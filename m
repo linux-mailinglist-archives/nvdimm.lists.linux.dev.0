@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-26-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-29-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5477038BE1B
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 May 2021 07:52:00 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24DF438BE33
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 May 2021 07:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3F6FC3E0F1C
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 May 2021 05:51:58 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id EE2393E0F34
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 May 2021 05:52:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4916D0D;
-	Fri, 21 May 2021 05:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD7C6D1B;
+	Fri, 21 May 2021 05:51:58 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B40B70
-	for <nvdimm@lists.linux.dev>; Fri, 21 May 2021 05:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4422FBF
+	for <nvdimm@lists.linux.dev>; Fri, 21 May 2021 05:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
 	Content-ID:Content-Description:In-Reply-To:References;
-	bh=1uf84BS8Q7NSBXg1yQR5EC+qaCg2ZgLYmuXoDkaPjCQ=; b=yVac5N8yUOzpUTxL5O1tvL86te
-	m3UAUEPJY/af59veHnMPwBOnJ7BRLcZrKIKt8Dh7YPbjkftLfLGTS4VhKOyyyjq3VjpC44ktitdB9
-	IGcelhE3Oa213g7yVLse3bazcfqBPE0AjzvZkAoIGc9XTXbidpJpsbluOmOOc3JrOP6KXc8MYblK4
-	oHQQgY+u4rceYmhcSMGEEbuC03JwZPicLhzcbKv5cdyhrdklHJY1gLYGuEEO6TAkLoGvvppviy5Hp
-	K3tkB8PLSkhH6CJEnd2fuR+rb3FAaFtYutga3kk4PwncNu4+e+dofRaE7iKfkJNVvZr+BYooXFvLx
-	bVfJReyA==;
+	bh=1uf84BS8Q7NSBXg1yQR5EC+qaCg2ZgLYmuXoDkaPjCQ=; b=qYec4TV3LzKaP2n3ES94XtwLuN
+	Rl9ETp00pxgXHWMiVaqU1NEHjsNwBCAops8oVhfDa5QRHrJNSDaCyti+sJNn9rvf1uYQ4GA3DB0Ay
+	esSC0cXIU4CdBCqSiNTamsYa4lzWuaGSed8x/wHvY7MdpjXgBIZn9QNf9s12VopHptNQ1EM12ISrT
+	hM1YZI/vDanDsnHTFFMGFC3HnZQJPaZqKiEjRjgXepy1pmMTbEztkloYN/Ou7kNDoHST4Fhsl9hNE
+	VGbBjm4DHc6wZjNzBVhkjnxdDik0YPHERe6nTK4ik7Pt9SDxqpIkw+czTDWp9qLqL4XzR0WKvEHUH
+	XEcT4yBA==;
 Received: from [2001:4bb8:180:5add:4fd7:4137:d2f2:46e6] (helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-	id 1ljy3s-00Gpw6-Eq; Fri, 21 May 2021 05:51:04 +0000
+	id 1ljy47-00Gpwf-GU; Fri, 21 May 2021 05:51:19 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: Jens Axboe <axboe@kernel.dk>,
 	Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -61,7 +61,7 @@ Cc: linux-block@vger.kernel.org,
 	linux-m68k@lists.linux-m68k.org,
 	linux-xtensa@linux-xtensa.org,
 	drbd-dev@lists.linbit.com,
-	linuxppc-dev@lists.ozlabs.org (open list:PS3 PLATFORM SUPPORT),
+	linuxppc-dev@lists.ozlabs.org,
 	linux-bcache@vger.kernel.org,
 	linux-raid@vger.kernel.org,
 	linux-mmc@vger.kernel.org,
@@ -69,8 +69,8 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-s390@vger.kernel.org
 Subject: simplify gendisk and request_queue allocation for bio based drivers
-Date: Fri, 21 May 2021 07:50:35 +0200
-Message-Id: <20210521055102.1053529-1-hch@lst.de>
+Date: Fri, 21 May 2021 07:50:50 +0200
+Message-Id: <20210521055116.1053587-1-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
