@@ -1,137 +1,85 @@
-Return-Path: <nvdimm+bounces-119-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-122-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 046BA394AF0
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 29 May 2021 09:39:29 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEA0B3953B6
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 31 May 2021 03:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 0C9651C0E71
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 29 May 2021 07:39:28 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 901B81C0DC2
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 31 May 2021 01:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C773A6D2E;
-	Sat, 29 May 2021 07:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B3D66D18;
+	Mon, 31 May 2021 01:43:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13006D14
-	for <nvdimm@lists.linux.dev>; Sat, 29 May 2021 07:39:11 +0000 (UTC)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14T7YM79085792;
-	Sat, 29 May 2021 03:39:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=LMk7SrRrXQ/vzbySKtIU8w16pKX+vZ9d3leb2ZMVw6w=;
- b=VmGvIDzD9Pv1XgMjffdR7kWG8uPVjQ6+PLR8nwzaDGevHFaBILSngWp52A1p/y3TDpJx
- ux7dC0wtKR6dalzYolJN4md/+IJGeA+/CWPlnIXNXzKNjxmCL5d1Wl8C4ZIZURnvjh9m
- pVjMx1bkqze7pwO4NkMPQPnzbnezDCdNZOz/CcsAsWIGwTf+CbnVXbqxEwR9fsOrGC9A
- duwiRr0ZHVMK8DJ7xAfyk2vLJGI+97Ten4sAAooBy0MzgnsVG8HEj9314Rv2liNWwJOQ
- IX/Y4AHdtviiYJxywN7reh+s4hqa8ws2I0s1/nSHmvZ3zCKyPjPGj8/39hqdr7Eng+SJ Bw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 38ugwpgfce-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 29 May 2021 03:39:03 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 14T7d1Yw021139;
-	Sat, 29 May 2021 07:39:01 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-	by ppma06ams.nl.ibm.com with ESMTP id 38ucvh82bh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 29 May 2021 07:39:01 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14T7cSqj33161590
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 29 May 2021 07:38:28 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 76D1C4C04A;
-	Sat, 29 May 2021 07:38:58 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E87A74C040;
-	Sat, 29 May 2021 07:38:54 +0000 (GMT)
-Received: from localhost.localdomain.com (unknown [9.199.45.117])
-	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Sat, 29 May 2021 07:38:54 +0000 (GMT)
-From: Kajol Jain <kjain@linux.ibm.com>
-To: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, peterz@infradead.org
-Cc: maddy@linux.vnet.ibm.com, santosh@fossix.org, aneesh.kumar@linux.ibm.com,
-        vaibhav@linux.ibm.com, dan.j.williams@intel.com, ira.weiny@intel.com,
-        atrajeev@linux.vnet.ibm.com, tglx@linutronix.de, kjain@linux.ibm.com,
-        rnsastry@linux.ibm.com
-Subject: [RFC v3 4/4] powerpc/papr_scm: Document papr_scm sysfs event format entries
-Date: Sat, 29 May 2021 13:08:28 +0530
-Message-Id: <20210529073828.1542292-5-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210529073828.1542292-1-kjain@linux.ibm.com>
-References: <20210529073828.1542292-1-kjain@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E26271
+	for <nvdimm@lists.linux.dev>; Mon, 31 May 2021 01:43:16 +0000 (UTC)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ftcqm38VPz1BGCK;
+	Mon, 31 May 2021 09:18:28 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 31 May 2021 09:23:08 +0800
+Received: from huawei.com (10.175.124.27) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 31 May
+ 2021 09:23:07 +0800
+From: Wu Bo <wubo40@huawei.com>
+To: <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+	<dave.jiang@intel.com>, <ira.weiny@intel.com>, <bp@suse.de>,
+	<rafael.j.wysocki@intel.com>, <mpe@ellerman.id.au>, <nvdimm@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linfeilong@huawei.com>, <wubo40@huawei.com>
+Subject: [PATCH] tools/testing/nvdimm: use vzalloc() instead of vmalloc()/memset(0)
+Date: Mon, 31 May 2021 09:48:35 +0800
+Message-ID: <1622425715-146012-1-git-send-email-wubo40@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: sNh9OA4sr30Qm-Df3YfWwKuZHq56W_Ft
-X-Proofpoint-GUID: sNh9OA4sr30Qm-Df3YfWwKuZHq56W_Ft
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-29_03:2021-05-27,2021-05-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105290058
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
 
-Details is added for the event, cpumask and format attributes
-in the ABI documentation.
+Use vzalloc() instead of vmalloc() and memset(0) to simpify
+the code.
 
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+Signed-off-by: Wu Bo <wubo40@huawei.com>
 ---
- Documentation/ABI/testing/sysfs-bus-papr-pmem | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ tools/testing/nvdimm/test/nfit.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-papr-pmem b/Documentation/ABI/testing/sysfs-bus-papr-pmem
-index 92e2db0e2d3d..2de9c8d2168f 100644
---- a/Documentation/ABI/testing/sysfs-bus-papr-pmem
-+++ b/Documentation/ABI/testing/sysfs-bus-papr-pmem
-@@ -59,3 +59,34 @@ Description:
- 		* "CchRHCnt" : Cache Read Hit Count
- 		* "CchWHCnt" : Cache Write Hit Count
- 		* "FastWCnt" : Fast Write Count
-+
-+What:		/sys/devices/nmemX/format
-+Date:		May 2021
-+Contact:	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-nvdimm@lists.01.org,
-+Description:	(RO) Attribute group to describe the magic bits
-+                that go into perf_event_attr.config for a particular pmu.
-+                (See ABI/testing/sysfs-bus-event_source-devices-format).
-+
-+                Each attribute under this group defines a bit range of the
-+                perf_event_attr.config. Supported attribute is listed
-+                below::
-+
-+		    event  = "config:0-4"  - event ID
-+
-+		For example::
-+		    noopstat = "event=0x1"
-+
-+What:		/sys/devices/nmemX/events
-+Date:		May 2021
-+Contact:	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-nvdimm@lists.01.org,
-+Description:    (RO) Attribute group to describe performance monitoring
-+                events specific to papr-scm. Each attribute in this group describes
-+                a single performance monitoring event supported by this nvdimm pmu.
-+                The name of the file is the name of the event.
-+                (See ABI/testing/sysfs-bus-event_source-devices-events).
-+
-+What:		/sys/devices/nmemX/cpumask
-+Date:		May 2021
-+Contact:	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-nvdimm@lists.01.org,
-+Description:	(RO) This sysfs file exposes the cpumask which is designated to make
-+                HCALLs to retrieve nvdimm pmu event counter data.
+diff --git a/tools/testing/nvdimm/test/nfit.c b/tools/testing/nvdimm/test/nfit.c
+index 54f367cbadae..258bba22780b 100644
+--- a/tools/testing/nvdimm/test/nfit.c
++++ b/tools/testing/nvdimm/test/nfit.c
+@@ -1625,7 +1625,6 @@ static void *__test_alloc(struct nfit_test *t, size_t size, dma_addr_t *dma,
+ 	if (rc)
+ 		goto err;
+ 	INIT_LIST_HEAD(&nfit_res->list);
+-	memset(buf, 0, size);
+ 	nfit_res->dev = dev;
+ 	nfit_res->buf = buf;
+ 	nfit_res->res.start = *dma;
+@@ -1652,7 +1651,7 @@ static void *test_alloc(struct nfit_test *t, size_t size, dma_addr_t *dma)
+ 	struct genpool_data_align data = {
+ 		.align = SZ_128M,
+ 	};
+-	void *buf = vmalloc(size);
++	void *buf = vzalloc(size);
+ 
+ 	if (size >= DIMM_SIZE)
+ 		*dma = gen_pool_alloc_algo(nfit_pool, size,
 -- 
-2.27.0
+2.30.0
 
 
