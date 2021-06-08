@@ -1,147 +1,169 @@
-Return-Path: <nvdimm+bounces-151-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-153-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C04939EE8A
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Jun 2021 08:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD2639F4D1
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Jun 2021 13:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 675283E0F24
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Jun 2021 06:10:47 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 73B6F3E0FE0
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Jun 2021 11:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 032F82FB4;
-	Tue,  8 Jun 2021 06:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354572FB4;
+	Tue,  8 Jun 2021 11:20:15 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from ozlabs.org (ozlabs.org [203.11.71.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6B472
-	for <nvdimm@lists.linux.dev>; Tue,  8 Jun 2021 06:10:39 +0000 (UTC)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1585XG3v073391;
-	Tue, 8 Jun 2021 01:43:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
- from : in-reply-to : date : cc : message-id : references : to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=PQPmzEQcdaoBnOuS7ZevmiX8i2v1FJ8/+mtIRXMQ42o=;
- b=gU5xRTM1iA2Bw+LR13YQSweFGyn9tnVZNWpRH1nfJoJuOxtKC1samtxYaOx8LnhS8wQm
- ywLVfOCLVuXxNa4m/5T37355h0C+isZFHegc+e9YkaueX7/CCkYZC/6Vzd4m29kHopER
- elk1DNbfzc3aHjv1BUYeJqgKXqGDwOUQVAPT5eOHWjKdi7bNUP9I4iPyJpNdBGIFptI7
- YXy+/tb+BaVzjZDwTPRx2O0ONnPLSnGCzj4IuLy0PqtyFm6+A4VQdCHh3WGtqJEsvT+V
- URcLSDLjeA7weuoWSnHprFYYuzWCTzZvkrXUrPHgaPoe0j3fsowDzrl6h2WwPbzk22M9 VA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 39228drjyt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Jun 2021 01:43:38 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-	by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1585bsPE027773;
-	Tue, 8 Jun 2021 05:43:36 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by ppma03fra.de.ibm.com with ESMTP id 3900w8rqcx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Jun 2021 05:43:36 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1585hXoE33620238
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 8 Jun 2021 05:43:34 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DB56C42042;
-	Tue,  8 Jun 2021 05:43:33 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 984F94203F;
-	Tue,  8 Jun 2021 05:43:32 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.199.59.176])
-	by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Tue,  8 Jun 2021 05:43:32 +0000 (GMT)
-Content-Type: text/plain;
-	charset=utf-8
-Subject: Re: [PATCH v2] libnvdimm/pmem: Fix blk_cleanup_disk() usage
-From: Sachin Sant <sachinp@linux.vnet.ibm.com>
-In-Reply-To: <162310994435.1571616.334551212901820961.stgit@dwillia2-desk3.amr.corp.intel.com>
-Date: Tue, 8 Jun 2021 11:13:31 +0530
-Cc: axboe@kernel.dk, nvdimm@lists.linux.dev,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-block@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Christoph Hellwig <hch@lst.de>
-Message-Id: <637B91E6-B4DD-4DF3-BAA2-0C60B6B6B3C5@linux.vnet.ibm.com>
-References: <162310861219.1571453.6561642225122047071.stgit@dwillia2-desk3.amr.corp.intel.com>
- <162310994435.1571616.334551212901820961.stgit@dwillia2-desk3.amr.corp.intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-X-Mailer: Apple Mail (2.3654.80.0.2.43)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: f1SCacZwDL47-u1DPvXhD6RO1n8SNoVb
-X-Proofpoint-ORIG-GUID: f1SCacZwDL47-u1DPvXhD6RO1n8SNoVb
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F4272
+	for <nvdimm@lists.linux.dev>; Tue,  8 Jun 2021 11:20:12 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fznct061wz9sW7;
+	Tue,  8 Jun 2021 21:11:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+	s=201909; t=1623150723;
+	bh=h1pjcx14WED8GV61yyvX+o5nh/QO2vDigglGzaBUaPo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=qaYxKhntxn9domJfTp/b7vZheGgvSG04qAi3oPZszcrG9xJ8L8BtLeFBDdkNbhfRZ
+	 X8AJHokX7Us9uk+OIikdyp8VwCVfcmpt0jHbXBsbfQ+HEwfgLRBxW3k7uXH4jT5QAg
+	 8xQpuppzCCGEv/fkG3Q1MEqEdqwDa3GgrXCwBwQ3bGGeK2M1OuWRxuc0qtkEr1keBz
+	 fDJQZ6qLeVUxjcpDY8AtdZZU3JvH1MC5Y3w/lLqHwiFCGx13AS18HU2Ir33OkNpg2k
+	 8GyFRxa0K5NYJybxWne97z3ZMcKKDCCW4J0WeaoO69Q+XrReDs4uvXduZSTclQX4ku
+	 hnEBus8PGkG1w==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: David Hildenbrand <david@redhat.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Marek Kedzierski <mkedzier@redhat.com>, Hui Zhu <teawater@gmail.com>,
+ Pankaj Gupta <pankaj.gupta.linux@gmail.com>, Wei Yang
+ <richard.weiyang@linux.alibaba.com>, Oscar Salvador <osalvador@suse.de>,
+ Michal Hocko <mhocko@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
+ Anshuman Khandual <anshuman.khandual@arm.com>, Dave Hansen
+ <dave.hansen@linux.intel.com>, Vlastimil Babka <vbabka@suse.cz>, Mike
+ Rapoport <rppt@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, Len
+ Brown <lenb@kernel.org>, Pavel Tatashin <pasha.tatashin@soleen.com>,
+ virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+ linux-acpi@vger.kernel.org, Benjamin Herrenschmidt
+ <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, Vishal
+ Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Nathan Lynch <nathanl@linux.ibm.com>, Laurent Dufour
+ <ldufour@linux.ibm.com>, "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+ Scott Cheloha <cheloha@linux.ibm.com>, Anton Blanchard <anton@ozlabs.org>,
+ linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev
+Subject: Re: [PATCH v1 05/12] mm/memory_hotplug: remove nid parameter from
+ remove_memory() and friends
+In-Reply-To: <20210607195430.48228-6-david@redhat.com>
+References: <20210607195430.48228-1-david@redhat.com>
+ <20210607195430.48228-6-david@redhat.com>
+Date: Tue, 08 Jun 2021 21:11:57 +1000
+Message-ID: <87y2bkehky.fsf@mpe.ellerman.id.au>
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-08_05:2021-06-04,2021-06-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 malwarescore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1011 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106080035
+Content-Type: text/plain
 
+David Hildenbrand <david@redhat.com> writes:
+> There is only a single user remaining. We can simply try to offline all
+> online nodes - which is fast, because we usually span pages and can skip
+> such nodes right away.
 
-> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-> Fixes: 87eb73b2ca7c ("nvdimm-pmem: convert to blk_alloc_disk/blk_cleanup_=
-disk")
-> Link: http://lore.kernel.org/r/DFB75BA8-603F-4A35-880B-C5B23EF8FA7D@linux=
-.vnet.ibm.com
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+That makes me slightly nervous, because our big powerpc boxes tend to
+trip on these scaling issues before others.
+
+But the spanned pages check is just:
+
+void try_offline_node(int nid)
+{
+	pg_data_t *pgdat = NODE_DATA(nid);
+        ...
+	if (pgdat->node_spanned_pages)
+		return;
+
+So I guess that's pretty cheap, and it's only O(nodes), which should
+never get that big.
+
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Vishal Verma <vishal.l.verma@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+> Cc: Laurent Dufour <ldufour@linux.ibm.com>
+> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+> Cc: Scott Cheloha <cheloha@linux.ibm.com>
+> Cc: Anton Blanchard <anton@ozlabs.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-acpi@vger.kernel.org
+> Cc: nvdimm@lists.linux.dev
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
+>  .../platforms/pseries/hotplug-memory.c        |  9 ++++-----
+>  drivers/acpi/acpi_memhotplug.c                |  7 +------
+>  drivers/dax/kmem.c                            |  3 +--
+>  drivers/virtio/virtio_mem.c                   |  4 ++--
+>  include/linux/memory_hotplug.h                | 10 +++++-----
+>  mm/memory_hotplug.c                           | 20 +++++++++----------
+>  6 files changed, 23 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/powerpc/platforms/pseries/hotplug-memory.c b/arch/powerpc/platforms/pseries/hotplug-memory.c
+> index 8377f1f7c78e..4a9232ddbefe 100644
+> --- a/arch/powerpc/platforms/pseries/hotplug-memory.c
+> +++ b/arch/powerpc/platforms/pseries/hotplug-memory.c
+> @@ -286,7 +286,7 @@ static int pseries_remove_memblock(unsigned long base, unsigned long memblock_si
+>  {
+>  	unsigned long block_sz, start_pfn;
+>  	int sections_per_block;
+> -	int i, nid;
+> +	int i;
+>  
+>  	start_pfn = base >> PAGE_SHIFT;
+>  
+> @@ -297,10 +297,9 @@ static int pseries_remove_memblock(unsigned long base, unsigned long memblock_si
+>  
+>  	block_sz = pseries_memory_block_size();
+>  	sections_per_block = block_sz / MIN_MEMORY_BLOCK_SIZE;
+> -	nid = memory_add_physaddr_to_nid(base);
+>  
+>  	for (i = 0; i < sections_per_block; i++) {
+> -		__remove_memory(nid, base, MIN_MEMORY_BLOCK_SIZE);
+> +		__remove_memory(base, MIN_MEMORY_BLOCK_SIZE);
+>  		base += MIN_MEMORY_BLOCK_SIZE;
+>  	}
+>  
+> @@ -386,7 +385,7 @@ static int dlpar_remove_lmb(struct drmem_lmb *lmb)
+>  
+>  	block_sz = pseries_memory_block_size();
+>  
+> -	__remove_memory(mem_block->nid, lmb->base_addr, block_sz);
+> +	__remove_memory(lmb->base_addr, block_sz);
+>  	put_device(&mem_block->dev);
+>  
+>  	/* Update memory regions for memory remove */
+> @@ -638,7 +637,7 @@ static int dlpar_add_lmb(struct drmem_lmb *lmb)
+>  
+>  	rc = dlpar_online_lmb(lmb);
+>  	if (rc) {
+> -		__remove_memory(nid, lmb->base_addr, block_sz);
+> +		__remove_memory(lmb->base_addr, block_sz);
+>  		invalidate_lmb_associativity_index(lmb);
+>  	} else {
+>  		lmb->flags |= DRCONF_MEM_ASSIGNED;
 
-Thanks Dan. This patch fixes the reported crash for me.
 
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
->=20
-> Changes in v2 Improve the changelog.
->=20
-> drivers/nvdimm/pmem.c |    4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 31f3c4bd6f72..fc6b78dd2d24 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -337,8 +337,9 @@ static void pmem_pagemap_cleanup(struct dev_pagemap *=
-pgmap)
-> {
-> 	struct request_queue *q =3D
-> 		container_of(pgmap->ref, struct request_queue, q_usage_counter);
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-With this change variable =E2=80=98q' is no longer needed and can be remove=
-d.
-
-drivers/nvdimm/pmem.c: In function 'pmem_pagemap_cleanup':
-drivers/nvdimm/pmem.c:338:24: warning: unused variable 'q' [-Wunused-variab=
-le]
-  struct request_queue *q =3D=20=20
-                                      ^
-> +	struct pmem_device *pmem =3D pgmap->owner;
->=20
-> -	blk_cleanup_disk(queue_to_disk(q));
-> +	blk_cleanup_disk(pmem->disk);
-> }
->=20
-> static void pmem_release_queue(void *pgmap)
-> @@ -427,6 +428,7 @@ static int pmem_attach_disk(struct device *dev,
-> 	q =3D disk->queue;
->=20
-> 	pmem->disk =3D disk;
-> +	pmem->pgmap.owner =3D pmem;
-> 	pmem->pfn_flags =3D PFN_DEV;
-> 	pmem->pgmap.ref =3D &q->q_usage_counter;
-> 	if (is_nd_pfn(dev)) {
->=20
-
-Thanks
--Sachin=
+cheers
 
