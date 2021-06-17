@@ -1,541 +1,350 @@
-Return-Path: <nvdimm+bounces-237-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-248-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401BE3AB9F8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 18:52:22 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C793ABC22
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 20:47:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 51F3A1C0E10
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 16:52:21 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 79FA33E11AF
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 18:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8800B6D33;
-	Thu, 17 Jun 2021 16:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA352C29;
+	Thu, 17 Jun 2021 18:46:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7428D6D00
-	for <nvdimm@lists.linux.dev>; Thu, 17 Jun 2021 16:51:41 +0000 (UTC)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HGZq2F074247;
-	Thu, 17 Jun 2021 12:51:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=FlhfHB+EdYRiNZqvUGZDruM5K475E9IQTOeE10vgabk=;
- b=Z7rDyjLC0qxU0LOuLL7qwTnRp783C4IsgNwcomL4vQz83o4Is/56GdyJFMG1CJwJJzC+
- LxyUASVNI39Y59t2+vBQpZILebR9qcQQ0yFK5z6nfe/sSR++6j4cW+4okb22Nr8le6gS
- quLeb9JgEvouhJiA5N/2YpkyaW2NzZsl6hMzFfzbVx5FXY1NMKk5W3+2aSLXVqTy41Tr
- EaR+YqDldB+r2gIskER8JMuvDCjuG5ixwxsZWU7XkZ4PyGVv+mrNXH7GhhJMZA7kLqBM
- OReOVLH+12QajK03/i53WHFv2ZNZoUT2FxvIyZhto+lqF+EkBQkbwRnibNfsMr5xSf63 Cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3987hrpfks-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jun 2021 12:51:38 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-	by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15HGaZsi077611;
-	Thu, 17 Jun 2021 12:51:37 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3987hrpfkc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jun 2021 12:51:37 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-	by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15HGlWAt028358;
-	Thu, 17 Jun 2021 16:51:36 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-	by ppma01wdc.us.ibm.com with ESMTP id 394mj9tkvx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jun 2021 16:51:36 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-	by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15HGpZRa40632742
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Jun 2021 16:51:36 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E03ABB206B;
-	Thu, 17 Jun 2021 16:51:35 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E450EB205F;
-	Thu, 17 Jun 2021 16:51:32 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.199.39.101])
-	by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Jun 2021 16:51:32 +0000 (GMT)
-From: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To: linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
-Cc: Nathan Lynch <nathanl@linux.ibm.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        nvdimm@lists.linux.dev, dan.j.williams@intel.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v4 7/7] powerpc/pseries: Add support for FORM2 associativity
-Date: Thu, 17 Jun 2021 22:21:05 +0530
-Message-Id: <20210617165105.574178-8-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210617165105.574178-1-aneesh.kumar@linux.ibm.com>
-References: <20210617165105.574178-1-aneesh.kumar@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6936D38
+	for <nvdimm@lists.linux.dev>; Thu, 17 Jun 2021 18:46:07 +0000 (UTC)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HIZciD004688;
+	Thu, 17 Jun 2021 18:45:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2020-01-29; bh=Au0YPmJPGz40CZB361DVeVOlGNrS7V0fsnZ9TE62m9E=;
+ b=0PTL/msq+QxFqGpTXiM34T8p9M70+wMmCo6G+cSB6ZG1uUXmdbjA06wXcpNOm0Q38H4O
+ xJp+O9ZNtaN2nOhO4ob0i5oGDAl8W/9C4g7QsKc7k9x50MIzhtjmYqgJLccR3Qbqeqnd
+ EhT6EwAO0J5RZGP0DWw57w0Fr2kCil0ChBHgeA4dwZMds40ld2Do+WzXQzmTPALMOxgW
+ jBajoQJDTEn1/gVvMmNpG1Rv4iL5YeSQkN9Js0lttVv4bNAXxF2eETNVHqEpNOQP6fEw
+ D186OqmrnXOIj69Ift2UDMIuLnmE3tqgT5iEtuUIkis/oBz5Y8R1fOYIeOEB4SWMuKzv bQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+	by mx0b-00069f02.pphosted.com with ESMTP id 39893qrcej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Jun 2021 18:45:40 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+	by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15HIjaO4180356;
+	Thu, 17 Jun 2021 18:45:38 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+	by userp3020.oracle.com with ESMTP id 396waxy5wg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Jun 2021 18:45:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GlY/TDG6xg95motLjgsOO8KsobNAOGBJ9g9EzZrzlHxIhOM2WjFI7Uda372doWIQT/phAGHjE0esrsEzi+8pRGUT13q6+RqCdtYZV3fcpl407gxNKPWVaKghadsxnpvhHgWONaHyIHKekcLmJwdrF63yNHljCf03XGFAgZrJDz01ItdOSMGpOSoGJhDOuKXxvItdn7Iu2OzYkn8x+Os0XlgPVQYTsjfN8tK787gHstJUdoWUcGKsaXRPgBET0pSY+/9tf8uRCEtoI0VdyD6ubZkndvh79I96OBYBTsYLUbeIosXSacJfOmy1sAhkO+Aife72F4K1wBAB6y40RC07IA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Au0YPmJPGz40CZB361DVeVOlGNrS7V0fsnZ9TE62m9E=;
+ b=ZPArFAqxTqEGAcoyIQBR3JdsvLhmIgrVdBFRNYOxsI1yvgfYelu0+56MzPDRZH73DTghNCVbBSaFopzu2epKZGWvbOMO/05yo4e4Qefb94fBv8EA6YdNJcDa7wD10w7+wlj5Hvo7T1NhFXJ/lOfe0Db0Jj3KO88SfeIx8fH2IfsuHBeLCwXbkYuWcoJUVq+z4Lu+LkyXI6/J3Td4DDDB90jV2afQBIswwMl08mWUoN+UW3iM0kEMf1CUba+Py7+rl1SHRrmpf6uGZUnhGUUslaA5Iq5i7S6udLObwSRiVi2HtUJrKVMt16Ln5qKdtKx28GDdzZpU/k60xh56lkCo7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Au0YPmJPGz40CZB361DVeVOlGNrS7V0fsnZ9TE62m9E=;
+ b=PxZh5g8mB8KD+hg9B9sTG3EeVi54oL+zPPyOR5G8heRB448oxlKTIyFbXhlfCaH6bttjXlH8cLWPiz1g4SJNwuAuA23fOryWrPVSY4EaflgmaPU+0rQ116SCtTkN3l61+PqPMm/7AMBmjpQlR0+ghUaxRIW3EcDfAMHNPEmd5Os=
+Authentication-Results: kvack.org; dkim=none (message not signed)
+ header.d=none;kvack.org; dmarc=none action=none header.from=oracle.com;
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
+ by BLAPR10MB4852.namprd10.prod.outlook.com (2603:10b6:208:30f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.15; Thu, 17 Jun
+ 2021 18:45:24 +0000
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::d875:3dd7:c053:6582]) by BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::d875:3dd7:c053:6582%7]) with mapi id 15.20.4242.021; Thu, 17 Jun 2021
+ 18:45:24 +0000
+From: Joao Martins <joao.m.martins@oracle.com>
+To: linux-mm@kvack.org
+Cc: Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Matthew Wilcox <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>, Jane Chu <jane.chu@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, nvdimm@lists.linux.dev,
+        linux-doc@vger.kernel.org, Joao Martins <joao.m.martins@oracle.com>
+Subject: [PATCH v2 00/14] mm, sparse-vmemmap: Introduce compound pagemaps
+Date: Thu, 17 Jun 2021 19:44:53 +0100
+Message-Id: <20210617184507.3662-1-joao.m.martins@oracle.com>
+X-Mailer: git-send-email 2.11.0
+Content-Type: text/plain
+X-Originating-IP: [94.61.1.144]
+X-ClientProxiedBy: LO2P265CA0113.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:c::29) To BLAPR10MB4835.namprd10.prod.outlook.com
+ (2603:10b6:208:331::11)
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6jZuql_KlN_SwvgYIJkVtRpTivYklibY
-X-Proofpoint-ORIG-GUID: W0LcxiCqg3oPV7VqriUVcEgZfIgdINS1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-17_15:2021-06-15,2021-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- spamscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106170104
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from paddy.uk.oracle.com (94.61.1.144) by LO2P265CA0113.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:c::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4242.16 via Frontend Transport; Thu, 17 Jun 2021 18:45:21 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: defeb944-7b85-46b4-f3a0-08d931c0111a
+X-MS-TrafficTypeDiagnostic: BLAPR10MB4852:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: 
+	<BLAPR10MB48528EA737DB4F07F6FFEE24BB0E9@BLAPR10MB4852.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	YZK7TAhaszElCIIh8fb/LlbTLSn5tDa5TdmqvWqgy8SznB4ATUvjxNUl3agKq1mWGppVRKKn07WhxAYPqiqnPrKhnPlzPoKvHJaukRzvh282yZd94cFnH97aB71Z22WipPesAkfzLR5Zge5knmtOZvJttk4S8unsyR8HXUQohlclki4IY0DknbxkkOBUn5qaP+L4LryWxFpxG45y/JqwE0ivwNmtAGdC//43taxX2aQqF2p3PFj2pg2Yq2g/GkoHXa89zKorlgegRVmbDeL3156U4kC1/bXJbHYcuSnJVowp5q8AfYUObNfgAzN8DsEstO05eZN+So83U41KNEkgGmrrAJlIZuy0Mj7ZpZGF1j38Y348Z1OFdbNh5nH3/i8VTSGPQL8IKtY0XKc9DqXpAdPDbEezMzD6wFAnWyIxAco2YyD2pTjBcbgWivjZRScPJQHEDnoeFR6J0HXAgul2Ii55zMTlrpj7bAOthqgTJJey1FbnbS5klS+ffAtF1dMZZCnbxcCyij1FMBErLfaEOI9oXUn6om0W1S3AFbg51Njkv2auXJuHEvVDBQCzOwRrWQ+WMdelyWRQlwpxvIyrZ2HPx3B6btptNJsSumWMtb4WVLx9HFr4Q4nzzKeSO2i480em6fB/t1yyDtsmzP+mrInVWpAA1B5GpEsOKWuJmxb3ec1rnPyRKB9HxUZUp2m3cOtK/8YHiEyljcPRHYinHzUTOQLtdG7i+a8pVvfJuVKIVUeay6XHyvp6/U5RfYPg6juINSeDPnMjHf+tDteHnW8hw2q5icovTHNPJDQOAlGbtm9KEQkLmqs6hb41xulI
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(376002)(136003)(366004)(346002)(83380400001)(6666004)(38350700002)(4326008)(103116003)(7696005)(5660300002)(186003)(16526019)(26005)(54906003)(478600001)(38100700002)(316002)(107886003)(1076003)(52116002)(8936002)(66476007)(66946007)(66556008)(36756003)(6486002)(6916009)(966005)(2906002)(86362001)(7416002)(8676002)(2616005)(956004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?g1SquuibQpFphXNUFEaHlDNeHsSg2Vs8NaVMD4ow/0PH58TmiOdnXqGL74MS?=
+ =?us-ascii?Q?qoHCrc971mZl8i2gsthRKlMBBnYs5T/8/DO7RaknDz5RV+DJw3a82v9SDo27?=
+ =?us-ascii?Q?HFvD0JOqMh7E8JtByeoFpJDcvpk3ZhrdfQXwg7ofveKPkS3luEyEY3T9Wxfp?=
+ =?us-ascii?Q?OXlIYHwdiEh+rvtrrqoHVjawxAlHAYtOg3+WtqkKIwmBxNbaTY41PFvMdhMT?=
+ =?us-ascii?Q?cDHB1+/nmm4z/RwjR4kBs9rsk6u8c/bElU3mbcbuNHi8fiHXNGucxPqh389S?=
+ =?us-ascii?Q?BmXImpa0IVJuu9o1Fa2ND2RBvBN+Ym9n412WNPqSVNHjUDzLnDC5CNrAZj8s?=
+ =?us-ascii?Q?2k9H6JV2sdxs52wSk42ApzN8s3J5/MVCbE/C5iWQzKP87bS3f692JR/TuAlh?=
+ =?us-ascii?Q?k4hsiRo6YvX0JRw9l9uAEkMwZ7U4r5dMpr2cSZtrEQk7TMPSVwTIwbecFIbw?=
+ =?us-ascii?Q?WqdPBbU2GI7yKjQf/JFnUyEH2WdWa6GufTtg6dyXBeuMLPEb0smfI38or5Od?=
+ =?us-ascii?Q?0xVIV8ym8AusqWTwLXmQZZAorLj5avXAsBvfOuF9imknNEXtsJccrG+G437Q?=
+ =?us-ascii?Q?1BmwaspeVgdzAZzhK2/3o1UIydFDCN84WEl38zwQTBhlS+fiSwcFw7K9qmQe?=
+ =?us-ascii?Q?fDUD1p3Kk97hQ1rjW6/UQYRDFeiKB3xltZeigofhypAv+1V6kQU7lFg7Ca2N?=
+ =?us-ascii?Q?pMgq9a/58U/GGcqjOJUKbuft/WmQO7X86qHzcA8JD/+YMv9Gd9QfyJZYU+rB?=
+ =?us-ascii?Q?iTjwT7JwqBj8oiqwK37wWVKcWecw0kgBiMWE3pA6ElqR15YiTIcArCH7Kfr9?=
+ =?us-ascii?Q?7XlEGBaSnPeZxVXOI/SXTdbLIqeCQqB70lrq6efdcZwT84BlvK+LE0RJa4Za?=
+ =?us-ascii?Q?GIIAKiJgUad/04wQrZdo4U5wZNOrZz6tBI9H1uqNGjJ+s8XnMf9DleJv4Ad4?=
+ =?us-ascii?Q?bErV10tvPRJ8rSxw+pgMP0Ah6ggVbFPt8U7cp63/YHjWN2e2NZS/Oyg/02p9?=
+ =?us-ascii?Q?foKbleKR3T7OMmJZsUVMqgzBJySE5Gw0gmYvsh/EMbZr7q0cf6VXI5PqNWmZ?=
+ =?us-ascii?Q?E2icAMxPpBElo6URwpOlhWScuG23uc38lB9+aPYQwcgSRlNHXuvsuvjPiQwv?=
+ =?us-ascii?Q?0Hvh6RxccUXswHSKDFznxGZII9RamxmH4MWalCSyBw716TFs9SCmIUtpb79j?=
+ =?us-ascii?Q?ZH9S7mOUx2lL4g+lx+t79E4QMr5yo5r6iKBCnPPRZrG8TyLhFkNT2S8xP5jR?=
+ =?us-ascii?Q?gNaH4oEWvQz62tuTOQUyxzDKnpSzPUMjTSlf1OoZAkfR4dA38LCA0HZ3Mk8I?=
+ =?us-ascii?Q?Q8af7Fm0ga+VBhNHtjdBTzIV?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: defeb944-7b85-46b4-f3a0-08d931c0111a
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2021 18:45:24.2655
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 76rscAQHpa9lhq1CdWgzYZWqH2QZ7c7SA49Ja3wHq6QhqzkAUzl/L89I+8cPzVIB5cDcyYFmkVp2rLSWttNO9zyahgnFvgG/DGFn2q9XM4M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4852
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10018 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106170117
+X-Proofpoint-ORIG-GUID: Ei1QqSENHSOWhUv0-z1pqw_QvhNzbG9Q
+X-Proofpoint-GUID: Ei1QqSENHSOWhUv0-z1pqw_QvhNzbG9Q
 
-PAPR interface currently supports two different ways of communicating resource
-grouping details to the OS. These are referred to as Form 0 and Form 1
-associativity grouping. Form 0 is the older format and is now considered
-deprecated. This patch adds another resource grouping named FORM2.
+Changes since v1 [0]:
 
-Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+ (New patches 7, 10, 11)
+ * Remove occurences of 'we' in the commit descriptions (now for real) [Dan]
+ * Add comment on top of compound_head() for fsdax (Patch 1) [Dan]
+ * Massage commit descriptions of cleanup/refactor patches to reflect [Dan]
+ that it's in preparation for bigger infra in sparse-vmemmap. (Patch 2,3,5) [Dan]
+ * Greatly improve all commit messages in terms of grammar/wording and clearity. [Dan]
+ * Rename variable/helpers from dev_pagemap::align to @geometry, reflecting
+ tht it's not the same thing as dev_dax->align, Patch 4 [Dan]
+ * Move compound page init logic into separate memmap_init_compound() helper, Patch 4 [Dan]
+ * Simplify patch 9 as a result of having compound initialization differently [Dan]
+ * Rename @pfn_align variable in memmap_init_zone_device to @pfns_per_compound [Dan]
+ * Rename Subject of patch 6 [Dan]
+ * Move hugetlb_vmemmap.c comment block to Documentation/vm Patch 7 [Dan]
+ * Add some type-safety to @block and use 'struct page *' rather than
+ void, Patch 8 [Dan]
+ * Add some comments to less obvious parts on 1G compound page case, Patch 8 [Dan]
+ * Remove vmemmap lookup function in place of
+ pmd_off_k() + pte_offset_kernel() given some guarantees on section onlining
+ serialization, Patch 8
+ * Add a comment to get_page() mentioning where/how it is, Patch 8 freed [Dan]
+ * Add docs about device-dax usage of tail dedup technique in newly added
+ compound_pagemaps.rst doc entry.
+ * Add cleanup patch for device-dax for ensuring dev_dax::pgmap is always set [Dan]
+ * Add cleanup patch for device-dax for using ALIGN() [Dan]
+ * Store pinned head in separate @pinned_head variable and fix error case, patch 13 [Dan]
+ * Add comment on difference of @next value for PageCompound(), patch 13 [Dan]
+ * Move PUD compound page to be last patch [Dan]
+ * Add vmemmap layout for PUD compound geometry in compound_pagemaps.rst doc, patch 14 [Dan]
+
+[0] https://lore.kernel.org/linux-mm/20210325230938.30752-1-joao.m.martins@oracle.com/
+
+Full changelog of previous versions at the bottom of cover letter.
+
 ---
- Documentation/powerpc/associativity.rst   | 135 ++++++++++++++++++++
- arch/powerpc/include/asm/firmware.h       |   3 +-
- arch/powerpc/include/asm/prom.h           |   1 +
- arch/powerpc/kernel/prom_init.c           |   3 +-
- arch/powerpc/mm/numa.c                    | 149 +++++++++++++++++++++-
- arch/powerpc/platforms/pseries/firmware.c |   1 +
- 6 files changed, 286 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/powerpc/associativity.rst
 
-diff --git a/Documentation/powerpc/associativity.rst b/Documentation/powerpc/associativity.rst
-new file mode 100644
-index 000000000000..93be604ac54d
---- /dev/null
-+++ b/Documentation/powerpc/associativity.rst
-@@ -0,0 +1,135 @@
-+============================
-+NUMA resource associativity
-+=============================
-+
-+Associativity represents the groupings of the various platform resources into
-+domains of substantially similar mean performance relative to resources outside
-+of that domain. Resources subsets of a given domain that exhibit better
-+performance relative to each other than relative to other resources subsets
-+are represented as being members of a sub-grouping domain. This performance
-+characteristic is presented in terms of NUMA node distance within the Linux kernel.
-+From the platform view, these groups are also referred to as domains.
-+
-+PAPR interface currently supports different ways of communicating these resource
-+grouping details to the OS. These are referred to as Form 0, Form 1 and Form2
-+associativity grouping. Form 0 is the older format and is now considered deprecated.
-+
-+Hypervisor indicates the type/form of associativity used via "ibm,arcitecture-vec-5 property".
-+Bit 0 of byte 5 in the "ibm,architecture-vec-5" property indicates usage of Form 0 or Form 1.
-+A value of 1 indicates the usage of Form 1 associativity. For Form 2 associativity
-+bit 2 of byte 5 in the "ibm,architecture-vec-5" property is used.
-+
-+Form 0
-+-----
-+Form 0 associativity supports only two NUMA distance (LOCAL and REMOTE).
-+
-+Form 1
-+-----
-+With Form 1 a combination of ibm,associativity-reference-points and ibm,associativity
-+device tree properties are used to determine the NUMA distance between resource groups/domains.
-+
-+The “ibm,associativity” property contains one or more lists of numbers (domainID)
-+representing the resource’s platform grouping domains.
-+
-+The “ibm,associativity-reference-points” property contains one or more list of numbers
-+(domainID index) that represents the 1 based ordinal in the associativity lists.
-+The list of domainID index represnets increasing hierachy of resource grouping. 
-+
-+ex:
-+{ primary domainID index, secondary domainID index, tertiary domainID index.. }
-+
-+Linux kernel uses the domainID at the primary domainID index as the NUMA node id.
-+Linux kernel computes NUMA distance between two domains by recursively comparing
-+if they belong to the same higher-level domains. For mismatch at every higher
-+level of the resource group, the kernel doubles the NUMA distance between the
-+comparing domains.
-+
-+Form 2
-+-------
-+Form 2 associativity format adds separate device tree properties representing NUMA node distance
-+thereby making the node distance computation flexible. Form 2 also allows flexible primary
-+domain numbering. With numa distance computation now detached from the index value of
-+"ibm,associativity" property, Form 2 allows a large number of primary domain ids at the
-+same domainID index representing resource groups of different performance/latency characteristics.
-+
-+Hypervisor indicates the usage of FORM2 associativity using bit 2 of byte 5 in the
-+"ibm,architecture-vec-5" property.
-+
-+"ibm,numa-lookup-index-table" property contains one or more list numbers representing
-+the domainIDs present in the system. The offset of the domainID in this property is considered
-+the domainID index.
-+
-+prop-encoded-array: The number N of the domainIDs encoded as with encode-int, followed by
-+N domainID encoded as with encode-int
-+
-+For ex:
-+ibm,numa-lookup-index-table =  {4, 0, 8, 250, 252}, domainID index for domainID 8 is 1.
-+
-+"ibm,numa-distance-table" property contains one or more list of numbers representing the NUMA
-+distance between resource groups/domains present in the system.
-+
-+prop-encoded-array: The number N of the distance values encoded as with encode-int, followed by
-+N distance values encoded as with encode-bytes. The max distance value we could encode is 255.
-+
-+For ex:
-+ibm,numa-lookup-index-table =  {3, 0, 8, 40}
-+ibm,numa-distance-table     =  {9, 10, 20, 80, 20, 10, 160, 80, 160, 10}
-+
-+  | 0    8   40
-+--|------------
-+  |
-+0 | 10   20  80
-+  |
-+8 | 20   10  160
-+  |
-+40| 80   160  10
-+
-+
-+"ibm,associativity" property for resources in node 0, 8 and 40
-+
-+{ 3, 6, 7, 0 }
-+{ 3, 6, 9, 8 }
-+{ 3, 6, 7, 40}
-+
-+With "ibm,associativity-reference-points"  { 0x3 }
-+
-+Each resource (drcIndex) now also supports additional optional device tree properties.
-+These properties are marked optional because the platform can choose not to export
-+them and provide the system topology details using the earlier defined device tree
-+properties alone. The optional device tree properties are used when adding new resources
-+(DLPAR) and when the platform didn't provide the topology details of the domain which
-+contains the newly added resource during boot.
-+
-+"ibm,numa-lookup-index" property contains a number representing the domainID index to be used
-+when building the NUMA distance of the numa node to which this resource belongs. This can
-+be looked at as the index at which this new domainID would have appeared in
-+"ibm,numa-lookup-index-table" if the domain was present during boot. The domainID
-+of the new resource can be obtained from the existing "ibm,associativity" property. This
-+can be used to build distance information of a newly onlined NUMA node via DLPAR operation.
-+The value is 1 based array index value.
-+
-+prop-encoded-array: An integer encoded as with encode-int specifying the domainID index
-+
-+"ibm,numa-distance" property contains one or more list of numbers presenting the NUMA distance
-+from this resource domain to other resources.
-+
-+prop-encoded-array: The number N of the distance values encoded as with encode-int, followed by
-+N distance values encoded as with encode-bytes. The max distance value we could encode is 255.
-+
-+For ex:
-+ibm,associativity     = { 4, 5, 10, 50}
-+ibm,numa-lookup-index = { 4 }
-+ibm,numa-distance   =  {8, 160, 255, 80, 10, 160, 255, 80, 10}
-+
-+resulting in a new toplogy as below.
-+  | 0    8   40   50
-+--|------------------
-+  |
-+0 | 10   20  80   160
-+  |
-+8 | 20   10  160  255
-+  |
-+40| 80   160  10  80
-+  |
-+50| 160  255  80  10
-+
-diff --git a/arch/powerpc/include/asm/firmware.h b/arch/powerpc/include/asm/firmware.h
-index 60b631161360..97a3bd9ffeb9 100644
---- a/arch/powerpc/include/asm/firmware.h
-+++ b/arch/powerpc/include/asm/firmware.h
-@@ -53,6 +53,7 @@
- #define FW_FEATURE_ULTRAVISOR	ASM_CONST(0x0000004000000000)
- #define FW_FEATURE_STUFF_TCE	ASM_CONST(0x0000008000000000)
- #define FW_FEATURE_RPT_INVALIDATE ASM_CONST(0x0000010000000000)
-+#define FW_FEATURE_FORM2_AFFINITY ASM_CONST(0x0000020000000000)
- 
- #ifndef __ASSEMBLY__
- 
-@@ -73,7 +74,7 @@ enum {
- 		FW_FEATURE_HPT_RESIZE | FW_FEATURE_DRMEM_V2 |
- 		FW_FEATURE_DRC_INFO | FW_FEATURE_BLOCK_REMOVE |
- 		FW_FEATURE_PAPR_SCM | FW_FEATURE_ULTRAVISOR |
--		FW_FEATURE_RPT_INVALIDATE,
-+		FW_FEATURE_RPT_INVALIDATE | FW_FEATURE_FORM2_AFFINITY,
- 	FW_FEATURE_PSERIES_ALWAYS = 0,
- 	FW_FEATURE_POWERNV_POSSIBLE = FW_FEATURE_OPAL | FW_FEATURE_ULTRAVISOR,
- 	FW_FEATURE_POWERNV_ALWAYS = 0,
-diff --git a/arch/powerpc/include/asm/prom.h b/arch/powerpc/include/asm/prom.h
-index df9fec9d232c..5c80152e8f18 100644
---- a/arch/powerpc/include/asm/prom.h
-+++ b/arch/powerpc/include/asm/prom.h
-@@ -149,6 +149,7 @@ extern int of_read_drc_info_cell(struct property **prop,
- #define OV5_XCMO		0x0440	/* Page Coalescing */
- #define OV5_FORM1_AFFINITY	0x0580	/* FORM1 NUMA affinity */
- #define OV5_PRRN		0x0540	/* Platform Resource Reassignment */
-+#define OV5_FORM2_AFFINITY	0x0520	/* Form2 NUMA affinity */
- #define OV5_HP_EVT		0x0604	/* Hot Plug Event support */
- #define OV5_RESIZE_HPT		0x0601	/* Hash Page Table resizing */
- #define OV5_PFO_HW_RNG		0x1180	/* PFO Random Number Generator */
-diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-index 64b9593038a7..496fdac54c29 100644
---- a/arch/powerpc/kernel/prom_init.c
-+++ b/arch/powerpc/kernel/prom_init.c
-@@ -1070,7 +1070,8 @@ static const struct ibm_arch_vec ibm_architecture_vec_template __initconst = {
- #else
- 		0,
- #endif
--		.associativity = OV5_FEAT(OV5_FORM1_AFFINITY) | OV5_FEAT(OV5_PRRN),
-+		.associativity = OV5_FEAT(OV5_FORM1_AFFINITY) | OV5_FEAT(OV5_PRRN) |
-+		OV5_FEAT(OV5_FORM2_AFFINITY),
- 		.bin_opts = OV5_FEAT(OV5_RESIZE_HPT) | OV5_FEAT(OV5_HP_EVT),
- 		.micro_checkpoint = 0,
- 		.reserved0 = 0,
-diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
-index d32729f235b8..5a7d94960fb7 100644
---- a/arch/powerpc/mm/numa.c
-+++ b/arch/powerpc/mm/numa.c
-@@ -56,12 +56,17 @@ static int n_mem_addr_cells, n_mem_size_cells;
- 
- #define FORM0_AFFINITY 0
- #define FORM1_AFFINITY 1
-+#define FORM2_AFFINITY 2
- static int affinity_form;
- 
- #define MAX_DISTANCE_REF_POINTS 4
- static int max_associativity_domain_index;
- static const __be32 *distance_ref_points;
- static int distance_lookup_table[MAX_NUMNODES][MAX_DISTANCE_REF_POINTS];
-+static int numa_distance_table[MAX_NUMNODES][MAX_NUMNODES] = {
-+	[0 ... MAX_NUMNODES - 1] = { [0 ... MAX_NUMNODES - 1] = -1 }
-+};
-+static int numa_id_index_table[MAX_NUMNODES];
- 
- /*
-  * Allocate node_to_cpumask_map based on number of available nodes
-@@ -166,6 +171,27 @@ static void unmap_cpu_from_node(unsigned long cpu)
- }
- #endif /* CONFIG_HOTPLUG_CPU || CONFIG_PPC_SPLPAR */
- 
-+/*
-+ * With FORM2 if we are not using logical domain ids, we will find
-+ * both primary and seconday domains with same value. Hence always
-+ * start comparison from secondary domains
-+ */
-+static int __cpu_form2_distance(__be32 *cpu1_assoc, __be32 *cpu2_assoc)
-+{
-+	int dist = 0;
-+
-+	int i, index;
-+
-+	for (i = 1; i < max_associativity_domain_index; i++) {
-+		index = be32_to_cpu(distance_ref_points[i]);
-+		if (cpu1_assoc[index] == cpu2_assoc[index])
-+			break;
-+		dist++;
-+	}
-+
-+	return dist;
-+}
-+
- static int __cpu_form1_distance(__be32 *cpu1_assoc, __be32 *cpu2_assoc)
- {
- 	int dist = 0;
-@@ -178,7 +204,6 @@ static int __cpu_form1_distance(__be32 *cpu1_assoc, __be32 *cpu2_assoc)
- 			break;
- 		dist++;
- 	}
--
- 	return dist;
- }
- 
-@@ -186,8 +211,9 @@ int cpu_distance(__be32 *cpu1_assoc, __be32 *cpu2_assoc)
- {
- 	/* We should not get called with FORM0 */
- 	VM_WARN_ON(affinity_form == FORM0_AFFINITY);
--
--	return __cpu_form1_distance(cpu1_assoc, cpu2_assoc);
-+	if (affinity_form == FORM1_AFFINITY)
-+		return __cpu_form1_distance(cpu1_assoc, cpu2_assoc);
-+	return __cpu_form2_distance(cpu1_assoc, cpu2_assoc);
- }
- 
- /* must hold reference to node during call */
-@@ -201,7 +227,9 @@ int __node_distance(int a, int b)
- 	int i;
- 	int distance = LOCAL_DISTANCE;
- 
--	if (affinity_form == FORM0_AFFINITY)
-+	if (affinity_form == FORM2_AFFINITY)
-+		return numa_distance_table[a][b];
-+	else if (affinity_form == FORM0_AFFINITY)
- 		return ((a == b) ? LOCAL_DISTANCE : REMOTE_DISTANCE);
- 
- 	for (i = 0; i < max_associativity_domain_index; i++) {
-@@ -303,15 +331,116 @@ static void initialize_form1_numa_distance(struct device_node *node)
- 
- /*
-  * Used to update distance information w.r.t newly added node.
-+ * ibm,numa-lookup-index -> 4
-+ * ibm,numa-distance -> {5, 20, 40, 60, 80, 10 }
-  */
- void update_numa_distance(struct device_node *node)
- {
-+	int i, nid, other_nid, other_nid_index = 0;
-+	const __be32 *numa_indexp;
-+	const __u8  *numa_distancep;
-+	int numa_index, max_numa_index, numa_distance;
-+
- 	if (affinity_form == FORM0_AFFINITY)
- 		return;
- 	else if (affinity_form == FORM1_AFFINITY) {
- 		initialize_form1_numa_distance(node);
- 		return;
- 	}
-+	/* FORM2 affinity  */
-+
-+	nid = of_node_to_nid_single(node);
-+	if (nid == NUMA_NO_NODE)
-+		return;
-+
-+	/* Already initialized */
-+	if (numa_distance_table[nid][nid] != -1)
-+		return;
-+	/*
-+	 * update node distance if not already populated.
-+	 */
-+	numa_distancep = of_get_property(node, "ibm,numa-distance", NULL);
-+	if (!numa_distancep)
-+		return;
-+
-+	numa_indexp = of_get_property(node, "ibm,numa-lookup-index", NULL);
-+	if (!numa_indexp)
-+		return;
-+
-+	numa_index = of_read_number(numa_indexp, 1);
-+	/*
-+	 * update the numa_id_index_table. Device tree look at index table as
-+	 * 1 based array indexing.
-+	 */
-+	numa_id_index_table[numa_index - 1] = nid;
-+
-+	max_numa_index = of_read_number((const __be32 *)numa_distancep, 1);
-+	VM_WARN_ON(max_numa_index != 2 * numa_index);
-+	/* Skip the size which is encoded int */
-+	numa_distancep += sizeof(__be32);
-+
-+	/*
-+	 * First fill the distance information from other node to this node.
-+	 */
-+	other_nid_index = 0;
-+	for (i = 0; i < numa_index; i++) {
-+		numa_distance = numa_distancep[i];
-+		other_nid = numa_id_index_table[other_nid_index++];
-+		numa_distance_table[other_nid][nid] = numa_distance;
-+	}
-+
-+	other_nid_index = 0;
-+	for (; i < max_numa_index; i++) {
-+		numa_distance = numa_distancep[i];
-+		other_nid = numa_id_index_table[other_nid_index++];
-+		numa_distance_table[nid][other_nid] = numa_distance;
-+	}
-+}
-+
-+/*
-+ * ibm,numa-lookup-index-table= {N, domainid1, domainid2, ..... domainidN}
-+ * ibm,numa-distance-table = { N, 1, 2, 4, 5, 1, 6, .... N elements}
-+ */
-+static void initialize_form2_numa_distance_lookup_table(struct device_node *root)
-+{
-+	const __u8 *numa_dist_table;
-+	const __be32 *numa_lookup_index;
-+	int numa_dist_table_length;
-+	int max_numa_index, distance_index;
-+	int i, curr_row = 0, curr_column = 0;
-+
-+	numa_lookup_index = of_get_property(root, "ibm,numa-lookup-index-table", NULL);
-+	max_numa_index = of_read_number(&numa_lookup_index[0], 1);
-+
-+	/* first element of the array is the size and is encode-int */
-+	numa_dist_table = of_get_property(root, "ibm,numa-distance-table", NULL);
-+	numa_dist_table_length = of_read_number((const __be32 *)&numa_dist_table[0], 1);
-+	/* Skip the size which is encoded int */
-+	numa_dist_table += sizeof(__be32);
-+
-+	pr_debug("numa_dist_table_len = %d, numa_dist_indexes_len = %d \n",
-+		 numa_dist_table_length, max_numa_index);
-+
-+	for (i = 0; i < max_numa_index; i++)
-+		/* +1 skip the max_numa_index in the property */
-+		numa_id_index_table[i] = of_read_number(&numa_lookup_index[i + 1], 1);
-+
-+
-+	VM_WARN_ON(numa_dist_table_length != max_numa_index * max_numa_index);
-+
-+	for (distance_index = 0; distance_index < numa_dist_table_length; distance_index++) {
-+		int nodeA = numa_id_index_table[curr_row];
-+		int nodeB = numa_id_index_table[curr_column++];
-+
-+		numa_distance_table[nodeA][nodeB] = numa_dist_table[distance_index];
-+
-+		pr_debug("dist[%d][%d]=%d ", nodeA, nodeB, numa_distance_table[nodeA][nodeB]);
-+		if (curr_column >= max_numa_index) {
-+			curr_row++;
-+			/* reset the column */
-+			curr_column = 0;
-+		}
-+	}
- }
- 
- static int __init find_primary_domain_index(void)
-@@ -324,6 +453,9 @@ static int __init find_primary_domain_index(void)
- 	 */
- 	if (firmware_has_feature(FW_FEATURE_OPAL)) {
- 		affinity_form = FORM1_AFFINITY;
-+	} else if (firmware_has_feature(FW_FEATURE_FORM2_AFFINITY)) {
-+		dbg("Using form 2 affinity\n");
-+		affinity_form = FORM2_AFFINITY;
- 	} else if (firmware_has_feature(FW_FEATURE_FORM1_AFFINITY)) {
- 		dbg("Using form 1 affinity\n");
- 		affinity_form = FORM1_AFFINITY;
-@@ -368,8 +500,17 @@ static int __init find_primary_domain_index(void)
- 
- 		index = of_read_number(&distance_ref_points[1], 1);
- 	} else {
-+		/*
-+		 * Both FORM1 and FORM2 affinity find the primary domain details
-+		 * at the same offset.
-+		 */
- 		index = of_read_number(distance_ref_points, 1);
- 	}
-+	/*
-+	 * If it is FORM2 also initialize the distance table here.
-+	 */
-+	if (affinity_form == FORM2_AFFINITY)
-+		initialize_form2_numa_distance_lookup_table(root);
- 
- 	/*
- 	 * Warn and cap if the hardware supports more than
-diff --git a/arch/powerpc/platforms/pseries/firmware.c b/arch/powerpc/platforms/pseries/firmware.c
-index 5d4c2bc20bba..f162156b7b68 100644
---- a/arch/powerpc/platforms/pseries/firmware.c
-+++ b/arch/powerpc/platforms/pseries/firmware.c
-@@ -123,6 +123,7 @@ vec5_fw_features_table[] = {
- 	{FW_FEATURE_PRRN,		OV5_PRRN},
- 	{FW_FEATURE_DRMEM_V2,		OV5_DRMEM_V2},
- 	{FW_FEATURE_DRC_INFO,		OV5_DRC_INFO},
-+	{FW_FEATURE_FORM2_AFFINITY,	OV5_FORM2_AFFINITY},
- };
- 
- static void __init fw_vec5_feature_init(const char *vec5, unsigned long len)
+This series, attempts at minimizing 'struct page' overhead by
+pursuing a similar approach as Muchun Song series "Free some vmemmap
+pages of hugetlb page"[0] but applied to devmap/ZONE_DEVICE which is now
+in mmotm. 
+
+[0] https://lore.kernel.org/linux-mm/20210308102807.59745-1-songmuchun@bytedance.com/
+
+The link above describes it quite nicely, but the idea is to reuse tail
+page vmemmap areas, particular the area which only describes tail pages.
+So a vmemmap page describes 64 struct pages, and the first page for a given
+ZONE_DEVICE vmemmap would contain the head page and 63 tail pages. The second
+vmemmap page would contain only tail pages, and that's what gets reused across
+the rest of the subsection/section. The bigger the page size, the bigger the
+savings (2M hpage -> save 6 vmemmap pages; 1G hpage -> save 4094 vmemmap pages).
+
+This series also takes one step further on 1GB pages and *also* reuse PMD pages
+which only contain tail pages which allows to keep parity with current hugepage
+based memmap. This further let us more than halve the overhead with 1GB pages
+(40M -> 16M per Tb)
+
+In terms of savings, per 1Tb of memory, the struct page cost would go down
+with compound pagemap:
+
+* with 2M pages we lose 4G instead of 16G (0.39% instead of 1.5% of total memory)
+* with 1G pages we lose 16MB instead of 16G (0.0014% instead of 1.5% of total memory)
+
+Along the way I've extended it past 'struct page' overhead *trying* to address a
+few performance issues we knew about for pmem, specifically on the
+{pin,get}_user_pages_fast with device-dax vmas which are really
+slow even of the fast variants. THP is great on -fast variants but all except
+hugetlbfs perform rather poorly on non-fast gup. Although I deferred the
+__get_user_pages() improvements (in a follow up series I have stashed as its
+ortogonal to device-dax as THP suffers from the same syndrome).
+
+So to summarize what the series does:
+
+Patch 1: Prepare hwpoisoning to work with dax compound pages.
+
+Patches 2-4: Have memmap_init_zone_device() initialize its metadata as compound
+pages. We split the current utility function of prep_compound_page() into head
+and tail and use those two helpers where appropriate to take advantage of caches
+being warm after __init_single_page(). Since RFC this also lets us further speed
+up from 190ms down to 80ms init time.
+
+Patches 5-12, 14: Much like Muchun series, we reuse PTE (and PMD) tail page vmemmap
+areas across a given page size (namely @align was referred by remaining
+memremap/dax code) and enabling of memremap to initialize the ZONE_DEVICE pages
+as compound pages or a given @align order. The main difference though, is that
+contrary to the hugetlbfs series, there's no vmemmap for the area, because we
+are populating it as opposed to remapping it. IOW no freeing of pages of
+already initialized vmemmap like the case for hugetlbfs, which simplifies the
+logic (besides not being arch-specific). After these, there's quite visible
+region bootstrap of pmem memmap given that we would initialize fewer struct
+pages depending on the page size with DRAM backed struct pages. altmap sees no
+difference in bootstrap. Patch 14 comes last as it's an improvement, not
+mandated for the initial functionality. Also move the very nice docs of
+hugetlb_vmemmap.c into a Documentation/vm/ entry.
+
+    NVDIMM namespace bootstrap improves from ~268-358 ms to ~78-100/<1ms on 128G NVDIMMs
+    with 2M and 1G respectivally.
+
+Patch 13: Optimize grabbing page refcount changes given that we
+are working with compound pages i.e. we do 1 increment to the head
+page for a given set of N subpages compared as opposed to N individual writes.
+{get,pin}_user_pages_fast() for zone_device with compound pagemap consequently
+improves considerably with DRAM stored struct pages. It also *greatly*
+improves pinning with altmap. Results with gup_test:
+
+                                                   before     after
+    (16G get_user_pages_fast 2M page size)         ~59 ms -> ~6.1 ms
+    (16G pin_user_pages_fast 2M page size)         ~87 ms -> ~6.2 ms
+    (16G get_user_pages_fast altmap 2M page size) ~494 ms -> ~9 ms
+    (16G pin_user_pages_fast altmap 2M page size) ~494 ms -> ~10 ms
+
+    altmap performance gets specially interesting when pinning a pmem dimm:
+
+                                                   before     after
+    (128G get_user_pages_fast 2M page size)         ~492 ms -> ~49 ms
+    (128G pin_user_pages_fast 2M page size)         ~493 ms -> ~50 ms
+    (128G get_user_pages_fast altmap 2M page size)  ~3.91 s -> ~70 ms
+    (128G pin_user_pages_fast altmap 2M page size)  ~3.97 s -> ~74 ms
+
+I have deferred the __get_user_pages() patch to outside this series
+(https://lore.kernel.org/linux-mm/20201208172901.17384-11-joao.m.martins@oracle.com/),
+as I found an simpler way to address it and that is also applicable to
+THP. But will submit that as a follow up of this.
+
+Patches apply on top of linux-next tag next-20210617 (commit 7d9c6b8147bd).
+
+Comments and suggestions very much appreciated!
+
+Older Changelog,
+
+ RFC[1] -> v1:
+ (New patches 1-3, 5-8 but the diffstat isn't that different)
+ * Fix hwpoisoning of devmap pages reported by Jane (Patch 1 is new in v1)
+ * Fix/Massage commit messages to be more clear and remove the 'we' occurences (Dan, John, Matthew)
+ * Use pfn_align to be clear it's nr of pages for @align value (John, Dan)
+ * Add two helpers pgmap_align() and pgmap_pfn_align() as accessors of pgmap->align;
+ * Remove the gup_device_compound_huge special path and have the same code
+   work both ways while special casing when devmap page is compound (Jason, John)
+ * Avoid usage of vmemmap_populate_basepages() and introduce a first class
+   loop that doesn't care about passing an altmap for memmap reuse. (Dan)
+ * Completely rework the vmemmap_populate_compound() to avoid the sparse_add_section
+   hack into passing block across sparse_add_section calls. It's a lot easier to
+   follow and more explicit in what it does.
+ * Replace the vmemmap refactoring with adding a @pgmap argument and moving
+   parts of the vmemmap_populate_base_pages(). (Patch 5 and 6 are new as a result)
+ * Add PMD tail page vmemmap area reuse for 1GB pages. (Patch 8 is new)
+ * Improve memmap_init_zone_device() to initialize compound pages when
+   struct pages are cache warm. That lead to a even further speed up further
+   from RFC series from 190ms -> 80-120ms. Patches 2 and 3 are the new ones
+   as a result (Dan)
+ * Remove PGMAP_COMPOUND and use @align as the property to detect whether
+   or not to reuse vmemmap areas (Dan)
+
+[1] https://lore.kernel.org/linux-mm/20201208172901.17384-1-joao.m.martins@oracle.com/
+
+Thanks,
+	Joao
+
+Joao Martins (14):
+  memory-failure: fetch compound_head after pgmap_pfn_valid()
+  mm/page_alloc: split prep_compound_page into head and tail subparts
+  mm/page_alloc: refactor memmap_init_zone_device() page init
+  mm/memremap: add ZONE_DEVICE support for compound pages
+  mm/sparse-vmemmap: add a pgmap argument to section activation
+  mm/sparse-vmemmap: refactor core of vmemmap_populate_basepages() to
+    helper
+  mm/hugetlb_vmemmap: move comment block to Documentation/vm
+  mm/sparse-vmemmap: populate compound pagemaps
+  mm/page_alloc: reuse tail struct pages for compound pagemaps
+  device-dax: use ALIGN() for determining pgoff
+  device-dax: ensure dev_dax->pgmap is valid for dynamic devices
+  device-dax: compound pagemap support
+  mm/gup: grab head page refcount once for group of subpages
+  mm/sparse-vmemmap: improve memory savings for compound pud geometry
+
+ Documentation/vm/compound_pagemaps.rst | 300 +++++++++++++++++++++++++
+ Documentation/vm/index.rst             |   1 +
+ drivers/dax/device.c                   |  58 +++--
+ include/linux/memory_hotplug.h         |   5 +-
+ include/linux/memremap.h               |  17 ++
+ include/linux/mm.h                     |   8 +-
+ mm/gup.c                               |  53 +++--
+ mm/hugetlb_vmemmap.c                   | 162 +------------
+ mm/memory-failure.c                    |   6 +
+ mm/memory_hotplug.c                    |   3 +-
+ mm/memremap.c                          |   9 +-
+ mm/page_alloc.c                        | 148 ++++++++----
+ mm/sparse-vmemmap.c                    | 226 +++++++++++++++++--
+ mm/sparse.c                            |  24 +-
+ 14 files changed, 743 insertions(+), 277 deletions(-)
+ create mode 100644 Documentation/vm/compound_pagemaps.rst
+
 -- 
-2.31.1
+2.17.1
 
 
