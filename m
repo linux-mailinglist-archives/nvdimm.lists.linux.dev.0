@@ -1,58 +1,59 @@
-Return-Path: <nvdimm+bounces-228-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-225-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38ACB3AB4B4
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 15:27:17 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C3133AB4AD
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 15:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 576FB1C0E6D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 13:27:16 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1C1851C0E5E
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Jun 2021 13:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571E26D1B;
-	Thu, 17 Jun 2021 13:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C518B2FB8;
+	Thu, 17 Jun 2021 13:26:47 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E866D18
-	for <nvdimm@lists.linux.dev>; Thu, 17 Jun 2021 13:26:57 +0000 (UTC)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HD3RSO183331;
-	Thu, 17 Jun 2021 09:26:31 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A262871
+	for <nvdimm@lists.linux.dev>; Thu, 17 Jun 2021 13:26:46 +0000 (UTC)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HD3NDZ040656;
+	Thu, 17 Jun 2021 09:26:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=yi2bEAVOHZr/srPy2qxKj3ID5qDzfBu9iUVVxb5z0zo=;
- b=hTyBumF4cuH5mXvf5lWgZ39QtR8LUVbX3iC3NZimGn8PeOxEuasGtskdSRvCaLOBQz7A
- BnU8Sd7Y/3msyaYaQ+I3aFkeQZ4bDuLQ8QSoMWOA1R5DqOaU/rZQEwT5m6R2zdHr2ksx
- DbsgOOuwOYpytC7iQ+WH2+zrouabtDxJRPPFIaAdi9gEDnkCLY1pA/Ps1s2RPLdXue0L
- k4Y+8zV8/f6PxuakGaw+1i5J5k+yUVBAgp4I7+b+AYIbQzrj1rZt6kEa9S0OhYfPkq6i
- HFRB3q0cc5x/74V/jf7ccGWM666wfbjjXx0VQYVSI0Z1qU7KBGUdfYzEj7si61iYAQnn Pw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3984w84use-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=XrVmuxPC+7CjQdBkXScnrwxqvgsRdcPl7q37VT9+fZk=;
+ b=RUdXWYtXWl87m1VJyjc01K1XNangE4Bu/elUP4qWHMvCb0+rEjLkNUPwLY8JBK2nSAqT
+ TrD/WcntFItKe79StWBWXF07pFBe5L/humuD0eToZrP7Pp9dv/lrNyumVn/wIYCJEuy1
+ tDTGhBTaYfPZPHrb2WITNgmQS8W2bWlfxZRnR1y1ToFRYm79lzYmlcy62977ZWWUWRuB
+ NTy3NxuPa8qMdclwqcsYY0vBfcQWBR6sqn+RfEz6yoHjC0kJzn4hea1yd8JObLdYWuQR
+ OXGPb+5ueC6yPFqKJQdls8hw4Fd0lsLeQMKpbra7JbUcJbpDUy1+nGZB4z6hDg7GR1p4 sA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3985y1b0qu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jun 2021 09:26:30 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-	by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15HDDMaT007666;
-	Thu, 17 Jun 2021 13:26:29 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-	by ppma04ams.nl.ibm.com with ESMTP id 394mj8tr0m-1
+	Thu, 17 Jun 2021 09:26:35 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15HDDG30031742;
+	Thu, 17 Jun 2021 13:26:32 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+	by ppma02fra.de.ibm.com with ESMTP id 3966jph0d2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jun 2021 13:26:28 +0000
+	Thu, 17 Jun 2021 13:26:32 +0000
 Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15HDQQUi33685848
+	by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15HDPNvr35586446
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Jun 2021 13:26:26 GMT
+	Thu, 17 Jun 2021 13:25:23 GMT
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 25DC2AE04D;
+	by IMSVA (Postfix) with ESMTP id CDC71AE045;
+	Thu, 17 Jun 2021 13:26:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 822F4AE04D;
 	Thu, 17 Jun 2021 13:26:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B9FA6AE045;
-	Thu, 17 Jun 2021 13:26:22 +0000 (GMT)
 Received: from localhost.localdomain.com (unknown [9.199.36.139])
 	by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Jun 2021 13:26:22 +0000 (GMT)
+	Thu, 17 Jun 2021 13:26:26 +0000 (GMT)
 From: Kajol Jain <kjain@linux.ibm.com>
 To: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
         linux-kernel@vger.kernel.org, peterz@infradead.org
@@ -60,113 +61,101 @@ Cc: maddy@linux.vnet.ibm.com, santosh@fossix.org, aneesh.kumar@linux.ibm.com,
         vaibhav@linux.ibm.com, dan.j.williams@intel.com, ira.weiny@intel.com,
         atrajeev@linux.vnet.ibm.com, tglx@linutronix.de, kjain@linux.ibm.com,
         rnsastry@linux.ibm.com
-Subject: [PATCH v3 0/4] Add perf interface to expose nvdimm
-Date: Thu, 17 Jun 2021 18:56:13 +0530
-Message-Id: <20210617132617.99529-1-kjain@linux.ibm.com>
+Subject: [PATCH v3 1/4] drivers/nvdimm: Add nvdimm pmu structure
+Date: Thu, 17 Jun 2021 18:56:14 +0530
+Message-Id: <20210617132617.99529-2-kjain@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ar9wrjnEd6BGdJhLZo3Dhnd-TOyiY1Kt
-X-Proofpoint-ORIG-GUID: Ar9wrjnEd6BGdJhLZo3Dhnd-TOyiY1Kt
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20210617132617.99529-1-kjain@linux.ibm.com>
+References: <20210617132617.99529-1-kjain@linux.ibm.com>
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mq_Xhj4ZbxFpBBLmBCL8djMo0ZO0LnqG
+X-Proofpoint-GUID: mq_Xhj4ZbxFpBBLmBCL8djMo0ZO0LnqG
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-06-17_10:2021-06-15,2021-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2106170085
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106170085
 
-Patchset adds performance stats reporting support for nvdimm.
-Added interface includes support for pmu register/unregister
-functions. A structure is added called nvdimm_pmu to be used for
-adding arch/platform specific data such as supported events, cpumask
-pmu event functions like event_init/add/read/del.
-User could use the standard perf tool to access perf
-events exposed via pmu.
+A structure is added, called nvdimm_pmu, for performance
+stats reporting support of nvdimm devices. It can be used to add
+nvdimm pmu data such as supported events and pmu event functions
+like event_init/add/read/del with cpu hotplug support.
 
-Added implementation to expose IBM pseries platform nmem*
-device performance stats using this interface.
-
-Result from power9 pseries lpar with 2 nvdimm device:
-command:# perf list nmem
-  nmem0/cchrhcnt/                                    [Kernel PMU event]
-  nmem0/cchwhcnt/                                    [Kernel PMU event]
-  nmem0/critrscu/                                    [Kernel PMU event]
-  nmem0/ctlresct/                                    [Kernel PMU event]
-  nmem0/ctlrestm/                                    [Kernel PMU event]
-  nmem0/fastwcnt/                                    [Kernel PMU event]
-  nmem0/hostlcnt/                                    [Kernel PMU event]
-  nmem0/hostldur/                                    [Kernel PMU event]
-  nmem0/hostscnt/                                    [Kernel PMU event]
-  nmem0/hostsdur/                                    [Kernel PMU event]
-  nmem0/medrcnt/                                     [Kernel PMU event]
-  nmem0/medrdur/                                     [Kernel PMU event]
-  nmem0/medwcnt/                                     [Kernel PMU event]
-  nmem0/medwdur/                                     [Kernel PMU event]
-  nmem0/memlife/                                     [Kernel PMU event]
-  nmem0/noopstat/                                    [Kernel PMU event]
-  nmem0/ponsecs/                                     [Kernel PMU event]
-  nmem1/cchrhcnt/                                    [Kernel PMU event]
-  nmem1/cchwhcnt/                                    [Kernel PMU event]
-  nmem1/critrscu/                                    [Kernel PMU event]
-  ...
-  nmem1/noopstat/                                    [Kernel PMU event]
-  nmem1/ponsecs/                                     [Kernel PMU event]
-
-Patch1:
-        Introduces the nvdimm_pmu structure
-Patch2:
-	Adds common interface to add arch/platform specific data
-	includes supported events, pmu event functions. It also
-	adds code for cpu hotplug support.
-Patch3:
-        Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
-        nmem* pmu. It fills in the nvdimm_pmu structure with event attrs
-        cpumask andevent functions and then registers the pmu by adding
-        callbacks to register_nvdimm_pmu.
-Patch4:
-        Sysfs documentation patch
-
-Changelog
+Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
 ---
-v2 -> v3
-- Added Tested-by tag.
+ include/linux/nd.h | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-- Fix nvdimm mailing list in the ABI Documentation.
-
-- Link to the patchset v2: https://lkml.org/lkml/2021/6/14/25
-
-v1 -> v2
-- Fix hotplug code by adding pmu migration call
-  incase current designated cpu got offline. As
-  pointed by Peter Zijlstra.
-
-- Removed the retun -1 part from cpu hotplug offline
-  function.
-
-- Link to the patchset v1: https://lkml.org/lkml/2021/6/8/500
----
-Kajol Jain (4):
-  drivers/nvdimm: Add nvdimm pmu structure
-  drivers/nvdimm: Add perf interface to expose nvdimm performance stats
-  powerpc/papr_scm: Add perf interface support
-  powerpc/papr_scm: Document papr_scm sysfs event format entries
-
- Documentation/ABI/testing/sysfs-bus-papr-pmem |  31 ++
- arch/powerpc/include/asm/device.h             |   5 +
- arch/powerpc/platforms/pseries/papr_scm.c     | 365 ++++++++++++++++++
- drivers/nvdimm/Makefile                       |   1 +
- drivers/nvdimm/nd_perf.c                      | 230 +++++++++++
- include/linux/nd.h                            |  46 +++
- 6 files changed, 678 insertions(+)
- create mode 100644 drivers/nvdimm/nd_perf.c
-
+diff --git a/include/linux/nd.h b/include/linux/nd.h
+index ee9ad76afbba..712499cf7335 100644
+--- a/include/linux/nd.h
++++ b/include/linux/nd.h
+@@ -8,6 +8,8 @@
+ #include <linux/ndctl.h>
+ #include <linux/device.h>
+ #include <linux/badblocks.h>
++#include <linux/platform_device.h>
++#include <linux/perf_event.h>
+ 
+ enum nvdimm_event {
+ 	NVDIMM_REVALIDATE_POISON,
+@@ -23,6 +25,47 @@ enum nvdimm_claim_class {
+ 	NVDIMM_CCLASS_UNKNOWN,
+ };
+ 
++/* Event attribute array index */
++#define NVDIMM_PMU_FORMAT_ATTR		0
++#define NVDIMM_PMU_EVENT_ATTR		1
++#define NVDIMM_PMU_CPUMASK_ATTR		2
++#define NVDIMM_PMU_NULL_ATTR		3
++
++/**
++ * struct nvdimm_pmu - data structure for nvdimm perf driver
++ *
++ * @name: name of the nvdimm pmu device.
++ * @pmu: pmu data structure for nvdimm performance stats.
++ * @dev: nvdimm device pointer.
++ * @functions(event_init/add/del/read): platform specific pmu functions.
++ * @attr_groups: data structure for events, formats and cpumask
++ * @cpu: designated cpu for counter access.
++ * @node: node for cpu hotplug notifier link.
++ * @cpuhp_state: state for cpu hotplug notification.
++ * @arch_cpumask: cpumask to get designated cpu for counter access.
++ */
++struct nvdimm_pmu {
++	const char *name;
++	struct pmu pmu;
++	struct device *dev;
++	int (*event_init)(struct perf_event *event);
++	int  (*add)(struct perf_event *event, int flags);
++	void (*del)(struct perf_event *event, int flags);
++	void (*read)(struct perf_event *event);
++	/*
++	 * Attribute groups for the nvdimm pmu. Index 0 used for
++	 * format attribute, index 1 used for event attribute,
++	 * index 2 used for cpusmask attribute and index 3 kept as NULL.
++	 */
++	const struct attribute_group *attr_groups[4];
++	int cpu;
++	struct hlist_node node;
++	enum cpuhp_state cpuhp_state;
++
++	/* cpumask provided by arch/platform specific code */
++	struct cpumask arch_cpumask;
++};
++
+ struct nd_device_driver {
+ 	struct device_driver drv;
+ 	unsigned long type;
 -- 
 2.27.0
 
