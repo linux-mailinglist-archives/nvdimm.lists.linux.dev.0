@@ -1,88 +1,88 @@
-Return-Path: <nvdimm+bounces-256-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-258-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AF9D3AD685
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 19 Jun 2021 03:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB18B3AD687
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 19 Jun 2021 03:45:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 415891C0E2E
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 19 Jun 2021 01:45:39 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 002F81C0F15
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 19 Jun 2021 01:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1B62FB1;
-	Sat, 19 Jun 2021 01:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9446D0F;
+	Sat, 19 Jun 2021 01:45:35 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C917172
-	for <nvdimm@lists.linux.dev>; Sat, 19 Jun 2021 01:45:29 +0000 (UTC)
-IronPort-SDR: vqvCvQjhB7VMrVL9ZyiBNFyGU3BHQ7qnMn8Pv6OiAsmrH/T1x7pGZhrNngXmjvzgFZ1DD+h61W
- pgy/cLuUcSCQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="187020486"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A65A2FB4
+	for <nvdimm@lists.linux.dev>; Sat, 19 Jun 2021 01:45:34 +0000 (UTC)
+IronPort-SDR: Q+kQ4eg4KIEoiw46X2HsDmYto8XG0NRLfRz9n1BuVsPQW+t+oIRXc/4R+nIOaM7H5qDTA8fG2p
+ VPzQLvNmvDyA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="204816938"
 X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
-   d="scan'208";a="187020486"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2021 18:45:28 -0700
-IronPort-SDR: bh6qK3VRtfLHM5Jbxfhkzv9QXgoMwADb1BeOZ1E9pJ6ILJAlVl9j88jWYGLF2smbfHYrpQc+3+
- xKdxDfsropdg==
+   d="scan'208";a="204816938"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2021 18:45:32 -0700
+IronPort-SDR: 59KvrXc2kBawd0MFZt/WFFUFV9xImsr803XdfOVtmqsW58vwQ/SMNUZFt2836QgLcR9PzOZYEf
+ lij3d6Cmg/Eg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,284,1616482800"; 
-   d="scan'208";a="489265509"
+   d="scan'208";a="485881670"
 Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.53])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2021 18:45:28 -0700
+  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2021 18:45:31 -0700
 From: Alison Schofield <alison.schofield@intel.com>
 To: Vishal Verma <vishal.l.verma@intel.com>,
 	Dan Williams <dan.j.williams@intel.com>
 Cc: Alison Schofield <alison.schofield@intel.com>,
 	nvdimm@lists.linux.dev
-Subject: [ndctl PATCH] ndctl: do not try to load a key already on the kernel keyring
-Date: Fri, 18 Jun 2021 18:40:54 -0700
-Message-Id: <20210619014056.31907-1-alison.schofield@intel.com>
+Subject: [ndctl PATCH] ndctl: remove key from kernel keyring if blob storage fails
+Date: Fri, 18 Jun 2021 18:40:55 -0700
+Message-Id: <20210619014056.31907-2-alison.schofield@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210619014056.31907-1-alison.schofield@intel.com>
+References: <20210619014056.31907-1-alison.schofield@intel.com>
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 
-During a bulk load of kernel keys, an attempt to load a key that is
-already on the kernel keyring emits this ndctl error message:
-	add_key failed: Invalid argument
+When a new passphrase key is created, the encrypted blob is always
+written to storage. If the write to storage fails the passphrase is
+not applied to the NVDIMM. That is all good. The unused key however
+is left lingering on the kernel keyring. That blocks subsequent
+attempts to add a passphrase key for the same NVDIMM. (presumably
+after correcting the storage issue)
 
-and this message in the kernel log:
-	encrypted_key: keyword 'load' not allowed when called from .update method
+Unlink the key from the kernel keyring upon failures in key storage.
 
-Avoid these error messages by checking the kernel keyring before
-trying to load.
-
-Fixes: 9925be9d6793 ("ndctl: add a load-keys command and a modprobe config")
+Fixes: 86b078b44275 ("ndctl: add passphrase management commands")
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- ndctl/load-keys.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ ndctl/util/keys.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/ndctl/load-keys.c b/ndctl/load-keys.c
-index 26648fe..9124d5b 100644
---- a/ndctl/load-keys.c
-+++ b/ndctl/load-keys.c
-@@ -132,6 +132,16 @@ static int load_dimm_keys(struct loadkeys *lk_ctx)
- 			continue;
- 		}
- 
-+		/* Skip if key is already on kernel keyring */
-+		key = keyctl_search(KEY_SPEC_USER_KEYRING, "encrypted",
-+				    desc, 0);
-+
-+		if (key > 0) {
-+			free(fname);
-+			free(blob);
-+			continue;
-+		}
-+
- 		key = add_key("encrypted", desc, blob, size,
- 				KEY_SPEC_USER_KEYRING);
- 		if (key < 0)
+diff --git a/ndctl/util/keys.c b/ndctl/util/keys.c
+index 30cb4c8..dbd622a 100644
+--- a/ndctl/util/keys.c
++++ b/ndctl/util/keys.c
+@@ -264,6 +264,7 @@ static key_serial_t dimm_create_key(struct ndctl_dimm *dimm,
+ 		rc = -errno;
+ 		fprintf(stderr, "Unable to open file %s: %s\n",
+ 				path, strerror(errno));
++		keyctl_unlink(key, KEY_SPEC_USER_KEYRING);
+ 		free(buffer);
+ 		return rc;
+ 	}
+@@ -276,6 +277,7 @@ static key_serial_t dimm_create_key(struct ndctl_dimm *dimm,
+ 			rc = -EIO;
+ 		fprintf(stderr, "Failed to write to %s: %s\n",
+ 				path, strerror(-rc));
++		keyctl_unlink(key, KEY_SPEC_USER_KEYRING);
+ 		fclose(fp);
+ 		free(buffer);
+ 		return rc;
 
 base-commit: 4e646fa490ba4b782afa188dd8818b94c419924e
 -- 
