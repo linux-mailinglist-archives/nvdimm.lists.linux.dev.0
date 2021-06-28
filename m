@@ -1,108 +1,150 @@
-Return-Path: <nvdimm+bounces-295-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-297-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 497083B4FC4
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 26 Jun 2021 19:43:38 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 314063B561A
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Jun 2021 02:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1BB1F3E103D
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 26 Jun 2021 17:43:36 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 025991C0DD7
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Jun 2021 00:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7BB2FB9;
-	Sat, 26 Jun 2021 17:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59896D0D;
+	Mon, 28 Jun 2021 00:03:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A124177
-	for <nvdimm@lists.linux.dev>; Sat, 26 Jun 2021 17:43:26 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id u14so4665396pga.11
-        for <nvdimm@lists.linux.dev>; Sat, 26 Jun 2021 10:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5lzS3c978KWVZhp9dx/lJ7t8+OWX7BevxD99uFCYCLw=;
-        b=TEKJ4tT2dwiVznc1KdZgOX7jo1ciZgIUvxxu9uZI31WHGV88slpNhl83mHcDRZgEmu
-         fU+I8MOtxrqEcg3/K+I8zC1KC4e5LA/7o7wAujjLvO5HeULS+fArZ8c4YaAx6lNR778N
-         cPodhq6zKDx6tCl846+hdDKKkv8Yl2w37yCMzv5fChJNm1CHecZus8FPsTAuKEeEKX0h
-         z9qgDyvIJRTK+wrEkC/HMu7YXv8sWMSsFxlorTZgnzN0lhFGyYNw7vUDBjLDvifviUyy
-         2v3a5/73Osk7shpGrXgeekreL4yiUkYvs0xbavtaUynL0Gnp65k/Nj4RCk4meV6Tl9KW
-         3B0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5lzS3c978KWVZhp9dx/lJ7t8+OWX7BevxD99uFCYCLw=;
-        b=RLPHOwoMPTkrG3nWp4kO6CKmcPXqH0KS2+VtK4xt3UMT2BcxHYwTDIlUz8Fok4wqP0
-         y7sx/NtQVBj/YweMXwiIOlPKXJfuC9ATf2VQPwtOtbKNARaHS1DOMOdqmtkmSM1iHDWR
-         2DTBserZ+eADQe1sOkKzEhXxf+cCg0fhuajaGYV3Y0SVHAp76cPusglJx0dAF2kQLPGp
-         AdyilwKI+AaR/ZfQ08mGjC2VPMueIvFVK+pLL+o2AZ3tHi92wHAUUPswQJU8ozamDitt
-         h03N5lwYuglsPURU8qgMl49MakSNJ+UeAz+Q4FXq5FcXfkxHNZuEoNn6DiVUWX/UPJ9z
-         oE1Q==
-X-Gm-Message-State: AOAM530Mx67qJ3OboU1JDCuKjs/WU1eoOXT7PK8RhZw9ZZdsxSMs9Ntt
-	UQXmHxr0f/ElaSYNtuPMEKXVDWUFR5wvL9kgepuBlg==
-X-Google-Smtp-Source: ABdhPJwDJWNvFeSOl/aHQkL4aR6n+XOQLuyDu1ETB1JWNzeOgPmAjuaVlFygur/FTWNpJhjikW3TvgIaSGjr9vig020=
-X-Received: by 2002:a62:768c:0:b029:2ff:2002:d3d0 with SMTP id
- r134-20020a62768c0000b02902ff2002d3d0mr16409804pfc.70.1624729406065; Sat, 26
- Jun 2021 10:43:26 -0700 (PDT)
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9526770
+	for <nvdimm@lists.linux.dev>; Mon, 28 Jun 2021 00:03:08 +0000 (UTC)
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AV8gBeKG6lsoZXInUpLqEAMeALOsnbusQ8zAX?=
+ =?us-ascii?q?P0AYc3Jom6uj5qSTdZUgpHjJYVkqOE3I9ertBEDiewK4yXcW2/hzAV7KZmCP0w?=
+ =?us-ascii?q?HEEGgI1+rfKlPbdBEWjtQtt5uIbZIOc+HYPBxri9rg+gmkH5IFyNmDyqqhguDT?=
+ =?us-ascii?q?1B5WPHhXQpAl/wFkERyaD0EzYAFHAKAyHJ2a6tECiCGnfR0sH7yGL0hAT+7evM?=
+ =?us-ascii?q?fKiZ6jRRYHAiQs4A6IgSjtyJOSKWn/4isj?=
+X-IronPort-AV: E=Sophos;i="5.83,304,1616428800"; 
+   d="scan'208";a="110256323"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 28 Jun 2021 08:02:57 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+	by cn.fujitsu.com (Postfix) with ESMTP id 28CF14D0BA69;
+	Mon, 28 Jun 2021 08:02:53 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 28 Jun 2021 08:02:44 +0800
+Received: from irides.mr.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.2 via Frontend Transport; Mon, 28 Jun 2021 08:02:22 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>, <dm-devel@redhat.com>
+CC: <darrick.wong@oracle.com>, <dan.j.williams@intel.com>,
+	<david@fromorbit.com>, <hch@lst.de>, <agk@redhat.com>, <snitzer@redhat.com>,
+	<rgoldwyn@suse.de>
+Subject: [PATCH v5 0/9] fsdax: introduce fs query to support reflink
+Date: Mon, 28 Jun 2021 08:02:09 +0800
+Message-ID: <20210628000218.387833-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210624080621.252038-1-vaibhav@linux.ibm.com>
-In-Reply-To: <20210624080621.252038-1-vaibhav@linux.ibm.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Sat, 26 Jun 2021 10:43:15 -0700
-Message-ID: <CAPcyv4g7Y0AQDWq4DN2o+=iDQAuWjd0f9DCY2jR7A-=eED=dZQ@mail.gmail.com>
-Subject: Re: [RESEND-PATCH v2] powerpc/papr_scm: Add support for reporting dirty-shutdown-count
-To: Vaibhav Jain <vaibhav@linux.ibm.com>
-Cc: linux-nvdimm <linux-nvdimm@lists.01.org>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	"Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Santosh Sivaraj <santosh@fossix.org>, Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: 28CF14D0BA69.A2AEF
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-On Thu, Jun 24, 2021 at 1:07 AM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
->
-> Persistent memory devices like NVDIMMs can loose cached writes in case
-> something prevents flush on power-fail. Such situations are termed as
-> dirty shutdown and are exposed to applications as
-> last-shutdown-state (LSS) flag and a dirty-shutdown-counter(DSC) as
-> described at [1]. The latter being useful in conditions where multiple
-> applications want to detect a dirty shutdown event without racing with
-> one another.
->
-> PAPR-NVDIMMs have so far only exposed LSS style flags to indicate a
-> dirty-shutdown-state. This patch further adds support for DSC via the
-> "ibm,persistence-failed-count" device tree property of an NVDIMM. This
-> property is a monotonic increasing 64-bit counter thats an indication
-> of number of times an NVDIMM has encountered a dirty-shutdown event
-> causing persistence loss.
->
-> Since this value is not expected to change after system-boot hence
-> papr_scm reads & caches its value during NVDIMM probe and exposes it
-> as a PAPR sysfs attributed named 'dirty_shutdown' to match the name of
-> similarly named NFIT sysfs attribute. Also this value is available to
-> libnvdimm via PAPR_PDSM_HEALTH payload. 'struct nd_papr_pdsm_health'
-> has been extended to add a new member called 'dimm_dsc' presence of
-> which is indicated by the newly introduced PDSM_DIMM_DSC_VALID flag.
->
-> References:
-> [1] https://pmem.io/documents/Dirty_Shutdown_Handling-V1.0.pdf
->
-> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-> Reviewed-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+This patchset is aimed to support shared pages tracking for fsdax.
 
-Belated:
+Change from V4:
+  - Add nr_pfns for ->memory_failure() to support range based notification
+  - Remove struct bdev in dax_holder_notify_failure()
+  - Add rwsem for dax_holder
+  - Rename functions to (*_)notify_failure()
+  - Remove sb->corrupted_range(), implement holder_ops in filesystem and
+      MD driver instead
+  - Reorganize the patchset, make it easy to review
+  - Rebased to v5.13-rc7
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
+This patchset moves owner tracking from dax_assocaite_entry() to pmem
+device driver, by introducing an interface ->memory_failure() for struct
+pagemap.  This interface is called by memory_failure() in mm, and
+implemented by pmem device.
 
-It's looking like CXL will add one of these as well. Might be time to
-add a unified location when that happens and deprecate these
-bus-specific locations.
+Then call holder operations to find the filesystem which the corrupted
+data located in, and call filesystem handler to track files or metadata
+associated with this page.
+
+Finally we are able to try to fix the corrupted data in filesystem and
+do other necessary processing, such as killing processes who are using
+the files affected.
+
+The call trace is like this:
+memory_failure()
+|* fsdax case
+|------------
+|pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+| dax_holder_notify_failure()      =>
+|  dax_device->holder_ops->notify_failure() =>
+|                                     - xfs_dax_notify_failure()
+|                                     - md_dax_notify_failure()
+|  |* xfs_dax_notify_failure()
+|  |--------------------------
+|  |   xfs_rmap_query_range()
+|  |    xfs_currupt_helper()
+|  |    * corrupted on metadata
+|  |       try to recover data, call xfs_force_shutdown()
+|  |    * corrupted on file data
+|  |       try to recover data, call mf_dax_kill_procs()
+|  |* md_dax_notify_failure()
+|  |-------------------------
+|      md_targets->iterate_devices()
+|      md_targets->rmap()          => linear_rmap()
+|       dax_holder_notify_failure()
+|* normal case
+|-------------
+ mf_generic_kill_procs()
+
+The fsdax & reflink support for XFS is not contained in this patchset.
+
+(Rebased on v5.13-rc7)
+==
+
+Shiyang Ruan (9):
+  pagemap: Introduce ->memory_failure()
+  dax: Introduce holder for dax_device
+  mm: factor helpers for memory_failure_dev_pagemap
+  pmem,mm: Implement ->memory_failure in pmem driver
+  mm: Introduce mf_dax_kill_procs() for fsdax case
+  xfs: Implement ->corrupted_range() for XFS
+  dm: Introduce ->rmap() to find bdev offset
+  md: Implement dax_holder_operations
+  fs/dax: Remove useless functions
+
+ block/genhd.c                 |  30 +++++++
+ drivers/dax/super.c           |  49 ++++++++++
+ drivers/md/dm-linear.c        |  20 +++++
+ drivers/md/dm.c               | 126 +++++++++++++++++++++++++-
+ drivers/nvdimm/pmem.c         |  13 +++
+ fs/dax.c                      |  73 ++++-----------
+ fs/xfs/xfs_fsops.c            |   5 ++
+ fs/xfs/xfs_mount.h            |   1 +
+ fs/xfs/xfs_super.c            | 140 +++++++++++++++++++++++++++++
+ include/linux/dax.h           |  27 ++++++
+ include/linux/device-mapper.h |   5 ++
+ include/linux/genhd.h         |   1 +
+ include/linux/memremap.h      |   9 ++
+ include/linux/mm.h            |  10 +++
+ mm/memory-failure.c           | 165 ++++++++++++++++++++++------------
+ 15 files changed, 564 insertions(+), 110 deletions(-)
+
+--
+2.32.0
+
+
+
 
