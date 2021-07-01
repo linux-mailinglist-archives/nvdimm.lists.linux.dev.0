@@ -1,30 +1,30 @@
-Return-Path: <nvdimm+bounces-334-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-336-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11F863B96FE
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 22:11:22 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A08813B9700
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 22:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 15FE81C0C8C
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 20:11:21 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3958D3E1167
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 20:11:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD136D3F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36B52FB0;
 	Thu,  1 Jul 2021 20:10:29 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B903D6D13
-	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 20:10:27 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="205606911"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5386D6D2D
+	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 20:10:28 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="205606919"
 X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
-   d="scan'208";a="205606911"
+   d="scan'208";a="205606919"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:19 -0700
 X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
-   d="scan'208";a="409271345"
+   d="scan'208";a="409271356"
 Received: from anandvig-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.38.85])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:18 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
@@ -35,9 +35,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	Alison Schofield <alison.schofield@intel.com>,
 	Ira Weiny <ira.weiny@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [ndctl PATCH v3 09/21] libcxl: add GET_HEALTH_INFO mailbox command and accessors
-Date: Thu,  1 Jul 2021 14:09:53 -0600
-Message-Id: <20210701201005.3065299-10-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v3 10/21] libcxl: add support for the 'GET_LSA' command
+Date: Thu,  1 Jul 2021 14:09:54 -0600
+Message-Id: <20210701201005.3065299-11-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210701201005.3065299-1-vishal.l.verma@intel.com>
 References: <20210701201005.3065299-1-vishal.l.verma@intel.com>
@@ -49,151 +49,101 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add libcxl APIs to create a new GET_HEALTH_INFO mailbox command, the
-command output data structure (privately), and accessor APIs to return
-the different fields in the health info output.
+Add a command allocator and accessor APIs for the 'GET_LSA' mailbox
+command.
 
 Cc: Ben Widawsky <ben.widawsky@intel.com>
 Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- cxl/lib/private.h  | 11 +++++++++
- cxl/lib/libcxl.c   | 61 ++++++++++++++++++++++++++++++++++++++++++++++
- cxl/libcxl.h       |  9 +++++++
- cxl/lib/libcxl.sym |  9 +++++++
- 4 files changed, 90 insertions(+)
+ cxl/lib/private.h  |  5 +++++
+ cxl/lib/libcxl.c   | 31 +++++++++++++++++++++++++++++++
+ cxl/libcxl.h       |  3 +++
+ cxl/lib/libcxl.sym |  2 ++
+ 4 files changed, 41 insertions(+)
 
 diff --git a/cxl/lib/private.h b/cxl/lib/private.h
-index 3273f21..2232f4c 100644
+index 2232f4c..fb1dd8e 100644
 --- a/cxl/lib/private.h
 +++ b/cxl/lib/private.h
-@@ -73,6 +73,17 @@ struct cxl_cmd_identify {
+@@ -73,6 +73,11 @@ struct cxl_cmd_identify {
  	u8 qos_telemetry_caps;
  } __attribute__((packed));
  
-+struct cxl_cmd_get_health_info {
-+	u8 health_status;
-+	u8 media_status;
-+	u8 ext_status;
-+	u8 life_used;
-+	le16 temperature;
-+	le32 dirty_shutdowns;
-+	le32 volatile_errors;
-+	le32 pmem_errors;
++struct cxl_cmd_get_lsa_in {
++	le32 offset;
++	le32 length;
 +} __attribute__((packed));
 +
- static inline int check_kmod(struct kmod_ctx *kmod_ctx)
- {
- 	return kmod_ctx ? 0 : -ENXIO;
+ struct cxl_cmd_get_health_info {
+ 	u8 health_status;
+ 	u8 media_status;
 diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
-index 06a6c20..2e33c5e 100644
+index 2e33c5e..d2c38c9 100644
 --- a/cxl/lib/libcxl.c
 +++ b/cxl/lib/libcxl.c
-@@ -673,6 +673,67 @@ CXL_EXPORT const char *cxl_cmd_get_devname(struct cxl_cmd *cmd)
- 	return cxl_memdev_get_devname(cmd->memdev);
+@@ -799,6 +799,37 @@ CXL_EXPORT struct cxl_cmd *cxl_cmd_new_raw(struct cxl_memdev *memdev,
+ 	return cmd;
  }
  
-+#define cmd_get_int(cmd, n, N, field) \
++CXL_EXPORT struct cxl_cmd *cxl_cmd_new_get_lsa(struct cxl_memdev *memdev,
++		unsigned int offset, unsigned int length)
++{
++	struct cxl_cmd_get_lsa_in *get_lsa;
++	struct cxl_cmd *cmd;
++
++	cmd = cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_GET_LSA);
++	if (!cmd)
++		return NULL;
++
++	get_lsa = (void *)cmd->send_cmd->in.payload;
++	get_lsa->offset = cpu_to_le32(offset);
++	get_lsa->length = cpu_to_le32(length);
++	return cmd;
++}
++
++#define cmd_get_void(cmd, N) \
 +do { \
-+	struct cxl_cmd_##n *c = (void *)cmd->send_cmd->out.payload; \
++	void *p = (void *)cmd->send_cmd->out.payload; \
 +	if (cmd->send_cmd->id != CXL_MEM_COMMAND_ID_##N) \
-+		return EINVAL; \
++		return NULL; \
 +	if (cmd->status < 0) \
-+		return cmd->status; \
-+	return le32_to_cpu(c->field); \
++		return NULL; \
++	return p; \
 +} while(0);
 +
-+CXL_EXPORT struct cxl_cmd *cxl_cmd_new_get_health_info(
-+		struct cxl_memdev *memdev)
++CXL_EXPORT void *cxl_cmd_get_lsa_get_payload(struct cxl_cmd *cmd)
 +{
-+	return cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_GET_HEALTH_INFO);
++	cmd_get_void(cmd, GET_LSA);
 +}
 +
-+#define cmd_health_get_int(c, f) \
-+do { \
-+	cmd_get_int(c, get_health_info, GET_HEALTH_INFO, f); \
-+} while (0);
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_health_status(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, health_status);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_media_status(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, media_status);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_ext_status(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, ext_status);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_life_used(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, life_used);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_temperature(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, temperature);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_dirty_shutdowns(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, dirty_shutdowns);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_volatile_errors(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, volatile_errors);
-+}
-+
-+CXL_EXPORT int cxl_cmd_get_health_info_get_pmem_errors(struct cxl_cmd *cmd)
-+{
-+	cmd_health_get_int(cmd, pmem_errors);
-+}
-+
- CXL_EXPORT struct cxl_cmd *cxl_cmd_new_identify(struct cxl_memdev *memdev)
+ CXL_EXPORT int cxl_cmd_submit(struct cxl_cmd *cmd)
  {
- 	return cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_IDENTIFY);
+ 	struct cxl_memdev *memdev = cmd->memdev;
 diff --git a/cxl/libcxl.h b/cxl/libcxl.h
-index 9ed8c83..56ae4af 100644
+index 56ae4af..6edbd8d 100644
 --- a/cxl/libcxl.h
 +++ b/cxl/libcxl.h
-@@ -62,6 +62,15 @@ struct cxl_cmd *cxl_cmd_new_identify(struct cxl_memdev *memdev);
- int cxl_cmd_identify_get_fw_rev(struct cxl_cmd *cmd, char *fw_rev, int fw_len);
- unsigned long long cxl_cmd_identify_get_partition_align(struct cxl_cmd *cmd);
- unsigned int cxl_cmd_identify_get_lsa_size(struct cxl_cmd *cmd);
-+struct cxl_cmd *cxl_cmd_new_get_health_info(struct cxl_memdev *memdev);
-+int cxl_cmd_get_health_info_get_health_status(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_media_status(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_ext_status(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_life_used(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_temperature(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_dirty_shutdowns(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_volatile_errors(struct cxl_cmd *cmd);
-+int cxl_cmd_get_health_info_get_pmem_errors(struct cxl_cmd *cmd);
+@@ -71,6 +71,9 @@ int cxl_cmd_get_health_info_get_temperature(struct cxl_cmd *cmd);
+ int cxl_cmd_get_health_info_get_dirty_shutdowns(struct cxl_cmd *cmd);
+ int cxl_cmd_get_health_info_get_volatile_errors(struct cxl_cmd *cmd);
+ int cxl_cmd_get_health_info_get_pmem_errors(struct cxl_cmd *cmd);
++struct cxl_cmd *cxl_cmd_new_get_lsa(struct cxl_memdev *memdev,
++		unsigned int offset, unsigned int length);
++void *cxl_cmd_get_lsa_get_payload(struct cxl_cmd *cmd);
  
  #ifdef __cplusplus
  } /* extern "C" */
 diff --git a/cxl/lib/libcxl.sym b/cxl/lib/libcxl.sym
-index d6aa0b2..e00443d 100644
+index e00443d..2c6193b 100644
 --- a/cxl/lib/libcxl.sym
 +++ b/cxl/lib/libcxl.sym
-@@ -43,4 +43,13 @@ global:
- 	cxl_cmd_identify_get_fw_rev;
- 	cxl_cmd_identify_get_partition_align;
- 	cxl_cmd_identify_get_lsa_size;
-+	cxl_cmd_new_get_health_info;
-+	cxl_cmd_get_health_info_get_health_status;
-+	cxl_cmd_get_health_info_get_media_status;
-+	cxl_cmd_get_health_info_get_ext_status;
-+	cxl_cmd_get_health_info_get_life_used;
-+	cxl_cmd_get_health_info_get_temperature;
-+	cxl_cmd_get_health_info_get_dirty_shutdowns;
-+	cxl_cmd_get_health_info_get_volatile_errors;
-+	cxl_cmd_get_health_info_get_pmem_errors;
+@@ -52,4 +52,6 @@ global:
+ 	cxl_cmd_get_health_info_get_dirty_shutdowns;
+ 	cxl_cmd_get_health_info_get_volatile_errors;
+ 	cxl_cmd_get_health_info_get_pmem_errors;
++	cxl_cmd_new_get_lsa;
++	cxl_cmd_get_lsa_get_payload;
  } LIBCXL_2;
 -- 
 2.31.1
