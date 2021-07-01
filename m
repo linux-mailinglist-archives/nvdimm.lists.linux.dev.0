@@ -1,209 +1,213 @@
-Return-Path: <nvdimm+bounces-325-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-327-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4612E3B8C9B
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 05:23:47 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE7B03B96F7
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 22:10:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id C6C6A3E0FE8
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 03:23:45 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 661471C0D60
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 20:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9EE2FAE;
-	Thu,  1 Jul 2021 03:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04F92FB9;
+	Thu,  1 Jul 2021 20:10:19 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBDF72
-	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 03:23:36 +0000 (UTC)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GFk1X1lbyzXn1c
-	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 11:18:08 +0800 (CST)
-Received: from dggema765-chm.china.huawei.com (10.1.198.207) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Thu, 1 Jul 2021 11:23:26 +0800
-Received: from [127.0.0.1] (10.174.177.249) by dggema765-chm.china.huawei.com
- (10.1.198.207) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 1 Jul
- 2021 11:23:26 +0800
-Subject: Re: [ndctl PATCH 1/2] libndctl: check return value of
- ndctl_pfn_get_namespace
-To: Alison Schofield <alison.schofield@intel.com>
-CC: <vishal.l.verma@intel.com>, <nvdimm@lists.linux.dev>,
-	<linfeilong@huawei.com>, lixiaokeng <lixiaokeng@huawei.com>
-References: <d9881921-aef7-5410-1536-71df81227f4b@huawei.com>
- <b899e8ba-560c-88e6-3b49-2bdf14eab150@huawei.com>
- <20210630174125.GA25123@alison-desk.jf.intel.com>
-From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
-Message-ID: <f2132c83-4c95-2847-4125-62043d16f499@huawei.com>
-Date: Thu, 1 Jul 2021 11:23:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9851229CA
+	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 20:10:15 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="205606870"
+X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
+   d="scan'208";a="205606870"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:13 -0700
+X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
+   d="scan'208";a="409271277"
+Received: from anandvig-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.38.85])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:12 -0700
+From: Vishal Verma <vishal.l.verma@intel.com>
+To: <nvdimm@lists.linux.dev>,
+	<linux-cxl@vger.kernel.org>
+Cc: Dan Williams <dan.j.williams@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v3 00/21] Initial CXL support
+Date: Thu,  1 Jul 2021 14:09:44 -0600
+Message-Id: <20210701201005.3065299-1-vishal.l.verma@intel.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20210630174125.GA25123@alison-desk.jf.intel.com>
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.249]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggema765-chm.china.huawei.com (10.1.198.207)
-X-CFilter-Loop: Reflected
+
+Changes since v2[1]:
+
+- Some minor cleanups and formatting (Ben)
+- Update cxl_mem.h to the latest kernel version (Ben)
+- Add .clang-format (Ben)
+- Add label commands to cxl-clu - {read,write,zero}-labels
+- Add libcxl and cxl-cli to the RPM spec
+- Add bash-completion for cxl-cli
+- 
+
+[1]: https://lore.kernel.org/linux-cxl/20210219020331.725687-1-vishal.l.verma@intel.com/
+
+---
+
+These patches add a new utility and library to support CXL devices.
+This comprehends the kernel's sysfs layout for CXL devices, and
+implements a command submission harness for CXL mailbox commands via
+ioctl()s definied by the cxl_mem driver. 
+
+These patches include:
+- libcxl representation of cxl_mem devices
+- A command submission harness through libcxl
+- A 'cxl-list' command which displays information about a device
+- cxl-{read,write,zero}-labels commands for Label Storage Area
+  manipulation
+- Unit tests to exercise several libcxl APIs and perform mailbox
+  commands.
+
+Patch 15 is an RFC - maybe this should just be dropped entirely for now
+until there is a concept of active/disabled memdevs. It is useful as a
+placeholder as it allows for a way to pre-insert checks in places
+we expect the device to be active or disabled.
+
+An ndctl branch with these patches is also available at [2]
+
+[2]: https://github.com/pmem/ndctl/tree/cxl-2.0v2
+
+Ira Weiny (1):
+  ndctl: Add CXL packages to the RPM spec
+
+Vishal Verma (20):
+  ndctl: add .clang-format
+  cxl: add a cxl utility and libcxl library
+  cxl: add a local copy of the cxl_mem UAPI header
+  libcxl: add support for command query and submission
+  libcxl: add support for the 'Identify Device' command
+  test: rename 'ndctl_test' to 'test_ctx'
+  test: rename 'ndctl_test_*' helpers to 'test_*'
+  test: introduce a libcxl unit test
+  libcxl: add GET_HEALTH_INFO mailbox command and accessors
+  libcxl: add support for the 'GET_LSA' command
+  util/hexdump: Add a util helper to print a buffer in hex
+  test/libcxl: add a test for {set, get}_lsa commands
+  test/libcxl: introduce a command size fuzzing test
+  libcxl: add lsa_size to cxl_memdev, and an API to retrieve it
+  libcxl: PLACEHOLDER: add an interface to determine whether a memdev is
+    active
+  libcxl: add interfaces for label operations
+  test/libcxl: add a test for cxl_memdev_{get,set}_lsa
+  cxl: add commands to read, write, and zero labels
+  Documentation/cxl: add library API documentation
+  cxl-cli: add bash completion
+
+ Documentation/cxl/cxl-list.txt           |   64 ++
+ Documentation/cxl/cxl-read-labels.txt    |   33 +
+ Documentation/cxl/cxl-write-labels.txt   |   32 +
+ Documentation/cxl/cxl-zero-labels.txt    |   29 +
+ Documentation/cxl/cxl.txt                |   34 +
+ Documentation/cxl/human-option.txt       |    8 +
+ Documentation/cxl/labels-description.txt |    8 +
+ Documentation/cxl/labels-options.txt     |   17 +
+ Documentation/cxl/lib/cxl_new.txt        |   43 +
+ Documentation/cxl/lib/libcxl.txt         |   56 ++
+ Documentation/cxl/memdev-option.txt      |    4 +
+ Documentation/cxl/verbose-option.txt     |    5 +
+ configure.ac                             |    4 +
+ Makefile.am                              |   14 +-
+ Makefile.am.in                           |    5 +
+ cxl/lib/private.h                        |  104 +++
+ cxl/lib/libcxl.c                         | 1026 ++++++++++++++++++++++
+ cxl/builtin.h                            |   13 +
+ cxl/cxl_mem.h                            |  189 ++++
+ cxl/libcxl.h                             |   91 ++
+ test.h                                   |   40 +-
+ test/libcxl-expect.h                     |   13 +
+ util/filter.h                            |    2 +
+ util/hexdump.h                           |    8 +
+ util/json.h                              |    3 +
+ util/main.h                              |    3 +
+ cxl/cxl.c                                |   99 +++
+ cxl/list.c                               |  113 +++
+ cxl/memdev.c                             |  314 +++++++
+ ndctl/bat.c                              |    8 +-
+ ndctl/test.c                             |    8 +-
+ test/ack-shutdown-count-set.c            |   16 +-
+ test/blk_namespaces.c                    |   14 +-
+ test/core.c                              |   32 +-
+ test/dax-dev.c                           |   10 +-
+ test/dax-pmd.c                           |   13 +-
+ test/dax-poison.c                        |    6 +-
+ test/daxdev-errors.c                     |    2 +-
+ test/device-dax.c                        |   26 +-
+ test/dpa-alloc.c                         |   14 +-
+ test/dsm-fail.c                          |   14 +-
+ test/libcxl.c                            |  553 ++++++++++++
+ test/libndctl.c                          |   84 +-
+ test/multi-pmem.c                        |   23 +-
+ test/parent-uuid.c                       |   13 +-
+ test/pmem_namespaces.c                   |   14 +-
+ test/revoke-devmem.c                     |   12 +-
+ util/filter.c                            |   20 +
+ util/hexdump.c                           |   53 ++
+ util/json.c                              |   26 +
+ .clang-format                            |  162 ++++
+ .gitignore                               |    7 +-
+ Documentation/cxl/Makefile.am            |   61 ++
+ Documentation/cxl/lib/Makefile.am        |   58 ++
+ README.md                                |    2 +-
+ contrib/ndctl                            |  109 +++
+ cxl/Makefile.am                          |   22 +
+ cxl/lib/Makefile.am                      |   32 +
+ cxl/lib/libcxl.pc.in                     |   11 +
+ cxl/lib/libcxl.sym                       |   67 ++
+ ndctl.spec.in                            |   49 ++
+ test/Makefile.am                         |   15 +-
+ 62 files changed, 3749 insertions(+), 181 deletions(-)
+ create mode 100644 Documentation/cxl/cxl-list.txt
+ create mode 100644 Documentation/cxl/cxl-read-labels.txt
+ create mode 100644 Documentation/cxl/cxl-write-labels.txt
+ create mode 100644 Documentation/cxl/cxl-zero-labels.txt
+ create mode 100644 Documentation/cxl/cxl.txt
+ create mode 100644 Documentation/cxl/human-option.txt
+ create mode 100644 Documentation/cxl/labels-description.txt
+ create mode 100644 Documentation/cxl/labels-options.txt
+ create mode 100644 Documentation/cxl/lib/cxl_new.txt
+ create mode 100644 Documentation/cxl/lib/libcxl.txt
+ create mode 100644 Documentation/cxl/memdev-option.txt
+ create mode 100644 Documentation/cxl/verbose-option.txt
+ create mode 100644 cxl/lib/private.h
+ create mode 100644 cxl/lib/libcxl.c
+ create mode 100644 cxl/builtin.h
+ create mode 100644 cxl/cxl_mem.h
+ create mode 100644 cxl/libcxl.h
+ create mode 100644 test/libcxl-expect.h
+ create mode 100644 util/hexdump.h
+ create mode 100644 cxl/cxl.c
+ create mode 100644 cxl/list.c
+ create mode 100644 cxl/memdev.c
+ create mode 100644 test/libcxl.c
+ create mode 100644 util/hexdump.c
+ create mode 100644 .clang-format
+ create mode 100644 Documentation/cxl/Makefile.am
+ create mode 100644 Documentation/cxl/lib/Makefile.am
+ create mode 100644 cxl/Makefile.am
+ create mode 100644 cxl/lib/Makefile.am
+ create mode 100644 cxl/lib/libcxl.pc.in
+ create mode 100644 cxl/lib/libcxl.sym
 
 
-On 2021/7/1 1:41, Alison Schofield wrote:
-> On Tue, Jun 15, 2021 at 08:38:33PM +0800, Zhiqiang Liu wrote:
->> ndctl_pfn_get_namespace() may return NULL, so callers
->> should check return value of it. Otherwise, it may
->> cause access NULL pointer problem.
->>
-> Hi Zhiqiang,
->
-> I see you mentioned this was found by Coverity in the cover letter.
-> Please repeat that in the commit log here.
->
-> What about the call path:
-> ndctl_dax_get_namespace() --> ndctl_pfn_get_namespace()
->
-> Seems like another place where ndctl_pfn_get_namespace() could
-> eventually lead to a NULL ptr dereference.
->
-> Alison
-
-Thanks for your reply.
-
-Call path:
-
-namespace_clear_bb
-
- -> if (dax) dax_clear_badblocks(dax)
-
-     ->ndctl_dax_get_namespace(dax)
-
-        ->ndctl_pfn_get_namespace(&dax->pfn)
-
-            ->ndctl_pfn_get_ctx(pfn)
-
-
-struct ndctl_dax {
-    struct ndctl_pfn pfn;
-    struct daxctl_region *region;
-};
-
-Here, we have checked that dax is not NULL before calling ndctl_dax_get_namespace(dax).
-
-If dax is not a NULL pointer, the dax->pfn will not be a NULL pointer.
-
-As for ndctl_pfn_get_ctx(pfn), it will access pfn->region->bus without NULL-checking, which
-
-may lead to a NULL ptr dereference as you said. I will correct it in the v2 patch.
-
-
-Regards,
-
-Zhiqiang Liu
-
->> Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
->> ---
->>  ndctl/namespace.c | 18 ++++++++++++++----
->>  test/libndctl.c   |  4 ++--
->>  util/json.c       |  2 ++
->>  3 files changed, 18 insertions(+), 6 deletions(-)
->>
->> diff --git a/ndctl/namespace.c b/ndctl/namespace.c
->> index 0c8df9f..21089d7 100644
->> --- a/ndctl/namespace.c
->> +++ b/ndctl/namespace.c
->> @@ -1417,11 +1417,16 @@ static int nstype_clear_badblocks(struct ndctl_namespace *ndns,
->>
->>  static int dax_clear_badblocks(struct ndctl_dax *dax)
->>  {
->> -	struct ndctl_namespace *ndns = ndctl_dax_get_namespace(dax);
->> -	const char *devname = ndctl_dax_get_devname(dax);
->> +	struct ndctl_namespace *ndns;
->> +	const char *devname;
->>  	unsigned long long begin, size;
->>  	int rc;
->>
->> +	ndns = ndctl_dax_get_namespace(dax);
->> +	if (!ndns)
->> +		return -ENXIO;
->> +
->> +	devname = ndctl_dax_get_devname(dax);
->>  	begin = ndctl_dax_get_resource(dax);
->>  	if (begin == ULLONG_MAX)
->>  		return -ENXIO;
->> @@ -1441,11 +1446,16 @@ static int dax_clear_badblocks(struct ndctl_dax *dax)
->>
->>  static int pfn_clear_badblocks(struct ndctl_pfn *pfn)
->>  {
->> -	struct ndctl_namespace *ndns = ndctl_pfn_get_namespace(pfn);
->> -	const char *devname = ndctl_pfn_get_devname(pfn);
->> +	struct ndctl_namespace *ndns;
->> +	const char *devname;
->>  	unsigned long long begin, size;
->>  	int rc;
->>
->> +	ndns = ndctl_pfn_get_namespace(pfn);
->> +	if (!ndns)
->> +		return -ENXIO;
->> +
->> +	devname = ndctl_pfn_get_devname(pfn);
->>  	begin = ndctl_pfn_get_resource(pfn);
->>  	if (begin == ULLONG_MAX)
->>  		return -ENXIO;
->> diff --git a/test/libndctl.c b/test/libndctl.c
->> index 24d72b3..05e5ff2 100644
->> --- a/test/libndctl.c
->> +++ b/test/libndctl.c
->> @@ -1275,7 +1275,7 @@ static int check_pfn_autodetect(struct ndctl_bus *bus,
->>  		if (!ndctl_pfn_is_enabled(pfn))
->>  			continue;
->>  		pfn_ndns = ndctl_pfn_get_namespace(pfn);
->> -		if (strcmp(ndctl_namespace_get_devname(pfn_ndns), devname) != 0)
->> +		if (!pfn_ndns || strcmp(ndctl_namespace_get_devname(pfn_ndns), devname) != 0)
->>  			continue;
->>  		fprintf(stderr, "%s: pfn_ndns: %p ndns: %p\n", __func__,
->>  				pfn_ndns, ndns);
->> @@ -1372,7 +1372,7 @@ static int check_dax_autodetect(struct ndctl_bus *bus,
->>  		if (!ndctl_dax_is_enabled(dax))
->>  			continue;
->>  		dax_ndns = ndctl_dax_get_namespace(dax);
->> -		if (strcmp(ndctl_namespace_get_devname(dax_ndns), devname) != 0)
->> +		if (!dax_ndns || strcmp(ndctl_namespace_get_devname(dax_ndns), devname) != 0)
->>  			continue;
->>  		fprintf(stderr, "%s: dax_ndns: %p ndns: %p\n", __func__,
->>  				dax_ndns, ndns);
->> diff --git a/util/json.c b/util/json.c
->> index ca0167b..249f021 100644
->> --- a/util/json.c
->> +++ b/util/json.c
->> @@ -1002,6 +1002,8 @@ static struct json_object *util_pfn_badblocks_to_json(struct ndctl_pfn *pfn,
->>  	pfn_begin = ndctl_pfn_get_resource(pfn);
->>  	if (pfn_begin == ULLONG_MAX) {
->>  		struct ndctl_namespace *ndns = ndctl_pfn_get_namespace(pfn);
->> +		if (!ndns)
->> +			return NULL;
->>
->>  		return util_namespace_badblocks_to_json(ndns, bb_count, flags);
->>  	}
->> -- 
->> 2.23.0
->>
->>
->>
->>
->> .
->>
->>
->>
-> .
+base-commit: 4e646fa490ba4b782afa188dd8818b94c419924e
+-- 
+2.31.1
 
 
