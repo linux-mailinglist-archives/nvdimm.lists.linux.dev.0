@@ -1,32 +1,32 @@
-Return-Path: <nvdimm+bounces-337-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-340-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83B213B9701
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 22:11:43 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 816553B9705
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 22:12:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 4CD963E10EF
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 20:11:42 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 2E9BE3E11C8
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  1 Jul 2021 20:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D2433C1;
-	Thu,  1 Jul 2021 20:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9734D33D4;
+	Thu,  1 Jul 2021 20:10:31 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250D06D3D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8835A29CA
 	for <nvdimm@lists.linux.dev>; Thu,  1 Jul 2021 20:10:29 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="205606927"
+X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="205606934"
 X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
-   d="scan'208";a="205606927"
+   d="scan'208";a="205606934"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:20 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:21 -0700
 X-IronPort-AV: E=Sophos;i="5.83,315,1616482800"; 
-   d="scan'208";a="409271363"
+   d="scan'208";a="409271369"
 Received: from anandvig-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.38.85])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:19 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2021 13:10:20 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
 To: <nvdimm@lists.linux.dev>,
 	<linux-cxl@vger.kernel.org>
@@ -35,9 +35,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	Alison Schofield <alison.schofield@intel.com>,
 	Ira Weiny <ira.weiny@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [ndctl PATCH v3 11/21] util/hexdump: Add a util helper to print a buffer in hex
-Date: Thu,  1 Jul 2021 14:09:55 -0600
-Message-Id: <20210701201005.3065299-12-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v3 12/21] test/libcxl: add a test for {set, get}_lsa commands
+Date: Thu,  1 Jul 2021 14:09:56 -0600
+Message-Id: <20210701201005.3065299-13-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210701201005.3065299-1-vishal.l.verma@intel.com>
 References: <20210701201005.3065299-1-vishal.l.verma@intel.com>
@@ -49,92 +49,191 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for tests that may need to set, retrieve, and display
-opaque data, add a hexdump function in util/
+Add a test to store a static string in the label storage area using the
+SET_LSA mailbox command, and retrieve it using the GET_LSA command.
+Compare the strings sent and received and ensure they match.
 
 Cc: Ben Widawsky <ben.widawsky@intel.com>
 Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- util/hexdump.h |  8 ++++++++
- util/hexdump.c | 53 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 util/hexdump.h
- create mode 100644 util/hexdump.c
+ test/libcxl.c    | 134 +++++++++++++++++++++++++++++++++++++++++++++++
+ test/Makefile.am |   3 +-
+ 2 files changed, 136 insertions(+), 1 deletion(-)
 
-diff --git a/util/hexdump.h b/util/hexdump.h
-new file mode 100644
-index 0000000..d322b6a
---- /dev/null
-+++ b/util/hexdump.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2021 Intel Corporation. All rights reserved. */
-+#ifndef _UTIL_HEXDUMP_H_
-+#define _UTIL_HEXDUMP_H_
-+
-+void hex_dump_buf(unsigned char *buf, int size);
-+
-+#endif /* _UTIL_HEXDUMP_H_*/
-diff --git a/util/hexdump.c b/util/hexdump.c
-new file mode 100644
-index 0000000..1ab0118
---- /dev/null
-+++ b/util/hexdump.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2015-2021 Intel Corporation. All rights reserved. */
-+#include <stdio.h>
+diff --git a/test/libcxl.c b/test/libcxl.c
+index 241a4bb..437b1ba 100644
+--- a/test/libcxl.c
++++ b/test/libcxl.c
+@@ -19,6 +19,7 @@
+ #include <linux/version.h>
+ 
+ #include <util/size.h>
 +#include <util/hexdump.h>
-+
-+static void print_separator(int len)
+ #include <ccan/short_types/short_types.h>
+ #include <ccan/array_size/array_size.h>
+ #include <ccan/endian/endian.h>
+@@ -210,6 +211,138 @@ out_fail:
+ 	return rc;
+ }
+ 
++static int debugfs_write_raw_flag(char *str)
 +{
-+	int i;
++	char *path = "/sys/kernel/debug/cxl/mbox/raw_allow_all";
++	int fd = open(path, O_WRONLY|O_CLOEXEC);
++	int n, len = strlen(str) + 1, rc;
 +
-+	for (i = 0; i < len; i++)
-+		fprintf(stderr, "-");
-+	fprintf(stderr, "\n");
++	if (fd < 0)
++		return -errno;
++
++	n = write(fd, str, len);
++	rc = -errno;
++	close(fd);
++	if (n < len) {
++		fprintf(stderr, "failed to write %s to %s: %s\n", str, path,
++					strerror(errno));
++		return rc;
++	}
++	return 0;
 +}
 +
-+void hex_dump_buf(unsigned char *buf, int size)
++static char *test_lsa_data = "LIBCXL_TEST LSA DATA 01";
++static int lsa_size = EXPECT_CMD_IDENTIFY_LSA_SIZE;
++
++static int test_set_lsa(struct cxl_memdev *memdev)
 +{
-+	int i;
-+	const int grp = 4;  /* Number of bytes in a group */
-+	const int wid = 16; /* Bytes per line. Should be a multiple of grp */
-+	char ascii[wid + 1];
++	int data_size = strlen(test_lsa_data) + 1;
++	struct cxl_cmd *cmd;
++	struct {
++		le32 offset;
++		le32 rsvd;
++		unsigned char data[lsa_size];
++	} __attribute__((packed)) set_lsa;
++	int rc;
 +
-+	/* Generate header */
-+	print_separator((wid * 4) + (wid / grp) + 12);
++	set_lsa.offset = cpu_to_le32(0);
++	set_lsa.rsvd = cpu_to_le32(0);
++	memcpy(set_lsa.data, test_lsa_data, data_size);
 +
-+	fprintf(stderr, "Offset    ");
-+	for (i = 0; i < wid; i++) {
-+		if (i % grp == 0) fprintf(stderr, " ");
-+		fprintf(stderr, "%02x ", i);
++	cmd = cxl_cmd_new_raw(memdev, 0x4103);
++	if (!cmd)
++		return -ENOMEM;
++
++	rc = cxl_cmd_set_input_payload(cmd, &set_lsa, sizeof(set_lsa));
++	if (rc) {
++		fprintf(stderr, "%s: %s: cmd setup failed: %s\n",
++			__func__, cxl_memdev_get_devname(memdev),
++			strerror(-rc));
++		goto out_fail;
 +	}
-+	fprintf(stderr, "  Ascii\n");
 +
-+	print_separator((wid * 4) + (wid / grp) + 12);
++	rc = debugfs_write_raw_flag("Y");
++	if (rc < 0)
++		return rc;
 +
-+	/* Generate hex dump */
-+	for (i = 0; i < size; i++) {
-+		if (i % wid == 0) fprintf(stderr, "%08x  ", i);
-+		ascii[i % wid] =
-+		    ((buf[i] >= ' ') && (buf[i] <= '~')) ? buf[i] : '.';
-+		if (i % grp == 0) fprintf(stderr, " ");
-+		fprintf(stderr, "%02x ", buf[i]);
-+		if ((i == size - 1) && (size % wid != 0)) {
-+			int j;
-+			int done = size % wid;
-+			int grps_done = (done / grp) + ((done % grp) ? 1 : 0);
-+			int spaces = wid / grp - grps_done + ((wid - done) * 3);
++	rc = cxl_cmd_submit(cmd);
++	if (rc < 0)
++		fprintf(stderr, "%s: %s: cmd submission failed: %s\n",
++			__func__, cxl_memdev_get_devname(memdev),
++			strerror(-rc));
 +
-+			for (j = 0; j < spaces; j++) fprintf(stderr, " ");
++	rc = cxl_cmd_get_mbox_status(cmd);
++	if (rc != 0) {
++		fprintf(stderr, "%s: %s: firmware status: %d\n",
++			__func__, cxl_memdev_get_devname(memdev), rc);
++		return -ENXIO;
++	}
++
++	if(debugfs_write_raw_flag("N") < 0)
++		fprintf(stderr, "%s: %s: failed to restore raw flag\n",
++			__func__, cxl_memdev_get_devname(memdev));
++
++out_fail:
++	cxl_cmd_unref(cmd);
++	return rc;
++}
++
++static int test_cxl_cmd_lsa(struct cxl_ctx *ctx)
++{
++	int data_size = strlen(test_lsa_data) + 1;
++	struct cxl_memdev *memdev;
++	struct cxl_cmd *cmd;
++	unsigned char *buf;
++	int rc;
++
++	cxl_memdev_foreach(ctx, memdev) {
++		rc = test_set_lsa(memdev);
++		if (rc)
++			return rc;
++
++		cmd = cxl_cmd_new_get_lsa(memdev, 0, lsa_size);
++		if (!cmd)
++			return -ENOMEM;
++		rc = cxl_cmd_set_output_payload(cmd, NULL, lsa_size);
++		if (rc) {
++			fprintf(stderr, "%s: output buffer allocation: %s\n",
++				__func__, strerror(-rc));
++			return rc;
 +		}
-+		if ((i % wid == wid - 1) || (i == size - 1))
-+			fprintf(stderr, "  %.*s\n", (i % wid) + 1, ascii);
++		rc = cxl_cmd_submit(cmd);
++		if (rc < 0) {
++			fprintf(stderr, "%s: %s: cmd submission failed: %s\n",
++				__func__, cxl_memdev_get_devname(memdev),
++				strerror(-rc));
++			goto out_fail;
++		}
++
++		rc = cxl_cmd_get_mbox_status(cmd);
++		if (rc != 0) {
++			fprintf(stderr, "%s: %s: firmware status: %d\n",
++				__func__, cxl_memdev_get_devname(memdev), rc);
++			return -ENXIO;
++		}
++
++		buf = cxl_cmd_get_lsa_get_payload(cmd);
++		if (rc < 0)
++			goto out_fail;
++
++		if (memcmp(buf, test_lsa_data, data_size) != 0) {
++			fprintf(stderr, "%s: LSA data mismatch.\n", __func__);
++			hex_dump_buf(buf, data_size);
++			rc = -EIO;
++			goto out_fail;
++		}
++		cxl_cmd_unref(cmd);
 +	}
-+	print_separator((wid * 4) + (wid / grp) + 12);
++	return 0;
++
++out_fail:
++	cxl_cmd_unref(cmd);
++	return rc;
 +}
++
+ typedef int (*do_test_fn)(struct cxl_ctx *ctx);
+ 
+ static do_test_fn do_test[] = {
+@@ -217,6 +350,7 @@ static do_test_fn do_test[] = {
+ 	test_cxl_presence,
+ 	test_cxl_emulation_env,
+ 	test_cxl_cmd_identify,
++	test_cxl_cmd_lsa,
+ };
+ 
+ static int test_libcxl(int loglevel, struct test_ctx *test, struct cxl_ctx *ctx)
+diff --git a/test/Makefile.am b/test/Makefile.am
+index ce492a4..23f4860 100644
+--- a/test/Makefile.am
++++ b/test/Makefile.am
+@@ -86,7 +86,8 @@ LIBNDCTL_LIB =\
+ testcore =\
+ 	core.c \
+ 	../util/log.c \
+-	../util/sysfs.c
++	../util/sysfs.c \
++	../util/hexdump.c
+ 
+ libndctl_SOURCES = libndctl.c $(testcore)
+ libndctl_LDADD = $(LIBNDCTL_LIB) $(UUID_LIBS) $(KMOD_LIBS)
 -- 
 2.31.1
 
