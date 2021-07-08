@@ -1,209 +1,213 @@
-Return-Path: <nvdimm+bounces-405-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-407-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 456423BF41D
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 04:57:54 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF1493BF542
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 07:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 089043E1070
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 02:57:53 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 92E211C0EE7
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 05:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 880052FB0;
-	Thu,  8 Jul 2021 02:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C852F80;
+	Thu,  8 Jul 2021 05:40:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B78772
-	for <nvdimm@lists.linux.dev>; Thu,  8 Jul 2021 02:57:44 +0000 (UTC)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1682Yb3U047975;
-	Wed, 7 Jul 2021 22:57:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=YaAJbIOt4yyi4yrcpodi1H/EVgAmWLiCwFLM+ixUOfg=;
- b=c+eLSFi6lo3DRAjv/KQC5xokqBxf6eaIHOQxrDiMi532jfYOK393lwpLCmXGoBB+XEKi
- DxQYsxev4C1gua4++DRo/4LC0gjHfk3ODD7HkJYpsGJjfeCXR/LpjSYP3Js3KKDm8b1P
- ZYsRQ9RBIXa85Z2juJinbsCNsPrG0HIj+7qYpIrj7vGhddRsnp3QtO66qMjC++3gBtkA
- RhwbuihhiZ6YceChxDbhXGJd8jfPHDxoDWi/Lygj3M4D4I6j9ReVCUf0TdsOs6Jytq1Y
- oFJer435Im62rXS5Uqnj1fRWbfjlJns2rSrrk+agvsBwdMfMqXm6GGEwNcj5vb8KQZqe 7w== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 39mkpwbg3a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Jul 2021 22:57:38 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1682sW9b019446;
-	Thu, 8 Jul 2021 02:57:36 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-	by ppma02fra.de.ibm.com with ESMTP id 39jfh892fw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 08 Jul 2021 02:57:36 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-	by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1682vY9M33095976
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 8 Jul 2021 02:57:34 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 114A711C052;
-	Thu,  8 Jul 2021 02:57:34 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C11A811C04A;
-	Thu,  8 Jul 2021 02:57:32 +0000 (GMT)
-Received: from lep8c.aus.stglabs.ibm.com (unknown [9.40.192.207])
-	by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Thu,  8 Jul 2021 02:57:32 +0000 (GMT)
-Subject: [PATCH REBASED v5 2/2] spapr: nvdimm: Introduce spapr-nvdimm device
-From: Shivaprasad G Bhat <sbhat@linux.ibm.com>
-To: david@gibson.dropbear.id.au, groug@kaod.org, qemu-ppc@nongnu.org
-Cc: qemu-devel@nongnu.org, aneesh.kumar@linux.ibm.com, nvdimm@lists.linux.dev,
-        kvm-ppc@vger.kernel.org, bharata@linux.vnet.ibm.com
-Date: Wed, 07 Jul 2021 21:57:31 -0500
-Message-ID: 
- <162571304881.1030381.2406869533148471546.stgit@lep8c.aus.stglabs.ibm.com>
-In-Reply-To: 
- <162571302321.1030381.15196355582642786915.stgit@lep8c.aus.stglabs.ibm.com>
-References: 
- <162571302321.1030381.15196355582642786915.stgit@lep8c.aus.stglabs.ibm.com>
-User-Agent: StGit/0.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB88F70
+	for <nvdimm@lists.linux.dev>; Thu,  8 Jul 2021 05:40:51 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1m1MkT-0006EF-FH; Thu, 08 Jul 2021 07:38:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1m1Mk9-00030G-2j; Thu, 08 Jul 2021 07:38:37 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1m1Mk8-0007Hx-U3; Thu, 08 Jul 2021 07:38:36 +0200
+Date: Thu, 8 Jul 2021 07:38:13 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Sven Van Asbroeck <thesven73@gmail.com>
+Cc: nvdimm@lists.linux.dev, Alexey Kardashevskiy <aik@ozlabs.ru>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+	Jens Taprogge <jens.taprogge@taprogge.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jaroslav Kysela <perex@perex.cz>, linux-fpga@vger.kernel.org,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Paul Mackerras <paulus@samba.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Maxim Levitsky <maximlevitsky@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Michael Ellerman <mpe@ellerman.id.au>, linux-acpi@vger.kernel.org,
+	linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org,
+	Tomas Winkler <tomas.winkler@intel.com>,
+	Julien Grall <jgrall@amazon.com>, Ohad Ben-Cohen <ohad@wizery.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Alex Elder <elder@kernel.org>, linux-parisc@vger.kernel.org,
+	Geoff Levand <geoff@infradead.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-spi <linux-spi@vger.kernel.org>,
+	Thorsten Scherer <t.scherer@eckelmann.de>,
+	Sascha Hauer <kernel@pengutronix.de>, Jon Mason <jdmason@kudzu.us>,
+	linux-ntb@googlegroups.com, Wu Hao <hao.wu@intel.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Manohar Vanga <manohar.vanga@gmail.com>,
+	linux-wireless@vger.kernel.org,
+	Dominik Brodowski <linux@dominikbrodowski.net>,
+	virtualization@lists.linux-foundation.org,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	target-devel@vger.kernel.org,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Ira Weiny <ira.weiny@intel.com>, Helge Deller <deller@gmx.de>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	industrypack-devel@lists.sourceforge.net,
+	linux-mips@vger.kernel.org, Len Brown <lenb@kernel.org>,
+	alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+	linux-media <linux-media@vger.kernel.org>,
+	Maxime Ripard <mripard@kernel.org>, Johan Hovold <johan@kernel.org>,
+	greybus-dev@lists.linaro.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Cornelia Huck <cohuck@redhat.com>,
+	Wolfram Sang <wsa@kernel.org>, Joey Pabalan <jpabalanb@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+	Bodo Stroesser <bostroesser@gmail.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Tom Rix <trix@redhat.com>, Jason Wang <jasowang@redhat.com>,
+	SeongJae Park <sjpark@amazon.de>, linux-hyperv@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, Frank Li <lznuaa@gmail.com>,
+	netdev <netdev@vger.kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Mark Gross <mgross@linux.intel.com>, linux-staging@lists.linux.dev,
+	Dexuan Cui <decui@microsoft.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Kishon Vijay Abraham I <kishon@ti.com>,
+	Chen-Yu Tsai <wens@csie.org>, linux-input@vger.kernel.org,
+	Matt Porter <mporter@kernel.crashing.org>,
+	Allen Hubbe <allenbh@gmail.com>, Alex Dubov <oakad@yahoo.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Jiri Kosina <jikos@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Moritz Fischer <mdf@kernel.org>, linux-cxl@vger.kernel.org,
+	Michael Buesch <m@bues.ch>, Dan Williams <dan.j.williams@intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Martyn Welch <martyn@welchs.me.uk>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-mmc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"David S. Miller" <davem@davemloft.net>, kvm@vger.kernel.org,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	linux-remoteproc@vger.kernel.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Kirti Wankhede <kwankhede@nvidia.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-i3c@lists.infradead.org,
+	linux1394-devel@lists.sourceforge.net,
+	Lee Jones <lee.jones@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-scsi@vger.kernel.org, Vishal Verma <vishal.l.verma@intel.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Andy Gross <agross@kernel.org>, linux-serial@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Michael Jamet <michael.jamet@intel.com>,
+	William Breathitt Gray <vilhelm.gray@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>, Hannes Reinecke <hare@suse.de>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Juergen Gross <jgross@suse.com>, linuxppc-dev@lists.ozlabs.org,
+	Takashi Iwai <tiwai@suse.com>,
+	Alexandre Bounine <alex.bou9@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Marc Zyngier <maz@kernel.org>, dmaengine@vger.kernel.org,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Maximilian Luz <luzmaximilian@gmail.com>
+Subject: Re: [PATCH v2 0/4] bus: Make remove callback return void
+Message-ID: <20210708053813.pem2ufjuwkacptv3@pengutronix.de>
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
+ <CAGngYiWm4u27o-yy5L5tokMB5G1RUR5uYmKf2oXah2P3J=hK2A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9Ddrd10YOrg0phoz2b9wBB73ys7kppup
-X-Proofpoint-GUID: 9Ddrd10YOrg0phoz2b9wBB73ys7kppup
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-08_01:2021-07-06,2021-07-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 spamscore=0 suspectscore=0 impostorscore=0 phishscore=0
- mlxlogscore=856 lowpriorityscore=0 priorityscore=1501 clxscore=1015
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107080011
-
-If the device backend is not persistent memory for the nvdimm, there is
-need for explicit IO flushes on the backend to ensure persistence.
-
-On SPAPR, the issue is addressed by adding a new hcall to request for
-an explicit flush from the guest when the backend is not pmem. So, the
-approach here is to convey when the hcall flush is required in a device
-tree property. The guest once it knows the device backend is not pmem,
-makes the hcall whenever flush is required.
-
-To set the device tree property, the patch introduces a new papr specific
-device type inheriting the nvdimm device. When the backend doesn't have
-pmem="yes", the device tree property "ibm,hcall-flush-required" is set,
-and the guest makes hcall H_SCM_FLUSH requesting for an explicit flush.
-
-Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
----
- hw/ppc/spapr_nvdimm.c         |   46 +++++++++++++++++++++++++++++++++++++++++
- include/hw/ppc/spapr_nvdimm.h |    4 ++++
- 2 files changed, 50 insertions(+)
-
-diff --git a/hw/ppc/spapr_nvdimm.c b/hw/ppc/spapr_nvdimm.c
-index 4f8931ab15..4dc7c3f147 100644
---- a/hw/ppc/spapr_nvdimm.c
-+++ b/hw/ppc/spapr_nvdimm.c
-@@ -54,6 +54,8 @@ bool spapr_nvdimm_validate(HotplugHandler *hotplug_dev, NVDIMMDevice *nvdimm,
- {
-     const MachineClass *mc = MACHINE_GET_CLASS(hotplug_dev);
-     const MachineState *ms = MACHINE(hotplug_dev);
-+    PCDIMMDevice *dimm = PC_DIMM(nvdimm);
-+    MemoryRegion *mr = host_memory_backend_get_memory(dimm->hostmem);
-     g_autofree char *uuidstr = NULL;
-     QemuUUID uuid;
-     int ret;
-@@ -91,6 +93,14 @@ bool spapr_nvdimm_validate(HotplugHandler *hotplug_dev, NVDIMMDevice *nvdimm,
-         return false;
-     }
- 
-+    if (object_dynamic_cast(OBJECT(nvdimm), TYPE_SPAPR_NVDIMM) &&
-+        (memory_region_get_fd(mr) < 0)) {
-+        error_setg(errp, "spapr-nvdimm device requires the "
-+                   "memdev %s to be of memory-backend-file type",
-+                   object_get_canonical_path_component(OBJECT(dimm->hostmem)));
-+        return false;
-+    }
-+
-     return true;
- }
- 
-@@ -162,6 +172,21 @@ static int spapr_dt_nvdimm(SpaprMachineState *spapr, void *fdt,
-                              "operating-system")));
-     _FDT(fdt_setprop(fdt, child_offset, "ibm,cache-flush-required", NULL, 0));
- 
-+    if (object_dynamic_cast(OBJECT(nvdimm), TYPE_SPAPR_NVDIMM)) {
-+        bool is_pmem = false;
-+#ifdef CONFIG_LIBPMEM
-+        PCDIMMDevice *dimm = PC_DIMM(nvdimm);
-+        HostMemoryBackend *hostmem = dimm->hostmem;
-+
-+        is_pmem = object_property_get_bool(OBJECT(hostmem), "pmem",
-+                                           &error_abort);
-+#endif
-+        if (!is_pmem) {
-+            _FDT(fdt_setprop(fdt, child_offset, "ibm,hcall-flush-required",
-+                             NULL, 0));
-+        }
-+    }
-+
-     return child_offset;
- }
- 
-@@ -585,7 +610,16 @@ static target_ulong h_scm_flush(PowerPCCPU *cpu, SpaprMachineState *spapr,
-     }
- 
-     dimm = PC_DIMM(drc->dev);
-+    if (!object_dynamic_cast(OBJECT(dimm), TYPE_SPAPR_NVDIMM)) {
-+        return H_PARAMETER;
-+    }
-+
-     backend = MEMORY_BACKEND(dimm->hostmem);
-+#ifdef CONFIG_LIBPMEM
-+    if (object_property_get_bool(OBJECT(backend), "pmem", &error_abort)) {
-+        return H_UNSUPPORTED;
-+    }
-+#endif
-     fd = memory_region_get_fd(&backend->mr);
- 
-     if (fd < 0) {
-@@ -766,3 +800,15 @@ static void spapr_scm_register_types(void)
- }
- 
- type_init(spapr_scm_register_types)
-+
-+static TypeInfo spapr_nvdimm_info = {
-+    .name          = TYPE_SPAPR_NVDIMM,
-+    .parent        = TYPE_NVDIMM,
-+};
-+
-+static void spapr_nvdimm_register_types(void)
-+{
-+    type_register_static(&spapr_nvdimm_info);
-+}
-+
-+type_init(spapr_nvdimm_register_types)
-diff --git a/include/hw/ppc/spapr_nvdimm.h b/include/hw/ppc/spapr_nvdimm.h
-index 24d8e37b33..fb4e56418e 100644
---- a/include/hw/ppc/spapr_nvdimm.h
-+++ b/include/hw/ppc/spapr_nvdimm.h
-@@ -13,6 +13,10 @@
- #include "hw/mem/nvdimm.h"
- #include "migration/vmstate.h"
- 
-+#define TYPE_SPAPR_NVDIMM "spapr-nvdimm"
-+OBJECT_DECLARE_SIMPLE_TYPE(SpaprNVDIMMDevice, SPAPR_NVDIMM)
-+
-+typedef struct SpaprNVDIMMDevice  SpaprNVDIMMDevice;
- typedef struct SpaprDrc SpaprDrc;
- typedef struct SpaprMachineState SpaprMachineState;
- 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bpxpm3lcta7ifhrg"
+Content-Disposition: inline
+In-Reply-To: <CAGngYiWm4u27o-yy5L5tokMB5G1RUR5uYmKf2oXah2P3J=hK2A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: nvdimm@lists.linux.dev
 
 
+--bpxpm3lcta7ifhrg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jul 07, 2021 at 10:08:53PM -0400, Sven Van Asbroeck wrote:
+> On Tue, Jul 6, 2021 at 11:50 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> >  drivers/staging/fieldbus/anybuss/host.c   | 4 +---
+>=20
+> Awesome !
+>=20
+> Acked-by: Sven Van Asbroeck <TheSven73@gmail.com>
+
+I note that as an Ack for patch 4 only, as the others don't touch this
+file.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--bpxpm3lcta7ifhrg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDmjzsACgkQwfwUeK3K
+7Alp5wf+LJkpxzkaW2ldAtFhGuqT1XfOqbe9d5vNgqvqupJS1Q+aeie0kH0038ba
+uN3KDJ2V2DAmMf6OIKUFucVxBpCC92myb63zIHRJs5kGzTu41BRp3yt/I650Xzdr
++MB/xdEr/XFy2f9gDr/QdCojwh44TXqKzZPG6a7r6uQu8/AAUOdVEcfK6o01hN8W
+szxNTR1qtdQMHj9Ji8fo0wADdSPEez1kGe+HEOJVWBZnhdyCqS0jh774r7GsLjqY
+l8S7HhKPoY6/CCbEHKfYA15GUvexTA14O2tn6vuQPtiTTdDoh/Nl0wj0z5/WbWjX
+HF/tKnNb3l18s65PbEmxEKa2XonjFQ==
+=+Y+1
+-----END PGP SIGNATURE-----
+
+--bpxpm3lcta7ifhrg--
 
