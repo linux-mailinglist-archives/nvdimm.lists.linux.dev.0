@@ -1,92 +1,111 @@
-Return-Path: <nvdimm+bounces-415-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-417-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 385FF3C13F0
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 15:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D40FE3C1946
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 20:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id B99433E108C
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 13:11:39 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1BFEC3E1103
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jul 2021 18:38:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98072F80;
-	Thu,  8 Jul 2021 13:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEC42FB7;
+	Thu,  8 Jul 2021 18:37:56 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1866168
-	for <nvdimm@lists.linux.dev>; Thu,  8 Jul 2021 13:11:30 +0000 (UTC)
-Received: from dggeme755-chm.china.huawei.com (unknown [172.30.72.55])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GLGn43RmPzbbZ4;
-	Thu,  8 Jul 2021 21:08:08 +0800 (CST)
-Received: from [10.174.179.57] (10.174.179.57) by
- dggeme755-chm.china.huawei.com (10.3.19.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Thu, 8 Jul 2021 21:11:20 +0800
-Subject: Re: [PATCH v2] libnvdimm, badrange: replace div_u64_rem with
- DIV_ROUND_UP
-From: Kemeng Shi <shikemeng@huawei.com>
-To: <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
-	<dave.jiang@intel.com>, <ira.weiny@intel.com>, <nvdimm@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-References: <194fed48-eaf3-065f-9571-7813ad35b098@huawei.com>
-Message-ID: <8ebb412c-7978-5222-746e-1e35ff518275@huawei.com>
-Date: Thu, 8 Jul 2021 21:11:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CB9173
+	for <nvdimm@lists.linux.dev>; Thu,  8 Jul 2021 18:37:54 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="231332236"
+X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
+   d="scan'208";a="231332236"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 11:37:48 -0700
+X-IronPort-AV: E=Sophos;i="5.84,224,1620716400"; 
+   d="scan'208";a="411017427"
+Received: from janandra-mobl.amr.corp.intel.com ([10.251.31.93])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 11:37:47 -0700
+From: James Anandraj <james.sushanth.anandraj@intel.com>
+To: nvdimm@lists.linux.dev,
+	james.sushanth.anandraj@intel.com
+Subject: [PATCH v1 0/4] ndctl: Add pcdctl tool with pcdctl list and reconfigure-region commands
+Date: Thu,  8 Jul 2021 11:37:37 -0700
+Message-Id: <20210708183741.2952-1-james.sushanth.anandraj@intel.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <194fed48-eaf3-065f-9571-7813ad35b098@huawei.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.57]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme755-chm.china.huawei.com (10.3.19.101)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 
+From: James Sushanth Anandraj <james.sushanth.anandraj@intel.com>
 
-A gentle ping
+The Intel Optane Persistent Memory OS provisioning specification
+describes how to support basic provisioning for Intel Optane
+persistent memory 100 and 200 series for use in different
+operating modes using OS software.
 
-on 2021/6/26 11:53, Kemeng Shi wrote:
-> __add_badblock_range use div_u64_rem to round up end_sector and it
-> will introduces unnecessary rem define and costly '%' operation.
-> So clean it with DIV_ROUND_UP.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
-> ---
-> V1->V2:
-> -- fix that end_sector is assigned twice, sorry for that.
-> 
->  drivers/nvdimm/badrange.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/badrange.c b/drivers/nvdimm/badrange.c
-> index aaf6e215a8c6..af622ae511aa 100644
-> --- a/drivers/nvdimm/badrange.c
-> +++ b/drivers/nvdimm/badrange.c
-> @@ -187,12 +187,9 @@ static void __add_badblock_range(struct badblocks *bb, u64 ns_offset, u64 len)
->  	const unsigned int sector_size = 512;
->  	sector_t start_sector, end_sector;
->  	u64 num_sectors;
-> -	u32 rem;
-> 
->  	start_sector = div_u64(ns_offset, sector_size);
-> -	end_sector = div_u64_rem(ns_offset + len, sector_size, &rem);
-> -	if (rem)
-> -		end_sector++;
-> +	end_sector = DIV_ROUND_UP(ns_offset + len, sector_size);
->  	num_sectors = end_sector - start_sector;
-> 
->  	if (unlikely(num_sectors > (u64)INT_MAX)) {
-> 
+This patch set introduces a new utility pcdctl that implements
+basic provisioning as described in the provisioning specification
+document at https://cdrdv2.intel.com/v1/dl/getContent/634430 .
+
+The pcdctl utility provides enumeration and region reconfiguration
+commands for "nvdimm" subsystem devices (Non-volatile Memory). This
+is implemented as a separate tool rather than as a feature of ndctl as
+the steps for provisioning are specific to Intel Optane devices and 
+are as follows.
+1..Generate a new region configuration request using this utility.
+2. Reset the platform.
+3. Use this utility to list the status of operation.
+
+James Sushanth Anandraj (4):
+  Documentation/pcdctl: Add documentation for pcdctl tool and commands
+  pcdctl/list: Add pcdctl-list command to enumerate 'nvdimm' devices
+  pcdctl/reconfigure: Add pcdctl-reconfigure-region command
+  pcdctl/reconfigure: Add support for pmem and iso-pmem modes
+
+ Documentation/pcdctl/Makefile.am              |   59 +
+ .../pcdctl/asciidoctor-extensions.rb          |   30 +
+ Documentation/pcdctl/pcdctl-list.txt          |   56 +
+ .../pcdctl/pcdctl-reconfigure-region.txt      |   50 +
+ Documentation/pcdctl/pcdctl.txt               |   40 +
+ Documentation/pcdctl/theory-of-operation.txt  |   28 +
+ Makefile.am                                   |    4 +-
+ configure.ac                                  |    2 +
+ pcdctl/Makefile.am                            |   18 +
+ pcdctl/builtin.h                              |    9 +
+ pcdctl/list.c                                 |  114 ++
+ pcdctl/list.h                                 |   11 +
+ pcdctl/pcat.c                                 |   59 +
+ pcdctl/pcat.h                                 |   13 +
+ pcdctl/pcd.h                                  |  381 +++++
+ pcdctl/pcdctl.c                               |   88 +
+ pcdctl/reconfigure.c                          | 1458 +++++++++++++++++
+ pcdctl/reconfigure.h                          |   12 +
+ util/main.h                                   |    1 +
+ 19 files changed, 2431 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/pcdctl/Makefile.am
+ create mode 100644 Documentation/pcdctl/asciidoctor-extensions.rb
+ create mode 100644 Documentation/pcdctl/pcdctl-list.txt
+ create mode 100644 Documentation/pcdctl/pcdctl-reconfigure-region.txt
+ create mode 100644 Documentation/pcdctl/pcdctl.txt
+ create mode 100644 Documentation/pcdctl/theory-of-operation.txt
+ create mode 100644 pcdctl/Makefile.am
+ create mode 100644 pcdctl/builtin.h
+ create mode 100644 pcdctl/list.c
+ create mode 100644 pcdctl/list.h
+ create mode 100644 pcdctl/pcat.c
+ create mode 100644 pcdctl/pcat.h
+ create mode 100644 pcdctl/pcd.h
+ create mode 100644 pcdctl/pcdctl.c
+ create mode 100644 pcdctl/reconfigure.c
+ create mode 100644 pcdctl/reconfigure.h
 
 -- 
-Best wishes
-Kemeng Shi
+2.20.1
+
 
