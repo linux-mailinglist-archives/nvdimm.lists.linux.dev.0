@@ -1,85 +1,146 @@
-Return-Path: <nvdimm+bounces-501-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-503-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A9D3C94DB
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Jul 2021 02:20:49 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27D593C9588
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Jul 2021 03:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 66B191C0E86
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Jul 2021 00:20:48 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 93BED3E10C7
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Jul 2021 01:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580782F80;
-	Thu, 15 Jul 2021 00:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD022F80;
+	Thu, 15 Jul 2021 01:17:22 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE8072
-	for <nvdimm@lists.linux.dev>; Thu, 15 Jul 2021 00:20:39 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id o8so2286290plg.11
-        for <nvdimm@lists.linux.dev>; Wed, 14 Jul 2021 17:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=++GKWz1ssqCoeJx6bnGwv/X0kc5Z2dWJaQSf7sR2xSw=;
-        b=U0PaRa++GGYaBFwYDH/lfFiilXCr2yuSCQujvVP22gL1atGIlTC378Mi40GfDOVB6A
-         LGJQH3s5KlIRQ7jvjPI7PRMBUiieTdQD8EYG6o6W2/O8U70BMLXDq35Kwa1IwBLb3eom
-         EOH0+hBF8DUoD0vjyPGEBg4f5VkUqNjqnUR5DPN7lHlEuj7S/OJejm38Ozv0gPPydnJt
-         3V1iRBhx3r8j1M1OTc1CWwejo+jBFjEltwpdNN/0xia1WQwphKJ6zjxe6RMYwdaUPRTY
-         P7ywcBETHArMhiTAjqTuk79xznUmb5Hx5aIFoY/zOl2nJ4TIx9npkb6bAAG6BO9aDRpO
-         wqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=++GKWz1ssqCoeJx6bnGwv/X0kc5Z2dWJaQSf7sR2xSw=;
-        b=n3X8og+DpMn08P82iWPmhW9vZ4+2VCPx42vCYJnQxTdayS30jf+L1YqOUqDyYGAVm6
-         eqaWKUISObLVBUrY92MnmNH/c2RM9ETWvsNxqxDbHBhN/3BXN8wYX1RthBNf6Z6FbJwv
-         ne0oU/pCpVQ8qThmZj0H//2fG0tB8Je6iPWst2zlAPRUiIgaZhUE0Ttu/6NyoYBl3NpN
-         Lssxh/WQf5NvI9qCtCoXJuQuDe4rKCv+xxYPDjFdmZHTl8savk29PUEBpf634r9HDqUs
-         CV9qzkaQ+EO1BzbDIINd92sdFQyZIVGuPO18jJKZQHOTIXfqRLbfVbUfBT9Kldn+FGXQ
-         OK7A==
-X-Gm-Message-State: AOAM532bDajpFJb7g/CTiiQCWOMomQ/Ip3dwMZLv6fe980gLP8fMhob3
-	ron9FsBvjDjBFj1yjhm4JLr+D3ZGFVXQQWJ9fTzvSQ==
-X-Google-Smtp-Source: ABdhPJyrCy3+Y6IJAkn3gtPXWHmXninLfXfs7SN98GDpyx+hpvDd5ePEFLW9PH44iDbQsDONtPRb8Mn3CdBYf6L02Lc=
-X-Received: by 2002:a17:902:6bc7:b029:129:20c4:1c33 with SMTP id
- m7-20020a1709026bc7b029012920c41c33mr679072plt.52.1626308439094; Wed, 14 Jul
- 2021 17:20:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F43168
+	for <nvdimm@lists.linux.dev>; Thu, 15 Jul 2021 01:17:19 +0000 (UTC)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GQG7J63jXz1CJKh
+	for <nvdimm@lists.linux.dev>; Thu, 15 Jul 2021 08:52:44 +0800 (CST)
+Received: from dggema765-chm.china.huawei.com (10.1.198.207) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Thu, 15 Jul 2021 08:58:23 +0800
+Received: from [127.0.0.1] (10.174.177.249) by dggema765-chm.china.huawei.com
+ (10.1.198.207) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 15
+ Jul 2021 08:58:22 +0800
+Subject: Re: [ndctl PATCH v2 2/2] namespace: Close fd before return in
+ do_xaction_namespace()
+To: <vishal.l.verma@intel.com>
+CC: <nvdimm@lists.linux.dev>, linfeilong <linfeilong@huawei.com>,
+	<lixiaokeng@huawei.com>, Alison Schofield <alison.schofield@intel.com>
+References: <c3c08075-4815-8e84-2ba6-64644e72abee@huawei.com>
+ <a10193c0-e56b-8bf1-7ce4-d0c0f7bdc35b@huawei.com>
+From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Message-ID: <6060dada-9ad0-c6bc-0c2a-89ced6414120@huawei.com>
+Date: Thu, 15 Jul 2021 08:58:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210714193542.21857-1-joao.m.martins@oracle.com> <20210714193542.21857-4-joao.m.martins@oracle.com>
-In-Reply-To: <20210714193542.21857-4-joao.m.martins@oracle.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Wed, 14 Jul 2021 17:20:28 -0700
-Message-ID: <CAPcyv4jgsAy0RFnxvegJSBypYnHS_JrMUmbLvgwvSDUXurHnnA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/14] mm/page_alloc: refactor memmap_init_zone_device()
- page init
-To: Joao Martins <joao.m.martins@oracle.com>
-Cc: Linux MM <linux-mm@kvack.org>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Naoya Horiguchi <naoya.horiguchi@nec.com>, 
-	Matthew Wilcox <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
-	Jane Chu <jane.chu@oracle.com>, Muchun Song <songmuchun@bytedance.com>, 
-	Mike Kravetz <mike.kravetz@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <a10193c0-e56b-8bf1-7ce4-d0c0f7bdc35b@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.177.249]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggema765-chm.china.huawei.com (10.1.198.207)
+X-CFilter-Loop: Reflected
 
-On Wed, Jul 14, 2021 at 12:36 PM Joao Martins <joao.m.martins@oracle.com> wrote:
+friendly ping...
+
+On 2021/7/6 12:33, Zhiqiang Liu wrote:
+> Recently, we use Coverity to analysis the ndctl package,
+> one issue in do_xaction_namespace() is reported as follows,
+> 	CID 11690564: (RESOURCE_LEAK)
+> 	2058. leaked_storage: Variable "ri_ctx" going out of scope
+> 	      leaks the storage "ri_ctx.f_out" points to.
 >
-> Move struct page init to an helper function __init_zone_device_page().
+> In do_xaction_namespace(), ri_ctx.f_out should be closed after
+> being opened. This prevents a potential file descriptor leak
+> in do_xaction_namespace().
 >
-> This is in preparation for sharing the storage for / deduplicating
-> compound page metadata.
+> Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+> ---
+> v1->v2: add coverity report info as suggested by Alison
+>
+>  ndctl/namespace.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/ndctl/namespace.c b/ndctl/namespace.c
+> index 21089d7..55364ac 100644
+> --- a/ndctl/namespace.c
+> +++ b/ndctl/namespace.c
+> @@ -2141,7 +2141,7 @@ static int do_xaction_namespace(const char *namespace,
+>  				util_display_json_array(ri_ctx.f_out, ri_ctx.jblocks, 0);
+>  			if (rc >= 0)
+>  				(*processed)++;
+> -			return rc;
+> +			goto out;
+>  		}
+>  	}
+>
+> @@ -2152,11 +2152,11 @@ static int do_xaction_namespace(const char *namespace,
+>  		rc = file_write_infoblock(param.outfile);
+>  		if (rc >= 0)
+>  			(*processed)++;
+> -		return rc;
+> +		goto out;
+>  	}
+>
+>  	if (!namespace && action != ACTION_CREATE)
+> -		return rc;
+> +		goto out;
+>
+>  	if (verbose)
+>  		ndctl_set_log_priority(ctx, LOG_DEBUG);
+> @@ -2212,7 +2212,7 @@ static int do_xaction_namespace(const char *namespace,
+>  						saved_rc = rc;
+>  						continue;
+>  				}
+> -				return rc;
+> +				goto out;
+>  			}
+>  			ndctl_namespace_foreach_safe(region, ndns, _n) {
+>  				ndns_name = ndctl_namespace_get_devname(ndns);
+> @@ -2259,7 +2259,7 @@ static int do_xaction_namespace(const char *namespace,
+>  					rc = namespace_reconfig(region, ndns);
+>  					if (rc == 0)
+>  						*processed = 1;
+> -					return rc;
+> +					goto out;
+>  				case ACTION_READ_INFOBLOCK:
+>  					rc = namespace_rw_infoblock(ndns, &ri_ctx, READ);
+>  					if (rc == 0)
+> @@ -2281,9 +2281,6 @@ static int do_xaction_namespace(const char *namespace,
+>  	if (ri_ctx.jblocks)
+>  		util_display_json_array(ri_ctx.f_out, ri_ctx.jblocks, 0);
+>
+> -	if (ri_ctx.f_out && ri_ctx.f_out != stdout)
+> -		fclose(ri_ctx.f_out);
+> -
+>  	if (action == ACTION_CREATE && rc == -EAGAIN) {
+>  		/*
+>  		 * Namespace creation searched through all candidate
+> @@ -2301,6 +2298,10 @@ static int do_xaction_namespace(const char *namespace,
+>  	if (saved_rc)
+>  		rc = saved_rc;
+>
+> +out:
+> +	if (ri_ctx.f_out && ri_ctx.f_out != stdout)
+> +		fclose(ri_ctx.f_out);
+> +
+>  	return rc;
+>  }
 >
 
-Looks good,
-
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
