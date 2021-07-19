@@ -1,26 +1,26 @@
-Return-Path: <nvdimm+bounces-562-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-561-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54C763CDB88
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 19 Jul 2021 17:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 035E93CDAC8
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 19 Jul 2021 17:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 790E61C0F44
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 19 Jul 2021 15:28:11 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 284821C0EEC
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 19 Jul 2021 15:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE662FB3;
-	Mon, 19 Jul 2021 15:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E15002FB3;
+	Mon, 19 Jul 2021 15:19:03 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57A170
-	for <nvdimm@lists.linux.dev>; Mon, 19 Jul 2021 15:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC3B70
+	for <nvdimm@lists.linux.dev>; Mon, 19 Jul 2021 15:19:01 +0000 (UTC)
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id E6FF767373; Mon, 19 Jul 2021 17:17:44 +0200 (CEST)
-Date: Mon, 19 Jul 2021 17:17:44 +0200
+	id 3EC7E67357; Mon, 19 Jul 2021 17:18:59 +0200 (CEST)
+Date: Mon, 19 Jul 2021 17:18:57 +0200
 From: Christoph Hellwig <hch@lst.de>
 To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
 Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
 	darrick.wong@oracle.com, dan.j.williams@intel.com,
 	david@fromorbit.com, hch@lst.de, agk@redhat.com, snitzer@redhat.com,
 	rgoldwyn@suse.de
-Subject: Re: [PATCH v5 2/9] dax: Introduce holder for dax_device
-Message-ID: <20210719151744.GA22718@lst.de>
-References: <20210628000218.387833-1-ruansy.fnst@fujitsu.com> <20210628000218.387833-3-ruansy.fnst@fujitsu.com>
+Subject: Re: [PATCH v5 9/9] fs/dax: Remove useless functions
+Message-ID: <20210719151857.GB22718@lst.de>
+References: <20210628000218.387833-1-ruansy.fnst@fujitsu.com> <20210628000218.387833-10-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -40,62 +40,12 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210628000218.387833-3-ruansy.fnst@fujitsu.com>
+In-Reply-To: <20210628000218.387833-10-ruansy.fnst@fujitsu.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Mon, Jun 28, 2021 at 08:02:11AM +0800, Shiyang Ruan wrote:
-> +int dax_holder_notify_failure(struct dax_device *dax_dev, loff_t offset,
-> +			      size_t size, void *data)
-> +{
-> +	int rc = -ENXIO;
-> +	if (!dax_dev)
-> +		return rc;
-> +
-> +	if (dax_dev->holder_data) {
-> +		rc = dax_dev->holder_ops->notify_failure(dax_dev, offset,
-> +							 size, data);
-> +		if (rc == -ENODEV)
-> +			rc = -ENXIO;
-> +	} else
-> +		rc = -EOPNOTSUPP;
+On Mon, Jun 28, 2021 at 08:02:18AM +0800, Shiyang Ruan wrote:
+> Since owner tracking is triggerred by pmem device, these functions are
+> useless.  So remove them.
 
-The style looks a little odd.  Why not:
-
-	if (!dax_dev)
-		return -ENXIO
-	if (!dax_dev->holder_data)
-		return -EOPNOTSUPP;
-	return dax_dev->holder_ops->notify_failure(dax_dev, offset, size, data);
-
-and let everyone deal with the same errno codes?
-
-Also why do we even need the dax_dev NULL check?
-
-> +void dax_set_holder(struct dax_device *dax_dev, void *holder,
-> +		const struct dax_holder_operations *ops)
-> +{
-> +	if (!dax_dev)
-> +		return;
-
-I don't think we really need that check here.
-
-> +void *dax_get_holder(struct dax_device *dax_dev)
-> +{
-> +	void *holder_data;
-> +
-> +	if (!dax_dev)
-> +		return NULL;
-
-Same here.
-
-> +
-> +	down_read(&dax_dev->holder_rwsem);
-> +	holder_data = dax_dev->holder_data;
-> +	up_read(&dax_dev->holder_rwsem);
-> +
-> +	return holder_data;
-
-That lock won't protect anything.  I think we simply must have
-synchronization to prevent unregistration while the ->notify_failure
-call is in progress.
+What about ext2 and ext4?
 
