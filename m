@@ -1,37 +1,38 @@
-Return-Path: <nvdimm+bounces-609-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-610-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18DF03D552D
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jul 2021 10:15:29 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E48F13D5532
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jul 2021 10:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1A6E51C068B
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jul 2021 08:15:28 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 197EA3E0F60
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jul 2021 08:17:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D87952FB2;
-	Mon, 26 Jul 2021 08:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3BA2FB2;
+	Mon, 26 Jul 2021 08:17:35 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E9370
-	for <nvdimm@lists.linux.dev>; Mon, 26 Jul 2021 08:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1548F70
+	for <nvdimm@lists.linux.dev>; Mon, 26 Jul 2021 08:17:34 +0000 (UTC)
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id DF1C468BEB; Mon, 26 Jul 2021 10:15:12 +0200 (CEST)
-Date: Mon, 26 Jul 2021 10:15:11 +0200
+	id EC92468AFE; Mon, 26 Jul 2021 10:17:30 +0200 (CEST)
+Date: Mon, 26 Jul 2021 10:17:30 +0200
 From: Christoph Hellwig <hch@lst.de>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Dan Williams <dan.j.williams@intel.com>,
+To: Dave Chinner <david@fromorbit.com>
+Cc: Christoph Hellwig <hch@lst.de>, "Darrick J. Wong" <djwong@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
 	Matthew Wilcox <willy@infradead.org>,
 	Andreas Gruenbacher <agruenba@redhat.com>,
 	Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-xfs@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
 	nvdimm@lists.linux.dev, cluster-devel@redhat.com
 Subject: Re: [PATCH 08/27] iomap: add the new iomap_iter model
-Message-ID: <20210726081510.GB14853@lst.de>
-References: <20210719103520.495450-1-hch@lst.de> <20210719103520.495450-9-hch@lst.de> <20210719165600.GG23236@magnolia>
+Message-ID: <20210726081730.GC14853@lst.de>
+References: <20210719103520.495450-1-hch@lst.de> <20210719103520.495450-9-hch@lst.de> <20210719214838.GK664593@dread.disaster.area>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -40,32 +41,20 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210719165600.GG23236@magnolia>
+In-Reply-To: <20210719214838.GK664593@dread.disaster.area>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Mon, Jul 19, 2021 at 09:56:00AM -0700, Darrick J. Wong wrote:
-> Linus previously complained to me about filesystem code (especially
-> iomap since it was "newer") (ab)using loff_t variables to store the
-> lengths of byte ranges.  It was "loff_t length;" (or so willy
-> recollects) that tripped him up.
-> 
-> ISTR he also said we should use size_t for all lengths because nobody
-> should do operations larger than ~2G, but I reject that because iomap
-> has users that iterate large ranges of data without generating any IO
-> (e.g. fiemap, seek, swapfile activation).
-> 
-> So... rather than confusing things even more by mixing u64 and ssize_t
-> for lengths, can we introduce a new 64-bit length typedef for iomap?
-> Last summer, Dave suggested[1] something like:
-> 
-> 	typedef long long lsize_t;
-> 
-> That would enable cleanup of all the count/size/length parameters in
-> fs/remap_range.c and fs/xfs/xfs_reflink.c to use the new 64-bit length
-> type, since those operations have never been limited to 32-bit sizes.
+On Tue, Jul 20, 2021 at 07:48:38AM +1000, Dave Chinner wrote:
+> We should avoid namespace conflicts where function names shadow
+> object types. iomap_iterate() is fine as the function name - there's
+> no need for abbreviation here because it's not an overly long name.
+> This will makes it clearly different to the struct iomap_iter that
+> is passed to it and it will also make grep, cscope and other
+> code searching tools much more precise...
 
-I'd rather avoid playing guinea pig for a somewhat odd new type.  For
-now I've switched it to the loff_t as that matches the rest of iomap.
-If we switch away either to a new type or s64/u64 we should probably do
-it as a big sweep.
+Well, there isn't really a conflict by definition.  I actually like
+this choice of names (stolen from the original patch from willy)
+as it clearly indicates they go together.
+
+But I'm happy to collect a few more opinions.
 
