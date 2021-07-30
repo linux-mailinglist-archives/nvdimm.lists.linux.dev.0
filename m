@@ -1,112 +1,101 @@
-Return-Path: <nvdimm+bounces-685-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-688-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C6B23DBD42
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 18:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87BE53DBF3F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 21:52:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3AE553E1489
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 16:46:16 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 4DD793E1499
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 19:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2DE348D;
-	Fri, 30 Jul 2021 16:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41C63488;
+	Fri, 30 Jul 2021 19:51:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37E170
-	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 16:46:05 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10061"; a="212856071"
-X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
-   d="scan'208";a="212856071"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:46:04 -0700
-X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
-   d="scan'208";a="567627488"
-Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:46:04 -0700
-Subject: [PATCH] libnvdimm/region: Fix label activation vs errors
-From: Dan Williams <dan.j.williams@intel.com>
-To: nvdimm@lists.linux.dev
-Cc: Krzysztof Kensicki <krzysztof.kensicki@intel.com>, vishal.l.verma@intel.com
-Date: Fri, 30 Jul 2021 09:46:04 -0700
-Message-ID: <162766356450.3223041.1183118139023841447.stgit@dwillia2-desk3.amr.corp.intel.com>
-User-Agent: StGit/0.18-3-g996c
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CAC3481
+	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 19:51:55 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UhT8q23_1627674386;
+Received: from e18g09479.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0UhT8q23_1627674386)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 31 Jul 2021 03:46:38 +0800
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
+To: linux-erofs@lists.ozlabs.org
+Cc: linux-fsdevel@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Chao Yu <chao@kernel.org>,
+	Liu Bo <bo.liu@linux.alibaba.com>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>,
+	Liu Jiang <gerry@linux.alibaba.com>,
+	Huang Jianan <huangjianan@oppo.com>,
+	Tao Ma <boyu.mt@taobao.com>,
+	Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH v2 0/3] erofs: iomap support for uncompressed cases
+Date: Sat, 31 Jul 2021 03:46:22 +0800
+Message-Id: <20210730194625.93856-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-There are a few scenarios where init_active_labels() can return without
-registering deactivate_labels() to run when the region is disabled. In
-particular label error injection creates scenarios where a DIMM is
-disabled, but labels on other DIMMs in the region become activated.
+Hi folks,
 
-Arrange for init_active_labels() to always register deactivate_labels().
+This patchset mainly adds EROFS iomap support for uncompressed cases
+I've planed for the next merge window.
 
-Reported-by: Krzysztof Kensicki <krzysztof.kensicki@intel.com>
-Fixes: bf9bccc14c05 ("libnvdimm: pmem label sets and namespace instantiation.")
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
- drivers/nvdimm/namespace_devs.c |   17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+The first 2 patches mainly deal with 2 new cases:
+1) Direct I/O is useful in certain scenarios for uncompressed files.
+For example, double pagecache can be avoid by direct I/O when loop
+device is used for uncompressed files containing upper layer
+compressed filesystem.
 
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index 2403b71b601e..745478213ff2 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -2527,7 +2527,7 @@ static void deactivate_labels(void *region)
- 
- static int init_active_labels(struct nd_region *nd_region)
- {
--	int i;
-+	int i, rc = 0;
- 
- 	for (i = 0; i < nd_region->ndr_mappings; i++) {
- 		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
-@@ -2546,13 +2546,14 @@ static int init_active_labels(struct nd_region *nd_region)
- 			else if (test_bit(NDD_LABELING, &nvdimm->flags))
- 				/* fail, labels needed to disambiguate dpa */;
- 			else
--				return 0;
-+				continue;
- 
- 			dev_err(&nd_region->dev, "%s: is %s, failing probe\n",
- 					dev_name(&nd_mapping->nvdimm->dev),
- 					test_bit(NDD_LOCKED, &nvdimm->flags)
- 					? "locked" : "disabled");
--			return -ENXIO;
-+			rc = -ENXIO;
-+			goto out;
- 		}
- 		nd_mapping->ndd = ndd;
- 		atomic_inc(&nvdimm->busy);
-@@ -2586,13 +2587,17 @@ static int init_active_labels(struct nd_region *nd_region)
- 			break;
- 	}
- 
--	if (i < nd_region->ndr_mappings) {
-+	if (i < nd_region->ndr_mappings)
-+		rc = -ENOMEM;
-+
-+out:
-+	if (rc) {
- 		deactivate_labels(nd_region);
--		return -ENOMEM;
-+		return rc;
- 	}
- 
- 	return devm_add_action_or_reset(&nd_region->dev, deactivate_labels,
--			nd_region);
-+					nd_region);
- }
- 
- int nd_region_register_namespaces(struct nd_region *nd_region, int *err)
+2) DAX is quite useful for some container use cases in order to save
+guest memory extremely by using the minimal lightweight EROFS image.
+BTW, a bit more off this iomap topic, chunk-deduplicated regfile
+support is almost available (blob data support) for multi-layer
+container image use cases (aka. called RAFS v6, nydus [1] will support
+RAFS v6 (EROFS-compatible format) in the future and form a unified
+high-performance container image solution, which will be announced
+formally independently), which is also a small independent update.
+
+The last patch relies on the previous iomap core update in order to
+convert tail-packing inline files into iomap, thus all uncompressed
+cases are handled with iomap properly.
+
+Comments are welcome. Thanks for your time on reading this!
+
+Thanks,
+Gao Xiang
+
+[1] https://github.com/dragonflyoss/image-service
+
+changes since v1:
+ - mainly resend with commit message & comments update.
+
+Gao Xiang (2):
+  erofs: dax support for non-tailpacking regular file
+  erofs: convert all uncompressed cases to iomap
+
+Huang Jianan (1):
+  erofs: iomap support for non-tailpacking DIO
+
+ fs/erofs/Kconfig    |   1 +
+ fs/erofs/data.c     | 342 +++++++++++++++++++-------------------------
+ fs/erofs/inode.c    |   9 +-
+ fs/erofs/internal.h |   4 +
+ fs/erofs/super.c    |  60 +++++++-
+ 5 files changed, 217 insertions(+), 199 deletions(-)
+
+-- 
+2.24.4
 
 
