@@ -1,41 +1,38 @@
-Return-Path: <nvdimm+bounces-684-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-685-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F8B3DBD41
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 18:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C6B23DBD42
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 18:46:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 876783E147E
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 16:46:09 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3AE553E1489
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 16:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819903487;
-	Fri, 30 Jul 2021 16:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2DE348D;
+	Fri, 30 Jul 2021 16:46:07 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C867B70
-	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 16:46:00 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10061"; a="298717469"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37E170
+	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 16:46:05 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10061"; a="212856071"
 X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
-   d="scan'208";a="298717469"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:45:59 -0700
+   d="scan'208";a="212856071"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:46:04 -0700
 X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
-   d="scan'208";a="508283326"
+   d="scan'208";a="567627488"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:45:59 -0700
-Subject: [PATCH] ACPI: NFIT: Fix support for virtual SPA ranges
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 09:46:04 -0700
+Subject: [PATCH] libnvdimm/region: Fix label activation vs errors
 From: Dan Williams <dan.j.williams@intel.com>
 To: nvdimm@lists.linux.dev
-Cc: Jacek Zloch <jacek.zloch@intel.com>,
- Lukasz Sobieraj <lukasz.sobieraj@intel.com>, "Lee, Chun-Yi" <jlee@suse.com>,
- stable@vger.kernel.org, Krzysztof Rusocki <krzysztof.rusocki@intel.com>,
- Damian Bassa <damian.bassa@intel.com>, vishal.l.verma@intel.com
-Date: Fri, 30 Jul 2021 09:45:58 -0700
-Message-ID: <162766355874.3223041.9582643895337437921.stgit@dwillia2-desk3.amr.corp.intel.com>
+Cc: Krzysztof Kensicki <krzysztof.kensicki@intel.com>, vishal.l.verma@intel.com
+Date: Fri, 30 Jul 2021 09:46:04 -0700
+Message-ID: <162766356450.3223041.1183118139023841447.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -46,51 +43,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Fix the NFIT parsing code to treat a 0 index in a SPA Range Structure as
-a special case and not match Region Mapping Structures that use 0 to
-indicate that they are not mapped. Without this fix some platform BIOS
-descriptions of "virtual disk" ranges do not result in the pmem driver
-attaching to the range.
+There are a few scenarios where init_active_labels() can return without
+registering deactivate_labels() to run when the region is disabled. In
+particular label error injection creates scenarios where a DIMM is
+disabled, but labels on other DIMMs in the region become activated.
 
-Details:
-In addition to typical persistent memory ranges, the ACPI NFIT may also
-convey "virtual" ranges. These ranges are indicated by a UUID in the SPA
-Range Structure of UUID_VOLATILE_VIRTUAL_DISK, UUID_VOLATILE_VIRTUAL_CD,
-UUID_PERSISTENT_VIRTUAL_DISK, or UUID_PERSISTENT_VIRTUAL_CD. The
-critical difference between virtual ranges and UUID_PERSISTENT_MEMORY, is
-that virtual do not support associations with Region Mapping Structures.
-For this reason the "index" value of virtual SPA Range Structures is
-allowed to be 0. If a platform BIOS decides to represent unmapped
-NVDIMMs with a 0 index in their "SPA Range Structure Index" the driver
-falsely matches them and may falsely require labels where "virtual
-disks" are expected to be label-less. I.e. label-less is where the
-namespace-range == region-range and the pmem driver attaches with no
-user action to create a namespace.
+Arrange for init_active_labels() to always register deactivate_labels().
 
-Cc: Jacek Zloch <jacek.zloch@intel.com>
-Cc: Lukasz Sobieraj <lukasz.sobieraj@intel.com>
-Cc: "Lee, Chun-Yi" <jlee@suse.com>
-Cc: <stable@vger.kernel.org>
-Fixes: c2f32acdf848 ("acpi, nfit: treat virtual ramdisk SPA as pmem region")
-Reported-by: Krzysztof Rusocki <krzysztof.rusocki@intel.com>
-Reported-by: Damian Bassa <damian.bassa@intel.com>
+Reported-by: Krzysztof Kensicki <krzysztof.kensicki@intel.com>
+Fixes: bf9bccc14c05 ("libnvdimm: pmem label sets and namespace instantiation.")
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/acpi/nfit/core.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/nvdimm/namespace_devs.c |   17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-index 23d9a09d7060..6f15e56ef955 100644
---- a/drivers/acpi/nfit/core.c
-+++ b/drivers/acpi/nfit/core.c
-@@ -3021,6 +3021,8 @@ static int acpi_nfit_register_region(struct acpi_nfit_desc *acpi_desc,
- 		struct acpi_nfit_memory_map *memdev = nfit_memdev->memdev;
- 		struct nd_mapping_desc *mapping;
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index 2403b71b601e..745478213ff2 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -2527,7 +2527,7 @@ static void deactivate_labels(void *region)
  
-+		if (memdev->range_index == 0 || spa->range_index == 0)
-+			continue;
- 		if (memdev->range_index != spa->range_index)
- 			continue;
- 		if (count >= ND_MAX_MAPPINGS) {
+ static int init_active_labels(struct nd_region *nd_region)
+ {
+-	int i;
++	int i, rc = 0;
+ 
+ 	for (i = 0; i < nd_region->ndr_mappings; i++) {
+ 		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
+@@ -2546,13 +2546,14 @@ static int init_active_labels(struct nd_region *nd_region)
+ 			else if (test_bit(NDD_LABELING, &nvdimm->flags))
+ 				/* fail, labels needed to disambiguate dpa */;
+ 			else
+-				return 0;
++				continue;
+ 
+ 			dev_err(&nd_region->dev, "%s: is %s, failing probe\n",
+ 					dev_name(&nd_mapping->nvdimm->dev),
+ 					test_bit(NDD_LOCKED, &nvdimm->flags)
+ 					? "locked" : "disabled");
+-			return -ENXIO;
++			rc = -ENXIO;
++			goto out;
+ 		}
+ 		nd_mapping->ndd = ndd;
+ 		atomic_inc(&nvdimm->busy);
+@@ -2586,13 +2587,17 @@ static int init_active_labels(struct nd_region *nd_region)
+ 			break;
+ 	}
+ 
+-	if (i < nd_region->ndr_mappings) {
++	if (i < nd_region->ndr_mappings)
++		rc = -ENOMEM;
++
++out:
++	if (rc) {
+ 		deactivate_labels(nd_region);
+-		return -ENOMEM;
++		return rc;
+ 	}
+ 
+ 	return devm_add_action_or_reset(&nd_region->dev, deactivate_labels,
+-			nd_region);
++					nd_region);
+ }
+ 
+ int nd_region_register_namespaces(struct nd_region *nd_region, int *err)
 
 
