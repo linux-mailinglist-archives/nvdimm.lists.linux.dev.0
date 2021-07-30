@@ -1,408 +1,76 @@
-Return-Path: <nvdimm+bounces-686-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-690-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E19BC3DBF33
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 21:47:11 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 186A63DBF52
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 22:00:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 936DC1C0B88
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 19:47:10 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3EAF03E146A
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 30 Jul 2021 20:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693873488;
-	Fri, 30 Jul 2021 19:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5872C348A;
+	Fri, 30 Jul 2021 20:00:27 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from out4436.biz.mail.alibaba.com (out4436.biz.mail.alibaba.com [47.88.44.36])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316073481
-	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 19:46:59 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UhT8q23_1627674386;
-Received: from e18g09479.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0UhT8q23_1627674386)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 31 Jul 2021 03:46:49 +0800
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-To: linux-erofs@lists.ozlabs.org
-Cc: linux-fsdevel@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Chao Yu <chao@kernel.org>,
-	Liu Bo <bo.liu@linux.alibaba.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Liu Jiang <gerry@linux.alibaba.com>,
-	Huang Jianan <huangjianan@oppo.com>,
-	Tao Ma <boyu.mt@taobao.com>,
-	Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 3/3] erofs: convert all uncompressed cases to iomap
-Date: Sat, 31 Jul 2021 03:46:25 +0800
-Message-Id: <20210730194625.93856-4-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20210730194625.93856-1-hsiangkao@linux.alibaba.com>
-References: <20210730194625.93856-1-hsiangkao@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55913481
+	for <nvdimm@lists.linux.dev>; Fri, 30 Jul 2021 20:00:25 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10061"; a="200365513"
+X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
+   d="scan'208";a="200365513"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 13:00:22 -0700
+X-IronPort-AV: E=Sophos;i="5.84,282,1620716400"; 
+   d="scan'208";a="508342000"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2021 13:00:22 -0700
+Subject: [PATCH] tools/testing/nvdimm: Fix missing 'fallthrough' warning
+From: Dan Williams <dan.j.williams@intel.com>
+To: nvdimm@lists.linux.dev
+Cc: vishal.l.verma@intel.com
+Date: Fri, 30 Jul 2021 13:00:20 -0700
+Message-ID: <162767522046.3313209.14767278726893995797.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Since tail-packing inline has been supported by iomap now, let's
-convert all EROFS uncompressed data I/O to iomap, which is pretty
-straight-forward.
+Use "fallthrough;" to address:
 
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+tools/testing/nvdimm/test/nfit.c: In function ‘nd_intel_test_finish_query’:
+tools/testing/nvdimm/test/nfit.c:436:37: warning: this statement may
+	fall through [-Wimplicit-fallthrough=]
+  436 |                 fw->missed_activate = false;
+      |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~
+tools/testing/nvdimm/test/nfit.c:438:9: note: here
+  438 |         case FW_STATE_UPDATED:
+      |         ^~~~
+
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- fs/erofs/data.c | 288 ++++++++----------------------------------------
- 1 file changed, 49 insertions(+), 239 deletions(-)
+ tools/testing/nvdimm/test/nfit.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-index 911521293b20..6b98156bb5ca 100644
---- a/fs/erofs/data.c
-+++ b/fs/erofs/data.c
-@@ -9,29 +9,6 @@
- #include <linux/dax.h>
- #include <trace/events/erofs.h>
- 
--static void erofs_readendio(struct bio *bio)
--{
--	struct bio_vec *bvec;
--	blk_status_t err = bio->bi_status;
--	struct bvec_iter_all iter_all;
--
--	bio_for_each_segment_all(bvec, bio, iter_all) {
--		struct page *page = bvec->bv_page;
--
--		/* page is already locked */
--		DBG_BUGON(PageUptodate(page));
--
--		if (err)
--			SetPageError(page);
--		else
--			SetPageUptodate(page);
--
--		unlock_page(page);
--		/* page could be reclaimed now */
--	}
--	bio_put(bio);
--}
--
- struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
- {
- 	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
-@@ -109,206 +86,6 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
- 	return err;
- }
- 
--static inline struct bio *erofs_read_raw_page(struct bio *bio,
--					      struct address_space *mapping,
--					      struct page *page,
--					      erofs_off_t *last_block,
--					      unsigned int nblocks,
--					      unsigned int *eblks,
--					      bool ra)
--{
--	struct inode *const inode = mapping->host;
--	struct super_block *const sb = inode->i_sb;
--	erofs_off_t current_block = (erofs_off_t)page->index;
--	int err;
--
--	DBG_BUGON(!nblocks);
--
--	if (PageUptodate(page)) {
--		err = 0;
--		goto has_updated;
--	}
--
--	/* note that for readpage case, bio also equals to NULL */
--	if (bio &&
--	    (*last_block + 1 != current_block || !*eblks)) {
--submit_bio_retry:
--		submit_bio(bio);
--		bio = NULL;
--	}
--
--	if (!bio) {
--		struct erofs_map_blocks map = {
--			.m_la = blknr_to_addr(current_block),
--		};
--		erofs_blk_t blknr;
--		unsigned int blkoff;
--
--		err = erofs_map_blocks_flatmode(inode, &map, EROFS_GET_BLOCKS_RAW);
--		if (err)
--			goto err_out;
--
--		/* zero out the holed page */
--		if (!(map.m_flags & EROFS_MAP_MAPPED)) {
--			zero_user_segment(page, 0, PAGE_SIZE);
--			SetPageUptodate(page);
--
--			/* imply err = 0, see erofs_map_blocks */
--			goto has_updated;
--		}
--
--		/* for RAW access mode, m_plen must be equal to m_llen */
--		DBG_BUGON(map.m_plen != map.m_llen);
--
--		blknr = erofs_blknr(map.m_pa);
--		blkoff = erofs_blkoff(map.m_pa);
--
--		/* deal with inline page */
--		if (map.m_flags & EROFS_MAP_META) {
--			void *vsrc, *vto;
--			struct page *ipage;
--
--			DBG_BUGON(map.m_plen > PAGE_SIZE);
--
--			ipage = erofs_get_meta_page(inode->i_sb, blknr);
--
--			if (IS_ERR(ipage)) {
--				err = PTR_ERR(ipage);
--				goto err_out;
--			}
--
--			vsrc = kmap_atomic(ipage);
--			vto = kmap_atomic(page);
--			memcpy(vto, vsrc + blkoff, map.m_plen);
--			memset(vto + map.m_plen, 0, PAGE_SIZE - map.m_plen);
--			kunmap_atomic(vto);
--			kunmap_atomic(vsrc);
--			flush_dcache_page(page);
--
--			SetPageUptodate(page);
--			/* TODO: could we unlock the page earlier? */
--			unlock_page(ipage);
--			put_page(ipage);
--
--			/* imply err = 0, see erofs_map_blocks */
--			goto has_updated;
--		}
--
--		/* pa must be block-aligned for raw reading */
--		DBG_BUGON(erofs_blkoff(map.m_pa));
--
--		/* max # of continuous pages */
--		if (nblocks > DIV_ROUND_UP(map.m_plen, PAGE_SIZE))
--			nblocks = DIV_ROUND_UP(map.m_plen, PAGE_SIZE);
--
--		*eblks = bio_max_segs(nblocks);
--		bio = bio_alloc(GFP_NOIO, *eblks);
--
--		bio->bi_end_io = erofs_readendio;
--		bio_set_dev(bio, sb->s_bdev);
--		bio->bi_iter.bi_sector = (sector_t)blknr <<
--			LOG_SECTORS_PER_BLOCK;
--		bio->bi_opf = REQ_OP_READ | (ra ? REQ_RAHEAD : 0);
--	}
--
--	err = bio_add_page(bio, page, PAGE_SIZE, 0);
--	/* out of the extent or bio is full */
--	if (err < PAGE_SIZE)
--		goto submit_bio_retry;
--	--*eblks;
--	*last_block = current_block;
--	return bio;
--
--err_out:
--	/* for sync reading, set page error immediately */
--	if (!ra) {
--		SetPageError(page);
--		ClearPageUptodate(page);
--	}
--has_updated:
--	unlock_page(page);
--
--	/* if updated manually, continuous pages has a gap */
--	if (bio)
--		submit_bio(bio);
--	return err ? ERR_PTR(err) : NULL;
--}
--
--/*
-- * since we dont have write or truncate flows, so no inode
-- * locking needs to be held at the moment.
-- */
--static int erofs_raw_access_readpage(struct file *file, struct page *page)
--{
--	erofs_off_t last_block;
--	unsigned int eblks;
--	struct bio *bio;
--
--	trace_erofs_readpage(page, true);
--
--	bio = erofs_read_raw_page(NULL, page->mapping,
--				  page, &last_block, 1, &eblks, false);
--
--	if (IS_ERR(bio))
--		return PTR_ERR(bio);
--
--	if (bio)
--		submit_bio(bio);
--	return 0;
--}
--
--static void erofs_raw_access_readahead(struct readahead_control *rac)
--{
--	erofs_off_t last_block;
--	unsigned int eblks;
--	struct bio *bio = NULL;
--	struct page *page;
--
--	trace_erofs_readpages(rac->mapping->host, readahead_index(rac),
--			readahead_count(rac), true);
--
--	while ((page = readahead_page(rac))) {
--		prefetchw(&page->flags);
--
--		bio = erofs_read_raw_page(bio, rac->mapping, page, &last_block,
--				readahead_count(rac), &eblks, true);
--
--		/* all the page errors are ignored when readahead */
--		if (IS_ERR(bio)) {
--			pr_err("%s, readahead error at page %lu of nid %llu\n",
--			       __func__, page->index,
--			       EROFS_I(rac->mapping->host)->nid);
--
--			bio = NULL;
--		}
--
--		put_page(page);
--	}
--
--	if (bio)
--		submit_bio(bio);
--}
--
--static sector_t erofs_bmap(struct address_space *mapping, sector_t block)
--{
--	struct inode *inode = mapping->host;
--	struct erofs_map_blocks map = {
--		.m_la = blknr_to_addr(block),
--	};
--
--	if (EROFS_I(inode)->datalayout == EROFS_INODE_FLAT_INLINE) {
--		erofs_blk_t blks = i_size_read(inode) >> LOG_BLOCK_SIZE;
--
--		if (block >> LOG_SECTORS_PER_BLOCK >= blks)
--			return 0;
--	}
--
--	if (!erofs_map_blocks_flatmode(inode, &map, EROFS_GET_BLOCKS_RAW))
--		return erofs_blknr(map.m_pa);
--
--	return 0;
--}
--
- static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
- 		unsigned int flags, struct iomap *iomap, struct iomap *srcmap)
- {
-@@ -327,6 +104,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
- 	iomap->offset = map.m_la;
- 	iomap->length = map.m_llen;
- 	iomap->flags = 0;
-+	iomap->private = NULL;
- 
- 	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
- 		iomap->type = IOMAP_HOLE;
-@@ -336,20 +114,61 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
- 		return 0;
- 	}
- 
--	/* that shouldn't happen for now */
- 	if (map.m_flags & EROFS_MAP_META) {
--		DBG_BUGON(1);
--		return -ENOTBLK;
-+		struct page *ipage;
-+
-+		iomap->type = IOMAP_INLINE;
-+		ipage = erofs_get_meta_page(inode->i_sb,
-+					    erofs_blknr(map.m_pa));
-+		iomap->inline_data = page_address(ipage) +
-+					erofs_blkoff(map.m_pa);
-+		iomap->private = ipage;
-+	} else {
-+		iomap->type = IOMAP_MAPPED;
-+		iomap->addr = map.m_pa;
- 	}
--	iomap->type = IOMAP_MAPPED;
--	iomap->addr = map.m_pa;
- 	return 0;
- }
- 
-+static int erofs_iomap_end(struct inode *inode, loff_t pos, loff_t length,
-+		ssize_t written, unsigned flags, struct iomap *iomap)
-+{
-+	struct page *ipage = iomap->private;
-+
-+	if (ipage) {
-+		DBG_BUGON(iomap->type != IOMAP_INLINE);
-+		unlock_page(ipage);
-+		put_page(ipage);
-+	} else {
-+		DBG_BUGON(iomap->type == IOMAP_INLINE);
-+	}
-+	return written;
-+}
-+
- const struct iomap_ops erofs_iomap_ops = {
- 	.iomap_begin = erofs_iomap_begin,
-+	.iomap_end = erofs_iomap_end,
- };
- 
-+/*
-+ * since we dont have write or truncate flows, so no inode
-+ * locking needs to be held at the moment.
-+ */
-+static int erofs_readpage(struct file *file, struct page *page)
-+{
-+	return iomap_readpage(page, &erofs_iomap_ops);
-+}
-+
-+static void erofs_readahead(struct readahead_control *rac)
-+{
-+	return iomap_readahead(rac, &erofs_iomap_ops);
-+}
-+
-+static sector_t erofs_bmap(struct address_space *mapping, sector_t block)
-+{
-+	return iomap_bmap(mapping, block, &erofs_iomap_ops);
-+}
-+
- static int erofs_prepare_dio(struct kiocb *iocb, struct iov_iter *to)
- {
- 	struct inode *inode = file_inode(iocb->ki_filp);
-@@ -365,15 +184,6 @@ static int erofs_prepare_dio(struct kiocb *iocb, struct iov_iter *to)
- 
- 	if (align & blksize_mask)
- 		return -EINVAL;
--
--	/*
--	 * Temporarily fall back tail-packing inline to buffered I/O instead
--	 * since tail-packing inline support relies on an iomap core update.
--	 */
--	if (EROFS_I(inode)->datalayout == EROFS_INODE_FLAT_INLINE &&
--	    iocb->ki_pos + iov_iter_count(to) >
--			rounddown(inode->i_size, EROFS_BLKSIZ))
--		return 1;
- 	return 0;
- }
- 
-@@ -409,8 +219,8 @@ static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 
- /* for uncompressed (aligned) files and raw access for other files */
- const struct address_space_operations erofs_raw_access_aops = {
--	.readpage = erofs_raw_access_readpage,
--	.readahead = erofs_raw_access_readahead,
-+	.readpage = erofs_readpage,
-+	.readahead = erofs_readahead,
- 	.bmap = erofs_bmap,
- 	.direct_IO = noop_direct_IO,
- };
--- 
-2.24.4
+diff --git a/tools/testing/nvdimm/test/nfit.c b/tools/testing/nvdimm/test/nfit.c
+index 54f367cbadae..b1bff5fb0f65 100644
+--- a/tools/testing/nvdimm/test/nfit.c
++++ b/tools/testing/nvdimm/test/nfit.c
+@@ -434,7 +434,7 @@ static int nd_intel_test_finish_query(struct nfit_test *t,
+ 		dev_dbg(dev, "%s: transition out verify\n", __func__);
+ 		fw->state = FW_STATE_UPDATED;
+ 		fw->missed_activate = false;
+-		/* fall through */
++		fallthrough;
+ 	case FW_STATE_UPDATED:
+ 		nd_cmd->status = 0;
+ 		/* bogus test version */
 
 
