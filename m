@@ -1,119 +1,165 @@
-Return-Path: <nvdimm+bounces-698-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-699-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8BE3DDA29
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  2 Aug 2021 16:06:41 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4C6D3DDCB0
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  2 Aug 2021 17:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 2AAF53E144D
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  2 Aug 2021 14:06:40 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 02B1B1C0787
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  2 Aug 2021 15:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2193480;
-	Mon,  2 Aug 2021 14:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7CBE3480;
+	Mon,  2 Aug 2021 15:47:53 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [216.205.24.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD182168
-	for <nvdimm@lists.linux.dev>; Mon,  2 Aug 2021 14:06:32 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id q2so19709646plr.11
-        for <nvdimm@lists.linux.dev>; Mon, 02 Aug 2021 07:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S30D7JnOgPGqBVRgaO8L0r6DfESVg4Q0tFc852vuoQg=;
-        b=o7zchrRzGSGJvS1YaJA1zPgb9ncAEmQmS7wdtDRLvzTCTV0KV5fs6bh0F0NjLGNQdA
-         hAsch3Th8KrrnTB3oABOyV9xGiM0mqxvjwcQkfhvu6p+CzBkBfEJS62qGuplsCP//3yg
-         Y/7Pd6ryCB0f1VkCo8aXIsC1y4zhgDxhhN+SRDfojcY9OlwszZt73S0OMdSAGrrt/lEF
-         DAL3uoym+fNdBMYLmsgLkKHhyp31BFULI/YtTh4pTa9xWKYuYTipXMvvP+ON9z6AxU2Y
-         Ley1Tyza1FWHdyq3dJxbBTwJofGKtCqvbKWZgl3yHMFRcxOB/Pt8dJtPdR+vN52DMLVv
-         44lw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB2672
+	for <nvdimm@lists.linux.dev>; Mon,  2 Aug 2021 15:47:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1627919271;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=di+y0xMvdbCrkaN5KumVgKe0pl3QX55ReR309IY2E68=;
+	b=cDH6CHqNKrkVQnI1WM+w3+G3pEN1dvFT1TJLUiNZtwGTCrj+Xx9Khb2C+sdUPPI0oO5BdA
+	V51UwbbL9LjlRt/E0EN9rYzGK+mgesCAHb3xntEPe/gskyU53gsujHxb9i1l/guJkxKhyh
+	UrcdCR+8VZVjJOpoEa2VtSMSWVF30yI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-23--qklPxfBN3WF_RDz4mbIAQ-1; Mon, 02 Aug 2021 11:47:49 -0400
+X-MC-Unique: -qklPxfBN3WF_RDz4mbIAQ-1
+Received: by mail-wm1-f72.google.com with SMTP id o26-20020a05600c511ab0290252d0248251so104123wms.1
+        for <nvdimm@lists.linux.dev>; Mon, 02 Aug 2021 08:47:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S30D7JnOgPGqBVRgaO8L0r6DfESVg4Q0tFc852vuoQg=;
-        b=dYiZvifEMlH2A3mAAKpmEH+sazP5dTW4lT9eNVETEwTxyJqWM5pDlliefuBgYoURwR
-         2B5vYFFbPcvmy54fJQo0bRBR289Gah6cfDGIKHsWwxY+juhINP+R3Z6dRNhPaKX6UmAb
-         S7cVivtIHDusVjxYOmxQ8gAXg6ibOJLChbITxso3M2yMUsUxFJUhDkfoMPACrzpxeS+0
-         p2+YWAXfSHNOkbwajBea9DJlv9NJgGQzRVyTPmx/rgBNu1MEfPQnRYrK9j7zeVu+5WAG
-         FFWuF4OrKGbh2A9P4S3a2Zy8RgJDj1P2ZQviCspCu/JdpVv2ha9f2uaJE4Ac2YkflfZm
-         oU5Q==
-X-Gm-Message-State: AOAM532grVFIr5lEkjIJruxJvfsF0gd+FPuU7JTmflx6cNxgsj64D0Nl
-	BogPfUNDA8MyIwLDuE7iW5g5S8qrHy1JUHURKIqtWg==
-X-Google-Smtp-Source: ABdhPJyVKOnhVt0Wdh9gR5klKUeMY8LJl9xOy+rXAR1aL3gh/RyX3d+gIGycEUJ0HTA94nfjLHThyGCadYvcoTFdMUM=
-X-Received: by 2002:a65:6248:: with SMTP id q8mr1176705pgv.279.1627913192152;
- Mon, 02 Aug 2021 07:06:32 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=di+y0xMvdbCrkaN5KumVgKe0pl3QX55ReR309IY2E68=;
+        b=mS8xx9F+i/bys3Bxd3zsvCdlAsQt6wdhOG8Nzp8nq3qtqs+7vOxNcZe6qsAlJSwneM
+         uawbtX6adwiF55OhkQ+GUDosxA/SoV1CBmN3TwPMpOuiFhw2pydgQhANEfG33o6ll/Hy
+         o02NgTB6PKqQInIXOaYyyxjIEq1BzrNkXVryR/5GY1iQj5Isug4Q+L6fijHxfyZIRGxS
+         TnWidHqY6fG61Q/mWR/aCcUfKob6y4PPb2sMQ7TveUfBpV50Wz4NraAaTuMj7yzWS3fi
+         9EZVQbTER5eSVx0KqcX6fdJPpMtogJbbr+XoafqgRuRoXZI6iMQENxOjqgv2vvZGT8xf
+         TGoQ==
+X-Gm-Message-State: AOAM5310KMzn2u6fQ7GawRoK/d8TeA2K0h47DSOuFzzC6IFfLWh2y5yV
+	INxXU8OGGEQLb86wJu4ZDrqrqu87uPR0Mq8H4IT0RP1JWk+BcdOfhn7DkdSrsGTEjqQjTTi1Smd
+	S5kcUDdOyx/cPORDc
+X-Received: by 2002:adf:ffd1:: with SMTP id x17mr18205661wrs.391.1627919268618;
+        Mon, 02 Aug 2021 08:47:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzEmbb2zH0a3fy8LIe8wfQA4/Y23WkCq1MgwVEgZQua5UBPTWh4ebj7+H7vh1LKNBn5dVAnLA==
+X-Received: by 2002:adf:ffd1:: with SMTP id x17mr18205644wrs.391.1627919268477;
+        Mon, 02 Aug 2021 08:47:48 -0700 (PDT)
+Received: from [192.168.3.132] (p5b0c60af.dip0.t-ipconnect.de. [91.12.96.175])
+        by smtp.gmail.com with ESMTPSA id t15sm8872923wrw.48.2021.08.02.08.47.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Aug 2021 08:47:48 -0700 (PDT)
+Subject: Re: [PATCH] device-dax: use fallback nid when numa_node is invalid
+To: Justin He <Justin.He@arm.com>, Dan Williams <dan.j.williams@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>
+Cc: "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ nd <nd@arm.com>
+References: <20210728082226.22161-1-justin.he@arm.com>
+ <20210728082226.22161-2-justin.he@arm.com>
+ <fc31c6ab-d147-10c0-7678-d820bc8ec96e@redhat.com>
+ <AM6PR08MB437663A6F8ABE7FCBC22B4E0F7EB9@AM6PR08MB4376.eurprd08.prod.outlook.com>
+ <f005a360-6669-1da6-5707-00b114831db2@redhat.com>
+ <AM6PR08MB43766A114DA6AE971697CA1CF7EB9@AM6PR08MB4376.eurprd08.prod.outlook.com>
+From: David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Message-ID: <9fec6bd8-1dbe-1a34-3cc0-fab7645f84b4@redhat.com>
+Date: Mon, 2 Aug 2021 17:47:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210714193542.21857-1-joao.m.martins@oracle.com>
- <20210714144830.29f9584878b04903079ef7eb@linux-foundation.org>
- <YPjW7tu1NU0iRaH9@casper.infradead.org> <5642c8c3-cf13-33dc-c617-9d1becfba1b1@oracle.com>
- <CAPcyv4ho7idBPU8F4qE8XWhRttkdfzQRATaTAw2C3AfY+Z2BdQ@mail.gmail.com> <fbb77d0f-f1e9-3ef9-fd12-b412b845b7fc@oracle.com>
-In-Reply-To: <fbb77d0f-f1e9-3ef9-fd12-b412b845b7fc@oracle.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Mon, 2 Aug 2021 07:06:21 -0700
-Message-ID: <CAPcyv4gXrNnTQfHXGy-psWRq59UdrfqJ_1xDvxb2Db_rQGGxug@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] mm, sparse-vmemmap: Introduce compound pagemaps
-To: Joao Martins <joao.m.martins@oracle.com>
-Cc: Matthew Wilcox <willy@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Linux MM <linux-mm@kvack.org>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Naoya Horiguchi <naoya.horiguchi@nec.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Jane Chu <jane.chu@oracle.com>, 
-	Muchun Song <songmuchun@bytedance.com>, Mike Kravetz <mike.kravetz@oracle.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <AM6PR08MB43766A114DA6AE971697CA1CF7EB9@AM6PR08MB4376.eurprd08.prod.outlook.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=david@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 2, 2021 at 3:41 AM Joao Martins <joao.m.martins@oracle.com> wrote:
->
->
->
-> On 7/28/21 12:23 AM, Dan Williams wrote:
-> > On Thu, Jul 22, 2021 at 3:54 AM Joao Martins <joao.m.martins@oracle.com> wrote:
-> > [..]
-> >>> The folio work really touches the page
-> >>> cache for now, and this seems mostly to touch the devmap paths.
-> >>>
-> >> /me nods -- it really is about devmap infra for usage in device-dax for persistent memory.
-> >>
-> >> Perhaps I should do s/pagemaps/devmap/ throughout the series to avoid confusion.
-> >
-> > I also like "devmap" as a more accurate name. It matches the PFN_DEV
-> > and PFN_MAP flags that decorate DAX capable pfn_t instances. It also
-> > happens to match a recommendation I gave to Ira for his support for
-> > supervisor protection keys with devmap pfns.
-> >
-> /me nods
->
-> Additionally, I think I'll be reordering the patches for more clear/easier
-> bisection i.e. first introducing compound pages for devmap, fixing associated
-> issues wrt to the slow pinning and then introduce vmemmap deduplication for
-> devmap.
->
-> It should look like below after the reordering from first patch to last.
-> Let me know if you disagree.
->
-> memory-failure: fetch compound_head after pgmap_pfn_valid()
-> mm/page_alloc: split prep_compound_page into head and tail subparts
-> mm/page_alloc: refactor memmap_init_zone_device() page init
-> mm/memremap: add ZONE_DEVICE support for compound pages
-> device-dax: use ALIGN() for determining pgoff
-> device-dax: compound devmap support
-> mm/gup: grab head page refcount once for group of subpages
-> mm/sparse-vmemmap: add a pgmap argument to section activation
-> mm/sparse-vmemmap: refactor core of vmemmap_populate_basepages() to helper
-> mm/hugetlb_vmemmap: move comment block to Documentation/vm
-> mm/sparse-vmemmap: populate compound devmaps
-> mm/page_alloc: reuse tail struct pages for compound devmaps
-> mm/sparse-vmemmap: improve memory savings for compound pud geometry
+On 29.07.21 16:44, Justin He wrote:
+> Hi David
+> 
+>> -----Original Message-----
+>> From: David Hildenbrand <david@redhat.com>
+>> Sent: Thursday, July 29, 2021 3:59 PM
+>> To: Justin He <Justin.He@arm.com>; Dan Williams <dan.j.williams@intel.com>;
+>> Vishal Verma <vishal.l.verma@intel.com>; Dave Jiang <dave.jiang@intel.com>
+>> Cc: nvdimm@lists.linux.dev; linux-kernel@vger.kernel.org; nd <nd@arm.com>
+>> Subject: Re: [PATCH] device-dax: use fallback nid when numa_node is
+>> invalid
+>>
+>> Hi Justin,
+>>
+>>>>>
+>>>>
+>>>> Note that this patch conflicts with:
+>>>>
+>>>> https://lkml.kernel.org/r/20210723125210.29987-7-david@redhat.com
+>>>>
+>>>> But nothing fundamental. Determining a single NID is similar to how I'm
+>>>> handling it for ACPI:
+>>>>
+>>>> https://lkml.kernel.org/r/20210723125210.29987-6-david@redhat.com
+>>>>
+>>>
+>>> Okay, got it. Thanks for the reminder.
+>>> Seems my patch is not useful after your patch.
+>>>
+>>
+>> I think your patch still makes sense. With
+>>
+>> https://lore.kernel.org/linux-acpi/20210723125210.29987-7-
+>> david@redhat.com/
+>>
+>> We'd have to detect the node id in the first loop instead.
+> 
+> Ok, I got your point. I will do that in v2.
+> 
+> Btw, sorry for commenting there about your patch 06 since I didn't
+> subscribe lkml via this mailbox.
 
-LGTM.
+Sure, you really should subscribe :)
+
+> > +	for (i = 0; i < dev_dax->nr_range; i++) {
+> +		struct range range;
+> +
+> +		rc = dax_kmem_range(dev_dax, i, &range);
+> +		if (rc) {
+> +			dev_info(dev, "mapping%d: %#llx-%#llx too small after alignment\n",
+> +					i, range.start, range.end);
+> +			continue;
+> +		}
+> +		total_len += range_len(&range);
+> +	}
+> You add an additional loop to get the total_len.
+> I wonder is it independent on 2nd loop?
+> If yes, why not merge the 2 loops into one?
+> Sorry if this question is too simple, I don't know too much
+> about the background of your patch.
+
+We need total_len to register the memory group. We need the memory group 
+to add memory. Therefore, we need a second loop to calculate total_len 
+upfront.
+
+
+-- 
+Thanks,
+
+David / dhildenb
+
 
