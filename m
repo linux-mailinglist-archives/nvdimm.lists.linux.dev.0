@@ -1,30 +1,30 @@
-Return-Path: <nvdimm+bounces-715-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-717-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 486643DFA93
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 06:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 25EE83DFA95
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 06:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 04D233E14DA
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 04:34:03 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id C91473E1503
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 04:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCE234A6;
-	Wed,  4 Aug 2021 04:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D765934AC;
+	Wed,  4 Aug 2021 04:32:45 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DDE349D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B17349F
 	for <nvdimm@lists.linux.dev>; Wed,  4 Aug 2021 04:32:43 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="299433073"
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="299433075"
 X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
-   d="scan'208";a="299433073"
+   d="scan'208";a="299433075"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 21:32:38 -0700
 X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
-   d="scan'208";a="511702708"
+   d="scan'208";a="511702711"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 21:32:38 -0700
 From: ira.weiny@intel.com
@@ -43,9 +43,9 @@ Cc: Ira Weiny <ira.weiny@intel.com>,
 	linux-kernel@vger.kernel.org,
 	nvdimm@lists.linux.dev,
 	linux-mm@kvack.org
-Subject: [PATCH V7 13/18] memremap_pages: Add access protection via supervisor Protection Keys (PKS)
-Date: Tue,  3 Aug 2021 21:32:26 -0700
-Message-Id: <20210804043231.2655537-14-ira.weiny@intel.com>
+Subject: [PATCH V7 14/18] memremap_pages: Add memremap.pks_fault_mode
+Date: Tue,  3 Aug 2021 21:32:27 -0700
+Message-Id: <20210804043231.2655537-15-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20210804043231.2655537-1-ira.weiny@intel.com>
 References: <20210804043231.2655537-1-ira.weiny@intel.com>
@@ -59,395 +59,254 @@ Content-Transfer-Encoding: 8bit
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The persistent memory (PMEM) driver uses the memremap_pages facility to
-provide 'struct page' metadata (vmemmap) for PMEM.  Given that PMEM
-capacity maybe orders of magnitude higher capacity than System RAM it
-presents a large vulnerability surface to stray writes.  Unlike stray
-writes to System RAM, which may result in a crash or other undesirable
-behavior, stray writes to PMEM additionally are more likely to result in
-permanent data loss. Reboot is not a remediation for PMEM corruption
-like it is for System RAM.
+Some systems may be using pmem in unanticipated ways.  As such it is
+possible a code path may violation the restrictions of the PMEM PKS
+protections.
 
-Given that PMEM access from the kernel is limited to a constrained set
-of locations (PMEM driver, Filesystem-DAX, and direct-I/O to a DAX
-page), it is amenable to supervisor pkey protection.  Set up an
-infrastructure for thread local access protection. Then implement the
-protection using the new Protection Keys Supervisor (PKS) on
-architectures that support it.
+In order to provide a more seamless integration of the PMEM PKS feature
+provide a pks_fault_mode that allows for a relaxed mode should a
+previously working feature start to fault on PKS protected PMEM.
 
-To enable this extra protection memremap_pages users should check for
-protection support via pgmap_protection_enabled() and if enabled specify
-(PGMAP_PROTECTION) in (struct dev_pagemap)->flags to request that
-access protection.
+2 modes are available:
 
-NOTE: The name of pgmap_protection_enable() and PGMAP_PROTECTION were
-specifically chosen to isolate the implementation of the protection from
-higher level users.
+	'relaxed' (default) -- WARN_ONCE, abandon the protections, and
+	continuing to operate.
 
-Kernel code intending to access this memory can do so through 4 new
-calls.  pgmap_mk_{readwrite,noaccess}() and
-__pgmap_mk_{readwrite,noaccess}() calls.
+	'strict' -- BUG_ON/or fault indicating the error.  This is the
+	most protective of the PMEM memory but may be undesirable in
+	some configurations.
 
-The pgmap_mk_*() take a page parameter and the __pgmap_mk_*() calls
-directly take the dev_pagemap objects.  pgmap_mk_*() take care of
-checking if the page is a page map managed page and are safe to any user
-who has a reference on the page.
+NOTE: There was some debate about if a 3rd mode called 'silent' should
+be available.  'silent' would be the same as 'relaxed' but not print any
+output.  While 'silent' is nice for admins to reduce console/log output
+it would result in less motivation to fix invalid access to the
+protected pmem pages.  Therefore, 'silent' is left out.
 
-All changes in the protections must be through the above calls.  They
-abstract the protection implementation (currently the PKS api) from the
-upper layer users.
-
-Furthermore, the calls are nestable by the use of a per task reference
-count.  This ensures that the first call to re-enable protection does
-not 'break' the last access of the device memory.
-
-NOTE: There are no code paths which directly nest these calls.  For this
-reason multiple reviewers, including Dan and Thomas, asked why this
-reference counting was needed at this level rather than in a higher
-level call such as kmap_{atomic,local_page}().  The reason is that
-pmgmap_mk_read_write() can nest with kmap_{atomic,local_page}().
-Therefore push this reference counting to the lower level.
-
-Access to device memory during exceptions (#PF) is expected only from
-user faults.  Therefore there is no need to maintain the reference count
-when entering or exiting exceptions.  However, reference counting will
-occur during the exception.  Recall that protection is automatically
-enabled during exceptions by the PKS core.[1]
-
-A default of (NVDIMM_PFN && ARCH_HAS_SUPERVISOR_PKEYS) was suggested but
-logically that is the same as saying default 'yes' because both
-NVDIMM_PFN and ARCH_HAS_SUPERVISOR_PKEYS are required.  Therefore a
-default of 'yes' was used.
+In addition, kmap() is known to not work with this protection.  Provide
+a new call; pgmap_protection_flag_invalid().  This gives better
+debugging for missed kmap() users.  This call also respects the
+pks_fault_mode settings.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-[1] https://lore.kernel.org/lkml/20210401225833.566238-9-ira.weiny@intel.com/
-
 ---
 Changes for V7
-	Add __pgmap_mk_*() calls to allow users who have a dev_pagemap
-		to call directly into that layer of the API
-	Add pgmap_protection_enabled() and fail memremap_pages() if
-		protection is requested and pgmap_protection_enabled()
-		is false
-	s/PGMAP_PKEY_PROTECT/PGMAP_PROTECTION
-		This helps to isolate the implementation details of the
-		protection from the higher layers.
-	s/dev_page_access_ref/pgmap_prot_count
-	s/DEV_PAGEMAP_PROTECTION/DEVMAP_ACCESS_PROTECTION
-	Adjust Kconfig dependency and default
-	Address feedback from Dan Williams
-		Add requirement comment to devmap_protected
-		Make pgmap_mk_* static inline
-		Change to devmap_protected
-		Change config to DEV_PAGEMAP_PROTECTION
-	Remove dynamic key use from memremap
-		This greatly simplifies turning on PKS when requested by
-		the remapping code
-		#define a static key for pmem use
+	Leverage Rick Edgecombe's fault callback infrastructure to relax invalid
+		uses and prevent crashes
+	From Dan Williams
+		Use sysfs_* calls for parameter
+		Make pgmap_disable_protection inline
+		Remove pfn from warn output
+	Remove silent parameter option
 ---
- arch/x86/mm/pkeys.c      |  3 +-
- include/linux/memremap.h |  1 +
- include/linux/mm.h       | 62 ++++++++++++++++++++++++++++++++++
- include/linux/pkeys.h    |  1 +
- include/linux/sched.h    |  7 ++++
- init/init_task.c         |  3 ++
- kernel/fork.c            |  3 ++
- mm/Kconfig               | 18 ++++++++++
- mm/memremap.c            | 73 ++++++++++++++++++++++++++++++++++++++++
- 9 files changed, 170 insertions(+), 1 deletion(-)
+ .../admin-guide/kernel-parameters.txt         | 14 +++
+ arch/x86/mm/pkeys.c                           |  8 +-
+ include/linux/mm.h                            | 26 ++++++
+ mm/memremap.c                                 | 85 +++++++++++++++++++
+ 4 files changed, 132 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index bdb22006f713..7902fce7f1da 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4081,6 +4081,20 @@
+ 	pirq=		[SMP,APIC] Manual mp-table setup
+ 			See Documentation/x86/i386/IO-APIC.rst.
+ 
++	memremap.pks_fault_mode=	[X86] Control the behavior of page map
++			protection violations.  Violations may not be an actual
++			use of the memory but simply an attempt to map it in an
++			incompatible way.
++			(depends on CONFIG_DEVMAP_ACCESS_PROTECTION
++
++			Format: { relaxed | strict }
++
++			relaxed - Print a warning, disable the protection and
++				  continue execution.
++			strict - Stop kernel execution via BUG_ON or fault
++
++			default: relaxed
++
+ 	plip=		[PPT,NET] Parallel port network link
+ 			Format: { parport<nr> | timid | 0 }
+ 			See also Documentation/admin-guide/parport.rst.
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index f0166725a128..cdebc2018888 100644
+index cdebc2018888..201004586c2b 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -294,7 +294,8 @@ static int __init create_initial_pkrs_value(void)
- 	};
- 	int i;
+@@ -9,6 +9,7 @@
+ #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
+ #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
+ #include <linux/pkeys.h>                /* PKEY_*                       */
++#include <linux/mm.h>                   /* fault callback               */
+ #include <uapi/asm-generic/mman-common.h>
  
--	consumer_defaults[PKS_KEY_DEFAULT] = PKR_RW_BIT;
-+	consumer_defaults[PKS_KEY_DEFAULT]          = PKR_RW_BIT;
-+	consumer_defaults[PKS_KEY_PGMAP_PROTECTION] = PKR_AD_BIT;
+ #include <asm/cpufeature.h>             /* boot_cpu_has, ...            */
+@@ -241,7 +242,12 @@ int handle_abandoned_pks_value(struct pt_regs *regs)
+ 	return (ept_regs->thread_pkrs != old);
+ }
  
- 	/* Ensure the number of consumers is less than the number of keys */
- 	BUILD_BUG_ON(PKS_KEY_NR_CONSUMERS > PKS_NUM_PKEYS);
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index c0e9d35889e8..53dc97823418 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -90,6 +90,7 @@ struct dev_pagemap_ops {
- };
+-static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = { 0 };
++static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = {
++	[PKS_KEY_DEFAULT]            = NULL,
++#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
++	[PKS_KEY_PGMAP_PROTECTION]   = pgmap_pks_fault_callback,
++#endif
++};
  
- #define PGMAP_ALTMAP_VALID	(1 << 0)
-+#define PGMAP_PROTECTION	(1 << 1)
- 
- /**
-  * struct dev_pagemap - metadata for ZONE_DEVICE mappings
+ bool handle_pks_key_callback(unsigned long address, bool write, u16 key)
+ {
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7ca22e6e694a..d3c1a3ecca87 100644
+index d3c1a3ecca87..c13c7af7cad3 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1198,6 +1198,68 @@ static inline bool is_pci_p2pdma_page(const struct page *page)
- 		page->pgmap->type == MEMORY_DEVICE_PCI_P2PDMA;
+@@ -1216,6 +1216,7 @@ static inline bool devmap_protected(struct page *page)
+ 	return false;
  }
  
-+#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-+DECLARE_STATIC_KEY_FALSE(dev_pgmap_protection_static_key);
-+
++void __pgmap_protection_flag_invalid(struct dev_pagemap *pgmap);
+ void __pgmap_mk_readwrite(struct dev_pagemap *pgmap);
+ void __pgmap_mk_noaccess(struct dev_pagemap *pgmap);
+ 
+@@ -1232,6 +1233,27 @@ static inline bool pgmap_check_pgmap_prot(struct page *page)
+ 	return true;
+ }
+ 
 +/*
-+ * devmap_protected() requires a reference on the page to ensure there is no
-+ * races with dev_pagemap tear down.
++ * pgmap_protection_flag_invalid - Check and flag an invalid use of a pgmap
++ *                                 protected page
++ *
++ * There are code paths which are known to not be compatible with pgmap
++ * protections.  pgmap_protection_flag_invalid() is provided as a 'relief
++ * valve' to be used in those functions which are known to be incompatible.
++ *
++ * Thus an invalid code path can be flag more precisely what code contains the
++ * bug vs just flagging a fault.  Like the fault handler code this abandons the
++ * use of the PKS key and optionally allows the calling code path to continue
++ * based on the configuration of the memremap.pks_fault_mode command line
++ * (and/or sysfs) option.
 + */
-+static inline bool devmap_protected(struct page *page)
-+{
-+	if (!static_branch_unlikely(&dev_pgmap_protection_static_key))
-+		return false;
-+	if (!is_zone_device_page(page))
-+		return false;
-+	if (page->pgmap->flags & PGMAP_PROTECTION)
-+		return true;
-+	return false;
-+}
-+
-+void __pgmap_mk_readwrite(struct dev_pagemap *pgmap);
-+void __pgmap_mk_noaccess(struct dev_pagemap *pgmap);
-+
-+static inline bool pgmap_check_pgmap_prot(struct page *page)
-+{
-+	if (!devmap_protected(page))
-+		return false;
-+
-+	/*
-+	 * There is no known use case to change permissions in an irq for pgmap
-+	 * pages
-+	 */
-+	lockdep_assert_in_irq();
-+	return true;
-+}
-+
-+static inline void pgmap_mk_readwrite(struct page *page)
++static inline void pgmap_protection_flag_invalid(struct page *page)
 +{
 +	if (!pgmap_check_pgmap_prot(page))
 +		return;
-+	__pgmap_mk_readwrite(page->pgmap);
-+}
-+static inline void pgmap_mk_noaccess(struct page *page)
-+{
-+	if (!pgmap_check_pgmap_prot(page))
-+		return;
-+	__pgmap_mk_noaccess(page->pgmap);
++	__pgmap_protection_flag_invalid(page->pgmap);
 +}
 +
-+bool pgmap_protection_enabled(void);
-+
-+#else
-+
-+static inline void __pgmap_mk_readwrite(struct dev_pagemap *pgmap) { }
-+static inline void __pgmap_mk_noaccess(struct dev_pagemap *pgmap) { }
-+static inline void pgmap_mk_readwrite(struct page *page) { }
-+static inline void pgmap_mk_noaccess(struct page *page) { }
-+static inline bool pgmap_protection_enabled(void)
-+{
-+	return false;
-+}
-+
-+#endif /* CONFIG_DEVMAP_ACCESS_PROTECTION */
-+
- /* 127: arbitrary random number, small enough to assemble well */
- #define page_ref_zero_or_close_to_overflow(page) \
- 	((unsigned int) page_ref_count(page) + 127u <= 127u)
-diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
-index 549fa01d7da3..c06b47264c5d 100644
---- a/include/linux/pkeys.h
-+++ b/include/linux/pkeys.h
-@@ -49,6 +49,7 @@ static inline bool arch_pkeys_enabled(void)
- #ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
- enum pks_pkey_consumers {
- 	PKS_KEY_DEFAULT = 0, /* Must be 0 for default PTE values */
-+	PKS_KEY_PGMAP_PROTECTION,
- 	PKS_KEY_NR_CONSUMERS
- };
- extern u32 pkrs_init_value;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index ec8d07d88641..2d035d9981b5 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1400,6 +1400,13 @@ struct task_struct {
- 	struct llist_head               kretprobe_instances;
- #endif
+ static inline void pgmap_mk_readwrite(struct page *page)
+ {
+ 	if (!pgmap_check_pgmap_prot(page))
+@@ -1247,10 +1269,14 @@ static inline void pgmap_mk_noaccess(struct page *page)
  
-+#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-+	/*
-+	 * NOTE: pgmap_prot_count is modified within a single thread of
-+	 * execution.  So it does not need to be atomic_t.
-+	 */
-+	u32                             pgmap_prot_count;
-+#endif
- 	/*
- 	 * New fields for task_struct should be added above here, so that
- 	 * they are included in the randomized portion of task_struct.
-diff --git a/init/init_task.c b/init/init_task.c
-index 562f2ef8d157..f628ad552ee3 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -213,6 +213,9 @@ struct task_struct init_task
- #ifdef CONFIG_SECCOMP_FILTER
- 	.seccomp	= { .filter_count = ATOMIC_INIT(0) },
- #endif
-+#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-+	.pgmap_prot_count = 0,
-+#endif
- };
- EXPORT_SYMBOL(init_task);
+ bool pgmap_protection_enabled(void);
  
-diff --git a/kernel/fork.c b/kernel/fork.c
-index bc94b2cc5995..7f7b946f4f2e 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -956,6 +956,9 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 
- #ifdef CONFIG_MEMCG
- 	tsk->active_memcg = NULL;
-+#endif
-+#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-+	tsk->pgmap_prot_count = 0;
- #endif
- 	return tsk;
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index ea6ffee69f55..201d41269a36 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -790,6 +790,24 @@ config ZONE_DEVICE
- 
- 	  If FS_DAX is enabled, then say Y.
- 
-+config DEVMAP_ACCESS_PROTECTION
-+	bool "Access protection for memremap_pages()"
-+	depends on NVDIMM_PFN
-+	depends on ARCH_HAS_SUPERVISOR_PKEYS
-+	select GENERAL_PKS_USER
-+	default y
++bool pgmap_pks_fault_callback(unsigned long address, bool write);
 +
-+	help
-+	  Enable extra protections on device memory.  This protects against
-+	  unintended access to devices such as a stray writes.  This feature is
-+	  particularly useful to protect against corruption of persistent
-+	  memory.
-+
-+	  This depends on architecture support of supervisor PKeys and has no
-+	  overhead if the architecture does not support them.
-+
-+	  If you have persistent memory say 'Y'.
-+
- config DEV_PAGEMAP_OPS
- 	bool
+ #else
  
+ static inline void __pgmap_mk_readwrite(struct dev_pagemap *pgmap) { }
+ static inline void __pgmap_mk_noaccess(struct dev_pagemap *pgmap) { }
++
++static inline void pgmap_protection_flag_invalid(struct page *page) { }
+ static inline void pgmap_mk_readwrite(struct page *page) { }
+ static inline void pgmap_mk_noaccess(struct page *page) { }
+ static inline bool pgmap_protection_enabled(void)
 diff --git a/mm/memremap.c b/mm/memremap.c
-index 15a074ffb8d7..a05de8714916 100644
+index a05de8714916..930b360bad86 100644
 --- a/mm/memremap.c
 +++ b/mm/memremap.c
-@@ -6,6 +6,7 @@
- #include <linux/memory_hotplug.h>
- #include <linux/mm.h>
- #include <linux/pfn_t.h>
-+#include <linux/pkeys.h>
- #include <linux/swap.h>
- #include <linux/mmzone.h>
- #include <linux/swapops.h>
-@@ -63,6 +64,68 @@ static void devmap_managed_enable_put(struct dev_pagemap *pgmap)
+@@ -95,6 +95,91 @@ static void devmap_protection_disable(void)
+ 	static_branch_dec(&dev_pgmap_protection_static_key);
  }
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
  
-+#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
 +/*
-+ * Note; all devices which have asked for protections share the same key.  The
-+ * key may, or may not, have been provided by the core.  If not, protection
-+ * will be disabled.  The key acquisition is attempted when the first ZONE
-+ * DEVICE requests it and freed when all zones have been unmapped.
-+ *
-+ * Also this must be EXPORT_SYMBOL rather than EXPORT_SYMBOL_GPL because it is
-+ * intended to be used in the kmap API.
++ * Ignore the checkpatch warning because the typedef allows
++ * param_check_pks_fault_modes to automatically check the passed value.
 + */
-+DEFINE_STATIC_KEY_FALSE(dev_pgmap_protection_static_key);
-+EXPORT_SYMBOL(dev_pgmap_protection_static_key);
++typedef enum {
++	PKS_MODE_STRICT  = 0,
++	PKS_MODE_RELAXED = 1,
++} pks_fault_modes;
 +
-+static void devmap_protection_enable(void)
++pks_fault_modes pks_fault_mode = PKS_MODE_RELAXED;
++
++static int param_set_pks_fault_mode(const char *val, const struct kernel_param *kp)
 +{
-+	static_branch_inc(&dev_pgmap_protection_static_key);
-+}
++	int ret = -EINVAL;
 +
-+static pgprot_t devmap_protection_adjust_pgprot(pgprot_t prot)
-+{
-+	pgprotval_t val;
-+
-+	val = pgprot_val(prot);
-+	return __pgprot(val | _PAGE_PKEY(PKS_KEY_PGMAP_PROTECTION));
-+}
-+
-+static void devmap_protection_disable(void)
-+{
-+	static_branch_dec(&dev_pgmap_protection_static_key);
-+}
-+
-+void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
-+{
-+	if (!current->pgmap_prot_count++)
-+		pks_mk_readwrite(PKS_KEY_PGMAP_PROTECTION);
-+}
-+EXPORT_SYMBOL_GPL(__pgmap_mk_readwrite);
-+
-+void __pgmap_mk_noaccess(struct dev_pagemap *pgmap)
-+{
-+	if (!--current->pgmap_prot_count)
-+		pks_mk_noaccess(PKS_KEY_PGMAP_PROTECTION);
-+}
-+EXPORT_SYMBOL_GPL(__pgmap_mk_noaccess);
-+
-+bool pgmap_protection_enabled(void)
-+{
-+	return pks_enabled();
-+}
-+EXPORT_SYMBOL_GPL(pgmap_protection_enabled);
-+
-+#else /* !CONFIG_DEVMAP_ACCESS_PROTECTION */
-+
-+static void devmap_protection_enable(void) { }
-+static void devmap_protection_disable(void) { }
-+
-+static pgprot_t devmap_protection_adjust_pgprot(pgprot_t prot)
-+{
-+	return prot;
-+}
-+#endif /* CONFIG_DEVMAP_ACCESS_PROTECTION */
-+
- static void pgmap_array_delete(struct range *range)
- {
- 	xa_store_range(&pgmap_array, PHYS_PFN(range->start), PHYS_PFN(range->end),
-@@ -181,6 +244,9 @@ void memunmap_pages(struct dev_pagemap *pgmap)
- 
- 	WARN_ONCE(pgmap->altmap.alloc, "failed to free all reserved pages\n");
- 	devmap_managed_enable_put(pgmap);
-+
-+	if (pgmap->flags & PGMAP_PROTECTION)
-+		devmap_protection_disable();
- }
- EXPORT_SYMBOL_GPL(memunmap_pages);
- 
-@@ -329,6 +395,13 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
- 	if (WARN_ONCE(!nr_range, "nr_range must be specified\n"))
- 		return ERR_PTR(-EINVAL);
- 
-+	if (pgmap->flags & PGMAP_PROTECTION) {
-+		if (!pgmap_protection_enabled())
-+			return ERR_PTR(-EINVAL);
-+		devmap_protection_enable();
-+		params.pgprot = devmap_protection_adjust_pgprot(params.pgprot);
++	if (!sysfs_streq(val, "relaxed")) {
++		pks_fault_mode = PKS_MODE_RELAXED;
++		ret = 0;
++	} else if (!sysfs_streq(val, "strict")) {
++		pks_fault_mode = PKS_MODE_STRICT;
++		ret = 0;
 +	}
 +
- 	switch (pgmap->type) {
- 	case MEMORY_DEVICE_PRIVATE:
- 		if (!IS_ENABLED(CONFIG_DEVICE_PRIVATE)) {
++	return ret;
++}
++
++static int param_get_pks_fault_mode(char *buffer, const struct kernel_param *kp)
++{
++	int ret = 0;
++
++	switch (pks_fault_mode) {
++	case PKS_MODE_STRICT:
++		ret = sysfs_emit(buffer, "strict\n");
++		break;
++	case PKS_MODE_RELAXED:
++		ret = sysfs_emit(buffer, "relaxed\n");
++		break;
++	default:
++		ret = sysfs_emit(buffer, "<unknown>\n");
++		break;
++	}
++
++	return ret;
++}
++
++static const struct kernel_param_ops param_ops_pks_fault_modes = {
++	.set = param_set_pks_fault_mode,
++	.get = param_get_pks_fault_mode,
++};
++
++#define param_check_pks_fault_modes(name, p) \
++	__param_check(name, p, pks_fault_modes)
++module_param(pks_fault_mode, pks_fault_modes, 0644);
++
++static void pgmap_abandon_protection(void)
++{
++	static bool protections_abandoned = false;
++
++	if (!protections_abandoned) {
++		protections_abandoned = true;
++		pks_abandon_protections(PKS_KEY_PGMAP_PROTECTION);
++	}
++}
++
++void __pgmap_protection_flag_invalid(struct dev_pagemap *pgmap)
++{
++	BUG_ON(pks_fault_mode == PKS_MODE_STRICT);
++
++	WARN_ONCE(1, "Page map protection disabled");
++	pgmap_abandon_protection();
++}
++EXPORT_SYMBOL_GPL(__pgmap_protection_flag_invalid);
++
++bool pgmap_pks_fault_callback(unsigned long address, bool write)
++{
++	/* In strict mode just let the fault handler oops */
++	if (pks_fault_mode == PKS_MODE_STRICT)
++		return false;
++
++	WARN_ONCE(1, "Page map protection disabled");
++	pgmap_abandon_protection();
++	return true;
++}
++EXPORT_SYMBOL_GPL(pgmap_pks_fault_callback);
++
+ void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+ {
+ 	if (!current->pgmap_prot_count++)
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
