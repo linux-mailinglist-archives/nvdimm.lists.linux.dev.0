@@ -1,237 +1,269 @@
-Return-Path: <nvdimm+bounces-701-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-708-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4492C3DFA6D
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 06:31:08 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D853DFA84
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 06:33:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 15BDE3E0F71
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 04:31:06 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id A82C33E1014
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Aug 2021 04:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3442FAE;
-	Wed,  4 Aug 2021 04:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DA13490;
+	Wed,  4 Aug 2021 04:32:41 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from out4436.biz.mail.alibaba.com (out4436.biz.mail.alibaba.com [47.88.44.36])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A640F70
-	for <nvdimm@lists.linux.dev>; Wed,  4 Aug 2021 04:30:53 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0UhwJ.LP_1628051435;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0UhwJ.LP_1628051435)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 04 Aug 2021 12:30:37 +0800
-Date: Wed, 4 Aug 2021 12:30:35 +0800
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-To: Chao Yu <chao@kernel.org>
-Cc: linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-	nvdimm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Liu Bo <bo.liu@linux.alibaba.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Liu Jiang <gerry@linux.alibaba.com>,
-	Huang Jianan <huangjianan@oppo.com>, Tao Ma <boyu.mt@taobao.com>
-Subject: Re: [PATCH v2 1/3] erofs: iomap support for non-tailpacking DIO
-Message-ID: <YQoX62zRERGX9BGB@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
-	linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Liu Bo <bo.liu@linux.alibaba.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Liu Jiang <gerry@linux.alibaba.com>,
-	Huang Jianan <huangjianan@oppo.com>, Tao Ma <boyu.mt@taobao.com>
-References: <20210730194625.93856-1-hsiangkao@linux.alibaba.com>
- <20210730194625.93856-2-hsiangkao@linux.alibaba.com>
- <e79e3261-e582-e848-b550-c0c3163d9af4@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7B92FB8
+	for <nvdimm@lists.linux.dev>; Wed,  4 Aug 2021 04:32:39 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="201011706"
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="201011706"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 21:32:35 -0700
+X-IronPort-AV: E=Sophos;i="5.84,293,1620716400"; 
+   d="scan'208";a="521680204"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 21:32:34 -0700
+From: ira.weiny@intel.com
+To: Dave Hansen <dave.hansen@linux.intel.com>,
+	Dan Williams <dan.j.williams@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	linux-mm@kvack.org
+Subject: [PATCH V7 00/18] PKS/PMEM: Add Stray Write Protection
+Date: Tue,  3 Aug 2021 21:32:13 -0700
+Message-Id: <20210804043231.2655537-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e79e3261-e582-e848-b550-c0c3163d9af4@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Chao,
+From: Ira Weiny <ira.weiny@intel.com>
 
-On Wed, Aug 04, 2021 at 10:57:08AM +0800, Chao Yu wrote:
-> On 2021/7/31 3:46, Gao Xiang wrote:
+NOTE: x86 maintainers, I'm submitting this for ack/review by Dave Hansen and
+Dan Williams.  Feel free to ignore it but we have had a lot of internal debate
+on a number of design decisions so we would like to have the remaining reviews
+public such that everyone can see the remaining debate/decisions.
 
-...
+Furthermore, this gives a public reference for Rick to build other PKS use
+cases on.
 
-> >   }
-> > +static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
-> > +		unsigned int flags, struct iomap *iomap, struct iomap *srcmap)
-> > +{
-> > +	int ret;
-> > +	struct erofs_map_blocks map;
-> > +
-> > +	map.m_la = offset;
-> > +	map.m_llen = length;
-> > +
-> > +	ret = erofs_map_blocks_flatmode(inode, &map, EROFS_GET_BLOCKS_RAW);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	iomap->bdev = inode->i_sb->s_bdev;
-> > +	iomap->offset = map.m_la;
-> > +	iomap->length = map.m_llen;
-> > +	iomap->flags = 0;
-> > +
-> > +	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
-> > +		iomap->type = IOMAP_HOLE;
-> > +		iomap->addr = IOMAP_NULL_ADDR;
-> > +		if (!iomap->length)
-> > +			iomap->length = length;
-> 
-> This only happens for the case offset exceeds isize?
 
-Thanks for the review.
+PKS/PMEM Stray write protection
+===============================
 
-Yeah, this is a convention (length 0 with !EROFS_MAP_MAPPED) for post-EOF
-in erofs_map_blocks_flatmode(), need to follow iomap rule as well.
+This series is broken into 2 parts.
 
-> 
-> > +		return 0;
-> > +	}
-> > +
-> > +	/* that shouldn't happen for now */
-> > +	if (map.m_flags & EROFS_MAP_META) {
-> > +		DBG_BUGON(1);
-> > +		return -ENOTBLK;
-> > +	}
-> > +	iomap->type = IOMAP_MAPPED;
-> > +	iomap->addr = map.m_pa;
-> > +	return 0;
-> > +}
-> > +
-> > +const struct iomap_ops erofs_iomap_ops = {
-> > +	.iomap_begin = erofs_iomap_begin,
-> > +};
-> > +
-> > +static int erofs_prepare_dio(struct kiocb *iocb, struct iov_iter *to)
-> > +{
-> > +	struct inode *inode = file_inode(iocb->ki_filp);
-> > +	loff_t align = iocb->ki_pos | iov_iter_count(to) |
-> > +		iov_iter_alignment(to);
-> > +	struct block_device *bdev = inode->i_sb->s_bdev;
-> > +	unsigned int blksize_mask;
-> > +
-> > +	if (bdev)
-> > +		blksize_mask = (1 << ilog2(bdev_logical_block_size(bdev))) - 1;
-> > +	else
-> > +		blksize_mask = (1 << inode->i_blkbits) - 1;
-> > +
-> > +	if (align & blksize_mask)
-> > +		return -EINVAL;
-> > +
-> > +	/*
-> > +	 * Temporarily fall back tail-packing inline to buffered I/O instead
-> > +	 * since tail-packing inline support relies on an iomap core update.
-> > +	 */
-> > +	if (EROFS_I(inode)->datalayout == EROFS_INODE_FLAT_INLINE &&
-> > +	    iocb->ki_pos + iov_iter_count(to) >
-> > +			rounddown(inode->i_size, EROFS_BLKSIZ))
-> > +		return 1;
-> > +	return 0;
-> > +}
-> > +
-> > +static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
-> > +{
-> > +	/* no need taking (shared) inode lock since it's a ro filesystem */
-> > +	if (!iov_iter_count(to))
-> > +		return 0;
-> > +
-> > +	if (iocb->ki_flags & IOCB_DIRECT) {
-> > +		int err = erofs_prepare_dio(iocb, to);
-> > +
-> > +		if (!err)
-> > +			return iomap_dio_rw(iocb, to, &erofs_iomap_ops,
-> > +					    NULL, 0);
-> > +		if (err < 0)
-> > +			return err;
-> > +		/*
-> > +		 * Fallback to buffered I/O if the operation being performed on
-> > +		 * the inode is not supported by direct I/O. The IOCB_DIRECT
-> > +		 * flag needs to be cleared here in order to ensure that the
-> > +		 * direct I/O path within generic_file_read_iter() is not
-> > +		 * taken.
-> > +		 */
-> > +		iocb->ki_flags &= ~IOCB_DIRECT;
-> > +	}
-> > +	return generic_file_read_iter(iocb, to);
-> 
-> It looks it's fine to call filemap_read() directly since above codes have
-> covered DIO case, then we don't need to change iocb->ki_flags flag, it's
-> minor though.
+	1) Introduce Protection Key Supervisor (PKS)
+	2) Use PKS to protect PMEM from stray writes
 
-Yeah, we could use filemap_read() here instead. yet IMO, it might be
-better to drop IOCB_DIRECT too to keep iocb consistent with the real
-semantics (even it's not used internally.)
+Introduce Protection Key Supervisor (PKS)
+-----------------------------------------
 
-> 
-> > +}
-> > +
-> >   /* for uncompressed (aligned) files and raw access for other files */
-> >   const struct address_space_operations erofs_raw_access_aops = {
-> >   	.readpage = erofs_raw_access_readpage,
-> >   	.readahead = erofs_raw_access_readahead,
-> >   	.bmap = erofs_bmap,
-> > +	.direct_IO = noop_direct_IO,
-> > +};
-> > +
-> > +const struct file_operations erofs_file_fops = {
-> > +	.llseek		= generic_file_llseek,
-> > +	.read_iter	= erofs_file_read_iter,
-> > +	.mmap		= generic_file_readonly_mmap,
-> > +	.splice_read	= generic_file_splice_read,
-> >   };
-> > diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-> > index aa8a0d770ba3..00edb7562fea 100644
-> > --- a/fs/erofs/inode.c
-> > +++ b/fs/erofs/inode.c
-> > @@ -247,7 +247,10 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
-> >   	switch (inode->i_mode & S_IFMT) {
-> >   	case S_IFREG:
-> >   		inode->i_op = &erofs_generic_iops;
-> > -		inode->i_fop = &generic_ro_fops;
-> > +		if (!erofs_inode_is_data_compressed(vi->datalayout))
-> > +			inode->i_fop = &erofs_file_fops;
-> > +		else
-> > +			inode->i_fop = &generic_ro_fops;
-> 
-> if (erofs_inode_is_data_compressed(vi->datalayout))
-> 	inode->i_fop = &generic_ro_fops;
-> else
-> 	inode->i_fop = &erofs_file_fops;
-> 
-> Otherwise, it looks good to me.
+PKS enables protections on 'domains' of supervisor pages to limit supervisor
+mode access to pages beyond the normal paging protections.  PKS works in a
+similar fashion to user space pkeys, PKU.  As with PKU, supervisor pkeys are
+checked in addition to normal paging protections and Access or Writes can be
+disabled via a MSR update without TLB flushes when permissions change.
 
-ok, will fix in the next version.
+Also like PKU, a page mapping is assigned to a domain by setting pkey bits in
+the page table entry for that mapping.
 
-Thanks,
-Gao Xiang
+Access is controlled through a PKRS register which is updated via WRMSR/RDMSR.
 
-> 
-> Reviewed-by: Chao Yu <chao@kernel.org>
-> 
-> Thanks
-> 
-> >   		break;
-> >   	case S_IFDIR:
-> >   		inode->i_op = &erofs_dir_iops;
-> > diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> > index 543c2ff97d30..2669c785d548 100644
-> > --- a/fs/erofs/internal.h
-> > +++ b/fs/erofs/internal.h
-> > @@ -371,6 +371,7 @@ static inline int z_erofs_map_blocks_iter(struct inode *inode,
-> >   #endif	/* !CONFIG_EROFS_FS_ZIP */
-> >   /* data.c */
-> > +extern const struct file_operations erofs_file_fops;
-> >   struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
-> >   /* inode.c */
-> > 
+XSAVE is not supported for the PKRS MSR.  Therefore the implementation
+saves/restores the MSR across context switches and during exceptions.  Nested
+exceptions are supported by each exception getting a new PKS state.
+
+For consistent behavior with current paging protections, pkey 0 is reserved and
+configured to allow full access via the pkey mechanism, thus preserving the
+default paging protections.
+
+Other keys, (1-15) are statically allocated by kernel users adding an entry to
+'enum pks_pkey_consumers' and adding a corresponding default value in
+consumer_defaults in create_initial_pkrs_value().  This patch series allocates
+a single key for use by persistent memory stray write protection.  When the
+number of users grows larger the sharing of keys will need to be resolved
+depending on the needs of the users at that time.
+
+More usage details can be found in the documentation.
+
+The following are key attributes of PKS.
+
+	1) Fast switching of permissions
+		1a) Prevents access without page table manipulations
+		1b) No TLB flushes required
+	2) Works on a per thread basis
+
+PKS is available with 4 and 5 level paging.  Like PKRU it consumes 4 bits from
+the PTE to store the pkey within the entry.
+
+
+Use PKS to protect PMEM from stray writes
+-----------------------------------------
+
+DAX leverages the direct-map to enable 'struct page' services for PMEM.  Given
+that PMEM capacity may be an order of magnitude higher capacity than System RAM
+it presents a large vulnerability surface to stray writes.  Such a stray write
+becomes a silent data corruption bug.
+
+Given that PMEM access from the kernel is limited to a constrained set of
+locations (PMEM driver, Filesystem-DAX, and direct-I/O), it is amenable to PKS
+protection.  Set up an infrastructure for extra device access protection. Then
+implement the protection using the new Protection Keys Supervisor (PKS) on
+architectures which support it.
+
+Because PMEM pages are all associated with a struct dev_pagemap the flag of
+protecting memory can be stored there.  All PMEM is protected by the same pkey.
+So a single flag is all that is needed to indicate protection.
+
+General access in the kernel is supported by modifying the kmap infrastructure
+which can detect if a page is PMEM and pks protected.  If so kmap_local_page()
+and kmap_atomic() can enable access until their unmap's are called.
+
+Because PKS is a thread local mechanism and because kmap was never really
+intended to create a long term mapping,
+
+This implementation avoids supporting the kmap()/kunmap() for a number of
+reasons.  First, kmap was never really intended to create long term mappings.
+Second, no known kernel users of pmem use kmap.  Third, PKS is a thread local
+mechanism.
+
+Originally this series modified many of the kmap call sites to indicate they
+were thread local.[1]  And an attempt to support kmap()[2] was made.  But now
+that kmap_local_page() has been developed[3] and in more wide spread use,
+kmap() should be safe to leave unsupported and is considered an invalid access.
+
+Handling invalid access to these pages is configurable via a new module
+parameter memremap.pks_fault_mode.  2 modes are suported.
+
+	'relaxed' (default) -- WARN_ONCE, disable the protection and allow
+	                       access
+
+	'strict' -- prevent any unguarded access to a protected dev_pagemap
+		    range
+
+The fault handler detects the PMEM fault and applies the above configuration to
+the faulting thread.  The kmap call is a special case.  It is considered an
+invalid access but uses the configuration early before any access such that the
+kmap code path can be better evaluated and fixed.
+
+
+[1] https://lore.kernel.org/lkml/20201009195033.3208459-1-ira.weiny@intel.com/
+
+[2] https://lore.kernel.org/lkml/87mtycqcjf.fsf@nanos.tec.linutronix.de/
+
+[3] https://lore.kernel.org/lkml/20210128061503.1496847-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210210062221.3023586-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210205170030.856723-1-ira.weiny@intel.com/
+    https://lore.kernel.org/lkml/20210217024826.3466046-1-ira.weiny@intel.com/
+
+[4] https://lore.kernel.org/lkml/20201106232908.364581-1-ira.weiny@intel.com/
+
+[5] https://lore.kernel.org/lkml/20210322053020.2287058-1-ira.weiny@intel.com/
+
+[6] https://lore.kernel.org/lkml/20210331191405.341999-1-ira.weiny@intel.com/
+
+
+Fenghua Yu (1):
+  x86/pks: Add PKS kernel API
+
+Ira Weiny (16):
+  x86/pkeys: Create pkeys_common.h
+  x86/fpu: Refactor arch_set_user_pkey_access()
+  x86/pks: Add additional PKEY helper macros
+  x86/pks: Add PKS defines and Kconfig options
+  x86/pks: Add PKS setup code
+  x86/fault: Adjust WARN_ON for PKey fault
+  x86/pks: Preserve the PKRS MSR on context switch
+  x86/entry: Preserve PKRS MSR across exceptions
+  x86/pks: Introduce pks_abandon_protections()
+  x86/pks: Add PKS Test code
+  memremap_pages: Add access protection via supervisor Protection Keys
+    (PKS)
+  memremap_pages: Add memremap.pks_fault_mode
+  kmap: Add stray access protection for devmap pages
+  dax: Stray access protection for dax_direct_access()
+  nvdimm/pmem: Enable stray access protection
+  devdax: Enable stray access protection
+
+Rick Edgecombe (1):
+  x86/pks: Add PKS fault callbacks
+
+ .../admin-guide/kernel-parameters.txt         |  14 +
+ Documentation/core-api/protection-keys.rst    | 153 +++-
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/calling.h                      |  26 +
+ arch/x86/entry/common.c                       |  56 ++
+ arch/x86/entry/entry_64.S                     |  22 +-
+ arch/x86/entry/entry_64_compat.S              |   6 +-
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/msr-index.h              |   1 +
+ arch/x86/include/asm/pgtable_types.h          |  12 +
+ arch/x86/include/asm/pkeys.h                  |   2 +
+ arch/x86/include/asm/pkeys_common.h           |  19 +
+ arch/x86/include/asm/pkru.h                   |  16 +-
+ arch/x86/include/asm/pks.h                    |  67 ++
+ arch/x86/include/asm/processor-flags.h        |   2 +
+ arch/x86/include/asm/processor.h              |  19 +-
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/kernel/cpu/common.c                  |   2 +
+ arch/x86/kernel/fpu/xstate.c                  |  22 +-
+ arch/x86/kernel/head_64.S                     |   7 +-
+ arch/x86/kernel/process.c                     |   3 +
+ arch/x86/kernel/process_64.c                  |   3 +
+ arch/x86/mm/fault.c                           |  82 +-
+ arch/x86/mm/pkeys.c                           | 277 +++++-
+ drivers/dax/device.c                          |   2 +
+ drivers/dax/super.c                           |  54 ++
+ drivers/md/dm-writecache.c                    |   8 +-
+ drivers/nvdimm/pmem.c                         |  55 +-
+ fs/dax.c                                      |   8 +
+ fs/fuse/virtio_fs.c                           |   2 +
+ include/linux/dax.h                           |   8 +
+ include/linux/highmem-internal.h              |   5 +
+ include/linux/memremap.h                      |   1 +
+ include/linux/mm.h                            |  88 ++
+ include/linux/pgtable.h                       |   4 +
+ include/linux/pkeys.h                         |  36 +
+ include/linux/sched.h                         |   7 +
+ init/init_task.c                              |   3 +
+ kernel/entry/common.c                         |  14 +-
+ kernel/fork.c                                 |   3 +
+ lib/Kconfig.debug                             |  13 +
+ lib/Makefile                                  |   3 +
+ lib/pks/Makefile                              |   3 +
+ lib/pks/pks_test.c                            | 864 ++++++++++++++++++
+ mm/Kconfig                                    |  26 +
+ mm/memremap.c                                 | 158 ++++
+ tools/testing/selftests/x86/Makefile          |   2 +-
+ tools/testing/selftests/x86/test_pks.c        | 157 ++++
+ 49 files changed, 2261 insertions(+), 86 deletions(-)
+ create mode 100644 arch/x86/include/asm/pkeys_common.h
+ create mode 100644 arch/x86/include/asm/pks.h
+ create mode 100644 lib/pks/Makefile
+ create mode 100644 lib/pks/pks_test.c
+ create mode 100644 tools/testing/selftests/x86/test_pks.c
+
+-- 
+2.28.0.rc0.12.gb6a658bd00c9
+
 
