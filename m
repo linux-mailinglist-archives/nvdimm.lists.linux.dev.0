@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-756-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-757-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A722E3E3FC0
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 08:20:29 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5517C3E3FC5
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 08:21:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 65C643E1429
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 06:20:28 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 80F0C1C05D3
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 06:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3F42FB9;
-	Mon,  9 Aug 2021 06:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C012FBF;
+	Mon,  9 Aug 2021 06:21:45 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4ED29D6
-	for <nvdimm@lists.linux.dev>; Mon,  9 Aug 2021 06:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A13029D6
+	for <nvdimm@lists.linux.dev>; Mon,  9 Aug 2021 06:21:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description;
-	bh=SpLa8xXiLETp482f8TpSRj3+HkNL4ciTetnk4qLMMXw=; b=mHdHdUrJlcIc6ESaFKdhQAawPn
-	xz0iqi09VROOHtse6qm8Y3s/y1xzvMzeLG01UTRYYFxs90MPHtcEQhEBU9ymW9hclbo32Bbrx9ufb
-	XTXg/c16sdqFEPriHlsFM1eg9yioXtRTZw5/ETk27QJW7hIMvn0jO+qlk1z/QnLeJyZfx58nXFsIv
-	h7aQ4FYAusw9lKK9/dYqyEYFGIdCVsNdn7PcHLkuOjK9cNmwy7/6Hq5BuV7ddsdlyE/2cYYUBnqVC
-	nRMNn3P57qbEqJzOetQlVsIrDSl2/nDvVcWonB1Dq4ywampCoQyve8jXHvRSeFq32zZ+rvYLAYt+E
-	cP9wzFJw==;
+	bh=0jwSqDlw705sVTusKaT0PBreeftKviX8VMT3qlT9gus=; b=ojg9OncCLLFCtaLi6ZKutZy9g1
+	u6g6geKfouedy2Yx424TC82A4BZU44oZXzxPKRQTcSXeUGiFfv3G64jiSaeaDNSUzb8e1xS9+J3Iv
+	z8NMIcWzRGbHjzTZxgCYN9QTy8pfPLQLwFQOMfM4o3UyKRsZDnqMT2csBHlpvtCIoxQ6zckDqjsXO
+	GP13KJMydolByv3IgbbWel01mWyBPVXGxAY4Q6VcgbUi1+VbbLJ9dBVe0qeyhCeYhcZbP6w2ep7KP
+	PTXPsLRkHkCorvVE679Qh7L6s0jni53prnJJRI17dFM6OfXNSpB2X9f30a77JvQTLIXXzyCIvxviy
+	exgUiABg==;
 Received: from [2a02:1205:5023:1f80:c068:bd3d:78b3:7d37] (helo=localhost)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mCycj-00Agjm-EB; Mon, 09 Aug 2021 06:19:08 +0000
+	id 1mCydC-00AgmY-9F; Mon, 09 Aug 2021 06:19:38 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: "Darrick J. Wong" <djwong@kernel.org>
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -42,9 +42,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	linux-btrfs@vger.kernel.org,
 	nvdimm@lists.linux.dev,
 	cluster-devel@redhat.com
-Subject: [PATCH 08/30] iomap: mark the iomap argument to iomap_read_inline_data const
-Date: Mon,  9 Aug 2021 08:12:22 +0200
-Message-Id: <20210809061244.1196573-9-hch@lst.de>
+Subject: [PATCH 09/30] iomap: mark the iomap argument to iomap_read_page_sync const
+Date: Mon,  9 Aug 2021 08:12:23 +0200
+Message-Id: <20210809061244.1196573-10-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210809061244.1196573-1-hch@lst.de>
 References: <20210809061244.1196573-1-hch@lst.de>
@@ -57,7 +57,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-iomap_read_inline_data never modifies the passed in iomap, so mark
+iomap_read_page_sync never modifies the passed in iomap, so mark
 it const.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
@@ -67,18 +67,18 @@ Reviewed-by: Darrick J. Wong <djwong@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 8a7746433bc719..eda8892b8c5741 100644
+index eda8892b8c5741..44587209e6d7c7 100644
 --- a/fs/iomap/buffered-io.c
 +++ b/fs/iomap/buffered-io.c
-@@ -206,7 +206,7 @@ struct iomap_readpage_ctx {
- };
+@@ -531,7 +531,7 @@ iomap_write_failed(struct inode *inode, loff_t pos, unsigned len)
  
- static int iomap_read_inline_data(struct inode *inode, struct page *page,
--		struct iomap *iomap)
-+		const struct iomap *iomap)
+ static int
+ iomap_read_page_sync(loff_t block_start, struct page *page, unsigned poff,
+-		unsigned plen, struct iomap *iomap)
++		unsigned plen, const struct iomap *iomap)
  {
- 	size_t size = i_size_read(inode) - iomap->offset;
- 	size_t poff = offset_in_page(iomap->offset);
+ 	struct bio_vec bvec;
+ 	struct bio bio;
 -- 
 2.30.2
 
