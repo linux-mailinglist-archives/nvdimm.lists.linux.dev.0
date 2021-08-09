@@ -1,39 +1,40 @@
-Return-Path: <nvdimm+bounces-785-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-787-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 274C23E4F2F
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 10 Aug 2021 00:28:25 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB8173E4F31
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 10 Aug 2021 00:28:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id D9C8F3E1475
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 22:28:23 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id E74951C0F32
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Aug 2021 22:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235816D14;
-	Mon,  9 Aug 2021 22:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCAD6D12;
+	Mon,  9 Aug 2021 22:28:23 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5C26D0F
-	for <nvdimm@lists.linux.dev>; Mon,  9 Aug 2021 22:28:09 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10070"; a="212937499"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A094F6D0F
+	for <nvdimm@lists.linux.dev>; Mon,  9 Aug 2021 22:28:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10070"; a="275829950"
 X-IronPort-AV: E=Sophos;i="5.84,308,1620716400"; 
-   d="scan'208";a="212937499"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 15:28:08 -0700
+   d="scan'208";a="275829950"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 15:28:20 -0700
 X-IronPort-AV: E=Sophos;i="5.84,308,1620716400"; 
-   d="scan'208";a="439090753"
+   d="scan'208";a="505593393"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 15:28:08 -0700
-Subject: [PATCH 04/23] libnvdimm/labels: Add a checksum calculation helper
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 15:28:14 -0700
+Subject: [PATCH 05/23] libnvdimm/labels: Add blk isetcookie set / validation
+ helpers
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: nvdimm@lists.linux.dev, Jonathan.Cameron@huawei.com, ben.widawsky@intel.com,
  vishal.l.verma@intel.com, alison.schofield@intel.com, ira.weiny@intel.com
-Date: Mon, 09 Aug 2021 15:28:08 -0700
-Message-ID: <162854808885.1980150.16357075479454603275.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Mon, 09 Aug 2021 15:28:14 -0700
+Message-ID: <162854809395.1980150.5182046005884745099.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <162854806653.1980150.3354618413963083778.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <162854806653.1980150.3354618413963083778.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -52,113 +53,103 @@ label format is mostly similar to the EFI label format with concepts /
 fields added, like dynamic region creation and label type guids, and
 other concepts removed like BLK-mode and interleave-set-cookie ids.
 
-CXL labels support checksums by default, but early versions of the EFI
-labels did not. Add a validate function that can return true in the case
-the label format does not implement a checksum.
+Given BLK-mode is not even supported on CXL push hide the BLK-mode
+specific details inside the helpers.
 
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/nvdimm/label.c |   68 +++++++++++++++++++++++++-----------------------
- 1 file changed, 35 insertions(+), 33 deletions(-)
+ drivers/nvdimm/label.c          |   30 ++++++++++++++++++++++++++++--
+ drivers/nvdimm/namespace_devs.c |    9 ++-------
+ drivers/nvdimm/nd.h             |    4 ++++
+ 3 files changed, 34 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
-index b40a4eda1d89..3f73412dd438 100644
+index 3f73412dd438..d1a7f399cfe4 100644
 --- a/drivers/nvdimm/label.c
 +++ b/drivers/nvdimm/label.c
-@@ -346,29 +346,45 @@ static bool preamble_next(struct nvdimm_drvdata *ndd,
- 			free, nslot);
+@@ -898,6 +898,33 @@ static struct resource *to_resource(struct nvdimm_drvdata *ndd,
+ 	return NULL;
  }
  
-+static bool nsl_validate_checksum(struct nvdimm_drvdata *ndd,
-+				  struct nd_namespace_label *nd_label)
++static void nsl_set_blk_isetcookie(struct nvdimm_drvdata *ndd,
++				   struct nd_namespace_label *nd_label,
++				   u64 isetcookie)
 +{
-+	u64 sum, sum_save;
++	if (namespace_label_has(ndd, type_guid)) {
++		nsl_set_isetcookie(ndd, nd_label, isetcookie);
++		return;
++	}
++	nsl_set_isetcookie(ndd, nd_label, 0); /* N/A */
++}
 +
-+	if (!namespace_label_has(ndd, checksum))
++bool nsl_validate_blk_isetcookie(struct nvdimm_drvdata *ndd,
++				 struct nd_namespace_label *nd_label,
++				 u64 isetcookie)
++{
++	if (!namespace_label_has(ndd, type_guid))
 +		return true;
 +
-+	sum_save = nsl_get_checksum(ndd, nd_label);
-+	nsl_set_checksum(ndd, nd_label, 0);
-+	sum = nd_fletcher64(nd_label, sizeof_namespace_label(ndd), 1);
-+	nsl_set_checksum(ndd, nd_label, sum_save);
-+	return sum == sum_save;
++	if (nsl_get_isetcookie(ndd, nd_label) != isetcookie) {
++		dev_dbg(ndd->dev, "expect cookie %#llx got %#llx\n", isetcookie,
++			nsl_get_isetcookie(ndd, nd_label));
++		return false;
++	}
++
++	return true;
 +}
 +
-+static void nsl_calculate_checksum(struct nvdimm_drvdata *ndd,
-+				   struct nd_namespace_label *nd_label)
-+{
-+	u64 sum;
-+
-+	if (!namespace_label_has(ndd, checksum))
-+		return;
-+	nsl_set_checksum(ndd, nd_label, 0);
-+	sum = nd_fletcher64(nd_label, sizeof_namespace_label(ndd), 1);
-+	nsl_set_checksum(ndd, nd_label, sum);
-+}
-+
- static bool slot_valid(struct nvdimm_drvdata *ndd,
- 		struct nd_namespace_label *nd_label, u32 slot)
- {
-+	bool valid;
-+
- 	/* check that we are written where we expect to be written */
- 	if (slot != nsl_get_slot(ndd, nd_label))
- 		return false;
+ /*
+  * 1/ Account all the labels that can be freed after this update
+  * 2/ Allocate and write the label to the staging (next) index
+@@ -1042,12 +1069,11 @@ static int __blk_label_update(struct nd_region *nd_region,
+ 				nsl_set_nlabel(ndd, nd_label, 0xffff);
+ 				nsl_set_position(ndd, nd_label, 0xffff);
+ 			}
+-			nsl_set_isetcookie(ndd, nd_label, nd_set->cookie2);
+ 		} else {
+ 			nsl_set_nlabel(ndd, nd_label, 0); /* N/A */
+ 			nsl_set_position(ndd, nd_label, 0); /* N/A */
+-			nsl_set_isetcookie(ndd, nd_label, 0); /* N/A */
+ 		}
++		nsl_set_blk_isetcookie(ndd, nd_label, nd_set->cookie2);
+ 
+ 		nsl_set_dpa(ndd, nd_label, res->start);
+ 		nsl_set_rawsize(ndd, nd_label, resource_size(res));
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index fb9e080ce654..fbd0c2fcea4a 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -2272,14 +2272,9 @@ static struct device *create_namespace_blk(struct nd_region *nd_region,
+ 					&nd_label->type_guid);
+ 			return ERR_PTR(-EAGAIN);
+ 		}
 -
--	/* check checksum */
--	if (namespace_label_has(ndd, checksum)) {
--		u64 sum, sum_save;
--
--		sum_save = nsl_get_checksum(ndd, nd_label);
--		nsl_set_checksum(ndd, nd_label, 0);
--		sum = nd_fletcher64(nd_label, sizeof_namespace_label(ndd), 1);
--		nsl_set_checksum(ndd, nd_label, sum_save);
--		if (sum != sum_save) {
--			dev_dbg(ndd->dev, "fail checksum. slot: %d expect: %#llx\n",
--				slot, sum);
--			return false;
+-		if (nd_label->isetcookie != __cpu_to_le64(nd_set->cookie2)) {
+-			dev_dbg(ndd->dev, "expect cookie %#llx got %#llx\n",
+-					nd_set->cookie2,
+-					nsl_get_isetcookie(ndd, nd_label));
+-			return ERR_PTR(-EAGAIN);
 -		}
--	}
--
--	return true;
-+	valid = nsl_validate_checksum(ndd, nd_label);
-+	if (!valid)
-+		dev_dbg(ndd->dev, "fail checksum. slot: %d\n", slot);
-+	return valid;
+ 	}
++	if (!nsl_validate_blk_isetcookie(ndd, nd_label, nd_set->cookie2))
++		return ERR_PTR(-EAGAIN);
+ 
+ 	nsblk = kzalloc(sizeof(*nsblk), GFP_KERNEL);
+ 	if (!nsblk)
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index 416846fe7818..2a9a608b7f17 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -176,6 +176,10 @@ static inline void nsl_set_lbasize(struct nvdimm_drvdata *ndd,
+ 	nd_label->lbasize = __cpu_to_le64(lbasize);
  }
  
- int nd_label_reserve_dpa(struct nvdimm_drvdata *ndd)
-@@ -812,13 +828,7 @@ static int __pmem_label_update(struct nd_region *nd_region,
- 		guid_copy(&nd_label->abstraction_guid,
- 				to_abstraction_guid(ndns->claim_class,
- 					&nd_label->abstraction_guid));
--	if (namespace_label_has(ndd, checksum)) {
--		u64 sum;
--
--		nsl_set_checksum(ndd, nd_label, 0);
--		sum = nd_fletcher64(nd_label, sizeof_namespace_label(ndd), 1);
--		nsl_set_checksum(ndd, nd_label, sum);
--	}
-+	nsl_calculate_checksum(ndd, nd_label);
- 	nd_dbg_dpa(nd_region, ndd, res, "\n");
- 
- 	/* update label */
-@@ -1049,15 +1059,7 @@ static int __blk_label_update(struct nd_region *nd_region,
- 			guid_copy(&nd_label->abstraction_guid,
- 					to_abstraction_guid(ndns->claim_class,
- 						&nd_label->abstraction_guid));
--
--		if (namespace_label_has(ndd, checksum)) {
--			u64 sum;
--
--			nsl_set_checksum(ndd, nd_label, 0);
--			sum = nd_fletcher64(nd_label,
--					sizeof_namespace_label(ndd), 1);
--			nsl_set_checksum(ndd, nd_label, sum);
--		}
-+		nsl_calculate_checksum(ndd, nd_label);
- 
- 		/* update label */
- 		offset = nd_label_offset(ndd, nd_label);
++bool nsl_validate_blk_isetcookie(struct nvdimm_drvdata *ndd,
++				 struct nd_namespace_label *nd_label,
++				 u64 isetcookie);
++
+ struct nd_region_data {
+ 	int ns_count;
+ 	int ns_active;
 
 
