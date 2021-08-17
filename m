@@ -1,40 +1,51 @@
-Return-Path: <nvdimm+bounces-888-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-892-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF753EE477
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Aug 2021 04:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CD83EE4D0
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Aug 2021 05:12:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 395D53E0EDB
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Aug 2021 02:37:13 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 53C133E0F49
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Aug 2021 03:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 121286D24;
-	Tue, 17 Aug 2021 02:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237A16D24;
+	Tue, 17 Aug 2021 03:12:46 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail108.syd.optusnet.com.au (mail108.syd.optusnet.com.au [211.29.132.59])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89A5173
-	for <nvdimm@lists.linux.dev>; Tue, 17 Aug 2021 02:37:05 +0000 (UTC)
-Received: from dread.disaster.area (pa49-195-182-146.pa.nsw.optusnet.com.au [49.195.182.146])
-	by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id F26771B4722;
-	Tue, 17 Aug 2021 12:37:03 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-	(envelope-from <david@fromorbit.com>)
-	id 1mFoyN-001amD-2Z; Tue, 17 Aug 2021 12:37:03 +1000
-Date: Tue, 17 Aug 2021 12:37:02 +1000
-From: Dave Chinner <david@fromorbit.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Dan Williams <dan.j.williams@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-xfs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	nvdimm@lists.linux.dev, cluster-devel@redhat.com
-Subject: Re: [PATCH 31/30] iomap: move iomap iteration code to iter.c
-Message-ID: <20210817023702.GJ3657114@dread.disaster.area>
-References: <20210809061244.1196573-1-hch@lst.de>
- <20210811191926.GJ3601443@magnolia>
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4DA173
+	for <nvdimm@lists.linux.dev>; Tue, 17 Aug 2021 03:12:43 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="203184452"
+X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
+   d="scan'208";a="203184452"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 20:12:42 -0700
+X-IronPort-AV: E=Sophos;i="5.84,327,1620716400"; 
+   d="scan'208";a="530849800"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2021 20:12:42 -0700
+Date: Mon, 16 Aug 2021 20:12:42 -0700
+From: Ira Weiny <ira.weiny@intel.com>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "Williams, Dan J" <dan.j.williams@intel.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"Yu, Fenghua" <fenghua.yu@intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"Lutomirski, Andy" <luto@kernel.org>, "bp@alien8.de" <bp@alien8.de>
+Subject: Re: [PATCH V7 14/18] memremap_pages: Add memremap.pks_fault_mode
+Message-ID: <20210817031242.GF3169279@iweiny-DESK2.sc.intel.com>
+References: <20210804043231.2655537-1-ira.weiny@intel.com>
+ <20210804043231.2655537-15-ira.weiny@intel.com>
+ <506157336072463bf08562176eff0bb068cd0e9d.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -43,51 +54,33 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210811191926.GJ3601443@magnolia>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=F8MpiZpN c=1 sm=1 tr=0
-	a=QpfB3wCSrn/dqEBSktpwZQ==:117 a=QpfB3wCSrn/dqEBSktpwZQ==:17
-	a=kj9zAlcOel0A:10 a=MhDmnRu9jo8A:10 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8
-	a=7-415B0cAAAA:8 a=q_jVzwUvvCIIwZNgioUA:9 a=CjuIK1q_8ugA:10
-	a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
+In-Reply-To: <506157336072463bf08562176eff0bb068cd0e9d.camel@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 
-On Wed, Aug 11, 2021 at 12:19:26PM -0700, Darrick J. Wong wrote:
-> From: Darrick J. Wong <djwong@kernel.org>
+On Wed, Aug 11, 2021 at 12:01:28PM -0700, Edgecombe, Rick P wrote:
+> On Tue, 2021-08-03 at 21:32 -0700, ira.weiny@intel.com wrote:
+> > +static int param_set_pks_fault_mode(const char *val, const struct
+> > kernel_param *kp)
+> > +{
+> > +       int ret = -EINVAL;
+> > +
+> > +       if (!sysfs_streq(val, "relaxed")) {
+> > +               pks_fault_mode = PKS_MODE_RELAXED;
+> > +               ret = 0;
+> > +       } else if (!sysfs_streq(val, "strict")) {
+> > +               pks_fault_mode = PKS_MODE_STRICT;
+> > +               ret = 0;
+> > +       }
+> > +
+> > +       return ret;
+> > +}
+> > +
 > 
-> Now that we've moved iomap to the iterator model, rename this file to be
-> in sync with the functions contained inside of it.
-> 
-> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-> ---
->  fs/iomap/Makefile |    2 +-
->  fs/iomap/iter.c   |    0 
->  2 files changed, 1 insertion(+), 1 deletion(-)
->  rename fs/iomap/{apply.c => iter.c} (100%)
-> 
-> diff --git a/fs/iomap/Makefile b/fs/iomap/Makefile
-> index e46f936dde81..bb64215ae256 100644
-> --- a/fs/iomap/Makefile
-> +++ b/fs/iomap/Makefile
-> @@ -26,9 +26,9 @@ ccflags-y += -I $(srctree)/$(src)		# needed for trace events
->  obj-$(CONFIG_FS_IOMAP)		+= iomap.o
->  
->  iomap-y				+= trace.o \
-> -				   apply.o \
->  				   buffered-io.o \
->  				   direct-io.o \
->  				   fiemap.o \
-> +				   iter.o \
->  				   seek.o
->  iomap-$(CONFIG_SWAP)		+= swapfile.o
-> diff --git a/fs/iomap/apply.c b/fs/iomap/iter.c
-> similarity index 100%
-> rename from fs/iomap/apply.c
-> rename to fs/iomap/iter.c
+> Looks like !sysfs_streq() should be just sysfs_streq().
 
-LGTM,
+Indeed. Fixed.
 
-Reviewed-by: Dave Chinner <dchinner@redhat.com>
--- 
-Dave Chinner
-david@fromorbit.com
+Thanks!
+Ira
+
 
