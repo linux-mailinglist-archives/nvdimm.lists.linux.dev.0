@@ -1,41 +1,41 @@
-Return-Path: <nvdimm+bounces-996-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-983-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABBDF3F6251
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 18:08:37 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80DAE3F623C
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 18:07:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id D19631C0FB7
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:08:35 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 766601C0FA1
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC0C3FE3;
-	Tue, 24 Aug 2021 16:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48BD23FCC;
+	Tue, 24 Aug 2021 16:07:11 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FF03FD3
-	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 16:07:47 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="196918350"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0CD3FC0
+	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 16:07:10 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="204541379"
 X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="196918350"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:07:04 -0700
+   d="scan'208";a="204541379"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:07:09 -0700
 X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="426161877"
+   d="scan'208";a="515510177"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:07:02 -0700
-Subject: [PATCH v3 18/28] cxl/pci: Use module_pci_driver
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:07:07 -0700
+Subject: [PATCH v3 19/28] cxl/mbox: Convert 'enabled_cmds' to DECLARE_BITMAP
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: Ben Widawsky <ben.widawsky@intel.com>, vishal.l.verma@intel.com,
  alison.schofield@intel.com, nvdimm@lists.linux.dev,
  Jonathan.Cameron@huawei.com, ira.weiny@intel.com, ben.widawsky@intel.com,
  vishal.l.verma@intel.com, alison.schofield@intel.com
-Date: Tue, 24 Aug 2021 09:07:02 -0700
-Message-ID: <162982122234.1124374.8206618857845373193.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Tue, 24 Aug 2021 09:07:07 -0700
+Message-ID: <162982122744.1124374.6742215706893563515.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -48,61 +48,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Now that cxl_mem_{init,exit} no longer need to manage debugfs, switch
-back to the smaller form of the boiler plate.
+Define enabled_cmds as an embedded member of 'struct cxl_mem' rather
+than a pointer to another dynamic allocation.
+
+As this leaves only one user of cxl_cmd_count, just open code it and
+delete the helper.
 
 Acked-by: Ben Widawsky <ben.widawsky@intel.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/cxl/pci.c |   30 ++++++++----------------------
- 1 file changed, 8 insertions(+), 22 deletions(-)
+ drivers/cxl/core/mbox.c |   10 +---------
+ drivers/cxl/cxlmem.h    |    2 +-
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index b8075b941a3a..425e821160b5 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -519,6 +519,13 @@ static int cxl_mem_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	struct cxl_mem *cxlm;
- 	int rc;
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index 706fe007c8d6..73107b302224 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -324,8 +324,6 @@ static int cxl_validate_cmd_from_user(struct cxl_mem *cxlm,
+ 	return 0;
+ }
  
-+	/*
-+	 * Double check the anonymous union trickery in struct cxl_regs
-+	 * FIXME switch to struct_group()
-+	 */
-+	BUILD_BUG_ON(offsetof(struct cxl_regs, memdev) !=
-+		     offsetof(struct cxl_regs, device_regs.memdev));
-+
- 	rc = pcim_enable_device(pdev);
- 	if (rc)
- 		return rc;
-@@ -573,27 +580,6 @@ static struct pci_driver cxl_mem_driver = {
- 	},
- };
+-#define cxl_cmd_count ARRAY_SIZE(cxl_mem_commands)
+-
+ int cxl_query_cmd(struct cxl_memdev *cxlmd,
+ 		  struct cxl_mem_query_commands __user *q)
+ {
+@@ -341,7 +339,7 @@ int cxl_query_cmd(struct cxl_memdev *cxlmd,
  
--static __init int cxl_mem_init(void)
--{
--	int rc;
--
--	/* Double check the anonymous union trickery in struct cxl_regs */
--	BUILD_BUG_ON(offsetof(struct cxl_regs, memdev) !=
--		     offsetof(struct cxl_regs, device_regs.memdev));
--
--	rc = pci_register_driver(&cxl_mem_driver);
--	if (rc)
--		return rc;
--
--	return 0;
--}
--
--static __exit void cxl_mem_exit(void)
--{
--	pci_unregister_driver(&cxl_mem_driver);
--}
--
- MODULE_LICENSE("GPL v2");
--module_init(cxl_mem_init);
--module_exit(cxl_mem_exit);
-+module_pci_driver(cxl_mem_driver);
- MODULE_IMPORT_NS(CXL);
+ 	/* returns the total number if 0 elements are requested. */
+ 	if (n_commands == 0)
+-		return put_user(cxl_cmd_count, &q->n_commands);
++		return put_user(ARRAY_SIZE(cxl_mem_commands), &q->n_commands);
+ 
+ 	/*
+ 	 * otherwise, return max(n_commands, total commands) cxl_command_info
+@@ -805,12 +803,6 @@ struct cxl_mem *cxl_mem_create(struct device *dev)
+ 
+ 	mutex_init(&cxlm->mbox_mutex);
+ 	cxlm->dev = dev;
+-	cxlm->enabled_cmds =
+-		devm_kmalloc_array(dev, BITS_TO_LONGS(cxl_cmd_count),
+-				   sizeof(unsigned long),
+-				   GFP_KERNEL | __GFP_ZERO);
+-	if (!cxlm->enabled_cmds)
+-		return ERR_PTR(-ENOMEM);
+ 
+ 	return cxlm;
+ }
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index b7122ded3a04..df4f3636a999 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -116,7 +116,7 @@ struct cxl_mem {
+ 	size_t lsa_size;
+ 	struct mutex mbox_mutex; /* Protects device mailbox and firmware */
+ 	char firmware_version[0x10];
+-	unsigned long *enabled_cmds;
++	DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
+ 
+ 	struct range pmem_range;
+ 	struct range ram_range;
 
 
