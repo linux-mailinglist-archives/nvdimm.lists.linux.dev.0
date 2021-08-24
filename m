@@ -1,42 +1,41 @@
-Return-Path: <nvdimm+bounces-1007-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-982-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F47F3F625E
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 18:09:45 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 258DD3F623B
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 18:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 496E71C1096
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:09:44 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id A3A883E1094
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926883FE3;
-	Tue, 24 Aug 2021 16:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE15C3FCE;
+	Tue, 24 Aug 2021 16:06:43 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15033FCC
-	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 16:08:35 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="281060114"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A445C3FC0
+	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 16:06:42 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="204541255"
 X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="281060114"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:06:31 -0700
+   d="scan'208";a="204541255"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:06:36 -0700
 X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="597633802"
+   d="scan'208";a="643232631"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:06:30 -0700
-Subject: [PATCH v3 12/28] libnvdimm/labels: Introduce the concept of
- multi-range namespace labels
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:06:36 -0700
+Subject: [PATCH v3 13/28] libnvdimm/label: Define CXL region labels
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, vishal.l.verma@intel.com,
  alison.schofield@intel.com, nvdimm@lists.linux.dev,
  Jonathan.Cameron@huawei.com, ira.weiny@intel.com, ben.widawsky@intel.com,
  vishal.l.verma@intel.com, alison.schofield@intel.com
-Date: Tue, 24 Aug 2021 09:06:29 -0700
-Message-ID: <162982118939.1124374.9504087573920499391.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Tue, 24 Aug 2021 09:06:36 -0700
+Message-ID: <162982119604.1124374.8364301519543316156.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -49,56 +48,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-The CXL specification defines a mechanism for namespaces to be comprised
-of multiple dis-contiguous ranges. Introduce that concept to the legacy
-NVDIMM namespace implementation with a new nsl_set_nrange() helper, that
-sets the number of ranges to 1. Once the NVDIMM subsystem supports CXL
-labels and updates its namespace capacity provisioning for
-dis-contiguous support nsl_set_nrange() can be updated, but in the
-meantime CXL label validation requires nrange be non-zero.
+Add a definition of the CXL 2.0 region label format. Note this is done
+as a separate patch to make the next patch that adds namespace label
+support easier to read.
 
 Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/nvdimm/label.c |    1 +
- drivers/nvdimm/nd.h    |   13 +++++++++++++
- 2 files changed, 14 insertions(+)
+ drivers/nvdimm/label.h |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
-index e8e0d3e409a2..7abeb1233404 100644
---- a/drivers/nvdimm/label.c
-+++ b/drivers/nvdimm/label.c
-@@ -901,6 +901,7 @@ static int __pmem_label_update(struct nd_region *nd_region,
- 	nsl_set_name(ndd, nd_label, nspm->alt_name);
- 	nsl_set_flags(ndd, nd_label, flags);
- 	nsl_set_nlabel(ndd, nd_label, nd_region->ndr_mappings);
-+	nsl_set_nrange(ndd, nd_label, 1);
- 	nsl_set_position(ndd, nd_label, pos);
- 	nsl_set_isetcookie(ndd, nd_label, cookie);
- 	nsl_set_rawsize(ndd, nd_label, resource_size(res));
-diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-index 036638bdb7e3..d57f95a48fe1 100644
---- a/drivers/nvdimm/nd.h
-+++ b/drivers/nvdimm/nd.h
-@@ -164,6 +164,19 @@ static inline void nsl_set_nlabel(struct nvdimm_drvdata *ndd,
- 	nd_label->nlabel = __cpu_to_le16(nlabel);
- }
+diff --git a/drivers/nvdimm/label.h b/drivers/nvdimm/label.h
+index 31f94fad7b92..76ecd0347dc2 100644
+--- a/drivers/nvdimm/label.h
++++ b/drivers/nvdimm/label.h
+@@ -65,6 +65,36 @@ struct nd_namespace_index {
+ 	u8 free[];
+ };
  
-+static inline u16 nsl_get_nrange(struct nvdimm_drvdata *ndd,
-+				 struct nd_namespace_label *nd_label)
-+{
-+	/* EFI labels do not have an nrange field */
-+	return 1;
-+}
++/**
++ * struct cxl_region_label - CXL 2.0 Table 211
++ * @type: uuid identifying this label format (region)
++ * @uuid: uuid for the region this label describes
++ * @flags: NSLABEL_FLAG_UPDATING (all other flags reserved)
++ * @position: this label's position in the set
++ * @dpa: start address in device-local capacity for this label
++ * @rawsize: size of this label's contribution to region
++ * @hpa: mandatory system physical address to map this region
++ * @slot: slot id of this label in label area
++ * @ig: interleave granularity (1 << @ig) * 256 bytes
++ * @align: alignment in SZ_256M blocks
++ * @checksum: fletcher64 sum of this label
++ */
++struct cxl_region_label {
++	u8 type[NSLABEL_UUID_LEN];
++	u8 uuid[NSLABEL_UUID_LEN];
++	__le32 flags;
++	__le16 nlabel;
++	__le16 position;
++	__le64 dpa;
++	__le64 rawsize;
++	__le64 hpa;
++	__le32 slot;
++	__le32 ig;
++	__le32 align;
++	u8 reserved[0xac];
++	__le64 checksum;
++};
 +
-+static inline void nsl_set_nrange(struct nvdimm_drvdata *ndd,
-+				  struct nd_namespace_label *nd_label,
-+				  u16 nrange)
-+{
-+}
-+
- static inline u64 nsl_get_lbasize(struct nvdimm_drvdata *ndd,
- 				  struct nd_namespace_label *nd_label)
- {
+ /**
+  * struct nd_namespace_label - namespace superblock
+  * @uuid: UUID per RFC 4122
 
 
