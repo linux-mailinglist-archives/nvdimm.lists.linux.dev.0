@@ -1,118 +1,119 @@
-Return-Path: <nvdimm+bounces-970-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-972-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 610E63F588E
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 08:55:59 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF89A3F5B58
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 11:51:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 3200E1C0F74
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 06:55:58 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 050383E1089
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 09:51:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0076D3FCB;
-	Tue, 24 Aug 2021 06:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD1F3FCD;
+	Tue, 24 Aug 2021 09:51:42 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313FD3FC1
-	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 06:55:49 +0000 (UTC)
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 77C0D68AFE; Tue, 24 Aug 2021 08:55:46 +0200 (CEST)
-Date: Tue, 24 Aug 2021 08:55:46 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>, Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Mike Snitzer <snitzer@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	linux-xfs <linux-xfs@vger.kernel.org>,
-	Linux NVDIMM <nvdimm@lists.linux.dev>,
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-	linux-ext4 <linux-ext4@vger.kernel.org>
-Subject: Re: [PATCH 1/9] fsdax: improve the FS_DAX Kconfig description and
- help text
-Message-ID: <20210824065546.GA24465@lst.de>
-References: <20210823123516.969486-1-hch@lst.de> <20210823123516.969486-2-hch@lst.de> <CAPcyv4h0QdHi10ngaXtuisxeZ+66wd-oy0F7r9C0FjJmyXBOFg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B599272
+	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 09:51:37 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id f11-20020a17090aa78b00b0018e98a7cddaso1941313pjq.4
+        for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 02:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N1iUjoIHAHSPcb+Vjmn30gMqM9iXUyBU913+foah2qA=;
+        b=QOZ0TpNKbocf7HtNdHsThwb+PeMicqTM/sarwOPKx2bHql0Hbexww7VUu5OTxXG7Ed
+         h7B7fD4gzuR/Gjc3Zy9lhYA1uoSwfdkwty686jiF3yfea5QniMNNIXKdLUZOoIy4DRpG
+         BQR+4yF6YqQobdrcdZbre15WOHgDGts6f6nvqXbDZJO0H/XCN+8KRiijZm50PKu4nQ28
+         Uap4duPq0f9vjn6YBRT2+yUVYrCcFej3rG2LILxYaptW04aTlF6C4gxefxLYcgcEDm6/
+         bwvXTx/WzY095A1+/nETo3ru5pqFF8yiejkM/XH9bfrpR2yrHOacsTrhze7nmDz8BVt9
+         PwAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N1iUjoIHAHSPcb+Vjmn30gMqM9iXUyBU913+foah2qA=;
+        b=CVcplQnD//mYKZZ8KvLqwg+DtHEqaqtsSfL6FmEWpEad1JSm4rKPzBNZct9T4/XShW
+         fZ8zs1HSIL4iYXWYV7RKFL226GGEFjd90SA0JJT24pP8+mlGo4E7GBq/5fAhv7jfMBaX
+         57/Em94iidnugDIJj6+Pbjwz3rOnXJwnAArLau3oBDL5sAkBLO9cMNXEzSr07MkgPztD
+         JcEJcHvkomKGIAT4T7dgcThvz4zh3diVGA8fz2//x/BTp/uyVbDX6Ai8qMMIJdHzjgyg
+         wPHP8LdThS1BQbK6CgJOpDsLOlFcrQm0Rshchdv2riZIGfBosS87VZGoKx+15t/rnFFs
+         L7kA==
+X-Gm-Message-State: AOAM530khzYpftDcfb7hXltf5CRcE8hWG0smDFPAP9D2PcBEUIODAPDa
+	Sc5rNkbPHeYVN0w0ggXHx+tQs/pjj8CPIA==
+X-Google-Smtp-Source: ABdhPJx9MDXGW/iByZYd0X1uwuBpfMby0dpOtUQmlCaHzaEX3u6IVPfWTuD3PoELpXT/d7gUCbP6Zw==
+X-Received: by 2002:a17:90a:d596:: with SMTP id v22mr3577950pju.51.1629798697286;
+        Tue, 24 Aug 2021 02:51:37 -0700 (PDT)
+Received: from localhost.localdomain (125x103x255x1.ap125.ftth.ucom.ne.jp. [125.103.255.1])
+        by smtp.gmail.com with ESMTPSA id l19sm1873881pjq.10.2021.08.24.02.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 02:51:36 -0700 (PDT)
+From: QI Fuli <fukuri.sai@gmail.com>
+X-Google-Original-From: QI Fuli <qi.fuli@fujitsu.com>
+To: nvdimm@lists.linux.dev
+Cc: QI Fuli <qi.fuli@fujitsu.com>
+Subject: [ndctl PATCH v2 0/5] make ndctl support global configuration files
+Date: Tue, 24 Aug 2021 18:51:01 +0900
+Message-Id: <20210824095106.104808-1-qi.fuli@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4h0QdHi10ngaXtuisxeZ+66wd-oy0F7r9C0FjJmyXBOFg@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 23, 2021 at 11:45:52AM -0700, Dan Williams wrote:
-> On Mon, Aug 23, 2021 at 5:37 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > Rename the main option text to clarify it is for file system access,
-> > and add a bit of text that explains how to actually switch a nvdimm
-> > to a fsdax capable state.
-> >
-> 
-> Looks good, nice improvement. A couple suggestions below.
+From: QI Fuli <qi.fuli@fujitsu.com>
 
-Does this looks ok?
+This patch set is used to make ndctl support global configuration files.
+All files with .conf suffix under {sysconfdir}/ndctl can be regarded as
+ndctl global configuration files that all ndctl commands can refer to.
 
----
-From c69617137a1e6b67122c871c946e7aa00b03978b Mon Sep 17 00:00:00 2001
-From: Christoph Hellwig <hch@lst.de>
-Date: Mon, 23 Aug 2021 10:57:37 +0200
-Subject: fsdax: improve the FS_DAX Kconfig description and help text
+Signed-off-by: QI Fuli <qi.fuli@fujitsu.com>
 
-Rename the main option text to clarify it is for file system access,
-and add a bit of text that explains how to actually switch a nvdimm
-to a fsdax capable state.
+v1 -> v2:
+- Update the version of iniparser helper
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/Kconfig | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+QI Fuli (5):
+  ndctl, util: add iniparser helper
+  ndctl, util: add parse-configs helper
+  ndctl: make ndctl support configuration files
+  ndctl, config: add the default ndctl configuration file
+  ndctl, monitor: refator monitor for supporting multiple config files
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index a7749c126b8e..bd21535a7620 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -43,7 +43,7 @@ source "fs/f2fs/Kconfig"
- source "fs/zonefs/Kconfig"
- 
- config FS_DAX
--	bool "Direct Access (DAX) support"
-+	bool "File system based Direct Access (DAX) support"
- 	depends on MMU
- 	depends on !(ARM || MIPS || SPARC)
- 	select DEV_PAGEMAP_OPS if (ZONE_DEVICE && !FS_DAX_LIMITED)
-@@ -53,8 +53,23 @@ config FS_DAX
- 	  Direct Access (DAX) can be used on memory-backed block devices.
- 	  If the block device supports DAX and the filesystem supports DAX,
- 	  then you can avoid using the pagecache to buffer I/Os.  Turning
--	  on this option will compile in support for DAX; you will need to
--	  mount the filesystem using the -o dax option.
-+	  on this option will compile in support for DAX.
-+
-+	  For a DAX device to support file system access it needs to have
-+	  struct pages.  For the nfit based NVDIMMs this can be enabled
-+	  using the ndctl utility:
-+
-+		# ndctl create-namespace --force --reconfig=namespace0.0 \
-+			--mode=fsdax --map=mem
-+
-+	  See the 'create-namespace' man page for details on the overhead of
-+	  --map=mem:
-+	  https://docs.pmem.io/ndctl-user-guide/ndctl-man-pages/ndctl-create-namespace
-+
-+          For ndctl to work CONFIG_DEV_DAX needs to be enabled as well. For most
-+	  file systems DAX support needs to be manually enabled globally or
-+	  per-inode using a mount option as well.  See the file documentation in
-+	  Documentation/filesystems/dax.rst for details.
- 
- 	  If you do not have a block device that is capable of using this,
- 	  or if unsure, say N.  Saying Y will increase the size of the kernel
+ Documentation/ndctl/Makefile.am       |   2 +-
+ Documentation/ndctl/ndctl-monitor.txt |   8 +-
+ Makefile.am                           |   8 +-
+ configure.ac                          |   6 +-
+ ndctl/Makefile.am                     |   9 +-
+ ndctl/lib/Makefile.am                 |   4 +
+ ndctl/lib/libndctl.c                  |  52 ++
+ ndctl/lib/libndctl.sym                |   2 +
+ ndctl/lib/private.h                   |   1 +
+ ndctl/libndctl.h                      |   2 +
+ ndctl/monitor.c                       |  69 ++-
+ ndctl/ndctl.c                         |   1 +
+ ndctl/ndctl.conf                      |  56 ++
+ util/dictionary.c                     | 383 ++++++++++++
+ util/dictionary.h                     | 175 ++++++
+ util/iniparser.c                      | 838 ++++++++++++++++++++++++++
+ util/iniparser.h                      | 360 +++++++++++
+ util/parse-configs.c                  |  82 +++
+ util/parse-configs.h                  |  34 ++
+ 19 files changed, 2048 insertions(+), 44 deletions(-)
+ create mode 100644 ndctl/ndctl.conf
+ create mode 100644 util/dictionary.c
+ create mode 100644 util/dictionary.h
+ create mode 100644 util/iniparser.c
+ create mode 100644 util/iniparser.h
+ create mode 100644 util/parse-configs.c
+ create mode 100644 util/parse-configs.h
+
 -- 
-2.30.2
+2.31.1
 
 
