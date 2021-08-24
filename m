@@ -1,129 +1,240 @@
-Return-Path: <nvdimm+bounces-979-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1004-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27ABD3F60FF
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:53:43 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8E843F625B
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 18:09:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 831993E1056
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 14:53:41 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 66F643E14C4
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Aug 2021 16:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E05E3FCC;
-	Tue, 24 Aug 2021 14:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B9D93FEA;
+	Tue, 24 Aug 2021 16:08:23 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194D03FC0
-	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 14:53:34 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id n12so955907plk.10
-        for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 07:53:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9ylhUTqwJhOuYYwdsmYmo/6iY3LnpW0+y5HqqgED6H8=;
-        b=0GqAkBH/nv5mE+SUkUmCtp/Pwe2XyfpfayIPW7xPf4zMALUn+8UVuRqkiU5/doWAyu
-         mYltVepwNSNg4jFsmuXbs0v3dQ1BDTt6vaL7/GAiuFiI684L6L+K76lJrONqA9PoUKTZ
-         H98GgJ6wpuG4u+VZ+rOGiYpjGy1dIZJbTCiBtcEvQHTBiWGIH4qRplx+5wPBu5PCjIFk
-         9OBXbOiNJetFqwHBcvKNPfUwCLj33yaz6uqLopvKR0Re5pPWAQCKgtr4FqCkD/DrGF6i
-         S0FWWP6ujBqaO/ixSi1B8Qtm/cvJ9ZpyK5HCj5KknKJqHaLQMCj6+7AskxNfi8waSbKY
-         AdXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ylhUTqwJhOuYYwdsmYmo/6iY3LnpW0+y5HqqgED6H8=;
-        b=g1v9fb6hvypMg/8ukkSPoP48EbNrYEV0thM13AzpCl+5hPA/GbaPgmaMr/8gPHn1pa
-         X9ATH8+1czbl7M7IegzC3wvqi2ytmE9UTcLsmB6fsYOPizStcrjv6QgpyjUXiQruLknK
-         yMyvfyxPqFOQdZNgTp1diejUM+n/isbtw9wwTm1kzb3rfcn490lGZmA08byBb7vqbwiY
-         D0Ue3qqXfpMcQARUlPwQAOIDYhML/fObnDtln9qGqmzUpkPa0Q8wGqp6XFYfAPhZe3wq
-         gS9/vIdICEQbLg8V5lTitCHlsMPVEi/gVBDBFsCW/6KkSrdp6AUu3DYcBjwx/ZIFRT8a
-         xFgg==
-X-Gm-Message-State: AOAM530N+5GrVbV18MIZIl6lEf5T8kNSuMxX0QIg4lBJjJrZtNZNk4NG
-	MzlrHshJa7JrJKc97NXEOsSfAJ4n5VQ3rSW/35os5g==
-X-Google-Smtp-Source: ABdhPJxB5qoItv8tPXXCue0hhdumr9yxeciPby/nl24so9ftRlXdHk/l9EUDaI5+k43oB4FfA4dj+mopqnyG/DhwRe8=
-X-Received: by 2002:a17:902:9b95:b0:130:6a7b:4570 with SMTP id
- y21-20020a1709029b9500b001306a7b4570mr21771893plp.27.1629816813538; Tue, 24
- Aug 2021 07:53:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429803FCE
+	for <nvdimm@lists.linux.dev>; Tue, 24 Aug 2021 16:08:22 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="215501675"
+X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
+   d="scan'208";a="215501675"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:05:25 -0700
+X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
+   d="scan'208";a="643232071"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:05:24 -0700
+Subject: [PATCH v3 00/28] cxl_test: Enable CXL Topology and UAPI regression
+ tests
+From: Dan Williams <dan.j.williams@intel.com>
+To: linux-cxl@vger.kernel.org
+Cc: Ben Widawsky <ben.widawsky@intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, stable@vger.kernel.org,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ kernel test robot <lkp@intel.com>, Vishal Verma <vishal.l.verma@intel.com>,
+ nvdimm@lists.linux.dev, Jonathan.Cameron@huawei.com, ira.weiny@intel.com,
+ ben.widawsky@intel.com, vishal.l.verma@intel.com, alison.schofield@intel.com
+Date: Tue, 24 Aug 2021 09:05:24 -0700
+Message-ID: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210820054340.GA28560@lst.de> <20210823160546.0bf243bf@thinkpad>
- <20210823214708.77979b3f@thinkpad> <CAPcyv4jijqrb1O5OOTd5ftQ2Q-5SVwNRM7XMQ+N3MAFxEfvxpA@mail.gmail.com>
- <e250feab-1873-c91d-5ea9-39ac6ef26458@oracle.com>
-In-Reply-To: <e250feab-1873-c91d-5ea9-39ac6ef26458@oracle.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Tue, 24 Aug 2021 07:53:22 -0700
-Message-ID: <CAPcyv4jYXPWmT2EzroTa7RDz1Z68Qz8Uj4MeheQHPbBXdfS4pA@mail.gmail.com>
-Subject: Re: can we finally kill off CONFIG_FS_DAX_LIMITED
-To: Joao Martins <joao.m.martins@oracle.com>
-Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Christoph Hellwig <hch@lst.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@de.ibm.com>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	linux-s390 <linux-s390@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 24, 2021 at 7:10 AM Joao Martins <joao.m.martins@oracle.com> wrote:
->
->
->
-> On 8/23/21 9:21 PM, Dan Williams wrote:
-> > On Mon, Aug 23, 2021 at 12:47 PM Gerald Schaefer
-> > <gerald.schaefer@linux.ibm.com> wrote:
-> >>
-> >> On Mon, 23 Aug 2021 16:05:46 +0200
-> >> Gerald Schaefer <gerald.schaefer@linux.ibm.com> wrote:
-> >>
-> >>> On Fri, 20 Aug 2021 07:43:40 +0200
-> >>> Christoph Hellwig <hch@lst.de> wrote:
-> >>>
-> >>>> Hi all,
-> >>>>
-> >>>> looking at the recent ZONE_DEVICE related changes we still have a
-> >>>> horrible maze of different code paths.  I already suggested to
-> >>>> depend on ARCH_HAS_PTE_SPECIAL for ZONE_DEVICE there, which all modern
-> >>
-> >> Oh, we do have PTE_SPECIAL, actually that took away the last free bit
-> >> in the pte. So, if there is a chance that ZONE_DEVICE would depend
-> >> on PTE_SPECIAL instead of PTE_DEVMAP, we might be back in the game
-> >> and get rid of that CONFIG_FS_DAX_LIMITED.
-> >
-> > So PTE_DEVMAP is primarily there to coordinate the
-> > get_user_pages_fast() path, and even there it's usage can be
-> > eliminated in favor of PTE_SPECIAL. I started that effort [1], but
-> > need to rebase on new notify_failure infrastructure coming from Ruan
-> > [2]. So I think you are not in the critical path until I can get the
-> > PTE_DEVMAP requirement out of your way.
-> >
->
-> Isn't the implicit case that PTE_SPECIAL means that you
-> aren't supposed to get a struct page back? The gup path bails out on
-> pte_special() case. And in the fact in this thread that you quote:
->
-> > [1]: https://lore.kernel.org/r/161604050866.1463742.7759521510383551055.stgit@dwillia2-desk3.amr.corp.intel.com
->
-> (...) we were speaking about[1.1] using that same special bit to block
-> longterm gup for fs-dax (while allowing it device-dax which does support it).
->
-> [1.1] https://lore.kernel.org/nvdimm/a8c41028-c7f5-9b93-4721-b8ddcf2427da@oracle.com/
->
-> Or maybe that's what you mean for this particular case of FS_DAX_LIMITED. Most _special*()
-> cases in mm match _devmap*() as far I've experimented in the past with PMD/PUD and dax
-> (prior to [1.1]).
->
-> I am just wondering would you differentiate the case where you have metadata for the
-> !FS_DAX_LIMITED case in {gup,gup_fast} path in light of removing PTE_DEVMAP. I would have
-> thought of checking that a pgmap exists for the pfn (without grabbing a ref to it).
+Changes since v1* [1]:
+- Rearrange setters to be next to getters (Jonathan)
+- Fix endian bug in nsl_set_slot() (kbuild robot)
+- Return NULL instead of !name (Jonathan)
+- Use {import,export}_uuid() where UUIDs are used in external interface
+  structures (Andy)
+- Fix uuid_to_nvdimm_class() to be static (kbuild robot)
+- Fixup changelog to note uuid copying fixups (Jonathan)
+- Fix the broken nlabel/nrange confusion for CXL labels (Jonathan)
+  - Add a dedicated nlabel validation helper
+  - Add nrange helpers for CXL
+- Introduce __mock to fix unnecessary global symbols (kbuild robot)
+- Include core.h to fix some missing prototype warnings (kbuild robot)
+- Fix excessive stack usage from devm_cxl_add_decoder() (kbuild robot)
+- Add spec reference for namespace label fields (Jonathan)
+- Fix uninitialized variable use in cxl_nvdimm_probe() (kbuild robot)
+- Move cxl region definition to its own patch for readability (Jonathan)
+- Move exclusive command validation to cxl_validate_cmd_from_user() (Ben)
+- Fix exclusive command locking (Ben)
+- Fold in Alison's acpi_pci_find_root() fix and rebase (Alison)
+- Rebase on 0day-induced fixups of the baseline
 
-So I should clarify, I'm not proposing removing PTE_DEVMAP, I'm
-proposing relaxing its need for architectures that can not afford the
-PTE bit. Those architectures would miss out on get_user_pages_fast()
-for devmap pages. Then, once PTE_SPECIAL kicks get_user_pages() to the
-slow path, get_dev_pagemap() is used to detect devmap pages.
+[1]: https://lore.kernel.org/r/162854806653.1980150.3354618413963083778.stgit@dwillia2-desk3.amr.corp.intel.com
+
+Note that there were some one-off direct replies marked v2, but now this
+set supersedes those.
+
+---
+
+Changed or new(*) patches since v1 are:
+
+[ PATCH v3 03/28] libnvdimm/labels: Introduce label setter helpers
+[ PATCH v3 09/28] libnvdimm/labels: Add address-abstraction uuid definitions
+[ PATCH v3 10/28] libnvdimm/labels: Add uuid helpers
+[*PATCH v3 11/28] libnvdimm/label: Add a helper for nlabel validation
+[*PATCH v3 12/28] libnvdimm/labels: Introduce the concept of multi-range namespace labels
+[*PATCH v3 13/28] libnvdimm/label: Define CXL region labels
+[ PATCH v3 14/28] libnvdimm/labels: Introduce CXL labels
+[ PATCH v3 17/28] cxl/mbox: Move mailbox and other non-PCI specific infrastructure to the core
+[ PATCH v3 20/28] cxl/mbox: Add exclusive kernel command support
+[ PATCH v3 21/28] cxl/pmem: Translate NVDIMM label commands to CXL label commands
+[ PATCH v3 22/28] cxl/pmem: Add support for multiple nvdimm-bridge objects
+[*PATCH v3 23/28] cxl/acpi: Do not add DSDT disabled ACPI0016 host bridge ports
+[ PATCH v3 24/28] tools/testing/cxl: Introduce a mocked-up CXL port hierarchy
+[ PATCH v3 27/28] tools/testing/cxl: Introduce a mock memory device + driver
+[*PATCH v3 28/28] cxl/core: Split decoder setup into alloc + add
+
+---
+
+As mentioned in patch 24 in this series the response of upstream QEMU
+community to CXL device emulation has been underwhelming to date. Even
+if that picked up it still results in a situation where new driver
+features and new test capabilities for those features are split across
+multiple repositories.
+
+The "nfit_test" approach of mocking up platform resources via an
+external test module continues to yield positive results catching
+regressions early and often. So this attempts to repeat that success
+with a "cxl_test" module to inject custom crafted topologies and command
+responses into the CXL subsystem's sysfs and ioctl UAPIs.
+
+The first target for cxl_test to verify is the integration of CXL with
+LIBNVDIMM and the new support for the CXL namespace label + region-label
+format. The first 14 patches introduce support for the new label format.
+
+The next 9 patches rework the CXL PCI driver and to move more common
+infrastructure into the core for the unit test environment to reuse. The
+largest change here is disconnecting the mailbox command processing
+infrastructure from the PCI specific transport. The unit test
+environment replaces the PCI transport with a custom backend with mocked
+responses to command requests.
+
+Patch 24 introduces just enough mocked functionality for the cxl_acpi
+driver to load against cxl_test resources. Patch 21 fixes the first bug
+discovered by this framework, namely that HDM decoder target list maps
+were not being filled out.
+
+Finally patches 26 and 27 introduce a cxl_test representation of memory
+expander devices. In this initial implementation these memory expander
+targets implement just enough command support to pass the basic driver
+init sequence and enable label command passthrough to LIBNVDIMM.
+
+The topology of cxl_test includes:
+- (4) platform fixed memory windows. One each of a x1-volatile,
+  x4-volatile, x1-persistent, and x4-persistent.
+- (4) Host bridges each with (2) root ports
+- (8) CXL memory expanders, one for each root port
+- Each memory expander device supports the GET_SUPPORTED_LOGS, GET_LOG,
+  IDENTIFY, GET_LSA, and SET_LSA commands.
+
+Going forward the expectation is that where possible new UAPI visible
+subsystem functionality comes with cxl_test emulation of the same.
+
+The build process for cxl_test is:
+
+    make M=tools/testing/cxl
+    make M=tools/testing/cxl modules_install
+
+The implementation methodology of the test module is the same as
+nfit_test where the bulk of the emulation comes from replacing symbols
+that cxl_acpi and the cxl_core import with mocked implementation of
+those symbols. See the "--wrap=" lines in tools/testing/cxl/Kbuild. Some
+symbols need to be replaced, but are local to the modules like
+match_add_root_ports(). In those cases the local symbol is marked __weak
+(via __mock) with a strong implementation coming from
+tools/testing/cxl/. The goal being to be minimally invasive to
+production code paths.
+
+---
+
+Alison Schofield (1):
+      cxl/acpi: Do not add DSDT disabled ACPI0016 host bridge ports
+
+Dan Williams (27):
+      libnvdimm/labels: Introduce getters for namespace label fields
+      libnvdimm/labels: Add isetcookie validation helper
+      libnvdimm/labels: Introduce label setter helpers
+      libnvdimm/labels: Add a checksum calculation helper
+      libnvdimm/labels: Add blk isetcookie set / validation helpers
+      libnvdimm/labels: Add blk special cases for nlabel and position helpers
+      libnvdimm/labels: Add type-guid helpers
+      libnvdimm/labels: Add claim class helpers
+      libnvdimm/labels: Add address-abstraction uuid definitions
+      libnvdimm/labels: Add uuid helpers
+      libnvdimm/label: Add a helper for nlabel validation
+      libnvdimm/labels: Introduce the concept of multi-range namespace labels
+      libnvdimm/label: Define CXL region labels
+      libnvdimm/labels: Introduce CXL labels
+      cxl/pci: Make 'struct cxl_mem' device type generic
+      cxl/mbox: Introduce the mbox_send operation
+      cxl/mbox: Move mailbox and other non-PCI specific infrastructure to the core
+      cxl/pci: Use module_pci_driver
+      cxl/mbox: Convert 'enabled_cmds' to DECLARE_BITMAP
+      cxl/mbox: Add exclusive kernel command support
+      cxl/pmem: Translate NVDIMM label commands to CXL label commands
+      cxl/pmem: Add support for multiple nvdimm-bridge objects
+      tools/testing/cxl: Introduce a mocked-up CXL port hierarchy
+      cxl/bus: Populate the target list at decoder create
+      cxl/mbox: Move command definitions to common location
+      tools/testing/cxl: Introduce a mock memory device + driver
+      cxl/core: Split decoder setup into alloc + add
+
+
+ Documentation/driver-api/cxl/memory-devices.rst |    3 
+ drivers/cxl/acpi.c                              |  143 ++-
+ drivers/cxl/core/Makefile                       |    1 
+ drivers/cxl/core/bus.c                          |   87 +-
+ drivers/cxl/core/core.h                         |    8 
+ drivers/cxl/core/mbox.c                         |  798 +++++++++++++++++
+ drivers/cxl/core/memdev.c                       |  115 ++-
+ drivers/cxl/core/pmem.c                         |   32 +
+ drivers/cxl/cxl.h                               |   45 +
+ drivers/cxl/cxlmem.h                            |  188 ++++
+ drivers/cxl/pci.c                               | 1051 +----------------------
+ drivers/cxl/pmem.c                              |  160 +++-
+ drivers/nvdimm/btt.c                            |   11 
+ drivers/nvdimm/btt_devs.c                       |   14 
+ drivers/nvdimm/core.c                           |   40 -
+ drivers/nvdimm/label.c                          |  361 +++++---
+ drivers/nvdimm/label.h                          |  121 ++-
+ drivers/nvdimm/namespace_devs.c                 |  204 ++--
+ drivers/nvdimm/nd-core.h                        |    5 
+ drivers/nvdimm/nd.h                             |  289 ++++++
+ drivers/nvdimm/pfn_devs.c                       |    2 
+ include/linux/nd.h                              |    4 
+ tools/testing/cxl/Kbuild                        |   38 +
+ tools/testing/cxl/config_check.c                |   13 
+ tools/testing/cxl/mock_acpi.c                   |  109 ++
+ tools/testing/cxl/mock_pmem.c                   |   24 +
+ tools/testing/cxl/test/Kbuild                   |   10 
+ tools/testing/cxl/test/cxl.c                    |  587 +++++++++++++
+ tools/testing/cxl/test/mem.c                    |  255 ++++++
+ tools/testing/cxl/test/mock.c                   |  171 ++++
+ tools/testing/cxl/test/mock.h                   |   27 +
+ 31 files changed, 3422 insertions(+), 1494 deletions(-)
+ create mode 100644 drivers/cxl/core/mbox.c
+ create mode 100644 tools/testing/cxl/Kbuild
+ create mode 100644 tools/testing/cxl/config_check.c
+ create mode 100644 tools/testing/cxl/mock_acpi.c
+ create mode 100644 tools/testing/cxl/mock_pmem.c
+ create mode 100644 tools/testing/cxl/test/Kbuild
+ create mode 100644 tools/testing/cxl/test/cxl.c
+ create mode 100644 tools/testing/cxl/test/mem.c
+ create mode 100644 tools/testing/cxl/test/mock.c
+ create mode 100644 tools/testing/cxl/test/mock.h
+
+base-commit: ceeb0da0a0322bcba4c50ab3cf97fe9a7aa8a2e4
 
