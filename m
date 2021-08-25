@@ -1,221 +1,135 @@
-Return-Path: <nvdimm+bounces-1018-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1020-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8A33F7CFC
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Aug 2021 22:02:19 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDDA33F7DFD
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Aug 2021 23:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 324843E109B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Aug 2021 20:02:18 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id DDCF51C0F2A
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Aug 2021 21:55:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4490C3FC7;
-	Wed, 25 Aug 2021 20:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A703FCC;
+	Wed, 25 Aug 2021 21:54:58 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC163FC2
-	for <nvdimm@lists.linux.dev>; Wed, 25 Aug 2021 20:02:11 +0000 (UTC)
-Received: by mail-io1-f45.google.com with SMTP id n24so552756ion.10
-        for <nvdimm@lists.linux.dev>; Wed, 25 Aug 2021 13:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pNxxVhiR1+voUK1H9WsDHS3laxNpVdBw3hSCKXm8Xpo=;
-        b=m/2DnAFMByvXGaU+RM65ZGFo3fjcnLNrj1WDfqsy0NMHNW6HRmkJSa60qwznpcp5VX
-         hgZmDqpJOxpkf3Hyj7Vw6hVi9aDZZpjJi7BQeqVy8uFaTR3jtcLA3Eyl8MA7saKwDBOO
-         K3Rc+ykJRqagSUr34/RlpLO8F7aBRlHAmt0dn7TkvzLsOWLgeIIeuwaOtG/KY73S1QXj
-         x2dFXZiKsUTJ77ZJP1FbRGHw9TjubLX5WHKLMT066OuWLsQ8M8qrUrOQgftGFRmJBYEX
-         AzV68U/5u32W5BOA7Yu+K43C0VF21hTF25Tff2pCKiXNcJ7zoy6NOiNqnEiY9w3YL9qL
-         ctJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pNxxVhiR1+voUK1H9WsDHS3laxNpVdBw3hSCKXm8Xpo=;
-        b=TmIcwjyrTgHT2eNWwnOJGfcIjTW4NJxlhafdxCMc4e0RpvvpwBWiqYE2rOhWqwgIOW
-         HEBZspizaiptW5g8AvkjpaCMp9e+zgTXIWBZHPJ0UHtRcpU66FX50wJVD7BqQfU7FeO+
-         UDpzBN14ko7kpoT+7SwC7dFlyEnxRuXGfpVPxWnMZVF+04rW89YFdY3Hi4W8r28BMdwX
-         +EZRXVoHsHnZr1/YmrK6+cfGo89jsIvkaIaNB6MW64tYwV6Iw+9DmWm/dW4tow2LDcSN
-         ICMl9bCE/JU+1hNFuSPpAybO5lX5qgjJShmB6ksWVHGeVSWyYSBEJbeRtga1hgdxHdhq
-         9DdA==
-X-Gm-Message-State: AOAM532D5jCHQDxNT5qgQt/Zf+E1KtrLzGdtgHg9JEPXzZPOQxmG2O1L
-	tzwY8J5qUlYvqDJLLGtMVwtbFSyJelDMbP3iYhQ=
-X-Google-Smtp-Source: ABdhPJxnkWzzAQCQCqmIWDMi2WUN42Lb6RvKGvVeTLhg+esvzOx7gaOVUJjzi/Awgh9Rn5LOmq3g1ozNVJIYRcPRxFc=
-X-Received: by 2002:a6b:f416:: with SMTP id i22mr177674iog.162.1629921730223;
- Wed, 25 Aug 2021 13:02:10 -0700 (PDT)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACEC3FC0
+	for <nvdimm@lists.linux.dev>; Wed, 25 Aug 2021 21:54:57 +0000 (UTC)
+Received: by linux.microsoft.com (Postfix, from userid 1096)
+	id 1790520B8604; Wed, 25 Aug 2021 14:46:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1790520B8604
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1629927963;
+	bh=+s1tBY7n8IA7c76i6xhDFhZ4g0e7MZsS2QaJRBnsq7E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bSTGY2Tv3cQfTvzrFVpWbLkpUN1495TkQN3NB0SkPO6NZr/G0Bv58eErXAI8aihh4
+	 o001QZfgFg3UW+BYyn8vZYQRaa51MWt+Y+dPe6mIGG2oXBVhePe/dWiByD6aYMCMOe
+	 PnTLx248a2htN8VAzLlIn8JS+Uyu2sHWOT/5Bbfs=
+Date: Wed, 25 Aug 2021 14:46:03 -0700
+From: Taylor Stark <tstark@linux.microsoft.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Pankaj Gupta <pankaj.gupta@ionos.com>,
+	Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Linux NVDIMM <nvdimm@lists.linux.dev>, apais@microsoft.com,
+	tyhicks@microsoft.com, jamorris@microsoft.com,
+	benhill@microsoft.com, sunilmut@microsoft.com,
+	grahamwo@microsoft.com, tstark@microsoft.com,
+	"Michael S . Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH v2 1/2] virtio-pmem: Support PCI BAR-relative addresses
+Message-ID: <20210825214603.GA3868@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20210715223505.GA29329@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAM9Jb+g5viRiogvv2Mms+nBVWrYQXKofC9pweADUAW8-C6+iOw@mail.gmail.com>
+ <20210720063510.GB8476@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CALzYo30-fzcQMDVEhKMAGmzXO5hvtd-J6CtavesAUzaQjcpDcg@mail.gmail.com>
+ <20210721220851.GB19842@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAPcyv4gtS35-aLwmd5Jp+fT+CCdBaeFhaTor0t-p4GjhF8VtsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210726060855.108250-1-pankaj.gupta.linux@gmail.com>
- <20210726060855.108250-2-pankaj.gupta.linux@gmail.com> <CAPcyv4inCFFXmg0r5+h0O6cADpt9HdboVDEL00XX-wGroy-7LQ@mail.gmail.com>
-In-Reply-To: <CAPcyv4inCFFXmg0r5+h0O6cADpt9HdboVDEL00XX-wGroy-7LQ@mail.gmail.com>
-From: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date: Wed, 25 Aug 2021 22:01:59 +0200
-Message-ID: <CAM9Jb+hqPBFUh9X4sKb9TUGXX1P0mC1xcuCNQx1BYvAvoP9uQg@mail.gmail.com>
-Subject: Re: [RFC v2 1/2] virtio-pmem: Async virtio-pmem flush
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, jmoyer <jmoyer@redhat.com>, 
-	David Hildenbrand <david@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Cornelia Huck <cohuck@redhat.com>, 
-	Vishal L Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	"Weiny, Ira" <ira.weiny@intel.com>, Pankaj Gupta <pankaj.gupta@ionos.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4gtS35-aLwmd5Jp+fT+CCdBaeFhaTor0t-p4GjhF8VtsQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-Hi Dan,
-
-Thank you for the review. Please see my reply inline.
-
-> > Implement asynchronous flush for virtio pmem using work queue
-> > to solve the preflush ordering issue. Also, coalesce the flush
-> > requests when a flush is already in process.
+On Tue, Aug 24, 2021 at 05:29:11PM -0700, Dan Williams wrote:
+> On Wed, Jul 21, 2021 at 3:09 PM Taylor Stark <tstark@linux.microsoft.com> wrote:
 > >
-> > Signed-off-by: Pankaj Gupta <pankaj.gupta@ionos.com>
-> > ---
-> >  drivers/nvdimm/nd_virtio.c   | 72 ++++++++++++++++++++++++++++--------
-> >  drivers/nvdimm/virtio_pmem.c | 10 ++++-
-> >  drivers/nvdimm/virtio_pmem.h | 14 +++++++
-> >  3 files changed, 79 insertions(+), 17 deletions(-)
+> > On Tue, Jul 20, 2021 at 08:51:04AM +0200, Pankaj Gupta wrote:
+> > > > > >
+> > > > > > -       virtio_cread_le(vpmem->vdev, struct virtio_pmem_config,
+> > > > > > -                       start, &vpmem->start);
+> > > > > > -       virtio_cread_le(vpmem->vdev, struct virtio_pmem_config,
+> > > > > > -                       size, &vpmem->size);
+> > > > > > +       /* Retrieve the pmem device's address and size. It may have been supplied
+> > > > > > +        * as a PCI BAR-relative shared memory region, or as a guest absolute address.
+> > > > > > +        */
+> > > > > > +       have_shm_region = virtio_get_shm_region(vpmem->vdev, &pmem_region,
+> > > > > > +                                               VIRTIO_PMEM_SHMCAP_ID_PMEM_REGION);
+> > > > >
+> > > > > Current implementation of Virtio pmem device in Qemu does not expose
+> > > > > it as PCI BAR.
+> > > > > So, can't test it. Just curious if device side implementation is also
+> > > > > tested for asynchronous
+> > > > > flush case?
+> > > > >
+> > > > > Thanks,
+> > > > > Pankaj
+> > > >
+> > > > Yes, I tested the async flush case as well. We basically call
+> > > > FlushFileBuffers on the backing file, which is Windows' equivalent of
+> > > > fsync. I also briefly tested with qemu to ensure that still works with
+> > > > the patch.
+> > >
+> > > Thank you for the confirmation. This sounds really good.
+> > > I am also getting back to pending items for virtio-pmem.
+> > >
+> > > On a side question: Do you guys have any or plan for Windows guest
+> > > implementation
+> > > for virtio-pmem?
 > >
-> > diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
-> > index 10351d5b49fa..61b655b583be 100644
-> > --- a/drivers/nvdimm/nd_virtio.c
-> > +++ b/drivers/nvdimm/nd_virtio.c
-> > @@ -97,29 +97,69 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
-> >         return err;
-> >  };
-> >
-> > +static void submit_async_flush(struct work_struct *ws);
-> > +
-> >  /* The asynchronous flush callback function */
-> >  int async_pmem_flush(struct nd_region *nd_region, struct bio *bio)
-> >  {
-> > -       /*
-> > -        * Create child bio for asynchronous flush and chain with
-> > -        * parent bio. Otherwise directly call nd_region flush.
-> > +       /* queue asynchronous flush and coalesce the flush requests */
-> > +       struct virtio_device *vdev = nd_region->provider_data;
-> > +       struct virtio_pmem *vpmem  = vdev->priv;
-> > +       ktime_t req_start = ktime_get_boottime();
-> > +
-> > +       spin_lock_irq(&vpmem->lock);
-> > +       /* flush requests wait until ongoing flush completes,
-> > +        * hence coalescing all the pending requests.
-> >          */
-> > -       if (bio && bio->bi_iter.bi_sector != -1) {
-> > -               struct bio *child = bio_alloc(GFP_ATOMIC, 0);
-> > -
-> > -               if (!child)
-> > -                       return -ENOMEM;
-> > -               bio_copy_dev(child, bio);
-> > -               child->bi_opf = REQ_PREFLUSH;
-> > -               child->bi_iter.bi_sector = -1;
-> > -               bio_chain(child, bio);
-> > -               submit_bio(child);
-> > -               return 0;
-> > +       wait_event_lock_irq(vpmem->sb_wait,
-> > +                           !vpmem->flush_bio ||
-> > +                           ktime_before(req_start, vpmem->prev_flush_start),
-> > +                           vpmem->lock);
-> > +       /* new request after previous flush is completed */
-> > +       if (ktime_after(req_start, vpmem->prev_flush_start)) {
-> > +               WARN_ON(vpmem->flush_bio);
-> > +               vpmem->flush_bio = bio;
-> > +               bio = NULL;
-> > +       }
->
-> Why the dance with ->prev_flush_start vs just calling queue_work()
-> again. queue_work() is naturally coalescing in that if the last work
-> request has not started execution another queue attempt will be
-> dropped.
+> > Unfortunately, my team doesn't currently have any plans to add a Windows
+> > virtio-pmem implementation. My team is primarily focused on virtualization
+> > in client environments, which is a little different than server environments.
+> > For our Windows-based scenarios, dynamically sized disks are important. It's
+> > tricky to get that to work with pmem+DAX given that Windows isn't state separated.
+> 
+> Pardon me for commenting on an old thread...
+> 
+> What does "state separated" mean here? There's configuration
+> flexibility in the driver to resize persistent memory namespaces.
 
-How parent flush request will know when corresponding flush is completed?
+I think I might have been using Microsoft specific terminology - my bad. By "state
+separated" I mean the system is split into read-only and read-write partitions.
+Typically OS state is on the read-only partition and user data is on the
+read-write partition (for easier servicing/upgrade). One of our primary use cases
+for virtio-pmem is WSL GUI app support. In that scenario, we have a read-only
+system distro, and we let the user dynamically fill the read-write partitions with
+as many apps as they want (and have space for - remembering that their Windows apps
+on the host are eating up space as well). Windows is not state separated, so we
+have OS state intermingled with user data/apps all on one read-write partition.
 
->
-> > +       spin_unlock_irq(&vpmem->lock);
-> > +
-> > +       if (!bio) {
-> > +               INIT_WORK(&vpmem->flush_work, submit_async_flush);
->
-> I expect this only needs to be initialized once at driver init time.
+The crux of the problem isn't really related to state separation, it's how do
+you handle dynamically sized data with virtio-pmem? If there's a way to do that
+already, I'm all ears :) But right now virtio-pmem is supplied with a fixed range
+during init, so it wasn't immediately obvious to me how to make dynamically sized
+data work. We'd have to like pick a max size, and expand the backing file on the
+host on second level page fault when the guest tries to touch a page past whats 
+already been allocated or something. Which is doable, there are just gotchas around
+failure cases (do we have to kill the guest?), sharing disk space between the
+Windows host and guest, etc. Getting back to why I said state separation makes
+this easier, the read-only partitions are fixed size. So our WSL system distro
+slots in nicely with virtio-pmem, but less so IMO for Windows guests (at least for
+our use cases).
 
-yes, will fix this.
->
-> > +               queue_work(vpmem->pmem_wq, &vpmem->flush_work);
-> > +               return 1;
-> > +       }
-> > +
-> > +       /* flush completed in other context while we waited */
-> > +       if (bio && (bio->bi_opf & REQ_PREFLUSH)) {
-> > +               bio->bi_opf &= ~REQ_PREFLUSH;
-> > +               submit_bio(bio);
-> > +       } else if (bio && (bio->bi_opf & REQ_FUA)) {
-> > +               bio->bi_opf &= ~REQ_FUA;
-> > +               bio_endio(bio);
->
-> It's not clear to me how this happens, shouldn't all flush completions
-> be driven from the work completion?
-
-Requests should progress after notified by ongoing flush completion
-event.
-
->
-> >         }
-> > -       if (virtio_pmem_flush(nd_region))
-> > -               return -EIO;
-> >
-> >         return 0;
-> >  };
-> >  EXPORT_SYMBOL_GPL(async_pmem_flush);
-> > +
-> > +static void submit_async_flush(struct work_struct *ws)
-> > +{
-> > +       struct virtio_pmem *vpmem = container_of(ws, struct virtio_pmem, flush_work);
-> > +       struct bio *bio = vpmem->flush_bio;
-> > +
-> > +       vpmem->start_flush = ktime_get_boottime();
-> > +       bio->bi_status = errno_to_blk_status(virtio_pmem_flush(vpmem->nd_region));
-> > +       vpmem->prev_flush_start = vpmem->start_flush;
-> > +       vpmem->flush_bio = NULL;
-> > +       wake_up(&vpmem->sb_wait);
-> > +
-> > +       /* Submit parent bio only for PREFLUSH */
-> > +       if (bio && (bio->bi_opf & REQ_PREFLUSH)) {
-> > +               bio->bi_opf &= ~REQ_PREFLUSH;
-> > +               submit_bio(bio);
-> > +       } else if (bio && (bio->bi_opf & REQ_FUA)) {
-> > +               bio->bi_opf &= ~REQ_FUA;
-> > +               bio_endio(bio);
-> > +       }
->
-> Shouldn't the wait_event_lock_irq() be here rather than in
-> async_pmem_flush()? That will cause the workqueue to back up and flush
-> requests to coalesce.
-
-but this is coalesced flush request?
-
-> > +}
-> >  MODULE_LICENSE("GPL");
-> > diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
-> > index 726c7354d465..56780a6140c7 100644
-> > --- a/drivers/nvdimm/virtio_pmem.c
-> > +++ b/drivers/nvdimm/virtio_pmem.c
-> > @@ -24,6 +24,7 @@ static int init_vq(struct virtio_pmem *vpmem)
-> >                 return PTR_ERR(vpmem->req_vq);
-> >
-> >         spin_lock_init(&vpmem->pmem_lock);
-> > +       spin_lock_init(&vpmem->lock);
->
-> Why 2 locks?
-
-One lock is for work queue and other for virtio flush completion.
+Long explanation - hope it helped to explain things. And if I'm missing something
+obvious, please let me know! :)
 
 Thanks,
-Pankaj
+Taylor
 
