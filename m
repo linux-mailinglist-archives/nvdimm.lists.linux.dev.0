@@ -1,156 +1,115 @@
-Return-Path: <nvdimm+bounces-1090-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1092-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0790E3FAA09
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 29 Aug 2021 09:57:17 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DFF3FAB4C
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 29 Aug 2021 14:26:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 2512E3E1034
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 29 Aug 2021 07:57:14 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 164CA1C0A4B
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 29 Aug 2021 12:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BE73FCD;
-	Sun, 29 Aug 2021 07:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B303FCF;
+	Sun, 29 Aug 2021 12:25:44 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74ECB3FC2
-	for <nvdimm@lists.linux.dev>; Sun, 29 Aug 2021 07:57:07 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 30EC12001C;
-	Sun, 29 Aug 2021 07:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1630223456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=73J2UE8Czy++p+oC2c1YQ/nI6lCZX18/T7xzfmn1GQM=;
-	b=U/JTwI4r3UueWPSbL2BXG0B/1O//PhaHiI20X1CFPhvqcKVCPcipBO2UjcWjYYOYezDHsc
-	jz+dY5JD+n47H2SRr9A44KhZB4Wor9uJqqtN7Qc6hIlEktbVPMVYm6O6BTv5kEv6tb9Crr
-	SZLxy6G82g8to2hSA7W15AVvHpWWETo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1630223456;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=73J2UE8Czy++p+oC2c1YQ/nI6lCZX18/T7xzfmn1GQM=;
-	b=MpYnVtu9WN8URWUoLPwSo92l76vQxZyq4UzwCv00Idt0AlLalqJbPnZZrNzWkIueaKk2T9
-	6+2V/KTFaZfEzEBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D2FD0139F6;
-	Sun, 29 Aug 2021 07:50:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id gOd5KVs8K2GGHQAAMHmgww
-	(envelope-from <colyli@suse.de>); Sun, 29 Aug 2021 07:50:51 +0000
-Subject: Re: [PATCH 02/10] bcache: add error handling support for add_disk()
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: xen-devel@lists.xenproject.org, nvdimm@lists.linux.dev,
- linux-nvme@lists.infradead.org, linux-bcache@vger.kernel.org,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, axboe@kernel.dk,
- kent.overstreet@gmail.com, kbusch@kernel.org, sagi@grimberg.me,
- vishal.l.verma@intel.com, dan.j.williams@intel.com, dave.jiang@intel.com,
- ira.weiny@intel.com, konrad.wilk@oracle.com, roger.pau@citrix.com,
- boris.ostrovsky@oracle.com, jgross@suse.com, sstabellini@kernel.org,
- minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org
-References: <20210827191809.3118103-1-mcgrof@kernel.org>
- <20210827191809.3118103-3-mcgrof@kernel.org>
-From: Coly Li <colyli@suse.de>
-Message-ID: <59a4ce06-22ee-7047-487e-621da3f7c507@suse.de>
-Date: Sun, 29 Aug 2021 15:50:49 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.13.0
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727893FC1
+	for <nvdimm@lists.linux.dev>; Sun, 29 Aug 2021 12:25:42 +0000 (UTC)
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AhtUtwa27tAqbjRTnawv0fAqjBI4kLtp133Aq?=
+ =?us-ascii?q?2lEZdPU1SL39qynKppkmPHDP5gr5J0tLpTntAsi9qBDnhPtICOsqTNSftWDd0Q?=
+ =?us-ascii?q?PGEGgI1/qB/9SPIU3D398Y/aJhXow7M9foEGV95PyQ3CCIV/om3/mLmZrFudvj?=
+X-IronPort-AV: E=Sophos;i="5.84,361,1620662400"; 
+   d="scan'208";a="113656446"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 29 Aug 2021 20:25:31 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+	by cn.fujitsu.com (Postfix) with ESMTP id 6759A4D0D4A1;
+	Sun, 29 Aug 2021 20:25:27 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Sun, 29 Aug 2021 20:25:23 +0800
+Received: from irides.mr.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Sun, 29 Aug 2021 20:25:21 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <djwong@kernel.org>, <hch@lst.de>, <linux-xfs@vger.kernel.org>
+CC: <ruansy.fnst@fujitsu.com>, <dan.j.williams@intel.com>,
+	<david@fromorbit.com>, <linux-fsdevel@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>, <rgoldwyn@suse.de>,
+	<viro@zeniv.linux.org.uk>, <willy@infradead.org>
+Subject: [PATCH v8 0/7] fsdax,xfs: Add reflink&dedupe support for fsdax
+Date: Sun, 29 Aug 2021 20:25:10 +0800
+Message-ID: <20210829122517.1648171-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20210827191809.3118103-3-mcgrof@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: 6759A4D0D4A1.A01A4
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-On 8/28/21 3:18 AM, Luis Chamberlain wrote:
-> We never checked for errors on add_disk() as this function
-> returned void. Now that this is fixed, use the shiny new
-> error handling.
->
-> This driver doesn't do any unwinding with blk_cleanup_disk()
-> even on errors after add_disk() and so we follow that
-> tradition.
->
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+This patchset is attempt to add CoW support for fsdax, and take XFS,
+which has both reflink and fsdax feature, as an example.
 
-Acked-by: Coly Li <colyli@suse.de>
+Changes from V7:
+ - Patch 3: Update to iter model[1]
+ - Patch 4: Add the missing memset() in CoW case
+ - Remove iomap_iter2(), use 2 nested iomap_iter() instead
+ - Patch 6: Remove dax_iomap_ops, handle end CoW operations in
+      ->iomap_end()
+ - Update docs, comments
 
-Thanks.
+One of the key mechanism need to be implemented in fsdax is CoW.  Copy
+the data from srcmap before we actually write data to the destance
+iomap.  And we just copy range in which data won't be changed.
 
-> ---
->   drivers/md/bcache/super.c | 17 ++++++++++++-----
->   1 file changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-> index f2874c77ff79..f0c32cdd6594 100644
-> --- a/drivers/md/bcache/super.c
-> +++ b/drivers/md/bcache/super.c
-> @@ -1082,7 +1082,9 @@ int bch_cached_dev_run(struct cached_dev *dc)
->   		closure_sync(&cl);
->   	}
->   
-> -	add_disk(d->disk);
-> +	ret = add_disk(d->disk);
-> +	if (ret)
-> +		goto out;
->   	bd_link_disk_holder(dc->bdev, dc->disk.disk);
->   	/*
->   	 * won't show up in the uevent file, use udevadm monitor -e instead
-> @@ -1534,10 +1536,11 @@ static void flash_dev_flush(struct closure *cl)
->   
->   static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
->   {
-> +	int err = -ENOMEM;
->   	struct bcache_device *d = kzalloc(sizeof(struct bcache_device),
->   					  GFP_KERNEL);
->   	if (!d)
-> -		return -ENOMEM;
-> +		goto err_ret;
->   
->   	closure_init(&d->cl, NULL);
->   	set_closure_fn(&d->cl, flash_dev_flush, system_wq);
-> @@ -1551,9 +1554,12 @@ static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
->   	bcache_device_attach(d, c, u - c->uuids);
->   	bch_sectors_dirty_init(d);
->   	bch_flash_dev_request_init(d);
-> -	add_disk(d->disk);
-> +	err = add_disk(d->disk);
-> +	if (err)
-> +		goto err;
->   
-> -	if (kobject_add(&d->kobj, &disk_to_dev(d->disk)->kobj, "bcache"))
-> +	err = kobject_add(&d->kobj, &disk_to_dev(d->disk)->kobj, "bcache");
-> +	if (err)
->   		goto err;
->   
->   	bcache_device_link(d, c, "volume");
-> @@ -1567,7 +1573,8 @@ static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
->   	return 0;
->   err:
->   	kobject_put(&d->kobj);
-> -	return -ENOMEM;
-> +err_ret:
-> +	return err;
->   }
->   
->   static int flash_devs_run(struct cache_set *c)
+Another mechanism is range comparison.  In page cache case, readpage()
+is used to load data on disk to page cache in order to be able to
+compare data.  In fsdax case, readpage() does not work.  So, we need
+another compare data with direct access support.
+
+With the two mechanisms implemented in fsdax, we are able to make reflink
+and fsdax work together in XFS.
+
+(Rebased on v5.14-rc4 and Christoph's "switch iomap to an iterator model v2"[1])
+[1]: https://lore.kernel.org/linux-xfs/20210809061244.1196573-1-hch@lst.de/
+==
+
+Shiyang Ruan (7):
+  fsdax: Output address in dax_iomap_pfn() and rename it
+  fsdax: Introduce dax_iomap_cow_copy()
+  fsdax: Replace mmap entry in case of CoW
+  fsdax: Add dax_iomap_cow_copy() for dax_iomap_zero
+  fsdax: Dedup file range to use a compare function
+  xfs: support CoW in fsdax mode
+  xfs: Add dax dedupe support
+
+ fs/dax.c               | 319 ++++++++++++++++++++++++++++++++++-------
+ fs/iomap/buffered-io.c |   7 +-
+ fs/remap_range.c       |  39 +++--
+ fs/xfs/xfs_bmap_util.c |   3 +-
+ fs/xfs/xfs_file.c      |   6 +-
+ fs/xfs/xfs_inode.c     |  57 ++++++++
+ fs/xfs/xfs_inode.h     |   1 +
+ fs/xfs/xfs_iomap.c     |  32 ++++-
+ fs/xfs/xfs_iomap.h     |  32 +++++
+ fs/xfs/xfs_iops.c      |   7 +-
+ fs/xfs/xfs_reflink.c   |  15 +-
+ include/linux/dax.h    |  15 +-
+ include/linux/fs.h     |  12 +-
+ include/linux/iomap.h  |   1 +
+ 14 files changed, 460 insertions(+), 86 deletions(-)
+
+-- 
+2.32.0
+
+
 
 
