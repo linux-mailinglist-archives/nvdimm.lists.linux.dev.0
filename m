@@ -1,32 +1,32 @@
-Return-Path: <nvdimm+bounces-1103-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1107-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 627863FC498
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 11:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6A933FC49E
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 11:07:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 738473E1027
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 09:06:36 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 7AD123E1037
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 09:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AF23FD1;
-	Tue, 31 Aug 2021 09:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998A23FDC;
+	Tue, 31 Aug 2021 09:06:24 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4932FAF
-	for <nvdimm@lists.linux.dev>; Tue, 31 Aug 2021 09:06:18 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="304009062"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4473FD0
+	for <nvdimm@lists.linux.dev>; Tue, 31 Aug 2021 09:06:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="304009066"
 X-IronPort-AV: E=Sophos;i="5.84,365,1620716400"; 
-   d="scan'208";a="304009062"
+   d="scan'208";a="304009066"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:09 -0700
 X-IronPort-AV: E=Sophos;i="5.84,365,1620716400"; 
-   d="scan'208";a="577063015"
+   d="scan'208";a="577063019"
 Received: from msgunjal-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.30.4])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:08 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:09 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
 To: <nvdimm@lists.linux.dev>
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -34,9 +34,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	fenghua.hu@intel.com,
 	Vishal Verma <vishal.l.verma@intel.com>,
 	QI Fuli <qi.fuli@fujitsu.com>
-Subject: [ndctl PATCH 6/7] daxctl/device.c: add an option for getting params from a config file
-Date: Tue, 31 Aug 2021 03:04:58 -0600
-Message-Id: <20210831090459.2306727-7-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH 7/7] daxctl: add systemd service and udev rule for auto-onlining
+Date: Tue, 31 Aug 2021 03:04:59 -0600
+Message-Id: <20210831090459.2306727-8-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210831090459.2306727-1-vishal.l.verma@intel.com>
 References: <20210831090459.2306727-1-vishal.l.verma@intel.com>
@@ -46,235 +46,145 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6597; h=from:subject; bh=2t/CNKrXMgGmTkp1vvTwmRakYOn+pzKCHvEh/VXrE44=; b=owGbwMvMwCHGf25diOft7jLG02pJDIm6H7aeWZC7eUEyj3/RtkKvyYtratiX39urvujVlg9HD86/ aa+k31HKwiDGwSArpsjyd89HxmNy2/N5AhMcYeawMoEMYeDiFICJ+OcxMuyqXvVsdutM+4Cw37rXS9 2u9+Wti5qa9LCSWWOO+BnRp5sZGeZWltUsnO2XdP289YHvndvlTW58vjoz32uVSMvbxOw8RVYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4691; h=from:subject; bh=j+X/+rg444qIGQjoep96kvmDep35kpQaptDAf7tSmOg=; b=owGbwMvMwCHGf25diOft7jLG02pJDIm6H3Y8uGnO7pcvmykdoLW/LeCYz9J+j+xVHXl5wsvqnZKe VnV1lLIwiHEwyIopsvzd85HxmNz2fJ7ABEeYOaxMIEMYuDgFYCIeBowM038vLNQ8+umAfPPjP49tXZ 3rrAz2ffxws+TL5bwAkxv3bzAyTNr/n+dY7rfjMya3Hv6eHO6g6RIY8Phk1QvLK/HTmHh+sAMA
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 Content-Transfer-Encoding: 8bit
 
-Add a new option to daxctl-reconfigure-device that allows it to
-comprehend the new global config system in ndctl/daxctl. With this, the
-reconfigure-device command can query the config to match a specific
-device UUID, and operate using the parameters supplied in that INI
-section.
+Install a helper script that calls daxctl-reconfigure-device with the
+new 'check-config' option for a given device. This is meant to be called
+via a systemd service.
 
-This is in preparation to make daxctl device reconfiguration (usually
-as system-ram) policy based, so that reconfiguration can happen
-automatically on boot.
+Install a systemd service that calls the above wrapper script with a
+daxctl device passed in to it via the environment.
+
+Install a udev rule that is triggered for every daxctl device, and
+triggers the above oneshot systemd service.
+
+Together, these three things work such that upon boot, whenever a daxctl
+device is found, udev triggers a device-specific systemd service called,
+for example:
+
+  daxdev-reconfigure@-dev-dax0.0.service
+
+This initiates a daxctl-reconfigure-device with a config lookup for the
+'dax0.0' device. If the config has an '[auto-online <unique_id>]'
+section, it uses the information in that to set the operating mode of
+the device.
+
+If any device is in an unexpected status, 'journalctl' can be used to
+view the reconfiguration log for that device, for example:
+
+  journalctl --unit daxdev-reconfigure@-dev-dax0.0.service
+
+Update the RPM spec file to include the newly added files to the RPM
+build.
 
 Cc: QI Fuli <qi.fuli@fujitsu.com>
 Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- daxctl/daxctl.c    |   1 +
- daxctl/device.c    | 141 ++++++++++++++++++++++++++++++++++++++++++++-
- daxctl/Makefile.am |   1 +
- 3 files changed, 142 insertions(+), 1 deletion(-)
+ configure.ac                       |  9 ++++++++-
+ daxctl/90-daxctl-device.rules      |  1 +
+ daxctl/Makefile.am                 | 10 ++++++++++
+ daxctl/daxdev-auto-reconfigure.sh  |  3 +++
+ daxctl/daxdev-reconfigure@.service |  8 ++++++++
+ ndctl.spec.in                      |  3 +++
+ 6 files changed, 33 insertions(+), 1 deletion(-)
+ create mode 100644 daxctl/90-daxctl-device.rules
+ create mode 100755 daxctl/daxdev-auto-reconfigure.sh
+ create mode 100644 daxctl/daxdev-reconfigure@.service
 
-diff --git a/daxctl/daxctl.c b/daxctl/daxctl.c
-index 928814c..dc7ac5f 100644
---- a/daxctl/daxctl.c
-+++ b/daxctl/daxctl.c
-@@ -95,6 +95,7 @@ int main(int argc, const char **argv)
- 	rc = daxctl_new(&ctx);
- 	if (rc)
- 		goto out;
-+	daxctl_set_configs(&ctx, DAXCTL_CONF_DIR);
- 	main_handle_internal_command(argc, argv, ctx, commands,
- 			ARRAY_SIZE(commands), PROG_DAXCTL);
- 	daxctl_unref(ctx);
-diff --git a/daxctl/device.c b/daxctl/device.c
-index a427b7d..99a4548 100644
---- a/daxctl/device.c
-+++ b/daxctl/device.c
-@@ -14,8 +14,10 @@
- #include <util/filter.h>
- #include <json-c/json.h>
- #include <json-c/json_util.h>
-+#include <ndctl/libndctl.h>
- #include <daxctl/libdaxctl.h>
- #include <util/parse-options.h>
-+#include <util/parse-configs.h>
- #include <ccan/array_size/array_size.h>
+diff --git a/configure.ac b/configure.ac
+index 9e1c6db..df6ab10 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -160,7 +160,7 @@ AC_CHECK_FUNCS([ \
  
- static struct {
-@@ -25,6 +27,7 @@ static struct {
- 	const char *size;
- 	const char *align;
- 	const char *input;
-+	bool check_config;
- 	bool no_online;
- 	bool no_movable;
- 	bool force;
-@@ -75,7 +78,9 @@ OPT_STRING('m', "mode", &param.mode, "mode", "mode to switch the device to"), \
- OPT_BOOLEAN('N', "no-online", &param.no_online, \
- 	"don't auto-online memory sections"), \
- OPT_BOOLEAN('f', "force", &param.force, \
--		"attempt to offline memory sections before reconfiguration")
-+		"attempt to offline memory sections before reconfiguration"), \
-+OPT_BOOLEAN('C', "check-config", &param.check_config, \
-+		"use config files to determine parameters for the operation")
+ AC_ARG_WITH([systemd],
+ 	AS_HELP_STRING([--with-systemd],
+-		[Enable systemd functionality (monitor). @<:@default=yes@:>@]),
++		[Enable systemd functionality. @<:@default=yes@:>@]),
+ 	[], [with_systemd=yes])
  
- #define CREATE_OPTIONS() \
- OPT_STRING('s', "size", &param.size, "size", "size to switch the device to"), \
-@@ -218,6 +223,130 @@ err:
- 	return rc;
- }
+ if test "x$with_systemd" = "xyes"; then
+@@ -183,6 +183,13 @@ daxctl_modprobe_data=daxctl.conf
+ AC_SUBST([daxctl_modprobe_datadir])
+ AC_SUBST([daxctl_modprobe_data])
  
-+static int conf_string_to_bool(const char *str)
-+{
-+	if (!str)
-+		return INT_MAX;
-+	if (strncmp(str, "t", 1) == 0 ||
-+			strncmp(str, "T", 1) == 0 ||
-+			strncmp(str, "y", 1) == 0 ||
-+			strncmp(str, "Y", 1) == 0 ||
-+			strncmp(str, "1", 1) == 0)
-+		return true;
-+	if (strncmp(str, "f", 1) == 0 ||
-+			strncmp(str, "F", 1) == 0 ||
-+			strncmp(str, "n", 1) == 0 ||
-+			strncmp(str, "N", 1) == 0 ||
-+			strncmp(str, "0", 1) == 0)
-+		return false;
-+	return INT_MAX;
-+}
++AC_ARG_WITH(udevrulesdir,
++    [AS_HELP_STRING([--with-udevrulesdir=DIR], [udev rules.d directory])],
++    [UDEVRULESDIR="$withval"],
++    [UDEVRULESDIR='${prefix}/lib/udev/rules.d']
++)
++AC_SUBST(UDEVRULESDIR)
 +
-+#define conf_assign_inverted_bool(p, conf_var) \
-+do { \
-+	if (conf_string_to_bool(conf_var) != INT_MAX) \
-+		param.p = !conf_string_to_bool(conf_var); \
-+} while(0)
-+
-+static int parse_config_reconfig_set_params(struct daxctl_ctx *ctx, const char *device,
-+					    const char *uuid)
-+{
-+	const char *conf_online = NULL, *conf_movable = NULL;
-+	const struct config configs[] = {
-+		CONF_SEARCH("auto-online", "uuid", uuid, "mode", &param.mode, NULL),
-+		CONF_SEARCH("auto-online", "uuid", uuid, "online", &conf_online, NULL),
-+		CONF_SEARCH("auto-online", "uuid", uuid, "movable", &conf_movable, NULL),
-+		CONF_END(),
-+	};
-+	const char *prefix = "./";
-+	int rc;
-+
-+	rc = parse_configs_prefix(daxctl_get_configs(ctx), prefix, configs);
-+	if (rc < 0)
-+		return rc;
-+
-+	conf_assign_inverted_bool(no_online, conf_online);
-+	conf_assign_inverted_bool(no_movable, conf_movable);
-+
-+	return 0;
-+}
-+
-+static bool daxctl_ndns_has_device(struct ndctl_namespace *ndns,
-+				    const char *device)
-+{
-+	struct daxctl_region *dax_region;
-+	struct ndctl_dax *dax;
-+
-+	dax = ndctl_namespace_get_dax(ndns);
-+	if (!dax)
-+		return false;
-+
-+	dax_region = ndctl_dax_get_daxctl_region(dax);
-+	if (dax_region) {
-+		struct daxctl_dev *dev;
-+
-+		dev = daxctl_dev_get_first(dax_region);
-+		if (dev) {
-+			if (strcmp(daxctl_dev_get_devname(dev), device) == 0)
-+				return true;
-+		}
-+	}
-+	return false;
-+}
-+
-+static int parse_config_reconfig(struct daxctl_ctx *ctx, const char *device)
-+{
-+	struct ndctl_namespace *ndns;
-+	struct ndctl_ctx *ndctl_ctx;
-+	struct ndctl_region *region;
-+	struct ndctl_bus *bus;
-+	struct ndctl_dax *dax;
-+	int rc, found = 0;
-+	char uuid_buf[40];
-+	uuid_t uuid;
-+
-+	if (strcmp(device, "all") == 0)
-+		return 0;
-+
-+	rc = ndctl_new(&ndctl_ctx);
-+	if (rc < 0)
-+		return rc;
-+
-+        ndctl_bus_foreach(ndctl_ctx, bus) {
-+		ndctl_region_foreach(bus, region) {
-+			ndctl_namespace_foreach(region, ndns) {
-+				if (daxctl_ndns_has_device(ndns, device)) {
-+					dax = ndctl_namespace_get_dax(ndns);
-+					if (!dax)
-+						continue;
-+					ndctl_dax_get_uuid(dax, uuid);
-+					found = 1;
-+				}
-+			}
-+		}
-+	}
-+
-+	if (!found) {
-+		fprintf(stderr, "no UUID match for %s found in config files\n",
-+			device);
-+		return 0;
-+	}
-+
-+	uuid_unparse(uuid, uuid_buf);
-+	return parse_config_reconfig_set_params(ctx, device, uuid_buf);
-+}
-+
-+static int parse_device_config(struct daxctl_ctx *ctx, const char *device,
-+			       enum device_action action)
-+{
-+	switch (action) {
-+	case ACTION_RECONFIG:
-+		return parse_config_reconfig(ctx, device);
-+	default:
-+		return 0;
-+	}
-+}
-+
- static const char *parse_device_options(int argc, const char **argv,
- 		enum device_action action, const struct option *options,
- 		const char *usage, struct daxctl_ctx *ctx)
-@@ -279,6 +408,16 @@ static const char *parse_device_options(int argc, const char **argv,
- 	if (param.human)
- 		flags |= UTIL_JSON_HUMAN;
- 
-+	/* Scan config file(s) for options. This sets param.foo accordingly */
-+	if (param.check_config) {
-+		rc = parse_device_config(ctx, argv[0], action);
-+		if (rc) {
-+			fprintf(stderr, "error parsing config file: %s\n",
-+				strerror(-rc));
-+			return NULL;
-+		}
-+	}
-+
- 	/* Handle action-specific options */
- 	switch (action) {
- 	case ACTION_RECONFIG:
+ AC_ARG_WITH([keyutils],
+ 	    AS_HELP_STRING([--with-keyutils],
+ 			[Enable keyutils functionality (security).  @<:@default=yes@:>@]), [], [with_keyutils=yes])
+diff --git a/daxctl/90-daxctl-device.rules b/daxctl/90-daxctl-device.rules
+new file mode 100644
+index 0000000..ee0670f
+--- /dev/null
++++ b/daxctl/90-daxctl-device.rules
+@@ -0,0 +1 @@
++ACTION=="add", SUBSYSTEM=="dax", TAG+="systemd", ENV{SYSTEMD_WANTS}="daxdev-reconfigure@$env{DEVNAME}.service"
 diff --git a/daxctl/Makefile.am b/daxctl/Makefile.am
-index a9845a0..f30c485 100644
+index f30c485..d53bdcf 100644
 --- a/daxctl/Makefile.am
 +++ b/daxctl/Makefile.am
-@@ -23,6 +23,7 @@ daxctl_SOURCES =\
- 
- daxctl_LDADD =\
- 	lib/libdaxctl.la \
-+	../ndctl/lib/libndctl.la \
- 	../libutil.a \
+@@ -28,3 +28,13 @@ daxctl_LDADD =\
  	$(UUID_LIBS) \
  	$(KMOD_LIBS) \
+ 	$(JSON_LIBS)
++
++bin_SCRIPTS = daxdev-auto-reconfigure.sh
++CLEANFILES = $(bin_SCRIPTS)
++
++udevrulesdir = $(UDEVRULESDIR)
++udevrules_DATA = 90-daxctl-device.rules
++
++if ENABLE_SYSTEMD_UNITS
++systemd_unit_DATA = daxdev-reconfigure@.service
++endif
+diff --git a/daxctl/daxdev-auto-reconfigure.sh b/daxctl/daxdev-auto-reconfigure.sh
+new file mode 100755
+index 0000000..f6da43f
+--- /dev/null
++++ b/daxctl/daxdev-auto-reconfigure.sh
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++daxctl reconfigure-device --check-config "${1##*/}"
+diff --git a/daxctl/daxdev-reconfigure@.service b/daxctl/daxdev-reconfigure@.service
+new file mode 100644
+index 0000000..451fef1
+--- /dev/null
++++ b/daxctl/daxdev-reconfigure@.service
+@@ -0,0 +1,8 @@
++[Unit]
++Description=Automatic daxctl device reconfiguration
++Documentation=man:daxctl-reconfigure-device(1)
++
++[Service]
++Type=forking
++GuessMainPID=false
++ExecStart=/bin/sh -c "exec daxdev-auto-reconfigure.sh %I"
+diff --git a/ndctl.spec.in b/ndctl.spec.in
+index 07c36ec..fd1a5ff 100644
+--- a/ndctl.spec.in
++++ b/ndctl.spec.in
+@@ -124,8 +124,11 @@ make check
+ %defattr(-,root,root)
+ %license LICENSES/preferred/GPL-2.0 LICENSES/other/MIT LICENSES/other/CC0-1.0
+ %{_bindir}/daxctl
++%{_bindir}/daxdev-auto-reconfigure.sh
+ %{_mandir}/man1/daxctl*
+ %{_datadir}/daxctl/daxctl.conf
++%{_unitdir}/daxdev-reconfigure@.service
++%config %{_udevrulesdir}/90-daxctl-device.rules
+ 
+ %files -n LNAME
+ %defattr(-,root,root)
 -- 
 2.31.1
 
