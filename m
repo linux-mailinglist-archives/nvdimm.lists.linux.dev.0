@@ -1,41 +1,42 @@
-Return-Path: <nvdimm+bounces-1101-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1104-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 250513FC497
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 11:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 646083FC49B
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 11:06:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id BABE01C08CB
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 09:06:24 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 626BA1C0DAE
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Aug 2021 09:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5CE2FB2;
-	Tue, 31 Aug 2021 09:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC853FD4;
+	Tue, 31 Aug 2021 09:06:21 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A1E72
-	for <nvdimm@lists.linux.dev>; Tue, 31 Aug 2021 09:06:17 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="304009051"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F8D72
+	for <nvdimm@lists.linux.dev>; Tue, 31 Aug 2021 09:06:20 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="304009053"
 X-IronPort-AV: E=Sophos;i="5.84,365,1620716400"; 
-   d="scan'208";a="304009051"
+   d="scan'208";a="304009053"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:07 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:08 -0700
 X-IronPort-AV: E=Sophos;i="5.84,365,1620716400"; 
-   d="scan'208";a="577062985"
+   d="scan'208";a="577062994"
 Received: from msgunjal-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.30.4])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:06 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2021 02:05:07 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
 To: <nvdimm@lists.linux.dev>
 Cc: Dan Williams <dan.j.williams@intel.com>,
 	QI Fuli <qi.fuli@jp.fujitsu.com>,
 	fenghua.hu@intel.com,
-	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [ndctl PATCH 2/7] daxctl: Documentation updates for persistent reconfiguration
-Date: Tue, 31 Aug 2021 03:04:54 -0600
-Message-Id: <20210831090459.2306727-3-vishal.l.verma@intel.com>
+	Vishal Verma <vishal.l.verma@intel.com>,
+	QI Fuli <qi.fuli@fujitsu.com>
+Subject: [ndctl PATCH 3/7] util/parse-config: refactor filter_conf_files into util/
+Date: Tue, 31 Aug 2021 03:04:55 -0600
+Message-Id: <20210831090459.2306727-4-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210831090459.2306727-1-vishal.l.verma@intel.com>
 References: <20210831090459.2306727-1-vishal.l.verma@intel.com>
@@ -45,105 +46,144 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3612; h=from:subject; bh=RfUOYLapCL32N/uEHfAt+tPaxQZWaJ1SNP7jJGd1Ju8=; b=owGbwMvMwCHGf25diOft7jLG02pJDIm6H1ZsE5NLXR3muyub4a79Y/Ml/Ut6tgu0FrnOt07elWPB PmFGRykLgxgHg6yYIsvfPR8Zj8ltz+cJTHCEmcPKBDKEgYtTACbSVsjI0Fry1Ljl/zxV02Zraeu8T7 P+dS/WvN/2o5zlmeod7Wr9KkaG1U5bRM+8ca1m+5T0t5uJIXq/80O3TRbSPVqPQ1z8S3fxAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3726; h=from:subject; bh=43yM7GmiQdu2zFYDOd1yPQaNuDLpwWaLyR/jlwYlKjM=; b=owGbwMvMwCHGf25diOft7jLG02pJDIm6H1bz7q1cKbf3fcO1nkM7vOs9kmJjTdPSHG37ZqvYyWzK Z//WUcrCIMbBICumyPJ3z0fGY3Lb83kCExxh5rAygQxh4OIUgIlwvWP4H5vmWrei9cL9iDy33cf6g2 USJqvseGGX8l0x+sSE8k2P4xgZnil0tMzzeZoyden+j9xH7odsyhZLuaD38bm16xvjTYq1TAA=
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 Content-Transfer-Encoding: 8bit
 
-Add a man page update describing how daxctl-reconfigure-device(1) can
-be used for persistent reconfiguration of a daxctl device using a
-config file.
+Move filter_conf() into util/parse-configs.c as filter_conf_files() so
+that it can be reused by the config parser in daxctl.
 
-Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: QI Fuli <qi.fuli@fujitsu.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- .../daxctl/daxctl-reconfigure-device.txt      | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ ndctl/lib/libndctl.c   | 19 ++-----------------
+ util/parse-configs.h   |  4 ++++
+ util/parse-configs.c   | 16 ++++++++++++++++
+ daxctl/lib/Makefile.am |  2 ++
+ ndctl/lib/Makefile.am  |  2 ++
+ 5 files changed, 26 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/daxctl/daxctl-reconfigure-device.txt b/Documentation/daxctl/daxctl-reconfigure-device.txt
-index f112b3c..1e2d380 100644
---- a/Documentation/daxctl/daxctl-reconfigure-device.txt
-+++ b/Documentation/daxctl/daxctl-reconfigure-device.txt
-@@ -162,6 +162,15 @@ include::region-option.txt[]
- 	brought online automatically and immediately with the 'online_movable'
- 	policy. Use this option to disable the automatic onlining behavior.
+diff --git a/ndctl/lib/libndctl.c b/ndctl/lib/libndctl.c
+index db2e38b..a01ac80 100644
+--- a/ndctl/lib/libndctl.c
++++ b/ndctl/lib/libndctl.c
+@@ -25,6 +25,7 @@
+ #include <util/size.h>
+ #include <util/sysfs.h>
+ #include <util/strbuf.h>
++#include <util/parse-configs.h>
+ #include <ndctl/libndctl.h>
+ #include <ndctl/namespace.h>
+ #include <daxctl/libdaxctl.h>
+@@ -266,22 +267,6 @@ NDCTL_EXPORT void ndctl_set_userdata(struct ndctl_ctx *ctx, void *userdata)
+ 	ctx->userdata = userdata;
+ }
  
-+-C::
-+--check-config::
-+	Get reconfiguration parameters from the global daxctl config file.
-+	This is typically used when daxctl-reconfigure-device is called from
-+	a systemd-udevd device unit file. The reconfiguration proceeds only
-+	if the UUID of the dax device passed in on the command line matches
-+	a UUID listed in the auto-online section of the config. See the
-+	'PERSISTENT RECONFIGURATION' section for more details.
-+
- include::movable-options.txt[]
+-static int filter_conf(const struct dirent *dir)
+-{
+-	if (!dir)
+-		return 0;
+-
+-	if (dir->d_type == DT_REG) {
+-		const char *ext = strrchr(dir->d_name, '.');
+-		if ((!ext) || (ext == dir->d_name))
+-			return 0;
+-		if (strcmp(ext, ".conf") == 0)
+-			return 1;
+-	}
+-
+-	return 0;
+-}
+-
+ NDCTL_EXPORT void ndctl_set_configs(struct ndctl_ctx **ctx, char *conf_dir)
+ {
+ 	struct dirent **namelist;
+@@ -291,7 +276,7 @@ NDCTL_EXPORT void ndctl_set_configs(struct ndctl_ctx **ctx, char *conf_dir)
+ 	if ((!ctx) || (!conf_dir))
+ 		return;
  
- -f::
-@@ -183,6 +192,64 @@ include::human-option.txt[]
+-	rc = scandir(conf_dir, &namelist, filter_conf, alphasort);
++	rc = scandir(conf_dir, &namelist, filter_conf_files, alphasort);
+ 	if (rc == -1) {
+ 		perror("scandir");
+ 		return;
+diff --git a/util/parse-configs.h b/util/parse-configs.h
+index f70f58f..491aebb 100644
+--- a/util/parse-configs.h
++++ b/util/parse-configs.h
+@@ -1,8 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2021, FUJITSU LIMITED. ALL rights reserved.
  
- include::verbose-option.txt[]
++#include <dirent.h>
+ #include <stdbool.h>
+ #include <stdint.h>
++#include <string.h>
+ #include <util/util.h>
  
-+PERSISTENT RECONFIGURATION
-+--------------------------
-+
-+The 'mode' of a daxctl device is not persistent across reboots by default. This
-+is because the device itself may hold any metadata that hints at what mode it
-+was set to, or is intended to be used in. The default mode for such a device
-+is 'devdax', and on reboot, that is the mode devices appear in by default.
-+
-+The administrator may desire to configure the system in a way that certain
-+dax devices are always reconfigured into a certain mode every time on boot.
-+This is accomplished via a daxctl config file located at [location TBD].
-+
-+The config file may have multiple sections influencing different aspects of
-+daxctl operation. The section of interest for persistent reconfiguration is
-+'auto-online'. The format of this is as follows:
-+
-+----
-+[auto-online <subsection_name>]
-+uuid = <namespace uuid>
-+mode = <desired reconfiguration mode> (default: system-ram)
-+online = <true|false> (default: true)
-+movable = <true|false> (default: true)
-+----
-+
-+Here is an example of a config snippet for managing three devdax namespaces,
-+one is left in devdax mode, the second is changed to system-ram mode with
-+default options (online, movable), and the third is set to system-ram mode,
-+the memory is onlined, but not movable.
-+
-+Note that the 'subsection name' can be arbitrary, and is only used to
-+identify a specific config section. It does not have to match the 'device
-+name' (e.g. 'dax0.0' etc).
-+
-+----
-+[auto-online dax0]
-+uuid = ed93e918-e165-49d8-921d-383d7b9660c5
-+mode = devdax
-+
-+[auto-online dax1]
-+uuid = f36d02ff-1d9f-4fb9-a5b9-8ceb10a00fe3
-+mode = system-ram
-+
-+[auto-online dax2]
-+uuid = f36d02ff-1d9f-4fb9-a5b9-8ceb10a00fe3
-+mode = system-ram
-+online = true
-+movable = false
-+----
-+
-+The following example can be used to create a devdax mode namespace, and
-+simultaneously add the newly created namespace to the config file for
-+system-ram conversion.
-+
-+----
-+ndctl create-namespace --mode=devdax | \
-+	jq -r "\"[auto-online $(uuidgen)]\", \"uuid = \(.uuid)\", \"mode = system-ram\"" >> $config_path
-+----
-+
- include::../copyright.txt[]
+ enum parse_conf_type {
+@@ -11,6 +13,8 @@ enum parse_conf_type {
+ 	MONITOR_CALLBACK,
+ };
  
- SEE ALSO
++int filter_conf_files(const struct dirent *dir);
++
+ struct config;
+ typedef int parse_conf_cb(const struct config *, const char *config_file);
+ 
+diff --git a/util/parse-configs.c b/util/parse-configs.c
+index 44dcff4..72c4913 100644
+--- a/util/parse-configs.c
++++ b/util/parse-configs.c
+@@ -6,6 +6,22 @@
+ #include <util/strbuf.h>
+ #include <util/iniparser.h>
+ 
++int filter_conf_files(const struct dirent *dir)
++{
++	if (!dir)
++		return 0;
++
++	if (dir->d_type == DT_REG) {
++		const char *ext = strrchr(dir->d_name, '.');
++		if ((!ext) || (ext == dir->d_name))
++			return 0;
++		if (strcmp(ext, ".conf") == 0)
++			return 1;
++	}
++
++	return 0;
++}
++
+ static void set_str_val(const char **value, const char *val)
+ {
+ 	struct strbuf buf = STRBUF_INIT;
+diff --git a/daxctl/lib/Makefile.am b/daxctl/lib/Makefile.am
+index 25efd83..db2351e 100644
+--- a/daxctl/lib/Makefile.am
++++ b/daxctl/lib/Makefile.am
+@@ -15,6 +15,8 @@ libdaxctl_la_SOURCES =\
+ 	../../util/sysfs.h \
+ 	../../util/log.c \
+ 	../../util/log.h \
++	../../util/parse-configs.h \
++	../../util/parse-configs.c \
+ 	libdaxctl.c
+ 
+ libdaxctl_la_LIBADD =\
+diff --git a/ndctl/lib/Makefile.am b/ndctl/lib/Makefile.am
+index f741c44..8020eb4 100644
+--- a/ndctl/lib/Makefile.am
++++ b/ndctl/lib/Makefile.am
+@@ -19,6 +19,8 @@ libndctl_la_SOURCES =\
+ 	../../util/wrapper.c \
+ 	../../util/usage.c \
+ 	../../util/fletcher.h \
++	../../util/parse-configs.h \
++	../../util/parse-configs.c \
+ 	dimm.c \
+ 	inject.c \
+ 	nfit.c \
 -- 
 2.31.1
 
