@@ -1,186 +1,117 @@
-Return-Path: <nvdimm+bounces-1121-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1125-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 209E03FF042
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 17:33:19 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B95E33FF1D6
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 18:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 115701C0A40
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 15:33:18 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 6B9AB3E0F6F
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 16:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D648D2FB2;
-	Thu,  2 Sep 2021 15:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253862F80;
+	Thu,  2 Sep 2021 16:53:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC12A3FC1
-	for <nvdimm@lists.linux.dev>; Thu,  2 Sep 2021 15:33:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 52A8E610CD;
-	Thu,  2 Sep 2021 15:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1630596790;
-	bh=WwYdTWP6eNm+J5Il2EKANSs5L/HmsnHp5e3hmUJfBUg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A4dHS+sw0sVgMoOs4ab8XO8E1JWv1xdOpnvBUhIGkzrIgp/Vrxy8AO6lFMvOdJ2VN
-	 uqUDpGALQTD51UZivGlUovONCe/bL16WwCOMEV6oyDeX9ob3pjohfGLQIriwHVw3zC
-	 astHWlG++5QQnQXWEQlUvZ+6xlZKULakXzuDEhFuOxoBdyjOPqwbbc/p6sov2ZeGmg
-	 PoG/UScH30YwdA/4XhG1Ql2uG90sufLtmm1Ec58x1ugVLt5nt26uF4Aw8EnMxnPKzB
-	 nmiGnXdbovq9NWIZDPZ6glaw8XaC46cjuXICGx58o/YbdKxhNkKQ3P8cfE62Z32Et1
-	 VgnrIt3Y2sBjQ==
-Date: Thu, 2 Sep 2021 08:33:09 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>, linux-xfs@vger.kernel.org,
-	dan.j.williams@intel.com, david@fromorbit.com,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev, rgoldwyn@suse.de, viro@zeniv.linux.org.uk,
-	willy@infradead.org
-Subject: Re: [PATCH v8 6/7] xfs: support CoW in fsdax mode
-Message-ID: <20210902153309.GB9892@magnolia>
-References: <20210829122517.1648171-1-ruansy.fnst@fujitsu.com>
- <20210829122517.1648171-7-ruansy.fnst@fujitsu.com>
- <20210902074308.GE13867@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C11B72
+	for <nvdimm@lists.linux.dev>; Thu,  2 Sep 2021 16:53:52 +0000 (UTC)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.201])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H0mj44192z67kXv;
+	Fri,  3 Sep 2021 00:34:16 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Thu, 2 Sep 2021 18:36:01 +0200
+Received: from localhost (10.52.127.69) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Thu, 2 Sep 2021
+ 17:36:01 +0100
+Date: Thu, 2 Sep 2021 17:36:02 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Dan Williams <dan.j.williams@intel.com>
+CC: <linux-cxl@vger.kernel.org>, <vishal.l.verma@intel.com>,
+	<alison.schofield@intel.com>, <nvdimm@lists.linux.dev>,
+	<ira.weiny@intel.com>, <ben.widawsky@intel.com>
+Subject: Re: [PATCH v3 13/28] libnvdimm/label: Define CXL region labels
+Message-ID: <20210902173602.00000272@Huawei.com>
+In-Reply-To: <162982119604.1124374.8364301519543316156.stgit@dwillia2-desk3.amr.corp.intel.com>
+References: <162982112370.1124374.2020303588105269226.stgit@dwillia2-desk3.amr.corp.intel.com>
+	<162982119604.1124374.8364301519543316156.stgit@dwillia2-desk3.amr.corp.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210902074308.GE13867@lst.de>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.127.69]
+X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 
-On Thu, Sep 02, 2021 at 09:43:08AM +0200, Christoph Hellwig wrote:
-> On Sun, Aug 29, 2021 at 08:25:16PM +0800, Shiyang Ruan wrote:
-> > In fsdax mode, WRITE and ZERO on a shared extent need CoW performed.
-> > After that, new allocated extents needs to be remapped to the file.  Add
-> > an implementation of ->iomap_end() for dax write ops to do the remapping
-> > work.
-> 
-> Please split the new dax infrastructure from the XFS changes.
-> 
-> >  static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
-> > -			       int *iomap_errp, const struct iomap_ops *ops)
-> > +		int *iomap_errp, const struct iomap_ops *ops)
-> >  {
-> >  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> >  	XA_STATE(xas, &mapping->i_pages, vmf->pgoff);
-> > @@ -1631,7 +1664,7 @@ static bool dax_fault_check_fallback(struct vm_fault *vmf, struct xa_state *xas,
-> >  }
-> >  
-> >  static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
-> > -			       const struct iomap_ops *ops)
-> > +		const struct iomap_ops *ops)
-> 
-> These looks like unrelated whitespace changes.
-> 
-> > -static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
-> > +loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
-> >  {
-> >  	const struct iomap *iomap = &iter->iomap;
-> >  	const struct iomap *srcmap = iomap_iter_srcmap(iter);
-> > @@ -918,6 +918,7 @@ static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
-> >  
-> >  	return written;
-> >  }
-> > +EXPORT_SYMBOL_GPL(iomap_zero_iter);
-> 
-> I don't see why this would have to be exported.
-> 
-> > +	unsigned 		flags,
-> > +	struct iomap 		*iomap)
-> > +{
-> > +	int			error = 0;
-> > +	struct xfs_inode	*ip = XFS_I(inode);
-> > +	bool			cow = xfs_is_cow_inode(ip);
-> 
-> The cow variable is only used once, so I think we can drop it.
-> 
-> > +	const struct iomap_iter *iter =
-> > +				container_of(iomap, typeof(*iter), iomap);
-> 
-> Please comment this as it is a little unusual.
-> 
-> > +
-> > +	if (cow) {
-> > +		if (iter->processed <= 0)
-> > +			xfs_reflink_cancel_cow_range(ip, pos, length, true);
-> > +		else
-> > +			error = xfs_reflink_end_cow(ip, pos, iter->processed);
-> > +	}
-> > +	return error ?: iter->processed;
-> 
-> The ->iomap_end convention is to return 0 or a negative error code.
-> Also i'd much prefer to just spell this out in a normal sequential way:
-> 
-> 	if (!xfs_is_cow_inode(ip))
-> 		return 0;
-> 
-> 	if (iter->processed <= 0) {
-> 		xfs_reflink_cancel_cow_range(ip, pos, length, true);
-> 		return 0;
-> 	}
-> 
-> 	return xfs_reflink_end_cow(ip, pos, iter->processed);
+On Tue, 24 Aug 2021 09:06:36 -0700
+Dan Williams <dan.j.williams@intel.com> wrote:
 
-Seeing as written either contains iter->processed if it's positive, or
-zero if nothing got written or there were errors, I wonder why this
-isn't just:
-
-	if (!xfs_is_cow_inode(ip));
-		return 0;
-
-	if (!written) {
-		xfs_reflink_cancel_cow_range(ip, pos, length, true);
-		return 0;
-	}
-
-	return xfs_reflink_end_cow(ip, pos, written);
-
-? (He says while cleaning up trying to leave for vacation, pardon me
-if this comment is totally boneheaded...)
-
---D
-
-> > +static inline int
-> > +xfs_iomap_zero_range(
-> > +	struct xfs_inode	*ip,
-> > +	loff_t			pos,
-> > +	loff_t			len,
-> > +	bool			*did_zero)
-> > +{
-> > +	struct inode		*inode = VFS_I(ip);
-> > +
-> > +	return IS_DAX(inode)
-> > +			? dax_iomap_zero_range(inode, pos, len, did_zero,
-> > +					       &xfs_dax_write_iomap_ops)
-> > +			: iomap_zero_range(inode, pos, len, did_zero,
-> > +					       &xfs_buffered_write_iomap_ops);
-> > +}
+> Add a definition of the CXL 2.0 region label format. Note this is done
+> as a separate patch to make the next patch that adds namespace label
+> support easier to read.
 > 
-> 	if (IS_DAX(inode))
-> 		return dax_iomap_zero_range(inode, pos, len, did_zero,
-> 					    &xfs_dax_write_iomap_ops);
-> 	return iomap_zero_range(inode, pos, len, did_zero,
-> 				&xfs_buffered_write_iomap_ops);
+> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+FWIW
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/nvdimm/label.h |   30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
-> > +static inline int
-> > +xfs_iomap_truncate_page(
-> > +	struct xfs_inode	*ip,
-> > +	loff_t			pos,
-> > +	bool			*did_zero)
-> > +{
-> > +	struct inode		*inode = VFS_I(ip);
-> > +
-> > +	return IS_DAX(inode)
-> > +			? dax_iomap_truncate_page(inode, pos, did_zero,
-> > +					       &xfs_dax_write_iomap_ops)
-> > +			: iomap_truncate_page(inode, pos, did_zero,
-> > +					       &xfs_buffered_write_iomap_ops);
-> > +}
+> diff --git a/drivers/nvdimm/label.h b/drivers/nvdimm/label.h
+> index 31f94fad7b92..76ecd0347dc2 100644
+> --- a/drivers/nvdimm/label.h
+> +++ b/drivers/nvdimm/label.h
+> @@ -65,6 +65,36 @@ struct nd_namespace_index {
+>  	u8 free[];
+>  };
+>  
+> +/**
+> + * struct cxl_region_label - CXL 2.0 Table 211
+> + * @type: uuid identifying this label format (region)
+> + * @uuid: uuid for the region this label describes
+> + * @flags: NSLABEL_FLAG_UPDATING (all other flags reserved)
+> + * @position: this label's position in the set
+> + * @dpa: start address in device-local capacity for this label
+> + * @rawsize: size of this label's contribution to region
+> + * @hpa: mandatory system physical address to map this region
+> + * @slot: slot id of this label in label area
+> + * @ig: interleave granularity (1 << @ig) * 256 bytes
+> + * @align: alignment in SZ_256M blocks
+> + * @checksum: fletcher64 sum of this label
+> + */
+> +struct cxl_region_label {
+> +	u8 type[NSLABEL_UUID_LEN];
+> +	u8 uuid[NSLABEL_UUID_LEN];
+> +	__le32 flags;
+> +	__le16 nlabel;
+> +	__le16 position;
+> +	__le64 dpa;
+> +	__le64 rawsize;
+> +	__le64 hpa;
+> +	__le32 slot;
+> +	__le32 ig;
+> +	__le32 align;
+> +	u8 reserved[0xac];
+> +	__le64 checksum;
+> +};
+> +
+>  /**
+>   * struct nd_namespace_label - namespace superblock
+>   * @uuid: UUID per RFC 4122
 > 
-> Same here.
+
 
