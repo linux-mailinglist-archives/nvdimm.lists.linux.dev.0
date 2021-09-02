@@ -1,38 +1,38 @@
-Return-Path: <nvdimm+bounces-1136-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1140-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04ABC3FF511
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 22:43:21 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ECC23FF517
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 22:43:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id D701A1C0DCD
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 20:43:19 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id CD47E3E1043
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Sep 2021 20:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 102912FB3;
-	Thu,  2 Sep 2021 20:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F88D3FE3;
+	Thu,  2 Sep 2021 20:43:31 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8E729CA
-	for <nvdimm@lists.linux.dev>; Thu,  2 Sep 2021 20:43:11 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10095"; a="304807341"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFE03FDB
+	for <nvdimm@lists.linux.dev>; Thu,  2 Sep 2021 20:43:29 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10095"; a="282951016"
 X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="scan'208";a="304807341"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 13:43:11 -0700
+   d="scan'208";a="282951016"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 13:43:16 -0700
 X-IronPort-AV: E=Sophos;i="5.85,263,1624345200"; 
-   d="scan'208";a="602548264"
+   d="scan'208";a="691676385"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 13:43:10 -0700
-Subject: [ndctl PATCH v2 2/6] Documentation: Drop attrs.adoc include
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2021 13:43:16 -0700
+Subject: [ndctl PATCH v2 3/6] build: Drop unnecessary $tool/config.h includes
 From: Dan Williams <dan.j.williams@intel.com>
 To: nvdimm@lists.linux.dev
 Cc: vishal.l.verma@intel.com, linux-cxl@vger.kernel.org
-Date: Thu, 02 Sep 2021 13:43:10 -0700
-Message-ID: <163061539059.1943957.3717594871893118896.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Thu, 02 Sep 2021 13:43:16 -0700
+Message-ID: <163061539621.1943957.15148388017989435698.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <163061537869.1943957.8491829881215255815.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <163061537869.1943957.8491829881215255815.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -45,141 +45,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-In preparation for switching build systems, drop the attrs.adoc include for
-communicating variables to asciidoc. Simply add the necessary variable
-values to the invocation of the command using the --attribute argument.
+In preparation for support for meson as the build infrastructure remove
+some explicit config.h includes that will be replaced by a unified config.h
+at the top of the project.
 
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- Documentation/ndctl/Makefile.am                 |   14 ++++----------
- Documentation/ndctl/intel-nvdimm-security.txt   |    2 --
- Documentation/ndctl/ndctl-load-keys.txt         |    2 --
- Documentation/ndctl/ndctl-monitor.txt           |    5 +----
- Documentation/ndctl/ndctl-sanitize-dimm.txt     |    2 --
- Documentation/ndctl/ndctl-setup-passphrase.txt  |    2 --
- Documentation/ndctl/ndctl-update-passphrase.txt |    2 --
- 7 files changed, 5 insertions(+), 24 deletions(-)
+ daxctl/migrate.c |    1 -
+ ndctl/keys.c     |    1 -
+ ndctl/monitor.c  |    1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/Documentation/ndctl/Makefile.am b/Documentation/ndctl/Makefile.am
-index f0d5b213057c..9ec5458c2268 100644
---- a/Documentation/ndctl/Makefile.am
-+++ b/Documentation/ndctl/Makefile.am
-@@ -56,14 +56,6 @@ EXTRA_DIST = $(man1_MANS)
+diff --git a/daxctl/migrate.c b/daxctl/migrate.c
+index 5fbe970fdaff..c51106625849 100644
+--- a/daxctl/migrate.c
++++ b/daxctl/migrate.c
+@@ -5,7 +5,6 @@
+ #include <stdio.h>
+ #include <errno.h>
+ #include <fcntl.h>
+-#include <daxctl/config.h>
+ #include <daxctl/libdaxctl.h>
+ #include <util/parse-options.h>
+ #include <ccan/array_size/array_size.h>
+diff --git a/ndctl/keys.c b/ndctl/keys.c
+index 876b34714b7e..2f33b8fb488c 100644
+--- a/ndctl/keys.c
++++ b/ndctl/keys.c
+@@ -13,7 +13,6 @@
+ #include <keyutils.h>
+ #include <syslog.h>
  
- CLEANFILES = $(man1_MANS)
+-#include <ndctl/config.h>
+ #include <ndctl/ndctl.h>
+ #include <ndctl/libndctl.h>
  
--.ONESHELL:
--attrs.adoc: $(srcdir)/Makefile.am
--	$(AM_V_GEN) cat <<- EOF >$@
--		:ndctl_monitorconfdir: $(ndctl_monitorconfdir)
--		:ndctl_monitorconf: $(ndctl_monitorconf)
--		:ndctl_keysdir: $(ndctl_keysdir)
--		EOF
--
- XML_DEPS = \
- 	../../version.m4 \
- 	Makefile \
-@@ -76,8 +68,7 @@ XML_DEPS = \
- 	xable-namespace-options.txt \
- 	ars-description.txt \
- 	labels-description.txt \
--	labels-options.txt \
--	attrs.adoc
-+	labels-options.txt
- 
- RM ?= rm -f
- 
-@@ -88,6 +79,9 @@ if USE_ASCIIDOCTOR
- 		$(ASCIIDOC) -b manpage -d manpage -acompat-mode \
- 		-I. -rasciidoctor-extensions \
- 		-amansource=ndctl -amanmanual="ndctl Manual" \
-+		-andctl_monitorconf=$(ndctl_monitorconfdir)/$(ndctl_monitorconf) \
-+		-andctl_monitorconfdir=$(ndctl_monitorconfdir) \
-+		-andctl_keysdir=$(ndctl_keysdir) \
- 		-andctl_version=$(VERSION) -o $@+ $< && \
- 		mv $@+ $@
- 
-diff --git a/Documentation/ndctl/intel-nvdimm-security.txt b/Documentation/ndctl/intel-nvdimm-security.txt
-index 142b4603db69..88b305b81978 100644
---- a/Documentation/ndctl/intel-nvdimm-security.txt
-+++ b/Documentation/ndctl/intel-nvdimm-security.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- THEORY OF OPERATION
- -------------------
- The Intel Device Specific Methods (DSM) specification v1.7 and v1.8 [1]
-diff --git a/Documentation/ndctl/ndctl-load-keys.txt b/Documentation/ndctl/ndctl-load-keys.txt
-index a064f97fd069..70db57441820 100644
---- a/Documentation/ndctl/ndctl-load-keys.txt
-+++ b/Documentation/ndctl/ndctl-load-keys.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- ndctl-load-keys(1)
- ==================
- 
-diff --git a/Documentation/ndctl/ndctl-monitor.txt b/Documentation/ndctl/ndctl-monitor.txt
-index dbc9070c6331..14e0026c657e 100644
---- a/Documentation/ndctl/ndctl-monitor.txt
-+++ b/Documentation/ndctl/ndctl-monitor.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- ndctl-monitor(1)
- ================
- 
-@@ -21,8 +19,7 @@ objects and dumping the json format notifications to syslog, standard
- output or a logfile.
- 
- The objects to monitor and smart events to notify can be selected by
--setting options and/or the configuration file at
--{ndctl_monitorconfdir}/{ndctl_monitorconf}
-+setting options and/or the configuration file at {ndctl_monitorconf}
- 
- Both, the values in configuration file and in options will work. If
- there is a conflict, the values in options will override the values in
-diff --git a/Documentation/ndctl/ndctl-sanitize-dimm.txt b/Documentation/ndctl/ndctl-sanitize-dimm.txt
-index b2e5fde9ecb3..e04467856ca4 100644
---- a/Documentation/ndctl/ndctl-sanitize-dimm.txt
-+++ b/Documentation/ndctl/ndctl-sanitize-dimm.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- ndctl-sanitize-dimm(1)
- ======================
- 
-diff --git a/Documentation/ndctl/ndctl-setup-passphrase.txt b/Documentation/ndctl/ndctl-setup-passphrase.txt
-index 1219279b4c66..96f709b468fc 100644
---- a/Documentation/ndctl/ndctl-setup-passphrase.txt
-+++ b/Documentation/ndctl/ndctl-setup-passphrase.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- ndctl-setup-passphrase(1)
- =========================
- 
-diff --git a/Documentation/ndctl/ndctl-update-passphrase.txt b/Documentation/ndctl/ndctl-update-passphrase.txt
-index c7c1bfc8ab0b..591ce44ebc3e 100644
---- a/Documentation/ndctl/ndctl-update-passphrase.txt
-+++ b/Documentation/ndctl/ndctl-update-passphrase.txt
-@@ -1,7 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--include::attrs.adoc[]
--
- ndctl-update-passphrase(1)
- ==========================
- 
+diff --git a/ndctl/monitor.c b/ndctl/monitor.c
+index 85890c5367d3..fde5b1209565 100644
+--- a/ndctl/monitor.c
++++ b/ndctl/monitor.c
+@@ -10,7 +10,6 @@
+ #include <util/util.h>
+ #include <util/parse-options.h>
+ #include <util/strbuf.h>
+-#include <ndctl/config.h>
+ #include <ndctl/ndctl.h>
+ #include <ndctl/libndctl.h>
+ #include <sys/epoll.h>
 
 
