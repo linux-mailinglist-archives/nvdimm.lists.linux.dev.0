@@ -1,40 +1,41 @@
-Return-Path: <nvdimm+bounces-1196-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1197-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ED484044BE
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  9 Sep 2021 07:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 596744044BF
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  9 Sep 2021 07:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 4D67D1C0BA2
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  9 Sep 2021 05:12:06 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 52F441C0F20
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  9 Sep 2021 05:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2E23FE4;
-	Thu,  9 Sep 2021 05:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94FF3FE6;
+	Thu,  9 Sep 2021 05:12:00 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9561C72
-	for <nvdimm@lists.linux.dev>; Thu,  9 Sep 2021 05:11:54 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="207793593"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6286872
+	for <nvdimm@lists.linux.dev>; Thu,  9 Sep 2021 05:11:59 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="281695844"
 X-IronPort-AV: E=Sophos;i="5.85,279,1624345200"; 
-   d="scan'208";a="207793593"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 22:11:54 -0700
+   d="scan'208";a="281695844"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 22:11:59 -0700
 X-IronPort-AV: E=Sophos;i="5.85,279,1624345200"; 
-   d="scan'208";a="449748458"
+   d="scan'208";a="469914922"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 22:11:53 -0700
-Subject: [PATCH v4 04/21] libnvdimm/labels: Fix kernel-doc for label.h
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 22:11:59 -0700
+Subject: [PATCH v4 05/21] libnvdimm/label: Define CXL region labels
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, vishal.l.verma@intel.com,
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, vishal.l.verma@intel.com,
  nvdimm@lists.linux.dev, ben.widawsky@intel.com, alison.schofield@intel.com,
  vishal.l.verma@intel.com, ira.weiny@intel.com, Jonathan.Cameron@huawei.com
-Date: Wed, 08 Sep 2021 22:11:53 -0700
-Message-ID: <163116431381.2460985.6990754901097922099.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Wed, 08 Sep 2021 22:11:58 -0700
+Message-ID: <163116431893.2460985.4003511000574373922.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <163116429183.2460985.5040982981112374615.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <163116429183.2460985.5040982981112374615.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -47,58 +48,59 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Clean up existing kernel-doc warnings before adding new CXL label data
-structures.
-
-drivers/nvdimm/label.h:66: warning: Function parameter or member 'labelsize' not described in 'nd_namespace_index'
-drivers/nvdimm/label.h:66: warning: Function parameter or member 'free' not described in 'nd_namespace_index'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'align' not described in 'nd_namespace_label'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'reserved' not described in 'nd_namespace_label'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'type_guid' not described in 'nd_namespace_label'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'abstraction_guid' not described in 'nd_namespace_label'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'reserved2' not described in 'nd_namespace_label'
-drivers/nvdimm/label.h:103: warning: Function parameter or member 'checksum' not described in 'nd_namespace_label'
+Add a definition of the CXL 2.0 region label format. Note this is done
+as a separate patch to make the next patch that adds namespace label
+support easier to read.
 
 Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/nvdimm/label.h |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/nvdimm/label.h |   32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/drivers/nvdimm/label.h b/drivers/nvdimm/label.h
-index 31f94fad7b92..7fa757d47846 100644
+index 7fa757d47846..0519aacc2926 100644
 --- a/drivers/nvdimm/label.h
 +++ b/drivers/nvdimm/label.h
-@@ -34,6 +34,7 @@ enum {
-  * struct nd_namespace_index - label set superblock
-  * @sig: NAMESPACE_INDEX\0
-  * @flags: placeholder
-+ * @labelsize: log2 size (v1 labels 128 bytes v2 labels 256 bytes)
-  * @seq: sequence number for this index
-  * @myoff: offset of this index in label area
-  * @mysize: size of this index struct
-@@ -43,7 +44,7 @@ enum {
-  * @major: label area major version
-  * @minor: label area minor version
-  * @checksum: fletcher64 of all fields
-- * @free[0]: bitmap, nlabel bits
-+ * @free: bitmap, nlabel bits
-  *
-  * The size of free[] is rounded up so the total struct size is a
-  * multiple of NSINDEX_ALIGN bytes.  Any bits this allocates beyond
-@@ -77,7 +78,12 @@ struct nd_namespace_index {
-  * @dpa: DPA of NVM range on this DIMM
-  * @rawsize: size of namespace
-  * @slot: slot of this label in label area
-- * @unused: must be zero
-+ * @align: physical address alignment of the namespace
+@@ -66,6 +66,38 @@ struct nd_namespace_index {
+ 	u8 free[];
+ };
+ 
++/**
++ * struct cxl_region_label - CXL 2.0 Table 211
++ * @type: uuid identifying this label format (region)
++ * @uuid: uuid for the region this label describes
++ * @flags: NSLABEL_FLAG_UPDATING (all other flags reserved)
++ * @nlabel: 1 per interleave-way in the region
++ * @position: this label's position in the set
++ * @dpa: start address in device-local capacity for this label
++ * @rawsize: size of this label's contribution to region
++ * @hpa: mandatory system physical address to map this region
++ * @slot: slot id of this label in label area
++ * @ig: interleave granularity (1 << @ig) * 256 bytes
++ * @align: alignment in SZ_256M blocks
 + * @reserved: reserved
-+ * @type_guid: copy of struct acpi_nfit_system_address.range_guid
-+ * @abstraction_guid: personality id (btt, btt2, fsdax, devdax....)
-+ * @reserved2: reserved
-+ * @checksum: fletcher64 sum of this object
-  */
- struct nd_namespace_label {
- 	u8 uuid[NSLABEL_UUID_LEN];
++ * @checksum: fletcher64 sum of this label
++ */
++struct cxl_region_label {
++	u8 type[NSLABEL_UUID_LEN];
++	u8 uuid[NSLABEL_UUID_LEN];
++	__le32 flags;
++	__le16 nlabel;
++	__le16 position;
++	__le64 dpa;
++	__le64 rawsize;
++	__le64 hpa;
++	__le32 slot;
++	__le32 ig;
++	__le32 align;
++	u8 reserved[0xac];
++	__le64 checksum;
++};
++
+ /**
+  * struct nd_namespace_label - namespace superblock
+  * @uuid: UUID per RFC 4122
 
 
