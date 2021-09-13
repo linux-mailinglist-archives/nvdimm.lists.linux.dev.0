@@ -1,84 +1,124 @@
-Return-Path: <nvdimm+bounces-1260-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1276-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB83D408902
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Sep 2021 12:29:44 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C68E409987
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Sep 2021 18:39:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id EE0D21C0DCD
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Sep 2021 10:29:43 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id D61323E1470
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Sep 2021 16:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3EF63FD9;
-	Mon, 13 Sep 2021 10:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BB83FDA;
+	Mon, 13 Sep 2021 16:39:46 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4575E3FD6
-	for <nvdimm@lists.linux.dev>; Mon, 13 Sep 2021 10:29:32 +0000 (UTC)
-Received: from zn.tnic (p200300ec2f097300647bc1aeefdcee9f.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:7300:647b:c1ae:efdc:ee9f])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A9341EC0372;
-	Mon, 13 Sep 2021 12:29:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1631528960;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=IVIUZjL5dpInfeT4UHJ2BlG9ZIvelznW5/5tsIcMzEY=;
-	b=Z9cYssIV96NSTCYklKwDw1ZTBAvDiSdiVJ37N30F7xAa/JaxtRnZ5TQQg6zHwfWkO4UNbt
-	K31K3xe3mFSy2PwlmRg5KVQq4rXFIeh++6neo/pvu5Mme+fxx2xqPicvXxvYn891GBzkOv
-	by8UbXWgBsOdqFTxSsoq10mycakcJ24=
-Date: Mon, 13 Sep 2021 12:29:13 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: nvdimm@lists.linux.dev, Jane Chu <jane.chu@oracle.com>,
-	Luis Chamberlain <mcgrof@suse.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [RFT PATCH] x86/pat: Fix set_mce_nospec() for pmem
-Message-ID: <YT8n+ae3lBQjqoDs@zn.tnic>
-References: <162561960776.1149519.9267511644788011712.stgit@dwillia2-desk3.amr.corp.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B9A3FD6
+	for <nvdimm@lists.linux.dev>; Mon, 13 Sep 2021 16:39:45 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 442AF22028;
+	Mon, 13 Sep 2021 16:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1631550642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Dfx9ZUh8IlSB114cbG4XVpLALI8W+1SZrDn37ByerEE=;
+	b=kXjOO0iCMoAKWnt6Opb8FFJugDUYZQ7DbzsDLuetsyrCbmiPllf/mkVR8VmNl9tWNWifs5
+	AoAoMzVmklJPB54/L4D4Nt4WVKMicnbLDU0dz1hPR58BymiqSOPOwFmy/LivFcuSEnZXFQ
+	kL2G2EhSzQDHiZwB4Uru3KeH19XW7Gw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1631550642;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Dfx9ZUh8IlSB114cbG4XVpLALI8W+1SZrDn37ByerEE=;
+	b=p64ujeY8XFsknqbEvjCTX1PfdqHjFQyxjmZkXXN2V0N30oiXhDFZdJNuK4dhWHt2m/z6RN
+	c/ccMMs18608KnBQ==
+Received: from localhost.localdomain (colyli.tcp.ovpn1.nue.suse.de [10.163.16.22])
+	by relay2.suse.de (Postfix) with ESMTP id A9A4BA3B81;
+	Mon, 13 Sep 2021 16:30:36 +0000 (UTC)
+From: Coly Li <colyli@suse.de>
+To: linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	nvdimm@lists.linux.dev
+Cc: antlists@youngman.org.uk,
+	Coly Li <colyli@suse.de>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Hannes Reinecke <hare@suse.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	NeilBrown <neilb@suse.de>,
+	Vishal L Verma <vishal.l.verma@intel.com>
+Subject: [PATCH v2 0/7] badblocks improvement for multiple bad block ranges 
+Date: Tue, 14 Sep 2021 00:30:09 +0800
+Message-Id: <20210913163016.10088-1-colyli@suse.de>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <162561960776.1149519.9267511644788011712.stgit@dwillia2-desk3.amr.corp.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 06, 2021 at 06:01:05PM -0700, Dan Williams wrote:
-> When poison is discovered and triggers memory_failure() the physical
-> page is unmapped from all process address space. However, it is not
-> unmapped from kernel address space. Unlike a typical memory page that
-> can be retired from use in the page allocator and marked 'not present',
-> pmem needs to remain accessible given it can not be physically remapped
-> or retired.
+This is the second effort to improve badblocks code APIs to handle
+multiple ranges in bad block table.
 
-I'm surely missing something obvious but why does it need to remain
-accessible? Spell it out please.
+There are 2 changes from previous version,
+- Fixes 2 bugs in front_overwrite() which are detected by the user
+  space testing code.
+- Provide the user space testing code in last patch.
 
-> set_memory_uc() tries to maintain consistent nominal memtype
-> mappings for a given pfn, but memory_failure() is an exceptional
-> condition.
+There is NO in-memory or on-disk format change in the whole series, all
+existing API and data structures are consistent. This series just only
+improve the code algorithm to handle more corner cases, the interfaces
+are same and consistency to all existing callers (md raid and nvdimm
+drivers).
 
-That's not clear to me too. So looking at the failure:
+The original motivation of the change is from the requirement from our
+customer, that current badblocks routines don't handle multiple ranges.
+For example if the bad block setting range covers multiple ranges from
+bad block table, only the first two bad block ranges merged and rested
+ranges are intact. The expected behavior should be all the covered
+ranges to be handled.
 
-[10683.426147] x86/PAT: fsdax_poison_v1:5018 conflicting memory types 1850600000-1850601000  uncached-minus<->write-back
+All the patches are tested by modified user space code and the code
+logic works as expected. The modified user space testing code is
+provided in last patch. The testing code detects 2 defects in helper
+front_overwrite() and fixed in this version.
 
-set_memory_uc() marked it UC- but something? wants it to be WB. Why?
+The whole change is divided into 6 patches to make the code review more
+clear and easier. If people prefer, I'd like to post a single large
+patch finally after the code review accomplished.
 
-I guess I need some more info on the whole memory offlining for pmem and
-why that should be done differently than with normal memory.
+This version is seriously tested, and so far no more defect observed.
 
-Thx.
+
+Coly Li
+
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: NeilBrown <neilb@suse.de>
+Cc: Vishal L Verma <vishal.l.verma@intel.com>
+---
+
+Coly Li (6):
+  badblocks: add more helper structure and routines in badblocks.h
+  badblocks: add helper routines for badblock ranges handling
+  badblocks: improvement badblocks_set() for multiple ranges handling
+  badblocks: improve badblocks_clear() for multiple ranges handling
+  badblocks: improve badblocks_check() for multiple ranges handling
+  badblocks: switch to the improved badblock handling code
+Coly Li (1):
+  test: user space code to test badblocks APIs
+
+ block/badblocks.c         | 1599 ++++++++++++++++++++++++++++++-------
+ include/linux/badblocks.h |   32 +
+ 2 files changed, 1340 insertions(+), 291 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
