@@ -1,119 +1,127 @@
-Return-Path: <nvdimm+bounces-1304-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1312-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id C56DA40C3BA
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 15 Sep 2021 12:41:53 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B354340C3E8
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 15 Sep 2021 12:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id CA87B1C0F2B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 15 Sep 2021 10:41:52 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id E6AA41C0F5F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 15 Sep 2021 10:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3643FD8;
-	Wed, 15 Sep 2021 10:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63393FDB;
+	Wed, 15 Sep 2021 10:46:34 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01643FC9
-	for <nvdimm@lists.linux.dev>; Wed, 15 Sep 2021 10:41:43 +0000 (UTC)
-Received: from zn.tnic (p200300ec2f0d07000c3d48728178681f.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:700:c3d:4872:8178:681f])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BA85A1EC0493;
-	Wed, 15 Sep 2021 12:41:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1631702490;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=DMSPVE3ps9SBVtM/8QmBc99ziCix9wq6T05rkqRlJW4=;
-	b=eedSt5JXkJwiAqtVkdnbeORCH24XdU8o45HedKr509AsMkDZK3mIUFX3WwcKvsnIx9WImn
-	rpfxAJ/EeVtmjiokN/Y5+85X8iPmJRykyg/YbmpnZq4LDPsV5DDvr8tWucNUAoy7l/dQKt
-	JQQhJJrTntVQh6BoCOWcdKG0KoIAAA4=
-Date: Wed, 15 Sep 2021 12:41:24 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Linux NVDIMM <nvdimm@lists.linux.dev>, Jane Chu <jane.chu@oracle.com>,
-	Luis Chamberlain <mcgrof@suse.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [RFT PATCH] x86/pat: Fix set_mce_nospec() for pmem
-Message-ID: <YUHN1DqsgApckZ/R@zn.tnic>
-References: <162561960776.1149519.9267511644788011712.stgit@dwillia2-desk3.amr.corp.intel.com>
- <YT8n+ae3lBQjqoDs@zn.tnic>
- <CAPcyv4hNzR8ExvYxguvyu6N6Md1x0QVSnDF_5G1WSruK=gvgEA@mail.gmail.com>
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E6E3FC9
+	for <nvdimm@lists.linux.dev>; Wed, 15 Sep 2021 10:46:33 +0000 (UTC)
+IronPort-Data: =?us-ascii?q?A9a23=3AdNspu6/CCYdB067sQ0AWDrUD+3+TJUtcMsCJ2f8?=
+ =?us-ascii?q?bfWQNrUomhTAOnGNNXm6BPa6MYmukc9p2aoux8h4F6sPVyNNjQVdlrnsFo1Bi8?=
+ =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4EfwWlTdhSMkj/jQF+OhULW?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt8pswdNWpNq+T?=
+ =?us-ascii?q?xw1FqPRmuUBSAQeGCZ7VUFD0OaefSXm4JTJlyUqdFOpmZ2CFnoeMYQG++pfD3t?=
+ =?us-ascii?q?J8PsCIjERKBuEgoqe37O/TvhEh8ItNsDnMYoT/HZ6wlnxAf8gB5KFXKTO4d5R2?=
+ =?us-ascii?q?SwYh8ZSEPKYbM0cARJjbgvHZRJnOVoNDp862uCyiRHXdSNUqVeQja42+HTIigh?=
+ =?us-ascii?q?w1qX9dtbYZLSiRc5VtkKDuiTK8gzRGB4dMNCA2Dyt6W+3i6nDkEvTXIMUCa39+?=
+ =?us-ascii?q?OVmjUOewkQNBxAME1i2u/+0jgi5Qd03A0gV/Dc+6Ks/7kqmSvHjUBCi5n2JpBg?=
+ =?us-ascii?q?RX5xXCeJSwAWMzLfEphaXHUAaQTNbLt8rrsk7QXotzFDht83oHztHorCTSGzb8?=
+ =?us-ascii?q?raSsCP0PjIaa3IBDRLo5yNtD8LL+dl110yQCI04VvPdszE8IhmoqxjikcT0r+5?=
+ =?us-ascii?q?7YRY36piG?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AT1LFY6vUGxgwx6ZYvnY7dTQd7skDE9V00zEX?=
+ =?us-ascii?q?/kB9WHVpm62j9/xG88536faZslwssRIb+OxoWpPufZq0z/ccirX5VY3SPzUO01?=
+ =?us-ascii?q?HFEGgN1+Xf/wE=3D?=
+X-IronPort-AV: E=Sophos;i="5.85,295,1624291200"; 
+   d="scan'208";a="114519020"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 15 Sep 2021 18:45:21 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+	by cn.fujitsu.com (Postfix) with ESMTP id F14DA4D0D9D2;
+	Wed, 15 Sep 2021 18:45:14 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 15 Sep 2021 18:45:04 +0800
+Received: from irides.mr.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 15 Sep 2021 18:45:03 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <djwong@kernel.org>, <hch@lst.de>, <linux-xfs@vger.kernel.org>
+CC: <ruansy.fnst@fujitsu.com>, <dan.j.williams@intel.com>,
+	<david@fromorbit.com>, <linux-fsdevel@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>, <rgoldwyn@suse.de>,
+	<viro@zeniv.linux.org.uk>, <willy@infradead.org>
+Subject: [PATCH v9 0/8] fsdax,xfs: Add reflink&dedupe support for fsdax
+Date: Wed, 15 Sep 2021 18:44:53 +0800
+Message-ID: <20210915104501.4146910-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4hNzR8ExvYxguvyu6N6Md1x0QVSnDF_5G1WSruK=gvgEA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: F14DA4D0D9D2.A142D
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-On Tue, Sep 14, 2021 at 11:08:00AM -0700, Dan Williams wrote:
-> Sure, I should probably include this following note in all patches
-> touching the DAX-memory_failure() path, because it is a frequently
-> asked question. The tl;dr is:
-> 
-> Typical memory_failure() does not assume the physical page can be
-> recovered and put back into circulation, PMEM memory_failure() allows
-> for recovery of the page.
+This patchset is attempt to add CoW support for fsdax, and take XFS,
+which has both reflink and fsdax feature, as an example.
 
-Hmm, I think by "PMEM memory_failure()" you mean what pmem_do_write()
-does with that poison clearing or?
+Changes from V8:
+ - Rebased on v5.15-rc1
+ - Patch 4: Add a pre patch to convert dax_iomap_zero to iter model[1]
+ - Patch 6&7: Remove EXPORT_SYMBOL
+ - Patch 8: Solve the conflict caused by rebase
+ - Fix code style problems, add comment
 
-But then I have no clue what the "DAX-memory_failure()" path is.
+One of the key mechanism need to be implemented in fsdax is CoW.  Copy
+the data from srcmap before we actually write data to the destance
+iomap.  And we just copy range in which data won't be changed.
 
-> The longer description is:
-> Typical memory_failure() for anonymous, or page-cache pages, has the
-> flexibility to invalidate bad pages and trigger any users to request a
-> new page from the page allocator to replace the quarantined one. DAX
-> removes that flexibility. The page is a handle for a fixed storage
-> location, i.e. no mechanism to remap a physical page to a different
-> logical address. Software expects to be able to repair an error in
-> PMEM by reading around the poisoned cache lines and writing zeros,
-> fallocate(...FALLOC_FL_PUNCH_HOLE...), to overwrite poison. The page
-> needs to remain accessible to enable recovery.
+Another mechanism is range comparison.  In page cache case, readpage()
+is used to load data on disk to page cache in order to be able to
+compare data.  In fsdax case, readpage() does not work.  So, we need
+another compare data with direct access support.
 
-Aha, so memory failure there is not offlining he 4K page but simply
-zeroing the poison. What happens if the same physical location triggers
-more read errors, i.e., the underlying hw is going bad? Don't you want
-to exclude that location from ever being written again?
+With the two mechanisms implemented in fsdax, we are able to make reflink
+and fsdax work together in XFS.
 
-Or maybe such recovery action doesn't make sense for pmem?
+(Rebased on v5.15-rc1)
+==
 
-> Short answer, PMEM never goes "offline" because it was never "online"
-> in the first place. Where "online" in this context is specifically
-> referring to pfns that are under the watchful eye of the core-mm page
-> allocator.
+Shiyang Ruan (8):
+  fsdax: Output address in dax_iomap_pfn() and rename it
+  fsdax: Introduce dax_iomap_cow_copy()
+  fsdax: Replace mmap entry in case of CoW
+  fsdax: Convert dax_iomap_zero to iter model
+  fsdax: Add dax_iomap_cow_copy() for dax_iomap_zero
+  fsdax: Dedup file range to use a compare function
+  xfs: support CoW in fsdax mode
+  xfs: Add dax dedupe support
 
-Ok, so pmem wants to be handled differently during memory failure.
-Looking at the patch again, you change the !unmap case to do
-_set_memory_uc().
-
-That bool unmap thing gets *not* set in whole_page():
-
-	return MCI_MISC_ADDR_LSB(m->misc) >= PAGE_SHIFT;
-
-so I'm guessing that "Recoverable Address LSB (bits 5:0): The lowest
-valid recoverable address bit." thing is < 12 for pmem.
-
-But are you really saying that the hardware would never report a lower
-than 12 value for normal memory?
-
-If it does, then that is wrong here.
-
-In any case, I'd prefer if the code would do an explicit check somewhere
-saying "is this pmem" in order to do that special action only for when
-it really is pmem and not rely on it implicitly.
-
-Thx.
+ fs/dax.c               | 284 +++++++++++++++++++++++++++++++++--------
+ fs/iomap/buffered-io.c |   3 +-
+ fs/remap_range.c       |  31 ++++-
+ fs/xfs/xfs_bmap_util.c |   3 +-
+ fs/xfs/xfs_file.c      |   8 +-
+ fs/xfs/xfs_inode.c     |  80 +++++++++++-
+ fs/xfs/xfs_inode.h     |   1 +
+ fs/xfs/xfs_iomap.c     |  38 +++++-
+ fs/xfs/xfs_iomap.h     |  30 +++++
+ fs/xfs/xfs_iops.c      |   7 +-
+ fs/xfs/xfs_reflink.c   |  15 ++-
+ include/linux/dax.h    |  11 +-
+ include/linux/fs.h     |  12 +-
+ 13 files changed, 438 insertions(+), 85 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.33.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+
 
