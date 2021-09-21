@@ -1,166 +1,541 @@
-Return-Path: <nvdimm+bounces-1364-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1367-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E94C412B0F
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 21 Sep 2021 04:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA640412EC0
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 21 Sep 2021 08:42:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1C3F91C0B5C
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 21 Sep 2021 02:05:11 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id D770A1C0D2B
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 21 Sep 2021 06:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF1A3FCD;
-	Tue, 21 Sep 2021 02:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9483FCF;
+	Tue, 21 Sep 2021 06:42:30 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ozlabs.org (ozlabs.org [203.11.71.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E71C3FCB
-	for <nvdimm@lists.linux.dev>; Tue, 21 Sep 2021 02:05:02 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id t1so19294557pgv.3
-        for <nvdimm@lists.linux.dev>; Mon, 20 Sep 2021 19:05:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06983FC5
+	for <nvdimm@lists.linux.dev>; Tue, 21 Sep 2021 06:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FYrM/RzmYkooaIgiaBS+xzc+ouPWh3U85lPQJ64IViw=;
-        b=K9vEjPqLTDcznukBNO9tBFRvGlY2hgu3nvAMKqu01b+khPED8fHMEGirh2wukqJsSk
-         9MnKeL2LuGxmYiHKnX4QmN9H3zF5DMhQF1XY1A9t8J73A8JbXb4ioKxPS0+id29m3R1y
-         KPtnwAW+UZ8wxbW33bWEC2WUB2qpGIM1ZrS72E/OjSH1uMmGcIYtb0C8ok0PjU8XP4bY
-         SWcFYzitNcCoH2jQlDm9BU/EerH8JXEJZT3xI2cIGZaXKZVaO7OfssZvo+Oz3l94oyYe
-         JSuLcb7OaDahXu1VSI0uwBP18EdcXOU7AiOf3CX3g4WOW2BdKkgQWz8Y6Qo0qwk6u8un
-         M9/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FYrM/RzmYkooaIgiaBS+xzc+ouPWh3U85lPQJ64IViw=;
-        b=IIeKsAXtuRcFRXW80bHAYJLypXe7FOAYLxcSnp0cCDvdscWSr9uyffTfHEfE88Kvj2
-         JnEt3MSFtZyR6rK9T0gCbhrUvKmVaMZv08GrfO43oErNOHYOdWWTMSjFkufp33j5NYpO
-         FQTvs10jlP4rjHwENaGf9A7nVk9/0ImMrTN9alNrM0GFXssa9VM79DRAwOf3UHQxy8BV
-         hqGbLlYfDc1S5GtjfIpiGnqyMXh8y+HuI/sxOckKmY1ZqZQTblTH8FVYvtp8a7/4Wvfx
-         L3Sk0WJ8NQdrq8Uecal3eT2x9XiRhuNhlIQS/HQW6J4hRcxk4byvFZ9m3eeWRf35VdvK
-         tcXA==
-X-Gm-Message-State: AOAM5316VUkkWFC6B8HxqnlOIGVIxq4gcinJCxJpT0XA72sbYt7EuNAu
-	6czoYU26eLS6WW+ibjVLXrTZ7kWSHt5vLBkZX5BTwg==
-X-Google-Smtp-Source: ABdhPJyC1RFA56n7jX4OaZitCuQ5VoFk7iom3j+Ez4Z9MCXFdonTHD2S2VHVDlI+ktsWQCMV2XY/yvTK6mgDrGuL3Zg=
-X-Received: by 2002:aa7:9d84:0:b0:447:c2f4:4a39 with SMTP id
- f4-20020aa79d84000000b00447c2f44a39mr6611401pfq.86.1632189901949; Mon, 20 Sep
- 2021 19:05:01 -0700 (PDT)
+	d=gibson.dropbear.id.au; s=201602; t=1632206039;
+	bh=A8uBCT6pEVvuvjWO8o3GM/qbi4ao3ZjwmzmzHHoYPAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gIAYOxvz4if32h8j7ybOGWXVQFHhwq60Vu6jqw5x08wdDfh+m88nCd/eAUhNlHcTg
+	 v0xNcLtWsKJ5rm46HC6E+myVi5agZxVOitE/hcW78Hz3pH/qvbA+nsGozy6vht/HFg
+	 uZB5eQrtbdGUowmbh/OBXCQU2LR30S1Nl9VIyH1I=
+Received: by ozlabs.org (Postfix, from userid 1007)
+	id 4HDBTg2g7Qz9t0Y; Tue, 21 Sep 2021 16:33:59 +1000 (AEST)
+Date: Tue, 21 Sep 2021 16:23:42 +1000
+From: David Gibson <david@gibson.dropbear.id.au>
+To: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+Cc: groug@kaod.org, qemu-ppc@nongnu.org, qemu-devel@nongnu.org,
+	aneesh.kumar@linux.ibm.com, nvdimm@lists.linux.dev,
+	kvm-ppc@vger.kernel.org, bharata@linux.vnet.ibm.com
+Subject: Re: [PATCH REBASED v5 1/2] spapr: nvdimm: Implement H_SCM_FLUSH hcall
+Message-ID: <YUl6bnSuWVsX4P1I@yekko>
+References: <162571302321.1030381.15196355582642786915.stgit@lep8c.aus.stglabs.ibm.com>
+ <162571303048.1030381.13893352223345979621.stgit@lep8c.aus.stglabs.ibm.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <162561960776.1149519.9267511644788011712.stgit@dwillia2-desk3.amr.corp.intel.com>
- <YT8n+ae3lBQjqoDs@zn.tnic> <CAPcyv4hNzR8ExvYxguvyu6N6Md1x0QVSnDF_5G1WSruK=gvgEA@mail.gmail.com>
- <YUHN1DqsgApckZ/R@zn.tnic> <CAPcyv4hABimEQ3z7HNjaQBWNtq7yhEXe=nbRx-N_xCuTZ1D_-g@mail.gmail.com>
- <YUR8RTx9blI2ezvQ@zn.tnic>
-In-Reply-To: <YUR8RTx9blI2ezvQ@zn.tnic>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Mon, 20 Sep 2021 19:04:50 -0700
-Message-ID: <CAPcyv4jOk_Ej5op9ZZM+=OCitUsmp0RCZNH=PFqYTCoUeXXCCg@mail.gmail.com>
-Subject: Re: [RFT PATCH] x86/pat: Fix set_mce_nospec() for pmem
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linux NVDIMM <nvdimm@lists.linux.dev>, Jane Chu <jane.chu@oracle.com>, 
-	Luis Chamberlain <mcgrof@suse.com>, Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="sEy+QjDdyRzU+2cX"
+Content-Disposition: inline
+In-Reply-To: <162571303048.1030381.13893352223345979621.stgit@lep8c.aus.stglabs.ibm.com>
 
-On Fri, Sep 17, 2021 at 4:30 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Sep 16, 2021 at 01:33:42PM -0700, Dan Williams wrote:
-> > I am specifically talking about the memory_failure_dev_pagemap() path
-> > taken from memory_failure().
-> >
-> > > But then I have no clue what the "DAX-memory_failure()" path is.
-> >
-> > Sorry, I should not have lazily used {PMEM,DAX} memory_failure() to
-> > refer to the exact routine in question: memory_failure_dev_pagemap().
-> > That path is taken when memory_failure() sees that a pfn was mapped by
-> > memremap_pages(). It determines that the pfn does not represent a
-> > dynamic page allocator page and may refer to a static page of storage
-> > from a device like /dev/pmem, or /dev/dax.
->
-> Aaaha, that's that innocent-looking pfn_to_online_page() call there in
-> memory_failure() which would return NULL for pmem/dax pages.
 
-Exactly.
+--sEy+QjDdyRzU+2cX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > The zeroing of the poison comes optionally later if userspace
-> > explicitly asks for it to be cleared.
->
-> I see.
->
-> > Yes. The device driver avoids reconsumption of the same error by
-> > recording the error in a "badblocks" structure (block/badblocks.c).
-> > The driver consults its badblocks instance on every subsequent access
-> > and preemptively returns EIO. The driver registers for machine-check
-> > notifications and translates those events into badblocks entries. So,
-> > repeat consumption is avoided unless/until the babblocks entry can be
-> > cleared along with the poison itself.
->
-> Sounds good.
->
-> > I'll note that going forward the filesystem wants to be more involved
-> > in tracking and managing these errors so the driver will grow the
-> > ability to forward those notifications up the stack.
->
-> ... which would save the ask-the-driver each time thing. Yap.
->
-> > It does. In addition to machine-check synchronous notification of
-> > poison, there are asynchronous scanning mechanisms that prepopulate
-> > the badblocks entries to get ahead of consumption events.
->
-> Probably something similar to patrol scrubbing on normal DRAM.
+On Wed, Jul 07, 2021 at 09:57:21PM -0500, Shivaprasad G Bhat wrote:
+> The patch adds support for the SCM flush hcall for the nvdimm devices.
+> To be available for exploitation by guest through the next patch.
+>=20
+> The hcall expects the semantics such that the flush to return
+> with one of H_LONG_BUSY when the operation is expected to take longer
+> time along with a continue_token. The hcall to be called again providing
+> the continue_token to get the status. So, all fresh requests are put into
+> a 'pending' list and flush worker is submitted to the thread pool. The
+> thread pool completion callbacks move the requests to 'completed' list,
+> which are cleaned up after reporting to guest in subsequent hcalls to
+> get the status.
+>=20
+> The semantics makes it necessary to preserve the continue_tokens and
+> their return status across migrations. So, the completed flush states
+> are forwarded to the destination and the pending ones are restarted
+> at the destination in post_load. The necessary nvdimm flush specific
+> vmstate structures are added to the spapr machine vmstate.
+>=20
+> Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+> ---
+>  hw/ppc/spapr.c                |    6 +
+>  hw/ppc/spapr_nvdimm.c         |  240 +++++++++++++++++++++++++++++++++++=
+++++++
+>  include/hw/ppc/spapr.h        |   11 ++
+>  include/hw/ppc/spapr_nvdimm.h |   13 ++
+>  4 files changed, 269 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/hw/ppc/spapr.c b/hw/ppc/spapr.c
+> index 4dd90b75cc..546d825dde 100644
+> --- a/hw/ppc/spapr.c
+> +++ b/hw/ppc/spapr.c
+> @@ -1622,6 +1622,8 @@ static void spapr_machine_reset(MachineState *machi=
+ne)
+>          spapr->ov5_cas =3D spapr_ovec_clone(spapr->ov5);
+>      }
+> =20
+> +    spapr_nvdimm_finish_flushes(spapr);
+> +
+>      /* DRC reset may cause a device to be unplugged. This will cause tro=
+ubles
+>       * if this device is used by another device (eg, a running vhost bac=
+kend
+>       * will crash QEMU if the DIMM holding the vring goes away). To avoi=
+d such
+> @@ -2018,6 +2020,7 @@ static const VMStateDescription vmstate_spapr =3D {
+>          &vmstate_spapr_cap_ccf_assist,
+>          &vmstate_spapr_cap_fwnmi,
+>          &vmstate_spapr_fwnmi,
+> +        &vmstate_spapr_nvdimm_states,
+>          NULL
+>      }
+>  };
+> @@ -3014,6 +3017,9 @@ static void spapr_machine_init(MachineState *machin=
+e)
+>      }
+> =20
+>      qemu_cond_init(&spapr->fwnmi_machine_check_interlock_cond);
+> +
+> +    QLIST_INIT(&spapr->pending_flush_states);
+> +    QLIST_INIT(&spapr->completed_flush_states);
+>  }
+> =20
+>  #define DEFAULT_KVM_TYPE "auto"
+> diff --git a/hw/ppc/spapr_nvdimm.c b/hw/ppc/spapr_nvdimm.c
+> index 91de1052f2..4f8931ab15 100644
+> --- a/hw/ppc/spapr_nvdimm.c
+> +++ b/hw/ppc/spapr_nvdimm.c
+> @@ -22,6 +22,7 @@
+>   * THE SOFTWARE.
+>   */
+>  #include "qemu/osdep.h"
+> +#include "qemu/cutils.h"
+>  #include "qapi/error.h"
+>  #include "hw/ppc/spapr_drc.h"
+>  #include "hw/ppc/spapr_nvdimm.h"
+> @@ -30,6 +31,7 @@
+>  #include "hw/ppc/fdt.h"
+>  #include "qemu/range.h"
+>  #include "hw/ppc/spapr_numa.h"
+> +#include "block/thread-pool.h"
+> =20
+>  /* DIMM health bitmap bitmap indicators. Taken from kernel's papr_scm.c =
+*/
+>  /* SCM device is unable to persist memory contents */
+> @@ -375,6 +377,243 @@ static target_ulong h_scm_bind_mem(PowerPCCPU *cpu,=
+ SpaprMachineState *spapr,
+>      return H_SUCCESS;
+>  }
+> =20
+> +static uint64_t flush_token;
 
-Yes, although I believe that DRAM patrol scrubbing is being done from
-the host memory controller, these PMEM DIMMs have firmware and DMA
-engines *in the DIMM* to do this scrub work.
+Better to put this in the machine state structure than a global.
 
-> > ... Because the entire page is dead there is no need for UC because all
-> > the cachelines are gone, nothing to read-around in this page. In short
-> > DRAM and PMEM want to share the exact same policy here and use NP for
-> > whole_page() and UC for not. Just the small matter of ignoring the
-> > memtype by using _set_memory_uc().
->
-> Hmm, so looking at this more:
->
->         else
->                 rc = set_memory_uc(decoy_addr, 1);
->
-> ->  memtype_reserve(__pa(addr), __pa(addr) + numpages * PAGE_SIZE,
->
-> ->  memtype_reserve(__pa(addr), __pa(addr) + 1,
->
-> Looking at
->
->   17fae1294ad9 ("x86/{mce,mm}: Unmap the entire page if the whole page is affected and poisoned")
->
-> it says
->
->     Fix is to check the scope of the poison by checking the MCi_MISC register.
->     If the entire page is affected, then unmap the page. If only part of the
->     page is affected, then mark the page as uncacheable.
->
-> so I guess for normal DRAM we still want to map the page uncacheable so
-> that other parts except that cacheline can still be read.
+> +static int flush_worker_cb(void *opaque)
+> +{
+> +    int ret =3D H_SUCCESS;
+> +    SpaprNVDIMMDeviceFlushState *state =3D opaque;
+> +
+> +    /* flush raw backing image */
+> +    if (qemu_fdatasync(state->backend_fd) < 0) {
+> +        error_report("papr_scm: Could not sync nvdimm to backend file: %=
+s",
+> +                     strerror(errno));
+> +        ret =3D H_HARDWARE;
+> +    }
+> +
+> +    return ret;
+> +}
+> +
+> +static void spapr_nvdimm_flush_completion_cb(void *opaque, int hcall_ret)
+> +{
+> +    SpaprMachineState *spapr =3D SPAPR_MACHINE(qdev_get_machine());
+> +    SpaprNVDIMMDeviceFlushState *state =3D opaque;
+> +
+> +    state->hcall_ret =3D hcall_ret;
+> +    QLIST_REMOVE(state, node);
+> +    QLIST_INSERT_HEAD(&spapr->completed_flush_states, state, node);
+> +}
+> +
+> +static const VMStateDescription vmstate_spapr_nvdimm_flush_state =3D {
+> +     .name =3D "spapr_nvdimm_flush_state",
+> +     .version_id =3D 1,
+> +     .minimum_version_id =3D 1,
+> +     .fields =3D (VMStateField[]) {
+> +         VMSTATE_UINT64(continue_token, SpaprNVDIMMDeviceFlushState),
+> +         VMSTATE_INT64(hcall_ret, SpaprNVDIMMDeviceFlushState),
+> +         VMSTATE_UINT32(drcidx, SpaprNVDIMMDeviceFlushState),
+> +         VMSTATE_END_OF_LIST()
+> +     },
+> +};
+> +
+> +static bool spapr_nvdimm_states_needed(void *opaque)
+> +{
+> +     SpaprMachineState *spapr =3D (SpaprMachineState *)opaque;
+> +
+> +     return (!QLIST_EMPTY(&spapr->pending_flush_states) ||
+> +             !QLIST_EMPTY(&spapr->completed_flush_states));
+> +}
+> +
+> +static int spapr_nvdimm_post_load(void *opaque, int version_id)
+> +{
+> +    SpaprMachineState *spapr =3D (SpaprMachineState *)opaque;
+> +    SpaprNVDIMMDeviceFlushState *state, *next;
+> +    PCDIMMDevice *dimm;
+> +    HostMemoryBackend *backend =3D NULL;
+> +    ThreadPool *pool =3D aio_get_thread_pool(qemu_get_aio_context());
+> +    SpaprDrc *drc;
+> +
+> +    QLIST_FOREACH_SAFE(state, &spapr->completed_flush_states, node, next=
+) {
 
-Perhaps, but I don't know how you do that if memory_failure() has
-"offlined" the DRAM page, in the case of PMEM you can issue a
-byte-aligned direct-I/O access to the exact storage locations around
-the poisoned cachelines.
+I don't think you need FOREACH_SAFE here.  You're not removing entries
+=66rom the loop body.  If you're trying to protect against concurrent
+removals, I don't think FOREACH_SAFE is sufficient, you'll need an
+actual lock (but I think it's already protected by the BQL).
 
-> And PMEM should be excluded from that treatise here because it needs to
-> be WB, as you said earlier.
->
-> Right?
+> +        if (flush_token < state->continue_token) {
+> +            flush_token =3D state->continue_token;
+> +        }
+> +    }
+> +
+> +    QLIST_FOREACH_SAFE(state, &spapr->pending_flush_states, node, next) {
 
-PMEM can still go NP if the entire page is failed, so no need to
-exclude PMEM from the treatise because the driver's badblocks
-implementation will cover the NP page, and the driver can use
-clear_mce_nospec() to recover the WB mapping / access after the poison
-has been cleared.
+Sane comments here.
+
+> +        if (flush_token < state->continue_token) {
+> +            flush_token =3D state->continue_token;
+> +        }
+> +
+> +        drc =3D spapr_drc_by_index(state->drcidx);
+> +        dimm =3D PC_DIMM(drc->dev);
+> +        backend =3D MEMORY_BACKEND(dimm->hostmem);
+> +        state->backend_fd =3D memory_region_get_fd(&backend->mr);
+> +
+> +        thread_pool_submit_aio(pool, flush_worker_cb, state,
+> +                               spapr_nvdimm_flush_completion_cb, state);
+> +    }
+> +
+> +    return 0;
+> +}
+> +
+> +const VMStateDescription vmstate_spapr_nvdimm_states =3D {
+> +    .name =3D "spapr_nvdimm_states",
+> +    .version_id =3D 1,
+> +    .minimum_version_id =3D 1,
+> +    .needed =3D spapr_nvdimm_states_needed,
+> +    .post_load =3D spapr_nvdimm_post_load,
+> +    .fields =3D (VMStateField[]) {
+> +        VMSTATE_QLIST_V(completed_flush_states, SpaprMachineState, 1,
+> +                        vmstate_spapr_nvdimm_flush_state,
+> +                        SpaprNVDIMMDeviceFlushState, node),
+> +        VMSTATE_QLIST_V(pending_flush_states, SpaprMachineState, 1,
+> +                        vmstate_spapr_nvdimm_flush_state,
+> +                        SpaprNVDIMMDeviceFlushState, node),
+> +        VMSTATE_END_OF_LIST()
+> +    },
+> +};
+> +
+> +/*
+> + * Assign a token and reserve it for the new flush state.
+> + */
+> +static SpaprNVDIMMDeviceFlushState *spapr_nvdimm_init_new_flush_state(
+> +                                                      SpaprMachineState =
+*spapr)
+> +{
+> +    SpaprNVDIMMDeviceFlushState *state;
+> +
+> +    state =3D g_malloc0(sizeof(*state));
+> +
+> +    flush_token++;
+> +    /* Token zero is presumed as no job pending. Handle the overflow to =
+zero */
+> +    if (flush_token =3D=3D 0) {
+> +        flush_token++;
+
+Hmm... strictly speaking, this isn't safe.  It's basically never going
+to happen in practice, but in theory there's nothing preventing
+continue_token 1 still being outstanding when the flush_token counter
+overflows.
+
+Come to think of it, since it's a uint64_t, I think an actual overflow
+is also never going to happen in practice.  Maybe we should just
+assert() on overflow, and fix it in the unlikely event that we ever
+discover a case where it could happen.
+
+> +    }
+> +    state->continue_token =3D flush_token;
+> +
+> +    QLIST_INSERT_HEAD(&spapr->pending_flush_states, state, node);
+> +
+> +    return state;
+> +}
+> +
+> +/*
+> + * spapr_nvdimm_finish_flushes
+> + *      Waits for all pending flush requests to complete
+> + *      their execution and free the states
+> + */
+> +void spapr_nvdimm_finish_flushes(SpaprMachineState *spapr)
+> +{
+> +    SpaprNVDIMMDeviceFlushState *state, *next;
+> +
+> +    /*
+> +     * Called on reset path, the main loop thread which calls
+> +     * the pending BHs has gotten out running in the reset path,
+> +     * finally reaching here. Other code path being guest
+> +     * h_client_architecture_support, thats early boot up.
+> +     */
+> +    while (!QLIST_EMPTY(&spapr->pending_flush_states)) {
+> +        aio_poll(qemu_get_aio_context(), true);
+> +    }
+> +
+> +    QLIST_FOREACH_SAFE(state, &spapr->completed_flush_states, node, next=
+) {
+> +        QLIST_REMOVE(state, node);
+> +        g_free(state);
+> +    }
+> +}
+> +
+> +/*
+> + * spapr_nvdimm_get_flush_status
+> + *      Fetches the status of the hcall worker and returns
+> + *      H_LONG_BUSY_XYZ if the worker is still running.
+> + */
+> +static int spapr_nvdimm_get_flush_status(SpaprMachineState *spapr,
+> +                                         uint64_t token)
+> +{
+> +    int ret =3D H_LONG_BUSY_ORDER_10_MSEC;
+> +    SpaprNVDIMMDeviceFlushState *state, *node;
+> +
+> +    QLIST_FOREACH_SAFE(state, &spapr->pending_flush_states, node, node) {
+> +        if (state->continue_token =3D=3D token) {
+> +            goto exit;
+> +        }
+> +    }
+> +    ret =3D H_P2; /* If not found in complete list too, invalid token */
+> +    QLIST_FOREACH_SAFE(state, &spapr->completed_flush_states, node, node=
+) {
+> +        if (state->continue_token =3D=3D token) {
+> +            ret =3D state->hcall_ret;
+> +            QLIST_REMOVE(state, node);
+> +            g_free(state);
+> +            break;
+> +        }
+> +    }
+> +exit:
+> +    return ret;
+> +}
+> +
+> +/*
+> + * H_SCM_FLUSH
+> + * Input: drc_index, continue-token
+> + * Out: continue-token
+> + * Return Value: H_SUCCESS, H_Parameter, H_P2, H_LONG_BUSY
+> + *
+> + * Given a DRC Index Flush the data to backend NVDIMM device.
+> + * The hcall returns H_LONG_BUSY_XX when the flush takes longer time and
+> + * the hcall needs to be issued multiple times in order to be completely
+> + * serviced. The continue-token from the output to be passed in the
+> + * argument list of subsequent hcalls until the hcall is completely serv=
+iced
+> + * at which point H_SUCCESS or other error is returned.
+> + */
+> +static target_ulong h_scm_flush(PowerPCCPU *cpu, SpaprMachineState *spap=
+r,
+> +                                target_ulong opcode, target_ulong *args)
+> +{
+> +    int ret;
+> +    uint32_t drc_index =3D args[0];
+> +    uint64_t continue_token =3D args[1];
+> +    SpaprDrc *drc =3D spapr_drc_by_index(drc_index);
+> +    PCDIMMDevice *dimm;
+> +    HostMemoryBackend *backend =3D NULL;
+> +    SpaprNVDIMMDeviceFlushState *state;
+> +    ThreadPool *pool =3D aio_get_thread_pool(qemu_get_aio_context());
+> +    int fd;
+> +
+> +    if (!drc || !drc->dev ||
+> +        spapr_drc_type(drc) !=3D SPAPR_DR_CONNECTOR_TYPE_PMEM) {
+> +        return H_PARAMETER;
+> +    }
+> +
+> +    if (continue_token !=3D 0) {
+> +        goto get_status;
+
+Ugly goto, just reverse the sense and put the next chunk in the if body.
+
+> +    }
+> +
+> +    dimm =3D PC_DIMM(drc->dev);
+> +    backend =3D MEMORY_BACKEND(dimm->hostmem);
+> +    fd =3D memory_region_get_fd(&backend->mr);
+> +
+> +    if (fd < 0) {
+> +        return H_UNSUPPORTED;
+> +    }
+> +
+> +    state =3D spapr_nvdimm_init_new_flush_state(spapr);
+> +    if (!state) {
+> +        return H_HARDWARE;
+> +    }
+> +
+> +    state->drcidx =3D drc_index;
+> +    state->backend_fd =3D fd;
+> +
+> +    thread_pool_submit_aio(pool, flush_worker_cb, state,
+> +                           spapr_nvdimm_flush_completion_cb, state);
+> +
+> +    continue_token =3D state->continue_token;
+> +
+> +get_status:
+> +    ret =3D spapr_nvdimm_get_flush_status(spapr, continue_token);
+> +    if (H_IS_LONG_BUSY(ret)) {
+> +        args[0] =3D continue_token;
+> +    }
+> +
+> +    return ret;
+> +}
+> +
+>  static target_ulong h_scm_unbind_mem(PowerPCCPU *cpu, SpaprMachineState =
+*spapr,
+>                                       target_ulong opcode, target_ulong *=
+args)
+>  {
+> @@ -523,6 +762,7 @@ static void spapr_scm_register_types(void)
+>      spapr_register_hypercall(H_SCM_UNBIND_MEM, h_scm_unbind_mem);
+>      spapr_register_hypercall(H_SCM_UNBIND_ALL, h_scm_unbind_all);
+>      spapr_register_hypercall(H_SCM_HEALTH, h_scm_health);
+> +    spapr_register_hypercall(H_SCM_FLUSH, h_scm_flush);
+>  }
+> =20
+>  type_init(spapr_scm_register_types)
+> diff --git a/include/hw/ppc/spapr.h b/include/hw/ppc/spapr.h
+> index f05219f75e..1684d72546 100644
+> --- a/include/hw/ppc/spapr.h
+> +++ b/include/hw/ppc/spapr.h
+> @@ -12,10 +12,12 @@
+>  #include "hw/ppc/spapr_xive.h"  /* For SpaprXive */
+>  #include "hw/ppc/xics.h"        /* For ICSState */
+>  #include "hw/ppc/spapr_tpm_proxy.h"
+> +#include "hw/ppc/spapr_nvdimm.h"
+> =20
+>  struct SpaprVioBus;
+>  struct SpaprPhbState;
+>  struct SpaprNvram;
+> +struct SpaprNVDIMMDeviceFlushState;
+> =20
+>  typedef struct SpaprEventLogEntry SpaprEventLogEntry;
+>  typedef struct SpaprEventSource SpaprEventSource;
+> @@ -248,6 +250,11 @@ struct SpaprMachineState {
+>      uint32_t numa_assoc_array[MAX_NODES + NVGPU_MAX_NUM][NUMA_ASSOC_SIZE=
+];
+> =20
+>      Error *fwnmi_migration_blocker;
+> +
+> +    /* nvdimm flush states */
+> +    QLIST_HEAD(, SpaprNVDIMMDeviceFlushState) pending_flush_states;
+> +    QLIST_HEAD(, SpaprNVDIMMDeviceFlushState) completed_flush_states;
+> +
+>  };
+> =20
+>  #define H_SUCCESS         0
+> @@ -328,6 +335,7 @@ struct SpaprMachineState {
+>  #define H_P7              -60
+>  #define H_P8              -61
+>  #define H_P9              -62
+> +#define H_UNSUPPORTED     -67
+>  #define H_OVERLAP         -68
+>  #define H_UNSUPPORTED_FLAG -256
+>  #define H_MULTI_THREADS_ACTIVE -9005
+> @@ -542,8 +550,9 @@ struct SpaprMachineState {
+>  #define H_SCM_UNBIND_MEM        0x3F0
+>  #define H_SCM_UNBIND_ALL        0x3FC
+>  #define H_SCM_HEALTH            0x400
+> +#define H_SCM_FLUSH             0x44C
+> =20
+> -#define MAX_HCALL_OPCODE        H_SCM_HEALTH
+> +#define MAX_HCALL_OPCODE        H_SCM_FLUSH
+> =20
+>  /* The hcalls above are standardized in PAPR and implemented by pHyp
+>   * as well.
+> diff --git a/include/hw/ppc/spapr_nvdimm.h b/include/hw/ppc/spapr_nvdimm.h
+> index 764f999f54..24d8e37b33 100644
+> --- a/include/hw/ppc/spapr_nvdimm.h
+> +++ b/include/hw/ppc/spapr_nvdimm.h
+> @@ -11,6 +11,7 @@
+>  #define HW_SPAPR_NVDIMM_H
+> =20
+>  #include "hw/mem/nvdimm.h"
+> +#include "migration/vmstate.h"
+> =20
+>  typedef struct SpaprDrc SpaprDrc;
+>  typedef struct SpaprMachineState SpaprMachineState;
+> @@ -21,5 +22,17 @@ void spapr_dt_persistent_memory(SpaprMachineState *spa=
+pr, void *fdt);
+>  bool spapr_nvdimm_validate(HotplugHandler *hotplug_dev, NVDIMMDevice *nv=
+dimm,
+>                             uint64_t size, Error **errp);
+>  void spapr_add_nvdimm(DeviceState *dev, uint64_t slot);
+> +void spapr_nvdimm_finish_flushes(SpaprMachineState *spapr);
+> +
+> +typedef struct SpaprNVDIMMDeviceFlushState {
+> +    uint64_t continue_token;
+> +    int64_t hcall_ret;
+> +    int backend_fd;
+> +    uint32_t drcidx;
+> +
+> +    QLIST_ENTRY(SpaprNVDIMMDeviceFlushState) node;
+> +} SpaprNVDIMMDeviceFlushState;
+> +
+> +extern const VMStateDescription vmstate_spapr_nvdimm_states;
+> =20
+>  #endif
+>=20
+>=20
+
+--=20
+David Gibson			| I'll have my music baroque, and my code
+david AT gibson.dropbear.id.au	| minimalist, thank you.  NOT _the_ _other_
+				| _way_ _around_!
+http://www.ozlabs.org/~dgibson
+
+--sEy+QjDdyRzU+2cX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEdfRlhq5hpmzETofcbDjKyiDZs5IFAmFJemwACgkQbDjKyiDZ
+s5Knxw//WE6jBIE93x+IhNaRvLzHF6loWZhwmNb/MV0BISFdfxk1yqO7Kc6PylTL
+QcxLNm1wsvDqSuAMl5tfFfHd2FO9iPQYOl+8Z4apwPH3Wq0/4SO90owCHUWWK4TM
+rZVK5MaBuldWkGcVYQ43Al05HmKZptmyxOzkz1Q9PTvtNFmnKOEXoeYNG3QpBpfZ
+NnRrtCNIyRiaBpW38cdDJigyRaHMuDuiz1d3abpeuukvtN0yvricMybtYz3RorZ3
+Hh//0PTvZdRD3/GwZ7MZYVBZnvUNGXxZ7MEXiTdDlad/42nOgtgzryVFDHVUKrcM
+zzcypZG8kiNh+X/whKDXRMepUmT4CgkN8nXouC9q344YWLW6r8iIIDkAd/AFENy7
+PUwJ8PEMs7ew0+bydl6CrhKjNB26JGpnlYplp6OV21Jy9AsOYv4xFcsoAbU6FdO8
+DWTALzc+TQPBnNZuFT6Z9bjv+E0R2jVPD6pFUn04iSEK8rWHuYxLeAKiQqPF96LC
+38yZD3mTSAG1nSKEvMFhtmloo5FfFSjlZaCDFiC7Buc1oxSuEJlqtew0rTQi1wTl
+BnXWgBuG+ZSn5S4H6wtPcStTnPzoWk2BWwt6/gJ7/Fj7541Ksp7rgjNM/4X88cuF
++bfbH7ezwi3rnQ6vtUNvMunB4ZZR9IwNVudF2dZP35WfuLpSf9A=
+=aMjk
+-----END PGP SIGNATURE-----
+
+--sEy+QjDdyRzU+2cX--
 
