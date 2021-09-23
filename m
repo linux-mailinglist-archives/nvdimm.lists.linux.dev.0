@@ -1,108 +1,189 @@
-Return-Path: <nvdimm+bounces-1389-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1391-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5455F415583
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 04:47:29 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8459941581E
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 08:09:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 60D071C0F21
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 02:47:28 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id AF8A61C0AF3
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 06:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 515573FD4;
-	Thu, 23 Sep 2021 02:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5EC3FCC;
+	Thu, 23 Sep 2021 06:09:34 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5BA3FC8
-	for <nvdimm@lists.linux.dev>; Thu, 23 Sep 2021 02:47:20 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id k23-20020a17090a591700b001976d2db364so3833674pji.2
-        for <nvdimm@lists.linux.dev>; Wed, 22 Sep 2021 19:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=agoq3Fxpf+zW/Ee2I2bgAzZKmWuzEcBcM6Muz18xBqA=;
-        b=nArOwzsUXZXiLe4TziLWZHrpKd/FHn28RSC5txzbzzV63fl08WSYEZJk5Co82LRG5B
-         Od3/IPPQ6Z/J1EOCZDk+ArlrvAQS4I0GbZkqIxZtvILtaZl1vD/+qdjZ+4huB5tDIWJc
-         jDzYkhYFe5ongcQ3TG/5wWuUfcEmG4VtpHRBJp/BvRKamoZUnqauDwpgPq3t7xjETL+t
-         Tn6gclF7CmkQc2CvjxCveFNbleM1amUDpI16LpYb0LiUdE5HvhsNI+ohqhldjBapX8+2
-         nRT4eUFUoQMb3Vrq17ICqZv6+9EnZ+zfqDpWQJxewiTkEL8jHvchW0BA/5oklVfiST1w
-         A2ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=agoq3Fxpf+zW/Ee2I2bgAzZKmWuzEcBcM6Muz18xBqA=;
-        b=vXi/qzBDIm4OgyoHwwo6uZ6VbskBFesGhpa4cFKFbeGwg4Q11gjFTGblIaKfPI6tem
-         FFQBw+mlsXNBFDRrKLpdYNcdbAY+lNJfoOeAWYzD/7/79CRL+p2ORAQIt+N3huiMBT39
-         cuL4doalxY+2uOIJ6xwQug8hLlYRITadGcXC9A2URUNp6hLYzyfGFpZtuahe00cMStMh
-         F6EgqiszSYI/J+UBY6KaadC3O0BGMI1f5Xn6kXSCxWgEPr5TS67r/v30ux4o1Why6nC1
-         QsfSfTIByacmyWRg7CturGzJSk54QkngozC1SAwX9SQHYeRHlWK1tyYnqRjf7sevJjUx
-         xolw==
-X-Gm-Message-State: AOAM5305wEjiAUzqrELa1N/YH21L6O2l8rm370aTBmDSOWT4tvOhCBqu
-	vGH6Dyb6VSaZkJGvK7ZfXYkVcpAJajR97d1IcnnXgw==
-X-Google-Smtp-Source: ABdhPJxHihhVA4u7nhquDosGs4ysGyAjAjUQ2tJKKYjWJpFwQBjiy7jfO5CRdxC27m6u5DJu3irBHSwc4NJg+F940dk=
-X-Received: by 2002:a17:902:bd8d:b0:13a:8c8:a2b2 with SMTP id
- q13-20020a170902bd8d00b0013a08c8a2b2mr2084104pls.89.1632365239539; Wed, 22
- Sep 2021 19:47:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113D92FAE
+	for <nvdimm@lists.linux.dev>; Thu, 23 Sep 2021 06:09:33 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 7E18F222EE;
+	Thu, 23 Sep 2021 05:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1632376774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NeEO+zbxiuOqpxAJH7FNgi1ZW98mHpsyLMzfL6fobho=;
+	b=sXP8wGaAMVb4cyR9F7lk83rI48Jxr6JzYhknER8hdpRbIq0DwRtwjyOFq5qd5ohwJPIOJP
+	0ra1/0D1CqPpxNodb0c9ljHxmBYigutbF9TSdqSgAKs038BW4XebUTx+O3DBtxGNwtH9E8
+	cmITjBdJ5DJTOUIRw9r8qtmV1YJF7Sw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1632376774;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NeEO+zbxiuOqpxAJH7FNgi1ZW98mHpsyLMzfL6fobho=;
+	b=qvdLBS4HAOrQn+LV/Jx9dNZW3HzjxfkBElN7kfxUcfMqX6VYyJZMfs2FLnNt1EKxeIDkKX
+	JrZNpuO3REMZrPAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3DC113DBC;
+	Thu, 23 Sep 2021 05:59:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id 5n2wLsIXTGEqUgAAMHmgww
+	(envelope-from <colyli@suse.de>); Thu, 23 Sep 2021 05:59:30 +0000
+Subject: Too large badblocks sysfs file (was: [PATCH v3 0/7] badblocks
+ improvement for multiple bad block ranges)
+To: linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-raid@vger.kernel.org, nvdimm@lists.linux.dev
+Cc: antlists@youngman.org.uk, Dan Williams <dan.j.williams@intel.com>,
+ Hannes Reinecke <hare@suse.de>, Jens Axboe <axboe@kernel.dk>,
+ NeilBrown <neilb@suse.de>, Richard Fan <richard.fan@suse.com>,
+ Vishal L Verma <vishal.l.verma@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rafael@kernel.org
+References: <20210913163643.10233-1-colyli@suse.de>
+From: Coly Li <colyli@suse.de>
+Message-ID: <a0f7b021-4816-6785-a9a4-507464b55895@suse.de>
+Date: Thu, 23 Sep 2021 13:59:28 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210923010915.GQ570615@magnolia>
-In-Reply-To: <20210923010915.GQ570615@magnolia>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Wed, 22 Sep 2021 19:47:08 -0700
-Message-ID: <CAPcyv4i5xYHFkW55eGi8L6mfoPwuMhcH3eFhDTAqzrTNvwTt4A@mail.gmail.com>
-Subject: Re: [PATCH] dax: remove silly single-page limitation in dax_zero_page_range
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Mike Snitzer <snitzer@redhat.com>, 
-	Matthew Wilcox <willy@infradead.org>, linux-xfs <linux-xfs@vger.kernel.org>, 
-	Linux NVDIMM <nvdimm@lists.linux.dev>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	linux-ext4 <linux-ext4@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210913163643.10233-1-colyli@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
-On Wed, Sep 22, 2021 at 6:09 PM Darrick J. Wong <djwong@kernel.org> wrote:
+Hi all the kernel gurus, and folks in mailing lists,
+
+This is a question about exporting 4KB+ text information via sysfs 
+interface. I need advice on how to handle the problem.
+
+Recently I work on the bad blocks API (block/badblocks.c) improvement, 
+there is a sysfs file to export the bad block ranges for me raid. E.g 
+for a md raid1 device, file
+     /sys/block/md0/md/rd0/bad_blocks
+may contain the following text content,
+     64 32
+    128 8
+The above lines mean there are two bad block ranges, one starts at LBA 
+64, length 32 sectors, another one starts at LBA 128 and length 8 
+sectors. All the content is generated from the internal bad block 
+records with 512 elements. In my testing the worst case only 185 from 
+512 records can be displayed via the sysfs file if the LBA string is 
+very long, e.g.the following content,
+   17668164135030776 512
+   17668164135029776 512
+   17668164135028776 512
+   17668164135027776 512
+   ... ...
+The bad block ranges stored in internal bad blocks array are correct, 
+but the output message is truncated. This is the problem I encountered.
+
+I don't see sysfs has seq_file support (correct me if I am wrong), and I 
+know it is improper to transfer 4KB+ text via sysfs interface, but the 
+code is here already for long time.
+
+There are 2 ideas to fix showing up in my brain,
+1) Do not fix the problem
+     Normally it is rare that a storage media has 100+ bad block ranges, 
+maybe in real world all the existing bad blocks information won't exceed 
+the page size limitation of sysfs file.
+2) Add seq_file support to sysfs interface if there is no
+
+It is probably there is other better solution to fix. So I do want to 
+get hint/advice from you.
+
+Thanks in advance for any comment :-)
+
+Coly Li
+
+On 9/14/21 12:36 AM, Coly Li wrote:
+> This is the second effort to improve badblocks code APIs to handle
+> multiple ranges in bad block table.
 >
-> From: Darrick J. Wong <djwong@kernel.org>
+> There are 2 changes from previous version,
+> - Fixes 2 bugs in front_overwrite() which are detected by the user
+>    space testing code.
+> - Provide the user space testing code in last patch.
 >
-> It's totally silly that the dax zero_page_range implementations are
-> required to accept a page count, but one of the four implementations
-> silently ignores the page count and the wrapper itself errors out if you
-> try to do more than one page.
+> There is NO in-memory or on-disk format change in the whole series, all
+> existing API and data structures are consistent. This series just only
+> improve the code algorithm to handle more corner cases, the interfaces
+> are same and consistency to all existing callers (md raid and nvdimm
+> drivers).
 >
-> Fix the nvdimm implementation to loop over the page count and remove the
-> artificial limitation.
+> The original motivation of the change is from the requirement from our
+> customer, that current badblocks routines don't handle multiple ranges.
+> For example if the bad block setting range covers multiple ranges from
+> bad block table, only the first two bad block ranges merged and rested
+> ranges are intact. The expected behavior should be all the covered
+> ranges to be handled.
 >
-> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+> All the patches are tested by modified user space code and the code
+> logic works as expected. The modified user space testing code is
+> provided in last patch. The testing code detects 2 defects in helper
+> front_overwrite() and fixed in this version.
+>
+> The whole change is divided into 6 patches to make the code review more
+> clear and easier. If people prefer, I'd like to post a single large
+> patch finally after the code review accomplished.
+>
+> This version is seriously tested, and so far no more defect observed.
+>
+>
+> Coly Li
+>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: NeilBrown <neilb@suse.de>
+> Cc: Richard Fan <richard.fan@suse.com>
+> Cc: Vishal L Verma <vishal.l.verma@intel.com>
 > ---
->  drivers/dax/super.c   |    7 -------
->  drivers/nvdimm/pmem.c |   14 +++++++++++---
->  2 files changed, 11 insertions(+), 10 deletions(-)
+> Changelog:
+> v3: add tester Richard Fan <richard.fan@suse.com>
+> v2: the improved version, and with testing code.
+> v1: the first completed version.
 >
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index fc89e91beea7..ca61a01f9ccd 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -353,13 +353,6 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
->  {
->         if (!dax_alive(dax_dev))
->                 return -ENXIO;
-> -       /*
-> -        * There are no callers that want to zero more than one page as of now.
-> -        * Once users are there, this check can be removed after the
-> -        * device mapper code has been updated to split ranges across targets.
-> -        */
+>
+> Coly Li (6):
+>    badblocks: add more helper structure and routines in badblocks.h
+>    badblocks: add helper routines for badblock ranges handling
+>    badblocks: improvement badblocks_set() for multiple ranges handling
+>    badblocks: improve badblocks_clear() for multiple ranges handling
+>    badblocks: improve badblocks_check() for multiple ranges handling
+>    badblocks: switch to the improved badblock handling code
+> Coly Li (1):
+>    test: user space code to test badblocks APIs
+>
+>   block/badblocks.c         | 1599 ++++++++++++++++++++++++++++++-------
+>   include/linux/badblocks.h |   32 +
+>   2 files changed, 1340 insertions(+), 291 deletions(-)
+>
 
-It's device-mapper that's the issue, you need to make sure that every
-device-mapper zero_page_range implementation knows how to route a
-multi-page operation. This is part of the motivation to drop that
-support and move simple concatenation and striping into the PMEM
-driver directly.
 
