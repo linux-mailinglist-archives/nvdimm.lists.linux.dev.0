@@ -1,92 +1,159 @@
-Return-Path: <nvdimm+bounces-1403-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1406-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C84D41679F
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 23:42:32 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B934174DC
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 24 Sep 2021 15:11:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 0386B1C0F2E
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Sep 2021 21:42:31 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 691E71C0F3E
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 24 Sep 2021 13:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAEE82F80;
-	Thu, 23 Sep 2021 21:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7922FB3;
+	Fri, 24 Sep 2021 13:11:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D267872
-	for <nvdimm@lists.linux.dev>; Thu, 23 Sep 2021 21:42:22 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id s16so7007664pfk.0
-        for <nvdimm@lists.linux.dev>; Thu, 23 Sep 2021 14:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eyYDxmDuTKY2lFXVhVB2ELOLfNUN9k8MQqqdBbe1fsU=;
-        b=KCn+RIus6IoAP1X8IGB5+QqORKUYHiZhLK/h15vdz7nwgfVVFdnDeTUS6x5EfXNqEL
-         vHkl1lsNcWgI2Al+3tUFeWxzv41dExhFvYTSHffU7w2mJqYg/X4iTVmV0gzEv6VATSbN
-         GyrOI1pXzxSYSJQ2Su61Cky0Czb2vOefxnUSphokfU44py09/SjUTaxnIYLh7Be5ditG
-         13BEmHxxYJ41ceEGMeAmeMf8/NrNBgazCyMlEf22xgNKPlhHw9XSI4GKbwvwi0qv0ovI
-         KwZVg7eF6TaIoezX825StnyoRzKkWaAdbc7zT1oe51mmpWNq0/cltBhb4i62RbDpm+SV
-         N0pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eyYDxmDuTKY2lFXVhVB2ELOLfNUN9k8MQqqdBbe1fsU=;
-        b=Ec/Li68CvG0K7E/E7yubgEBS4vV7h8MErkY4BcF7OP/8pk2A6oc3hy8kPsK+JVwnW0
-         RMHdyk0HbrJZ59pUFM6uRPJ0iaaKbZuDsetTEAq9zqZn7M+CZR8lcZ16yUOz1GHPPfpx
-         6mSo2KHFIfQF0HKk7nm/K/FEjGhB2IX5FVltv5XvbOXzLV2MkyuA8e4vxVhJwBJE+tgB
-         rMgku4F1bmgAWAUwAbE0Yzo1uedcrVtLfdxpLWAK7aKCLEOR5vVDqfqT16D4VkdYuw9u
-         sUYQFmz0sJmlM1LWwxyQBmvBDTMQ7vHHF0soO2EDX9TI5YL9RZ3ItXI8t8AyGEoLvmCp
-         uOAA==
-X-Gm-Message-State: AOAM532W5h1ma5I2gMMNoiuC4jl7q5Hy+wqey7adpz7G+c7hFDMvOhCP
-	n3WMffQ8Cy4gjxVBsvnIULVwzvdE9DDRmTM3nP7EFg==
-X-Google-Smtp-Source: ABdhPJxkWk0rZvWEVajRy7qi3gMohR9kiAbp/zbww61b9hU8jzVgph1himNBBtHY9AvwIfwrqHDuZ1oo/UvxAInWtm8=
-X-Received: by 2002:a62:7f87:0:b0:444:b077:51ef with SMTP id
- a129-20020a627f87000000b00444b07751efmr6537475pfd.61.1632433342168; Thu, 23
- Sep 2021 14:42:22 -0700 (PDT)
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85B572
+	for <nvdimm@lists.linux.dev>; Fri, 24 Sep 2021 13:11:16 +0000 (UTC)
+IronPort-Data: =?us-ascii?q?A9a23=3AolVQ0qz4hX4Tw8pDpAN6t+dcxyrEfRIJ4+MujC/?=
+ =?us-ascii?q?XYbTApD0k1zADmmcbXjiEOfneajbyfYp0Odmy8BtSscfUn9ZhHQtv/xmBbVoQ9?=
+ =?us-ascii?q?5OdWo7xwmQcns+qBpSaChohtq3yU/GYRCwPZiKa9krF3oTJ9yEmjPnZHOakUYY?=
+ =?us-ascii?q?oBwgqLeNaYHZ44f5cs75h6mJYqYDR7zKl4bsekeWGULOW82Ic3lYv1k62gEgHU?=
+ =?us-ascii?q?MIeF98vlgdWifhj5DcynpSOZX4VDfnZw3DQGuG4EgMmLtsvwo1V/kuBl/ssIti?=
+ =?us-ascii?q?j1LjmcEwWWaOUNg+L4pZUc/H6xEEc+WppieBmXBYfQR4/ZzGhhc14zs5c85K2U?=
+ =?us-ascii?q?hsBMLDOmfgGTl9TFCQW0ahuoeabcCHg7ZfKp6HBWz62qxl0N2k6NJMZ9s55G2Z?=
+ =?us-ascii?q?L8uYSKSxLZReG78q2y7KTS+9inM0vIcDneoQFtRlIwTjfS/RgXpHHR6TD4MRw3?=
+ =?us-ascii?q?TEsi8QIFvHbD+IVayVoahvoYBBVPFoTTpUkk4+Agnj5bi0drVe9prQ+6GuVyxZ?=
+ =?us-ascii?q?+uJDrLtbUf9miQcROgl3eomPA4nS/DhwEXPSdwDyItHmsm8fIhyrwXI9UH7q9n?=
+ =?us-ascii?q?tZugVuO1ikdExEbS1a/iee2h1T4WN9FLUEQvC00osAa8E2tU8m4XBCipnOAlgA?=
+ =?us-ascii?q?TVsAWEOAg7gyJjK3O7G6xAmkCUy4EeNI9nNE5SCZs1VKTmd7tQzt1v9Wopdi1n?=
+ =?us-ascii?q?luPhWrqf3FLcilZPmlZJTbpKuLL+Okb5i8jhP45eEJtsuDIJA=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AaPMaSq/yNYeb73tciMBuk+DkI+orL9Y04lQ7?=
+ =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
+ =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.85,319,1624291200"; 
+   d="scan'208";a="114917431"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 24 Sep 2021 21:10:06 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+	by cn.fujitsu.com (Postfix) with ESMTP id 4DEFC4D0DC77;
+	Fri, 24 Sep 2021 21:10:02 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 24 Sep 2021 21:10:03 +0800
+Received: from irides.mr.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 24 Sep 2021 21:10:00 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>
+CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
+	<hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [PATCH v7 0/8] [PATCH v7 0/8] fsdax: introduce fs query to support reflink
+Date: Fri, 24 Sep 2021 21:09:51 +0800
+Message-ID: <20210924130959.2695749-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20210914233132.3680546-1-jane.chu@oracle.com> <CAPcyv4h3KpOKgy_Cwi5fNBZmR=n1hB33mVzA3fqOY7c3G+GrMA@mail.gmail.com>
- <516ecedc-38b9-1ae3-a784-289a30e5f6df@oracle.com> <20210915161510.GA34830@magnolia>
- <324444b0-6121-d14c-a59f-7689bb206f58@oracle.com>
-In-Reply-To: <324444b0-6121-d14c-a59f-7689bb206f58@oracle.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Thu, 23 Sep 2021 14:42:10 -0700
-Message-ID: <CAPcyv4j8ro5rQKwbwknH+KTcc_8pGDsL8QwmJyi8fDUZE+G8JA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] dax: clear poison on the fly along pwrite
-To: Jane Chu <jane.chu@oracle.com>
-Cc: "Darrick J. Wong" <djwong@kernel.org>, Vishal L Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, "Weiny, Ira" <ira.weiny@intel.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: 4DEFC4D0DC77.A232F
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-On Thu, Sep 23, 2021 at 1:56 PM Jane Chu <jane.chu@oracle.com> wrote:
-[..]
-> > This (AFAICT) has already been done for dax_zero_page_range, so I sense
-> > that Dan is trying to save you a bunch of code plumbing work by nudging
-> > you towards doing s/dax_clear_poison/dax_zero_page_range/ to this series
-> > and then you only need patches 2-3.
->
-> Thanks Darrick for the explanation!
-> I don't mind to add DM layer support, it sounds straight forward.
-> I also like your latest patch and am wondering if the clear_poison API
-> is still of value.
+This patchset is aimed to support shared pages tracking for fsdax.
 
-No, the discussion about fallocate(...ZEROINIT...) has lead to a
-better solution. Instead of making error clearing a silent /
-opportunistic side-effect of writes, or trying to define new fallocate
-mode, just add a new RWF_CLEAR_HWERROR flag to pwritev2(). This allows
-for dax_direct_access() to map the page regardless of poison and
-trigger pmem_copy_from_iter() to precisely handle sub-page poison.
+Changes from [V6 RESEND]:
+  - Move ->memory_failure() into the patch who implements it
+  - Change the parameter of ->memory_failure():
+      unsigned long nr_pfns -> size_t size
+  - Remove changes(2 patches) for mapped device
+  - Add some necessary comments for functions or interfaces
+  - P1: Make a pre-patch for changes for dax_{read,write}_lock()
+  - P2: Change the parameter of ->notify_failure():
+      void *data -> int flags
+  - P3: keep the original dax_lock_page() logic
+  - P5: Rewrite the lock function for file's mapping and index:
+      dax_lock_mapping_entry()
+  - P6: use the new dax_lock_mapping_entry() to lock dax entry, and add
+      size parameter to handle a range of failure
+  - P7: add a cross range calculation between memory_failure range and
+      founded extent range
+  - Rebased to v5.15-rc1
+
+This patchset moves owner tracking from dax_assocaite_entry() to pmem
+device driver, by introducing an interface ->memory_failure() for struct
+pagemap.  This interface is called by memory_failure() in mm, and
+implemented by pmem device.
+
+Then call holder operations to find the filesystem which the corrupted
+data located in, and call filesystem handler to track files or metadata
+associated with this page.
+
+Finally we are able to try to fix the corrupted data in filesystem and
+do other necessary processing, such as killing processes who are using
+the files affected.
+
+The call trace is like this:
+memory_failure()
+|* fsdax case
+|------------
+|pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+| dax_holder_notify_failure()      =>
+|  dax_device->holder_ops->notify_failure() =>
+|                                     - xfs_dax_notify_failure()
+|  |* xfs_dax_notify_failure()
+|  |--------------------------
+|  |   xfs_rmap_query_range()
+|  |    xfs_dax_notify_failure_fn()
+|  |    * corrupted on metadata
+|  |       try to recover data, call xfs_force_shutdown()
+|  |    * corrupted on file data
+|  |       try to recover data, call mf_dax_kill_procs()
+|* normal case
+|-------------
+ mf_generic_kill_procs()
+
+The fsdax & reflink support for XFS is not contained in this patchset.
+
+(Rebased on v5.15-rc1)
+==
+
+Shiyang Ruan (8):
+  dax: Use rwsem for dax_{read,write}_lock()
+  dax: Introduce holder for dax_device
+  mm: factor helpers for memory_failure_dev_pagemap
+  pagemap,pmem: Introduce ->memory_failure()
+  fsdax: Introduce dax_lock_mapping_entry()
+  mm: Introduce mf_dax_kill_procs() for fsdax case
+  xfs: Implement ->notify_failure() for XFS
+  fsdax: add exception for reflinked files
+
+ drivers/dax/device.c       |  11 +-
+ drivers/dax/super.c        | 121 +++++++++++++++++---
+ drivers/md/dm-writecache.c |   7 +-
+ drivers/nvdimm/pmem.c      |  11 ++
+ fs/dax.c                   | 115 ++++++++++++++-----
+ fs/xfs/xfs_fsops.c         |   3 +
+ fs/xfs/xfs_mount.h         |   1 +
+ fs/xfs/xfs_super.c         | 188 +++++++++++++++++++++++++++++++
+ include/linux/dax.h        |  80 ++++++++++++-
+ include/linux/memremap.h   |   9 ++
+ include/linux/mm.h         |   2 +
+ mm/memory-failure.c        | 225 ++++++++++++++++++++++++++-----------
+ 12 files changed, 643 insertions(+), 130 deletions(-)
+
+-- 
+2.33.0
+
+
+
 
