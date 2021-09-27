@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1426-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1428-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id D693841A1E9
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 00:01:16 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FF9541A1F1
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 00:01:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 17CBB1C0A4B
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 22:01:16 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1908C3E0F63
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 22:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2724D2B83;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961BB2B89;
 	Mon, 27 Sep 2021 22:00:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EC03FF9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174C43FED
 	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 22:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=hYL8LO+ietZVLiEWE2oEBW5mwRVdCiTP81FH5yaWaJI=; b=1BIITuUWUphtncAHlR3onSNJxl
-	M6CmnasxwYUC18J5dAsyxcU45RRwAvsUth2gvXvlZCPWdpLhxADiTdWmmJnwp3Uk6w06QS7PX+wFY
-	xppaHnOXRVB6MSKkNlcAfcp3c19hINrak2wAZGn+6pA7bP0hbBcVLP+ysEnGBFB8hzMRoaOxh9d8N
-	EmHK04hOyMeu/LPfTOWs+mRlcoafAuyFpBBN3nOB+ukUTwMoJKSfcf/9HcGCwOOXot+mH5FL/B6ke
-	PyL9SssBEH7fnKGJu6Uq+ETgRscCbWtIhSkBzmnno/dRwxrZeb5mjc5Tr1f/Pm86EFqDvRow06OXL
-	BrqrshjA==;
+	bh=7F58wxD/dEQonKrzNoWM7DkNk/UH9ZF8NZLJCFZZJo4=; b=ZnlFI8fLEZC+pXL09OaLsKjdn8
+	sG2hdDcnkdd7ZQAAOmWguGc7OnVMevoBr9Iei6cSMyXAQixEc8APBeN/A8M4gCqUCYojYyBiRia7O
+	7wDEec/aFp7xuN5F775zNLNzsTp/rSR3Ay3VTbK1PNHfZokfRNvqNAX9BvqfJMUKuSdi3rm3MuWeX
+	L6a8Q4FjRtkn9UeJ4Lhp3Lt/jbaePXbm+u8tO6lhIOBWl8Zvgdk3hjBymTruCXrQy+1R0u429f+a4
+	B0bkzO9hXCn6QDiaV77uGrK+Hfqt+kENvWzGuFAfXSbunwOgQu1cHy4uiqeb5kU5vGXxTPlHBSNa9
+	7+WGTsLw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mUyfw-004Sue-Cr; Mon, 27 Sep 2021 22:00:40 +0000
+	id 1mUyfw-004Suk-EY; Mon, 27 Sep 2021 22:00:40 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	colyli@suse.de,
@@ -55,9 +55,9 @@ Cc: xen-devel@lists.xenproject.org,
 	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v2 02/10] bcache: add error handling support for add_disk()
-Date: Mon, 27 Sep 2021 15:00:31 -0700
-Message-Id: <20210927220039.1064193-3-mcgrof@kernel.org>
+Subject: [PATCH v2 03/10] nvme-multipath: add error handling support for add_disk()
+Date: Mon, 27 Sep 2021 15:00:32 -0700
+Message-Id: <20210927220039.1064193-4-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210927220039.1064193-1-mcgrof@kernel.org>
 References: <20210927220039.1064193-1-mcgrof@kernel.org>
@@ -74,69 +74,49 @@ We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
 error handling.
 
-This driver doesn't do any unwinding with blk_cleanup_disk()
-even on errors after add_disk() and so we follow that
-tradition.
+Since we now can tell for sure when a disk was added, move
+setting the bit NVME_NSHEAD_DISK_LIVE only when we did
+add the disk successfully.
 
-Acked-by: Coly Li <colyli@suse.de>
+Nothing to do here as the cleanup is done elsewhere. We take
+care and use test_and_set_bit() because it is protects against
+two nvme paths simultaneously calling device_add_disk() on the
+same namespace head.
+
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/md/bcache/super.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/nvme/host/multipath.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-index f2874c77ff79..f0c32cdd6594 100644
---- a/drivers/md/bcache/super.c
-+++ b/drivers/md/bcache/super.c
-@@ -1082,7 +1082,9 @@ int bch_cached_dev_run(struct cached_dev *dc)
- 		closure_sync(&cl);
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index e8ccdd398f78..35cace4f3f5f 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -496,13 +496,22 @@ int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *head)
+ static void nvme_mpath_set_live(struct nvme_ns *ns)
+ {
+ 	struct nvme_ns_head *head = ns->head;
++	int rc;
+ 
+ 	if (!head->disk)
+ 		return;
+ 
++	/*
++	 * test_and_set_bit() is used because it is protecting against two nvme
++	 * paths simultaneously calling device_add_disk() on the same namespace
++	 * head.
++	 */
+ 	if (!test_and_set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags)) {
+-		device_add_disk(&head->subsys->dev, head->disk,
+-				nvme_ns_id_attr_groups);
++		rc = device_add_disk(&head->subsys->dev, head->disk,
++				     nvme_ns_id_attr_groups);
++		if (rc)
++			return;
++		set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags);
+ 		nvme_add_ns_head_cdev(head);
  	}
  
--	add_disk(d->disk);
-+	ret = add_disk(d->disk);
-+	if (ret)
-+		goto out;
- 	bd_link_disk_holder(dc->bdev, dc->disk.disk);
- 	/*
- 	 * won't show up in the uevent file, use udevadm monitor -e instead
-@@ -1534,10 +1536,11 @@ static void flash_dev_flush(struct closure *cl)
- 
- static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
- {
-+	int err = -ENOMEM;
- 	struct bcache_device *d = kzalloc(sizeof(struct bcache_device),
- 					  GFP_KERNEL);
- 	if (!d)
--		return -ENOMEM;
-+		goto err_ret;
- 
- 	closure_init(&d->cl, NULL);
- 	set_closure_fn(&d->cl, flash_dev_flush, system_wq);
-@@ -1551,9 +1554,12 @@ static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
- 	bcache_device_attach(d, c, u - c->uuids);
- 	bch_sectors_dirty_init(d);
- 	bch_flash_dev_request_init(d);
--	add_disk(d->disk);
-+	err = add_disk(d->disk);
-+	if (err)
-+		goto err;
- 
--	if (kobject_add(&d->kobj, &disk_to_dev(d->disk)->kobj, "bcache"))
-+	err = kobject_add(&d->kobj, &disk_to_dev(d->disk)->kobj, "bcache");
-+	if (err)
- 		goto err;
- 
- 	bcache_device_link(d, c, "volume");
-@@ -1567,7 +1573,8 @@ static int flash_dev_run(struct cache_set *c, struct uuid_entry *u)
- 	return 0;
- err:
- 	kobject_put(&d->kobj);
--	return -ENOMEM;
-+err_ret:
-+	return err;
- }
- 
- static int flash_devs_run(struct cache_set *c)
 -- 
 2.30.2
 
