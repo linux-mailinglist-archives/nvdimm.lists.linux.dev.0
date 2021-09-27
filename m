@@ -1,126 +1,125 @@
-Return-Path: <nvdimm+bounces-1404-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1413-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776064174D8
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 24 Sep 2021 15:10:49 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F445418EFB
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 08:18:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1DC953E0F91
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 24 Sep 2021 13:10:45 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1877F1C0A47
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 06:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACB72FB3;
-	Fri, 24 Sep 2021 13:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F7D3FD3;
+	Mon, 27 Sep 2021 06:17:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F334B72
-	for <nvdimm@lists.linux.dev>; Fri, 24 Sep 2021 13:10:36 +0000 (UTC)
-IronPort-Data: =?us-ascii?q?A9a23=3A/voK/a2bxVwiSZGbpfbD5bhwkn2cJEfYwER7XOP?=
- =?us-ascii?q?LsXnJ1jJxgTEOnGFNDDjQbPfeYmKkKdF0advl8RgGusfRmIc2QQE+nZ1PZygU8?=
- =?us-ascii?q?JKaX7x1DatR0xu6d5SFFAQ+hyknQoGowPscEzmM+39BDpC79SMljfDSGuKlYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5S31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFAdX?=
- =?us-ascii?q?jnKv5c1ERX/jZOg3mZnh+AvDk20Yd4HdplPtT2Pk0MC+7jx2Tgtl308QLu5qrV?=
- =?us-ascii?q?S8nI6/NhP8AFRJfFkmSOIUfoeOWeCfj75T7I0ruNiGEL+9VJE0/I4wU0uhtBmR?=
- =?us-ascii?q?J7/YZNHYGaRXrr+K9wJq6TOd2j8guJcWtO5kQ0llsxDefD7A5QJTHQqzP/vdZ2?=
- =?us-ascii?q?is9goZFGvO2T8Ybdj1pYzzDbgdJN1NRD4gx9M+sh3/iY3hdrXqWu6M84C7U1gM?=
- =?us-ascii?q?Z+L7zPNvQf/SORN5JhQCcp2Tb7yL1Dw9yHN6WzzfD+XKxrujVlCj/VcQZE7jQ3?=
- =?us-ascii?q?vprhkCDg2IIBBAIWF+Tv/a0kAi9VshZJkhS/TAhxYA29Uq2Xpz+Uge+rXqsoBE?=
- =?us-ascii?q?RQZxTHvc85QXLzbDbiy6dB24ZXntRZscOqsA7X3op20WPktevAiZg2IB541r1G?=
- =?us-ascii?q?qy89Gv0YHZKazRZI3JscOfM2PG7yKlbs/4FZowL/HaJs+DI?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AaIlSO69HK9edoMdmVB5uk+A+I+orL9Y04lQ7?=
- =?us-ascii?q?vn2YSXRuE/Bw8Pre5cjztCWE8Ar5N0tQ+uxoVJPufZqYz+8Q3WBzB8bFYOCFgh?=
- =?us-ascii?q?rLEGgK1+KLqFeMdxEWtNQtspuIGJIfNDSfNzZHZL7BkWyF+sgbsaW62ZHtleHD?=
- =?us-ascii?q?1G1sUA0vT6lh6j1yAgGdHlYefng9ObMJUIqb+tFcpyetPVAebsGADHEDWOTZ4/?=
- =?us-ascii?q?LRkpaOW296OzcXrBmJkSiz6KP3VzyR3hIlWTtJxrs4tUjp+jaJnZmejw=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.85,319,1624291200"; 
-   d="scan'208";a="114917460"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 24 Sep 2021 21:10:36 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-	by cn.fujitsu.com (Postfix) with ESMTP id E286D4CE84EF;
-	Fri, 24 Sep 2021 21:10:31 +0800 (CST)
-Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 24 Sep 2021 21:10:33 +0800
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 24 Sep 2021 21:10:32 +0800
-Received: from irides.mr.mr.mr (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 24 Sep 2021 21:10:30 +0800
-From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-	<linux-fsdevel@vger.kernel.org>
-CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
-	<hch@infradead.org>, <jane.chu@oracle.com>
-Subject: [PATCH v7 8/8] fsdax: add exception for reflinked files
-Date: Fri, 24 Sep 2021 21:09:59 +0800
-Message-ID: <20210924130959.2695749-9-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210924130959.2695749-1-ruansy.fnst@fujitsu.com>
-References: <20210924130959.2695749-1-ruansy.fnst@fujitsu.com>
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C463FC8
+	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 06:17:56 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id y186so5441712pgd.0
+        for <nvdimm@lists.linux.dev>; Sun, 26 Sep 2021 23:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=g91KILktNNUUVd+3f2/+5R/t9sdil7VmAXnlMm2l/Uk=;
+        b=cU/6nkNYI11cbtPYfVnt/peEIfif6j3XjmI2Kgwk4eMq+hej3uVoe4GKGvU+/qkKTi
+         RlZtoqdbgsnxfSbJc4tt8lRqEGh/X/msstOW6lc2Xg8qBn7+Uxk4qy4xmn8m0VyJY+5F
+         pZzLoNzDbpDCgsfLOrX1YwR39LKQ2ejkS/dbZkEp6uyxfxSAXuOPswhkf6sx7MLhP3Bq
+         dZl7cUS73Z4Y+CmVaWTX8E/93iM97e1q8f9LTjcPTfQz9hXILUKmnPrMGpdWrRqgWRb9
+         a37XDfLPNQgA0uS06As+AwyYCDNOfAXkfpC+PabnCKR13EAGc4cnxiDLAS+ELU6/HpYh
+         FeKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=g91KILktNNUUVd+3f2/+5R/t9sdil7VmAXnlMm2l/Uk=;
+        b=43c3VK+9BSVdRnYKSRgc61pRiiGsF+2qm8LlDt5S5jFnS+Uu3NtEqAE7Zg0v+PnwSO
+         4yfBPxPImi0xe0Muj8YPy5rcuNrvkMLCiJRprbMkJzmGS7psnDxLB/AL+7A/TE5uDSYU
+         DagOE0GX98svjq6J8SKqfd8UG5JCL2mbCMLp/be+2zssiP5NX165AjM6K8WxDErVRwb3
+         oVlAd1tXrb0zEw6lF0WGkgMxY1WkyLm6tVG8sNjdo8xSNmMU3GGG6p6oQMIMqNd77yDs
+         YWWU67M9U+BdQ1eO2IH6SwwqTlVKPXIDERRtvDRXE4SmP1Dt1iFdtmZxINTLV5CwB4W+
+         pNwA==
+X-Gm-Message-State: AOAM5332UD0jWv4YB1Z0ErchWS5NByo37BId8CeQc579l3g9V52YSuEy
+	kbq6EX6tbOrokNQAGUzYYnQvej6AjCg=
+X-Google-Smtp-Source: ABdhPJwgv5NnKIJyTTHA+WwVFZB+1HaZ+GOn5h0C3czcvXOQNEIzzWaMr2sxDgkhjj1efY6n9KVNNg==
+X-Received: by 2002:a63:cf10:: with SMTP id j16mr15155863pgg.257.1632723475832;
+        Sun, 26 Sep 2021 23:17:55 -0700 (PDT)
+Received: from xzhoux.usersys.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id n22sm17552019pgc.55.2021.09.26.23.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Sep 2021 23:17:55 -0700 (PDT)
+Date: Mon, 27 Sep 2021 14:17:47 +0800
+From: Murphy Zhou <jencce.kernel@gmail.com>
+To: nvdimm@lists.linux.dev, hch@lst.de
+Cc: linux-fsdevel@vger.kernel.org
+Subject: [regression] fs dax xfstests panic
+Message-ID: <20210927061747.rijhtovxafsot32z@xzhoux.usersys.redhat.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-yoursite-MailScanner-ID: E286D4CE84EF.A4154
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-For reflinked files, one dax page may be associated more than once with
-different fime mapping and index.  It will report warning.  Now, since
-we have introduced dax-RMAP for this case and also have to keep its
-functionality for other filesystems who are not support rmap, I add this
-exception here.
+Hi folks,
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
----
- fs/dax.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Since this commit:
 
-diff --git a/fs/dax.c b/fs/dax.c
-index 2536c105ec7f..1a57211b1bc9 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -352,9 +352,10 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
- 	for_each_mapped_pfn(entry, pfn) {
- 		struct page *page = pfn_to_page(pfn);
- 
--		WARN_ON_ONCE(page->mapping);
--		page->mapping = mapping;
--		page->index = index + i++;
-+		if (!page->mapping) {
-+			page->mapping = mapping;
-+			page->index = index + i++;
-+		}
- 	}
- }
- 
-@@ -370,9 +371,10 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
- 		struct page *page = pfn_to_page(pfn);
- 
- 		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
--		WARN_ON_ONCE(page->mapping && page->mapping != mapping);
--		page->mapping = NULL;
--		page->index = 0;
-+		if (page->mapping == mapping) {
-+			page->mapping = NULL;
-+			page->index = 0;
-+		}
- 	}
- }
- 
--- 
-2.33.0
+commit edb0872f44ec9976ea6d052cb4b93cd2d23ac2ba
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Mon Aug 9 16:17:43 2021 +0200
+
+    block: move the bdi from the request_queue to the gendisk
 
 
+Looping xfstests generic/108 or xfs/279 on mountpoints with fsdax
+enabled can lead to panic like this:
 
+[  373.882656] BUG: kernel NULL pointer dereference, address: 0000000000000300 
+[  373.893342] #PF: supervisor read access in kernel mode 
+[  373.899082] #PF: error_code(0x0000) - not-present page 
+[  373.904820] PGD 0 P4D 0  
+[  373.907647] Oops: 0000 [#1] SMP PTI 
+[  373.911542] CPU: 5 PID: 0 Comm: swapper/5 Kdump: loaded Tainted: G          I       5.14.0-rc4+ #1 
+[  373.921544] Hardware name: Lenovo ThinkSystem SR630 -[7X02CTO1WW]-/-[7X02CTO1WW]-, BIOS -[IVE116S-1.20]- 02/08/2018 
+[  373.933193] RIP: 0010:wb_timer_fn+0x3a/0x3c0 
+[  373.937966] Code: 60 4c 8b 67 50 8b 9d 98 00 00 00 8b 95 b8 00 00 00 8b 85 d8 00 00 00 4c 8b 6d 28 01 d3 01 c3 48 8b 45 60 48 8b 80 90 00 00 00 <48> 8b 80 00 03 00 00 4c 8b b0 98 00 00 00 4d 85 ed 0f 84 ca 00 00 
+[  373.958915] RSP: 0018:ffffaa0f465e4eb0 EFLAGS: 00010246 
+[  373.964748] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000020 
+[  373.972712] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff937c41649500 
+[  373.980676] RBP: ffff937bf0f38400 R08: 0000000000000020 R09: 0000000000000000 
+[  373.988641] R10: 0000000000000020 R11: 000000000000003d R12: ffff937d2bbf0d20 
+[  373.996606] R13: 0000000000000000 R14: 0000000000000000 R15: ffff937f2f55c0c0 
+[  374.004570] FS:  0000000000000000(0000) GS:ffff937f2f540000(0000) knlGS:0000000000000000 
+[  374.013602] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033 
+[  374.020015] CR2: 0000000000000300 CR3: 0000000c14c10003 CR4: 00000000007706e0 
+[  374.027981] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000 
+[  374.035944] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400 
+[  374.043907] PKRU: 55555554 
+[  374.046927] Call Trace: 
+[  374.049657]  <IRQ> 
+[  374.051902]  ? blk_stat_free_callback_rcu+0x30/0x30 
+[  374.057350]  call_timer_fn+0x26/0xf0 
+[  374.061344]  __run_timers.part.0+0x1c0/0x220 
+[  374.066112]  ? __hrtimer_run_queues+0x136/0x270 
+[  374.071169]  ? recalibrate_cpu_khz+0x10/0x10 
+[  374.075940]  ? ktime_get+0x38/0x90 
+[  374.079737]  run_timer_softirq+0x26/0x50 
+[  374.084106]  __do_softirq+0xca/0x276 
+[  374.088102]  __irq_exit_rcu+0xc1/0xe0 
+[  374.092195]  sysvec_apic_timer_interrupt+0x72/0x90 
+[  374.097545]  </IRQ> 
+[  374.099885]  asm_sysvec_apic_timer_interrupt+0x12/0x20 
+[  374.105613] RIP: 0010:acpi_idle_do_entry+0x4c/0x50 
+
+
+
+It can be reliably reproduced on xfs or ext4. It was tested on pmem ramdisks.
+
+Thanks,
+Murphy
 
