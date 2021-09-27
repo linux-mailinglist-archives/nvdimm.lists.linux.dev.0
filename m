@@ -1,73 +1,111 @@
-Return-Path: <nvdimm+bounces-1422-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1427-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBACD419F5F
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 21:46:58 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871A041A1EE
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 00:01:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id C1D783E0F00
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 19:46:56 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 9ABBE1C0A9D
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 22:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37AEB3FD3;
-	Mon, 27 Sep 2021 19:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA692B86;
+	Mon, 27 Sep 2021 22:00:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from d2-forwarder.nctu.edu.tw (d2-forwarder.nctu.edu.tw [140.113.2.79])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB40472
-	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 19:46:48 +0000 (UTC)
-Received: from d2-forwarder.nctu.edu.tw (localhost [127.0.0.1])
-	by d2-forwarder.nctu.edu.tw (Postfix) with ESMTP id 0605459092
-	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 03:53:40 +0800 (CST)
-X-Virus-Scanned: amavisd-new at d2-forwarder.nctu.edu.tw
-Received: from d2-forwarder.nctu.edu.tw ([127.0.0.1])
-	by d2-forwarder.nctu.edu.tw (amavisd.cc.nctu.edu.tw [127.0.0.1]) (amavisd-new, port 10024)
-	with LMTP id 1-XjP9zWEbCU for <nvdimm@lists.linux.dev>;
-	Tue, 28 Sep 2021 03:53:36 +0800 (CST)
-Received: from smtp.nctu.edu.tw (unknown [140.113.250.93])
-	by d2-forwarder.nctu.edu.tw (Postfix) with ESMTP id 788155A22A
-	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 03:39:59 +0800 (CST)
-Received: from [77.247.110.160] (unknown [77.247.110.160])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: flannery0123.ep07)
-	by smtp.nctu.edu.tw (Postfix) with ESMTPSA id 134A74BD77
-	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 03:34:39 +0800 (CST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD93FFB
+	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 22:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=f1z5HgkOwmjFBk4lUYxpkBwDgNqINDcFoZThfyywwx8=; b=eQhJDUwgI2a4kvwwC1LW4Grcbe
+	Afldl7Y/5P+CtLt6Bf7Y9ytxFLTlAL7DQ1mrwOtj6+6Pnddn8Wp4NkxVuxqvoNw0Tyz5tv3XvMzt/
+	95ad2a+T3zdPfY1HqSNzUwK9FALGPXQfHChw080YZLrustezGq9sWxl4CDGODiD+GUg6c3Ya2VpOL
+	Lz+0XMYtVA7Q3XN0iSeVnjb/6bCKu9f0aIxF7V2Oxq68qH0zcltU5tGD/tQ+xGADbb+jbit4yqFIv
+	EQ6Wyv4G24Wl6sIzPggmISuK4WSugRZrguNrS2KSbhhqFI7oFTnyVJEEiHe4GjAGQLWYlZNDx3Kcq
+	wpi9PwkQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mUyfw-004SuN-7t; Mon, 27 Sep 2021 22:00:40 +0000
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: axboe@kernel.dk,
+	colyli@suse.de,
+	kent.overstreet@gmail.com,
+	kbusch@kernel.org,
+	sagi@grimberg.me,
+	vishal.l.verma@intel.com,
+	dan.j.williams@intel.com,
+	dave.jiang@intel.com,
+	ira.weiny@intel.com,
+	konrad.wilk@oracle.com,
+	roger.pau@citrix.com,
+	boris.ostrovsky@oracle.com,
+	jgross@suse.com,
+	sstabellini@kernel.org,
+	minchan@kernel.org,
+	ngupta@vflare.org,
+	senozhatsky@chromium.org
+Cc: xen-devel@lists.xenproject.org,
+	nvdimm@lists.linux.dev,
+	linux-nvme@lists.infradead.org,
+	linux-bcache@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH v2 00/10] block: second batch of add_disk() error handling conversions
+Date: Mon, 27 Sep 2021 15:00:29 -0700
+Message-Id: <20210927220039.1064193-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: IMPORTANT,
-To: nvdimm@lists.linux.dev
-From: "Mr. James Khumalo"<flannery0123.ep07@nctu.edu.tw>
-Date: Mon, 27 Sep 2021 21:34:38 +0200
-Reply-To: khumalojameskhumalo@gmail.com
-Message-Id: <20210927195340.0605459092@d2-forwarder.nctu.edu.tw>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Good Day,
- =
+This is the second series of driver conversions for add_disk()
+error handling. You can find this set and the rest of the 7th set of
+driver conversions on my 20210927-for-axboe-add-disk-error-handling
+branch [0].
 
-I know this email might come to you as a surprise as first coming from one =
-you haven=E2=80=99t met with before.
-I am Mr. James Khumalo, the bank manager with ABSA bank of South Africa,  a=
-nd a personal banker of Dr.Mohamed Farouk Ibrahim, an Egyptian who happened=
- to be a medical contractor attached to the overthrown Afghan government by=
- the Taliban government.   =
+Changes on this v2 since the last first version of this
+patch series:
 
-Dr.Mohamed Farouk Ibrahim deposits some sum of money with our bank but pass=
-ed away with his family while trying to escape from Kandahar.
-The said sum can be used for an investment if you are interested.  Details =
-relating to the funds are in my position and will present you as the Next-o=
-f-Kin because there was none, and I shall furnish you with more detail once=
- your response.
+  - rebased onto linux-next tag 20210927
+  - nvme-multipath: used test_and_set_bit() as suggested by Keith Busch,         
+    and justified this in the code with a comment as this race was not
+    obvious
+  - Added reviewed-by / Acked-by tags where one was provided 
 
-Regards,
-Mr. James Khumalo
-Tel: 27-632696383
-South Africa
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210927-for-axboe-add-disk-error-handling
+
+Luis Chamberlain (10):
+  block/brd: add error handling support for add_disk()
+  bcache: add error handling support for add_disk()
+  nvme-multipath: add error handling support for add_disk()
+  nvdimm/btt: do not call del_gendisk() if not needed
+  nvdimm/btt: use goto error labels on btt_blk_init()
+  nvdimm/btt: add error handling support for add_disk()
+  nvdimm/blk: avoid calling del_gendisk() on early failures
+  nvdimm/blk: add error handling support for add_disk()
+  xen-blkfront: add error handling support for add_disk()
+  zram: add error handling support for add_disk()
+
+ drivers/block/brd.c           | 10 ++++++++--
+ drivers/block/xen-blkfront.c  |  8 +++++++-
+ drivers/block/zram/zram_drv.c |  6 +++++-
+ drivers/md/bcache/super.c     | 17 ++++++++++++-----
+ drivers/nvdimm/blk.c          | 21 +++++++++++++++------
+ drivers/nvdimm/btt.c          | 24 +++++++++++++++---------
+ drivers/nvme/host/multipath.c | 13 +++++++++++--
+ 7 files changed, 73 insertions(+), 26 deletions(-)
+
+-- 
+2.30.2
+
 
