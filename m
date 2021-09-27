@@ -1,109 +1,77 @@
-Return-Path: <nvdimm+bounces-1430-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1434-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id E915041A1F5
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 00:01:39 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BB9D41A2C4
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 00:13:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id BC7D33E1083
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 22:01:38 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 5F96C1C0BA1
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Sep 2021 22:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1052B8F;
-	Mon, 27 Sep 2021 22:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7F03FED;
+	Mon, 27 Sep 2021 22:13:19 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3163FF7
-	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 22:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Zp3peWChzsLwJZgR1i8Dtyh3FOO544lFeJzlWbkfyco=; b=xyicbK2H0CR7mxWgNNAbZZVOoG
-	f/TY+aOtnMS/uoVtMXqtPXis+vbZhtpiS/ndUP0AdX9IDRGIobYET1+iWMgf0eic3hI0JSLbAulKG
-	8wvXxEzmhDvXeOmmj8TPh+HGQ0Q2wvHySLXwxFAgsiQ0IWl+sk40LXHXcOXOHWUbo3breLF9OOmtC
-	aU5QvqBV5mC+pgxhFyfAWSzB39tzj8teDlNoEJNNKk8zoulQfqxsIBVBuYTJraMMbw8Z6hDN9ZQpa
-	LM244ocJ/fpPGEyLZkxh+GCiIuoIMgqFitcviGyRgvFztoaDWVexx1nlLNy/oEUY4relGyOFoN2oa
-	SP4Bj1fA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mUyfw-004SvY-Q6; Mon, 27 Sep 2021 22:00:40 +0000
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: axboe@kernel.dk,
-	colyli@suse.de,
-	kent.overstreet@gmail.com,
-	kbusch@kernel.org,
-	sagi@grimberg.me,
-	vishal.l.verma@intel.com,
-	dan.j.williams@intel.com,
-	dave.jiang@intel.com,
-	ira.weiny@intel.com,
-	konrad.wilk@oracle.com,
-	roger.pau@citrix.com,
-	boris.ostrovsky@oracle.com,
-	jgross@suse.com,
-	sstabellini@kernel.org,
-	minchan@kernel.org,
-	ngupta@vflare.org,
-	senozhatsky@chromium.org
-Cc: xen-devel@lists.xenproject.org,
-	nvdimm@lists.linux.dev,
-	linux-nvme@lists.infradead.org,
-	linux-bcache@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v2 10/10] zram: add error handling support for add_disk()
-Date: Mon, 27 Sep 2021 15:00:39 -0700
-Message-Id: <20210927220039.1064193-11-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210927220039.1064193-1-mcgrof@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4FD2FB6
+	for <nvdimm@lists.linux.dev>; Mon, 27 Sep 2021 22:13:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 014C460F94;
+	Mon, 27 Sep 2021 22:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1632780797;
+	bh=aUkvMSo84Ts+2hyfPmGVIgM4abSwV67b0JY7DU1pVzk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CR3ThJMTzNN7IxGCoQ9SihnqkQkkv3F41YJaAr67klqD8ay7cRcSeppUUhh/8+7PQ
+	 DFxOyaBzoI962F2usbjfziq1easTinlTyXoLnTwCKEIgdylqvj9h8QEVuaeDIXyhCf
+	 8pRA7I8t7831enPRtpE/358VVKwNsUwrPG5b/lRH5qyH1IXU821Yn+C1LYzW65TQiM
+	 Kr2pNyLsYwmCCd+A88QwrYslEh5QjuzWUx1TBVYz6/tBtiRBBMVllLOKUI3Il17WX7
+	 FhuTQ1Q9A8S1JL3ILSV0TNBfSOS3l81jmsFCnMM1Pvg1VT7bDaBh2KmwsWKeTC3U9m
+	 OIVZBum14ZcHw==
+Date: Mon, 27 Sep 2021 15:13:12 -0700
+From: Keith Busch <kbusch@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: axboe@kernel.dk, colyli@suse.de, kent.overstreet@gmail.com,
+	sagi@grimberg.me, vishal.l.verma@intel.com,
+	dan.j.williams@intel.com, dave.jiang@intel.com, ira.weiny@intel.com,
+	konrad.wilk@oracle.com, roger.pau@citrix.com,
+	boris.ostrovsky@oracle.com, jgross@suse.com, sstabellini@kernel.org,
+	minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
+	xen-devel@lists.xenproject.org, nvdimm@lists.linux.dev,
+	linux-nvme@lists.infradead.org, linux-bcache@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] nvme-multipath: add error handling support for
+ add_disk()
+Message-ID: <20210927221312.GD387558@dhcp-10-100-145-180.wdc.com>
 References: <20210927220039.1064193-1-mcgrof@kernel.org>
+ <20210927220039.1064193-4-mcgrof@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210927220039.1064193-4-mcgrof@kernel.org>
 
-We never checked for errors on add_disk() as this function
-returned void. Now that this is fixed, use the shiny new
-error handling.
+On Mon, Sep 27, 2021 at 03:00:32PM -0700, Luis Chamberlain wrote:
+> +	/*
+> +	 * test_and_set_bit() is used because it is protecting against two nvme
+> +	 * paths simultaneously calling device_add_disk() on the same namespace
+> +	 * head.
+> +	 */
+>  	if (!test_and_set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags)) {
+> -		device_add_disk(&head->subsys->dev, head->disk,
+> -				nvme_ns_id_attr_groups);
+> +		rc = device_add_disk(&head->subsys->dev, head->disk,
+> +				     nvme_ns_id_attr_groups);
+> +		if (rc)
+> +			return;
+> +		set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags);
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- drivers/block/zram/zram_drv.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index f61910c65f0f..59086e178fbd 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1953,7 +1953,9 @@ static int zram_add(void)
- 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
- 
- 	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
--	device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
-+	ret = device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
-+	if (ret)
-+		goto out_cleanup_disk;
- 
- 	strlcpy(zram->compressor, default_compressor, sizeof(zram->compressor));
- 
-@@ -1961,6 +1963,8 @@ static int zram_add(void)
- 	pr_info("Added device: %s\n", zram->disk->disk_name);
- 	return device_id;
- 
-+out_cleanup_disk:
-+	blk_cleanup_disk(zram->disk);
- out_free_idr:
- 	idr_remove(&zram_index_idr, device_id);
- out_free_dev:
--- 
-2.30.2
-
+No need to set_bit() here since the test_and_set_bit() already took care
+of that.
 
