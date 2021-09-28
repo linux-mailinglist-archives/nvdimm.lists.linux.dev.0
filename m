@@ -1,141 +1,135 @@
-Return-Path: <nvdimm+bounces-1455-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1457-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1909E41AF8F
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 14:59:52 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F7041B591
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 20:02:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 956773E0FA5
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 12:59:50 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 18C121C0D56
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 18:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689FE3FD4;
-	Tue, 28 Sep 2021 12:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA203FCC;
+	Tue, 28 Sep 2021 18:01:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7062FB2
-	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 12:59:42 +0000 (UTC)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SAJ4Eq019457;
-	Tue, 28 Sep 2021 08:48:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=Y0lsPQ3de1hi0HT1iJbp1UbGiO/7GnkeYOUpwVeKUTE=;
- b=h5KAHzZNdK3KLlgER0onYrZGrzUUun2gsSU3KXV7xR9XoIayMvcXZUj12fu37/ZYARbZ
- XeefROo0pkwZEemrkKxlQrhy1lzNICFty02Yx1/hE1RTP3uRfHQ2gBVlAqF4rPov7ezU
- NaCVoOTc64PMCPQ4FwlsQnry7MEQf/oSRDuDzb+wHGNjDCk98WEIqcsXoDY/gO2jyTwd
- PPIkV1AePuA/SsnSlwE1P5I5eB/DTwlCQx7uQxiAgGbgtaMtEbZJworeScIdsit7+9BG
- hVcmP8Z7sIrj3gJIiWkvNSMnGW4D2RpnvX0kQPmKDqdUQqeBvW+jRMnWL4Hn+v9DX4at mg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 3bc16mb5jm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Sep 2021 08:48:53 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18SChFcT030260;
-	Tue, 28 Sep 2021 12:48:52 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma06ams.nl.ibm.com with ESMTP id 3b9u1je28x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Sep 2021 12:48:51 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18SCmmRK56361414
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Sep 2021 12:48:48 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 45CD84C058;
-	Tue, 28 Sep 2021 12:48:48 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 776474C059;
-	Tue, 28 Sep 2021 12:48:42 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.50.245])
-	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Tue, 28 Sep 2021 12:48:42 +0000 (GMT)
-From: Kajol Jain <kjain@linux.ibm.com>
-To: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        dan.j.williams@intel.com, ira.weiny@intel.com,
-        vishal.l.verma@intel.com
-Cc: maddy@linux.ibm.com, santosh@fossix.org, aneesh.kumar@linux.ibm.com,
-        vaibhav@linux.ibm.com, atrajeev@linux.vnet.ibm.com, tglx@linutronix.de,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com
-Subject: [PATCH v5 4/4] docs: ABI: sysfs-bus-nvdimm: Document sysfs event format entries for nvdimm pmu
-Date: Tue, 28 Sep 2021 18:18:34 +0530
-Message-Id: <20210928124834.146803-1-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572F129CA
+	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 18:01:53 +0000 (UTC)
+Received: by mail-qk1-f172.google.com with SMTP id i132so41764178qke.1
+        for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 11:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Hbv2nrTZWWGTP0zetuxX8JZfSvkOTIqxNDWscf8lqjM=;
+        b=k4yeqVkRBZLOz8RVqZfB/X5go9d5P08x7DAbdDnxauKP3w8Ly9MWhcIHzduBQOXIv6
+         5T5FpLdhoYxRIYJWBMLnAJ7jOYyO3vy177E9aPa3GqGMao6G1SAoEYk2fyt1p3IWPBuw
+         K1Anqfuu7NYgolRTn0AfvVNGspfbs0NRJ1sKcbA2uCFLvg5fZxKmQPdfUDYS23yyyQLB
+         aLowg6jW72cG3PRtSZ6WOi2yuNJGa4STjmwpcX5B0gvtmcRhLASp6KxUB1QEMamXP1nY
+         oA4t3c6XPhHyNRDddoMK+c2IK+nwFlv8bVPLD9Q944WafOhKBZ3mKMpllZ11Y9sQe7tM
+         HxuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Hbv2nrTZWWGTP0zetuxX8JZfSvkOTIqxNDWscf8lqjM=;
+        b=i5mTfBtkRHnr4CftelZX6Ly3eS5kDp4tpC29X416ZlBVw8HXHvdSG5Gxn89pye6evC
+         vOWojvRgygbyf6FpE5az+vvhjhp0vjhuKxSD5hzLKg+WETAarBSbq+vkIdZ9mZNGqJ+W
+         bPjLla69qrcLPQMxlwFrX08k5BJXlDWymk9CP94aHwxUlOc36uqewx8319lfsT3HX6Vj
+         FRfqZMM5m9nGyhQYkZqlAX7Ha1lcArA7yGn36gFvAaANAh/f5goBrI+uoPT6sI/GXNV+
+         couaMO1cYDMKmWnZCDwjy/zv+WRQPTYyERziqMYnSESyny8d0dmcLBGOfzqgLiPEWMV3
+         7wAg==
+X-Gm-Message-State: AOAM532wBKTnhn7enfbkVmlf96hBVvIim2KTERyy3B4uOJTNXXfZh70B
+	BMljCmcdm+ySMqFr7d1hwNXZIw==
+X-Google-Smtp-Source: ABdhPJw8PoqtCM9jEu0HEkGUTPOuB+K045ZQ+xnwIr++i1ps2Ma+Gi571Hezhn6PyiIq87siDpO+yw==
+X-Received: by 2002:ae9:eb8b:: with SMTP id b133mr1406067qkg.188.1632852112225;
+        Tue, 28 Sep 2021 11:01:52 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id q184sm15663797qkd.35.2021.09.28.11.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Sep 2021 11:01:51 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1mVHQM-007Eis-Ps; Tue, 28 Sep 2021 15:01:50 -0300
+Date: Tue, 28 Sep 2021 15:01:50 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Joao Martins <joao.m.martins@oracle.com>
+Cc: Dan Williams <dan.j.williams@intel.com>, linux-mm@kvack.org,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	John Hubbard <jhubbard@nvidia.com>, Jane Chu <jane.chu@oracle.com>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
+	nvdimm@lists.linux.dev, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 08/14] mm/gup: grab head page refcount once for group
+ of subpages
+Message-ID: <20210928180150.GI3544071@ziepe.ca>
+References: <20210827145819.16471-1-joao.m.martins@oracle.com>
+ <20210827145819.16471-9-joao.m.martins@oracle.com>
+ <20210827162552.GK1200268@ziepe.ca>
+ <da90638d-d97f-bacb-f0fa-01f5fd9f2504@oracle.com>
+ <20210830130741.GO1200268@ziepe.ca>
+ <cda6d8fb-bd48-a3de-9d4e-96e4a43ebe58@oracle.com>
+ <20210831170526.GP1200268@ziepe.ca>
+ <8c23586a-eb3b-11a6-e72a-dcc3faad4e96@oracle.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6vqiGTjGIiT5nhz1KivSxMLR6mekFC9r
-X-Proofpoint-GUID: 6vqiGTjGIiT5nhz1KivSxMLR6mekFC9r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- adultscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2109280071
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c23586a-eb3b-11a6-e72a-dcc3faad4e96@oracle.com>
 
-Details are added for the event, cpumask and format attributes
-in the ABI documentation.
+On Thu, Sep 23, 2021 at 05:51:04PM +0100, Joao Martins wrote:
+> On 8/31/21 6:05 PM, Jason Gunthorpe wrote:
 
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
----
- Documentation/ABI/testing/sysfs-bus-nvdimm | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+> >> Switching to similar iteration logic to unpin would look something like
+> >> this (still untested):
+> >>
+> >>         for_each_compound_range(index, &page, npages, head, refs) {
+> >>                 pgmap = get_dev_pagemap(pfn + *nr, pgmap);
+> > 
+> > I recall talking to DanW about this and we agreed it was unnecessary
+> > here to hold the pgmap and should be deleted.
+> 
+> Yeap, I remember that conversation[0]. It was a long time ago, and I am
+> not sure what progress was made there since the last posting? Dan, any
+> thoughts there?
+> 
+> [0]
+> https://lore.kernel.org/linux-mm/161604050866.1463742.7759521510383551055.stgit@dwillia2-desk3.amr.corp.intel.com/
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
-index bff84a16812a..64004d5e4840 100644
---- a/Documentation/ABI/testing/sysfs-bus-nvdimm
-+++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
-@@ -6,3 +6,38 @@ Description:
- 
- The libnvdimm sub-system implements a common sysfs interface for
- platform nvdimm resources. See Documentation/driver-api/nvdimm/.
-+
-+What:           /sys/bus/event_source/devices/nmemX/format
-+Date:           September 2021
-+KernelVersion:  5.16
-+Contact:        Kajol Jain <kjain@linux.ibm.com>
-+Description:	(RO) Attribute group to describe the magic bits
-+		that go into perf_event_attr.config for a particular pmu.
-+		(See ABI/testing/sysfs-bus-event_source-devices-format).
-+
-+		Each attribute under this group defines a bit range of the
-+		perf_event_attr.config. Supported attribute is listed
-+		below::
-+		  event  = "config:0-4"  - event ID
-+
-+		For example::
-+			ctl_res_cnt = "event=0x1"
-+
-+What:           /sys/bus/event_source/devices/nmemX/events
-+Date:           September 2021
-+KernelVersion:  5.16
-+Contact:        Kajol Jain <kjain@linux.ibm.com>
-+Description:	(RO) Attribute group to describe performance monitoring events
-+                for the nvdimm memory device. Each attribute in this group
-+                describes a single performance monitoring event supported by
-+                this nvdimm pmu.  The name of the file is the name of the event.
-+                (See ABI/testing/sysfs-bus-event_source-devices-events). A
-+                listing of the events supported by a given nvdimm provider type
-+                can be found in Documentation/driver-api/nvdimm/$provider.
-+
-+What:          /sys/bus/event_source/devices/nmemX/cpumask
-+Date:          September 2021
-+KernelVersion:  5.16
-+Contact:        Kajol Jain <kjain@linux.ibm.com>
-+Description:	(RO) This sysfs file exposes the cpumask which is designated to
-+		to retrieve nvdimm pmu event counter data.
--- 
-2.26.2
+I would really like to see that finished :\
 
+> So ... if pgmap accounting was removed from gup-fast then this patch
+> would be a lot simpler and we could perhaps just fallback to the regular
+> hugepage case (THP, HugeTLB) like your suggestion at the top. See at the
+> end below scissors mark as the ballpark of changes.
+> 
+> So far my options seem to be: 1) this patch which leverages the existing
+> iteration logic or 2) switching to for_each_compound_range() -- see my previous
+> reply 3) waiting for Dan to remove @pgmap accounting in gup-fast and use
+> something similar to below scissors mark.
+> 
+> What do you think would be the best course of action?
+
+I still think the basic algorithm should be to accumulate physicaly
+contiguous addresses when walking the page table and then flush them
+back to struct pages once we can't accumulate any more.
+
+That works for both the walkers and all the page types?
+
+If the get_dev_pagemap has to remain then it just means we have to
+flush before changing pagemap pointers
+
+Jason
 
