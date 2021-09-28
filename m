@@ -1,228 +1,213 @@
-Return-Path: <nvdimm+bounces-1451-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1456-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id C43D141A8E0
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 08:24:19 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599A641B0FE
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 15:37:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id E18FF1C0BA1
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 06:24:18 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 4BF281C0EE9
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Sep 2021 13:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132D23FF7;
-	Tue, 28 Sep 2021 06:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363673FD4;
+	Tue, 28 Sep 2021 13:37:43 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793B872
-	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 06:24:04 +0000 (UTC)
-IronPort-Data: =?us-ascii?q?A9a23=3AM+p0O69uN1adIemA41NLDrUD+3+TJUtcMsCJ2f8?=
- =?us-ascii?q?bfWQNrUoigTwAzmNMWDzVaarcZmvzcth/O9608RxQ78XTyoNgSVdlrnsFo1Bi8?=
- =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4EfwWlTdhSMkj/jQF+CsULe?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt8pswdNWpNq+T?=
- =?us-ascii?q?xw1FqPRmuUBSAQeGCZ7VUFD0OaefCDu7pTJliUqdFOpmZ2CFnoeMYQG++pfD3t?=
- =?us-ascii?q?J8PsCIjERKBuEgoqe37O/TvhEh8ItNsDnMYoT/HZ6wlnxAf8gB5KFXKTO4d5R2?=
- =?us-ascii?q?SwYh8ZSEPKYbM0cARJjbgvHZRJnOVoNDp862uCyiRHXdSNUqVeQja42+HTIigh?=
- =?us-ascii?q?w1qX9dtbYZLSiRc5VtkKDuiTK8gzRGB4dMNCA2Dyt6W+3i6nDkEvTXIMUCa39+?=
- =?us-ascii?q?OVmjUOewkQNBxAME1i2u/+0jgi5Qd03A0gV/Dc+6Ks/7kqmSvHjUBCi5n2JpBg?=
- =?us-ascii?q?RX5xXCeJSwAWMzLfEphaXHUAaQTNbLt8rrsk7QXotzFDht83oHztHorCTSGzb8?=
- =?us-ascii?q?raSsCP0PjIaa3IBDRLo5yNtD8LL+dl110yQCI04VvPdszE8IhmoqxjikcT0r+t?=
- =?us-ascii?q?7YRY36piG?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AViJ5daNsm6Qwg8BcTv2jsMiBIKoaSvp037BL?=
- =?us-ascii?q?7TEUdfUxSKGlfq+V8sjzqiWftN98YhAdcLO7Scy9qBHnhP1ICOAqVN/MYOCMgh?=
- =?us-ascii?q?rLEGgN1+vf6gylMyj/28oY7q14bpV5YeeaMXFKyer8/ym0euxN/OW6?=
-X-IronPort-AV: E=Sophos;i="5.85,328,1624291200"; 
-   d="scan'208";a="115097021"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 28 Sep 2021 14:24:04 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-	by cn.fujitsu.com (Postfix) with ESMTP id 3D3194D0DC7C;
-	Tue, 28 Sep 2021 14:23:58 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Tue, 28 Sep 2021 14:23:57 +0800
-Received: from irides.mr.mr.mr (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Tue, 28 Sep 2021 14:23:56 +0800
-From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To: <dan.j.williams@intel.com>, <djwong@kernel.org>, <hch@lst.de>,
-	<linux-xfs@vger.kernel.org>
-CC: <ruansy.fnst@fujitsu.com>, <david@fromorbit.com>,
-	<linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
-	<willy@infradead.org>
-Subject: [PATCH v10 8/8] xfs: Add dax dedupe support
-Date: Tue, 28 Sep 2021 14:23:11 +0800
-Message-ID: <20210928062311.4012070-9-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928062311.4012070-1-ruansy.fnst@fujitsu.com>
-References: <20210928062311.4012070-1-ruansy.fnst@fujitsu.com>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30722FB2
+	for <nvdimm@lists.linux.dev>; Tue, 28 Sep 2021 13:37:41 +0000 (UTC)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SC9LvJ005896;
+	Tue, 28 Sep 2021 08:42:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=/IiP3OJn3/x2BE7U7GqNBNSQHO3LlVNZfJj+YeFRfp0=;
+ b=dx1j8l2dKmtv4WpBoBkDYv+Kp0UI3/wBBRSTylQ/ecjVhbJps2Cgw5aZle8Ne8bwbcH8
+ +qGZ//dE6530YRwHYloZHXE/7HUh0BvwmdiS249jD6QocnLCO2WySqxOiLHVEX/WCCb7
+ 0JTYB1kE7oYQA/KXwO5q7CMqBeXyeH6f7Ik2XUYAH4k4fttTIlYC3iUFHsxcG8Eq7ITe
+ gB9OlH1fUOoqLroXiY2H4x5dAxgTj1qsr5es2DVCufDnRwzhzNRRWlsBv8hjU2WWcgPm
+ ushkSd2gv8bCrdl0o1KEDnR79Z+ZZWYtj/whmtpOnrAp9AaAk4q6uZjN7bPkXTkosq3V IA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3bc092c57f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Sep 2021 08:42:20 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18SCXq9Q024042;
+	Tue, 28 Sep 2021 12:42:17 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+	by ppma02fra.de.ibm.com with ESMTP id 3b9ud9cdjs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Sep 2021 12:42:17 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18SCgBpc60817880
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Sep 2021 12:42:11 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6B437A4055;
+	Tue, 28 Sep 2021 12:42:11 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DC458A407C;
+	Tue, 28 Sep 2021 12:42:05 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.50.245])
+	by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Tue, 28 Sep 2021 12:42:05 +0000 (GMT)
+From: Kajol Jain <kjain@linux.ibm.com>
+To: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        dan.j.williams@intel.com, ira.weiny@intel.com,
+        vishal.l.verma@intel.com
+Cc: maddy@linux.ibm.com, santosh@fossix.org, aneesh.kumar@linux.ibm.com,
+        vaibhav@linux.ibm.com, atrajeev@linux.vnet.ibm.com, tglx@linutronix.de,
+        rnsastry@linux.ibm.com, kjain@linux.ibm.com
+Subject: [PATCH v5 0/4] Add perf interface to expose nvdimm
+Date: Tue, 28 Sep 2021 18:11:56 +0530
+Message-Id: <20210928124200.146331-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C4Xjjt1gIybISOgXYVSmu7hynCqz5I_C
+X-Proofpoint-GUID: C4Xjjt1gIybISOgXYVSmu7hynCqz5I_C
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-yoursite-MailScanner-ID: 3D3194D0DC7C.A0ED8
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ mlxlogscore=999 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109280071
 
-Introduce xfs_mmaplock_two_inodes_and_break_dax_layout() for dax files
-who are going to be deduped.  After that, call compare range function
-only when files are both DAX or not.
+Patchset adds performance stats reporting support for nvdimm.
+Added interface includes support for pmu register/unregister
+functions. A structure is added called nvdimm_pmu to be used for
+adding arch/platform specific data such as cpumask, nvdimm device
+pointer and pmu event functions like event_init/add/read/del.
+User could use the standard perf tool to access perf events
+exposed via pmu.
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Interface also defines supported event list, config fields for the
+event attributes and their corresponding bit values which are exported
+via sysfs. Patch 3 exposes IBM pseries platform nmem* device
+performance stats using this interface.
+
+Result from power9 pseries lpar with 2 nvdimm device:
+
+Ex: List all event by perf list
+
+command:# perf list nmem
+
+  nmem0/cache_rh_cnt/                                [Kernel PMU event]
+  nmem0/cache_wh_cnt/                                [Kernel PMU event]
+  nmem0/cri_res_util/                                [Kernel PMU event]
+  nmem0/ctl_res_cnt/                                 [Kernel PMU event]
+  nmem0/ctl_res_tm/                                  [Kernel PMU event]
+  nmem0/fast_w_cnt/                                  [Kernel PMU event]
+  nmem0/host_l_cnt/                                  [Kernel PMU event]
+  nmem0/host_l_dur/                                  [Kernel PMU event]
+  nmem0/host_s_cnt/                                  [Kernel PMU event]
+  nmem0/host_s_dur/                                  [Kernel PMU event]
+  nmem0/med_r_cnt/                                   [Kernel PMU event]
+  nmem0/med_r_dur/                                   [Kernel PMU event]
+  nmem0/med_w_cnt/                                   [Kernel PMU event]
+  nmem0/med_w_dur/                                   [Kernel PMU event]
+  nmem0/mem_life/                                    [Kernel PMU event]
+  nmem0/poweron_secs/                                [Kernel PMU event]
+  ...
+  nmem1/mem_life/                                    [Kernel PMU event]
+  nmem1/poweron_secs/                                [Kernel PMU event]
+
+Patch1:
+        Introduces the nvdimm_pmu structure
+Patch2:
+        Adds common interface to add arch/platform specific data
+        includes nvdimm device pointer, pmu data along with
+        pmu event functions. It also defines supported event list
+        and adds attribute groups for format, events and cpumask.
+        It also adds code for cpu hotplug support.
+Patch3:
+        Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
+        nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
+        capabilities, cpumask and event functions and then registers
+        the pmu by adding callbacks to register_nvdimm_pmu.
+Patch4:
+        Sysfs documentation patch
+
+Changelog
 ---
- fs/xfs/xfs_file.c    |  2 +-
- fs/xfs/xfs_inode.c   | 69 +++++++++++++++++++++++++++++++++++++++++---
- fs/xfs/xfs_inode.h   |  1 +
- fs/xfs/xfs_reflink.c |  4 +--
- 4 files changed, 69 insertions(+), 7 deletions(-)
+v4 -> v5:
+- Remove multiple variables defined in nvdimm_pmu structure include
+  name and pmu functions(event_int/add/del/read) as they are just
+  used to copy them again in pmu variable. Now we are directly doing
+  this step in arch specific code as suggested by Dan Williams.
 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index afde4fbefb6f..97d03bc25fda 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -846,7 +846,7 @@ xfs_wait_dax_page(
- 	xfs_ilock(ip, XFS_MMAPLOCK_EXCL);
- }
- 
--static int
-+int
- xfs_break_dax_layouts(
- 	struct inode		*inode,
- 	bool			*retry)
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index a4f6f034fb81..8e03cca4ce61 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -3790,6 +3790,50 @@ xfs_iolock_two_inodes_and_break_layout(
- 	return 0;
- }
- 
-+static int
-+xfs_mmaplock_two_inodes_and_break_dax_layout(
-+	struct xfs_inode	*ip1,
-+	struct xfs_inode	*ip2)
-+{
-+	int			error;
-+	bool			retry;
-+	struct page		*page;
-+
-+	if (ip1->i_ino > ip2->i_ino)
-+		swap(ip1, ip2);
-+
-+again:
-+	retry = false;
-+	/* Lock the first inode */
-+	xfs_ilock(ip1, XFS_MMAPLOCK_EXCL);
-+	error = xfs_break_dax_layouts(VFS_I(ip1), &retry);
-+	if (error || retry) {
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		if (error == 0 && retry)
-+			goto again;
-+		return error;
-+	}
-+
-+	if (ip1 == ip2)
-+		return 0;
-+
-+	/* Nested lock the second inode */
-+	xfs_ilock(ip2, xfs_lock_inumorder(XFS_MMAPLOCK_EXCL, 1));
-+	/*
-+	 * We cannot use xfs_break_dax_layouts() directly here because it may
-+	 * need to unlock & lock the XFS_MMAPLOCK_EXCL which is not suitable
-+	 * for this nested lock case.
-+	 */
-+	page = dax_layout_busy_page(VFS_I(ip2)->i_mapping);
-+	if (page && page_ref_count(page) != 1) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		goto again;
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Lock two inodes so that userspace cannot initiate I/O via file syscalls or
-  * mmap activity.
-@@ -3804,8 +3848,19 @@ xfs_ilock2_io_mmap(
- 	ret = xfs_iolock_two_inodes_and_break_layout(VFS_I(ip1), VFS_I(ip2));
- 	if (ret)
- 		return ret;
--	filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
--				    VFS_I(ip2)->i_mapping);
-+
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		ret = xfs_mmaplock_two_inodes_and_break_dax_layout(ip1, ip2);
-+		if (ret) {
-+			inode_unlock(VFS_I(ip2));
-+			if (ip1 != ip2)
-+				inode_unlock(VFS_I(ip1));
-+			return ret;
-+		}
-+	} else
-+		filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
-+					    VFS_I(ip2)->i_mapping);
-+
- 	return 0;
- }
- 
-@@ -3815,8 +3870,14 @@ xfs_iunlock2_io_mmap(
- 	struct xfs_inode	*ip1,
- 	struct xfs_inode	*ip2)
- {
--	filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
--				      VFS_I(ip2)->i_mapping);
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		if (ip1 != ip2)
-+			xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+	} else
-+		filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
-+					      VFS_I(ip2)->i_mapping);
-+
- 	inode_unlock(VFS_I(ip2));
- 	if (ip1 != ip2)
- 		inode_unlock(VFS_I(ip1));
-diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
-index b21b177832d1..f7e26fe31a26 100644
---- a/fs/xfs/xfs_inode.h
-+++ b/fs/xfs/xfs_inode.h
-@@ -472,6 +472,7 @@ enum xfs_prealloc_flags {
- 
- int	xfs_update_prealloc_flags(struct xfs_inode *ip,
- 				  enum xfs_prealloc_flags flags);
-+int	xfs_break_dax_layouts(struct inode *inode, bool *retry);
- int	xfs_break_layouts(struct inode *inode, uint *iolock,
- 		enum layout_break_reason reason);
- 
-diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-index 9d876e268734..3b99c9dfcf0d 100644
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -1327,8 +1327,8 @@ xfs_reflink_remap_prep(
- 	if (XFS_IS_REALTIME_INODE(src) || XFS_IS_REALTIME_INODE(dest))
- 		goto out_unlock;
- 
--	/* Don't share DAX file data for now. */
--	if (IS_DAX(inode_in) || IS_DAX(inode_out))
-+	/* Don't share DAX file data with non-DAX file. */
-+	if (IS_DAX(inode_in) != IS_DAX(inode_out))
- 		goto out_unlock;
- 
- 	if (!IS_DAX(inode_in))
+- Remove attribute group field from nvdimm pmu structure and
+  defined these attribute groups in common interface which
+  includes format, event list along with cpumask as suggested by
+  Dan Williams.
+  Since we added static defination for attrbute groups needed in
+  common interface, removes corresponding code from papr.
+
+- Add nvdimm pmu event list with event codes in the common interface.
+
+- Remove Acked-by/Reviewed-by/Tested-by tags as code is refactored
+  to handle review comments from Dan.
+
+- Make nvdimm_pmu_free_hotplug_memory function static as reported
+  by kernel test robot, also add corresponding Reported-by tag.
+
+- Link to the patchset v4: https://lkml.org/lkml/2021/9/3/45
+
+v3 -> v4
+- Rebase code on top of current papr_scm code without any logical
+  changes.
+
+- Added Acked-by tag from Peter Zijlstra and Reviewed by tag
+  from Madhavan Srinivasan.
+
+- Link to the patchset v3: https://lkml.org/lkml/2021/6/17/605
+
+v2 -> v3
+- Added Tested-by tag.
+
+- Fix nvdimm mailing list in the ABI Documentation.
+
+- Link to the patchset v2: https://lkml.org/lkml/2021/6/14/25
+
+v1 -> v2
+- Fix hotplug code by adding pmu migration call
+  incase current designated cpu got offline. As
+  pointed by Peter Zijlstra.
+
+- Removed the retun -1 part from cpu hotplug offline
+  function.
+
+- Link to the patchset v1: https://lkml.org/lkml/2021/6/8/500
+
+Kajol Jain (4):
+  drivers/nvdimm: Add nvdimm pmu structure
+  drivers/nvdimm: Add perf interface to expose nvdimm performance stats
+  powerpc/papr_scm: Add perf interface support
+  docs: ABI: sysfs-bus-nvdimm: Document sysfs event format entries for
+    nvdimm pmu
+
+ Documentation/ABI/testing/sysfs-bus-nvdimm |  35 +++
+ arch/powerpc/include/asm/device.h          |   5 +
+ arch/powerpc/platforms/pseries/papr_scm.c  | 225 ++++++++++++++
+ drivers/nvdimm/Makefile                    |   1 +
+ drivers/nvdimm/nd_perf.c                   | 328 +++++++++++++++++++++
+ include/linux/nd.h                         |  41 +++
+ 6 files changed, 635 insertions(+)
+ create mode 100644 drivers/nvdimm/nd_perf.c
+
 -- 
-2.33.0
-
-
+2.26.2
 
 
