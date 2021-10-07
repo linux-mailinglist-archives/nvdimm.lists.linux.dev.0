@@ -1,41 +1,42 @@
-Return-Path: <nvdimm+bounces-1505-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1507-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B017424F33
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  7 Oct 2021 10:23:20 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 341FD424F35
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  7 Oct 2021 10:23:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3F5013E105A
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  7 Oct 2021 08:23:19 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 54EA81C0AF3
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  7 Oct 2021 08:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294652CB8;
-	Thu,  7 Oct 2021 08:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6CB2CBC;
+	Thu,  7 Oct 2021 08:22:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52742CB0
-	for <nvdimm@lists.linux.dev>; Thu,  7 Oct 2021 08:22:01 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="249511735"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F002CB3
+	for <nvdimm@lists.linux.dev>; Thu,  7 Oct 2021 08:22:02 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="249511738"
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="249511735"
+   d="scan'208";a="249511738"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 01:21:58 -0700
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="568555132"
+   d="scan'208";a="568555136"
 Received: from abishekh-mobl.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.251.133.239])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 01:21:57 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 01:21:58 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
 To: <linux-cxl@vger.kernel.org>
 Cc: Dan Williams <dan.j.williams@intel.com>,
 	Ben Widawsky <ben.widawsky@intel.com>,
 	<nvdimm@lists.linux.dev>,
+	Ira Weiny <ira.weiny@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [ndctl PATCH v4 14/17] Documentation/cxl: add library API documentation
-Date: Thu,  7 Oct 2021 02:21:36 -0600
-Message-Id: <20211007082139.3088615-15-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v4 15/17] ndctl: Add CXL packages to the RPM spec
+Date: Thu,  7 Oct 2021 02:21:37 -0600
+Message-Id: <20211007082139.3088615-16-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211007082139.3088615-1-vishal.l.verma@intel.com>
 References: <20211007082139.3088615-1-vishal.l.verma@intel.com>
@@ -45,249 +46,150 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6937; h=from:subject; bh=FyE9DJ1q3qW9qwnNb/T0/T9dBHoee+Piyd1gyB/OmP8=; b=owGbwMvMwCHGf25diOft7jLG02pJDIlx63j31FmFVbktkK51D0vgPe2/Y/HtiPmSe9/r3dif5ZEd vym9o5SFQYyDQVZMkeXvno+Mx+S25/MEJjjCzGFlAhnCwMUpABPxSGNkeMegfnlK5rITLDnPG99WcE bklPh+Vtxh5M6xuV9M/sWqIkaGvmf3NmvecJPd0Weh5eD1If/xRIbTWW1PDvycXWZynLuIFwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4557; i=vishal.l.verma@intel.com; h=from:subject; bh=zKOQKfuyxQ8GXGir5s5EVZtEfBTL3DKU8BtAxhe6wVs=; b=owGbwMvMwCHGf25diOft7jLG02pJDIlx6/gF9aYbaFw4v1B/a6zep5crHtnmlAY0OnuWV2vs4L6q KTy5o5SFQYyDQVZMkeXvno+Mx+S25/MEJjjCzGFlAhnCwMUpABN5sZnhn+pF7hMs/jwH+M5zmuRcaq jQTkhw8I5xr2A5vHvehuLFHxgZlr5XiMvaFuAzwcxrZuvevb/5a1X8tx0rZ+tnOPsv+VMOPwA=
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 Content-Transfer-Encoding: 8bit
 
-Add library API documentation for libcxl(3) using the existing
-asciidoc(tor) build system. Add a section 3 man page for 'libcxl' that
-provides an overview of the library and its usage, and a man page for
-the 'cxl_new()' API.
+From: Ira Weiny <ira.weiny@intel.com>
 
-Cc: Ben Widawsky <ben.widawsky@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
+Add CXL related packages - the cxl-cli utility, the libcxl library, and
+development headers to respective RPM packages in the main spec file.
+
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- Documentation/cxl/lib/cxl_new.txt | 43 +++++++++++++++++++++++
- Documentation/cxl/lib/libcxl.txt  | 56 +++++++++++++++++++++++++++++
- configure.ac                      |  1 +
- Makefile.am                       |  1 +
- .gitignore                        |  3 ++
- Documentation/cxl/lib/Makefile.am | 58 +++++++++++++++++++++++++++++++
- 6 files changed, 162 insertions(+)
- create mode 100644 Documentation/cxl/lib/cxl_new.txt
- create mode 100644 Documentation/cxl/lib/libcxl.txt
- create mode 100644 Documentation/cxl/lib/Makefile.am
+ Makefile.am   |  4 ++++
+ ndctl.spec.in | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+)
 
-diff --git a/Documentation/cxl/lib/cxl_new.txt b/Documentation/cxl/lib/cxl_new.txt
-new file mode 100644
-index 0000000..d4d5bcb
---- /dev/null
-+++ b/Documentation/cxl/lib/cxl_new.txt
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+cxl_new(3)
-+==========
-+
-+NAME
-+----
-+cxl_new - Create a new library context object that acts as a handle for all
-+library operations
-+
-+SYNOPSIS
-+--------
-+[verse]
-+----
-+#include <cxl/libcxl.h>
-+
-+int cxl_new(struct cxl_ctx **ctx);
-+----
-+
-+DESCRIPTION
-+-----------
-+Instantiates a new library context, and stores an opaque pointer in ctx. The
-+context is freed by linklibcxl:cxl_unref[3], i.e. cxl_new(3) implies an
-+internal linklibcxl:cxl_ref[3].
-+
-+
-+RETURN VALUE
-+------------
-+Returns 0 on success, and a negative errno on failure.
-+Possible error codes are:
-+
-+ * -ENOMEM
-+ * -ENXIO
-+
-+EXAMPLE
-+-------
-+See example usage in test/libcxl.c
-+
-+include::../../copyright.txt[]
-+
-+SEE ALSO
-+--------
-+linklibcxl:cxl_ref[3], linklibcxl:cxl_unref[3]
-diff --git a/Documentation/cxl/lib/libcxl.txt b/Documentation/cxl/lib/libcxl.txt
-new file mode 100644
-index 0000000..47f4cc3
---- /dev/null
-+++ b/Documentation/cxl/lib/libcxl.txt
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+libcxl(3)
-+=========
-+
-+NAME
-+----
-+libcxl - A library to interact with CXL devices through sysfs(5)
-+and ioctl(2) interfaces
-+
-+SYNOPSIS
-+--------
-+[verse]
-+#include <cxl/libcxl.h>
-+cc ... -lcxl
-+
-+DESCRIPTION
-+-----------
-+libcxl provides interfaces to interact with CXL devices in Linux, using sysfs
-+interfaces for most kernel interactions, and the ioctl() interface for command
-+submission.
-+
-+The starting point for all library interfaces is a 'cxl_ctx' object, returned
-+by linklibcxl:cxl_new[3]. CXL 'Type 3' memory devices are children of the
-+cxl_ctx object, and can be iterated through using an iterator API.
-+
-+Library level interfaces that are agnostic to any device, or a specific
-+subclass of operations have the prefix 'cxl_'
-+
-+The object representing a CXL Type 3 device is 'cxl_memdev'. Library interfaces
-+related to these devices have the prefix 'cxl_memdev_'. These interfaces are
-+mostly associated with sysfs interactions (unless otherwise noted in their
-+respective documentation pages). They are typically used to retrieve data
-+published by the kernel, or to send data or trigger kernel operations for a
-+given device.
-+
-+A 'cxl_cmd' is a reference counted object which is used to perform 'Mailbox'
-+commands as described in the CXL Specification. A 'cxl_cmd' object is tied to a
-+'cxl_memdev'. Associated library interfaces have the prefix 'cxl_cmd_'. Within
-+this sub-class of interfaces, there are:
-+
-+ * 'cxl_cmd_new_*' interfaces that allocate a new cxl_cmd object for a given
-+   command type.
-+
-+ * 'cxl_cmd_submit' which submits the command via ioctl()
-+
-+ * 'cxl_cmd_<name>_get_<field>' interfaces that get specific fields out of the
-+   command response
-+
-+ * 'cxl_cmd_get_*' interfaces to get general command related information.
-+
-+include::../../copyright.txt[]
-+
-+SEE ALSO
-+--------
-+linklibcxl:cxl[1]
-diff --git a/configure.ac b/configure.ac
-index dadae0a..00497ae 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -231,6 +231,7 @@ AC_CONFIG_FILES([
-         Documentation/ndctl/Makefile
-         Documentation/daxctl/Makefile
-         Documentation/cxl/Makefile
-+        Documentation/cxl/lib/Makefile
- ])
- 
- AC_OUTPUT
 diff --git a/Makefile.am b/Makefile.am
-index 4904ee7..e2f6bef 100644
+index e2f6bef..fa2010a 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -4,6 +4,7 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
- SUBDIRS = . cxl/lib daxctl/lib ndctl/lib cxl ndctl daxctl
- if ENABLE_DOCS
- SUBDIRS += Documentation/ndctl Documentation/daxctl Documentation/cxl
-+SUBDIRS += Documentation/cxl/lib
- endif
- SUBDIRS += test
+@@ -23,17 +23,21 @@ CLEANFILES += $(noinst_SCRIPTS)
  
-diff --git a/.gitignore b/.gitignore
-index 6a97b92..6468c7a 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -14,12 +14,15 @@ Makefile.in
- /libtool
- /stamp-h1
- *.1
-+*.3
- Documentation/daxctl/asciidoc.conf
- Documentation/ndctl/asciidoc.conf
- Documentation/cxl/asciidoc.conf
-+Documentation/cxl/lib/asciidoc.conf
- Documentation/daxctl/asciidoctor-extensions.rb
- Documentation/ndctl/asciidoctor-extensions.rb
- Documentation/cxl/asciidoctor-extensions.rb
-+Documentation/cxl/lib/asciidoctor-extensions.rb
- Documentation/ndctl/attrs.adoc
- .dirstamp
- daxctl/config.h
-diff --git a/Documentation/cxl/lib/Makefile.am b/Documentation/cxl/lib/Makefile.am
-new file mode 100644
-index 0000000..41e3a5f
---- /dev/null
-+++ b/Documentation/cxl/lib/Makefile.am
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2020-2021 Intel Corporation. All rights reserved.
+ do_rhel_subst = sed -e 's,VERSION,$(VERSION),g' \
+             -e 's,DAX_DNAME,daxctl-devel,g' \
++            -e 's,CXL_DNAME,cxl-devel,g' \
+             -e 's,DNAME,ndctl-devel,g' \
+             -e '/^%defattr.*/d' \
+ 	    -e 's,DAX_LNAME,daxctl-libs,g' \
++	    -e 's,CXL_LNAME,cxl-libs,g' \
+ 	    -e 's,LNAME,ndctl-libs,g'
+ 
+ do_sles_subst = sed -e 's,VERSION,$(VERSION),g' \
+             -e 's,DAX_DNAME,libdaxctl-devel,g' \
++            -e 's,CXL_DNAME,libcxl-devel,g' \
+             -e 's,DNAME,libndctl-devel,g' \
+             -e 's,%license,%doc,g' \
+             -e 's,\(^License:.*GPL\)v2,\1-2.0,g' \
+             -e "s,DAX_LNAME,libdaxctl$$(($(LIBDAXCTL_CURRENT) - $(LIBDAXCTL_AGE))),g" \
++            -e "s,CXL_LNAME,libcxl$$(($(LIBCXL_CURRENT) - $(LIBCXL_AGE))),g" \
+             -e "s,LNAME,libndctl$$(($(LIBNDCTL_CURRENT) - $(LIBNDCTL_AGE))),g"
+ 
+ rhel/ndctl.spec: ndctl.spec.in Makefile.am version.m4
+diff --git a/ndctl.spec.in b/ndctl.spec.in
+index 0563b2d..4b08c05 100644
+--- a/ndctl.spec.in
++++ b/ndctl.spec.in
+@@ -8,6 +8,7 @@ Source0:	https://github.com/pmem/%{name}/archive/v%{version}.tar.gz#/%{name}-%{v
+ 
+ Requires:	LNAME%{?_isa} = %{version}-%{release}
+ Requires:	DAX_LNAME%{?_isa} = %{version}-%{release}
++Requires:	CXL_LNAME%{?_isa} = %{version}-%{release}
+ BuildRequires:	autoconf
+ %if 0%{?rhel} < 9
+ BuildRequires:	asciidoc
+@@ -54,6 +55,24 @@ the Linux kernel Device-DAX facility. This facility enables DAX mappings
+ of performance / feature differentiated memory without need of a
+ filesystem.
+ 
++%package -n cxl-cli
++Summary:	Manage CXL devices
++License:	GPLv2
++Requires:	CXL_LNAME%{?_isa} = %{version}-%{release}
 +
-+if USE_ASCIIDOCTOR
++%description -n cxl-cli
++The cxl utility provides enumeration and provisioning commands for
++the Linux kernel CXL devices.
 +
-+do_subst = sed -e 's,@Utility@,Libcxl,g' -e's,@utility@,libcxl,g'
-+CONFFILE = asciidoctor-extensions.rb
-+asciidoctor-extensions.rb: ../../asciidoctor-extensions.rb.in
-+	$(AM_V_GEN) $(do_subst) < $< > $@
++%package -n CXL_DNAME
++Summary:	Development files for libcxl
++License:	LGPLv2
++Requires:	CXL_LNAME%{?_isa} = %{version}-%{release}
 +
-+else
++%description -n CXL_DNAME
++This package contains libraries and header files for developing applications
++that use libcxl, a library for enumerating and communicating with CXL devices.
 +
-+do_subst = sed -e 's,UTILITY,libcxl,g'
-+CONFFILE = asciidoc.conf
-+asciidoc.conf: ../../asciidoc.conf.in
-+	$(AM_V_GEN) $(do_subst) < $< > $@
+ %package -n DAX_DNAME
+ Summary:	Development files for libdaxctl
+ License:	LGPLv2
+@@ -84,6 +103,13 @@ Device DAX is a facility for establishing DAX mappings of performance /
+ feature-differentiated memory. DAX_LNAME provides an enumeration /
+ control API for these devices.
+ 
++%package -n CXL_LNAME
++Summary:	Management library for CXL devices
++License:	LGPLv2
 +
-+endif
++%description -n CXL_LNAME
++libcxl is a library for enumerating and communicating with CXL devices.
 +
-+man3_MANS = \
-+	libcxl.3 \
-+	cxl_new.3
+ 
+ %prep
+ %setup -q ndctl-%{version}
+@@ -105,6 +131,8 @@ make check
+ 
+ %ldconfig_scriptlets -n DAX_LNAME
+ 
++%ldconfig_scriptlets -n CXL_LNAME
 +
-+EXTRA_DIST = $(man3_MANS)
+ %define bashcompdir %(pkg-config --variable=completionsdir bash-completion)
+ 
+ %files
+@@ -126,6 +154,12 @@ make check
+ %{_mandir}/man1/daxctl*
+ %{_datadir}/daxctl/daxctl.conf
+ 
++%files -n cxl-cli
++%defattr(-,root,root)
++%license LICENSES/preferred/GPL-2.0 LICENSES/other/MIT LICENSES/other/CC0-1.0
++%{_bindir}/cxl
++%{_mandir}/man1/cxl*
 +
-+CLEANFILES = $(man3_MANS)
+ %files -n LNAME
+ %defattr(-,root,root)
+ %doc README.md
+@@ -138,6 +172,12 @@ make check
+ %license LICENSES/preferred/LGPL-2.1 LICENSES/other/MIT LICENSES/other/CC0-1.0
+ %{_libdir}/libdaxctl.so.*
+ 
++%files -n CXL_LNAME
++%defattr(-,root,root)
++%doc README.md
++%license LICENSES/preferred/LGPL-2.1 LICENSES/other/MIT LICENSES/other/CC0-1.0
++%{_libdir}/libcxl.so.*
 +
-+XML_DEPS = \
-+	../../../version.m4 \
-+	../../copyright.txt \
-+	Makefile \
-+	$(CONFFILE)
+ %files -n DNAME
+ %defattr(-,root,root)
+ %license LICENSES/preferred/LGPL-2.1
+@@ -152,6 +192,15 @@ make check
+ %{_libdir}/libdaxctl.so
+ %{_libdir}/pkgconfig/libdaxctl.pc
+ 
++%files -n CXL_DNAME
++%defattr(-,root,root)
++%license LICENSES/preferred/LGPL-2.1
++%{_includedir}/cxl/
++%{_libdir}/libcxl.so
++%{_libdir}/pkgconfig/libcxl.pc
++%{_mandir}/man3/cxl*
++%{_mandir}/man3/libcxl.3.gz
 +
-+RM ?= rm -f
-+
-+if USE_ASCIIDOCTOR
-+
-+%.3: %.txt $(XML_DEPS)
-+	$(AM_V_GEN)$(RM) $@+ $@ && \
-+		$(ASCIIDOC) -b manpage -d manpage -acompat-mode \
-+		-I. -rasciidoctor-extensions \
-+		-amansource=libcxl -amanmanual="libcxl Manual" \
-+		-andctl_version=$(VERSION) -o $@+ $< && \
-+		mv $@+ $@
-+
-+else
-+
-+%.xml: %.txt $(XML_DEPS)
-+	$(AM_V_GEN)$(RM) $@+ $@ && \
-+		$(ASCIIDOC) -b docbook -d manpage -f asciidoc.conf \
-+		--unsafe -alibcxl_version=$(VERSION) -o $@+ $< && \
-+		mv $@+ $@
-+
-+%.3: %.xml $(XML_DEPS)
-+	$(AM_V_GEN)$(RM) $@ && \
-+		$(XMLTO) -o . -m ../../manpage-normal.xsl man $<
-+
-+endif
+ 
+ %changelog
+ * Fri May 27 2016 Dan Williams <dan.j.williams@intel.com> - 53-1
 -- 
 2.31.1
 
