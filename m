@@ -1,181 +1,109 @@
-Return-Path: <nvdimm+bounces-1574-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1576-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97B0D42FD4D
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:16:06 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D9A42FF0B
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id DE5263E105B
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 21:16:04 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 2F7DD1C0F8D
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14782C85;
-	Fri, 15 Oct 2021 21:15:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0942CA1;
+	Fri, 15 Oct 2021 23:53:03 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D24972
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 21:15:56 +0000 (UTC)
-Received: by mail-pg1-f178.google.com with SMTP id r2so9665665pgl.10
-        for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 14:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uVxjIXB320G0utlagZyh71XBvtZ8hGEI7ml4ZXDQLYY=;
-        b=8F/jlLx3H/ai61cbaiyD8fsL8LSIY+NEhqNYZ5VHqwvg+4s5vFLg+BpfVpcvtQG0mp
-         WNIOGKanog95rHFfnzU8kZuG2G60duDdDlCZ/0Kc//8UHtuccaYeaEXlfZHuwqdC4VPi
-         RgQbuVPLiuzSnxeINN3QkqM/k/9lhuM5O+KOUemkfL6EmrtPwUqKszO0cs+cu8pFeBfn
-         PZO3gMPckkQssS+Izrpb2kxNG6ar2jGYjYZ885J5sEKi89ZuEWWeK9l+fNJdQSDVhQxs
-         clJapaoMw3xqe8kV38xm8c0nGCAemXCZJmD1zAlNLUgPTk2uTbNCh8+7K1W+JpQn/eDj
-         E0zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uVxjIXB320G0utlagZyh71XBvtZ8hGEI7ml4ZXDQLYY=;
-        b=KH8bjxLQ+G3mPdYtJy1skhQZ5utaviVj8zX+Z92rNGosxRwq5vOSfMx6ghvMrhjcDx
-         H7gJtw2yfvcXmK6KIobYKkDncvE4uQX8NwSsACvITBm1swUraZf4XZSedeUFIildED6a
-         oGp4BfWNvNmZl4KAmblvxJoctkmjg8EdAdqxQDc7fobRmxHXda4r/h3kJ/tUcumke66r
-         Q+hQpAes7OFeMYJEaVUrbkM0RdrbB578tD4QlFUM7/xx9jREKYp0bJQEJmWsppdP7iFN
-         7ZYqPWBDW0i1tUnlhNNOx6LmhhY71jyy694GAn0FMtaTP1J9IBdYwx3Fu/OH0pDl4m0b
-         xe6w==
-X-Gm-Message-State: AOAM532nncKS38qv4t3Hca0YQ0J4zvwmDpHnZXLhcLMdV0p8MKxRkPZX
-	/e61cugeXtfkQurLCNbp6vrgfiI8hKmCzvP2KB77jx9e
-X-Google-Smtp-Source: ABdhPJxg8UyfYiobupsrYJQASYUkON3lKi4grucUkPOxIj6dEkJFzgu/tHduON6DhchCYWFobryx5JgxUJVGk3hIxK0=
-X-Received: by 2002:a62:1b92:0:b0:3eb:3f92:724 with SMTP id
- b140-20020a621b92000000b003eb3f920724mr13773526pfb.3.1634332556001; Fri, 15
- Oct 2021 14:15:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FC229CA
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=qipf6So8PiT9INdx54i/oyCsyup0P8n0B263b/OsQJ4=; b=t3gCfbHNlbboUocETcAM5VOV6d
+	AJLTHpezByfiDQMOqnTlcXwpgyT05T23oSIBWBKgLRQ72ton2E1A2ljGdUfJTlvzgdQhPekg7nKHM
+	klgH7xbJSKVzjdx5UC+DtcocBxWXLSTv11aoSHl2Q7APe4B4bC/miatiJIqZ70W2Egz4HlHMilNQL
+	Z9LySleaw0wZqkEeqaykCp4znP22IegCeRAPKQMl57XDPNGq/lsCmt+xlrhVUkM99cEjMftqcmhAm
+	WN144g0qC1mqMuA5h3bZoI8WPC4u/acsbiZ4qEi6hSp7C7X3LT2OmZacYin/LyeOYhehZilzxmS8v
+	HJc4llZw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbWzs-009C2t-UH; Fri, 15 Oct 2021 23:52:20 +0000
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: axboe@kernel.dk,
+	geoff@infradead.org,
+	mpe@ellerman.id.au,
+	benh@kernel.crashing.org,
+	paulus@samba.org,
+	jim@jtan.com,
+	minchan@kernel.org,
+	ngupta@vflare.org,
+	senozhatsky@chromium.org,
+	richard@nod.at,
+	miquel.raynal@bootlin.com,
+	vigneshr@ti.com,
+	dan.j.williams@intel.com,
+	vishal.l.verma@intel.com,
+	dave.jiang@intel.com,
+	ira.weiny@intel.com,
+	kbusch@kernel.org,
+	hch@lst.de,
+	sagi@grimberg.me
+Cc: linux-block@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-mtd@lists.infradead.org,
+	nvdimm@lists.linux.dev,
+	linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 00/13] block: add_disk() error handling stragglers
+Date: Fri, 15 Oct 2021 16:52:06 -0700
+Message-Id: <20211015235219.2191207-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211007082139.3088615-1-vishal.l.verma@intel.com>
- <20211007082139.3088615-18-vishal.l.verma@intel.com> <d20b7fd17067aa49a5ccdd2c649f345ab17cb12e.camel@intel.com>
-In-Reply-To: <d20b7fd17067aa49a5ccdd2c649f345ab17cb12e.camel@intel.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Fri, 15 Oct 2021 14:15:47 -0700
-Message-ID: <CAPcyv4joKOhTdaRBJVeoOtqhRjBvdtt9902TS=c39=zWTZXvuw@mail.gmail.com>
-Subject: Re: [ndctl PATCH v4 17/17] cxl: add health information to cxl-list
-To: "Verma, Vishal L" <vishal.l.verma@intel.com>
-Cc: "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, "Widawsky, Ben" <ben.widawsky@intel.com>, 
-	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Thu, Oct 14, 2021 at 4:42 PM Verma, Vishal L
-<vishal.l.verma@intel.com> wrote:
->
-> On Thu, 2021-10-07 at 02:21 -0600, Vishal Verma wrote:
-> > Add JSON output for fields from the 'GET_HEALTH_INFO' mailbox command
-> > to memory device listings.
-> >
-> > Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
-> > ---
-> >  Documentation/cxl/cxl-list.txt |   4 +
-> >  util/json.h                    |   1 +
-> >  cxl/list.c                     |   5 +
-> >  util/json.c                    | 189 +++++++++++++++++++++++++++++++++
-> >  4 files changed, 199 insertions(+)
-> >
-> > diff --git a/Documentation/cxl/cxl-list.txt b/Documentation/cxl/cxl-list.txt
-> > index bd377b3..dc86651 100644
-> > --- a/Documentation/cxl/cxl-list.txt
-> > +++ b/Documentation/cxl/cxl-list.txt
-> > @@ -53,6 +53,10 @@ OPTIONS
-> >  --idle::
-> >       Include idle (not enabled / zero-sized) devices in the listing
-> >
-> > +-H::
-> > +--health::
-> > +     Include health information in the memdev listing
-> > +
-> >  include::human-option.txt[]
-> >
-> >  include::verbose-option.txt[]
-> > diff --git a/util/json.h b/util/json.h
-> > index 91918c8..ce575e6 100644
-> > --- a/util/json.h
-> > +++ b/util/json.h
-> > @@ -19,6 +19,7 @@ enum util_json_flags {
-> >       UTIL_JSON_CONFIGURED    = (1 << 7),
-> >       UTIL_JSON_FIRMWARE      = (1 << 8),
-> >       UTIL_JSON_DAX_MAPPINGS  = (1 << 9),
-> > +     UTIL_JSON_HEALTH        = (1 << 10),
-> >  };
-> >
-> >  struct json_object;
-> > diff --git a/cxl/list.c b/cxl/list.c
-> > index 3dea73f..2fa155a 100644
-> > --- a/cxl/list.c
-> > +++ b/cxl/list.c
-> > @@ -16,6 +16,7 @@ static struct {
-> >       bool memdevs;
-> >       bool idle;
-> >       bool human;
-> > +     bool health;
-> >  } list;
-> >
-> >  static unsigned long listopts_to_flags(void)
-> > @@ -26,6 +27,8 @@ static unsigned long listopts_to_flags(void)
-> >               flags |= UTIL_JSON_IDLE;
-> >       if (list.human)
-> >               flags |= UTIL_JSON_HUMAN;
-> > +     if (list.health)
-> > +             flags |= UTIL_JSON_HEALTH;
-> >       return flags;
-> >  }
-> >
-> > @@ -57,6 +60,8 @@ int cmd_list(int argc, const char **argv, struct cxl_ctx *ctx)
-> >               OPT_BOOLEAN('i', "idle", &list.idle, "include idle devices"),
-> >               OPT_BOOLEAN('u', "human", &list.human,
-> >                               "use human friendly number formats "),
-> > +             OPT_BOOLEAN('H', "health", &list.health,
-> > +                             "include memory device health information "),
-> >               OPT_END(),
-> >       };
-> >       const char * const u[] = {
-> > diff --git a/util/json.c b/util/json.c
-> > index 3be3a92..dfc7b8e 100644
-> > --- a/util/json.c
-> > +++ b/util/json.c
-> > @@ -1442,6 +1442,190 @@ struct json_object *util_badblock_rec_to_json(u64 block, u64 count,
-> >       return NULL;
-> >  }
-> >
-> > +static struct json_object *util_cxl_memdev_health_to_json(
-> > +             struct cxl_memdev *memdev, unsigned long flags)
-> > +{
-> > +     const char *devname = cxl_memdev_get_devname(memdev);
-> > +     struct json_object *jhealth;
-> > +     struct json_object *jobj;
-> > +     struct cxl_cmd *cmd;
-> > +     u32 field;
-> > +     int rc;
-> > +
-> > +     jhealth = json_object_new_object();
-> > +     if (!jhealth)
-> > +             return NULL;
-> > +     if (!memdev)
-> > +             goto err_jobj;
-> > +
-> > +     cmd = cxl_cmd_new_get_health_info(memdev);
-> > +     if (!cmd)
-> > +             goto err_jobj;
-> > +
-> > +     rc = cxl_cmd_submit(cmd);
-> > +     /* ENOTTY - command not supported by the memdev */
-> > +     if (rc == -ENOTTY)
-> > +             goto err_cmd;
->
-> I'll remove this special case, as well as the error prints below. The
-> cmd submission could fail for any number of reasons, including
-> unsupported by hardware - I think for any of those cases, we can just
-> silently skip printing the json fields here.
+This patch set consists of al the straggler drivers for which we have
+have no patch reviews done for yet. I'd like to ask for folks to please
+consider chiming in, specially if you're the maintainer for the driver.
+Additionally if you can specify if you'll take the patch in yourself or
+if you want Jens to take it, that'd be great too.
 
-Sounds good. If someone really cares, the debug prints inside
-cxl_cmd_submit() should be enough to indicate what went wrong.
+Luis Chamberlain (13):
+  block/brd: add error handling support for add_disk()
+  nvme-multipath: add error handling support for add_disk()
+  nvdimm/btt: do not call del_gendisk() if not needed
+  nvdimm/btt: use goto error labels on btt_blk_init()
+  nvdimm/btt: add error handling support for add_disk()
+  nvdimm/blk: avoid calling del_gendisk() on early failures
+  nvdimm/blk: add error handling support for add_disk()
+  zram: add error handling support for add_disk()
+  z2ram: add error handling support for add_disk()
+  ps3disk: add error handling support for add_disk()
+  ps3vram: add error handling support for add_disk()
+  block/sunvdc: add error handling support for add_disk()
+  mtd/ubi/block: add error handling support for add_disk()
+
+ drivers/block/brd.c           |  9 +++++++--
+ drivers/block/ps3disk.c       |  8 ++++++--
+ drivers/block/ps3vram.c       |  7 ++++++-
+ drivers/block/sunvdc.c        | 14 +++++++++++---
+ drivers/block/z2ram.c         |  7 +++++--
+ drivers/block/zram/zram_drv.c |  6 +++++-
+ drivers/mtd/ubi/block.c       |  8 +++++++-
+ drivers/nvdimm/blk.c          | 21 +++++++++++++++------
+ drivers/nvdimm/btt.c          | 24 +++++++++++++++---------
+ drivers/nvme/host/multipath.c | 14 ++++++++++++--
+ 10 files changed, 89 insertions(+), 29 deletions(-)
+
+-- 
+2.30.2
+
 
