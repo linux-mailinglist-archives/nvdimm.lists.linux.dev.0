@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1576-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1580-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D9A42FF0B
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:15 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF19642FF11
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 2F7DD1C0F8D
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:14 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id B92BC3E1060
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0942CA1;
-	Fri, 15 Oct 2021 23:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850F72CAD;
+	Fri, 15 Oct 2021 23:53:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FC229CA
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA202C94
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=qipf6So8PiT9INdx54i/oyCsyup0P8n0B263b/OsQJ4=; b=t3gCfbHNlbboUocETcAM5VOV6d
-	AJLTHpezByfiDQMOqnTlcXwpgyT05T23oSIBWBKgLRQ72ton2E1A2ljGdUfJTlvzgdQhPekg7nKHM
-	klgH7xbJSKVzjdx5UC+DtcocBxWXLSTv11aoSHl2Q7APe4B4bC/miatiJIqZ70W2Egz4HlHMilNQL
-	Z9LySleaw0wZqkEeqaykCp4znP22IegCeRAPKQMl57XDPNGq/lsCmt+xlrhVUkM99cEjMftqcmhAm
-	WN144g0qC1mqMuA5h3bZoI8WPC4u/acsbiZ4qEi6hSp7C7X3LT2OmZacYin/LyeOYhehZilzxmS8v
-	HJc4llZw==;
+	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=+2LEMN1XpiXKACzO2eJ6NkEHApTLeNqeZiilGza0YlE=; b=Jjlk8pvArEGMnx4jkmd2938ccV
+	ob+hr+a1J3MtEl2X0rDuA8TL+WP3gCuxl30kYrFyV8X0i9xaOxYLaXHc/Alp1hJWbVPwuxWdcqyVs
+	gIdLRUBfIKutjBUP3eTW8MVIGPp8BofTZ9vvIv2RzLIXWmU924dlWbeaQVGq4Xqv0PUwBccp0qJHP
+	jbs8GF+gSRDcGeDm6xm+yCHucQhkZsUxuN+j9J9c0PbGSi2o4OyuhdYJscVdmK3d0938vB9eSP/g4
+	xUx3XqpUyB5m9VQVzTZaaUigf6jY54ZsR0OkgjwU4P6pmIqWY4+BYbpuWPnPZJFVmJcGIV/qLlH1i
+	7U18sTtg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzs-009C2t-UH; Fri, 15 Oct 2021 23:52:20 +0000
+	id 1mbWzs-009C2v-VN; Fri, 15 Oct 2021 23:52:20 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,10 +57,12 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 00/13] block: add_disk() error handling stragglers
-Date: Fri, 15 Oct 2021 16:52:06 -0700
-Message-Id: <20211015235219.2191207-1-mcgrof@kernel.org>
+Subject: [PATCH 01/13] block/brd: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:07 -0700
+Message-Id: <20211015235219.2191207-2-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
+References: <20211015235219.2191207-1-mcgrof@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,39 +72,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-This patch set consists of al the straggler drivers for which we have
-have no patch reviews done for yet. I'd like to ask for folks to please
-consider chiming in, specially if you're the maintainer for the driver.
-Additionally if you can specify if you'll take the patch in yourself or
-if you want Jens to take it, that'd be great too.
+We never checked for errors on add_disk() as this function
+returned void. Now that this is fixed, use the shiny new
+error handling.
 
-Luis Chamberlain (13):
-  block/brd: add error handling support for add_disk()
-  nvme-multipath: add error handling support for add_disk()
-  nvdimm/btt: do not call del_gendisk() if not needed
-  nvdimm/btt: use goto error labels on btt_blk_init()
-  nvdimm/btt: add error handling support for add_disk()
-  nvdimm/blk: avoid calling del_gendisk() on early failures
-  nvdimm/blk: add error handling support for add_disk()
-  zram: add error handling support for add_disk()
-  z2ram: add error handling support for add_disk()
-  ps3disk: add error handling support for add_disk()
-  ps3vram: add error handling support for add_disk()
-  block/sunvdc: add error handling support for add_disk()
-  mtd/ubi/block: add error handling support for add_disk()
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ drivers/block/brd.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- drivers/block/brd.c           |  9 +++++++--
- drivers/block/ps3disk.c       |  8 ++++++--
- drivers/block/ps3vram.c       |  7 ++++++-
- drivers/block/sunvdc.c        | 14 +++++++++++---
- drivers/block/z2ram.c         |  7 +++++--
- drivers/block/zram/zram_drv.c |  6 +++++-
- drivers/mtd/ubi/block.c       |  8 +++++++-
- drivers/nvdimm/blk.c          | 21 +++++++++++++++------
- drivers/nvdimm/btt.c          | 24 +++++++++++++++---------
- drivers/nvme/host/multipath.c | 14 ++++++++++++--
- 10 files changed, 89 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/block/brd.c b/drivers/block/brd.c
+index 530b31240203..6065f493876f 100644
+--- a/drivers/block/brd.c
++++ b/drivers/block/brd.c
+@@ -372,6 +372,7 @@ static int brd_alloc(int i)
+ 	struct brd_device *brd;
+ 	struct gendisk *disk;
+ 	char buf[DISK_NAME_LEN];
++	int err = -ENOMEM;
+ 
+ 	mutex_lock(&brd_devices_mutex);
+ 	list_for_each_entry(brd, &brd_devices, brd_list) {
+@@ -422,16 +423,20 @@ static int brd_alloc(int i)
+ 	/* Tell the block layer that this is not a rotational device */
+ 	blk_queue_flag_set(QUEUE_FLAG_NONROT, disk->queue);
+ 	blk_queue_flag_clear(QUEUE_FLAG_ADD_RANDOM, disk->queue);
+-	add_disk(disk);
++	err = add_disk(disk);
++	if (err)
++		goto out_cleanup_disk;
+ 
+ 	return 0;
+ 
++out_cleanup_disk:
++	blk_cleanup_disk(disk);
+ out_free_dev:
+ 	mutex_lock(&brd_devices_mutex);
+ 	list_del(&brd->brd_list);
+ 	mutex_unlock(&brd_devices_mutex);
+ 	kfree(brd);
+-	return -ENOMEM;
++	return err;
+ }
+ 
+ static void brd_probe(dev_t dev)
 -- 
 2.30.2
 
