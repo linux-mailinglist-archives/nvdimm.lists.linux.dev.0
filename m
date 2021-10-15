@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1588-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1583-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB1342FF1C
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:54:24 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 523E042FF14
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id D714E1C0FDF
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:54:22 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id A9C843E1185
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC182CBB;
-	Fri, 15 Oct 2021 23:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660C42CB2;
+	Fri, 15 Oct 2021 23:53:06 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8A22C89
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D207E2C96
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=omBKsWTl8Q/WM0k3AiOvEAjN+m9JDz574ka/nFE6G1U=; b=d3DuD+ntkjsX5wdLWBQUee/Kd4
-	Ka8WmB4Njz7ZuaQfe42890YC5Ei+XlqIQYf4otyg27DZOBzEGweA/XIOCjKPda0mlZIzkM7zD/S89
-	iRhbQwv0j63NfvXxDgtGtbzvfUTCh27v8rZE+AF0P6syYrDRfKVk9jlkvpepJhtdx6+Jm1HCpnzga
-	j2DB1Xq9POr6uTmUluGCTwaiWICaNRsoR0OOUh3SceEzWf+EyVjAqPcSSSigfoLZxnBoBvzU3+Qbq
-	r8FvoHNO6DLtHVeHtR3K3mezUwJnnmY7WWf9Llyug1fVocMzeKBs7pTKHfPacFnLhenLwBhkZDZgh
-	toPZ4UoQ==;
+	bh=7R5PYVFPXskQk20vzfFqzumtxD4zBhl8b3RLHCGuP34=; b=bA1zIwdhWBpvlfjPHf65YiWw1w
+	wNKSsZycfKU6wTo+TriKrwHhsylyC8eMhzSF0i7XqaBSV9dMtcoJk5uBzoLZCuWHqAJPs4dhdPV+q
+	S0GVi7stXEDsLti3GghX0YK306V30lxJcY2QeyKFi5sry6O3IOwJdxPd1N4J0z6KXmrD0rOVcpCn3
+	yvEnSxF2UYqoZdvec8gr0V7GX1sNtN9FOWzqjb1O5OqYYjndYWTsx0gJJlK8uyVSJ12gIWFem2lsk
+	h2GuzJdczHuexPRYg/FSSqNpsJTDLZbJXCRvYTM13PUle1YJcEgXxka426Nkl54BSAznT4EB7w/RK
+	xoviz0/Q==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzt-009C3A-7r; Fri, 15 Oct 2021 23:52:21 +0000
+	id 1mbWzt-009C3D-99; Fri, 15 Oct 2021 23:52:21 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,9 +57,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 08/13] zram: add error handling support for add_disk()
-Date: Fri, 15 Oct 2021 16:52:14 -0700
-Message-Id: <20211015235219.2191207-9-mcgrof@kernel.org>
+Subject: [PATCH 09/13] z2ram: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:15 -0700
+Message-Id: <20211015235219.2191207-10-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
 References: <20211015235219.2191207-1-mcgrof@kernel.org>
@@ -74,37 +74,39 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 
 We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
-error handling.
+error handling. Only the disk is cleaned up inside
+z2ram_register_disk() as the caller deals with the rest.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/block/zram/zram_drv.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/block/z2ram.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 0a9309a2ef54..bdbded107e6b 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1983,7 +1983,9 @@ static int zram_add(void)
- 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
+diff --git a/drivers/block/z2ram.c b/drivers/block/z2ram.c
+index 4eef218108c6..ccc52c935faf 100644
+--- a/drivers/block/z2ram.c
++++ b/drivers/block/z2ram.c
+@@ -318,6 +318,7 @@ static const struct blk_mq_ops z2_mq_ops = {
+ static int z2ram_register_disk(int minor)
+ {
+ 	struct gendisk *disk;
++	int err;
  
- 	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
--	device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
-+	ret = device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
-+	if (ret)
-+		goto out_cleanup_disk;
+ 	disk = blk_mq_alloc_disk(&tag_set, NULL);
+ 	if (IS_ERR(disk))
+@@ -333,8 +334,10 @@ static int z2ram_register_disk(int minor)
+ 		sprintf(disk->disk_name, "z2ram");
  
- 	strlcpy(zram->compressor, default_compressor, sizeof(zram->compressor));
+ 	z2ram_gendisk[minor] = disk;
+-	add_disk(disk);
+-	return 0;
++	err = add_disk(disk);
++	if (err)
++		blk_cleanup_disk(disk);
++	return err;
+ }
  
-@@ -1991,6 +1993,8 @@ static int zram_add(void)
- 	pr_info("Added device: %s\n", zram->disk->disk_name);
- 	return device_id;
- 
-+out_cleanup_disk:
-+	blk_cleanup_disk(zram->disk);
- out_free_idr:
- 	idr_remove(&zram_index_idr, device_id);
- out_free_dev:
+ static int __init z2_init(void)
 -- 
 2.30.2
 
