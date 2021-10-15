@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1585-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1575-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC8C642FF16
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:54:08 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id B697C42FF0A
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 7D7A71C0FE0
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:54:07 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 6809D3E00E2
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3722CB7;
-	Fri, 15 Oct 2021 23:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7408C2C9E;
+	Fri, 15 Oct 2021 23:53:02 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB972CA9
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7597E2C81
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:52:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=6NZfHmNoX5N/dbslA9tEZ3wm71g//v2MOeHuD/3FoC0=; b=IqiWkGJxOs4RZJjHpZ7nll994s
-	uQA7UIW+Ocik9GPEuu98PXKCk2c1/R4dmgJNmMK7hIT0CSmMm2dNOhTyBQnJAcQVps9OAi5PycSEB
-	lFwC/uYATxJhPiYhXVyPODu4sXxqnG/Kv6uAQzwaYmHA5XxAypucqitped5paW7j/jY5YdjpBuwNO
-	JXXnDjWd7gRdgfbjhElarcK95Xm273zx4UiqerCVkP3oitZ1QvMbY/dK2IjadIAuhraTLxgzCGeBo
-	hA6DJrWJ+8rFDTxLBOZlKX+fmT/H5hwAwFdfvcPhQB8OtMJQQqLRwkmCHBpjn7W+8UVgkpKB5sRdm
-	X3RLj42w==;
+	bh=HyZ2KI/h/gpVdjlPSyGH7uhBE8wL3JrrLi6b2qQqvAU=; b=yj5zwz6Fs1lJD22XifEcv2Orrv
+	prK+DP1Qo/XEWtRbfWO8+3LeJ2D/W40Mrnlx/po3H3Bj1sdJ7LjC46VZzVbijZLDUfyDQ0lcraB4A
+	O1+ZnXCViST9WOLXPEp6QEw5iFwg7Nl2NTJjTFNWAiBSCkRT/eFF+ufsLZ35VSvWT+Me6Bl5b+zW4
+	qnUeG+hWSyDlJEc6UGDHcC2VRpwbRbnamAoY23a1KoJTax19zGzqc5vZVqn6CEFYHaBNHVowexejt
+	7tFP6vpdjs9kA32INEEkgOr2mGidDR806UqktII1c799hggCz3zG9h/QDk29AdLY2mx1RJDCSEpjY
+	mzPuYCUA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzt-009C3H-Bn; Fri, 15 Oct 2021 23:52:21 +0000
+	id 1mbWzt-009C3J-DB; Fri, 15 Oct 2021 23:52:21 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,9 +57,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 11/13] ps3vram: add error handling support for add_disk()
-Date: Fri, 15 Oct 2021 16:52:17 -0700
-Message-Id: <20211015235219.2191207-12-mcgrof@kernel.org>
+Subject: [PATCH 12/13] block/sunvdc: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:18 -0700
+Message-Id: <20211015235219.2191207-13-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
 References: <20211015235219.2191207-1-mcgrof@kernel.org>
@@ -76,31 +76,48 @@ We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
 error handling.
 
+We re-use the same free tag call, so we also add a label for
+that as well.
+
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/block/ps3vram.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/block/sunvdc.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/block/ps3vram.c b/drivers/block/ps3vram.c
-index c7b19e128b03..af2a0d09c598 100644
---- a/drivers/block/ps3vram.c
-+++ b/drivers/block/ps3vram.c
-@@ -755,9 +755,14 @@ static int ps3vram_probe(struct ps3_system_bus_device *dev)
- 	dev_info(&dev->core, "%s: Using %llu MiB of GPU memory\n",
- 		 gendisk->disk_name, get_capacity(gendisk) >> 11);
+diff --git a/drivers/block/sunvdc.c b/drivers/block/sunvdc.c
+index 4d4bb810c2ae..6f45a53f7cbf 100644
+--- a/drivers/block/sunvdc.c
++++ b/drivers/block/sunvdc.c
+@@ -826,8 +826,8 @@ static int probe_disk(struct vdc_port *port)
+ 	if (IS_ERR(g)) {
+ 		printk(KERN_ERR PFX "%s: Could not allocate gendisk.\n",
+ 		       port->vio.name);
+-		blk_mq_free_tag_set(&port->tag_set);
+-		return PTR_ERR(g);
++		err = PTR_ERR(g);
++		goto out_free_tag;
+ 	}
  
--	device_add_disk(&dev->core, gendisk, NULL);
-+	error = device_add_disk(&dev->core, gendisk, NULL);
-+	if (error)
+ 	port->disk = g;
+@@ -879,9 +879,17 @@ static int probe_disk(struct vdc_port *port)
+ 	       port->vdisk_size, (port->vdisk_size >> (20 - 9)),
+ 	       port->vio.ver.major, port->vio.ver.minor);
+ 
+-	device_add_disk(&port->vio.vdev->dev, g, NULL);
++	err = device_add_disk(&port->vio.vdev->dev, g, NULL);
++	if (err)
 +		goto out_cleanup_disk;
-+
- 	return 0;
  
+ 	return 0;
++
 +out_cleanup_disk:
-+	blk_cleanup_disk(gendisk);
- out_cache_cleanup:
- 	remove_proc_entry(DEVICE_NAME, NULL);
- 	ps3vram_cache_cleanup(dev);
++	blk_cleanup_disk(g);
++out_free_tag:
++	blk_mq_free_tag_set(&port->tag_set);
++	return err;
+ }
+ 
+ static struct ldc_channel_config vdc_ldc_cfg = {
 -- 
 2.30.2
 
