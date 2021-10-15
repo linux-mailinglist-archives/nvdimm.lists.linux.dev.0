@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1577-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1588-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE9DB42FF0D
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:20 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB1342FF1C
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:54:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 868783E108E
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:19 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id D714E1C0FDF
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84EB32CA5;
-	Fri, 15 Oct 2021 23:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC182CBB;
+	Fri, 15 Oct 2021 23:53:10 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAC42C87
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8A22C89
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=vLYLL0oFZhxGylgSJPWXsGjPK2psQoUWyxkb9au47Xw=; b=VKj0PyAggUPHY58Y64VhZFHAZk
-	FhpZFFJ2m6Cm3SHaekc0CDiJyLp+OD6ip4tp6f0fm0KLP8DzK5r4zUN+TBF+Zr9exRvHYoP1U4ZSo
-	xvSMZDGCzyHG9yaWXd/DzzmwcgGlruPb5+CD0ctA68F79eEVs002wvsQCyuEyhihClXsJYS97NwsL
-	0m5eBo0Qkmdn5r8hNV7zk/1puPeJ1cjcM3zzlg31bplOURK1wIXcWSlBuo2kj1ISDbTfOi3ggEGBn
-	h4r+mufchQFxCHDsxXaWIpgxoqkHJHOwvHKOU/0fa0aDDgmXK1any8EXm3niZiuki8Z2zds4ZpISB
-	ehigutRw==;
+	bh=omBKsWTl8Q/WM0k3AiOvEAjN+m9JDz574ka/nFE6G1U=; b=d3DuD+ntkjsX5wdLWBQUee/Kd4
+	Ka8WmB4Njz7ZuaQfe42890YC5Ei+XlqIQYf4otyg27DZOBzEGweA/XIOCjKPda0mlZIzkM7zD/S89
+	iRhbQwv0j63NfvXxDgtGtbzvfUTCh27v8rZE+AF0P6syYrDRfKVk9jlkvpepJhtdx6+Jm1HCpnzga
+	j2DB1Xq9POr6uTmUluGCTwaiWICaNRsoR0OOUh3SceEzWf+EyVjAqPcSSSigfoLZxnBoBvzU3+Qbq
+	r8FvoHNO6DLtHVeHtR3K3mezUwJnnmY7WWf9Llyug1fVocMzeKBs7pTKHfPacFnLhenLwBhkZDZgh
+	toPZ4UoQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzt-009C37-6Y; Fri, 15 Oct 2021 23:52:21 +0000
+	id 1mbWzt-009C3A-7r; Fri, 15 Oct 2021 23:52:21 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,9 +57,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 07/13] nvdimm/blk: add error handling support for add_disk()
-Date: Fri, 15 Oct 2021 16:52:13 -0700
-Message-Id: <20211015235219.2191207-8-mcgrof@kernel.org>
+Subject: [PATCH 08/13] zram: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:14 -0700
+Message-Id: <20211015235219.2191207-9-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
 References: <20211015235219.2191207-1-mcgrof@kernel.org>
@@ -76,36 +76,35 @@ We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
 error handling.
 
-Since nvdimm/blk uses devm we just need to move the devm
-registration towards the end. And in hindsight, that seems
-to also provide a fix given del_gendisk() should not be
-called unless the disk was already added via add_disk().
-The probably of that issue happening is low though, like
-OOM while calling devm_add_action(), so the fix is minor.
-
-We manually unwind in case of add_disk() failure prior
-to the devm registration.
-
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/nvdimm/blk.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/block/zram/zram_drv.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/blk.c b/drivers/nvdimm/blk.c
-index 591fa1f86f1e..9f1eb41404ac 100644
---- a/drivers/nvdimm/blk.c
-+++ b/drivers/nvdimm/blk.c
-@@ -265,7 +265,9 @@ static int nsblk_attach_disk(struct nd_namespace_blk *nsblk)
- 	}
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 0a9309a2ef54..bdbded107e6b 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1983,7 +1983,9 @@ static int zram_add(void)
+ 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
  
- 	set_capacity(disk, available_disk_size >> SECTOR_SHIFT);
--	device_add_disk(dev, disk, NULL);
-+	rc = device_add_disk(dev, disk, NULL);
-+	if (rc)
-+		goto out_before_devm_err;
+ 	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
+-	device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
++	ret = device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
++	if (ret)
++		goto out_cleanup_disk;
  
- 	/* nd_blk_release_disk() is called if this fails */
- 	if (devm_add_action_or_reset(dev, nd_blk_release_disk, disk))
+ 	strlcpy(zram->compressor, default_compressor, sizeof(zram->compressor));
+ 
+@@ -1991,6 +1993,8 @@ static int zram_add(void)
+ 	pr_info("Added device: %s\n", zram->disk->disk_name);
+ 	return device_id;
+ 
++out_cleanup_disk:
++	blk_cleanup_disk(zram->disk);
+ out_free_idr:
+ 	idr_remove(&zram_index_idr, device_id);
+ out_free_dev:
 -- 
 2.30.2
 
