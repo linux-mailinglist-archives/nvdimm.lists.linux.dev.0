@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1580-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1578-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF19642FF11
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:37 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id C44F242FF0E
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id B92BC3E1060
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:36 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 16FCE3E10A5
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850F72CAD;
-	Fri, 15 Oct 2021 23:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0BF2CA7;
+	Fri, 15 Oct 2021 23:53:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA202C94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E8A2C89
 	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=+2LEMN1XpiXKACzO2eJ6NkEHApTLeNqeZiilGza0YlE=; b=Jjlk8pvArEGMnx4jkmd2938ccV
-	ob+hr+a1J3MtEl2X0rDuA8TL+WP3gCuxl30kYrFyV8X0i9xaOxYLaXHc/Alp1hJWbVPwuxWdcqyVs
-	gIdLRUBfIKutjBUP3eTW8MVIGPp8BofTZ9vvIv2RzLIXWmU924dlWbeaQVGq4Xqv0PUwBccp0qJHP
-	jbs8GF+gSRDcGeDm6xm+yCHucQhkZsUxuN+j9J9c0PbGSi2o4OyuhdYJscVdmK3d0938vB9eSP/g4
-	xUx3XqpUyB5m9VQVzTZaaUigf6jY54ZsR0OkgjwU4P6pmIqWY4+BYbpuWPnPZJFVmJcGIV/qLlH1i
-	7U18sTtg==;
+	bh=bWrYy27/Ft+aLDChsLBGCGZJ9I29Pbmku4dc9v02/r0=; b=IY2ti5CFu7tk7l/1b1dOBrzqFV
+	aY9UvoJKkeTLc2QMRNWX6uc1JjZmitgQWYAqCJrHP3ukaJAS1Znz/MF42OZxUAt/7nUAnIiAlaBdw
+	qxqWz+L6WdoNhUxemK8IqK8TTz5PiYshQ9/0IYTCEPZsgX8UFxP25gp3gw4mI5zwxPE0jpzsJMdNF
+	piTCgmlnkXlxAQxhoX2yeSSTMZLJghSLJlHFu34Sux+hr4llFOQyl8BtkdxpGRy5hn40pVSQcZxr9
+	8NMljnWNJV+SY+YkxBhw9vXuVPxdhVfyQszbzyQE3EdW1D1TeSngbhl2jloBhz2cfG6cuZlUSHqj0
+	9sJQoaow==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzs-009C2v-VN; Fri, 15 Oct 2021 23:52:20 +0000
+	id 1mbWzt-009C2x-0D; Fri, 15 Oct 2021 23:52:21 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,9 +57,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 01/13] block/brd: add error handling support for add_disk()
-Date: Fri, 15 Oct 2021 16:52:07 -0700
-Message-Id: <20211015235219.2191207-2-mcgrof@kernel.org>
+Subject: [PATCH 02/13] nvme-multipath: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:08 -0700
+Message-Id: <20211015235219.2191207-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
 References: <20211015235219.2191207-1-mcgrof@kernel.org>
@@ -76,46 +76,50 @@ We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
 error handling.
 
+Since we now can tell for sure when a disk was added, move
+setting the bit NVME_NSHEAD_DISK_LIVE only when we did
+add the disk successfully.
+
+Nothing to do here as the cleanup is done elsewhere. We take
+care and use test_and_set_bit() because it is protects against
+two nvme paths simultaneously calling device_add_disk() on the
+same namespace head.
+
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/block/brd.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/nvme/host/multipath.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/brd.c b/drivers/block/brd.c
-index 530b31240203..6065f493876f 100644
---- a/drivers/block/brd.c
-+++ b/drivers/block/brd.c
-@@ -372,6 +372,7 @@ static int brd_alloc(int i)
- 	struct brd_device *brd;
- 	struct gendisk *disk;
- 	char buf[DISK_NAME_LEN];
-+	int err = -ENOMEM;
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index e8ccdd398f78..022837f7be41 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -496,13 +496,23 @@ int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *head)
+ static void nvme_mpath_set_live(struct nvme_ns *ns)
+ {
+ 	struct nvme_ns_head *head = ns->head;
++	int rc;
  
- 	mutex_lock(&brd_devices_mutex);
- 	list_for_each_entry(brd, &brd_devices, brd_list) {
-@@ -422,16 +423,20 @@ static int brd_alloc(int i)
- 	/* Tell the block layer that this is not a rotational device */
- 	blk_queue_flag_set(QUEUE_FLAG_NONROT, disk->queue);
- 	blk_queue_flag_clear(QUEUE_FLAG_ADD_RANDOM, disk->queue);
--	add_disk(disk);
-+	err = add_disk(disk);
-+	if (err)
-+		goto out_cleanup_disk;
+ 	if (!head->disk)
+ 		return;
  
- 	return 0;
++	/*
++	 * test_and_set_bit() is used because it is protecting against two nvme
++	 * paths simultaneously calling device_add_disk() on the same namespace
++	 * head.
++	 */
+ 	if (!test_and_set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags)) {
+-		device_add_disk(&head->subsys->dev, head->disk,
+-				nvme_ns_id_attr_groups);
++		rc = device_add_disk(&head->subsys->dev, head->disk,
++				     nvme_ns_id_attr_groups);
++		if (rc) {
++			clear_bit(NVME_NSHEAD_DISK_LIVE, &ns->flags);
++			return;
++		}
+ 		nvme_add_ns_head_cdev(head);
+ 	}
  
-+out_cleanup_disk:
-+	blk_cleanup_disk(disk);
- out_free_dev:
- 	mutex_lock(&brd_devices_mutex);
- 	list_del(&brd->brd_list);
- 	mutex_unlock(&brd_devices_mutex);
- 	kfree(brd);
--	return -ENOMEM;
-+	return err;
- }
- 
- static void brd_probe(dev_t dev)
 -- 
 2.30.2
 
