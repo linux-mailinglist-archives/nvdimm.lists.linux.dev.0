@@ -1,35 +1,35 @@
-Return-Path: <nvdimm+bounces-1583-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1579-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 523E042FF14
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B189742FF0F
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 16 Oct 2021 01:53:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id A9C843E1185
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:53 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 2B6D43E10A8
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Oct 2021 23:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660C42CB2;
-	Fri, 15 Oct 2021 23:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59ACB2CAB;
+	Fri, 15 Oct 2021 23:53:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D207E2C96
-	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A122C85
+	for <nvdimm@lists.linux.dev>; Fri, 15 Oct 2021 23:53:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=7R5PYVFPXskQk20vzfFqzumtxD4zBhl8b3RLHCGuP34=; b=bA1zIwdhWBpvlfjPHf65YiWw1w
-	wNKSsZycfKU6wTo+TriKrwHhsylyC8eMhzSF0i7XqaBSV9dMtcoJk5uBzoLZCuWHqAJPs4dhdPV+q
-	S0GVi7stXEDsLti3GghX0YK306V30lxJcY2QeyKFi5sry6O3IOwJdxPd1N4J0z6KXmrD0rOVcpCn3
-	yvEnSxF2UYqoZdvec8gr0V7GX1sNtN9FOWzqjb1O5OqYYjndYWTsx0gJJlK8uyVSJ12gIWFem2lsk
-	h2GuzJdczHuexPRYg/FSSqNpsJTDLZbJXCRvYTM13PUle1YJcEgXxka426Nkl54BSAznT4EB7w/RK
-	xoviz0/Q==;
+	bh=IGHq/zn5r0bFrYNjymK6TXitnBNWw/sSmMius/3bC28=; b=rbJob0wAmG/PeQWeRRrtcYxYFJ
+	YRzLLYnhKrbq9c5C3ei247lq9ND1TVEr+sI9h97FxuA1tDfOtKvVSODpgJJ/i5ca6MJz5xP4IMZD0
+	k8GLy6j5oqZLDBGq6gK+63F5oR4QWzhbpUf2yaRiQDDfd4AeZudkLHLPi6u++tOTgiZ1+ocHLyxwm
+	NPrl9ADXuHopptXncDabSkoGhP5reCekk4mql+zkVM2KP3vBJufj+i8EcsZ3KxkVw2szdVftlSWsC
+	5jb2rMt8UQgpZTbkrS1+3YEmXkD2hhNaGQp9g1hn3QxwQHZoeI5/vA1VNosR6YWl+x1OyPfZeZ/mg
+	VZqAqmPQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbWzt-009C3D-99; Fri, 15 Oct 2021 23:52:21 +0000
+	id 1mbWzt-009C3F-AU; Fri, 15 Oct 2021 23:52:21 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: axboe@kernel.dk,
 	geoff@infradead.org,
@@ -57,9 +57,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 09/13] z2ram: add error handling support for add_disk()
-Date: Fri, 15 Oct 2021 16:52:15 -0700
-Message-Id: <20211015235219.2191207-10-mcgrof@kernel.org>
+Subject: [PATCH 10/13] ps3disk: add error handling support for add_disk()
+Date: Fri, 15 Oct 2021 16:52:16 -0700
+Message-Id: <20211015235219.2191207-11-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015235219.2191207-1-mcgrof@kernel.org>
 References: <20211015235219.2191207-1-mcgrof@kernel.org>
@@ -74,39 +74,33 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 
 We never checked for errors on add_disk() as this function
 returned void. Now that this is fixed, use the shiny new
-error handling. Only the disk is cleaned up inside
-z2ram_register_disk() as the caller deals with the rest.
+error handling.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- drivers/block/z2ram.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/block/ps3disk.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/z2ram.c b/drivers/block/z2ram.c
-index 4eef218108c6..ccc52c935faf 100644
---- a/drivers/block/z2ram.c
-+++ b/drivers/block/z2ram.c
-@@ -318,6 +318,7 @@ static const struct blk_mq_ops z2_mq_ops = {
- static int z2ram_register_disk(int minor)
- {
- 	struct gendisk *disk;
-+	int err;
+diff --git a/drivers/block/ps3disk.c b/drivers/block/ps3disk.c
+index 8d51efbe045d..3054adf77460 100644
+--- a/drivers/block/ps3disk.c
++++ b/drivers/block/ps3disk.c
+@@ -467,9 +467,13 @@ static int ps3disk_probe(struct ps3_system_bus_device *_dev)
+ 		 gendisk->disk_name, priv->model, priv->raw_capacity >> 11,
+ 		 get_capacity(gendisk) >> 11);
  
- 	disk = blk_mq_alloc_disk(&tag_set, NULL);
- 	if (IS_ERR(disk))
-@@ -333,8 +334,10 @@ static int z2ram_register_disk(int minor)
- 		sprintf(disk->disk_name, "z2ram");
- 
- 	z2ram_gendisk[minor] = disk;
--	add_disk(disk);
+-	device_add_disk(&dev->sbd.core, gendisk, NULL);
 -	return 0;
-+	err = add_disk(disk);
-+	if (err)
-+		blk_cleanup_disk(disk);
-+	return err;
- }
++	error = device_add_disk(&dev->sbd.core, gendisk, NULL);
++	if (error)
++		goto fail_cleanup_disk;
  
- static int __init z2_init(void)
++	return 0;
++fail_cleanup_disk:
++	blk_cleanup_disk(gendisk);
+ fail_free_tag_set:
+ 	blk_mq_free_tag_set(&priv->tag_set);
+ fail_teardown:
 -- 
 2.30.2
 
