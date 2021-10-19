@@ -1,80 +1,153 @@
-Return-Path: <nvdimm+bounces-1635-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1640-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9EAE432DAD
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 08:03:26 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id B611C4332D7
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 11:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 9BC041C0F8A
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 06:03:25 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id E5FD43E114E
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 09:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33342C8E;
-	Tue, 19 Oct 2021 06:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05442C93;
+	Tue, 19 Oct 2021 09:49:49 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from usmail.montage-tech.com (usmail.montage-tech.com [12.176.92.53])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F6E2C88
-	for <nvdimm@lists.linux.dev>; Tue, 19 Oct 2021 06:03:17 +0000 (UTC)
-X-MDAV-Result: clean
-X-MDAV-Processed: usmail.montage-tech.com, Mon, 18 Oct 2021 23:00:07 -0700
-Received: from shmail.montage-tech.com by usmail.montage-tech.com with ESMTP id md5001005844912.msg; 
-	Mon, 18 Oct 2021 23:00:07 -0700
-X-Spam-Processed: usmail.montage-tech.com, Mon, 18 Oct 2021 23:00:07 -0700
-	(not processed: message from trusted or authenticated source)
-X-MDArrival-Date: Mon, 18 Oct 2021 23:00:07 -0700
-X-Return-Path: prvs=1926c3430e=johnny.li@montage-tech.com
-X-Envelope-From: johnny.li@montage-tech.com
-X-MDaemon-Deliver-To: nvdimm@lists.linux.dev
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=montage-tech.com;
-	s=MDaemon; t=1634623176; x=1635227976;
-	i=johnny.li@montage-tech.com; q=dns/txt; h=Date:From:To:Cc:
-	Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	User-Agent; bh=M/QuCl6WZdO0B/paCrxMr6uASsEqFdAnmlfzM40rt9E=; b=Q
-	5L9rwkscQYJ12KLe3NVMbxqbac71pfhRgpx73HcVOw6xk0KYsJeSwdXW4HcnwIM4
-	lFY2aM+S60c9rnfDRG4n5V+SXb5QLHjgeAHzlb/tobNQaqK2J1mNUy2cpBGjWTSJ
-	DLvyrfgrcojvlbOqTkaUXVgds6qodQ4aFldN4JYZ04=
-X-MDAV-Result: clean
-X-MDAV-Processed: shmail.montage-tech.com, Tue, 19 Oct 2021 13:59:36 +0800
-Received: from montage-desktop by shmail.montage-tech.com with ESMTPA id pp5001017663793.msg; 
-	Tue, 19 Oct 2021 13:59:35 +0800
-X-Spam-Processed: shmail.montage-tech.com, Tue, 19 Oct 2021 13:59:35 +0800
-	(not processed: message from trusted or authenticated source)
-Date: Tue, 19 Oct 2021 13:55:18 -0400
-From: Li Qiang <johnny.li@montage-tech.com>
-To: linux-cxl@vger.kernel.org
-Cc: nvdimm@lists.linux.dev, Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>
-Subject: can call libcxl function outside ndctl tool?
-Message-ID: <20211019175518.GB47179@montage-desktop>
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9012C88
+	for <nvdimm@lists.linux.dev>; Tue, 19 Oct 2021 09:49:48 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id s1so11484258plg.12
+        for <nvdimm@lists.linux.dev>; Tue, 19 Oct 2021 02:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+TkWgYayAqA1N78B6sSsdHP9plKG2QD+oGHbJ5CtYzQ=;
+        b=m3HHQ244JZcfBV4yayxuPXIIHn8jzm/+dKCpjH1czmAdXvJ7NHYTvwhK+o+sK3DGcw
+         15ETtdDsCu686pOq9aka3Q8zHJmQjqkAtyeMDi9B8i10VUrEFz/7g4fCh9iDpu006vfQ
+         pfR5e6UU3pjH9x3iVthflT/UVKkT9CQ6MwsmtJdPGCPwosXPZrNxBK51x2y6+6Kvifnk
+         U8pA+KQooeflyAx75vEiXJYbWuZn3SI/l1ExvRktEHxcLi/HOEo3qUfJMAJOOJ9w2pod
+         5cZ4QrQ9hTh3/s3FF21fdfgWhmIPQjuPbby5htVtd7BILtZ/o1BgTpPfxvKtsoVyKHcY
+         29Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+TkWgYayAqA1N78B6sSsdHP9plKG2QD+oGHbJ5CtYzQ=;
+        b=1xUBs7t1lv+T0tckIloKqHuNqr62gfAxi9Q5gkxvANdMyxAXX409KGsu/YVV6yWVU4
+         nzaaG/CL7Un3gYR2kPVLKTPxMtCjosrGqi5PL3CDWNclMNtDM33kYSIwHJOf0A+yT5CV
+         GLlmDQAr37Gii1bdyARnT6D2LBLbWVYuVpN3H4KkfVu1KsZ6Dev7aaHUL/TkWYYWsJR6
+         1uI6njIi66Ns5RqywmC7VF1z5haRJP1C2e4iNBEYoyOug+ALOeZxSAlzcjRO4Lks6Ll1
+         46Q0PHZ7m9ZPFbFC58WywnlI7akrKJKCCSaj+38Y8CgFVxOuk9kXSO5xMOv5fqguqWSa
+         hZxg==
+X-Gm-Message-State: AOAM5333JBp5CCxfINyffXp7tYLGit04PCMAAnqi9fjFxkSOHojEGaX/
+	UpVs3zEAQ6kEkEPEW0SjLsMByfkJMJjUqA==
+X-Google-Smtp-Source: ABdhPJz+uBKC1bVwE9j+5reNsHLMTZxlluW6eNqfAvjnGDcR9LW9FQbF91y4OrG3hB+Y8FrB63TjOQ==
+X-Received: by 2002:a17:90b:388a:: with SMTP id mu10mr5506047pjb.0.1634636988444;
+        Tue, 19 Oct 2021 02:49:48 -0700 (PDT)
+Received: from fedora34.. (125x103x255x1.ap125.ftth.ucom.ne.jp. [125.103.255.1])
+        by smtp.gmail.com with ESMTPSA id q8sm2100331pja.52.2021.10.19.02.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 02:49:48 -0700 (PDT)
+From: QI Fuli <fukuri.sai@gmail.com>
+X-Google-Original-From: QI Fuli <qi.fuli@fujitsu.com>
+To: nvdimm@lists.linux.dev
+Cc: QI Fuli <qi.fuli@fujitsu.com>
+Subject: [RFC ndctl PATCH] monitor: Add "run" to call a bash script
+Date: Tue, 19 Oct 2021 18:49:37 +0900
+Message-Id: <20211019094937.11923-1-qi.fuli@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-MDCFSigsAdded: montage-tech.com
+Content-Transfer-Encoding: 8bit
 
-Take cxl_cmd_new_identify as example.
-There is CXL_EXPORT prefix, it seems can be called outside ndctl tool.
-While the intput and outpust struct cxl_memdev and cxl_cmd are private.
+From: QI Fuli <qi.fuli@fujitsu.com>
 
-```
+Currently, ndctl monitor only can write the smart event to log.
+If users do not read the log on time or the log analysis tools miss
+the smart event information, it will cause huge losses.
 
-CXL_EXPORT struct cxl_cmd *cxl_cmd_new_identify(struct cxl_memdev *memdev)
-{
-	return cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_IDENTIFY);
-}
+For example, if the smart health event dimm-spares-remaining takes
+place and users do not back up the data on time, it is largely
+possible to lose the data. If a bash script used to back up
+can be called, this problem will be avoided.
 
-```
+This patch adds a new argument named "run" to ndctl monitor command
+to set a bash script. When a smart event is monitored, the bash
+script can be run immediately.
 
+The following is the sample code for implementation. If it makes
+sense, I will continue to work on the patch. I will appreciate
+any comments.
 
-Thanks
-Johnny
+Signed-off-by: QI Fuli <qi.fuli@fujitsu.com>
+---
+ ndctl/monitor.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
+diff --git a/ndctl/monitor.c b/ndctl/monitor.c
+index e944c90..ff4513a 100644
+--- a/ndctl/monitor.c
++++ b/ndctl/monitor.c
+@@ -38,6 +38,7 @@ static struct monitor {
+ 	unsigned int poll_timeout;
+ 	unsigned int event_flags;
+ 	struct log_ctx ctx;
++	const char *run;
+ } monitor;
+ 
+ struct monitor_dimm {
+@@ -389,6 +390,8 @@ static int monitor_event(struct ndctl_ctx *ctx,
+ 		for (i = 0; i < nfds; i++) {
+ 			mdimm = events[i].data.ptr;
+ 			if (util_dimm_event_filter(mdimm, monitor.event_flags)) {
++				rc = system(monitor.run);
++				...
+ 				rc = notify_dimm_event(mdimm);
+ 				if (rc) {
+ 					err(&monitor, "%s: notify dimm event failed\n",
+@@ -546,6 +549,7 @@ static int parse_monitor_config(const struct config *configs,
+ 		set_monitor_conf(&param.region, "region", value, seek);
+ 		set_monitor_conf(&param.namespace, "namespace", value, seek);
+ 		set_monitor_conf(&monitor.dimm_event, "dimm-event", value, seek);
++		set_monitor_conf(&monitor.run, "run", value, seek);
+ 
+ 		if (!monitor.log)
+ 			set_monitor_conf(&monitor.log, "log", value, seek);
+@@ -581,6 +585,8 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+ 				"emit extra debug messages to log"),
+ 		OPT_UINTEGER('p', "poll", &monitor.poll_timeout,
+ 			     "poll and report events/status every <n> seconds"),
++		OPT_STRING('\0', "run", &monitor.run, "bash script",
++			"run a script when the smart event is monitored"),
+ 		OPT_END(),
+ 	};
+ 	const char * const u[] = {
+@@ -598,6 +604,7 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+ 		CONF_STR("monitor:dimm", &param.dimm, NULL),
+ 		CONF_STR("monitor:namespace", &param.namespace, NULL),
+ 		CONF_STR("monitor:dimm-event", &monitor.dimm_event, NULL),
++		CONF_STR("monitor:run", &monitor.run, NULL),
+ 		CONF_END(),
+ 	};
+ 	const char *prefix = "./";
+@@ -646,6 +653,9 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+ 		}
+ 	}
+ 
++	if (monitor.run && (strncmp(monitor.run, "./", 2) != 0))
++		fix_filename(prefix, (const char **)&monitor.run);
++
+ 	if (monitor.daemon) {
+ 		if (!monitor.log || strncmp(monitor.log, "./", 2) == 0)
+ 			monitor.ctx.log_fn = log_syslog;
+-- 
+2.31.1
 
 
