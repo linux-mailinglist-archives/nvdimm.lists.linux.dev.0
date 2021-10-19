@@ -1,68 +1,70 @@
-Return-Path: <nvdimm+bounces-1636-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1637-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EA8B432F4A
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 09:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1146B432FAF
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 09:37:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 6D6611C0DD5
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 07:23:45 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id F0BD11C0A46
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Oct 2021 07:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20CE82C8B;
-	Tue, 19 Oct 2021 07:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12A22C8E;
+	Tue, 19 Oct 2021 07:36:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181F772
-	for <nvdimm@lists.linux.dev>; Tue, 19 Oct 2021 07:23:37 +0000 (UTC)
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id C6E1568BFE; Tue, 19 Oct 2021 09:23:26 +0200 (CEST)
-Date: Tue, 19 Oct 2021 09:23:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5FC72
+	for <nvdimm@lists.linux.dev>; Tue, 19 Oct 2021 07:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=tggAfzLakoiLo+c6QdPmG/HwrQInFVNf4bngospVsnQ=; b=Dju723BnHucsP8eMAncoDbijpC
+	Df1SeTL8pKfm5y+RlERZPwuBoylwK45Ewjf895e1ewk7gyrZmRg3yMA4paaHYLJvzTs2ibUbinmsl
+	SzTVAHwjOzjOfDvEO+SEkfPQ+hT8EflFLKx4kPJW08YAtP+2CcLskzYeBP168sNnhI2ueIoTVCDTZ
+	KwjNc9ykhzKdMqs2ueaGlv8HebAoGulYJBBNUZhaMMysGVHXV+BRFXV1e2rfUwTywb8diVaObqTLd
+	foLYWZnZTLeDIjhCYq5wt7h2/vBHfQ801QtOTgwwClgtYH5CansiLqPIGuXXkttYmInCHESzIGRTE
+	X52/d2GA==;
+Received: from 089144192247.atnat0001.highway.a1.net ([89.144.192.247] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mcjfx-000QVy-Ta; Tue, 19 Oct 2021 07:36:46 +0000
 From: Christoph Hellwig <hch@lst.de>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, no@lst.de, To-header@lst.de, on@lst.de,
-	"input <"@lst.de;, Dan Williams <dan.j.williams@intel.com>,
-	Mike Snitzer <snitzer@redhat.com>, Ira Weiny <ira.weiny@intel.com>,
-	dm-devel@redhat.com, linux-xfs@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-s390@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org,
-	virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 06/11] xfs: factor out a xfs_setup_dax helper
-Message-ID: <20211019072326.GA23171@lst.de>
-References: <20211018044054.1779424-1-hch@lst.de> <20211018044054.1779424-7-hch@lst.de> <20211018164351.GT24307@magnolia>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Yi Zhang <yi.zhang@redhat.com>,
+	linux-block@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	linux-mm@kvack.org
+Subject: fix a pmem regression due to drain the block queue in del_gendisk
+Date: Tue, 19 Oct 2021 09:36:39 +0200
+Message-Id: <20211019073641.2323410-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211018164351.GT24307@magnolia>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, Oct 18, 2021 at 09:43:51AM -0700, Darrick J. Wong wrote:
-> > --- a/fs/xfs/xfs_super.c
-> > +++ b/fs/xfs/xfs_super.c
-> > @@ -339,6 +339,32 @@ xfs_buftarg_is_dax(
-> >  			bdev_nr_sectors(bt->bt_bdev));
-> >  }
-> >  
-> > +static int
-> > +xfs_setup_dax(
-> 
-> /me wonders if this should be named xfs_setup_dax_always, since this
-> doesn't handle the dax=inode mode?
+Hi Dan,
 
-Sure, why not.
+this series fixes my recently introduced regression in the pmem driver by
+removing the usage of q_usage_count as the external pgmap refcount in the
+pmem driver and then removes the now unused external refcount
+infrastructure.
 
-> The only reason I bring that up is that Eric reminded me a while ago
-> that we don't actually print any kind of EXPERIMENTAL warning for the
-> auto-detection behavior.
-
-Yes, I actually noticed that as well when preparing this series.
+Diffstat:
+ drivers/nvdimm/pmem.c             |   33 +--------------------
+ include/linux/memremap.h          |   18 +----------
+ mm/memremap.c                     |   59 +++++++-------------------------------
+ tools/testing/nvdimm/test/iomap.c |   43 +++++++--------------------
+ 4 files changed, 29 insertions(+), 124 deletions(-)
 
