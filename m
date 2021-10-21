@@ -1,187 +1,143 @@
-Return-Path: <nvdimm+bounces-1668-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1671-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE16C4356C7
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Oct 2021 02:12:45 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22002435852
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Oct 2021 03:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id D7C901C0F26
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Oct 2021 00:12:44 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 09EF11C0F3E
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Oct 2021 01:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F7C2CA2;
-	Thu, 21 Oct 2021 00:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041D92C94;
+	Thu, 21 Oct 2021 01:38:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DA22C94
-	for <nvdimm@lists.linux.dev>; Thu, 21 Oct 2021 00:12:23 +0000 (UTC)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KNjJrX019159;
-	Thu, 21 Oct 2021 00:12:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=rDb12PtZNgwTC1TYwBkAnpIWDw9Pt6HblK1iL44AkUU=;
- b=ZW/9hTO1jUKL+n8QzLRCnSq5cfz+N74UkwyUxbuBTwBzGc7KNHfFMzH6YS8mmO7+YGBw
- aEYiJSR7vMiMBVn3x8LcsBnJgChQsYbXGR7TYUnT69RMwSetrpIxVknxKCgdXWuT5v+5
- ZBUFhRS6UKgGHZpJXqg4vgedkQ0VSDa5r1AqoXPUOWS9YPpghRZqVAEZn2uYiWvYsxZ4
- K4AUkRzBqpWLAdxRMEErwN79eU9g+MJZAhJ5tg68dYNv038Kz7Undl7LO/i3/UmE1w7i
- qRLMQLceC/V5C+S6/wKvXhuJkWV44UUYQ6sRLh+OACllYZv6a4bSLwB2sEwKLEH6SgWv LA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-	by mx0b-00069f02.pphosted.com with ESMTP id 3btqyphuu9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Oct 2021 00:12:05 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-	by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19L0BD3W010014;
-	Thu, 21 Oct 2021 00:12:04 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2049.outbound.protection.outlook.com [104.47.73.49])
-	by aserp3020.oracle.com with ESMTP id 3bqpj7vuvd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Oct 2021 00:12:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P1s2sBqsFk2Wei9l4OZbIuXPWhekb3J4yjfQp5oHQI8YB9F4/p5Ykd6QCmDAXpdRPx8VTCH6w8wfquK5jkI2bxBIIpuIipOl58JlmWuH4AK6KuVMDNIjR3V7nHhwZV8AEe8OXEUMKV9KOcviYnbKIhQsKkCVYW9ev7w8Aiha0yI1kfw+Ymg84YrtPtmSVhoS/2a9UOmaRwDcWsJGiPH857bdvDmhPdx07MPgBinI8qL6Zztye8nRFLAYg02h8bEP/v9nIQB6oc8J82lJCLGQhUpjliF6f0sdEi1I0m78bV0+5Es5JSsS8O8sdYi8swutU38ueku3BybDUyD5fNr1KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rDb12PtZNgwTC1TYwBkAnpIWDw9Pt6HblK1iL44AkUU=;
- b=O8qG3Dd6rmCesxeV2LtXFzlOghHOARGj6JslQbtSO87a6JBUxmNsvHiqIckVaeU/AZUQ+k4dGiwMT1kL3+c9cf4F5CwzGSkqnX1eh6ZxT+GWcm0EMdfAwv+IK0j+WOsPPas+D4B1iWtPExPuQysui6ZsAp/TKd+omYWNTmluV7Kobu1hMjJO/On+45ouKJeytckWMp5iuDI3oXxs/9L3yyfCmYu1n+0dUUxh/mx5pzL6ROm45ixXHwxQqOteLpKmYQ5cqMb1Czbn+hbDh3J1WYVIEw8vN1055pQ+1+Q8C+ZI1P7OaE2dwqfGW7xBKwul1vIk/krl4vekscr7VhzYiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rDb12PtZNgwTC1TYwBkAnpIWDw9Pt6HblK1iL44AkUU=;
- b=rKpx11dpxDYSYqNg2MaPwyp9aTgY980PhGBW67cRFi4qF5Jz6pckfCDz1uW9cOekYCYBa4Z4xrhBUgHV8Wgyt2BMCuj3r1PNNe3ZHtoeDlLSAfVgJTNZ9O18B3t3aBjgWxbH2VnCPR69rtpgGpTc900aAuNz6sr8rM9fXd0WpQo=
-Authentication-Results: fromorbit.com; dkim=none (message not signed)
- header.d=none;fromorbit.com; dmarc=none action=none header.from=oracle.com;
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
- by BYAPR10MB2759.namprd10.prod.outlook.com (2603:10b6:a02:b5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.17; Thu, 21 Oct
- 2021 00:12:02 +0000
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::401:1df2:3e9a:66c]) by SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::401:1df2:3e9a:66c%5]) with mapi id 15.20.4608.018; Thu, 21 Oct 2021
- 00:12:02 +0000
-From: Jane Chu <jane.chu@oracle.com>
-To: david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: [PATCH 6/6] dm: Ensure dm honors DAXDEV_F_RECOVERY flag on dax only
-Date: Wed, 20 Oct 2021 18:10:59 -0600
-Message-Id: <20211021001059.438843-7-jane.chu@oracle.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20211021001059.438843-1-jane.chu@oracle.com>
-References: <20211021001059.438843-1-jane.chu@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SN4PR0801CA0003.namprd08.prod.outlook.com
- (2603:10b6:803:29::13) To SJ0PR10MB4429.namprd10.prod.outlook.com
- (2603:10b6:a03:2d1::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7116F2C81
+	for <nvdimm@lists.linux.dev>; Thu, 21 Oct 2021 01:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1634780331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n49Ebg7hJsbpmo8GxTO0/87u2/R5z7xkI3cR50VOP44=;
+	b=apmj2yzm83II6x+jfrd1skbARrWk9O64YLkxsZ865/Cyp1RYYqREF2tkPDdbekeo1oPezZ
+	XJHSeLDl03PWZ7pp9achhnR8qb0J3WBLIXgxWO8Nc/mubB4C+hBsdKI8mgG+7HAfNgklW3
+	zW7YiE0udNwkBQ3TJQpUCoLmmchVfn8=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-64-wfJI85qXPHKJuX4LxI5IDQ-1; Wed, 20 Oct 2021 21:38:49 -0400
+X-MC-Unique: wfJI85qXPHKJuX4LxI5IDQ-1
+Received: by mail-yb1-f197.google.com with SMTP id e189-20020a2569c6000000b005be95530997so2513869ybc.6
+        for <nvdimm@lists.linux.dev>; Wed, 20 Oct 2021 18:38:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n49Ebg7hJsbpmo8GxTO0/87u2/R5z7xkI3cR50VOP44=;
+        b=FpN02e1EwRBEtXNo+obV6c/R5Djf+7hWengpZzhcIILVYpykpZTg5ikvWvyPf0xefk
+         vsK4GXyAZNSE7xormM6Haem+qS8xiWYVWzhHZjg+zWKx9WAlGSLMgCJzCKeq+vocstWc
+         xjjdl7O3psV/U1z0f21wLGrETYApHfI+POyhbKLXBpUZPhRa7jTFOqJn32wkkUZT8g5N
+         n1jwQuV40zfX0erQq52Xx7ZpiLJxvaFa/amtnqEsi2gC09sAtY73Ayek+GzdzvgBj8Ks
+         8kX7Dz6XI6e0f7Jy/2Ka7cLGCWst4ekpKLZ/xPFhA1ZH6EcbdXQhj9fyz8UHcmaQKYOZ
+         +5Zw==
+X-Gm-Message-State: AOAM530AOcFpMnhnsipumvhVQlQuX+nLNysXZI7Q0TDme8INwh3U3Rqk
+	yz3X6tKjo+V8U/eVfQGDaA9GTqC0Ek5YiT0fUGWUkoiwfVVvjgFVdmytIe2AmA25u+AfWgGVjLC
+	28ZMbrTRBET8xZ8AQV4e6MBW6LgOnP+HF
+X-Received: by 2002:a25:ab61:: with SMTP id u88mr2590212ybi.241.1634780329493;
+        Wed, 20 Oct 2021 18:38:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyVo0pkDLJPjgqzPt2KK+wocH0qv3UHKcXreEhQUbwWEMGJW8p8Piza05CRZ016U0Lmps0ksZu5R9P5V0S+aEc=
+X-Received: by 2002:a25:ab61:: with SMTP id u88mr2590197ybi.241.1634780329301;
+ Wed, 20 Oct 2021 18:38:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: from brm-x62-16.us.oracle.com (2606:b400:8004:44::1d) by SN4PR0801CA0003.namprd08.prod.outlook.com (2603:10b6:803:29::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16 via Frontend Transport; Thu, 21 Oct 2021 00:12:00 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3086f6e0-b295-4ae8-3830-08d9942767f9
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2759:
-X-Microsoft-Antispam-PRVS: 
-	<BYAPR10MB2759CF48A81FADD320728D33F3BF9@BYAPR10MB2759.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:813;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	SwUxeInXWh+dgh6GbaS/ZG2Nv9S0cNJ6M42dZaeHBDJs558Q90G0R2h30G+aA3dCh2LfzmJWyQA/ahTIb91NfBH9wHpRUhPbLz24LQwxTDi2nc/xAnN81kzemmPwmScfKMnCd7/XDyPhNWepbqP7QhOJG/zrvKDustSxzm/HfGh4o5epcm/eNGP6fBFBnssAbDxt2nCnv4qpz/1+OKzrUhVmjQ9c0/wPCAa9WFhx2pRUtBlj+iqMPv/AF4kvb6otCDzlfbF6S9YH6BBLGvXXCSjDPvAp3qZMIvPDeMPU2rWMuEXGxzjNGrYzFgxJbJb0TjgDCSMAT28yHD/I11P91WFAub1FnuSHFRk3aKzHaNcXYE10DyJwa+YvavKRJ69ZB3NiS2/JycT1JWrbsyPkIelWMNA26e/3FVsoy83xHacU916cXMiiVuI9rZAUsd39hJk88SVbBHi5f972R8ZvpNZx+xCVg9n4pXEM6ARcSocBkGxcAHXwPzA5d5jxD/wpZu/x3vBTcacXOaCpPicCnYwiaSSI9DWOBaxNAzNM9sM3P/jYeH1YUA/eaLlA9fubW+bxuFpxRaNZahyUxaK4AC1B65GAErZBXlHRpDPpSIyDVDI/ug4nOCZc7qlLl6ZeOLx2FaMycGoOyu2JjwI7/9n5XbMup6N64gRaHe8etM3IVwf7o8zfY5cDzPMdMpPW
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(316002)(5660300002)(1076003)(66946007)(66476007)(7416002)(38100700002)(83380400001)(36756003)(66556008)(921005)(508600001)(6486002)(8676002)(86362001)(186003)(7696005)(52116002)(8936002)(44832011)(2616005)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?1JriRzLKMTs+EtHmGlcariODedtlWhYMtDDMliqQ+PnnOYwKb+N265nSqLb7?=
- =?us-ascii?Q?8TImsA4Pmr5rNPkLiMJLcMJtzDHoo9bxJeIzfLWjqjB+TJV/qy2JLPWxmUPE?=
- =?us-ascii?Q?cO473bekRvRPx32LXD+5J2ZBvmmaBBSUMlXCdK3+mZll4QjuDJ0+jPbTxT8c?=
- =?us-ascii?Q?J8E5Z5RkTcdxdlFJR+I9jo8VxRyNGJDvmpH0Z3uDKgEzlRX/C07RxtaXhwqq?=
- =?us-ascii?Q?c475/0ZCWr2829X+9FzM0tggHKJwGeVLLB21iIyZG5BW3iEtJDsSjNG5CWKO?=
- =?us-ascii?Q?NlU458r2dPNhZQgamu61TBQ48pimdGVZP3gIZ1h1lMB7FKhHMrBA2EIScmHT?=
- =?us-ascii?Q?9YM4qC0eIcO0bWwFvE5JhK3Va2FKziCN1gh482FtlfefF4ZB6maXsgA9L6wE?=
- =?us-ascii?Q?3F+wRWJ75CwPNSEkA2rkSXT0PrUUU8JHo4Ec90iopP10Z5yR6S/zlqu3AiWm?=
- =?us-ascii?Q?KxslpKSQMHgqVEYdiTCTuacobcyruTAU/cRpNxZFHjYKtEr37Mdcw3HWyA2Z?=
- =?us-ascii?Q?ViDB5NN4tgFilwSBcFHCOYcRw7TgDO7XWb/rRydso0C1zs4ZzEl0xs+zN45G?=
- =?us-ascii?Q?xx3q7dOKU0SSoToXmzYzWxb8hvniCBfxrb4rCSMftf38CJTcQHYLr4P9rOqM?=
- =?us-ascii?Q?mY3SrVDiW2c+JvM88GmR5hwhjBXUBEl2Lyz8SvRaSArKg1q9JasUbZvHXzue?=
- =?us-ascii?Q?KN6jZtKmRwy+29XBZSSoxbTsYjVbjxlzkg030EPGvGyudI2SLvgr4kY/ztmG?=
- =?us-ascii?Q?3p98F6isss1Qv3T9jlOBQJOj2ZavTBQMj5B7GkKmLKULreEB9fAKXMAuQ+NP?=
- =?us-ascii?Q?4mV/IUkmR7RwkoMFwhCBDANQ+VzRO8pcmSJNLS1jW9eHseVV8vP1ktu7mmG5?=
- =?us-ascii?Q?bycp7geH8gJK/zT4KpPmqq8yjBkQwJKeKfCNLy59Exc3U0T5FldExKael5dJ?=
- =?us-ascii?Q?vTE+Z00seULukXaTTKSJ6VnRTWIfiVT+hAC9UW90qjVU6aflWzlasKKCWFWY?=
- =?us-ascii?Q?4SHs8qoQF2x0cVRX2ln5ED8cCX44z3lCkknCULe9XyxKK87lu4OjvMrIQbZx?=
- =?us-ascii?Q?80+GsibrZcRIlcyPNwpVZgtOXfEWg5my2Ae8H7IJIlZPmy96I+0Y9TLi0wPy?=
- =?us-ascii?Q?SexNpj68zuim3kxt7xsEVW6ad51jnZPtwTgzpOZo3XJ/IAOF49aJXcswzWgA?=
- =?us-ascii?Q?xUg/HPAipIfuTuiRVYAHYkLH29pu9panYqfrB3FeLj5l6DIBhTqf1v8Pzkhh?=
- =?us-ascii?Q?xZngUX68nlU3KeSsKt9FJvrnPzInBPqPsTWS8TqeOoNFe7H/mG7R0mN5tYSg?=
- =?us-ascii?Q?v3/dtJeqUjuVbQbM1WoYTD4HRUc8Xbozeto1fjJ6YE1RTQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3086f6e0-b295-4ae8-3830-08d9942767f9
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2021 00:12:02.0369
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jane.chu@oracle.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2759
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10143 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109230001
- definitions=main-2110210000
-X-Proofpoint-ORIG-GUID: jlTJ0Uy0HZJPhubLMe06VMJMPNG1rwVD
-X-Proofpoint-GUID: jlTJ0Uy0HZJPhubLMe06VMJMPNG1rwVD
+References: <YXAYPK/oZNAXBs0R@angband.pl> <YXAhzF9qQsTPDfWU@angband.pl> <BY5PR11MB3989976BB2AE9F2B31E55B1695BE9@BY5PR11MB3989.namprd11.prod.outlook.com>
+In-Reply-To: <BY5PR11MB3989976BB2AE9F2B31E55B1695BE9@BY5PR11MB3989.namprd11.prod.outlook.com>
+From: Yi Zhang <yi.zhang@redhat.com>
+Date: Thu, 21 Oct 2021 09:38:37 +0800
+Message-ID: <CAHj4cs-CHKgcUyB54sBCGdzbTe-QhsGOjXL8TJ67n+L+WzdqTQ@mail.gmail.com>
+Subject: Re: ndctl hangs with big memmap=! fakepmem
+To: "Scargall, Steve" <steve.scargall@intel.com>
+Cc: Adam Borowski <kilobyte@angband.pl>, "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>, 
+	"Williams, Dan J" <dan.j.williams@intel.com>, "Verma, Vishal L" <vishal.l.verma@intel.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=yizhan@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-dm_dax_direct_access() supports DAXDEV_F_RECOVERY, so it may
-translate a poisoned range. But if dm_dax_copy_to/from_iter()
-don't have a dax_copy_to/from_iter() foundation underneath,
-performing load/store over poisoned range is dangerous and
-should be avoided.
+On Wed, Oct 20, 2021 at 11:11 PM Scargall, Steve
+<steve.scargall@intel.com> wrote:
+>
+> Hi Adam,
+>
+> This is likely related to an issue that was reported to the Linux NVDIMM =
+email list (https://lore.kernel.org/linux-block/CAHj4cs87BapQJcV0a=3DM6=3Dd=
+c9PrsGH6qzqJEt9fbjLK1aShnMPg@mail.gmail.com/)
+>
+This issue was fixed by this
+patchset:https://lore.kernel.org/nvdimm/20211019073641.2323410-1-hch@lst.de=
+/
 
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
----
- drivers/md/dm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+And they are still in the review process.
 
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 764183ddebc1..5f7fe64d3c37 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1058,6 +1058,8 @@ static size_t dm_dax_copy_from_iter(struct dax_device *dax_dev, pgoff_t pgoff,
- 	if (!ti)
- 		goto out;
- 	if (!ti->type->dax_copy_from_iter) {
-+		if (flags & DAXDEV_F_RECOVERY)
-+			goto out;
- 		ret = copy_from_iter(addr, bytes, i);
- 		goto out;
- 	}
-@@ -1082,6 +1084,8 @@ static size_t dm_dax_copy_to_iter(struct dax_device *dax_dev, pgoff_t pgoff,
- 	if (!ti)
- 		goto out;
- 	if (!ti->type->dax_copy_to_iter) {
-+		if (flags & DAXDEV_F_RECOVERY)
-+			goto out;
- 		ret = copy_to_iter(addr, bytes, i);
- 		goto out;
- 	}
--- 
-2.18.4
+> So the bisecting shows it was introduced with below commit:
+>
+> commit 8e141f9eb803e209714a80aa6ec073893f94c526
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Wed Sep 29 09:12:40 2021 +0200
+>
+>     block: drain file system I/O on del_gendisk
+>
+> /Steve
+>
+> -----Original Message-----
+> From: Adam Borowski <kilobyte@angband.pl>
+> Sent: Wednesday, October 20, 2021 8:04 AM
+> To: nvdimm@lists.linux.dev; Williams, Dan J <dan.j.williams@intel.com>; V=
+erma, Vishal L <vishal.l.verma@intel.com>
+> Subject: Re: ndctl hangs with big memmap=3D! fakepmem
+>
+> On Wed, Oct 20, 2021 at 03:23:08PM +0200, Adam Borowski wrote:
+> > Hi!
+> > After bumping fakepmem sizes from 4G!20G 4G!36G to 32G!20G 32G!192G,
+> > ndctl hangs.  Eg, at boot:
+> >
+> > [  725.642546] INFO: task ndctl:2486 blocked for more than 604 seconds.
+> > [  725.649586]       Not tainted 5.15.0-rc6-vanilla-00020-gd9abdee5fd5a=
+ #1
+>
+> > [  725.677539]  ? __schedule+0x30b/0x14e0 [  725.681975]  ?
+> > kernfs_put.part.0+0xd4/0x1a0 [  725.686841]  ?
+> > kmem_cache_free+0x28b/0x2b0 [  725.691622]  ? schedule+0x44/0xb0 [
+> > 725.695622]  ? blk_mq_freeze_queue_wait+0x62/0x90
+> > [  725.701009]  ? do_wait_intr_irq+0xc0/0xc0 [  725.705703]  ?
+> > del_gendisk+0xcf/0x220 [  725.710050]  ? release_nodes+0x38/0xa0
+>
+> On 5.14.14 all is fine.  Should I bisect?
+>
+>
+> Meow!
+> --
+> =E2=A2=80=E2=A3=B4=E2=A0=BE=E2=A0=BB=E2=A2=B6=E2=A3=A6=E2=A0=80
+> =E2=A3=BE=E2=A0=81=E2=A2=A0=E2=A0=92=E2=A0=80=E2=A3=BF=E2=A1=81 Remember,=
+ the S in "IoT" stands for Security, while P stands =E2=A2=BF=E2=A1=84=E2=
+=A0=98=E2=A0=B7=E2=A0=9A=E2=A0=8B=E2=A0=80 for Privacy.
+> =E2=A0=88=E2=A0=B3=E2=A3=84=E2=A0=80=E2=A0=80=E2=A0=80=E2=A0=80
+>
+
+
+--=20
+Best Regards,
+  Yi Zhang
 
 
