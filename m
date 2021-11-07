@@ -1,29 +1,29 @@
-Return-Path: <nvdimm+bounces-1853-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1854-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FC1E447480
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  7 Nov 2021 18:25:26 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09FBE4474E9
+	for <lists+linux-nvdimm@lfdr.de>; Sun,  7 Nov 2021 19:14:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1D4263E1042
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  7 Nov 2021 17:25:25 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id A35301C068B
+	for <lists+linux-nvdimm@lfdr.de>; Sun,  7 Nov 2021 18:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD232C9A;
-	Sun,  7 Nov 2021 17:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAE72C9A;
+	Sun,  7 Nov 2021 18:14:42 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD98468
-	for <nvdimm@lists.linux.dev>; Sun,  7 Nov 2021 17:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E1C68
+	for <nvdimm@lists.linux.dev>; Sun,  7 Nov 2021 18:14:40 +0000 (UTC)
 Received: from [192.168.1.18] ([86.243.171.122])
 	by smtp.orange.fr with ESMTPA
-	id jlutmTloWf6fnjlutmDbdz; Sun, 07 Nov 2021 18:25:16 +0100
+	id jmggmUEOWf6fnjmggmDhcI; Sun, 07 Nov 2021 19:14:39 +0100
 X-ME-Helo: [192.168.1.18]
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 07 Nov 2021 18:25:16 +0100
+X-ME-Date: Sun, 07 Nov 2021 19:14:39 +0100
 X-ME-IP: 86.243.171.122
 Subject: Re: [PATCH] nvdimm/pmem: Fix an error handling path in
  'pmem_attach_disk()'
@@ -35,8 +35,9 @@ Cc: dan.j.williams@intel.com, vishal.l.verma@intel.com, dave.jiang@intel.com,
 References: <f1933a01d9cefe24970ee93d741babb8fe9c1b32.1636219557.git.christophe.jaillet@wanadoo.fr>
  <20211107171157.GC3538886@iweiny-DESK2.sc.intel.com>
  <050385c3-7707-76cb-c580-c64d43456462@wanadoo.fr>
-Message-ID: <22d5172f-2d13-0ce2-2029-9cf46f203792@wanadoo.fr>
-Date: Sun, 7 Nov 2021 18:25:15 +0100
+ <22d5172f-2d13-0ce2-2029-9cf46f203792@wanadoo.fr>
+Message-ID: <d791466d-56db-7dc3-342b-73db0de48b68@wanadoo.fr>
+Date: Sun, 7 Nov 2021 19:14:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 Precedence: bulk
@@ -45,68 +46,76 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <050385c3-7707-76cb-c580-c64d43456462@wanadoo.fr>
+In-Reply-To: <22d5172f-2d13-0ce2-2029-9cf46f203792@wanadoo.fr>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
 
 
 
-Le 07/11/2021 à 18:20, Christophe JAILLET a écrit :
-> Le 07/11/2021 à 18:11, Ira Weiny a écrit :
->> On Sat, Nov 06, 2021 at 06:27:11PM +0100, Christophe JAILLET wrote:
->>> If 'devm_init_badblocks()' fails, a previous 'blk_alloc_disk()' call 
->>> must
->>> be undone.
->>
->> I think this is a problem...
->>
+Le 07/11/2021 à 18:25, Marion & Christophe JAILLET a écrit :
+> 
+> 
+> Le 07/11/2021 à 18:20, Christophe JAILLET a écrit :
+>> Le 07/11/2021 à 18:11, Ira Weiny a écrit :
+>>> On Sat, Nov 06, 2021 at 06:27:11PM +0100, Christophe JAILLET wrote:
+>>>> If 'devm_init_badblocks()' fails, a previous 'blk_alloc_disk()' call 
+>>>> must
+>>>> be undone.
 >>>
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->>> ---
->>> This patch is speculative. Several fixes on error handling paths have 
->>> been
->>> done recently, but this one has been left as-is. There was maybe a good
->>> reason that I have missed for that. So review with care!
+>>> I think this is a problem...
 >>>
->>> I've not been able to identify a Fixes tag that please me :(
->>> ---
->>>   drivers/nvdimm/pmem.c | 5 +++--
->>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>>>> ---
+>>>> This patch is speculative. Several fixes on error handling paths 
+>>>> have been
+>>>> done recently, but this one has been left as-is. There was maybe a good
+>>>> reason that I have missed for that. So review with care!
+>>>>
+>>>> I've not been able to identify a Fixes tag that please me :(
+>>>> ---
+>>>>   drivers/nvdimm/pmem.c | 5 +++--
+>>>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+>>>> index fe7ece1534e1..c37a1e6750b3 100644
+>>>> --- a/drivers/nvdimm/pmem.c
+>>>> +++ b/drivers/nvdimm/pmem.c
+>>>> @@ -490,8 +490,9 @@ static int pmem_attach_disk(struct device *dev,
+>>>>       nvdimm_namespace_disk_name(ndns, disk->disk_name);
+>>>>       set_capacity(disk, (pmem->size - pmem->pfn_pad - 
+>>>> pmem->data_offset)
+>>>>               / 512);
+>>>> -    if (devm_init_badblocks(dev, &pmem->bb))
+>>>> -        return -ENOMEM;
+>>>> +    rc = devm_init_badblocks(dev, &pmem->bb);
+>>>> +    if (rc)
+>>>> +        goto out;
 >>>
->>> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
->>> index fe7ece1534e1..c37a1e6750b3 100644
->>> --- a/drivers/nvdimm/pmem.c
->>> +++ b/drivers/nvdimm/pmem.c
->>> @@ -490,8 +490,9 @@ static int pmem_attach_disk(struct device *dev,
->>>       nvdimm_namespace_disk_name(ndns, disk->disk_name);
->>>       set_capacity(disk, (pmem->size - pmem->pfn_pad - 
->>> pmem->data_offset)
->>>               / 512);
->>> -    if (devm_init_badblocks(dev, &pmem->bb))
->>> -        return -ENOMEM;
->>> +    rc = devm_init_badblocks(dev, &pmem->bb);
->>> +    if (rc)
->>> +        goto out;
+>>> But I don't see this 'out' label in the function currently?  Was that 
+>>> part of
+>>> your patch missing?
 >>
->> But I don't see this 'out' label in the function currently?  Was that 
->> part of
->> your patch missing?
+>> Hi,
+>> the patch is based on the latest linux-next.
+>> See [1]. The 'out' label exists there and is already used.
+>>
+>> In fact, I run an own-made coccinelle script which tries to spot 
+>> mix-up between return and goto.
+>> In this case, we have a 'return -ENOMEM' after a 'goto out' which 
+>> looks spurious. Hence, my patch.
+>>
+>> [1]:https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/nvdimm/pmem.c#n512 
+>>
 > 
-> Hi,
-> the patch is based on the latest linux-next.
-> See [1]. The 'out' label exists there and is already used.
-> 
-> In fact, I run an own-made coccinelle script which tries to spot mix-up 
-> between return and goto.
-> In this case, we have a 'return -ENOMEM' after a 'goto out' which looks 
-> spurious. Hence, my patch.
-> 
-> [1]:https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/nvdimm/pmem.c#n512 
-> 
+> Lol, the #n512 above is in fact another place that should be updated as 
+> well. I missed it and only fixed #n494!
 
-Lol, the #n512 above is in fact another place that should be updated as 
-well. I missed it and only fixed #n494!
+In fact, no, line 512 should be left as-is. The clean-up wilol be made 
+by 'pmem_release_disk()'.
+
+The patch attached at the very first mail of this thread looks good to me.
 
 CJ
 
@@ -114,14 +123,18 @@ CJ
 > CJ
 > 
 >>
->> Ira
+>> CJ
 >>
->>>       nvdimm_badblocks_populate(nd_region, &pmem->bb, &bb_range);
->>>       disk->bb = &pmem->bb;
->>> -- 
->>> 2.30.2
+>>>
+>>> Ira
+>>>
+>>>>       nvdimm_badblocks_populate(nd_region, &pmem->bb, &bb_range);
+>>>>       disk->bb = &pmem->bb;
+>>>> -- 
+>>>> 2.30.2
+>>>>
 >>>
 >>
-> 
+>>
 > 
 
