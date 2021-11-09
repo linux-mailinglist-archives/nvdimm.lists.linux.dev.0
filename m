@@ -1,94 +1,129 @@
-Return-Path: <nvdimm+bounces-1896-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-1898-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8954E44A940
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Nov 2021 09:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D1544B2D8
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Nov 2021 19:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id B55901C1067
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Nov 2021 08:36:15 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 68A111C0F43
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Nov 2021 18:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D266D1B;
-	Tue,  9 Nov 2021 08:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7832C9A;
+	Tue,  9 Nov 2021 18:49:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621846D13
-	for <nvdimm@lists.linux.dev>; Tue,  9 Nov 2021 08:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=Sy1y0UiMgxAYvlwmHMq+D5FA8YC6nzMpWW5stnnL7mE=; b=gpT3QABXYlkVO9cfQiVD4lTzsW
-	wpEmY4Z/eRxbkXYSg+JxoHSV++jJ3mKJHMfrn55KL2mcGq383JeE2GT0n04CgdH5G/vt20HeQQaO9
-	ha8NRcqJ+6vlyLr/9gPdQntTqO6D0qCC+EcTk3/BEguhqZKKy15SmdCTvO76lOOWte1YinTMjYCfi
-	/KdwmZypZoj4wrR5V//D1uQ5lhEQb0sJEsg0xrWwJmOJ7q4ZVu8d8geqMTHzf2XXvKP3vPNMuL8Pr
-	VipJXXXtONrtI41oW3trXzSqrHSuGOwLqYKEYfzEe5AM49EB/C47xpIkPi9qt5n1Z11n3latDwOG8
-	X+sUDJ5Q==;
-Received: from [2001:4bb8:19a:7ee7:fb46:2fe1:8652:d9d4] (helo=localhost)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mkMZu-000sFi-W7; Tue, 09 Nov 2021 08:34:04 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Mike Snitzer <snitzer@redhat.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	dm-devel@redhat.com,
-	linux-xfs@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	linux-s390@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org,
-	virtualization@lists.linux-foundation.org
-Subject: [PATCH 29/29] fsdax: don't require CONFIG_BLOCK
-Date: Tue,  9 Nov 2021 09:33:09 +0100
-Message-Id: <20211109083309.584081-30-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211109083309.584081-1-hch@lst.de>
-References: <20211109083309.584081-1-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6CC68
+	for <nvdimm@lists.linux.dev>; Tue,  9 Nov 2021 18:49:02 +0000 (UTC)
+Received: by mail-pf1-f178.google.com with SMTP id z6so196823pfe.7
+        for <nvdimm@lists.linux.dev>; Tue, 09 Nov 2021 10:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9bp0YO5sOM+lpNoi642x1FUr5VchwTC78oq/dL28lzk=;
+        b=0Q1ubUOlWM8Iug6rvhIAFjz7MaLu3MQqTHHXXNFaAN3qobCKUeard5v3w6hQexzI6j
+         EQcZDkHYWqy9mWUon0Sw5zW0RErSz2I0osX0CHUN1ykL/BCN5ucRl32GT2O6dYVhRDx+
+         DIx0Bq3GMoEu4GQuOAoCsyqrJqRNG5y2MVJRbJCthUwPi140VN85CTlRi+CQIGmDkuoJ
+         o4YlTHfCQyJ4T21m/SW8rbNEAXwp16xbZ8UL7OpvPbBafjrbOh4FjIMKgETwtEC4fnjk
+         Wxk5Ja7eZ0ILW/8jehkfJvL5xHHWw8sddDBe/kDwglw+DIpJultHbe9pcAc33W5VFQaI
+         j5NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9bp0YO5sOM+lpNoi642x1FUr5VchwTC78oq/dL28lzk=;
+        b=z7ElQz9AnfnA4qfEo7f8wLfaWneHGxIGUH4eWTUcU5Fk1tJvOcXDlSf6UZXolhrOa/
+         0EbzWPfscy9cKI6J5R0M1SKkv3Sc2ZUcr1xuenK4PBLyfHqTGY1ROgIPk87LaVZ8Gm8Y
+         SpK1V/GZJDBzvR89S/rYHsvTYaa0ClLEZHoEht7FM+elBNfNTPQh6RbvWtHeAq0gfJAM
+         U0A6RvmGGBEiPM3D5Fsqk4XbspXpwGYBKHmjmcL2plFUhT5SWD8mKvlXO8SRsaBjeKFE
+         ipyiwUR2C6e4Otno74hyKP0ihjeY7mLBYAVlgRVG/0VESwT+VMZi/v+gH0EDBRk0Ts3j
+         hMUg==
+X-Gm-Message-State: AOAM533z8NIWIaKIY7jClo7kkLA8Nm02SN3Ycij1tacsLou10HpYsVMy
+	pdb7HrNmgpAue7DIlz5Q6zzPA9mkFoSJUS2tEtdubw==
+X-Google-Smtp-Source: ABdhPJxiswkGl2pVIvWWZ6aSVUFazaiZRuYEfrTL3uF2sZNR2Ly4HeMeR//UR5dITrLxDj1E3LTcAsgeWYlO0yGvWG4=
+X-Received: by 2002:a05:6a00:1a51:b0:4a0:3c1:4f45 with SMTP id
+ h17-20020a056a001a5100b004a003c14f45mr4740999pfv.86.1636483741722; Tue, 09
+ Nov 2021 10:49:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+References: <20211106011638.2613039-1-jane.chu@oracle.com> <20211106011638.2613039-3-jane.chu@oracle.com>
+ <YYoi2JiwTtmxONvB@infradead.org>
+In-Reply-To: <YYoi2JiwTtmxONvB@infradead.org>
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Tue, 9 Nov 2021 10:48:51 -0800
+Message-ID: <CAPcyv4hQrUEhDOK-Ys1_=Sxb8f+GJZvpKZHTUPKQvVMaMe8XMg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dax,pmem: Implement pmem based dax data recovery
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jane Chu <jane.chu@oracle.com>, david <david@fromorbit.com>, 
+	"Darrick J. Wong" <djwong@kernel.org>, Vishal L Verma <vishal.l.verma@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>, 
+	device-mapper development <dm-devel@redhat.com>, "Weiny, Ira" <ira.weiny@intel.com>, 
+	Matthew Wilcox <willy@infradead.org>, Vivek Goyal <vgoyal@redhat.com>, 
+	linux-fsdevel <linux-fsdevel@vger.kernel.org>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-xfs <linux-xfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The file system DAX code now does not require the block code.  So allow
-building a kernel with fuse DAX but not block layer.
+On Mon, Nov 8, 2021 at 11:27 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Fri, Nov 05, 2021 at 07:16:38PM -0600, Jane Chu wrote:
+> >  static size_t pmem_copy_from_iter(struct dax_device *dax_dev, pgoff_t pgoff,
+> >               void *addr, size_t bytes, struct iov_iter *i, int mode)
+> >  {
+> > +     phys_addr_t pmem_off;
+> > +     size_t len, lead_off;
+> > +     struct pmem_device *pmem = dax_get_private(dax_dev);
+> > +     struct device *dev = pmem->bb.dev;
+> > +
+> > +     if (unlikely(mode == DAX_OP_RECOVERY)) {
+> > +             lead_off = (unsigned long)addr & ~PAGE_MASK;
+> > +             len = PFN_PHYS(PFN_UP(lead_off + bytes));
+> > +             if (is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) / 512, len)) {
+> > +                     if (lead_off || !(PAGE_ALIGNED(bytes))) {
+> > +                             dev_warn(dev, "Found poison, but addr(%p) and/or bytes(%#lx) not page aligned\n",
+> > +                                     addr, bytes);
+> > +                             return (size_t) -EIO;
+> > +                     }
+> > +                     pmem_off = PFN_PHYS(pgoff) + pmem->data_offset;
+> > +                     if (pmem_clear_poison(pmem, pmem_off, bytes) !=
+> > +                                             BLK_STS_OK)
+> > +                             return (size_t) -EIO;
+> > +             }
+> > +     }
+>
+> This is in the wrong spot.  As seen in my WIP series individual drivers
+> really should not hook into copying to and from the iter, because it
+> really is just one way to write to a nvdimm.  How would dm-writecache
+> clear the errors with this scheme?
+>
+> So IMHO going back to the separate recovery method as in your previous
+> patch really is the way to go.  If/when the 64-bit store happens we
+> need to figure out a good way to clear the bad block list for that.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think we just make error management a first class citizen of a
+dax-device and stop abstracting it behind a driver callback. That way
+the driver that registers the dax-device can optionally register error
+management as well. Then fsdax path can do:
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 6d608330a096e..7a2b11c0b8036 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -42,6 +42,8 @@ source "fs/nilfs2/Kconfig"
- source "fs/f2fs/Kconfig"
- source "fs/zonefs/Kconfig"
- 
-+endif # BLOCK
-+
- config FS_DAX
- 	bool "File system based Direct Access (DAX) support"
- 	depends on MMU
-@@ -89,8 +91,6 @@ config FS_DAX_PMD
- config FS_DAX_LIMITED
- 	bool
- 
--endif # BLOCK
--
- # Posix ACL utility routines
- #
- # Note: Posix ACLs can be implemented without these helpers.  Never use
--- 
-2.30.2
+        rc = dax_direct_access(..., &kaddr, ...);
+        if (unlikely(rc)) {
+                kaddr = dax_mk_recovery(kaddr);
+                dax_direct_access(..., &kaddr, ...);
+                return dax_recovery_{read,write}(..., kaddr, ...);
+        }
+        return copy_{mc_to_iter,from_iter_flushcache}(...);
 
+Where, the recovery version of dax_direct_access() has the opportunity
+to change the page permissions / use an alias mapping for the access,
+dax_recovery_read() allows reading the good cachelines out of a
+poisoned page, and dax_recovery_write() coordinates error list
+management and returning a poison page to full write-back caching
+operation when no more poisoned cacheline are detected in the page.
 
