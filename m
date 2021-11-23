@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-2036-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2037-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED9F45AFDC
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 00:13:14 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9D1B45AFE3
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 00:13:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 3437E1C0F22
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 23 Nov 2021 23:13:13 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 91D113E106F
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 23 Nov 2021 23:13:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC0D2C96;
-	Tue, 23 Nov 2021 23:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE2A2C98;
+	Tue, 23 Nov 2021 23:13:27 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A6C2C81
-	for <nvdimm@lists.linux.dev>; Tue, 23 Nov 2021 23:13:05 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89AA960F9F;
-	Tue, 23 Nov 2021 23:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA572C81
+	for <nvdimm@lists.linux.dev>; Tue, 23 Nov 2021 23:13:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE20260FC3;
+	Tue, 23 Nov 2021 23:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1637709185;
-	bh=qI8k8SWcfOTf0dPmRhxg9uqxHXWp63uAbeW4/0Ozc7A=;
+	s=k20201202; t=1637709206;
+	bh=S/IswOJvRGBagLJRqzKcshhJ4v7k/vBIf4Vs4dGT10g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IzacBFBFhYh1FXrg7vX6C+KOP1OJxBbbaxlskfiRzRHZEcu+QVgT6TLPVe1C3qHil
-	 8w6H7EupDtAbvwL+YhPe1535bL7h0UBuS4dO0iEFrkQouRhqGT1M5iu0zTIt84UP35
-	 UJ8kQ0pSgv51CTWUeTa9oG2ShGEe8lGowjb1HLniNGys8CsRX+qESFdCphOZxlg8Nh
-	 SDWcaD/73OkeMq4lrTWsV3ChlvtjYmqSu0CE2EZvGeLbKpkBTx+DjBLn7sVm+YvSXb
-	 F0vt8O+an8SwKPzp9UrOyY70tBZndLxDC6VVIAk3CrRX19qSMcWPlKcStgHi/ulFjZ
-	 gJy9vInPH0O9g==
-Date: Tue, 23 Nov 2021 15:13:05 -0800
+	b=Xkg5cXpSDqabGeFWq7rmygKLTwImdF/9Sn8heQe42R/Yl8XGgY+AtzzmXPkUQcdes
+	 4zRZL+6+IKzGfg8DyRHpUlMflgVYZ/a0qcsQEyYMUOQSt8H1PN4K/4ljnF008ROVTO
+	 Wg2Yd6TaoIuT1rAuP4MQ5LHhkZR3MdspZQIYDo/j0RNRprZ6410ZDfRsvNNn/3BD0+
+	 BoXvZo3OFj7dm6LvkaiMpI52H2gbmIFDE7KYsgtFIOJtVx6wi7KK5ENEEMdlQFU1kG
+	 B8pfwvl1QCAx3g0SlZH2FEStKzn7XwOOnWr83DmLf696ZJnUywGpWhj7Qom2caz144
+	 ti5mzeKHYeHAw==
+Date: Tue, 23 Nov 2021 15:13:25 -0800
 From: "Darrick J. Wong" <djwong@kernel.org>
 To: Christoph Hellwig <hch@lst.de>
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -40,10 +40,10 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
 	linux-ext4@vger.kernel.org,
 	virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 27/29] dax: fix up some of the block device related ifdefs
-Message-ID: <20211123231305.GU266024@magnolia>
+Subject: Re: [PATCH 28/29] iomap: build the block based code conditionally
+Message-ID: <20211123231325.GV266024@magnolia>
 References: <20211109083309.584081-1-hch@lst.de>
- <20211109083309.584081-28-hch@lst.de>
+ <20211109083309.584081-29-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -52,12 +52,11 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211109083309.584081-28-hch@lst.de>
+In-Reply-To: <20211109083309.584081-29-hch@lst.de>
 
-On Tue, Nov 09, 2021 at 09:33:07AM +0100, Christoph Hellwig wrote:
-> The DAX device <-> block device association is only enabled if
-> CONFIG_BLOCK is enabled.  Update dax.h to account for that and use
-> the right conditions for the fs_put_dax stub as well.
+On Tue, Nov 09, 2021 at 09:33:08AM +0100, Christoph Hellwig wrote:
+> Only build the block based iomap code if CONFIG_BLOCK is set.  Currently
+> that is always the case, but it will change soon.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
@@ -67,80 +66,44 @@ Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 --D
 
 > ---
->  include/linux/dax.h | 41 ++++++++++++++++++++---------------------
->  1 file changed, 20 insertions(+), 21 deletions(-)
+>  fs/Kconfig        | 4 ++--
+>  fs/iomap/Makefile | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/dax.h b/include/linux/dax.h
-> index 90f95deff504d..5568d3dca941b 100644
-> --- a/include/linux/dax.h
-> +++ b/include/linux/dax.h
-> @@ -108,28 +108,15 @@ static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
->  #endif
+> diff --git a/fs/Kconfig b/fs/Kconfig
+> index a6313a969bc5f..6d608330a096e 100644
+> --- a/fs/Kconfig
+> +++ b/fs/Kconfig
+> @@ -15,11 +15,11 @@ config VALIDATE_FS_PARSER
+>  	  Enable this to perform validation of the parameter description for a
+>  	  filesystem when it is registered.
 >  
->  struct writeback_control;
-> -#if IS_ENABLED(CONFIG_FS_DAX)
-> +#if defined(CONFIG_BLOCK) && defined(CONFIG_FS_DAX)
->  int dax_add_host(struct dax_device *dax_dev, struct gendisk *disk);
->  void dax_remove_host(struct gendisk *disk);
+> -if BLOCK
 > -
-> +struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev,
-> +		u64 *start_off);
->  static inline void fs_put_dax(struct dax_device *dax_dev)
->  {
->  	put_dax(dax_dev);
->  }
-> -
-> -struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev,
-> -		u64 *start_off);
-> -int dax_writeback_mapping_range(struct address_space *mapping,
-> -		struct dax_device *dax_dev, struct writeback_control *wbc);
-> -
-> -struct page *dax_layout_busy_page(struct address_space *mapping);
-> -struct page *dax_layout_busy_page_range(struct address_space *mapping, loff_t start, loff_t end);
-> -dax_entry_t dax_lock_page(struct page *page);
-> -void dax_unlock_page(struct page *page, dax_entry_t cookie);
-> -int dax_zero_range(struct inode *inode, loff_t pos, loff_t len, bool *did_zero,
-> -		const struct iomap_ops *ops);
-> -int dax_truncate_page(struct inode *inode, loff_t pos, bool *did_zero,
-> -		const struct iomap_ops *ops);
->  #else
->  static inline int dax_add_host(struct dax_device *dax_dev, struct gendisk *disk)
->  {
-> @@ -138,17 +125,29 @@ static inline int dax_add_host(struct dax_device *dax_dev, struct gendisk *disk)
->  static inline void dax_remove_host(struct gendisk *disk)
->  {
->  }
-> -
-> -static inline void fs_put_dax(struct dax_device *dax_dev)
-> -{
-> -}
-> -
->  static inline struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev,
->  		u64 *start_off)
->  {
->  	return NULL;
->  }
-> +static inline void fs_put_dax(struct dax_device *dax_dev)
-> +{
-> +}
-> +#endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
+>  config FS_IOMAP
+>  	bool
+>  
+> +if BLOCK
 > +
-> +#if IS_ENABLED(CONFIG_FS_DAX)
-> +int dax_writeback_mapping_range(struct address_space *mapping,
-> +		struct dax_device *dax_dev, struct writeback_control *wbc);
+>  source "fs/ext2/Kconfig"
+>  source "fs/ext4/Kconfig"
+>  source "fs/jbd2/Kconfig"
+> diff --git a/fs/iomap/Makefile b/fs/iomap/Makefile
+> index 4143a3ff89dbc..fc070184b7faa 100644
+> --- a/fs/iomap/Makefile
+> +++ b/fs/iomap/Makefile
+> @@ -9,9 +9,9 @@ ccflags-y += -I $(srctree)/$(src)		# needed for trace events
+>  obj-$(CONFIG_FS_IOMAP)		+= iomap.o
 >  
-> +struct page *dax_layout_busy_page(struct address_space *mapping);
-> +struct page *dax_layout_busy_page_range(struct address_space *mapping, loff_t start, loff_t end);
-> +dax_entry_t dax_lock_page(struct page *page);
-> +void dax_unlock_page(struct page *page, dax_entry_t cookie);
-> +int dax_zero_range(struct inode *inode, loff_t pos, loff_t len, bool *did_zero,
-> +		const struct iomap_ops *ops);
-> +int dax_truncate_page(struct inode *inode, loff_t pos, bool *did_zero,
-> +		const struct iomap_ops *ops);
-> +#else
->  static inline struct page *dax_layout_busy_page(struct address_space *mapping)
->  {
->  	return NULL;
+>  iomap-y				+= trace.o \
+> -				   buffered-io.o \
+> +				   iter.o
+> +iomap-$(CONFIG_BLOCK)		+= buffered-io.o \
+>  				   direct-io.o \
+>  				   fiemap.o \
+> -				   iter.o \
+>  				   seek.o
+>  iomap-$(CONFIG_SWAP)		+= swapfile.o
 > -- 
 > 2.30.2
 > 
