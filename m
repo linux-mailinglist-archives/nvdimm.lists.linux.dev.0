@@ -1,70 +1,70 @@
-Return-Path: <nvdimm+bounces-2062-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2065-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030E145CCC2
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 20:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0BA345CCC9
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 20:11:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 74B811C0F5B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 19:10:58 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 844D11C0F6D
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 19:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F072C93;
-	Wed, 24 Nov 2021 19:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42302C9A;
+	Wed, 24 Nov 2021 19:10:51 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381942C81
-	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 19:10:45 +0000 (UTC)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOIFX8J026943;
-	Wed, 24 Nov 2021 19:10:30 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF132C86
+	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 19:10:50 +0000 (UTC)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOI2slv031388;
+	Wed, 24 Nov 2021 19:10:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=saJv+cmeXAb0i0lWCjomZjHXAEdm0lsOILVEOBAAS0Y=;
- b=QZ1eo1SDS5zneVwhcigw763fgsMtNDbUkTb5+CMYSwXbhMxCTkFrmG2vZ6eJ+rmkLt9A
- Zu8OpIqI73T9SrdaG5ybVbiNsKFvFCmMDxYQmlqvhn4CNmxDRmpcIyR1JbFP81SItiym
- WF6VqIMMvvCfTEt4P7pPIGlZYfTWwxIovWs5aUKW8vcOCT/s8Uii5ZrYRH98bDGYw27H
- 5jIzXrI+1AFa3XBNNaNFjcByl8k7O16UdPSR/h/svw8NwutuyemlsHnvFZNaw8HBtqjw
- coyIwKqvY03Bt7aZ8igDdYCUpPrTB6L0tMBTXSxKpUz4RV8s1FUcqXi3PdnyBSx/zTwT lA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-	by mx0b-00069f02.pphosted.com with ESMTP id 3chk002yrn-1
+ bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
+ b=kI44QLZYE2kocX852pd5wmIlpXkz5724UQ1Bdt0iEX0h5zGUZ6DV1piwWHTva/S5zPYG
+ 8NGHlxABjqkKgXGPeV3c84i/fhfsbRNpVcWIXoLyWMA88+PUvD9BFraMFZk4wIsWHvnf
+ O21YmWV7AgHkMAJWIYGqXYa8tADQnSHJH5IqZQ4bsFH87sJylSrcB3tU8jKDPuaPGRfK
+ aa6KeN6R7+dPJMqux+SZ57yMp9/JxE7b9YsIZHMImyqn2kYZ6WErlKMmFF+PJf0kOA0s
+ uvalWfpnjBXYfjw0WBTPloJuo9VjqprT8dBTMNHcW5oRsn3q+ZhzvzVz8snL8XiM9Nob nQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3chmfn2qsk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Nov 2021 19:10:30 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-	by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AOJ1GW3086978;
-	Wed, 24 Nov 2021 19:10:29 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2044.outbound.protection.outlook.com [104.47.51.44])
-	by userp3020.oracle.com with ESMTP id 3chtx6hcm1-1
+	Wed, 24 Nov 2021 19:10:33 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+	by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AOJ1J4l178752;
+	Wed, 24 Nov 2021 19:10:32 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2047.outbound.protection.outlook.com [104.47.51.47])
+	by aserp3020.oracle.com with ESMTP id 3ceru7j9bn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Nov 2021 19:10:29 +0000
+	Wed, 24 Nov 2021 19:10:32 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gzK2Aa+qHqFMjSZdeZ734GxXoo6b6AuIo31fsQlAidL0xM6CiUA8P394KSNzjwHaIaugQR7OIhR1JAIxCRTnGy65EZrdixzex8M9aq6U+7lv9rbjeqAD0mvgfVOrQ4Ig0goKKClFSqh1rcZ9afOW55vL5wCHKRIBcnEfvGfZyPGZwiqTV+/xBAZCmlNv0WsBY2PU4Afp2tOTAh3Gq4UUoICJc9q8gBCEYjay2oKcINaHgqhPsh5m/Igf03fYp7mGtq0e+uGrf2tfM4W1kX+pw1UtFfKut7iPNTTby5ehzo6k5NBJY0a5HnluvNpAUbfO+CL1SvhI5er8QXBYCJzBKQ==
+ b=V6+0K+z/RKDwLDCKXGs1j88EptRI+PEpqP6E++nlI+D1Bt6c8JUQvdJoUbX/s403V8yypj6lN3e15E8hIzMPyCGoxcuQyK8EE2Fj70H8eklWAvcXsqzj/jv4/aKqEmiZtgBGKt+B0cnngfyMvsYgs04lPoTiX2csWndI42F2THl7kjbWPi7T7NQr31Ei8OHzLGhGQ2yv7u3wF2p0PdgbGctU0JJmmBVaAzuW0388qXVEvOEDzotmO/i9JwQ+3I8FE1UPUs26qVSzFFCy5SZ6uK/3JPAo0UgPvCfBhWA5sx000PQ2NB2ikRbqnyaX1Hxg52F7vic1aFEmuX6qDxTX+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=saJv+cmeXAb0i0lWCjomZjHXAEdm0lsOILVEOBAAS0Y=;
- b=Jd7CQ9md7QmMwSRdrrfu0d5ZZqTSID2SRAmF4VvSoF9WF7IaaDozvuh0UKR3P0XOIh/O+n1voP2tm8Do1V3zC/ogufoeoMdUFgn8L60sxmDVF5uoHZstF9iysCbCWu6j2eJF0xE0eplQcwkYilPoTghq/HbIhJk2zsCywyPifx35GHP0c/ZcMIYItHZSeXHowGUSjiQxLAtFxSByUb7km5c9XnfCB5ki5B0bAJUyJDL1dNFrNkMmpDBjmCsOifbXaZrnTKBzfjyg6cTHeCtBnMSRP35h0Gf5o0RSp2EkXuKcrdkitEW3cFeiioVrxLX9eTteKBjbFpuH1uNfFA22wg==
+ bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
+ b=evNfyyCLILc+gWPSIm/Caf/laDSrxI9yAHj19LrfsinnSH1SHFmJ+rxM/ERBRJDuZbA+VyXrVWg0Qb+LxbbipMR/vdUhhILE+3ru/qF1hk28scH/Jnp3MYaO0qDYVkI7aADRDYUlTRG+J77TfmSX0CANel/cRYoHkywJezwee+TtT5Geu69eAcPPs9fblIs7nPJ+fVg20HbKby/IgxtKNCCJWkg8v9mUR8KCJbLPdRTCUXdWc++xd+59DyNqZ+8iaLnfOHyq2ps2/XfqyrGeSdTcL7KKEWiyIn4tHeJr94vCcN0ZWykenbyD/kbzR8btlzCOXwsfn73xhMdx+YB/xg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=saJv+cmeXAb0i0lWCjomZjHXAEdm0lsOILVEOBAAS0Y=;
- b=rpB5oNc/Y8MKUS0vgdbetLYTPYXXLjJX53K9aNod5RoHL5NAjz5iAyrIbtTwyUyhNm9uv+VTd6VBpchcU7avM/SjnJe+lvbZELF/UhlB7d1ET1Nw/aHar0nJpuhYqbF8lgvDbC0sk2NasOsqfganEp3V6JG+WHaEkiqpiNltac8=
+ bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
+ b=n12rnRS11F9uvwX+V+fxAs5893xatNjyuA9RGW3lQt/GBuMm4i51wSCIVN+UiCQi9ZWrHWnalGOQNDkO+15AZ7a5Dat8N7HjoNPa7vJNcZOa2ESZx+Y5r4iBlZwY96k8T1e4VAAwPzwhvIRoWqjrBEjuFoRuP952pLWGq5QNqK0=
 Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
  by BLAPR10MB5234.namprd10.prod.outlook.com (2603:10b6:208:30c::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Wed, 24 Nov
- 2021 19:10:27 +0000
+ 2021 19:10:30 +0000
 Received: from BLAPR10MB4835.namprd10.prod.outlook.com
  ([fe80::d809:9016:4511:2bc6]) by BLAPR10MB4835.namprd10.prod.outlook.com
  ([fe80::d809:9016:4511:2bc6%7]) with mapi id 15.20.4734.021; Wed, 24 Nov 2021
- 19:10:27 +0000
+ 19:10:30 +0000
 From: Joao Martins <joao.m.martins@oracle.com>
 To: linux-mm@kvack.org
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -79,9 +79,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
         Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
         nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
         Joao Martins <joao.m.martins@oracle.com>
-Subject: [PATCH v6 02/10] mm/page_alloc: split prep_compound_page into head and tail subparts
-Date: Wed, 24 Nov 2021 19:09:57 +0000
-Message-Id: <20211124191005.20783-3-joao.m.martins@oracle.com>
+Subject: [PATCH v6 03/10] mm/page_alloc: refactor memmap_init_zone_device() page init
+Date: Wed, 24 Nov 2021 19:09:58 +0000
+Message-Id: <20211124191005.20783-4-joao.m.martins@oracle.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20211124191005.20783-1-joao.m.martins@oracle.com>
 References: <20211124191005.20783-1-joao.m.martins@oracle.com>
@@ -95,132 +95,173 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: from paddy.uk.oracle.com (138.3.204.47) by AM0PR06CA0093.eurprd06.prod.outlook.com (2603:10a6:208:fa::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4713.20 via Frontend Transport; Wed, 24 Nov 2021 19:10:24 +0000
+Received: from paddy.uk.oracle.com (138.3.204.47) by AM0PR06CA0093.eurprd06.prod.outlook.com (2603:10a6:208:fa::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4713.20 via Frontend Transport; Wed, 24 Nov 2021 19:10:27 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3887b772-c393-4973-49a3-08d9af7e1315
+X-MS-Office365-Filtering-Correlation-Id: 33f51aab-0e6d-4794-9b9c-08d9af7e14e1
 X-MS-TrafficTypeDiagnostic: BLAPR10MB5234:
 X-Microsoft-Antispam-PRVS: 
-	<BLAPR10MB52340998D9B64876682C585DBB619@BLAPR10MB5234.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
+	<BLAPR10MB5234930F025B182783C475D1BB619@BLAPR10MB5234.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info: 
-	smffKBOkvlu32MgUznUPcB9J186T194XFZi5zs8Ad134/puCvlgvHnsO+YlscQj//wsyy7KROxVv/KKRJd/Oc2NVMjamnhZXQIQy9OIJdTuYrmfqZiXSJdTtYm4uD59Kf1TxntuFm2YwN8jqZ3NQV+PeRPlHjLOO0Vyx8JYlBFu8/fadAMIbrL8BbHfhlDdG/998Vh1YM8VFKVc+3Jb9NyjS0JrjK4dtsw3ve6s+IHxWJ5twBg3pga/9embFU3fxq5LDj3NqOjF/u3K42KSaEgl7tyyHFkrInJ+5W/1kC+vKKJUZW+Z+kXGzgasY9GmKJ0+8WHbSRdUSL7s1B9ZBkBQURjTHXrAg7pgVg2CGBUDSt9z+qW7HCQ0/llHJ2pTtQp4ko+tvvtgpZ7a4Nq++B8MbJcq+GrGOc2aeDUm2vbytXLigiihrmROSkKhU7lt3n20mTnQsMGF+FRbg13UHWZd3a74vrnwBQjs3hswp+5y5t4sf1t/9WYdFQKzVg39QgrPwJXrFEEqAQMj1FZ23ynTT4JvXFGLdd2Cnf3c8Xn55C/SLupMtT8GgnyfSGT5Teo12s8HazDiKzlphClULtSY/iylAsooPRS2IVCuBul8E/RVlviHpVRSPTLmWfrK7oVcD2uI1sgR3D8HsH4ScdZxJanb2dwmlcMntX1PPR+Upx6/LCP2xNErVtxX9xZvg5KrrL5leh7vLHuGcDq0f2w==
+	iCcVUSTx9tW3r+gvVp0RI0+bE+9iXbrczCx9cPWyQSk6eIj8kmROU0NJXE3jqoF6YSyEcIaF30iH70RxMzdPC/IThpM3qG30k5INoRYfI7xab/+sOBkQWGRt4NBC1b+XZtpAmVG32PY9km2b7flSCjOMxLXFXen+qW2YqYHINNh0yd45GOHBcN4YYxwJisVSHNQoCJZLPrH4nfBKy6W0zLaKSO3zkfYifb0uV841TwQqXTtyas4elN3VKcvmmf2jL6xQHYg88AZRjAR/Jz3teQfag6tWtrNx5HFTIYkoXRF7a45sHxH5+EiXwT3/hZJOimZNRafzJah1pBCCgY/2NJpeFKTJHvz6dkOTDVgj3FQhMtoeNy+o+PmSyC7aWj8GZD++6KrmRP1t6S35LT9R5kVmsDPgFL2CRrkB19f4MWKo2ir+SvXhWmAer/R7um34y5WJHgBWxiwdRwRgyXoBikEntIyq1iZNtL9BYvjQZMQJiUqZAIwXGmZ70Cg2SE/cdNvjhA3R8qaofZUo7en1awKeKuP1Q/98jsKwQaEx8jOBSvVJKMEdnvIcnHjnDP5vjVeq9N8BRfUX5pPcI2lHwHQWmOdj5A5rBSpAUaE65dYSj2B7/oJboDVg0RU7wnzB+8OYffFiLB37K1aXbinhVR9QmQWpfmC1xSmnQx+/oEBs62HbRYCEYNx07P0qkL8kfMAvmqa9vya/2Y0wEHjyBQ==
 X-Forefront-Antispam-Report: 
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(1076003)(26005)(7696005)(83380400001)(186003)(6916009)(103116003)(316002)(52116002)(508600001)(5660300002)(38350700002)(38100700002)(107886003)(7416002)(54906003)(4326008)(86362001)(2906002)(6486002)(66476007)(8936002)(8676002)(66946007)(2616005)(66556008)(956004)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?evtexMtXHs12rZUgsw3bj3gSqtX4U9tQt/zu7zNNVMQjlymynKoGJqNWahvX?=
- =?us-ascii?Q?IUDFAgDgGIESEHAZqbEBY5qYLImjLQd6m5hS2/QUEKsuNMxWr20v/eZnS8xU?=
- =?us-ascii?Q?vwONpqu0V2FcJlyyE1LVaXNC9UC4dV3yjs0jILUCfMPpmvWcCszZGsbLPlOd?=
- =?us-ascii?Q?DJ6ASn75ROUqiuLQR9WZn7zWc7Ui3A7Sx2hv3CgoBGvXvIUFTRCxza83yJxS?=
- =?us-ascii?Q?tFlthEyDHqPs6XVbNmR4cu5fLnC4Xaaykrcf/HU4iwsb5eJiaKYV+RfoziX7?=
- =?us-ascii?Q?DmyGV/tFPHHW/w6AMEBqBJS/FBGptdwwPewhsfTCHEMr4QPicDTNGPvFsn9f?=
- =?us-ascii?Q?RuT95DwBo6g61Z7wDBy4RKeZHF/93HKVVxQqYArP0BuzlnwDoxUeQDH/Ma3L?=
- =?us-ascii?Q?nNcvAqTAOIaOBx1lCZBIMlWiKoESIgmbutae9N4AOLo5nEezS7d8Q+Wxcfqj?=
- =?us-ascii?Q?J4zt2xeewG+VJsuabbha22qE0qUyFh91GkVCroNfdnd/M0qP/IZpvVW5wrfr?=
- =?us-ascii?Q?/65nlDIjhyo9EEPHVv+nx/UL/83/V1r4GTmNyPx3X2hPJ3QAt0qxZFmjTlkZ?=
- =?us-ascii?Q?DOxbW/KNY69OKOsIRTrO1l3Cxdk1Gn87XHOYG/QQXj/DBk4Ti1qJm56gg7yn?=
- =?us-ascii?Q?y1h/oFmm8ikrffJt19ZYK9NkG5o0TjVvAq7Cvc92v/2Uub2nvC732idTaXsa?=
- =?us-ascii?Q?ZwmT5JVEB0USg4d7jyO8cykWrrMJ/TGLbG+6IOtk+tO/1Pan7xZhAVQMGtbF?=
- =?us-ascii?Q?waTPzRL+quP+8G5a4TAzogpMR2LyN1BMlnkPeCybjesMrcM+eeDpFi8roN3h?=
- =?us-ascii?Q?YHpxlvyKepRl5GNp2I9wOHHzBtIxFc3qkRTmN/mUBzDxGYbPHz7xZiex+0Y9?=
- =?us-ascii?Q?bLrgBDndZbOIvOs1bKGr50bTeDV6I132Vd+DmRe2wIx+JiiN6+1+Ry1XT6iX?=
- =?us-ascii?Q?GiL64iokwCHQ/Hplbm9+2Mn0lPqCv0Ldu4s8XIM3+eWE/7BbSnSFElHOC4Tp?=
- =?us-ascii?Q?0n3AA+cVHp1M+oR8GrbhXs7Zxekrk6WJxL7J4u+5Ru8k1rCrvDvqqI1sTIhw?=
- =?us-ascii?Q?fagjkqQZM/d75uO2Mr7asH+M+tuVUjg8t4O8urQPqXzgiloPrbuQKik3kXOw?=
- =?us-ascii?Q?hYj0p2R5pzYYEramijRSc7DpN/ucF5yDwCHRAPZAGMM3zO8B0qU3OdNqM/px?=
- =?us-ascii?Q?xfSdP3v5kIFDYsCSH413zvWT0OWxp4fyD/ocmY8kwjPZDNxAzY0BEzAxTnTf?=
- =?us-ascii?Q?ZdQ608cOMTf9FqsyFFi1yaAbuYrBRLupbuB8wEHOZDfXQ8LPIWKM4Xe7fCP+?=
- =?us-ascii?Q?iNZmXv0PGR7D6TBW94j038ypV+vlLZW6Nu+yKk4pn2UFb6fPXCdL2c3UWW1C?=
- =?us-ascii?Q?XQMpU+SasHHM0f73aeoz4iLjjCOIS9ASy9RrAlj5fkGN+IR0rjLKN+Vgtt/n?=
- =?us-ascii?Q?nJV1rNkcD3o+wIGtTxw5An7zIz6+6HtmRkaFMKJSwS3xwjVvIc/5P1RQdlF1?=
- =?us-ascii?Q?euRB4eJAFU6djZyZKJHGjASxCrPiAApKrIsm5T/UE3lLq4qPSnoLiDvlOaWy?=
- =?us-ascii?Q?QT8jtpCv+tezFbzGTK6kXAPL3rLpQndU7NX1OF2NKBV8aAcKoP6bn7TX1fqS?=
- =?us-ascii?Q?uplBOZcMdZB7s8QfwAvmheXqj7YKFp9bmGuckuB18l99ZbFOmpRMvCqu02VT?=
- =?us-ascii?Q?As8BNg=3D=3D?=
+	=?us-ascii?Q?rZxlZiHPI13enpLHXXX9nMmbGlibyx74iGpyO41kQmFlzb6Ykpk6Oj8NJXRX?=
+ =?us-ascii?Q?hXmu7ft3DUw5axEh+Y7HVfOAdjuKSnnNB2wc/m1EJSTJJINs2I7nQ8DHuiBa?=
+ =?us-ascii?Q?sKiA2cze0Io8c0y9lKENQQO+YiAZ/UQUehX+dX5/zOLovASlUz+iXkpPp5rx?=
+ =?us-ascii?Q?uKvZdfjLmpRS0ugChnTK6Y2QLnQMfxwUOU1t3EFMXgNeNJYefq93xbPzeZiT?=
+ =?us-ascii?Q?ueODyla7eslKHaihpwxfPywsXy8xva10uDJmsuomboQFz9QqA1axtLqvWt7k?=
+ =?us-ascii?Q?bnJS7RdM6tgR2bctRTP0nofCLuAWfKGMsCoyQLg2pSIPLSxNtNqMxTRhi/py?=
+ =?us-ascii?Q?at+q9qaFXnm0m5JvWJNym++3mI7O2MQL3eNlhVevs4BeB2WhF8y2kWXCaSFV?=
+ =?us-ascii?Q?RM3IK5/FODgUx/JF8wmn060GjRErutKMHRx4NOnUA8XQdNqkXXXd/wTT+x6D?=
+ =?us-ascii?Q?qkas8S+u+VDAMhs+Ji5PJm124de+rv/Skt7O8ZcBdjr8+JwB7McLnz6oq8jB?=
+ =?us-ascii?Q?L00HOvEX8muhDbjTbjm3WFkYtSRXZ7fTdqTMTdZ5STB7SR0iwQ16PvuLBoIi?=
+ =?us-ascii?Q?yss7ar5OXldToBrIBzJ1ZxgenjpI0Vjmz5MvtmJSPal6M0ZgsF3dszJTYFGP?=
+ =?us-ascii?Q?k+v2DjysgcPUWBlxC8idfFulNP2mwbdpWToGQiyCeB8w+W0JNBd+Vs+ujyJV?=
+ =?us-ascii?Q?JkQ3aNY7P9Fk3SvAFQTX7WM4JvxcgaCwEUKQzuoi8AXdWHKGaKo1K0ieIVWT?=
+ =?us-ascii?Q?dGL5n8mbOGOrJQjI1OpnhjJET/4pJo8V49VgPYx7pNePpcRR8O/LD4zHwb7m?=
+ =?us-ascii?Q?ZYSdw3q5V11hVWBNy4ysHYx9Vf48e3InxrMClalIchcbPZJYMgzPCoc71CnN?=
+ =?us-ascii?Q?flyM57cFduqc16XIMYQtGaTXkKEuvLLM5PD8S+0MTzb7Nzy8mlLU8TUu92bg?=
+ =?us-ascii?Q?8BORI22xtBnc/8kjJjpStUBMK5ORtvmF3nrRy4OzvvAj4tPGb1LUuBcgc65Z?=
+ =?us-ascii?Q?LKR4rRyhRpM5sHnKCFosiJaf89MSNg1mptRyu9lkjpEDbbTyLy8HcBsh0q7i?=
+ =?us-ascii?Q?J1rUAWhv56t+LSchA2bz9lCfZQyBaGnp24ELoaI0lV7G8KzxmYVVS6eboWYS?=
+ =?us-ascii?Q?BYyKrDGxxASSxeKzKp4hGrbEBEJ4XsmHxUataZ9kAKcvrGMvM+LXmxwxXGW9?=
+ =?us-ascii?Q?nlW8o621nzB5f6XCO4SzGpmNeSFFZBI3OFC8hok8Goa8Q7+cMxxd3PRMxhvv?=
+ =?us-ascii?Q?vb9FuT6toAKOBJHoYlTZ6UagBBvgMhKk9DqUWC1ZyfT0rwBU1lgN41QEcbok?=
+ =?us-ascii?Q?lWI9eG97B1+vF3f/FOQbB4vBqi3L0Zd/WihGqrYwmUIPtYmfKXjelD/7JQqC?=
+ =?us-ascii?Q?j9CD3d/hS4HES85ijlVu0AB2VlNJckLPpQvpzmfp08LKCUWKCR6u7ibs5lxR?=
+ =?us-ascii?Q?HVpEW6WOyU++hkXbKyU9z+sHCkSnLvvuvXaEsiKkKUsXZzRsXgIw5lVJEB48?=
+ =?us-ascii?Q?TdSMjHpoldWv4xEWpPdW8modIobmfklvfQRKQa0Kckfe5G5Y859XhMl/BtTl?=
+ =?us-ascii?Q?2rieihCXJUv4yc6ZgaPNrOvrbXObmum2gUh/Qyy9edz+r0yPbzpDNzb65+hj?=
+ =?us-ascii?Q?i4sDx8gxn55FxlISV0vLauJN2jyyHsqO1nPpFIAUjPEd3B0//e9xcekIqVDg?=
+ =?us-ascii?Q?dC5M6w=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3887b772-c393-4973-49a3-08d9af7e1315
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33f51aab-0e6d-4794-9b9c-08d9af7e14e1
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2021 19:10:27.3077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2021 19:10:30.2716
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zkIVS71ixA8Y8jCrxdMYCQaSz60W54sMJ36e7UMd/OERoiUadEtCTIL9aSLO7SBX8Wj7yswPfMmDYmbIPFt3WwGbf+ENPfSthpC6cDDMYIM=
+X-MS-Exchange-CrossTenant-UserPrincipalName: jqDIMUkEWQK8CVBRTC7EFbxofDRVmXcjSZQk+sNaek6wLwMDwW1bXEO1AZOVxsY5U3QCaXZc5A0xOlzpzlvQTtGgMMaSGOAoshs/4nB4+68=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5234
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10178 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 mlxscore=0
- bulkscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
  definitions=main-2111240099
-X-Proofpoint-ORIG-GUID: xKOlgitcew2J9gIz1o0R0S36rV4MV-lh
-X-Proofpoint-GUID: xKOlgitcew2J9gIz1o0R0S36rV4MV-lh
+X-Proofpoint-ORIG-GUID: QRdmqhNLQlYB7Jcuo09HabAdRD1XSFDD
+X-Proofpoint-GUID: QRdmqhNLQlYB7Jcuo09HabAdRD1XSFDD
 
-Split the utility function prep_compound_page() into head and tail
-counterparts, and use them accordingly.
+Move struct page init to an helper function __init_zone_device_page().
 
 This is in preparation for sharing the storage for compound page
 metadata.
 
 Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/page_alloc.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ mm/page_alloc.c | 74 +++++++++++++++++++++++++++----------------------
+ 1 file changed, 41 insertions(+), 33 deletions(-)
 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 58490fa8948d..ba096f731e36 100644
+index ba096f731e36..f7f33c83222f 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -727,23 +727,33 @@ void free_compound_page(struct page *page)
- 	free_the_page(page, compound_order(page));
+@@ -6565,6 +6565,46 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
  }
  
-+static void prep_compound_head(struct page *page, unsigned int order)
+ #ifdef CONFIG_ZONE_DEVICE
++static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
++					  unsigned long zone_idx, int nid,
++					  struct dev_pagemap *pgmap)
 +{
-+	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
-+	set_compound_order(page, order);
-+	atomic_set(compound_mapcount_ptr(page), -1);
-+	if (hpage_pincount_available(page))
-+		atomic_set(compound_pincount_ptr(page), 0);
++
++	__init_single_page(page, pfn, zone_idx, nid);
++
++	/*
++	 * Mark page reserved as it will need to wait for onlining
++	 * phase for it to be fully associated with a zone.
++	 *
++	 * We can use the non-atomic __set_bit operation for setting
++	 * the flag as we are still initializing the pages.
++	 */
++	__SetPageReserved(page);
++
++	/*
++	 * ZONE_DEVICE pages union ->lru with a ->pgmap back pointer
++	 * and zone_device_data.  It is a bug if a ZONE_DEVICE page is
++	 * ever freed or placed on a driver-private list.
++	 */
++	page->pgmap = pgmap;
++	page->zone_device_data = NULL;
++
++	/*
++	 * Mark the block movable so that blocks are reserved for
++	 * movable at startup. This will force kernel allocations
++	 * to reserve their blocks rather than leaking throughout
++	 * the address space during boot when many long-lived
++	 * kernel allocations are made.
++	 *
++	 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
++	 * because this is done early in section_activate()
++	 */
++	if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
++		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
++		cond_resched();
++	}
 +}
 +
-+static void prep_compound_tail(struct page *head, int tail_idx)
-+{
-+	struct page *p = head + tail_idx;
-+
-+	p->mapping = TAIL_MAPPING;
-+	set_compound_head(p, head);
-+}
-+
- void prep_compound_page(struct page *page, unsigned int order)
- {
- 	int i;
- 	int nr_pages = 1 << order;
+ void __ref memmap_init_zone_device(struct zone *zone,
+ 				   unsigned long start_pfn,
+ 				   unsigned long nr_pages,
+@@ -6593,39 +6633,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
+ 	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
+ 		struct page *page = pfn_to_page(pfn);
  
- 	__SetPageHead(page);
--	for (i = 1; i < nr_pages; i++) {
--		struct page *p = page + i;
--		p->mapping = TAIL_MAPPING;
--		set_compound_head(p, page);
--	}
-+	for (i = 1; i < nr_pages; i++)
-+		prep_compound_tail(page, i);
+-		__init_single_page(page, pfn, zone_idx, nid);
+-
+-		/*
+-		 * Mark page reserved as it will need to wait for onlining
+-		 * phase for it to be fully associated with a zone.
+-		 *
+-		 * We can use the non-atomic __set_bit operation for setting
+-		 * the flag as we are still initializing the pages.
+-		 */
+-		__SetPageReserved(page);
+-
+-		/*
+-		 * ZONE_DEVICE pages union ->lru with a ->pgmap back pointer
+-		 * and zone_device_data.  It is a bug if a ZONE_DEVICE page is
+-		 * ever freed or placed on a driver-private list.
+-		 */
+-		page->pgmap = pgmap;
+-		page->zone_device_data = NULL;
+-
+-		/*
+-		 * Mark the block movable so that blocks are reserved for
+-		 * movable at startup. This will force kernel allocations
+-		 * to reserve their blocks rather than leaking throughout
+-		 * the address space during boot when many long-lived
+-		 * kernel allocations are made.
+-		 *
+-		 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
+-		 * because this is done early in section_activate()
+-		 */
+-		if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
+-			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+-			cond_resched();
+-		}
++		__init_zone_device_page(page, pfn, zone_idx, nid, pgmap);
+ 	}
  
--	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
--	set_compound_order(page, order);
--	atomic_set(compound_mapcount_ptr(page), -1);
--	if (hpage_pincount_available(page))
--		atomic_set(compound_pincount_ptr(page), 0);
-+	prep_compound_head(page, order);
- }
- 
- #ifdef CONFIG_DEBUG_PAGEALLOC
+ 	pr_info("%s initialised %lu pages in %ums\n", __func__,
 -- 
 2.17.2
 
