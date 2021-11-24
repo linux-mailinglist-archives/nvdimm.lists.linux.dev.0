@@ -1,41 +1,38 @@
-Return-Path: <nvdimm+bounces-2059-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2060-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C592E45B502
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 08:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 319D945B51C
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 08:14:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 5AF3F3E10C4
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 07:10:39 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id F41BB3E10C5
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 07:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F24A2C94;
-	Wed, 24 Nov 2021 07:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9602C94;
+	Wed, 24 Nov 2021 07:14:35 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C85B2C81
-	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 07:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4219C2C81
+	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 07:14:34 +0000 (UTC)
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id 9250868AFE; Wed, 24 Nov 2021 08:10:28 +0100 (CET)
-Date: Wed, 24 Nov 2021 08:10:28 +0100
+	id 8727968AFE; Wed, 24 Nov 2021 08:14:30 +0100 (CET)
+Date: Wed, 24 Nov 2021 08:14:30 +0100
 From: Christoph Hellwig <hch@lst.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>, Mike Snitzer <snitzer@redhat.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	device-mapper development <dm-devel@redhat.com>,
-	linux-xfs <linux-xfs@vger.kernel.org>,
-	Linux NVDIMM <nvdimm@lists.linux.dev>,
-	linux-s390 <linux-s390@vger.kernel.org>,
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-	linux-erofs@lists.ozlabs.org,
-	linux-ext4 <linux-ext4@vger.kernel.org>,
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Dan Williams <dan.j.williams@intel.com>,
+	Mike Snitzer <snitzer@redhat.com>, Ira Weiny <ira.weiny@intel.com>,
+	dm-devel@redhat.com, linux-xfs@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-s390@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org,
 	virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 22/29] iomap: add a IOMAP_DAX flag
-Message-ID: <20211124071028.GC7229@lst.de>
-References: <20211109083309.584081-1-hch@lst.de> <20211109083309.584081-23-hch@lst.de> <CAPcyv4gQO6F5-8Ux8ye5cU-W3ZQVDjj5614Xb8EsTvH9UhfAfg@mail.gmail.com>
+Subject: Re: [PATCH 23/29] xfs: use IOMAP_DAX to check for DAX mappings
+Message-ID: <20211124071430.GD7229@lst.de>
+References: <20211109083309.584081-1-hch@lst.de> <20211109083309.584081-24-hch@lst.de> <20211123230124.GR266024@magnolia>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -44,17 +41,19 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPcyv4gQO6F5-8Ux8ye5cU-W3ZQVDjj5614Xb8EsTvH9UhfAfg@mail.gmail.com>
+In-Reply-To: <20211123230124.GR266024@magnolia>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Nov 23, 2021 at 06:47:10PM -0800, Dan Williams wrote:
-> On Tue, Nov 9, 2021 at 12:34 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > Add a flag so that the file system can easily detect DAX operations.
+On Tue, Nov 23, 2021 at 03:01:24PM -0800, Darrick J. Wong wrote:
+> On Tue, Nov 09, 2021 at 09:33:03AM +0100, Christoph Hellwig wrote:
+> > Use the explicit DAX flag instead of checking the inode flag in the
+> > iomap code.
+> > 
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
-> Looks ok, but I would have preferred a quick note about the rationale
-> here before needing to read other patches to figure that out.
+> Any particular reason to pass this in as a flag vs. querying the inode?
 
-The reason is to only apply the DAX partition offsets to actual DAX
-operations, and not to e.g. fiemap.  I'll document that more clearly.
+Same reason as the addition of IOMAP_DAX.  But I think I'll redo this
+a bit to do the XFS paramater passing first and then actually check
+IOMAP_DAX together with introducing it to make it all a little more clear.
 
