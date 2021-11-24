@@ -1,70 +1,70 @@
-Return-Path: <nvdimm+bounces-2065-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2063-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0BA345CCC9
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 20:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C746445CCC6
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 20:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 844D11C0F6D
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 19:11:16 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 903F11C0F56
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 19:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42302C9A;
-	Wed, 24 Nov 2021 19:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AE12C96;
+	Wed, 24 Nov 2021 19:10:48 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF132C86
-	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 19:10:50 +0000 (UTC)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOI2slv031388;
-	Wed, 24 Nov 2021 19:10:34 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0FA29CA
+	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 19:10:45 +0000 (UTC)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOIFNRr000722;
+	Wed, 24 Nov 2021 19:10:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
- b=kI44QLZYE2kocX852pd5wmIlpXkz5724UQ1Bdt0iEX0h5zGUZ6DV1piwWHTva/S5zPYG
- 8NGHlxABjqkKgXGPeV3c84i/fhfsbRNpVcWIXoLyWMA88+PUvD9BFraMFZk4wIsWHvnf
- O21YmWV7AgHkMAJWIYGqXYa8tADQnSHJH5IqZQ4bsFH87sJylSrcB3tU8jKDPuaPGRfK
- aa6KeN6R7+dPJMqux+SZ57yMp9/JxE7b9YsIZHMImyqn2kYZ6WErlKMmFF+PJf0kOA0s
- uvalWfpnjBXYfjw0WBTPloJuo9VjqprT8dBTMNHcW5oRsn3q+ZhzvzVz8snL8XiM9Nob nQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-	by mx0b-00069f02.pphosted.com with ESMTP id 3chmfn2qsk-1
+ bh=h5SstNmQ1cr0H/SJe72geipxNFA/PXVszrLlkqHDrcM=;
+ b=uPXyPTNhrBx5sTZTnLJoPTRLbQqubXsRp4aCPRE8NMkMNALZ2mlwEo7zYInf95RQMSvF
+ 9rzl69qJhuDRzQyw9bmy++LKy5RVdvw8MtokKxT7N8ET7ofnu2iBx769DckVNqn4QXX/
+ LXWBY/JH/81zUNjY+glB1rDrrFoLLnJsVkf9DsXJFLCPKinhc85refGBFqHuSho+RaXC
+ JZBIs8Jhqi5kAyubXzZn8EWnn1uGxGXY+mxqinf+C5FLDr7ja+fl/nPRuy7d2UAO2+ti
+ VerJN+88SwMwI97lZu25E9ZfHzYWv8fYKNGau6ep/wsGGCMMxlq2EqoX1xh/T/ePaQBs cg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3chkfkb0cn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Nov 2021 19:10:33 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-	by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AOJ1J4l178752;
-	Wed, 24 Nov 2021 19:10:32 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2047.outbound.protection.outlook.com [104.47.51.47])
-	by aserp3020.oracle.com with ESMTP id 3ceru7j9bn-1
+	Wed, 24 Nov 2021 19:10:38 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+	by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AOJ0rqf192929;
+	Wed, 24 Nov 2021 19:10:36 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
+	by userp3030.oracle.com with ESMTP id 3cep526txw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Nov 2021 19:10:32 +0000
+	Wed, 24 Nov 2021 19:10:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V6+0K+z/RKDwLDCKXGs1j88EptRI+PEpqP6E++nlI+D1Bt6c8JUQvdJoUbX/s403V8yypj6lN3e15E8hIzMPyCGoxcuQyK8EE2Fj70H8eklWAvcXsqzj/jv4/aKqEmiZtgBGKt+B0cnngfyMvsYgs04lPoTiX2csWndI42F2THl7kjbWPi7T7NQr31Ei8OHzLGhGQ2yv7u3wF2p0PdgbGctU0JJmmBVaAzuW0388qXVEvOEDzotmO/i9JwQ+3I8FE1UPUs26qVSzFFCy5SZ6uK/3JPAo0UgPvCfBhWA5sx000PQ2NB2ikRbqnyaX1Hxg52F7vic1aFEmuX6qDxTX+w==
+ b=N78WciR/tOaublq+e+1K165/jLijI71vq+jiPSIsbj2CJrUm62OmwYCgoF7Vk8WmcDJKvrBExX4lAsbZny8mkyJULwGxD5If00fowI0HUD06PaCWP78jC+Q173w8hFv4Dr+H2uLkFEuik2irLqdfe7N2KfPe5/6VJXGMGqI4XVKBRZM1MKebwYQu0yYovuTNVT+OTksBe+vxZP/gtoyZoCxDJSrYsMz9tdmij9jPhkIi747PNzGeMJIhOoGyMolLMbCvzbQUHiOeNhyfqMVoI9cReSTWc5xM/OWgeEcDPwTI8phAgCJANZn0f9MjRtzDVk2ozcbKTMzpo4Ddyu8KGg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
- b=evNfyyCLILc+gWPSIm/Caf/laDSrxI9yAHj19LrfsinnSH1SHFmJ+rxM/ERBRJDuZbA+VyXrVWg0Qb+LxbbipMR/vdUhhILE+3ru/qF1hk28scH/Jnp3MYaO0qDYVkI7aADRDYUlTRG+J77TfmSX0CANel/cRYoHkywJezwee+TtT5Geu69eAcPPs9fblIs7nPJ+fVg20HbKby/IgxtKNCCJWkg8v9mUR8KCJbLPdRTCUXdWc++xd+59DyNqZ+8iaLnfOHyq2ps2/XfqyrGeSdTcL7KKEWiyIn4tHeJr94vCcN0ZWykenbyD/kbzR8btlzCOXwsfn73xhMdx+YB/xg==
+ bh=h5SstNmQ1cr0H/SJe72geipxNFA/PXVszrLlkqHDrcM=;
+ b=Xm6T2Y1FGOl+5e1x+V7ZiNYmqLbj4ixYjNj+5+kAq1vFVF1uRtoJywVjktGg02CjSD5mr2ccF8i98B18Tqq/s9xLMlf97Fj7AuYLxrb8O7dBkZCx6XCFbOwD8dwBFoMChEJTsnNAuCDVDEpQDe/kQdEuKJy4cN0QvBopWwSRsYrIovJ3KwFXgCg0JB6lwtwooINMjXRcyUK9egS5z0c1iQRFLlPyD2iHWIz3JJb45DsIY0PN+l4GzaYxk9fgt2tphaHF5dSZU6xq7Wxy6WtobkwxQk79k14RNtTdhOZTtmKmAPIIkr6DTQFu3RhZsr7FEmxF+jCnH+2N7TECJ/4RTQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uTLYKEkYQvMOzaFUCKSxv8ku0oYdToHJNLmK7s3USEw=;
- b=n12rnRS11F9uvwX+V+fxAs5893xatNjyuA9RGW3lQt/GBuMm4i51wSCIVN+UiCQi9ZWrHWnalGOQNDkO+15AZ7a5Dat8N7HjoNPa7vJNcZOa2ESZx+Y5r4iBlZwY96k8T1e4VAAwPzwhvIRoWqjrBEjuFoRuP952pLWGq5QNqK0=
+ bh=h5SstNmQ1cr0H/SJe72geipxNFA/PXVszrLlkqHDrcM=;
+ b=H0BzGav34mQhIpj+bAxy7ufT2pclwp5uaIJ92QCgqbhw/mp7Cq8736gZM5F4Rjrd0hNv/2glPGkoufRH8bBQvufB4+oamK7laVphH6xNibsAB3NSy/naCfFLQPhuboFiUzEp5bWdb+Lurv/V5B+ar2yhl/CN9xWpVZFimhkqjrA=
 Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
  by BLAPR10MB5234.namprd10.prod.outlook.com (2603:10b6:208:30c::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Wed, 24 Nov
- 2021 19:10:30 +0000
+ 2021 19:10:34 +0000
 Received: from BLAPR10MB4835.namprd10.prod.outlook.com
  ([fe80::d809:9016:4511:2bc6]) by BLAPR10MB4835.namprd10.prod.outlook.com
  ([fe80::d809:9016:4511:2bc6%7]) with mapi id 15.20.4734.021; Wed, 24 Nov 2021
- 19:10:30 +0000
+ 19:10:34 +0000
 From: Joao Martins <joao.m.martins@oracle.com>
 To: linux-mm@kvack.org
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -79,9 +79,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
         Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
         nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
         Joao Martins <joao.m.martins@oracle.com>
-Subject: [PATCH v6 03/10] mm/page_alloc: refactor memmap_init_zone_device() page init
-Date: Wed, 24 Nov 2021 19:09:58 +0000
-Message-Id: <20211124191005.20783-4-joao.m.martins@oracle.com>
+Subject: [PATCH v6 04/10] mm/memremap: add ZONE_DEVICE support for compound pages
+Date: Wed, 24 Nov 2021 19:09:59 +0000
+Message-Id: <20211124191005.20783-5-joao.m.martins@oracle.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20211124191005.20783-1-joao.m.martins@oracle.com>
 References: <20211124191005.20783-1-joao.m.martins@oracle.com>
@@ -95,170 +95,231 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: from paddy.uk.oracle.com (138.3.204.47) by AM0PR06CA0093.eurprd06.prod.outlook.com (2603:10a6:208:fa::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4713.20 via Frontend Transport; Wed, 24 Nov 2021 19:10:27 +0000
+Received: from paddy.uk.oracle.com (138.3.204.47) by AM0PR06CA0093.eurprd06.prod.outlook.com (2603:10a6:208:fa::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4713.20 via Frontend Transport; Wed, 24 Nov 2021 19:10:30 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 33f51aab-0e6d-4794-9b9c-08d9af7e14e1
+X-MS-Office365-Filtering-Correlation-Id: ce8aa112-9e71-401b-5976-08d9af7e171e
 X-MS-TrafficTypeDiagnostic: BLAPR10MB5234:
 X-Microsoft-Antispam-PRVS: 
-	<BLAPR10MB5234930F025B182783C475D1BB619@BLAPR10MB5234.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+	<BLAPR10MB5234C2F90367EA79918BD2A5BB619@BLAPR10MB5234.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:459;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info: 
-	iCcVUSTx9tW3r+gvVp0RI0+bE+9iXbrczCx9cPWyQSk6eIj8kmROU0NJXE3jqoF6YSyEcIaF30iH70RxMzdPC/IThpM3qG30k5INoRYfI7xab/+sOBkQWGRt4NBC1b+XZtpAmVG32PY9km2b7flSCjOMxLXFXen+qW2YqYHINNh0yd45GOHBcN4YYxwJisVSHNQoCJZLPrH4nfBKy6W0zLaKSO3zkfYifb0uV841TwQqXTtyas4elN3VKcvmmf2jL6xQHYg88AZRjAR/Jz3teQfag6tWtrNx5HFTIYkoXRF7a45sHxH5+EiXwT3/hZJOimZNRafzJah1pBCCgY/2NJpeFKTJHvz6dkOTDVgj3FQhMtoeNy+o+PmSyC7aWj8GZD++6KrmRP1t6S35LT9R5kVmsDPgFL2CRrkB19f4MWKo2ir+SvXhWmAer/R7um34y5WJHgBWxiwdRwRgyXoBikEntIyq1iZNtL9BYvjQZMQJiUqZAIwXGmZ70Cg2SE/cdNvjhA3R8qaofZUo7en1awKeKuP1Q/98jsKwQaEx8jOBSvVJKMEdnvIcnHjnDP5vjVeq9N8BRfUX5pPcI2lHwHQWmOdj5A5rBSpAUaE65dYSj2B7/oJboDVg0RU7wnzB+8OYffFiLB37K1aXbinhVR9QmQWpfmC1xSmnQx+/oEBs62HbRYCEYNx07P0qkL8kfMAvmqa9vya/2Y0wEHjyBQ==
+	ENdAy9XkSlT1QNWTD0Cibg1WH6Wn9ob0q7Z0Z5B8KluRDOPqAumgq+xmxnBQ05DyGvcPnbUKLz7i6zZJHi+ODS0hr6eSy5+dyyKOftbzFO+r8YtrDz5HQaCthBGckp53CUtPGSbHWsmCVMm4Ll9LpEYB5D0VZmP12mKM3LY5nKzSoWn/rLVi4VIeZpTjlLLfibAAOoKrg8Geh0GzVO7Lz+BCIlnn7WHQoYrzwkmVyAUikqOVm2Bl/VXHDMZ36eaKXs2sH9is+CfqhxuvqNj/iiTSvUFqVphkT0j59jzdXUlu7nakvxH3N/B7MKS+Ey8QNRr4n/wUmsA7H6I+81Q1bOfe2iJT0F9QoaDSKkvL9ZLiOQZrCrXENvlOac+oWru24wwpLLMULXBA98StH3sgYVjioj2F5kbYPwigra2FDYKO+dw1AXedvbyPJDvTX+anWpuEd63seJ5h3l4p/kKIL7lxSIe+MS9ZjLYtTwPjfIPrOkNz64oMSUz4TpHaPJoSpTkVEhOdqyFZZ8VFKKRniKBjyDXVADpE+aT1rLFdKNZ4c+UNfUtckoFHbUIphaRcnasngqi+jaJBM5pEdnlQMggNWChmSzK5iSD0M7DOw8FBNssM/UoNXvbZjDaPCXeKPhUlONoH/nvqRJTt9lXKwscOJtksdTZcaeaWCq0Y4IFVKYexE/NRVVAFA6Ak/9GMfg1ZN0a0gP4UQxHY6odPBA==
 X-Forefront-Antispam-Report: 
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(1076003)(26005)(7696005)(83380400001)(186003)(6916009)(103116003)(316002)(52116002)(508600001)(5660300002)(38350700002)(38100700002)(107886003)(7416002)(54906003)(4326008)(86362001)(2906002)(6486002)(66476007)(8936002)(8676002)(66946007)(2616005)(66556008)(956004)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?rZxlZiHPI13enpLHXXX9nMmbGlibyx74iGpyO41kQmFlzb6Ykpk6Oj8NJXRX?=
- =?us-ascii?Q?hXmu7ft3DUw5axEh+Y7HVfOAdjuKSnnNB2wc/m1EJSTJJINs2I7nQ8DHuiBa?=
- =?us-ascii?Q?sKiA2cze0Io8c0y9lKENQQO+YiAZ/UQUehX+dX5/zOLovASlUz+iXkpPp5rx?=
- =?us-ascii?Q?uKvZdfjLmpRS0ugChnTK6Y2QLnQMfxwUOU1t3EFMXgNeNJYefq93xbPzeZiT?=
- =?us-ascii?Q?ueODyla7eslKHaihpwxfPywsXy8xva10uDJmsuomboQFz9QqA1axtLqvWt7k?=
- =?us-ascii?Q?bnJS7RdM6tgR2bctRTP0nofCLuAWfKGMsCoyQLg2pSIPLSxNtNqMxTRhi/py?=
- =?us-ascii?Q?at+q9qaFXnm0m5JvWJNym++3mI7O2MQL3eNlhVevs4BeB2WhF8y2kWXCaSFV?=
- =?us-ascii?Q?RM3IK5/FODgUx/JF8wmn060GjRErutKMHRx4NOnUA8XQdNqkXXXd/wTT+x6D?=
- =?us-ascii?Q?qkas8S+u+VDAMhs+Ji5PJm124de+rv/Skt7O8ZcBdjr8+JwB7McLnz6oq8jB?=
- =?us-ascii?Q?L00HOvEX8muhDbjTbjm3WFkYtSRXZ7fTdqTMTdZ5STB7SR0iwQ16PvuLBoIi?=
- =?us-ascii?Q?yss7ar5OXldToBrIBzJ1ZxgenjpI0Vjmz5MvtmJSPal6M0ZgsF3dszJTYFGP?=
- =?us-ascii?Q?k+v2DjysgcPUWBlxC8idfFulNP2mwbdpWToGQiyCeB8w+W0JNBd+Vs+ujyJV?=
- =?us-ascii?Q?JkQ3aNY7P9Fk3SvAFQTX7WM4JvxcgaCwEUKQzuoi8AXdWHKGaKo1K0ieIVWT?=
- =?us-ascii?Q?dGL5n8mbOGOrJQjI1OpnhjJET/4pJo8V49VgPYx7pNePpcRR8O/LD4zHwb7m?=
- =?us-ascii?Q?ZYSdw3q5V11hVWBNy4ysHYx9Vf48e3InxrMClalIchcbPZJYMgzPCoc71CnN?=
- =?us-ascii?Q?flyM57cFduqc16XIMYQtGaTXkKEuvLLM5PD8S+0MTzb7Nzy8mlLU8TUu92bg?=
- =?us-ascii?Q?8BORI22xtBnc/8kjJjpStUBMK5ORtvmF3nrRy4OzvvAj4tPGb1LUuBcgc65Z?=
- =?us-ascii?Q?LKR4rRyhRpM5sHnKCFosiJaf89MSNg1mptRyu9lkjpEDbbTyLy8HcBsh0q7i?=
- =?us-ascii?Q?J1rUAWhv56t+LSchA2bz9lCfZQyBaGnp24ELoaI0lV7G8KzxmYVVS6eboWYS?=
- =?us-ascii?Q?BYyKrDGxxASSxeKzKp4hGrbEBEJ4XsmHxUataZ9kAKcvrGMvM+LXmxwxXGW9?=
- =?us-ascii?Q?nlW8o621nzB5f6XCO4SzGpmNeSFFZBI3OFC8hok8Goa8Q7+cMxxd3PRMxhvv?=
- =?us-ascii?Q?vb9FuT6toAKOBJHoYlTZ6UagBBvgMhKk9DqUWC1ZyfT0rwBU1lgN41QEcbok?=
- =?us-ascii?Q?lWI9eG97B1+vF3f/FOQbB4vBqi3L0Zd/WihGqrYwmUIPtYmfKXjelD/7JQqC?=
- =?us-ascii?Q?j9CD3d/hS4HES85ijlVu0AB2VlNJckLPpQvpzmfp08LKCUWKCR6u7ibs5lxR?=
- =?us-ascii?Q?HVpEW6WOyU++hkXbKyU9z+sHCkSnLvvuvXaEsiKkKUsXZzRsXgIw5lVJEB48?=
- =?us-ascii?Q?TdSMjHpoldWv4xEWpPdW8modIobmfklvfQRKQa0Kckfe5G5Y859XhMl/BtTl?=
- =?us-ascii?Q?2rieihCXJUv4yc6ZgaPNrOvrbXObmum2gUh/Qyy9edz+r0yPbzpDNzb65+hj?=
- =?us-ascii?Q?i4sDx8gxn55FxlISV0vLauJN2jyyHsqO1nPpFIAUjPEd3B0//e9xcekIqVDg?=
- =?us-ascii?Q?dC5M6w=3D=3D?=
+	=?us-ascii?Q?QnjuwekRjKPL6dgexDUFr4UoA8eGDQOhRQprdD77bGioEnGv0rhdS8WLVUdH?=
+ =?us-ascii?Q?ROSkuXsn6Hk0Gn6LV2HK9j8XhmsJ+NFfZz5u+huVYFP8dfCvUzDKyXZw/X0h?=
+ =?us-ascii?Q?YJxK0gmsEOkyvr86GaUM3reXH1HaYf5WD0ou9kiG7TGQhalD2ba7i2HjEcuH?=
+ =?us-ascii?Q?YDsQo6btb7i8I97icid3/898ekV37wN4D3Vj59j9e997BZKvDLd7b86XYbM6?=
+ =?us-ascii?Q?WN21x8a/SX3gzFoKNPJ28Fh8uGU2yewiIZ4SQr/3harDhB6wH1WrZ4NgZ2kZ?=
+ =?us-ascii?Q?VK2qPgr/ULUoXI83V2DnoOii5/z6CV9j9QX3vRuaaJcyWY/XaTyAkFdQIMMp?=
+ =?us-ascii?Q?CVr8Zh09vxt7DFv2UONyKEPMAtq9xDDap6MSNDylUCq42/yxv728srxjIuJr?=
+ =?us-ascii?Q?iElWhfe7tlVlkzyhe5QgmVS68LgfAuZucTJ4E8tBcfkkpm1MeRka0CyUTMFz?=
+ =?us-ascii?Q?5ZpqwORh9g9pTnYA1lfoUXGYM89zLQELgHmgwipzgWXoh6BFnx65YAJPiZFC?=
+ =?us-ascii?Q?1uQtAd0OFD2VnC/V6RCviz34N7I7ik125Gd0gMkCk9KeZNPOwp7D4w9pYlwl?=
+ =?us-ascii?Q?rQjk1/g+7SPO/nO1/U+c+VTABhkn21jIztq4OhrH/pUJES3gF/n4UD6eYi68?=
+ =?us-ascii?Q?QF1BxZECS5RIIBz7u2kyXr6aOrEmGqkvrpQtmObSqB9jxluDvXb44MGpLgBg?=
+ =?us-ascii?Q?MwWv+PehzqZPvdt2xvDVJnJsOD/EAYZlODWepaWxEqpP3agtiqJRqj1k8dmD?=
+ =?us-ascii?Q?EicV8k08FnHcSum2VutLEg5SR0YRMFbcL6eH2w/SlbbrCO05T7oJffOD6pP5?=
+ =?us-ascii?Q?ZPAhaRDpnRuXVtX30DxTjYBPGozPQa/Rz0lZmm9snH3PZsT7MHKe8vKiBR54?=
+ =?us-ascii?Q?MlbWPjXF3sdar8VSH2QvFWvbL5SAgprElPP8BPD5CKQhEzJgWRc+wIg0Yevo?=
+ =?us-ascii?Q?7REqn4RKS6ViWdx5/G7XzpAIQqjZWs4GN79u9tDdF0OU9FP2uLQ1FeWM+O6D?=
+ =?us-ascii?Q?NuSHmMBTSwFeStlttJcyeQDUHlPxHf3MOxgPp2wovQDGrLBwmctuFYs25Ph7?=
+ =?us-ascii?Q?mnsIPY3KsPqSk6GPuaRp55fA1hfb5xw3Ts6zMGCDJtno91ILE6rGeN8nHS3k?=
+ =?us-ascii?Q?lNxmPOwayzqAG43BM+QIg2uCDH3aM0VBK+m+Hg1tfSTqIAEZ6Dsc7P+1iivO?=
+ =?us-ascii?Q?M2XQXVxgPtLZsoxfJphxRHfdlM5kNJOpXRhy8GITR4rRCwwvC2nJ+Go44zCu?=
+ =?us-ascii?Q?doBV4TMnd6fEzXDu+BLq7+0NbZJbGXa1sMDdJ/JuOkKhlXkT9Ubuq1lx1+NW?=
+ =?us-ascii?Q?8MljuVETgZHHT2NezsTOW4s8IARHCRCaqWVY01XMMZ444knNKOES/W5Qqwf8?=
+ =?us-ascii?Q?pw+EHaFiEq8bAgDnvyiy6QMLxmarvzzPBJGdYd7q0MpLiV/yOI4XMn7CLb/+?=
+ =?us-ascii?Q?W6aZ2/jMo6Rc56vD1/OXsPHo60K0W75xmhcbSIaUOCHhMaFwdkKF6IOYHNUn?=
+ =?us-ascii?Q?HVXJf85ugEm864XWY6J8BoD5LdhXttOd9mWzM932GQmmfMzTRJYtTvj3PKJO?=
+ =?us-ascii?Q?YUBdPVDdigNN1Qmg8Yzuz1cUo4PHSTxw/KJCIWdUMBkNhVy5hkYeQpriAQOt?=
+ =?us-ascii?Q?F9hHbCkF8A0y8byi17Wu7egRhACDfwFmOt0oBclwbMMl0b3WqoWr91Qb3eQP?=
+ =?us-ascii?Q?xgeirA=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33f51aab-0e6d-4794-9b9c-08d9af7e14e1
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce8aa112-9e71-401b-5976-08d9af7e171e
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2021 19:10:30.2716
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2021 19:10:34.0799
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jqDIMUkEWQK8CVBRTC7EFbxofDRVmXcjSZQk+sNaek6wLwMDwW1bXEO1AZOVxsY5U3QCaXZc5A0xOlzpzlvQTtGgMMaSGOAoshs/4nB4+68=
+X-MS-Exchange-CrossTenant-UserPrincipalName: qqwTcVaqrQ2Ve3/R+0LGpnXU/IH/V3K9b1yDwBN3H8OovPzLxKLIef4ixMqucX1kqFXk7lwYIV5XgoFnLPQOo766de+1igYSAxkvGOggsCg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5234
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10178 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 adultscore=0 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
  definitions=main-2111240099
-X-Proofpoint-ORIG-GUID: QRdmqhNLQlYB7Jcuo09HabAdRD1XSFDD
-X-Proofpoint-GUID: QRdmqhNLQlYB7Jcuo09HabAdRD1XSFDD
+X-Proofpoint-GUID: Y5OQM9nowO6W1z7h3QoH-8Fhehkn-Wah
+X-Proofpoint-ORIG-GUID: Y5OQM9nowO6W1z7h3QoH-8Fhehkn-Wah
 
-Move struct page init to an helper function __init_zone_device_page().
+Add a new @vmemmap_shift property for struct dev_pagemap which specifies that a
+devmap is composed of a set of compound pages of order @vmemmap_shift, instead of
+base pages. When a compound page devmap is requested, all but the first
+page are initialised as tail pages instead of order-0 pages.
 
-This is in preparation for sharing the storage for compound page
-metadata.
+For certain ZONE_DEVICE users like device-dax which have a fixed page size,
+this creates an opportunity to optimize GUP and GUP-fast walkers, treating
+it the same way as THP or hugetlb pages.
+
+Additionally, commit 7118fc2906e2 ("hugetlb: address ref count racing in
+prep_compound_gigantic_page") removed set_page_count() because the
+setting of page ref count to zero was redundant. devmap pages don't come
+from page allocator though and only head page refcount is used for
+compound pages, hence initialize tail page count to zero.
 
 Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 ---
- mm/page_alloc.c | 74 +++++++++++++++++++++++++++----------------------
- 1 file changed, 41 insertions(+), 33 deletions(-)
+ include/linux/memremap.h | 11 +++++++++++
+ mm/memremap.c            | 12 ++++++------
+ mm/page_alloc.c          | 38 +++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 54 insertions(+), 7 deletions(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ba096f731e36..f7f33c83222f 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6565,6 +6565,46 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
+diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+index 119f130ef8f1..aaf85bda093b 100644
+--- a/include/linux/memremap.h
++++ b/include/linux/memremap.h
+@@ -99,6 +99,11 @@ struct dev_pagemap_ops {
+  * @done: completion for @internal_ref
+  * @type: memory type: see MEMORY_* in memory_hotplug.h
+  * @flags: PGMAP_* flags to specify defailed behavior
++ * @vmemmap_shift: structural definition of how the vmemmap page metadata
++ *      is populated, specifically the metadata page order.
++ *	A zero value (default) uses base pages as the vmemmap metadata
++ *	representation. A bigger value will set up compound struct pages
++ *	of the requested order value.
+  * @ops: method table
+  * @owner: an opaque pointer identifying the entity that manages this
+  *	instance.  Used by various helpers to make sure that no
+@@ -114,6 +119,7 @@ struct dev_pagemap {
+ 	struct completion done;
+ 	enum memory_type type;
+ 	unsigned int flags;
++	unsigned long vmemmap_shift;
+ 	const struct dev_pagemap_ops *ops;
+ 	void *owner;
+ 	int nr_range;
+@@ -130,6 +136,11 @@ static inline struct vmem_altmap *pgmap_altmap(struct dev_pagemap *pgmap)
+ 	return NULL;
  }
  
- #ifdef CONFIG_ZONE_DEVICE
-+static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
-+					  unsigned long zone_idx, int nid,
-+					  struct dev_pagemap *pgmap)
++static inline unsigned long pgmap_vmemmap_nr(struct dev_pagemap *pgmap)
 +{
++	return 1 << pgmap->vmemmap_shift;
++}
 +
-+	__init_single_page(page, pfn, zone_idx, nid);
+ #ifdef CONFIG_ZONE_DEVICE
+ bool pfn_zone_device_reserved(unsigned long pfn);
+ void *memremap_pages(struct dev_pagemap *pgmap, int nid);
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 84de22c14567..3afa246eb1ab 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -102,11 +102,11 @@ static unsigned long pfn_end(struct dev_pagemap *pgmap, int range_id)
+ 	return (range->start + range_len(range)) >> PAGE_SHIFT;
+ }
+ 
+-static unsigned long pfn_next(unsigned long pfn)
++static unsigned long pfn_next(struct dev_pagemap *pgmap, unsigned long pfn)
+ {
+-	if (pfn % 1024 == 0)
++	if (pfn % (1024 << pgmap->vmemmap_shift))
+ 		cond_resched();
+-	return pfn + 1;
++	return pfn + pgmap_vmemmap_nr(pgmap);
+ }
+ 
+ /*
+@@ -130,7 +130,7 @@ bool pfn_zone_device_reserved(unsigned long pfn)
+ }
+ 
+ #define for_each_device_pfn(pfn, map, i) \
+-	for (pfn = pfn_first(map, i); pfn < pfn_end(map, i); pfn = pfn_next(pfn))
++	for (pfn = pfn_first(map, i); pfn < pfn_end(map, i); pfn = pfn_next(map, pfn))
+ 
+ static void dev_pagemap_kill(struct dev_pagemap *pgmap)
+ {
+@@ -315,8 +315,8 @@ static int pagemap_range(struct dev_pagemap *pgmap, struct mhp_params *params,
+ 	memmap_init_zone_device(&NODE_DATA(nid)->node_zones[ZONE_DEVICE],
+ 				PHYS_PFN(range->start),
+ 				PHYS_PFN(range_len(range)), pgmap);
+-	percpu_ref_get_many(pgmap->ref, pfn_end(pgmap, range_id)
+-			- pfn_first(pgmap, range_id));
++	percpu_ref_get_many(pgmap->ref, (pfn_end(pgmap, range_id)
++			- pfn_first(pgmap, range_id)) >> pgmap->vmemmap_shift);
+ 	return 0;
+ 
+ err_add_memory:
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index f7f33c83222f..ea537839816e 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6605,6 +6605,35 @@ static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
+ 	}
+ }
+ 
++static void __ref memmap_init_compound(struct page *head,
++				       unsigned long head_pfn,
++				       unsigned long zone_idx, int nid,
++				       struct dev_pagemap *pgmap,
++				       unsigned long nr_pages)
++{
++	unsigned long pfn, end_pfn = head_pfn + nr_pages;
++	unsigned int order = pgmap->vmemmap_shift;
 +
-+	/*
-+	 * Mark page reserved as it will need to wait for onlining
-+	 * phase for it to be fully associated with a zone.
-+	 *
-+	 * We can use the non-atomic __set_bit operation for setting
-+	 * the flag as we are still initializing the pages.
-+	 */
-+	__SetPageReserved(page);
++	__SetPageHead(head);
++	for (pfn = head_pfn + 1; pfn < end_pfn; pfn++) {
++		struct page *page = pfn_to_page(pfn);
 +
-+	/*
-+	 * ZONE_DEVICE pages union ->lru with a ->pgmap back pointer
-+	 * and zone_device_data.  It is a bug if a ZONE_DEVICE page is
-+	 * ever freed or placed on a driver-private list.
-+	 */
-+	page->pgmap = pgmap;
-+	page->zone_device_data = NULL;
++		__init_zone_device_page(page, pfn, zone_idx, nid, pgmap);
++		prep_compound_tail(head, pfn - head_pfn);
++		set_page_count(page, 0);
 +
-+	/*
-+	 * Mark the block movable so that blocks are reserved for
-+	 * movable at startup. This will force kernel allocations
-+	 * to reserve their blocks rather than leaking throughout
-+	 * the address space during boot when many long-lived
-+	 * kernel allocations are made.
-+	 *
-+	 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
-+	 * because this is done early in section_activate()
-+	 */
-+	if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
-+		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-+		cond_resched();
++		/*
++		 * The first tail page stores compound_mapcount_ptr() and
++		 * compound_order() and the second tail page stores
++		 * compound_pincount_ptr(). Call prep_compound_head() after
++		 * the first and second tail pages have been initialized to
++		 * not have the data overwritten.
++		 */
++		if (pfn == head_pfn + 2)
++			prep_compound_head(head, order);
 +	}
 +}
 +
  void __ref memmap_init_zone_device(struct zone *zone,
  				   unsigned long start_pfn,
  				   unsigned long nr_pages,
-@@ -6593,39 +6633,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
- 	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
+@@ -6613,6 +6642,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
+ 	unsigned long pfn, end_pfn = start_pfn + nr_pages;
+ 	struct pglist_data *pgdat = zone->zone_pgdat;
+ 	struct vmem_altmap *altmap = pgmap_altmap(pgmap);
++	unsigned int pfns_per_compound = pgmap_vmemmap_nr(pgmap);
+ 	unsigned long zone_idx = zone_idx(zone);
+ 	unsigned long start = jiffies;
+ 	int nid = pgdat->node_id;
+@@ -6630,10 +6660,16 @@ void __ref memmap_init_zone_device(struct zone *zone,
+ 		nr_pages = end_pfn - start_pfn;
+ 	}
+ 
+-	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
++	for (pfn = start_pfn; pfn < end_pfn; pfn += pfns_per_compound) {
  		struct page *page = pfn_to_page(pfn);
  
--		__init_single_page(page, pfn, zone_idx, nid);
--
--		/*
--		 * Mark page reserved as it will need to wait for onlining
--		 * phase for it to be fully associated with a zone.
--		 *
--		 * We can use the non-atomic __set_bit operation for setting
--		 * the flag as we are still initializing the pages.
--		 */
--		__SetPageReserved(page);
--
--		/*
--		 * ZONE_DEVICE pages union ->lru with a ->pgmap back pointer
--		 * and zone_device_data.  It is a bug if a ZONE_DEVICE page is
--		 * ever freed or placed on a driver-private list.
--		 */
--		page->pgmap = pgmap;
--		page->zone_device_data = NULL;
--
--		/*
--		 * Mark the block movable so that blocks are reserved for
--		 * movable at startup. This will force kernel allocations
--		 * to reserve their blocks rather than leaking throughout
--		 * the address space during boot when many long-lived
--		 * kernel allocations are made.
--		 *
--		 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
--		 * because this is done early in section_activate()
--		 */
--		if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
--			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
--			cond_resched();
--		}
-+		__init_zone_device_page(page, pfn, zone_idx, nid, pgmap);
+ 		__init_zone_device_page(page, pfn, zone_idx, nid, pgmap);
++
++		if (pfns_per_compound == 1)
++			continue;
++
++		memmap_init_compound(page, pfn, zone_idx, nid, pgmap,
++				     pfns_per_compound);
  	}
  
  	pr_info("%s initialised %lu pages in %ums\n", __func__,
