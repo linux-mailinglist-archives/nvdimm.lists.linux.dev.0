@@ -1,26 +1,26 @@
-Return-Path: <nvdimm+bounces-2051-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2052-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C7E945B460
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 07:37:47 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A516B45B46B
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 07:39:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 574F81C0F3E
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 06:37:46 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 6B62C3E1093
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Nov 2021 06:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 338592C94;
-	Wed, 24 Nov 2021 06:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370B32C94;
+	Wed, 24 Nov 2021 06:39:40 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E0F2C81
-	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 06:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37472C81
+	for <nvdimm@lists.linux.dev>; Wed, 24 Nov 2021 06:39:38 +0000 (UTC)
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id 4D2F768AFE; Wed, 24 Nov 2021 07:37:35 +0100 (CET)
-Date: Wed, 24 Nov 2021 07:37:35 +0100
+	id D92CF68AFE; Wed, 24 Nov 2021 07:39:34 +0100 (CET)
+Date: Wed, 24 Nov 2021 07:39:34 +0100
 From: Christoph Hellwig <hch@lst.de>
 To: "Darrick J. Wong" <djwong@kernel.org>
 Cc: Christoph Hellwig <hch@lst.de>, Dan Williams <dan.j.williams@intel.com>,
@@ -30,9 +30,9 @@ Cc: Christoph Hellwig <hch@lst.de>, Dan Williams <dan.j.williams@intel.com>,
 	linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
 	linux-ext4@vger.kernel.org,
 	virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 08/29] dax: remove dax_capable
-Message-ID: <20211124063735.GB6889@lst.de>
-References: <20211109083309.584081-1-hch@lst.de> <20211109083309.584081-9-hch@lst.de> <20211123223123.GF266024@magnolia>
+Subject: Re: [PATCH 14/29] fsdax: simplify the pgoff calculation
+Message-ID: <20211124063934.GC6889@lst.de>
+References: <20211109083309.584081-1-hch@lst.de> <20211109083309.584081-15-hch@lst.de> <20211123223642.GI266024@magnolia>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -41,23 +41,18 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123223123.GF266024@magnolia>
+In-Reply-To: <20211123223642.GI266024@magnolia>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Nov 23, 2021 at 02:31:23PM -0800, Darrick J. Wong wrote:
-> > -	struct super_block	*sb = mp->m_super;
+On Tue, Nov 23, 2021 at 02:36:42PM -0800, Darrick J. Wong wrote:
+> > -	phys_addr_t phys_off = (start_sect + sector) * 512;
 > > -
-> > -	if (!xfs_buftarg_is_dax(sb, mp->m_ddev_targp) &&
-> > -	   (!mp->m_rtdev_targp || !xfs_buftarg_is_dax(sb, mp->m_rtdev_targp))) {
-> > +	if (!mp->m_ddev_targp->bt_daxdev &&
-> > +	   (!mp->m_rtdev_targp || !mp->m_rtdev_targp->bt_daxdev)) {
+> > -	if (pgoff)
+> > -		*pgoff = PHYS_PFN(phys_off);
+> > -	if (phys_off % PAGE_SIZE || size % PAGE_SIZE)
 > 
-> Nit: This  ^ paren should be indented one more column because it's a
-> sub-clause of the if() test.
+> AFAICT, we're relying on fs_dax_get_by_bdev to have validated this
+> previously, which is why the error return stuff goes away?
 
-Done.
-
-> Nit: xfs_alert() already adds a newline to the end of the format string.
-
-Already done in the current tree.
+Exactly.
 
