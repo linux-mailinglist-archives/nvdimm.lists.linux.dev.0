@@ -1,51 +1,51 @@
-Return-Path: <nvdimm+bounces-2132-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2133-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08EB646534E
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Dec 2021 17:48:30 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84B3D465351
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Dec 2021 17:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id B4E881C0A18
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Dec 2021 16:48:28 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 45AAE3E0E7A
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Dec 2021 16:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D0972CA8;
-	Wed,  1 Dec 2021 16:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67F2C2CA8;
+	Wed,  1 Dec 2021 16:48:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34892C9D
-	for <nvdimm@lists.linux.dev>; Wed,  1 Dec 2021 16:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002A82C9D
+	for <nvdimm@lists.linux.dev>; Wed,  1 Dec 2021 16:48:53 +0000 (UTC)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id E937C21155;
-	Wed,  1 Dec 2021 16:48:18 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTP id 71F7021155;
+	Wed,  1 Dec 2021 16:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1638377298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1638377332; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
 	bh=OZKC77PkRmt0LF81L8tNeddd6Z7fS1292wB4TtyQg1o=;
-	b=BDgmDpkH4W7WQpvgcXPUYreKRjV8CBYXaZvvz7d4YmZYBVZoRAwZJCuY6S5CEt1KNpXGmO
-	nC6OHc+C8E5N8nvfXvZRGz703P0tGe94v4925o/HOqYChqnDQbJ7dzQJ7994SSxffjXGWD
-	9XiNYSG/iLr/+iOIo0Hq8xAzId7gaKc=
+	b=x/nw4L3295nBKy0igKSy9CSbR92h8z2AZlAlBhzAAorTdvD6oNdFYmOpvfC4YWeTudyTFG
+	9nW5KTTn4Av52zqdEYRcbINBv1OZha1yHN0lXkk3dNKIU51Q2yYHHB5goQtGFbv2lFiqGc
+	zpuCLVp/hSylcMIlKT23TW/dbkpHK4I=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1638377298;
+	s=susede2_ed25519; t=1638377332;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
 	bh=OZKC77PkRmt0LF81L8tNeddd6Z7fS1292wB4TtyQg1o=;
-	b=36bl7d/jZZkE7z8kXDPz4wrhx+4roLTD0OTQmCIfFr82u5MaT0StNMjtaRtaj6Itc9UK4M
-	5yz3hCqGze51ryDQ==
-Received: from suse.localdomain (unknown [10.163.16.22])
-	by relay2.suse.de (Postfix) with ESMTP id A6C74A3B8D;
-	Wed,  1 Dec 2021 16:48:16 +0000 (UTC)
+	b=tXkJajbJhS3Zrr2scZ16SpnUxc3LADSEB8+jR4nRRjStcG/ZFwqkrviCveL3LOi8qFwZHm
+	ewYFVPwI/Y/rVrCg==
+Received: from suse.localdomain (colyli.tcp.ovpn1.nue.suse.de [10.163.16.22])
+	by relay2.suse.de (Postfix) with ESMTP id E47E1A3B85;
+	Wed,  1 Dec 2021 16:48:49 +0000 (UTC)
 From: Coly Li <colyli@suse.de>
 To: dan.williams@intel.com
 Cc: nvdimm@lists.linux.dev,
 	Hannes Reinecke <hare@suse.de>,
 	Santosh Sivaraj <santosh@fossix.org>
-Subject: [PATCH] [PATCH v2] libnvdimm: call devm_namespace_disable() on error
-Date: Thu,  2 Dec 2021 00:47:52 +0800
-Message-Id: <20211201164752.125238-1-colyli@suse.de>
+Subject: [PATCH v2] libnvdimm: call devm_namespace_disable() on error
+Date: Thu,  2 Dec 2021 00:48:44 +0800
+Message-Id: <20211201164844.125296-1-colyli@suse.de>
 X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
