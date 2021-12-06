@@ -1,85 +1,174 @@
-Return-Path: <nvdimm+bounces-2164-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2174-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id D143D466F08
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  3 Dec 2021 02:13:47 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAF8A46ABFE
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  6 Dec 2021 23:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id F19521C0E59
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  3 Dec 2021 01:13:46 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 799E53E0F6A
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  6 Dec 2021 22:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B324B2CAB;
-	Fri,  3 Dec 2021 01:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8592CB1;
+	Mon,  6 Dec 2021 22:29:02 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3B92C9E
-	for <nvdimm@lists.linux.dev>; Fri,  3 Dec 2021 01:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1478C00446;
-	Fri,  3 Dec 2021 01:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1638494019;
-	bh=n57k6U7BW8VgLU48lSFDh1oK3CtoLW1LIqJES3Ic1Qg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rWxP8RrXU1aUJtsDSV7yB6O9Nbxn0EzwuegKXWK1eBR8dQPcHgNSkF2SWozC+Ko77
-	 HjdsAYV6epgBvjHwk2ij/W0yLTUvcsHXLfakmR27+D1zNMR0/H2ospYKkP/VdQI6X/
-	 9jbfNank/a+UMNDie59tUgrrLXxYVqAFgqKXw4/9zkAMjMYeKNqEJucGk2NiLYeoT0
-	 XuKpNF7QZy2sskjTf04gxbRDHpi3gFIgJ29H/aygFHH+KpDZzzmdi90vTyIa8+KjZi
-	 GjZKz4stzfy0SP+u4AC+5ZYwJAWosoh3zZABovEjZP1rBbNWDcsbp+1MQLTWKROXlC
-	 RGn02P4chgrGQ==
-Message-ID: <0a4a1ad5-5143-bd51-c8db-194f7fa443b7@kernel.org>
-Date: Thu, 2 Dec 2021 17:13:37 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B372CA6
+	for <nvdimm@lists.linux.dev>; Mon,  6 Dec 2021 22:29:00 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="236159408"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="236159408"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 14:28:40 -0800
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="502310409"
+Received: from ponufryk-mobl1.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.251.133.29])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 14:28:40 -0800
+From: Vishal Verma <vishal.l.verma@intel.com>
+To: <nvdimm@lists.linux.dev>
+Cc: Dan Williams <dan.j.williams@intel.com>,
+	QI Fuli <qi.fuli@jp.fujitsu.com>,
+	fenghua.hu@intel.com,
+	Vishal Verma <vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v2 00/12] Policy based reconfiguration for daxctl
+Date: Mon,  6 Dec 2021 15:28:18 -0700
+Message-Id: <20211206222830.2266018-1-vishal.l.verma@intel.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH V7 08/18] x86/entry: Preserve PKRS MSR across exceptions
-Content-Language: en-US
-To: Ira Weiny <ira.weiny@intel.com>, Dave Hansen
- <dave.hansen@linux.intel.com>, Dan Williams <dan.j.williams@intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Fenghua Yu <fenghua.yu@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
- linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, linux-mm@kvack.org
-References: <20210804043231.2655537-1-ira.weiny@intel.com>
- <20210804043231.2655537-9-ira.weiny@intel.com>
- <20211113005051.GN3538886@iweiny-DESK2.sc.intel.com>
-From: Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20211113005051.GN3538886@iweiny-DESK2.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5652; h=from:subject; bh=LYaTqzktrAuHEtLLKqhl1gtf5ZGTDAQhawV7fbedByM=; b=owGbwMvMwCXGf25diOft7jLG02pJDInr+tqZ5FkWZxU9nhKwJq01LXtXQ/9uxpqLMkzKFz/+3VR8 0edpRykLgxgXg6yYIsvfPR8Zj8ltz+cJTHCEmcPKBDKEgYtTACai8IiR4ed/uXvMZ0/Y8H31Smp5nH FaeXfpywwdthzm0PMGv5/qtzD8L42xn+kgcyLle0ZXX1lyR0fr84tevT6LnjYJ7OzvuJXPBgA=
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+Content-Transfer-Encoding: 8bit
 
-On 11/12/21 16:50, Ira Weiny wrote:
-> On Tue, Aug 03, 2021 at 09:32:21PM -0700, 'Ira Weiny' wrote:
->> From: Ira Weiny <ira.weiny@intel.com>
->>
->> The PKRS MSR is not managed by XSAVE.  It is preserved through a context
->> switch but this support leaves exception handling code open to memory
->> accesses during exceptions.
->>
->> 2 possible places for preserving this state were considered,
->> irqentry_state_t or pt_regs.[1]  pt_regs was much more complicated and
->> was potentially fraught with unintended consequences.[2]  However, Andy
->> came up with a way to hide additional values on the stack which could be
->> accessed as "extended_pt_regs".[3]
-> 
-> Andy,
-> 
-> I'm preparing to send V8 of this PKS work.  But I have not seen any feed back
-> since I originally implemented this in V4[1].
-> 
-> Does this meets your expectations?  Are there any issues you can see with this
-> code?
+Changes since v1[1]:
+- Collect review tags
+- Fix 'make clean' removing the reconfigure script from the source tree
+  (Fenghua, Qi)
+- Documentation wordsmithing (Dan)
+- Fix line break after declarations in parse-configs.c (Dan)
+- Move daxctl config files to its own directory, /etc/daxctl/ (Dan)
+- Improve failure mode in the absence of a configs directory
+- Rename {nd,dax}ctl_{get|set}_configs to
+  {nd,dax}ctl_{get|set}_configs_dir
+- Exit with success if -C is specified, but no matching config section
+  is found.
+- Refuse to proceed if CLI options are passed in along with -C (Dan)
+- In the config file, rename: s/[auto-online foo]/[reconfigure-device foo/
+  and s/uuid/nvdimm.uuid/ (Dan)
+- Teach device.c to accept /dev/daxX.Y instead of only daxX.Y and thus
+  remove the need for a wrapper script that systemd invokes (Dan)
 
-I think I'm generally okay with the approach to allocating space.  All 
-of Thomas' comments still apply, though.  (Sorry, I'm horribly behind.)
+These patches add policy (config file) support to daxctl. The
+introductory user is daxctl-reconfigure-device. Sysadmins may wish to
+use daxctl devices as system-ram, but it may be cumbersome to automate
+the reconfiguration step for every device upon boot.
+
+Introduce a new option for daxctl-reconfigure-device, --check-config.
+This is at the heart of policy based reconfiguration, as it allows
+daxctl to look up reconfiguration parameters for a given device from the
+config system instead of the command line.
+
+Some systemd and udev glue then automates this for every new dax device
+that shows up, providing a way for the administrator to simply list all
+the 'system-ram' UUIDs in a config file, and not have to worry about
+anything else.
+
+An example config file can be:
+
+  # cat /etc/ndctl/daxctl.conf
+
+  [reconfigure-device unique_identifier_foo]
+  nvdimm.uuid = 48d8e42c-a2f0-4312-9e70-a837faafe862
+  mode = system-ram
+  online = true
+  movable = false
+
+Any file under '/etc/ndctl/' can be used - all files with a '.conf' suffix
+will be considered when looking for matches.
+
+These patches depend on the initial config file support from Qi Fuli[2].
+
+I've re-rolled Qi's original patches as the first five patches in this
+series because of a change I made for graceful handling in the case of a
+missing configs directory, and also to incorporate review feedback that
+applied to the dependant patches. Patch 6 onwards is the actual v2 of
+the daxctl policy work.
+
+A branch containing these patches is available at [3].
+
+[1]: https://lore.kernel.org/nvdimm/20210831090459.2306727-1-vishal.l.verma@intel.com/
+[2]: https://lore.kernel.org/nvdimm/20210824095106.104808-1-qi.fuli@fujitsu.com/
+[3]: https://github.com/pmem/ndctl/tree/vv/daxctl_config_v2
+
+QI Fuli (5):
+  ndctl, util: add iniparser helper
+  ndctl, util: add parse-configs helper
+  ndctl: make ndctl support configuration files
+  ndctl, config: add the default ndctl configuration file
+  ndctl, monitor: refator monitor for supporting multiple config files
+
+Vishal Verma (7):
+  ndctl: Update ndctl.spec.in for 'ndctl.conf'
+  daxctl: Documentation updates for persistent reconfiguration
+  util/parse-config: refactor filter_conf_files into util/
+  daxctl: add basic config parsing support
+  util/parse-configs: add a key/value search helper
+  daxctl/device.c: add an option for getting params from a config file
+  daxctl: add systemd service and udev rule for automatic
+    reconfiguration
+
+ .../daxctl/daxctl-reconfigure-device.txt      |  75 ++
+ Documentation/ndctl/ndctl-monitor.txt         |   8 +-
+ configure.ac                                  |  18 +-
+ Makefile.am                                   |   8 +-
+ ndctl/lib/private.h                           |   1 +
+ daxctl/lib/libdaxctl.c                        |  39 +
+ ndctl/lib/libndctl.c                          |  39 +
+ daxctl/libdaxctl.h                            |   2 +
+ ndctl/libndctl.h                              |   2 +
+ util/dictionary.h                             | 175 ++++
+ util/iniparser.h                              | 360 ++++++++
+ util/parse-configs.h                          |  53 ++
+ daxctl/daxctl.c                               |   1 +
+ daxctl/device.c                               | 174 +++-
+ ndctl/monitor.c                               |  73 +-
+ ndctl/ndctl.c                                 |   1 +
+ util/dictionary.c                             | 383 ++++++++
+ util/iniparser.c                              | 838 ++++++++++++++++++
+ util/parse-configs.c                          | 150 ++++
+ Documentation/daxctl/Makefile.am              |  11 +-
+ Documentation/ndctl/Makefile.am               |   2 +-
+ daxctl/90-daxctl-device.rules                 |   1 +
+ daxctl/Makefile.am                            |   9 +
+ daxctl/daxdev-reconfigure@.service            |   8 +
+ daxctl/lib/Makefile.am                        |   6 +
+ daxctl/lib/libdaxctl.sym                      |   2 +
+ ndctl.spec.in                                 |   4 +
+ ndctl/Makefile.am                             |   9 +-
+ ndctl/lib/Makefile.am                         |   6 +
+ ndctl/lib/libndctl.sym                        |   2 +
+ ndctl/ndctl.conf                              |  56 ++
+ 31 files changed, 2467 insertions(+), 49 deletions(-)
+ create mode 100644 util/dictionary.h
+ create mode 100644 util/iniparser.h
+ create mode 100644 util/parse-configs.h
+ create mode 100644 util/dictionary.c
+ create mode 100644 util/iniparser.c
+ create mode 100644 util/parse-configs.c
+ create mode 100644 daxctl/90-daxctl-device.rules
+ create mode 100644 daxctl/daxdev-reconfigure@.service
+ create mode 100644 ndctl/ndctl.conf
+
+
+base-commit: 4e646fa490ba4b782afa188dd8818b94c419924e
+-- 
+2.33.1
+
 
