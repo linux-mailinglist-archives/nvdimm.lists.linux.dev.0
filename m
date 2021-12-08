@@ -1,238 +1,282 @@
-Return-Path: <nvdimm+bounces-2192-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2194-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6936C46D68A
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 16:11:50 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14EC246D7A6
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 17:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1888F1C09CF
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 15:11:49 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 8A0913E0E52
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 16:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B092CB9;
-	Wed,  8 Dec 2021 15:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990DD2CBD;
+	Wed,  8 Dec 2021 16:01:38 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEF62C80
-	for <nvdimm@lists.linux.dev>; Wed,  8 Dec 2021 15:11:41 +0000 (UTC)
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1638976298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=byRNx3IYYVfiqDvajulkCfOp0Xbkv4Qy7scN11FFXwE=;
-	b=a7sx04DzB03RdVhq6WJhF9D9+xYxIGPK/cE49/FTuf291Rro/ZUNVS7tRWgxQAUq1mpfwg
-	zvgKxUxGCrlsG3gj91Iq9Eiko48Dpip3ZU4Ye+k8dEZOf9V+xOTQLiQu1kf1ioXc7iobDi
-	ZOy65wohCvG/oWSVdOmffP4ChxLGdtmHdx1QWDvshWaGMgq09ovPr7pcdIVv7quVxK6ppC
-	P6PSYXRlrhgwUyB1+L6bdLfyLa8hKhXFovAbvWqnAE7Ws6KN95RC/9ZgEWXuLJE9vsQE1n
-	ld1A489Po1sh368GsakhS84JDXHCs5BqIX6nlUCT+f6hAC7DewpT5dJJW2Aw+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1638976298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=byRNx3IYYVfiqDvajulkCfOp0Xbkv4Qy7scN11FFXwE=;
-	b=w/MUaeRlCtKqId0ZQ1Oi5Zkwj3QA1wQjxABk3SUWp4RHsMkbhrOtAJJnHDEkCur/TAMOny
-	3AX4dEuL9nWIdYAQ==
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, Dan Williams
- <dan.j.williams@intel.com>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, Andy
- Lutomirski <luto@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Fenghua Yu
- <fenghua.yu@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
- x86@kernel.org, linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
- linux-mm@kvack.org
-Subject: Re: [PATCH V7 03/18] x86/pks: Add additional PKEY helper macros
-In-Reply-To: <20211208005106.GJ3538886@iweiny-DESK2.sc.intel.com>
-References: <20210804043231.2655537-1-ira.weiny@intel.com>
- <20210804043231.2655537-4-ira.weiny@intel.com> <87lf1cl3cq.ffs@tglx>
- <20211208005106.GJ3538886@iweiny-DESK2.sc.intel.com>
-Date: Wed, 08 Dec 2021 16:11:38 +0100
-Message-ID: <87k0gf168l.ffs@tglx>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134D929CA
+	for <nvdimm@lists.linux.dev>; Wed,  8 Dec 2021 16:01:37 +0000 (UTC)
+Received: by mail-pj1-f45.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so4638528pjb.5
+        for <nvdimm@lists.linux.dev>; Wed, 08 Dec 2021 08:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jgfzLk1Aj0K+lAAQK/5g17X42GwOjOcMGfjVdRZmhB8=;
+        b=hk9Qxvt1sF11Hcn9XA97OZJSNRTa5+7k6AO9Fc2jYTV55u+BahrIwGm/fII83k8hRu
+         UWBejUR+3mQ9NhKegyGVVI+qDcslYDsgHpoavLuhi7AorGYP8rXvb93BChsxjzmAkpVg
+         T28pS+XgCpigolnDHVK/dfGNmEuyOww+zVhhaNiKMLFgS4tWbap+ck3lPc1zMY+T0PkB
+         mVWaspUISsiJTETVLIFGh3W2bHkJCuBh6vCcrPAygKcOEoAl1YLgdg5RXu0+clZhKDTl
+         SdWGt7lR0JZPQ/Tirv6jLff6cbOZxsWkg2UjxpZEgHpMZ/UcbsEnSPwP2QLVHsknT7fR
+         fpeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jgfzLk1Aj0K+lAAQK/5g17X42GwOjOcMGfjVdRZmhB8=;
+        b=GIF8SBD0jtlFM187Q+w2S1dz+wEf2cavxwvIbTGnkLskwF7Ms9eik4+QgUhdl4JKAS
+         FNcgiujQHZmPFCUbeTAeU9JCtUylGIiSOj2uGeUN8UU9k0a2ln6nKdMTLZ5O0iwHikXV
+         HSnHfm2YyY61p5YklyWWAozLN2xpEH9krlGHxo7Q2Fn49Nterxaj4BSNj2Tzy/9kWHgI
+         RVPhHOj239RBz3mDpKuBPWy+A59VpUyrqY7zACTCdGMc0EaxJXtq1URzWRntq6mIMCmq
+         6DHuRBruEpiCuM2zTlmm2kEJ61sbGRfMualew+zsIIszjalCA4yovb9gtw/U+vMbOAmy
+         wk1Q==
+X-Gm-Message-State: AOAM531pJyDB6LbDD+ehMB/WLVRl9715RycKxgPmu9fsCOJjnqLoq5uJ
+	T87TjzO9XNxjmHFMmm4Skog6/gmAuY7yDpmfQy47TQ==
+X-Google-Smtp-Source: ABdhPJyDBWmW/p/zczrjSP/LVdNxukGKpdTzOVb1qLZv8jnGpJtA4oyKbhuNOyd+a7FAy+aNaz1QSkOepgkTmRaz5xw=
+X-Received: by 2002:a17:90b:1e49:: with SMTP id pi9mr8263428pjb.220.1638979296300;
+ Wed, 08 Dec 2021 08:01:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211206222830.2266018-1-vishal.l.verma@intel.com> <20211206222830.2266018-6-vishal.l.verma@intel.com>
+In-Reply-To: <20211206222830.2266018-6-vishal.l.verma@intel.com>
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Wed, 8 Dec 2021 08:00:00 -0800
+Message-ID: <CAPcyv4iKrxGkj=yL7=YpcDjyYnsJA8J3Wzx9Q04zzjmw=hks6g@mail.gmail.com>
+Subject: Re: [ndctl PATCH v2 05/12] ndctl, monitor: refator monitor for
+ supporting multiple config files
+To: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Linux NVDIMM <nvdimm@lists.linux.dev>, QI Fuli <qi.fuli@jp.fujitsu.com>, 
+	"Hu, Fenghua" <fenghua.hu@intel.com>, QI Fuli <qi.fuli@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Ira,
-
-On Tue, Dec 07 2021 at 16:51, Ira Weiny wrote:
-> On Thu, Nov 25, 2021 at 03:25:09PM +0100, Thomas Gleixner wrote:
+On Mon, Dec 6, 2021 at 2:28 PM Vishal Verma <vishal.l.verma@intel.com> wrote:
 >
->  u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
->  {
-> -      int shift = pkey * PKR_BITS_PER_PKEY;
-> +      int shift = PKR_PKEY_SHIFT(pkey);
+> From: QI Fuli <qi.fuli@fujitsu.com>
 >
-> 	 if (WARN_ON_ONCE(accessbits & ~PKEY_ACCESS_MASK))
->		 accessbits &= PKEY_ACCESS_MASK;
+> Refactor ndctl monitor by using parse-configs helper to support multiple
+> configuration files.
 >
-> Better?
+> Link: https://lore.kernel.org/r/20210824095106.104808-6-qi.fuli@fujitsu.com
+> Signed-off-by: QI Fuli <qi.fuli@fujitsu.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 
-Let me postpone this question.
+Look ok to me, perhaps a global s/configs/config_path/, but otherwise:
 
-> As to the reason of why to put this patch after the other one.  Why would I
-> improve the old pre-refactoring code only to throw it away when moving it to
-> pkey_update_pkval()?  This reasoning is even stronger when pkey_update_pkval()
-> is implemented.
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
-Which refactoring? We seem to have fundamentally definitions of that
-term. Let me illustrate why.
-
-The original version of this was:
-
-  u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val)
-  {
-  	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
-  	u32 new_pkr_bits = 0;
-  
-  	/* Set the bits we need in the register:  */
-  	if (init_val & PKEY_DISABLE_ACCESS)
-  		new_pkr_bits |= PKR_AD_BIT;
-  	if (init_val & PKEY_DISABLE_WRITE)
-  		new_pkr_bits |= PKR_WD_BIT;
-  
-  	/* Shift the bits in to the correct place: */
-  	new_pkr_bits <<= pkey_shift;
-  
-  	/* Mask off any old bits in place: */
-  	old_pkr &= ~((PKR_AD_BIT | PKR_WD_BIT) << pkey_shift);
-  
-  	/* Return the old part along with the new part: */
-  	return old_pkr | new_pkr_bits;
-  }
-
-IOW, mechanical Cut & Paste.
-
-Then PeterZ came along and suggested to improve it this way:
-
-  u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
-  {
-	  int pkey_shift = pkey * PKR_BITS_PER_PKEY;
-
-	  /*  Mask out old bit values */
-	  pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
-
-	  /*  Or in new values */
-	  if (flags & PKEY_DISABLE_ACCESS)
-		  pk_reg |= PKR_AD_BIT << pkey_shift;
-	  if (flags & PKEY_DISABLE_WRITE)
-		  pk_reg |= PKR_WD_BIT << pkey_shift;
-
-	  return pk_reg;
-  }
-
-which is already better. So you changed your approach from Cut & Paste
-to Copy & Paste.
-
-But neither Cut & Paste nor Copy & Paste match what refactoring is
-really about. Just throwing the term refactoring at it does not make it
-so.
-
-Refactoring is about improving the code in design and implementation.
-The keyword is: improving.
-
-There are obviously cases where you can take the code as is and split it
-out into a new helper function.
-
-You really have to look at it and answer the question whether it's good
-code or not, whether it could be written in better ways and with
-improved functionality.
-
-I could have given you this minimalistic one:
-
-  u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
-  {
-	  int shift = pkey * PKR_BITS_PER_PKEY;
-
-	  pkval &= ~(PKEY_ACCESS_MASK << shift);
-	  return pkval | (accessbit & PKEY_ACCESS_MASK) << shift;
-  }
-
-But I gave you this:
-
-  u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
-  {
-	  int shift = pkey * PKR_BITS_PER_PKEY;
-
-	  if (WARN_ON_ONCE(accessbits & ~PKEY_ACCESS_MASK))
-		  accessbits &= PKEY_ACCESS_MASK;
-
-	  pkval &= ~(PKEY_ACCESS_MASK << shift);
-	  return pkval | accessbit << shift;
-  }
-
-This is what refactoring is about. See?
-
-> I agree with Dan regarding the macros though.  I think they make it easier to
-> see what is going on without dealing with masks and shifts directly.  But I can
-> remove this patch if you feel that strongly about it.
-
-I'm not against macros per se, but not everything is automatically
-better when it is hidden behind a macro.
-
-What I'm arguing against is the claim that macros are an improvement by
-definition. Especially when they are just blindly thrown into code which
-should not exist in the first place.
-
-Also versus ordering. What's wrong with doing it this way:
-
-  1) Define the macros first without changing the code
-
-  2) Implement pkey_update_pkval() in a sensible way and use the macros
-     where appropriate. Thereby replacing the existing version in the
-     other function.
-
-Which would end up in the obviously even simpler code:
-
-  u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
-  {
-	  if (WARN_ON_ONCE(accessbits & ~PKEY_ACCESS_MASK))
-		  accessbits &= PKEY_ACCESS_MASK;
-
-	  pkval &= ~PKR_PKEY_VALUE(pkey, PKEY_ACCESS_MASK);
-	  return pkval | PKR_PKEY_VALUE(pkey, accessbits);
-  }
-
-That fits the goal of that macro exercise to make it easy to read and
-obvious what's going on, no?
-
-Instead of:
-
->  u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
->  {
-> -      int shift = pkey * PKR_BITS_PER_PKEY;
-> +      int shift = PKR_PKEY_SHIFT(pkey);
+> ---
+>  Documentation/ndctl/ndctl-monitor.txt |  8 +--
+>  ndctl/monitor.c                       | 73 ++++++++++++++-------------
+>  Documentation/ndctl/Makefile.am       |  2 +-
+>  3 files changed, 44 insertions(+), 39 deletions(-)
 >
-> 	 if (WARN_ON_ONCE(accessbits & ~PKEY_ACCESS_MASK))
->		 accessbits &= PKEY_ACCESS_MASK;
+> diff --git a/Documentation/ndctl/ndctl-monitor.txt b/Documentation/ndctl/ndctl-monitor.txt
+> index dbc9070..8c8c35b 100644
+> --- a/Documentation/ndctl/ndctl-monitor.txt
+> +++ b/Documentation/ndctl/ndctl-monitor.txt
+> @@ -21,8 +21,8 @@ objects and dumping the json format notifications to syslog, standard
+>  output or a logfile.
 >
->	  pkval &= ~(PKEY_ACCESS_MASK << shift);
->	  return pkval | accessbit << shift;
+>  The objects to monitor and smart events to notify can be selected by
+> -setting options and/or the configuration file at
+> -{ndctl_monitorconfdir}/{ndctl_monitorconf}
+> +setting options and/or configuration files with .conf suffix under
+> +{ndctl_confdir}
+>
+>  Both, the values in configuration file and in options will work. If
+>  there is a conflict, the values in options will override the values in
+> @@ -81,8 +81,8 @@ will not work if "--daemon" is specified.
+>
+>  -c::
+>  --config-file=::
+> -       Provide the config file to use. This overrides the default config
+> -       typically found in {ndctl_monitorconfdir}
+> +       Provide the config file(s) to use. This overrides the default config
+> +       typically found in {ndctl_confdir}
+>
+>  --daemon::
+>         Run a monitor as a daemon.
+> diff --git a/ndctl/monitor.c b/ndctl/monitor.c
+> index ca36179..6bf3160 100644
+> --- a/ndctl/monitor.c
+> +++ b/ndctl/monitor.c
+> @@ -10,6 +10,7 @@
+>  #include <util/filter.h>
+>  #include <util/util.h>
+>  #include <util/parse-options.h>
+> +#include <util/parse-configs.h>
+>  #include <util/strbuf.h>
+>  #include <ndctl/config.h>
+>  #include <ndctl/ndctl.h>
+> @@ -28,7 +29,7 @@
+>
+>  static struct monitor {
+>         const char *log;
+> -       const char *config_file;
+> +       const char *configs;
+>         const char *dimm_event;
+>         FILE *log_file;
+>         bool daemon;
+> @@ -463,7 +464,7 @@ out:
+>         return rc;
 >  }
 >
-> Better?
-
-You surely can answer this question yourself, no?
-
-  "By continuously improving the design of code, we make it easier and
-   easier to work with. This is in sharp contrast to what typically
-   happens: little refactoring and a great deal of attention paid to
-   expediently adding new features. If you get into the hygienic habit
-   of refactoring continuously, you'll find that it is easier to extend
-   and maintain code." -- Joshua Kerievsky
-
-If you study that quote carefully, you surely can find our diverging
-approach to refactoring in it, no?
-
-Thanks,
-
-        tglx
+> -static void parse_config(const char **arg, char *key, char *val, char *ident)
+> +static void set_monitor_conf(const char **arg, char *key, char *val, char *ident)
+>  {
+>         struct strbuf value = STRBUF_INIT;
+>         size_t arg_len = *arg ? strlen(*arg) : 0;
+> @@ -479,39 +480,25 @@ static void parse_config(const char **arg, char *key, char *val, char *ident)
+>         *arg = strbuf_detach(&value, NULL);
+>  }
+>
+> -static int read_config_file(struct ndctl_ctx *ctx, struct monitor *_monitor,
+> -               struct util_filter_params *_param)
+> +static int parse_monitor_config(const struct config *configs,
+> +                                       const char *config_file)
+>  {
+>         FILE *f;
+>         size_t len = 0;
+>         int line = 0, rc = 0;
+> -       char *buf = NULL, *seek, *value, *config_file;
+> -
+> -       if (_monitor->config_file)
+> -               config_file = strdup(_monitor->config_file);
+> -       else
+> -               config_file = strdup(NDCTL_CONF_FILE);
+> -       if (!config_file) {
+> -               fail("strdup default config file failed\n");
+> -               rc = -ENOMEM;
+> -               goto out;
+> -       }
+> +       char *buf = NULL, *seek, *value;
+>
+>         buf = malloc(BUF_SIZE);
+>         if (!buf) {
+>                 fail("malloc read config-file buf error\n");
+> -               rc = -ENOMEM;
+> -               goto out;
+> +               return -ENOMEM;
+>         }
+>         seek = buf;
+>
+>         f = fopen(config_file, "r");
+>         if (!f) {
+> -               if (_monitor->config_file) {
+> -                       err(&monitor, "config-file: %s cannot be opened\n",
+> -                               config_file);
+> -                       rc = -errno;
+> -               }
+> +               err(&monitor, "%s cannot be opened\n", config_file);
+> +               rc = -errno;
+>                 goto out;
+>         }
+>
+> @@ -554,19 +541,18 @@ static int read_config_file(struct ndctl_ctx *ctx, struct monitor *_monitor,
+>                 if (len == 0)
+>                         continue;
+>
+> -               parse_config(&_param->bus, "bus", value, seek);
+> -               parse_config(&_param->dimm, "dimm", value, seek);
+> -               parse_config(&_param->region, "region", value, seek);
+> -               parse_config(&_param->namespace, "namespace", value, seek);
+> -               parse_config(&_monitor->dimm_event, "dimm-event", value, seek);
+> +               set_monitor_conf(&param.bus, "bus", value, seek);
+> +               set_monitor_conf(&param.dimm, "dimm", value, seek);
+> +               set_monitor_conf(&param.region, "region", value, seek);
+> +               set_monitor_conf(&param.namespace, "namespace", value, seek);
+> +               set_monitor_conf(&monitor.dimm_event, "dimm-event", value, seek);
+>
+> -               if (!_monitor->log)
+> -                       parse_config(&_monitor->log, "log", value, seek);
+> +               if (!monitor.log)
+> +                       set_monitor_conf(&monitor.log, "log", value, seek);
+>         }
+>         fclose(f);
+>  out:
+>         free(buf);
+> -       free(config_file);
+>         return rc;
+>  }
+>
+> @@ -585,8 +571,8 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+>                 OPT_FILENAME('l', "log", &monitor.log,
+>                                 "<file> | syslog | standard",
+>                                 "where to output the monitor's notification"),
+> -               OPT_FILENAME('c', "config-file", &monitor.config_file,
+> -                               "config-file", "override the default config"),
+> +               OPT_STRING('c', "config-file", &monitor.configs,
+> +                               "config-file", "override default configs"),
+>                 OPT_BOOLEAN('\0', "daemon", &monitor.daemon,
+>                                 "run ndctl monitor as a daemon"),
+>                 OPT_BOOLEAN('u', "human", &monitor.human,
+> @@ -601,7 +587,20 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+>                 "ndctl monitor [<options>]",
+>                 NULL
+>         };
+> -       const char *prefix = "./";
+> +       const struct config configs[] = {
+> +               CONF_MONITOR(NDCTL_CONF_FILE, parse_monitor_config),
+> +               CONF_STR("core:bus", &param.bus, NULL),
+> +               CONF_STR("core:region", &param.region, NULL),
+> +               CONF_STR("core:dimm", &param.dimm, NULL),
+> +               CONF_STR("core:namespace", &param.namespace, NULL),
+> +               CONF_STR("monitor:bus", &param.bus, NULL),
+> +               CONF_STR("monitor:region", &param.region, NULL),
+> +               CONF_STR("monitor:dimm", &param.dimm, NULL),
+> +               CONF_STR("monitor:namespace", &param.namespace, NULL),
+> +               CONF_STR("monitor:dimm-event", &monitor.dimm_event, NULL),
+> +               CONF_END(),
+> +       };
+> +       const char *prefix = "./", *ndctl_configs;
+>         struct util_filter_ctx fctx = { 0 };
+>         struct monitor_filter_arg mfa = { 0 };
+>         int i, rc;
+> @@ -621,7 +620,13 @@ int cmd_monitor(int argc, const char **argv, struct ndctl_ctx *ctx)
+>         else
+>                 monitor.ctx.log_priority = LOG_INFO;
+>
+> -       rc = read_config_file(ctx, &monitor, &param);
+> +       ndctl_configs = ndctl_get_configs_dir(ctx);
+> +       if (monitor.configs)
+> +               rc = parse_configs_prefix(monitor.configs, prefix, configs);
+> +       else if (ndctl_configs)
+> +               rc = parse_configs_prefix(ndctl_configs, prefix, configs);
+> +       else
+> +               rc = 0;
+>         if (rc)
+>                 goto out;
+>
+> diff --git a/Documentation/ndctl/Makefile.am b/Documentation/ndctl/Makefile.am
+> index f0d5b21..37855cc 100644
+> --- a/Documentation/ndctl/Makefile.am
+> +++ b/Documentation/ndctl/Makefile.am
+> @@ -59,7 +59,7 @@ CLEANFILES = $(man1_MANS)
+>  .ONESHELL:
+>  attrs.adoc: $(srcdir)/Makefile.am
+>         $(AM_V_GEN) cat <<- EOF >$@
+> -               :ndctl_monitorconfdir: $(ndctl_monitorconfdir)
+> +               :ndctl_confdir: $(ndctl_confdir)
+>                 :ndctl_monitorconf: $(ndctl_monitorconf)
+>                 :ndctl_keysdir: $(ndctl_keysdir)
+>                 EOF
+> --
+> 2.33.1
+>
 
