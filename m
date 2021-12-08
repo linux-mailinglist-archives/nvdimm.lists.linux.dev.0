@@ -1,25 +1,25 @@
-Return-Path: <nvdimm+bounces-2196-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2195-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E11446DDDC
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 22:49:02 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C75646DDDB
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 22:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id C071A1C0A22
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 21:49:00 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 392C43E03AB
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Dec 2021 21:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3FD22CBD;
-	Wed,  8 Dec 2021 21:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 833AD2CBD;
+	Wed,  8 Dec 2021 21:48:34 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0CE2CA6
-	for <nvdimm@lists.linux.dev>; Wed,  8 Dec 2021 21:48:53 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id 133so3199221pgc.12
-        for <nvdimm@lists.linux.dev>; Wed, 08 Dec 2021 13:48:53 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935FE2CA6
+	for <nvdimm@lists.linux.dev>; Wed,  8 Dec 2021 21:48:32 +0000 (UTC)
+Received: by mail-ot1-f43.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so4176427otg.4
+        for <nvdimm@lists.linux.dev>; Wed, 08 Dec 2021 13:48:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -36,17 +36,17 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=pr04vC42Xgru+ljjY2RIXTIfLjbNYKZ9r1zFIGxcXoY=;
-        b=O+qejhW7T09AacUK7bWb3K9RNTmyCtovwi9visTZxE0BUIuFGJ0TjPCdgUQRxqrE/K
-         d81XnYpEBcxehAy7rvNIuiKdlGMtcSQ2a23LyoF035ai7xp6TYOq4sc692h79f1np8r4
-         aQBsoruSs/STv0pfPhDUd4GOl62JRaC/tphx8TxG49ElDn3TFwFL52rRfqmmT8sHhLv4
-         FouPWstimFeIgmkw2T/SkDa6VsPbmPabwBjvtajZEbikzB40KWKI4HyG+Nffoqifs/4y
-         brAoWo+o994jS9OaUPJDzmFn90ii3RwWeqMYafNP2myjQcAAUDaNCt59SwAgLn15eC7W
-         6zgw==
-X-Gm-Message-State: AOAM533FS/lVMLvE1CW0rx39yyiQWkbbzYjX9usi/aJgRNVovHyUxspZ
-	v/YisBlnQKy0Zcv9rfaJtKLZLdOpwZmLch9PxtESPA==
-X-Google-Smtp-Source: ABdhPJyR8HxRMlchkpapJ77FARKKVoLd64B+ycsQJWSJBfxEQeHzFBWEMLWxEhfU9LC4+bG+JKAfBHE7ba+GqV1gsMg=
-X-Received: by 2002:a63:c052:: with SMTP id z18mr28178057pgi.74.1639000132680;
- Wed, 08 Dec 2021 13:48:52 -0800 (PST)
+        b=LjCV+Ss9yyvEx8ly4knm+YAEXC1gMqVtRbrQLjkNrPLRha4Hlcu822B7VBMxQsTP8t
+         NAxqaeaEcsBfE51vgFcSSUpii5ptnjD8Lu7yV9DMddDqajYIYWXIML6hMQNe5HHYAVkg
+         IqFyRjwpPESDSLKsGUfXxmA4nZkqwRWZAE89m6BFrzRbIp/8SnhLthqEyg/TdpFSsZ8M
+         rYG1Dhk080v+09JjvSemy6xzFnWqlW2T5c733DTOG/SRXnk+RRpe2xroNjcohPq87yMf
+         1cdUH0YA1ceYRZYwcqUsWHmB810NWDCLM1tQnU+KD/5XwsF/Tqmshe6H5yz8IN7Io8mS
+         zTlA==
+X-Gm-Message-State: AOAM532KNg0SEHl1G1AMILMBlOuOrTD8r1TWFfZqraPvWnYMWFjX9u2+
+	viYUxbBwxbhQ+i8Y3zK1AE39C9l8y8/sKmObArdM9A==
+X-Google-Smtp-Source: ABdhPJytBuTjeCKfp6rkBQCmelcmlaBO2OidL/00Nfjy7FVsSkc8RPlf2x7l4LB3x9S5XMeU0lGhMFLO6K5igGgZaaY=
+X-Received: by 2002:a9d:7dca:: with SMTP id k10mr1870023otn.274.1639000111567;
+ Wed, 08 Dec 2021 13:48:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
