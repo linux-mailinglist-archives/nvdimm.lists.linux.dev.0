@@ -1,45 +1,45 @@
-Return-Path: <nvdimm+bounces-2240-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2242-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 683AB470E02
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Dec 2021 23:35:36 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 656F7470E04
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Dec 2021 23:35:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3747A3E102D
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Dec 2021 22:35:35 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 535A51C0F17
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Dec 2021 22:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617212EAA;
-	Fri, 10 Dec 2021 22:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 073CC2EB0;
+	Fri, 10 Dec 2021 22:34:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0822CB5
-	for <nvdimm@lists.linux.dev>; Fri, 10 Dec 2021 22:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EFA2EA6
+	for <nvdimm@lists.linux.dev>; Fri, 10 Dec 2021 22:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639175694; x=1670711694;
+  t=1639175695; x=1670711695;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=y+8XReiicifM/uB1sM5khsM42aItFHtjInKCWoe5u7o=;
-  b=MpFoOQo4APQPebh86hGmyF1Ecb/JFwyosyPj1lzaEkEcArcEpoCGjhqP
-   5xJivEx40hZXmqtg0GaIOtvHAXoOoCYrz0SjITMswKiQnZVawDgrW7l3q
-   O/u1h5LIjQo+S55WUtPiiqE3S9Ric7A3O43VzBROL2XUPu+XEB2BHJ1ok
-   7B9iwDNf7Zx52isS/spq4EdOlJQAjlIpg5nKkKi86Rm00xhqAegfqAIRJ
-   tcvI+YLS1JTXjLMo79XgW+MQ1e/zAxTyB2dGfdCzR7k18ih7TiPfZVWJY
-   BGq3QXgJ51QsbeLG/m21wVLNKIrHiff9fCAVqbpO+2t7DuzKWmoIqFxWt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301843368"
+  bh=0I1JftdvB3rTfZpoTF26HdclcTfGEarkHEak5eqcR+Q=;
+  b=Xo1FlXD9B11Fw5k6tAfKScEQ7LExnY0jjEP01fyrFNMzAIeVGYdX/jSF
+   3WUJr123o9/IJnOgP1M4X71ynmEBiD9jaESyZ1UYy31hZIJRc0un/dV8J
+   7Zq7zJGjnhTBaQ6fFlbipCfEoheCsekbrs+KprGlaDf1jAmKNT2k9eIgX
+   61mz0KdPQHYqPYpDU3zmSV9CPuzsWzw9h8A73gDzfR2io/eiKNWlcDc67
+   N4IE/VBsCadM+wvnTT16jyRgRSX3eNyB/Wa/mstFzAga9G33TWOI4A3mK
+   3fbubKRqOPLnpukm1yxwcIcbmb9VVD4juzvzy3V4v+VS0aWGoayErtml4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301843373"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="301843368"
+   d="scan'208";a="301843373"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:34:47 -0800
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="504113676"
+   d="scan'208";a="504113680"
 Received: from fpchan-mobl1.amr.corp.intel.com (HELO vverma7-desk.amr.corp.intel.com) ([10.254.0.94])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:34:46 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:34:47 -0800
 From: Vishal Verma <vishal.l.verma@intel.com>
 To: <nvdimm@lists.linux.dev>
 Cc: Dan Williams <dan.j.williams@intel.com>,
@@ -47,9 +47,9 @@ Cc: Dan Williams <dan.j.williams@intel.com>,
 	fenghua.hu@intel.com,
 	Vishal Verma <vishal.l.verma@intel.com>,
 	QI Fuli <qi.fuli@fujitsu.com>
-Subject: [ndctl PATCH v3 07/11] daxctl: add basic config parsing support
-Date: Fri, 10 Dec 2021 15:34:36 -0700
-Message-Id: <20211210223440.3946603-8-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v3 08/11] util/parse-configs: add a key/value search helper
+Date: Fri, 10 Dec 2021 15:34:37 -0700
+Message-Id: <20211210223440.3946603-9-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211210223440.3946603-1-vishal.l.verma@intel.com>
 References: <20211210223440.3946603-1-vishal.l.verma@intel.com>
@@ -59,190 +59,136 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5927; h=from:subject; bh=y+8XReiicifM/uB1sM5khsM42aItFHtjInKCWoe5u7o=; b=owGbwMvMwCXGf25diOft7jLG02pJDImbr/4vaLyc8Fvk/Kpj0WG3ttk+v+5VPZVj3nyvbee0HE+9 mvT7fUcpC4MYF4OsmCLL3z0fGY/Jbc/nCUxwhJnDygQyhIGLUwAm4uDMyDBnWdIO8dy1AfzGsfFKGY /1Avc9j5LXi7mmuvvezgf/Fi5g+GcZ4/Oaf26y6/mK73t5Z8b+PH3lw1bfiJa/orO7d6/acpsVAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3874; h=from:subject; bh=0I1JftdvB3rTfZpoTF26HdclcTfGEarkHEak5eqcR+Q=; b=owGbwMvMwCXGf25diOft7jLG02pJDImbr/63Zpnln35hG9s1DcV/q7rPblkqvT9V4OU24yiHOztn v/56o6OUhUGMi0FWTJHl756PjMfktufzBCY4wsxhZQIZwsDFKQAT2fmE4X/o5oaX3b8XnY4N7pfa45 i/szTYWXZ+WFy6fPdPveqX8xkZ/sq6PNr9I/va9qfbBQKrDud3nXX27b7R9zk6t5XTVs0rlQ8A
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 Content-Transfer-Encoding: 8bit
 
-Add support similar to ndctl and libndctl for parsing config files. This
-allows storing a config file path/list in the daxctl_ctx, and adds APIs
-for setting and retrieving it.
+Add a new config query type called CONFIG_SEARCH_SECTION, which searches
+all loaded config files based on a query criteria of: specified section
+name, specified key/value pair within that section, and can return other
+key/values from the section that matched the search criteria.
+
+This allows for multiple named subsections, where a subsection name is
+of the type: '[section subsection]'.
 
 Cc: QI Fuli <qi.fuli@fujitsu.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
 Reviewed-by: QI Fuli <qi.fuli@jp.fujitsu.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- .../daxctl/daxctl-reconfigure-device.txt      |  8 ++++++++
- configure.ac                                  |  3 +++
- daxctl/lib/libdaxctl.c                        | 20 +++++++++++++++++++
- daxctl/libdaxctl.h                            |  2 ++
- Documentation/daxctl/Makefile.am              | 11 +++++++++-
- daxctl/Makefile.am                            |  3 ++-
- daxctl/lib/Makefile.am                        |  6 ++++++
- daxctl/lib/libdaxctl.sym                      |  2 ++
- 8 files changed, 53 insertions(+), 2 deletions(-)
+ util/parse-configs.h | 15 +++++++++++++
+ util/parse-configs.c | 51 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/Documentation/daxctl/daxctl-reconfigure-device.txt b/Documentation/daxctl/daxctl-reconfigure-device.txt
-index aa87d45..09556cc 100644
---- a/Documentation/daxctl/daxctl-reconfigure-device.txt
-+++ b/Documentation/daxctl/daxctl-reconfigure-device.txt
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
+diff --git a/util/parse-configs.h b/util/parse-configs.h
+index 32783b5..533480a 100644
+--- a/util/parse-configs.h
++++ b/util/parse-configs.h
+@@ -9,6 +9,7 @@
  
-+include::attrs.adoc[]
-+
- daxctl-reconfigure-device(1)
- ============================
+ enum parse_conf_type {
+ 	CONFIG_STRING,
++	CONFIG_SEARCH_SECTION,
+ 	CONFIG_END,
+ 	MONITOR_CALLBACK,
+ };
+@@ -20,6 +21,10 @@ typedef int parse_conf_cb(const struct config *, const char *config_file);
  
-@@ -250,6 +252,12 @@ ndctl create-namespace --mode=devdax | \
- 	jq -r "\"[reconfigure-device $(uuidgen)]\", \"nvdimm.uuid = \(.uuid)\", \"mode = system-ram\"" >> $config_path
- ----
+ struct config {
+ 	enum parse_conf_type type;
++	const char *section;
++	const char *search_key;
++	const char *search_val;
++	const char *get_key;
+ 	const char *key;
+ 	void *value;
+ 	void *defval;
+@@ -31,6 +36,16 @@ struct config {
+ #define CONF_END() { .type = CONFIG_END }
+ #define CONF_STR(k,v,d) \
+ 	{ .type = CONFIG_STRING, .key = (k), .value = check_vtype(v, const char **), .defval = (d) }
++#define CONF_SEARCH(s, sk, sv, gk, v, d)	\
++{						\
++	.type = CONFIG_SEARCH_SECTION,		\
++	.section = (s),				\
++	.search_key = (sk),			\
++	.search_val = (sv),			\
++	.get_key = (gk),			\
++	.value = check_vtype(v, const char **),	\
++	.defval = (d)				\
++}
+ #define CONF_MONITOR(k,f) \
+ 	{ .type = MONITOR_CALLBACK, .key = (k), .callback = (f)}
  
-+The default location for daxctl config files is under {daxctl_confdir}/,
-+and any file with a '.conf' suffix at this location is considered. It is
-+acceptable to have multiple files containing ini-style config sections,
-+but the {section, subsection} tuple must be unique across all config files
-+under {daxctl_confdir}/.
-+
- include::../copyright.txt[]
- 
- SEE ALSO
-diff --git a/configure.ac b/configure.ac
-index 3f15a7b..39ad0d4 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -178,6 +178,9 @@ AC_SUBST([ndctl_confdir])
- AC_SUBST([ndctl_conf])
- AC_SUBST([ndctl_monitorconf])
- 
-+daxctl_confdir=${sysconfdir}/daxctl.conf.d
-+AC_SUBST([daxctl_confdir])
-+
- daxctl_modprobe_datadir=${datadir}/daxctl
- daxctl_modprobe_data=daxctl.conf
- AC_SUBST([daxctl_modprobe_datadir])
-diff --git a/daxctl/lib/libdaxctl.c b/daxctl/lib/libdaxctl.c
-index 860bd9c..f173bbb 100644
---- a/daxctl/lib/libdaxctl.c
-+++ b/daxctl/lib/libdaxctl.c
-@@ -37,6 +37,7 @@ struct daxctl_ctx {
- 	struct log_ctx ctx;
- 	int refcount;
- 	void *userdata;
-+	const char *config_path;
- 	int regions_init;
- 	struct list_head regions;
- 	struct kmod_ctx *kmod_ctx;
-@@ -68,6 +69,22 @@ DAXCTL_EXPORT void daxctl_set_userdata(struct daxctl_ctx *ctx, void *userdata)
- 	ctx->userdata = userdata;
+diff --git a/util/parse-configs.c b/util/parse-configs.c
+index 61352d8..49ee4e0 100644
+--- a/util/parse-configs.c
++++ b/util/parse-configs.c
+@@ -42,6 +42,54 @@ static void set_str_val(const char **value, const char *val)
+ 	*value = strbuf_detach(&buf, NULL);
  }
  
-+DAXCTL_EXPORT int daxctl_set_config_path(struct daxctl_ctx *ctx,
-+					 char *config_path)
++static const char *search_section_kv(dictionary *d, const struct config *c)
 +{
-+	if ((!ctx) || (!config_path))
-+		return -EINVAL;
-+	ctx->config_path = config_path;
-+	return 0;
++	int i;
++
++	for (i = 0; i < iniparser_getnsec(d); i++) {
++		const char *cur_sec_full = iniparser_getsecname(d, i);
++		char *cur_sec = strdup(cur_sec_full);
++		const char *search_val, *ret_val;
++		const char *delim = " \t\n\r";
++		char *save, *cur, *query;
++
++		if (!cur_sec)
++			return NULL;
++		if (!c->section || !c->search_key || !c->search_val || !c->get_key) {
++			fprintf(stderr, "warning: malformed config query, skipping\n");
++			return NULL;
++		}
++
++		cur = strtok_r(cur_sec, delim, &save);
++		if ((cur == NULL) || (strcmp(cur, c->section) != 0))
++			goto out_sec;
++
++		if (asprintf(&query, "%s:%s", cur_sec_full, c->search_key) < 0)
++			goto out_sec;
++		search_val = iniparser_getstring(d, query, NULL);
++		if (!search_val)
++			goto out_query;
++		if (strcmp(search_val, c->search_val) != 0)
++			goto out_query;
++
++		/* we're now in a matching section */
++		free(query);
++		if (asprintf(&query, "%s:%s", cur_sec_full, c->get_key) < 0)
++			goto out_sec;
++		ret_val = iniparser_getstring(d, query, NULL);
++		free(query);
++		free(cur_sec);
++		return ret_val;
++
++out_query:
++		free(query);
++out_sec:
++		free(cur_sec);
++	}
++
++	return NULL;
 +}
 +
-+DAXCTL_EXPORT const char *daxctl_get_config_path(struct daxctl_ctx *ctx)
-+{
-+	if (ctx == NULL)
-+		return NULL;
-+	return ctx->config_path;
-+}
-+
- /**
-  * daxctl_new - instantiate a new library context
-  * @ctx: context to establish
-@@ -99,6 +116,9 @@ DAXCTL_EXPORT int daxctl_new(struct daxctl_ctx **ctx)
- 	*ctx = c;
- 	list_head_init(&c->regions);
- 	c->kmod_ctx = kmod_ctx;
-+	rc = daxctl_set_config_path(c, DAXCTL_CONF_DIR);
-+	if (rc)
-+		dbg(c, "Unable to set config path: %s\n", strerror(-rc));
- 
- 	return 0;
- out:
-diff --git a/daxctl/libdaxctl.h b/daxctl/libdaxctl.h
-index 683ae9c..6b6c71f 100644
---- a/daxctl/libdaxctl.h
-+++ b/daxctl/libdaxctl.h
-@@ -28,6 +28,8 @@ int daxctl_get_log_priority(struct daxctl_ctx *ctx);
- void daxctl_set_log_priority(struct daxctl_ctx *ctx, int priority);
- void daxctl_set_userdata(struct daxctl_ctx *ctx, void *userdata);
- void *daxctl_get_userdata(struct daxctl_ctx *ctx);
-+int daxctl_set_config_path(struct daxctl_ctx *ctx, char *config_path);
-+const char *daxctl_get_config_path(struct daxctl_ctx *ctx);
- 
- struct daxctl_region;
- struct daxctl_region *daxctl_new_region(struct daxctl_ctx *ctx, int id,
-diff --git a/Documentation/daxctl/Makefile.am b/Documentation/daxctl/Makefile.am
-index 5991731..9c43e61 100644
---- a/Documentation/daxctl/Makefile.am
-+++ b/Documentation/daxctl/Makefile.am
-@@ -33,11 +33,20 @@ EXTRA_DIST = $(man1_MANS)
- 
- CLEANFILES = $(man1_MANS)
- 
-+.ONESHELL:
-+attrs.adoc: $(srcdir)/Makefile.am
-+	$(AM_V_GEN) cat <<- EOF >$@
-+		:daxctl_confdir: $(daxctl_confdir)
-+		:daxctl_conf: $(daxctl_conf)
-+		:ndctl_keysdir: $(ndctl_keysdir)
-+		EOF
-+
- XML_DEPS = \
- 	../../version.m4 \
- 	../copyright.txt \
- 	Makefile \
--	$(CONFFILE)
-+	$(CONFFILE) \
-+	attrs.adoc
- 
- RM ?= rm -f
- 
-diff --git a/daxctl/Makefile.am b/daxctl/Makefile.am
-index 9b1313a..7ee65c4 100644
---- a/daxctl/Makefile.am
-+++ b/daxctl/Makefile.am
-@@ -25,4 +25,5 @@ daxctl_LDADD =\
- 	../libutil.a \
- 	$(UUID_LIBS) \
- 	$(KMOD_LIBS) \
--	$(JSON_LIBS)
-+	$(JSON_LIBS) \
-+	-liniparser
-diff --git a/daxctl/lib/Makefile.am b/daxctl/lib/Makefile.am
-index 25efd83..3c47a4b 100644
---- a/daxctl/lib/Makefile.am
-+++ b/daxctl/lib/Makefile.am
-@@ -3,6 +3,12 @@ include $(top_srcdir)/Makefile.am.in
- %.pc: %.pc.in Makefile
- 	$(SED_PROCESS)
- 
-+DISTCLEANFILES = config.h
-+BUILT_SOURCES = config.h
-+config.h: $(srcdir)/Makefile.am
-+	$(AM_V_GEN) echo "/* Autogenerated by daxctl/Makefile.am */" >$@ && \
-+		echo '#define DAXCTL_CONF_DIR  "$(daxctl_confdir)"' >>$@
-+
- pkginclude_HEADERS = ../libdaxctl.h
- lib_LTLIBRARIES = libdaxctl.la
- 
-diff --git a/daxctl/lib/libdaxctl.sym b/daxctl/lib/libdaxctl.sym
-index a13e93d..fe68fd0 100644
---- a/daxctl/lib/libdaxctl.sym
-+++ b/daxctl/lib/libdaxctl.sym
-@@ -96,4 +96,6 @@ LIBDAXCTL_9 {
- global:
- 	daxctl_dev_will_auto_online_memory;
- 	daxctl_dev_has_online_memory;
-+	daxctl_set_config_path;
-+	daxctl_get_config_path;
- } LIBDAXCTL_8;
+ static int parse_config_file(const char *config_file,
+ 			const struct config *configs)
+ {
+@@ -62,6 +110,9 @@ static int parse_config_file(const char *config_file,
+ 					iniparser_getstring(dic,
+ 					configs->key, configs->defval));
+ 			break;
++		case CONFIG_SEARCH_SECTION:
++			set_str_val((const char **)configs->value,
++					search_section_kv(dic, configs));
+ 		case MONITOR_CALLBACK:
+ 		case CONFIG_END:
+ 			break;
 -- 
 2.33.1
 
