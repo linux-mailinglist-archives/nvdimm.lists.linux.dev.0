@@ -1,182 +1,193 @@
-Return-Path: <nvdimm+bounces-2431-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2437-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A2D148B5BB
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jan 2022 19:34:34 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA3E48B667
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jan 2022 20:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id CBA253E0F44
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jan 2022 18:34:32 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 8F9123E0EB9
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jan 2022 19:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F55F2CA5;
-	Tue, 11 Jan 2022 18:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC922CB3;
+	Tue, 11 Jan 2022 19:00:19 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33974168
-	for <nvdimm@lists.linux.dev>; Tue, 11 Jan 2022 18:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=eAKZlQsmjfI+koCxrlOr8+ragZ61WF+HNKacitVGsa4=; b=uwPUp9egKUiNPj/3oywvH0xvRN
-	4PPC5HjY8DzksQkP3NNIVA3wuap90vioZPUxvKU+U8l8TJ6L6kuRzplWIg5V6euZGII00kt6f/UEL
-	X2q3LxlpAQWQll8GNYuMSf8LfYeJ2Fpw45EvAB43k1sIrVDdYadiCu4uwSX0JrzmofoNvYfXV5VWv
-	YTPBq1Rdg1bV72nGunzOJ87kOf8gcKJMX8rFX2pF34koHZ0zaH6437jAi7WWFo8kzdDI3+nB0Agmi
-	NN4EprO5pS0q4lqzaUN6vTNXlZ3OmwYAD1pwVnFgdM1CwKwHtyY3020wqFB7otx3+ezOehhfR+vcn
-	jPz7KxVA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1n7Ly1-003U8D-O7; Tue, 11 Jan 2022 18:33:57 +0000
-Date: Tue, 11 Jan 2022 18:33:57 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Logan Gunthorpe <logang@deltatee.com>,
-	Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mm@kvack.org,
-	linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	nvdimm@lists.linux.dev
-Subject: Re: Phyr Starter
-Message-ID: <Yd3Nle3YN063ZFVY@casper.infradead.org>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
- <20220111004126.GJ2328285@nvidia.com>
- <Yd0IeK5s/E0fuWqn@casper.infradead.org>
- <20220111150142.GL2328285@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947D82CA7
+	for <nvdimm@lists.linux.dev>; Tue, 11 Jan 2022 19:00:15 +0000 (UTC)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BI1hdM032072;
+	Tue, 11 Jan 2022 18:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=dU3OUmaZaBuqD+PTIKLIGbhcAC9qHfJqQU+JmhJBNjw=;
+ b=XvpqBCLd0fBbXr0trSTr0lJRaK33bYQBlDedF0udjYYXc8yr6TokxgeQpEAvhsCok0NW
+ MUuD2iZWdN5BNMgORspAwGAbgP7O/HB82POB2R69qABqPCWCnJmUFSlZz3kH5cn7cVrb
+ WTrp3dLUznvBcCs+K/vUKhM5LCmiznjWOdxug98Uj+KAcjCnMGnpa/V8gIA7pldakA/F
+ 6Pod8QHQdsXbNy7DkZHxlBF4Kj/lDm766w68KnTJ9D6FogsX3hLmBBKupybn4hvrm9Ih
+ DiKt/+5iUb6/hbWBrWKu9CU4U20Ufx/rdHCBfrP+t/h7uejbTQLkytoNohFbylWhfkbf RQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3dgkhx43an-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Jan 2022 18:59:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+	by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20BIpdrC110997;
+	Tue, 11 Jan 2022 18:59:49 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
+	by userp3020.oracle.com with ESMTP id 3df42n7d2s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Jan 2022 18:59:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hFV1c80YNvJIW2N9eoQ4hlMdfbHtdZDcwqaJCNIhKUlkbDK5qVmokiXDxuSwiMx5TMtFd6qrdsozb3wYF7ypFe5YbAwUmG+d91TNtuXLiS+NqucL1M/6fswiYSraWgJrLZYykrev5cUm6GXhu0x8dritmn9OZRWUlYJQXRF1aAmteA1syxqx1zBN4s7XtPu71y5Yh7WDuCBHUs6vYt9BsfUtlL+ChED4Elko9Z18kgbifC1PA4OAY5+3lPHjVuQmdt61eKFyI5LZ6FNIL2RUl4KWFMrT1iRG+jDblOirvX8UzHLtOxfErIoU21fJOGKo4inzG+aM5D89xy1Q8O9NDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dU3OUmaZaBuqD+PTIKLIGbhcAC9qHfJqQU+JmhJBNjw=;
+ b=CiUqgXMpJGM5PiUYWTZRYSWhL5d8yka+ngYDZ4y4/K3mrBKRKetfoULc6HmLCb91WC0DMk67gr3tyxeNZLhHTAmQQ57v+rsHWBmkuyfn6HvT8CDTvQoww1QL9d3xejO3IS1nmiE+1KbQjN4nqXhr1CTSv+/OIL4o3Rb5AONz6nwczuQdrt2d7nPW8oTvrDq5c4aQWjpFrRLwcUGLCwEVUPbVCARH/cJrUBb7Vfwf3zqsq9tlVxpCuB82gF0GgoTSWmJRfTND+xOuXKyeTPMqWc7aZUmi+Z5r4z1EndRPk84TEXdUZqhQGq1vVFTFNqyu2/0VJX10rsiNxhkMVmLWsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dU3OUmaZaBuqD+PTIKLIGbhcAC9qHfJqQU+JmhJBNjw=;
+ b=OhIz3r28uQ3CI8GETDXZfOAh2LofqGDTpuvq8mC/ocGAcZhEhjVGXGnsJKSbUwAKaZWnN/woe/e05Ndg0nIp6x6wn0QioVpb+rCrkQ72DeAsq05RQgi7GQ+MJwGkdQPdoakPIucLsvkrLZrldItBKz8SQ/7hZ93bSnGuo5YDawk=
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
+ by SJ0PR10MB5647.namprd10.prod.outlook.com (2603:10b6:a03:3d7::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
+ 2022 18:59:47 +0000
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::6814:f6c:b361:7071]) by SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::6814:f6c:b361:7071%8]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 18:59:46 +0000
+From: Jane Chu <jane.chu@oracle.com>
+To: david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: [PATCH v3 0/7] DAX poison recovery
+Date: Tue, 11 Jan 2022 11:59:23 -0700
+Message-Id: <20220111185930.2601421-1-jane.chu@oracle.com>
+X-Mailer: git-send-email 2.18.4
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR04CA0005.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::10) To SJ0PR10MB4429.namprd10.prod.outlook.com
+ (2603:10b6:a03:2d1::14)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111150142.GL2328285@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fb9460d2-b31e-41f2-206b-08d9d5348934
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5647:EE_
+X-Microsoft-Antispam-PRVS: 
+	<SJ0PR10MB5647220B43C69C9D08C0A981F3519@SJ0PR10MB5647.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	ifn49xF473S6Ee10Hyvv6NYP+upsk5gtz3EFljIx/YRd3KgXY91Mxg/AsS5lJy1cYVpXSk9vaSjHCCMmOvw+i4x0MJlufE0HvyOc0xGsLBzQpneKXqp7EmRilHDRz/Ya140dyuNcwa2qXHuZMEO1C85n3v/knSV9ZNas+Sl2l4K5JktxrXE5C9XG9QgbsgvGxKXNYdtotr8ik9ZgQFlD9X3YTr08UTkEI5RhqsptnMBHIdmlA+4Yanp0xaGkZLnsxp8cfHNBpCDM7gZXRn2eDdveuW3qc4amcOQwsGjXhKKzEuSXuz+G1M5p6bys/vG4uY6sUAndzmcvLLN6eh6qjBPm4xgBggxUK5NTms8HBMzxDePT7VaHFltQJGqf0G9tYQzEiHGtW287dBfCJw+e5KrYmY5im9aiKkNTscZOc29EiR/AeATfdk6Rappgl20rFL+5quRnMSDKeovXynNn4V5uT9WAzXSE/vZunrg0KBxeSFBhVje48Bw3o+ygnFVEdGo+wpqDpduR3SfFEtk0goIu8Ts+3hUpNJJ2o9puAK4B5rxBOBDvE/FD0Zbdhll8A+WUea3NbvCor3PVxVY8iswPlP6KuuijHArJ/cdX7Kh6Lcrlb6Ot1JWW9lE2F0e0wWe/vvGg+I4BJda3rgAt8amvlKkzywlK4epPMZNE8iVGT2v9gRDrWc0R1D2BUTdzag20EQ4vWLJ/VulZGECBuYapG1jeAeFBsUdbzbkqQ0RTY3v7cZRyWTkKXzFvLMriOLeE8iIV2+4lxLVIY1yusghXg4CIHOXGVvf3Zhcm8/58fvSfTp49ql26bHRytf0j
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(66476007)(508600001)(6512007)(44832011)(66556008)(66946007)(86362001)(83380400001)(1076003)(38100700002)(6486002)(36756003)(316002)(8936002)(6666004)(2616005)(966005)(921005)(7416002)(6506007)(2906002)(186003)(52116002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?K+wilDQdSaki24aJVLpVwGKr9CvfWXM8wrAB9iC/6ogJtDu1hmQlxi0eXU+s?=
+ =?us-ascii?Q?h9pSpymWJABXz64KlSAd6sv3cihwTrN3zyzuqXXBiFVn5oI018Ze+ZkxCSr+?=
+ =?us-ascii?Q?5g7YkZJq7Fmoa3JwJen61jxAa0D65eI16V3bYko0O1ctCpgutx+6bWc8DmXY?=
+ =?us-ascii?Q?EG7LgY8TrUGPyUawWiZyajuWHi9bWbbYlocWU/OdO3VosvnrPLk8Kw8uEZok?=
+ =?us-ascii?Q?Ukw7c9Owg5tGaKq4nU78IL2WJSw6D78BeVnzdXdNYFSEzDhq7DLItuQgcumT?=
+ =?us-ascii?Q?piawu1S0NEqeit1L5rAKjVu/4CZ16Z/9CVj2l0vSCUatyq6b9dsQnNkWbF2c?=
+ =?us-ascii?Q?nyK3ii7kTVZWPvhIEaAHQZxKfwzPWHR6EJYNIsICrtPsxjxs8kWj9xG25Rsg?=
+ =?us-ascii?Q?Lj9qxT0MTYwZdcOB/cbDyQ23gZQV8rdk6epVJnlnTcydJbMpF7rOt0nQJc7m?=
+ =?us-ascii?Q?0dMDzfrSfB/pLH5t1OS6seXj6DGXho7/LTJhiU0gt9F1xsZh5Gpt45UAELMy?=
+ =?us-ascii?Q?Wj6F5/i9hzFYG/myTOH8TCEC9J5WQQpo1geK9zx95nPcsYndhk0SNpFehwWg?=
+ =?us-ascii?Q?8SyIuTjZ/FyVvT7yebsZptPb3wDWx01Eoh9b2nGBHDSb/8mee22l03qjz7HW?=
+ =?us-ascii?Q?IzSsqauvTKLYji1zAUN2Qoy+1kO15loQqbcwHFupTu5Wd5SqV+jgeNqFd1SD?=
+ =?us-ascii?Q?CD+lAaf/L2ETwYAW4PuSx83FsEGuRKRKsm+iWsyyuEpqfwoXzevqmy/9Jo0A?=
+ =?us-ascii?Q?UYW+Zd25fNHWg6PShhhPUbpH5wThI5laCKAYahmg8CJYWwv84PHzHtj0XJKH?=
+ =?us-ascii?Q?hi5GsxHVObdnY0ZZQgEmnwThqD1NrpsVsR+BTl0gA4tEHdYpb/rWPg8uDWHf?=
+ =?us-ascii?Q?znxsiHeNehd0D+ItDpBVeeBSy47z4eiBVemfc+CbFo/gNkqxGFm7jOZXk27q?=
+ =?us-ascii?Q?ULhux+bjepHDnv13pGCjoq84KN+U1PNUx+vyVMBWujVWiFITSmP9KPn6lajn?=
+ =?us-ascii?Q?R4qP2r2aQ6SjOFiF77j9uR2ESb+f8ClinC9WdkQLcYWqCBQg/Hx9cYBy1u79?=
+ =?us-ascii?Q?3hgM3YlH/UOgsYuLDzvm4xyPlMHYWQfNvedtONBgjmHaG9f928BGcNLBtm6A?=
+ =?us-ascii?Q?8GmpUyu196L92CwMWxHO4ELUbkTsBu2e3sWYaSLxdmhvhbDVOiMC9wYojtVG?=
+ =?us-ascii?Q?RwAaqGDWP9+VBTJ3EnbSk/K90YPxsRd6m/Rqxb8+97muO0UY/ZzmwLahiDco?=
+ =?us-ascii?Q?hGVOXlV5p7TtIsyXrmK90/RiKfDKzXNV3WLWi8vdRq1WHJGVV6NZgYvX4DnD?=
+ =?us-ascii?Q?49Mj7nQd4whYslr78ceKMoWtUrIxtzbEwln//RvZulDueBxeiQvWUMU/8qeI?=
+ =?us-ascii?Q?wPa3HfGOVdnUW3I2CcftgpoKXvsCU8ucFnjKOggOonaAYnz4rCRVLUHtvkD4?=
+ =?us-ascii?Q?S+APnDuH7XZP/KbdJrxkufkDlXEE/Txdhwku4UvSaLaenCx/uuUecEGfMs+2?=
+ =?us-ascii?Q?yVCzGeXewfPVubhVWjWbx6mx/jcDD9jNajGSbmDomHEp4v9k/UT3/5Q/B6os?=
+ =?us-ascii?Q?9BUKCvDlr2ccivJaI+isrcRFHGUbxaZt8S6Es+EklMqKUk+bLdSMiERWEFzq?=
+ =?us-ascii?Q?zZIuhWn/v7eXqsbagJ26kr5gIhGktgkk0ijKV414QWnD?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb9460d2-b31e-41f2-206b-08d9d5348934
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 18:59:46.8706
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UhWgVKdX5LUoTyVeb3DC/NI5++N1iAqzS8QSOqj/L5JtJZf+TVGHeEhIrJaTepA5BY18cq6ivRR0dr8xKhHzYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5647
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10224 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 spamscore=0 bulkscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201110101
+X-Proofpoint-GUID: O8L4oDIDyb68Snz-vv4Y6U5aZjS8PH-n
+X-Proofpoint-ORIG-GUID: O8L4oDIDyb68Snz-vv4Y6U5aZjS8PH-n
 
-On Tue, Jan 11, 2022 at 11:01:42AM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 11, 2022 at 04:32:56AM +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 10, 2022 at 08:41:26PM -0400, Jason Gunthorpe wrote:
-> > > On Mon, Jan 10, 2022 at 07:34:49PM +0000, Matthew Wilcox wrote:
-> > > 
-> > > > Finally, it may be possible to stop using scatterlist to describe the
-> > > > input to the DMA-mapping operation.  We may be able to get struct
-> > > > scatterlist down to just dma_address and dma_length, with chaining
-> > > > handled through an enclosing struct.
-> > > 
-> > > Can you talk about this some more? IMHO one of the key properties of
-> > > the scatterlist is that it can hold huge amounts of pages without
-> > > having to do any kind of special allocation due to the chaining.
-> > > 
-> > > The same will be true of the phyr idea right?
-> > 
-> > My thinking is that we'd pass a relatively small array of phyr (maybe 16
-> > entries) to get_user_phyr().  If that turned out not to be big enough,
-> > then we have two options; one is to map those 16 ranges with sg and use
-> > the sg chaining functionality before throwing away the phyr and calling
-> > get_user_phyr() again. 
-> 
-> Then we are we using get_user_phyr() at all if we are just storing it
-> in a sg?
+In v3, dax recovery code path is independent of that of
+normal write. Competing dax recovery threads are serialized,
+racing read threads are guaranteed not overlapping with the
+recovery process.
 
-I did consider just implementing get_user_sg() (actually 4 years ago),
-but that cements the use of sg as both an input and output data structure
-for DMA mapping, which I am under the impression we're trying to get
-away from.
+In this phase, the recovery granularity is page, future patch
+will explore recovery in finer granularity.
 
-> Also 16 entries is way to small, it should be at least a whole PMD
-> worth so we don't have to relock the PMD level each iteration.
-> 
-> I would like to see a flow more like:
-> 
->   cpu_phyr_list = get_user_phyr(uptr, 1G);
->   dma_phyr_list = dma_map_phyr(device, cpu_phyr_list);
->   [..]
->   dma_unmap_phyr(device, dma_phyr_list);
->   unpin_drity_free(cpu_phy_list);
-> 
-> Where dma_map_phyr() can build a temporary SGL for old iommu drivers
-> compatability. iommu drivers would want to implement natively, of
-> course.
-> 
-> ie no loops in drivers.
+Please refer to below discussions for more information:
+v2:
+https://lore.kernel.org/all/20211106011638.2613039-1-jane.chu@oracle.com/
+Disussions about marking poisoned page as 'np':
+https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
 
-Let me just rewrite that for you ...
+Jane Chu (7):
+  mce: fix set_mce_nospec to always unmap the whole page
+  dax: introduce dax device flag DAXDEV_RECOVERY
+  dm: make dm aware of target's DAXDEV_RECOVERY capability
+  dax: add dax_recovery_write to dax_op and dm target type
+  pmem: add pmem_recovery_write() dax op
+  dax: add recovery_write to dax_iomap_iter in failure path
+  pmem: fix pmem_do_write() avoid writing to 'np' page
 
-	umem->phyrs = get_user_phyrs(addr, size, &umem->phyr_len);
-	umem->sgt = dma_map_phyrs(device, umem->phyrs, umem->phyr_len,
-			DMA_BIDIRECTIONAL, dma_attr);
-	...
-	dma_unmap_phyr(device, umem->phyrs, umem->phyr_len, umem->sgt->sgl,
-			umem->sgt->nents, DMA_BIDIRECTIONAL, dma_attr);
-	sg_free_table(umem->sgt);
-	free_user_phyrs(umem->phyrs, umem->phyr_len);
+ arch/x86/include/asm/set_memory.h |  17 ++---
+ arch/x86/kernel/cpu/mce/core.c    |   6 +-
+ arch/x86/mm/pat/set_memory.c      |   8 ++-
+ drivers/dax/super.c               |  53 ++++++++++++++++
+ drivers/md/dm-linear.c            |  13 ++++
+ drivers/md/dm-log-writes.c        |  14 +++++
+ drivers/md/dm-stripe.c            |  13 ++++
+ drivers/md/dm-table.c             |  33 ++++++++++
+ drivers/md/dm.c                   |  27 ++++++++
+ drivers/nvdimm/pmem.c             | 101 +++++++++++++++++++++++++++---
+ drivers/nvdimm/pmem.h             |   1 +
+ fs/dax.c                          |  25 +++++++-
+ include/linux/dax.h               |   9 +++
+ include/linux/device-mapper.h     |   3 +
+ include/linux/set_memory.h        |   2 +-
+ 15 files changed, 298 insertions(+), 27 deletions(-)
 
-> > The question is whether this is the right kind of optimisation to be
-> > doing.  I hear you that we want a dense format, but it's questionable
-> > whether the kind of thing you're suggesting is actually denser than this
-> > scheme.  For example, if we have 1GB pages and userspace happens to have
-> > allocated pages (3, 4, 5, 6, 7, 8, 9, 10) then this can be represented
-> > as a single phyr.  A power-of-two scheme would have us use four entries
-> > (3, 4-7, 8-9, 10).
-> 
-> That is not quite what I had in mind..
-> 
-> struct phyr_list {
->    unsigned int first_page_offset_bytes;
->    size_t total_length_bytes;
->    phys_addr_t min_alignment;
->    struct packed_phyr *list_of_pages;
-> };
-> 
-> Where each 'packed_phyr' is an aligned page of some kind. The packing
-> has to be able to represent any number of pfns, so we have four major
-> cases:
->  - 4k pfns (use 8 bytes)
->  - Natural order pfn (use 8 bytes)
->  - 4k aligned pfns, arbitary number (use 12 bytes)
->  - <4k aligned, arbitary length (use 16 bytes?)
-> 
-> In all cases the interior pages are fully used, only the first and
-> last page is sliced based on the two parameters in the phyr_list.
-
-This kind of representation works for a virtually contiguous range.
-Unfortunately, that's not sufficient for some bio users (as I discovered
-after getting a representation like this enshrined in the NVMe spec as
-the PRP List).
-
-> The last case is, perhaps, a possible route to completely replace
-> scatterlist. Few places need true byte granularity for interior pages,
-> so we can invent some coding to say 'this is 8 byte aligned, and n
-> bytes long' that only fits < 4k or something. Exceptional cases can
-> then still work. I'm not sure what block needs here - is it just 512?
-
-Replacing scatterlist is not my goal.  That seems like a lot more work
-for little gain.  I just want to delete page_link, offset and length
-from struct scatterlist.  Given the above sequence of calls, we're going
-to get sg lists that aren't chained.  They may have to be vmalloced,
-but they should be contiguous.
-
-> I would imagine a few steps to this process:
->  1) 'phyr_list' datastructure, with chaining, pre-allocation, etc
->  2) Wrapper around existing gup to get a phyr_list for user VA
->  3) Compat 'dma_map_phyr()' that coverts a phyr_list to a sgl and back
->     (However, with full performance for iommu passthrough)
->  4) Patches changing RDMA/VFIO/DRM to this API
->  5) Patches optimizing get_user_phyr()
->  6) Patches implementing dma_map_phyr in the AMD or Intel IOMMU driver
-
-I was thinking ...
-
-1. get_user_phyrs() & free_user_phyrs()
-2. dma_map_phyrs() and dma_unmap_phyrs() wrappers that create a
-   scatterlist from phyrs and call dma_map_sg() / dma_unmap_sg() to work
-   with current IOMMU drivers
-3. Convert umem to work with it
-4-n. Hand it off to people who can implement dma_map_phyrs() properly
-   and do the hard work of converting all the drivers.
+-- 
+2.18.4
 
 
