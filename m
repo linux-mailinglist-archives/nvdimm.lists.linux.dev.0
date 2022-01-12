@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-2455-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2458-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3444948BE94
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Jan 2022 07:29:00 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F2A348BE97
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Jan 2022 07:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 4D50F1C0A7A
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Jan 2022 06:28:59 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 2CFD63E1015
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Jan 2022 06:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78C22CB8;
-	Wed, 12 Jan 2022 06:28:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5082CBD;
+	Wed, 12 Jan 2022 06:28:41 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C120D2CA9
-	for <nvdimm@lists.linux.dev>; Wed, 12 Jan 2022 06:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B032CB6
+	for <nvdimm@lists.linux.dev>; Wed, 12 Jan 2022 06:28:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641968917; x=1673504917;
+  t=1641968918; x=1673504918;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3Wxgj/qFBcVa6CsqKvehUKKJi105Hok9IowDGRUxp1Y=;
-  b=Bpph3Sww3xYNaVA2EHr56wz/IPAmGaS9aFgFTbhYp/MjSDdIjz2xIERH
-   pzLqHXVhgG9SdBhXLHffyfjSkKK9sgqPluBeTpe5U04n3uHJAJY8NVMNi
-   r9hUbgsEb0fyH9gj99IZBWI4YC/mDZkFkc6ydGBjlycfd+c+E+OR0jggu
-   ArKe8+MVPK1Z5cmERxr74xrRuvnuepgidNWQXNM/MG9uiPY9ECqTJSN4C
-   BFLdsHAzzWWxA8G7xQZC3vwy+tiWtBg0C/8u+8nmuK/tgDUsxIn8CMKKB
-   iLvC29GM/yedbJOC87AxcJXzz9HLZ4UbOJOctuSAVi050G87MkXoJD4qR
+  bh=fbhZZPIS4srVPsK7qE6Evg4OkrawVwgn5oGqouQEnyQ=;
+  b=lM6caAnS5GiI1W/XkQCO3OPGrrOetAdlyJz6RfFYas/QD/L9KgfHBnKK
+   4nEkY/gePFxEcs3GHz8jN8IZWOVkw8URQpTSVxefQ0+ExeJbxV7GlHI7u
+   4uFm8tgjhxdDCtXuo4tWKglerhu96js88DBslk1iWAtHAuksvgPNGIrHh
+   4/omQfj13t/0RO+a727Gx3FblIQp0OE9S1UTfXCblYVnUZj/5LdBRg0uD
+   DqdPd01R7o0l6V9dMixLs6uAM+DmacK+8KZCrOBhcLEYtGyuHiWz+7CZT
+   EhRpAe1GqxFV+u2ydqSdunGAEorWVL2XxLJh16lCGDK0WJT2Xggp9SVt6
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="304407183"
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="304407184"
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="304407183"
+   d="scan'208";a="304407184"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 22:28:33 -0800
 X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="529051360"
+   d="scan'208";a="529051362"
 Received: from alison-desk.jf.intel.com (HELO localhost) ([10.54.74.41])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 22:28:33 -0800
 From: alison.schofield@intel.com
@@ -48,9 +48,9 @@ To: Ben Widawsky <ben.widawsky@intel.com>,
 Cc: Alison Schofield <alison.schofield@intel.com>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org
-Subject: [ndctl PATCH v2 5/6] libcxl: add interfaces for SET_PARTITION_INFO mailbox command
-Date: Tue, 11 Jan 2022 22:33:33 -0800
-Message-Id: <dae8e094fe9dd897cb16510a86644ad1fab97efe.1641965853.git.alison.schofield@intel.com>
+Subject: [ndctl PATCH v2 6/6] cxl: add command set-partition-info
+Date: Tue, 11 Jan 2022 22:33:34 -0800
+Message-Id: <323e26fb4347572c6403cb53787a4caefd834196.1641965853.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1641965853.git.alison.schofield@intel.com>
 References: <cover.1641965853.git.alison.schofield@intel.com>
@@ -60,147 +60,293 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-Users may want the ability to change the partition layout of a CXL
-memory device.
+Users may want to change the partition layout of a memory
+device using the CXL command line tool. Add a new CXL command,
+'cxl set-partition-info', that operates on a CXL memdev, or a
+set of memdevs, and allows the user to change the partition
+layout of the device(s).
 
-Add interfaces to libcxl to allocate and send a SET_PARTITION_INFO
-mailbox as defined in the CXL 2.0 specification.
+Synopsis:
+Usage: cxl set-partition-info <mem0> [<mem1>..<memN>] [<options>]
+
+    -v, --verbose         turn on debug
+    -s, --volatile_size <n>
+                          next volatile partition size in bytes
+
+The included MAN page explains how to find the partitioning
+capabilities and restrictions of a CXL memory device.
 
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- cxl/lib/libcxl.c   | 50 ++++++++++++++++++++++++++++++++++++++++++++++
- cxl/lib/libcxl.sym |  5 +++++
- cxl/lib/private.h  |  8 ++++++++
- cxl/libcxl.h       |  5 +++++
- 4 files changed, 68 insertions(+)
+ Documentation/cxl/cxl-set-partition-info.txt |  27 +++++
+ Documentation/cxl/partition-description.txt  |  15 +++
+ Documentation/cxl/partition-options.txt      |  20 ++++
+ cxl/builtin.h                                |   1 +
+ cxl/cxl.c                                    |   1 +
+ cxl/memdev.c                                 | 101 +++++++++++++++++++
+ 6 files changed, 165 insertions(+)
+ create mode 100644 Documentation/cxl/cxl-set-partition-info.txt
+ create mode 100644 Documentation/cxl/partition-description.txt
+ create mode 100644 Documentation/cxl/partition-options.txt
 
-diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
-index 823bcb0..30c8f23 100644
---- a/cxl/lib/libcxl.c
-+++ b/cxl/lib/libcxl.c
-@@ -1230,6 +1230,21 @@ cxl_cmd_partition_info_get_next_persistent_bytes(struct cxl_cmd *cmd)
- 	cmd_partition_get_capacity_field(cmd, next_persistent_cap);
+diff --git a/Documentation/cxl/cxl-set-partition-info.txt b/Documentation/cxl/cxl-set-partition-info.txt
+new file mode 100644
+index 0000000..32418b6
+--- /dev/null
++++ b/Documentation/cxl/cxl-set-partition-info.txt
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++
++cxl-set-partition-info(1)
++=========================
++
++NAME
++----
++cxl-set-partition-info - set the partitioning between volatile and persistent capacity on a CXL memdev
++
++SYNOPSIS
++--------
++[verse]
++'cxl set-partition-info <mem> [ [<mem1>..<memN>] [<options>]'
++
++include::partition-description.txt[]
++Partition the device on the next device reset using the volatile capacity
++requested. Using this command to change the size of the persistent capacity
++shall result in the loss of stored data.
++
++OPTIONS
++-------
++include::partition-options.txt[]
++
++SEE ALSO
++--------
++linkcxl:cxl-list[1],
++CXL-2.0 8.2.9.5.2
+diff --git a/Documentation/cxl/partition-description.txt b/Documentation/cxl/partition-description.txt
+new file mode 100644
+index 0000000..b66b68c
+--- /dev/null
++++ b/Documentation/cxl/partition-description.txt
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++DESCRIPTION
++-----------
++Partition the device into volatile and persistent capacity. The change
++in partitioning will become the “next” configuration, to become active
++on the next device reset.
++
++Use "cxl list -m <memdev> -I" to examine the partitioning capabilities
++of a device. A partition_alignment_bytes value of zero means there are
++no partitionable bytes available and therefore the partitions cannot be
++changed.
++
++Using this command to change the size of the persistent capacity shall
++result in the loss of data stored.
+diff --git a/Documentation/cxl/partition-options.txt b/Documentation/cxl/partition-options.txt
+new file mode 100644
+index 0000000..bc3676d
+--- /dev/null
++++ b/Documentation/cxl/partition-options.txt
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0
++
++<memory device(s)>::
++include::memdev-option.txt[]
++
++-s::
++--size=::
++	Size in bytes of the volatile partition requested.
++
++	Size must align to the devices partition_alignment_bytes.
++	Use 'cxl list -m <memdev> -I' to find partition_alignment_bytes.
++
++	Size must be less than or equal to the device's partitionable bytes.
++	Calculate partitionable bytes by subracting the volatile_only_bytes,
++	and the persistent_only_bytes, from the total_bytes.
++	Use 'cxl list -m <memdev> -I' to find the above mentioned_byte values.
++
++-v::
++	Turn on verbose debug messages in the library (if libcxl was built with
++	logging and debug enabled).
+diff --git a/cxl/builtin.h b/cxl/builtin.h
+index 78eca6e..7f11f28 100644
+--- a/cxl/builtin.h
++++ b/cxl/builtin.h
+@@ -10,4 +10,5 @@ int cmd_read_labels(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_zero_labels(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_init_labels(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_check_labels(int argc, const char **argv, struct cxl_ctx *ctx);
++int cmd_set_partition_info(int argc, const char **argv, struct cxl_ctx *ctx);
+ #endif /* _CXL_BUILTIN_H_ */
+diff --git a/cxl/cxl.c b/cxl/cxl.c
+index 4b1661d..3153cf0 100644
+--- a/cxl/cxl.c
++++ b/cxl/cxl.c
+@@ -64,6 +64,7 @@ static struct cmd_struct commands[] = {
+ 	{ "zero-labels", .c_fn = cmd_zero_labels },
+ 	{ "read-labels", .c_fn = cmd_read_labels },
+ 	{ "write-labels", .c_fn = cmd_write_labels },
++	{ "set-partition-info", .c_fn = cmd_set_partition_info },
+ };
+ 
+ int main(int argc, const char **argv)
+diff --git a/cxl/memdev.c b/cxl/memdev.c
+index d063d51..281b385 100644
+--- a/cxl/memdev.c
++++ b/cxl/memdev.c
+@@ -6,6 +6,7 @@
+ #include <unistd.h>
+ #include <limits.h>
+ #include <util/log.h>
++#include <util/size.h>
+ #include <cxl/libcxl.h>
+ #include <util/parse-options.h>
+ #include <ccan/minmax/minmax.h>
+@@ -24,6 +25,7 @@ static struct parameters {
+ 	unsigned len;
+ 	unsigned offset;
+ 	bool verbose;
++	const char *volatile_size;
+ } param;
+ 
+ #define fail(fmt, ...) \
+@@ -48,6 +50,10 @@ OPT_UINTEGER('s', "size", &param.len, "number of label bytes to operate"), \
+ OPT_UINTEGER('O', "offset", &param.offset, \
+ 	"offset into the label area to start operation")
+ 
++#define SET_PARTITION_OPTIONS() \
++OPT_STRING('s', "volatile_size",  &param.volatile_size, "volatile-size", \
++	"next volatile partition size in bytes")
++
+ static const struct option read_options[] = {
+ 	BASE_OPTIONS(),
+ 	LABEL_OPTIONS(),
+@@ -68,6 +74,12 @@ static const struct option zero_options[] = {
+ 	OPT_END(),
+ };
+ 
++static const struct option set_partition_options[] = {
++	BASE_OPTIONS(),
++	SET_PARTITION_OPTIONS(),
++	OPT_END(),
++};
++
+ static int action_zero(struct cxl_memdev *memdev, struct action_context *actx)
+ {
+ 	size_t size;
+@@ -175,6 +187,80 @@ out:
+ 	return rc;
  }
  
-+CXL_EXPORT struct cxl_cmd *cxl_cmd_new_set_partition_info(struct cxl_memdev *memdev,
-+		unsigned long long volatile_capacity, int flags)
++static int validate_partition(struct cxl_memdev *memdev,
++		unsigned long long volatile_request)
 +{
-+	struct cxl_cmd_set_partition_info *set_partition;
-+	struct cxl_cmd *cmd;
-+
-+	cmd = cxl_cmd_new_generic(memdev,
-+			CXL_MEM_COMMAND_ID_SET_PARTITION_INFO);
-+
-+	set_partition = (struct cxl_cmd_set_partition_info *)cmd->send_cmd->in.payload;
-+	set_partition->volatile_capacity = cpu_to_le64(volatile_capacity);
-+	set_partition->flags = flags;
-+	return cmd;
-+}
-+
- CXL_EXPORT int cxl_cmd_submit(struct cxl_cmd *cmd)
- {
- 	struct cxl_memdev *memdev = cmd->memdev;
-@@ -1428,3 +1443,38 @@ CXL_EXPORT int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf,
- {
- 	return lsa_op(memdev, LSA_OP_GET, buf, length, offset);
- }
-+
-+CXL_EXPORT int cxl_memdev_set_partition_info(struct cxl_memdev *memdev,
-+	       unsigned long long volatile_capacity, int flags)
-+{
-+	struct cxl_ctx *ctx = cxl_memdev_get_ctx(memdev);
++	unsigned long long total_cap, volatile_only, persistent_only;
++	unsigned long long partitionable_bytes, partition_align_bytes;
++	const char *devname = cxl_memdev_get_devname(memdev);
 +	struct cxl_cmd *cmd;
 +	int rc;
 +
-+	dbg(ctx, "%s: enter cap: %llx, flags %d\n", __func__,
-+		volatile_capacity, flags);
-+
-+	cmd = cxl_cmd_new_set_partition_info(memdev,
-+			volatile_capacity / CXL_CAPACITY_MULTIPLIER, flags);
++	cmd = cxl_cmd_new_identify(memdev);
 +	if (!cmd)
 +		return -ENXIO;
-+
 +	rc = cxl_cmd_submit(cmd);
-+	if (rc < 0) {
-+		err(ctx, "cmd submission failed: %s\n", strerror(-rc));
++	if (rc < 0)
++		goto err;
++	rc = cxl_cmd_get_mbox_status(cmd);
++	if (rc != 0)
++		goto err;
++
++	partition_align_bytes = cxl_cmd_identify_get_partition_align_bytes(cmd);
++	if (partition_align_bytes == 0) {
++		fprintf(stderr, "%s: no partitionable capacity\n", devname);
++		rc = -EINVAL;
 +		goto err;
 +	}
-+	rc = cxl_cmd_get_mbox_status(cmd);
-+	if (rc != 0) {
-+		err(ctx, "%s: mbox status: %d\n", __func__, rc);
-+		rc = -ENXIO;
++
++	total_cap = cxl_cmd_identify_get_total_bytes(cmd);
++	volatile_only = cxl_cmd_identify_get_volatile_only_bytes(cmd);
++	persistent_only = cxl_cmd_identify_get_persistent_only_bytes(cmd);
++
++	partitionable_bytes = total_cap - volatile_only - persistent_only;
++
++	if (volatile_request > partitionable_bytes) {
++		fprintf(stderr, "%s: volatile size %lld exceeds partitionable capacity %lld\n",
++			devname, volatile_request, partitionable_bytes);
++		rc = -EINVAL;
++		goto err;
++	}
++	if (!IS_ALIGNED(volatile_request, partition_align_bytes)) {
++		fprintf(stderr, "%s: volatile size %lld is not partition aligned %lld\n",
++			devname, volatile_request, partition_align_bytes);
++		rc = -EINVAL;
 +	}
 +err:
 +	cxl_cmd_unref(cmd);
 +	return rc;
 +}
 +
-+CXL_EXPORT int cxl_cmd_partition_info_flag_immediate(void)
++static int action_set_partition(struct cxl_memdev *memdev,
++		struct action_context *actx)
 +{
-+	return CXL_CMD_SET_PARTITION_INFO_FLAG_IMMEDIATE;
++	const char *devname = cxl_memdev_get_devname(memdev);
++	unsigned long long volatile_request;
++	int rc;
++
++	volatile_request = parse_size64(param.volatile_size);
++	if (volatile_request == ULLONG_MAX) {
++		fprintf(stderr, "%s: failed to parse volatile size '%s'\n",
++			devname, param.volatile_size);
++		return -EINVAL;
++	}
++
++	rc = validate_partition(memdev, volatile_request);
++	if (rc)
++		return rc;
++
++	rc = cxl_memdev_set_partition_info(memdev, volatile_request,
++			!cxl_cmd_partition_info_flag_immediate());
++	if (rc)
++		fprintf(stderr, "%s error: %s\n", devname, strerror(-rc));
++
++	return rc;
 +}
-diff --git a/cxl/lib/libcxl.sym b/cxl/lib/libcxl.sym
-index 1e2cf05..d5a0f5b 100644
---- a/cxl/lib/libcxl.sym
-+++ b/cxl/lib/libcxl.sym
-@@ -78,6 +78,11 @@ global:
- 	cxl_cmd_partition_info_get_active_persistent_bytes;
- 	cxl_cmd_partition_info_get_next_volatile_bytes;
- 	cxl_cmd_partition_info_get_next_persistent_bytes;
-+	cxl_cmd_new_set_partition_info;
-+	cxl_memdev_set_partition_info;
-+	cxl_cmd_partition_info_flag_none;
-+	cxl_cmd_partition_info_flag_immediate;
 +
- local:
-         *;
- };
-diff --git a/cxl/lib/private.h b/cxl/lib/private.h
-index dd9234f..4da8ea7 100644
---- a/cxl/lib/private.h
-+++ b/cxl/lib/private.h
-@@ -114,6 +114,14 @@ struct cxl_cmd_get_partition_info {
+ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 		int (*action)(struct cxl_memdev *memdev, struct action_context *actx),
+ 		const struct option *options, const char *usage)
+@@ -235,6 +321,11 @@ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 		}
+ 	}
  
- #define CXL_CAPACITY_MULTIPLIER		SZ_256M
- 
-+struct cxl_cmd_set_partition_info {
-+	le64 volatile_capacity;
-+	u8 flags;
-+} __attribute__((packed));
++	if (action == action_set_partition && !param.volatile_size) {
++		usage_with_options(u, options);
++		return -EINVAL;
++	}
 +
-+/* CXL 2.0 8.2.9.5.2 Set Partition Info */
-+#define CXL_CMD_SET_PARTITION_INFO_FLAG_IMMEDIATE			BIT(0)
+ 	if (param.verbose)
+ 		cxl_set_log_priority(ctx, LOG_DEBUG);
+ 
+@@ -323,3 +414,13 @@ int cmd_zero_labels(int argc, const char **argv, struct cxl_ctx *ctx)
+ 			count > 1 ? "s" : "");
+ 	return count >= 0 ? 0 : EXIT_FAILURE;
+ }
 +
- /* CXL 2.0 8.2.9.5.3 Byte 0 Health Status */
- #define CXL_CMD_HEALTH_INFO_STATUS_MAINTENANCE_NEEDED_MASK		BIT(0)
- #define CXL_CMD_HEALTH_INFO_STATUS_PERFORMANCE_DEGRADED_MASK		BIT(1)
-diff --git a/cxl/libcxl.h b/cxl/libcxl.h
-index f19ed4f..8f1a330 100644
---- a/cxl/libcxl.h
-+++ b/cxl/libcxl.h
-@@ -50,6 +50,8 @@ int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf, size_t length,
- 		size_t offset);
- int cxl_memdev_write_label(struct cxl_memdev *memdev, void *buf, size_t length,
- 		size_t offset);
-+int cxl_memdev_set_partition_info(struct cxl_memdev *memdev,
-+		unsigned long long volatile_capacity, int flags);
- 
- #define cxl_memdev_foreach(ctx, memdev) \
-         for (memdev = cxl_memdev_get_first(ctx); \
-@@ -117,6 +119,9 @@ unsigned long long cxl_cmd_partition_info_get_active_volatile_bytes(struct cxl_c
- unsigned long long cxl_cmd_partition_info_get_active_persistent_bytes(struct cxl_cmd *cmd);
- unsigned long long cxl_cmd_partition_info_get_next_volatile_bytes(struct cxl_cmd *cmd);
- unsigned long long cxl_cmd_partition_info_get_next_persistent_bytes(struct cxl_cmd *cmd);
-+struct cxl_cmd *cxl_cmd_new_set_partition_info(struct cxl_memdev *memdev,
-+		unsigned long long volatile_capacity, int flags);
-+int cxl_cmd_partition_info_flag_immediate(void);
- 
- #ifdef __cplusplus
- } /* extern "C" */
++int cmd_set_partition_info(int argc, const char **argv, struct cxl_ctx *ctx)
++{
++	int count = memdev_action(argc, argv, ctx, action_set_partition,
++			set_partition_options,
++			"cxl set-partition-info <mem0> [<mem1>..<memN>] [<options>]");
++	fprintf(stderr, "set_partition %d mem%s\n", count >= 0 ? count : 0,
++			count > 1 ? "s" : "");
++	return count >= 0 ? 0 : EXIT_FAILURE;
++}
 -- 
 2.31.1
 
