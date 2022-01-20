@@ -1,29 +1,29 @@
-Return-Path: <nvdimm+bounces-2514-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2515-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB05494FB3
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 20 Jan 2022 15:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43C69494FC6
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 20 Jan 2022 15:03:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id DB4713E03AB
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 20 Jan 2022 14:01:01 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id B4BC33E0E72
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 20 Jan 2022 14:03:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9662CAB;
-	Thu, 20 Jan 2022 14:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D4C2CAB;
+	Thu, 20 Jan 2022 14:03:45 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2E32C82
-	for <nvdimm@lists.linux.dev>; Thu, 20 Jan 2022 14:00:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5818F2C82
+	for <nvdimm@lists.linux.dev>; Thu, 20 Jan 2022 14:03:44 +0000 (UTC)
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id 6DCC668C4E; Thu, 20 Jan 2022 15:00:48 +0100 (CET)
-Date: Thu, 20 Jan 2022 15:00:47 +0100
+	id 4A34668BEB; Thu, 20 Jan 2022 15:03:40 +0100 (CET)
+Date: Thu, 20 Jan 2022 15:03:40 +0100
 From: Christoph Hellwig <hch@lst.de>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
 	Christoph Hellwig <hch@lst.de>,
 	Joao Martins <joao.m.martins@oracle.com>,
 	John Hubbard <jhubbard@nvidia.com>,
@@ -33,8 +33,8 @@ Cc: Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
 	linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
 	nvdimm@lists.linux.dev
 Subject: Re: Phyr Starter
-Message-ID: <20220120140047.GB11223@lst.de>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org> <20220111004126.GJ2328285@nvidia.com> <Yd0IeK5s/E0fuWqn@casper.infradead.org> <20220111150142.GL2328285@nvidia.com>
+Message-ID: <20220120140340.GC11223@lst.de>
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org> <20220111004126.GJ2328285@nvidia.com> <Yd0IeK5s/E0fuWqn@casper.infradead.org> <20220111150142.GL2328285@nvidia.com> <Yd3Nle3YN063ZFVY@casper.infradead.org> <20220111202159.GO2328285@nvidia.com> <Yd311C45gpQ3LqaW@casper.infradead.org> <20220111225306.GR2328285@nvidia.com> <Yd8fz4bY/aMMk24h@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -43,16 +43,18 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111150142.GL2328285@nvidia.com>
+In-Reply-To: <Yd8fz4bY/aMMk24h@casper.infradead.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Jan 11, 2022 at 11:01:42AM -0400, Jason Gunthorpe wrote:
-> Then we are we using get_user_phyr() at all if we are just storing it
-> in a sg?
+On Wed, Jan 12, 2022 at 06:37:03PM +0000, Matthew Wilcox wrote:
+> But let's go further than that (which only brings us to 32 bytes per
+> range).  For the systems you care about which use an identity mapping,
+> and have sizeof(dma_addr_t) == sizeof(phys_addr_t), we can simply
+> point the dma_range pointer to the same memory as the phyr.  We just
+> have to not free it too early.  That gets us down to 16 bytes per range,
+> a saving of 33%.
 
-I think we need to stop calling the output of the phyr dma map
-helper a sg.  Yes, a { dma_addr, len } tuple is scatter/gather I/O in its
-purest form, but it will need a different name in Linux as the scatterlist
-will have to stay around for a long time before all that mess is cleaned
-up.
+Even without an IOMMU the dma_addr_t can have offsets vs the actual
+physical address.  Not on x86 except for a weirdo SOC, but just about
+everywhere else.
 
