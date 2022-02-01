@@ -1,136 +1,139 @@
-Return-Path: <nvdimm+bounces-2729-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2731-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B49FE4A5476
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Feb 2022 02:07:47 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id F20854A54A2
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Feb 2022 02:25:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 3CA073E0F23
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Feb 2022 01:07:46 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 3513B1C0B42
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Feb 2022 01:25:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC493FE0;
-	Tue,  1 Feb 2022 01:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425A03FE0;
+	Tue,  1 Feb 2022 01:24:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22722CA5
-	for <nvdimm@lists.linux.dev>; Tue,  1 Feb 2022 01:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643677658; x=1675213658;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Kz4C9IlNb2Cm94xa+CQu8e9k7HD3jDLPkjGVRQb5+zg=;
-  b=OiaHM9WBoKdRRL2F/OTN5LvhQnTfaA4tvCYejmChOKDeQguCvWMPVKoj
-   iSao52XTSIjcMMm6dp/dMWVsIcPG5mtc5z7u3SJ468NJ1OMBcuT14YlW7
-   DoE1QFJaI2W6TMoujyfehl4jjFK3mX6HsrGYxIPFsphVp352s19J2Bf9/
-   FelbsOMsqruJCROaH70iCDC3Cmr5sxf6wEwyZqHO3n2ctJuxSem4TC5y5
-   5sxmkExVA+Z4EKVQCbHq7B89hp7aRQXCmqDxl0za28mtYAuAoVzX/mw6U
-   jWpnpz5j11MxmmYOxPirZK/3p8aLiuRgwNdsIF3VRQvpSokJALU/mdzKg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="231168176"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="231168176"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 17:07:38 -0800
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="630223013"
-Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 17:07:38 -0800
-Subject: [PATCH v4 19/40] cxl/port: Up-level cxl_add_dport() locking
- requirements to the caller
-From: Dan Williams <dan.j.williams@intel.com>
-To: linux-cxl@vger.kernel.org
-Cc: linux-pci@vger.kernel.org, nvdimm@lists.linux.dev
-Date: Mon, 31 Jan 2022 17:07:38 -0800
-Message-ID: <164367759016.324231.105551648350470000.stgit@dwillia2-desk3.amr.corp.intel.com>
-In-Reply-To: <164298422000.3018233.4106867312927858722.stgit@dwillia2-desk3.amr.corp.intel.com>
-References: <164298422000.3018233.4106867312927858722.stgit@dwillia2-desk3.amr.corp.intel.com>
-User-Agent: StGit/0.18-3-g996c
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D07F2CA5
+	for <nvdimm@lists.linux.dev>; Tue,  1 Feb 2022 01:24:53 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso868180pjm.4
+        for <nvdimm@lists.linux.dev>; Mon, 31 Jan 2022 17:24:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/dGCfVhT++w2Hx6ftbIxEvafxuyl5d8bN85+m8dx7Do=;
+        b=ALizp1nMToyERVLAdtQUpuvW9hHW54sIRjRqkGkxl7slbPNJWO9kWHV2rJarN+LcUF
+         kHYDpxCO543iNRyFf3PSnmM+bQ78hurdlNhyyj/4LSTLBX0pSe5ShFbaX+P7HbQMIBQl
+         jXbMLQUWynkgxd39dfuiJRZ6n9SJRYPTJLwE4JNNA6fXc90IRQXfBVXKGFYehiZJuo8l
+         MVhLYnqOtBcY51vBN37vLClOmiuGNW++hEHetc5jBzGUSERAqsVU0UKjytKQAf8Ktz1U
+         9s6oIivd15l5jO1HTW8HYy3J8WaWULPGsDALKE9nvhrPWACZS3yy2ktI0dcwktsjx/0Q
+         lcjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/dGCfVhT++w2Hx6ftbIxEvafxuyl5d8bN85+m8dx7Do=;
+        b=TcfD4OC14II5UTzZkcumbWV4KiwN5ARwUjRDSyU51R3L6BfiBul53IvtqQr1m4M7+6
+         BbPZ+YMKklPVyxe69buW8rtjye7roKYVwaqaBMTyJYI+RA/0qZzS3bQhMPNprwFMc/1r
+         MvEtLeL2T9J+bUxuy/Cvwp9RKAH+W+DHOjDVNilgnwbCBP+RMmO9KjPJNXT4djtvBZGO
+         7I8GA227f1bMm9d/BWN9CU9vOqBWAIOc0FKllR8cIXuiTGXQBI0JEPW+bH5zb9/a1pbA
+         Cyl2Wy4DghHn4ASuvLFcbO6lE10udoJD5oT0yJtOdOloQ9IPVIanpPBNo8qXhbor8bmQ
+         /SBQ==
+X-Gm-Message-State: AOAM533BXRaYiNoGNa8ZxUKSe+zLlzfH6P2eq949uniyEOp6TlF1Qbpc
+	W1lExV1Aj1A+HbP4UVQXtsPgVTIGzK48RdCbghWr3w==
+X-Google-Smtp-Source: ABdhPJxe/2hpc7fujLSVasJiSX0gGlYlsr511Vqqs9RbMsZiRIzL79paSdVBIbTKCeel09/v3Hse5yDJDcAZ2piVT/I=
+X-Received: by 2002:a17:902:7c15:: with SMTP id x21mr23855697pll.147.1643678693035;
+ Mon, 31 Jan 2022 17:24:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <cover.1642535478.git.alison.schofield@intel.com>
+ <e98fa18538c42c40b120d5c22da655d199d0329d.1642535478.git.alison.schofield@intel.com>
+ <CAPcyv4j4Nq1AAxH2CybQCH3pcBpCWgCsnY5i=OfKQXd_C_3xWA@mail.gmail.com> <20220127205009.GA894403@alison-desk>
+In-Reply-To: <20220127205009.GA894403@alison-desk>
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Mon, 31 Jan 2022 17:24:45 -0800
+Message-ID: <CAPcyv4h5+sMSKh-seNbmmTVuNzs5-8FTWUoYHw=LWtSrSNq1=g@mail.gmail.com>
+Subject: Re: [ndctl PATCH v3 5/6] libcxl: add interfaces for
+ SET_PARTITION_INFO mailbox command
+To: Alison Schofield <alison.schofield@intel.com>
+Cc: Ben Widawsky <ben.widawsky@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
+	linux-cxl@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-In preparation for moving dport enumeration into the core, require the
-port device lock to be acquired by the caller.
+On Thu, Jan 27, 2022 at 12:46 PM Alison Schofield
+<alison.schofield@intel.com> wrote:
+>
+> Hi Dan,
+> Thanks for the review. I'm still working thru this, but a clarifying
+> question below...
+>
+> On Wed, Jan 26, 2022 at 03:41:14PM -0800, Dan Williams wrote:
+> > On Tue, Jan 18, 2022 at 12:20 PM <alison.schofield@intel.com> wrote:
+> > >
+> > > From: Alison Schofield <alison.schofield@intel.com>
+> > >
+> > > Users may want the ability to change the partition layout of a CXL
+> > > memory device.
+> > >
+> > > Add interfaces to libcxl to allocate and send a SET_PARTITION_INFO
+> > > mailbox as defined in the CXL 2.0 specification.
+> > >
+> > > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > > ---
+> > >  cxl/lib/libcxl.c   | 50 ++++++++++++++++++++++++++++++++++++++++++++++
+> > >  cxl/lib/libcxl.sym |  5 +++++
+> > >  cxl/lib/private.h  |  8 ++++++++
+> > >  cxl/libcxl.h       |  5 +++++
+> > >  4 files changed, 68 insertions(+)
+> > >
+> snip
+> >
+> >
+> > I don't understand what this is for?
+> >
+> > Let's back up. In order to future proof against spec changes, and
+> > endianness, struct packing and all other weird things that make struct
+> > ABIs hard to maintain compatibility the ndctl project adopts the
+> > libabc template of just not letting library consumers see any raw data
+> > structures or bit fields by default [1]. For a situation like this
+> > since the command only has one flag that affects the mode of operation
+> > I would just go ahead and define an enum for that explicitly.
+> >
+> > enum cxl_setpartition_mode {
+> >     CXL_SETPART_NONE,
+> >     CXL_SETPART_NEXTBOOT,
+> >     CXL_SETPART_IMMEDIATE,
+> > };
+> >
+> > Then the main function prototype becomes:
+> >
+> > int cxl_cmd_new_setpartition(struct cxl_memdev *memdev, unsigned long
+> > long volatile_capacity);
+> >
+> > ...with a new:
+> >
+> > int cxl_cmd_setpartition_set_mode(struct cxl_cmd *cmd, enum
+> > cxl_setpartition_mode mode);
+> >
+>
+> I don't understand setting of the mode separately. Can it be:
+>
+> int cxl_cmd_new_setpartition(struct cxl_memdev *memdev,
+>                              unsigned long long volatile_capacity,
+>                              enum cxl_setpartition_mode mode);
 
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
-Changes since v3:
-- Fix a rebase oversight that left device_lock() instead of
-  cxl_device_lock(). (Jonathan and Ben)
-
- drivers/cxl/acpi.c            |    2 ++
- drivers/cxl/core/port.c       |    3 +--
- tools/testing/cxl/mock_acpi.c |    4 ++++
- 3 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-index ab2b76532272..5d848b77d8e8 100644
---- a/drivers/cxl/acpi.c
-+++ b/drivers/cxl/acpi.c
-@@ -342,7 +342,9 @@ static int add_host_bridge_dport(struct device *match, void *arg)
- 		return 0;
- 	}
- 
-+	cxl_device_lock(&root_port->dev);
- 	rc = cxl_add_dport(root_port, match, uid, ctx.chbcr);
-+	cxl_device_unlock(&root_port->dev);
- 	if (rc) {
- 		dev_err(host, "failed to add downstream port: %s\n",
- 			dev_name(match));
-diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-index af7a515e4572..369cc52e0837 100644
---- a/drivers/cxl/core/port.c
-+++ b/drivers/cxl/core/port.c
-@@ -519,7 +519,7 @@ static int add_dport(struct cxl_port *port, struct cxl_dport *new)
- {
- 	struct cxl_dport *dup;
- 
--	cxl_device_lock(&port->dev);
-+	device_lock_assert(&port->dev);
- 	dup = find_dport(port, new->port_id);
- 	if (dup)
- 		dev_err(&port->dev,
-@@ -528,7 +528,6 @@ static int add_dport(struct cxl_port *port, struct cxl_dport *new)
- 			dev_name(dup->dport));
- 	else
- 		list_add_tail(&new->list, &port->dports);
--	cxl_device_unlock(&port->dev);
- 
- 	return dup ? -EEXIST : 0;
- }
-diff --git a/tools/testing/cxl/mock_acpi.c b/tools/testing/cxl/mock_acpi.c
-index 4c8a493ace56..c953e3ab6494 100644
---- a/tools/testing/cxl/mock_acpi.c
-+++ b/tools/testing/cxl/mock_acpi.c
-@@ -57,7 +57,9 @@ static int match_add_root_port(struct pci_dev *pdev, void *data)
- 
- 	/* TODO walk DVSEC to find component register base */
- 	port_num = FIELD_GET(PCI_EXP_LNKCAP_PN, lnkcap);
-+	cxl_device_lock(&port->dev);
- 	rc = cxl_add_dport(port, &pdev->dev, port_num, CXL_RESOURCE_NONE);
-+	cxl_device_unlock(&port->dev);
- 	if (rc) {
- 		dev_err(dev, "failed to add dport: %s (%d)\n",
- 			dev_name(&pdev->dev), rc);
-@@ -78,7 +80,9 @@ static int mock_add_root_port(struct platform_device *pdev, void *data)
- 	struct device *dev = ctx->dev;
- 	int rc;
- 
-+	cxl_device_lock(&port->dev);
- 	rc = cxl_add_dport(port, &pdev->dev, pdev->id, CXL_RESOURCE_NONE);
-+	cxl_device_unlock(&port->dev);
- 	if (rc) {
- 		dev_err(dev, "failed to add dport: %s (%d)\n",
- 			dev_name(&pdev->dev), rc);
-
+It could be, but what happens when the specification defines a new
+flag for this command? Then we would have cxl_cmd_new_setpartition()
+and cxl_cmd_new_setpartition2()  to add the new parameters. A helper
+function after establishing the cxl_cmd context lets you have
+flexibility to extend the base command by as many new flags and modes
+that come along... hopefully none, but you never know.
 
