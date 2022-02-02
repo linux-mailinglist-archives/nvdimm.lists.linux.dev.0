@@ -1,180 +1,101 @@
-Return-Path: <nvdimm+bounces-2821-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2823-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831E74A7697
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Feb 2022 18:13:47 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B7E4A77E6
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Feb 2022 19:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 46ED03E0F04
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Feb 2022 17:13:46 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 067E61C0DCC
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Feb 2022 18:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72392F3F;
-	Wed,  2 Feb 2022 17:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020322F40;
+	Wed,  2 Feb 2022 18:26:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0A92F27
-	for <nvdimm@lists.linux.dev>; Wed,  2 Feb 2022 17:13:39 +0000 (UTC)
-Received: by mail-oi1-f171.google.com with SMTP id i5so3149867oih.1
-        for <nvdimm@lists.linux.dev>; Wed, 02 Feb 2022 09:13:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=e/yTOlW/wDNknIl8yCseQce+eOr7Fcm8SzJW8y0W3ek=;
-        b=lgtG1+q4UAbq2L4I1Kpr6fc8sOpp7PHpkyKyXDcGTnbYqLu5l4mebKxO4rqiEKEN2C
-         0IVeaEjVNcvFnNfJtoIyVXPZEBsU8V/Vw5UQ3AePm3jDHcGGyZpRNHxezmwIuft6huCk
-         8/X4VA+nrX4/LOgL/sLL+D99jLhaTO96WHolJJ22QCqDuNXN6E8wzsVRlLIDrovLY3Fz
-         hcpXf3dMoHCVCKzOigbpe2hM7SZPRh+JsLkT1WGbmWwjrtADhbYyTqQggAEU5NnMnugC
-         PHH+Yjt4I0zb0hESXoms2KNRcOWx4cNy/xXzyoYppF8MZO/GuaiPD8WbMVeDi6+IspzB
-         TQSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e/yTOlW/wDNknIl8yCseQce+eOr7Fcm8SzJW8y0W3ek=;
-        b=WzcoflokklPx3YwW+AlGFk/Xcpun5Ga6f20QbxUy/02Pajt/uGMDKvayBUch+DB4tM
-         688BdnRUPsvtQOe30x6sqOONK0cx9Cf4FzZtzpvk8LB7EVUwcmj01EdzqrfMUqEMchrO
-         F1v9dqWKd1vXRz/3MFm+UDqxTLDeV2IW+0picPYRJjsWup73WX1vfiueqICBenZDK5i8
-         Ta8mNFNoRv+inSmkjxoP/XatcLQ3i2finSK/3awZa7Lw0XeWBgdvwfW8wHNAYi/oUHCW
-         VfWhjlngFaD9IN2BL8/E/OZOvGZtSiNS+FtNEMpK0/HJA+dwp4ny6LGugZFixuTDYSKs
-         6mWg==
-X-Gm-Message-State: AOAM533KqhDYezz/IWNwtEOWrHDVNthKV7T9yyPEW45d3PB2MV1LwTfn
-	Cuny0cB073FCZ67qYbrHjTE=
-X-Google-Smtp-Source: ABdhPJwwaXi2WHx4eovqG6SgCPHwSpGB3zD5VXNaBNHEl8CYX7JIqbpeSgMgSqnXqQEixYw4CFTY8g==
-X-Received: by 2002:a54:4617:: with SMTP id p23mr4784494oip.143.1643822018391;
-        Wed, 02 Feb 2022 09:13:38 -0800 (PST)
-Received: from [192.168.10.222] (189-68-153-170.dsl.telesp.net.br. [189.68.153.170])
-        by smtp.gmail.com with ESMTPSA id n128sm8353180oia.6.2022.02.02.09.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 09:13:37 -0800 (PST)
-Message-ID: <b54f175e-4afc-f918-5680-0cfcdd940836@gmail.com>
-Date: Wed, 2 Feb 2022 14:13:31 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B20B2F27;
+	Wed,  2 Feb 2022 18:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643826367; x=1675362367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5lFTo574KUlzFBIVhKVEFCo/gFEvbqxFvFV8HxS9aUU=;
+  b=DAZvOFm7/Q4kfWQwo/JzcutskgSC3V44BhtgSn9HTNtdAs6WkDgf136N
+   l4xlmUNykGppeA+mgbFgE9YdHh63BvKN7vkJCySJtkGFAe1uBQWjSeWKg
+   V6mb4uAklZN1d6j0HS4sJ25HRqmh1GWfvsHN07F5VWd7Xk7SBeqvA7A4v
+   sg6e+puWILTJdoWP6Fg6tbllGak5gvQa+9nTksq7hYu9AL13/5YScVJR3
+   kbT8AsZgn9aXVIZC6ubWwMJizcr7cPOkmKIAdALTiJGj4F900s8nM1hrX
+   ApGTAQp/SO/VyoYtjiRgpHFlqDuinu3Gx473L7mphMBf1d57hxgnz2SuW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="245589029"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="245589029"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 10:26:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="497845490"
+Received: from svenur-mobl2.amr.corp.intel.com (HELO intel.com) ([10.252.133.34])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 10:26:06 -0800
+Date: Wed, 2 Feb 2022 10:26:04 -0800
+From: Ben Widawsky <ben.widawsky@intel.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: linux-cxl@vger.kernel.org, patches@lists.linux.dev,
+	Alison Schofield <alison.schofield@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Linux NVDIMM <nvdimm@lists.linux.dev>,
+	Linux PCI <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v3 01/14] cxl/region: Add region creation ABI
+Message-ID: <20220202182604.oangkxomx3npmobl@intel.com>
+References: <20220128002707.391076-1-ben.widawsky@intel.com>
+ <20220128002707.391076-2-ben.widawsky@intel.com>
+ <CAPcyv4h53gj9vETFcj_RebW+Zt=q+1yOmMo9CpyzHdABanpPRg@mail.gmail.com>
+ <CAPcyv4hj=1=+8UvqzSZqJ12ef1F15Hpzud7YjJpz7dZa0=9=QQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 1/3] nvdimm: Add realize, unrealize callbacks to
- NVDIMMDevice class
-Content-Language: en-US
-To: Shivaprasad G Bhat <sbhat@linux.ibm.com>, clg@kaod.org, mst@redhat.com,
- ani@anisinha.ca, david@gibson.dropbear.id.au, groug@kaod.org,
- imammedo@redhat.com, xiaoguangrong.eric@gmail.com, qemu-ppc@nongnu.org
-Cc: qemu-devel@nongnu.org, aneesh.kumar@linux.ibm.com,
- nvdimm@lists.linux.dev, kvm-ppc@vger.kernel.org
-References: <164375265242.118489.1350738893986283213.stgit@82dbe1ffb256>
- <164375265999.118489.14958665170590335290.stgit@82dbe1ffb256>
-From: Daniel Henrique Barboza <danielhb413@gmail.com>
-In-Reply-To: <164375265999.118489.14958665170590335290.stgit@82dbe1ffb256>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4hj=1=+8UvqzSZqJ12ef1F15Hpzud7YjJpz7dZa0=9=QQ@mail.gmail.com>
 
+On 22-01-28 10:59:26, Dan Williams wrote:
+> On Fri, Jan 28, 2022 at 10:14 AM Dan Williams <dan.j.williams@intel.com> wrote:
+> [..]
+> > Here is that put_device() I was expecting, that kfree() earlier was a
+> > double-free it seems.
+> >
+> > Also, I would have expected a devm action to remove this. Something like:
+> >
+> > struct cxl_port *port = to_cxl_port(cxld->dev.parent);
+> >
+> > cxl_device_lock(&port->dev);
+> > if (port->dev.driver)
+> >     devm_cxl_add_region(port->uport, cxld, id);
 
+I assume you mean devm_cxl_delete_region(), yes?
 
-On 2/1/22 18:57, Shivaprasad G Bhat wrote:
-> A new subclass inheriting NVDIMMDevice is going to be introduced in
-> subsequent patches. The new subclass uses the realize and unrealize
-> callbacks. Add them on NVDIMMClass to appropriately call them as part
-> of plug-unplug.
+> > else
+> >     rc = -ENXIO;
+> > cxl_device_unlock(&port->dev);
+> >
+> > ...then no matter what you know the region will be unregistered when
+> > the root port goes away.
 > 
-> Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
-> ---
+> ...actually, the lock and ->dev.driver check here are not needed
+> because this attribute is only registered while the cxl_acpi driver is
+> bound. So, it is safe to assume this is protected as decoder remove
+> synchronizes against active sysfs users.
 
-Acked-by: Daniel Henrique Barboza <danielhb413@gmail.com>
-
->   hw/mem/nvdimm.c          |   16 ++++++++++++++++
->   hw/mem/pc-dimm.c         |    5 +++++
->   include/hw/mem/nvdimm.h  |    2 ++
->   include/hw/mem/pc-dimm.h |    1 +
->   4 files changed, 24 insertions(+)
-> 
-> diff --git a/hw/mem/nvdimm.c b/hw/mem/nvdimm.c
-> index 7397b67156..59959d5563 100644
-> --- a/hw/mem/nvdimm.c
-> +++ b/hw/mem/nvdimm.c
-> @@ -181,10 +181,25 @@ static MemoryRegion *nvdimm_md_get_memory_region(MemoryDeviceState *md,
->   static void nvdimm_realize(PCDIMMDevice *dimm, Error **errp)
->   {
->       NVDIMMDevice *nvdimm = NVDIMM(dimm);
-> +    NVDIMMClass *ndc = NVDIMM_GET_CLASS(nvdimm);
->   
->       if (!nvdimm->nvdimm_mr) {
->           nvdimm_prepare_memory_region(nvdimm, errp);
->       }
-> +
-> +    if (ndc->realize) {
-> +        ndc->realize(nvdimm, errp);
-> +    }
-> +}
-> +
-> +static void nvdimm_unrealize(PCDIMMDevice *dimm)
-> +{
-> +    NVDIMMDevice *nvdimm = NVDIMM(dimm);
-> +    NVDIMMClass *ndc = NVDIMM_GET_CLASS(nvdimm);
-> +
-> +    if (ndc->unrealize) {
-> +        ndc->unrealize(nvdimm);
-> +    }
->   }
->   
->   /*
-> @@ -240,6 +255,7 @@ static void nvdimm_class_init(ObjectClass *oc, void *data)
->       DeviceClass *dc = DEVICE_CLASS(oc);
->   
->       ddc->realize = nvdimm_realize;
-> +    ddc->unrealize = nvdimm_unrealize;
->       mdc->get_memory_region = nvdimm_md_get_memory_region;
->       device_class_set_props(dc, nvdimm_properties);
->   
-> diff --git a/hw/mem/pc-dimm.c b/hw/mem/pc-dimm.c
-> index 48b913aba6..03bd0dd60e 100644
-> --- a/hw/mem/pc-dimm.c
-> +++ b/hw/mem/pc-dimm.c
-> @@ -216,6 +216,11 @@ static void pc_dimm_realize(DeviceState *dev, Error **errp)
->   static void pc_dimm_unrealize(DeviceState *dev)
->   {
->       PCDIMMDevice *dimm = PC_DIMM(dev);
-> +    PCDIMMDeviceClass *ddc = PC_DIMM_GET_CLASS(dimm);
-> +
-> +    if (ddc->unrealize) {
-> +        ddc->unrealize(dimm);
-> +    }
->   
->       host_memory_backend_set_mapped(dimm->hostmem, false);
->   }
-> diff --git a/include/hw/mem/nvdimm.h b/include/hw/mem/nvdimm.h
-> index bcf62f825c..cf8f59be44 100644
-> --- a/include/hw/mem/nvdimm.h
-> +++ b/include/hw/mem/nvdimm.h
-> @@ -103,6 +103,8 @@ struct NVDIMMClass {
->       /* write @size bytes from @buf to NVDIMM label data at @offset. */
->       void (*write_label_data)(NVDIMMDevice *nvdimm, const void *buf,
->                                uint64_t size, uint64_t offset);
-> +    void (*realize)(NVDIMMDevice *nvdimm, Error **errp);
-> +    void (*unrealize)(NVDIMMDevice *nvdimm);
->   };
->   
->   #define NVDIMM_DSM_MEM_FILE     "etc/acpi/nvdimm-mem"
-> diff --git a/include/hw/mem/pc-dimm.h b/include/hw/mem/pc-dimm.h
-> index 1473e6db62..322bebe555 100644
-> --- a/include/hw/mem/pc-dimm.h
-> +++ b/include/hw/mem/pc-dimm.h
-> @@ -63,6 +63,7 @@ struct PCDIMMDeviceClass {
->   
->       /* public */
->       void (*realize)(PCDIMMDevice *dimm, Error **errp);
-> +    void (*unrealize)(PCDIMMDevice *dimm);
->   };
->   
->   void pc_dimm_pre_plug(PCDIMMDevice *dimm, MachineState *machine,
-> 
-> 
+I'm somewhat confused when you say devm action to remove this. The current auto
+region deletion happens when the ->release() is called. Are you suggesting when
+the root decoder is removed I delete the regions at that point?
 
