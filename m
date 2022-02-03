@@ -1,50 +1,50 @@
-Return-Path: <nvdimm+bounces-2848-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2849-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4073C4A8229
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Feb 2022 11:16:55 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7794A822C
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Feb 2022 11:17:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 59F801C0D08
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Feb 2022 10:16:54 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 1D1863E103B
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Feb 2022 10:17:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D952CA1;
-	Thu,  3 Feb 2022 10:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73042C80;
+	Thu,  3 Feb 2022 10:17:06 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846DE2F26
-	for <nvdimm@lists.linux.dev>; Thu,  3 Feb 2022 10:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA30E2CA1
+	for <nvdimm@lists.linux.dev>; Thu,  3 Feb 2022 10:17:05 +0000 (UTC)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 2247F210F5;
-	Thu,  3 Feb 2022 10:16:40 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTP id 2DA36210F5;
+	Thu,  3 Feb 2022 10:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1643883400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1643883424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nMtUiTADLXvATyPy55s5v2jIbp3M1SDdfjBzYLxVQaY=;
-	b=uy2A4dJPId5ZjWCWAB7xzjfv13TBL3uksbYhtD+kKBZhrAucoFYo7wWTV4GGe0bSvNLiZg
-	/TASBHNd2GhHxG8IXnxdCpSOmo6tXKy/zRv5lEnzQFTGOlVqJYjcu5NXWm80JkNcmnW25s
-	2wbAYsBhMPGEqliDZhIuMJnb1yi8F+o=
+	bh=kuei1RsrZ1XayODHiwABNR6bsWtBgImk04EOWC1VWlw=;
+	b=cn0dkVNM6a8g6Q5J0snibEzl61eXoeHCLqGgnEDSLadhko8wMC5ZdfG9sqC5Qx59j09VjU
+	vzmmLMmpf1iH834oQmWBLtJiO13ekk281MzWcZcWLrgNGWIJ6F24AQwbdC3bC0o2v3ZpIe
+	KNKr4s2a3KK+AGsxswUdZzLFa17FqyY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1643883400;
+	s=susede2_ed25519; t=1643883424;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nMtUiTADLXvATyPy55s5v2jIbp3M1SDdfjBzYLxVQaY=;
-	b=vcVcbh2mnYakFOI5KUfh516xdmKnxbolVU4Edct5Wyh+ucnXTTj5p+shSiuZgqtlRy2NAd
-	0gSKvXRm2L/1iWDw==
+	bh=kuei1RsrZ1XayODHiwABNR6bsWtBgImk04EOWC1VWlw=;
+	b=ZMfqE1Cx+GaUDCKmrFbxZ4gEbxAzrQ4RwUrkbNizGFVSQBh0KEBOj6liQLr5mwDS0cloIY
+	FzOCiBf/grZyuEAA==
 Received: from quack3.suse.cz (unknown [10.100.200.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id 7694EA3B88;
-	Thu,  3 Feb 2022 10:16:39 +0000 (UTC)
+	by relay2.suse.de (Postfix) with ESMTPS id 1B315A3B8F;
+	Thu,  3 Feb 2022 10:17:04 +0000 (UTC)
 Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id E2601A05B6; Thu,  3 Feb 2022 11:16:38 +0100 (CET)
-Date: Thu, 3 Feb 2022 11:16:38 +0100
+	id D489AA05B6; Thu,  3 Feb 2022 11:17:03 +0100 (CET)
+Date: Thu, 3 Feb 2022 11:17:03 +0100
 From: Jan Kara <jack@suse.cz>
 To: Muchun Song <songmuchun@bytedance.com>
 Cc: dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
@@ -55,10 +55,10 @@ Cc: dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
 	hch@infradead.org, linux-fsdevel@vger.kernel.org,
 	nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, duanxiongchun@bytedance.com
-Subject: Re: [PATCH v2 1/6] mm: rmap: fix cache flush on THP pages
-Message-ID: <20220203101638.5sibdhu4owokhfex@quack3.lan>
+Subject: Re: [PATCH v2 2/6] dax: fix cache flush on PMD-mapped pages
+Message-ID: <20220203101703.a7ixac6h7kit4wng@quack3.lan>
 References: <20220202143307.96282-1-songmuchun@bytedance.com>
- <20220202143307.96282-2-songmuchun@bytedance.com>
+ <20220202143307.96282-3-songmuchun@bytedance.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -67,18 +67,15 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202143307.96282-2-songmuchun@bytedance.com>
+In-Reply-To: <20220202143307.96282-3-songmuchun@bytedance.com>
 
-On Wed 02-02-22 22:33:02, Muchun Song wrote:
+On Wed 02-02-22 22:33:03, Muchun Song wrote:
 > The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
 > However, it does not cover the full pages in a THP except a head page.
-> Replace it with flush_cache_range() to fix this issue. At least, no
-> problems were found due to this. Maybe because the architectures that
-> have virtual indexed caches is less.
+> Replace it with flush_cache_range() to fix this issue.
 > 
-> Fixes: f27176cfc363 ("mm: convert page_mkclean_one() to use page_vma_mapped_walk()")
+> Fixes: f729c8c9b24f ("dax: wrprotect pmd_t in dax_mapping_entry_mkclean")
 > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> Reviewed-by: Yang Shi <shy828301@gmail.com>
 
 Looks good. Feel free to add:
 
@@ -87,23 +84,23 @@ Reviewed-by: Jan Kara <jack@suse.cz>
 								Honza
 
 > ---
->  mm/rmap.c | 3 ++-
+>  fs/dax.c | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index b0fd9dc19eba..0ba12dc9fae3 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -974,7 +974,8 @@ static bool page_mkclean_one(struct page *page, struct vm_area_struct *vma,
->  			if (!pmd_dirty(*pmd) && !pmd_write(*pmd))
->  				continue;
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 88be1c02a151..e031e4b6c13c 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -857,7 +857,8 @@ static void dax_entry_mkclean(struct address_space *mapping, pgoff_t index,
+>  			if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
+>  				goto unlock_pmd;
 >  
-> -			flush_cache_page(vma, address, page_to_pfn(page));
+> -			flush_cache_page(vma, address, pfn);
 > +			flush_cache_range(vma, address,
 > +					  address + HPAGE_PMD_SIZE);
->  			entry = pmdp_invalidate(vma, address, pmd);
->  			entry = pmd_wrprotect(entry);
->  			entry = pmd_mkclean(entry);
+>  			pmd = pmdp_invalidate(vma, address, pmdp);
+>  			pmd = pmd_wrprotect(pmd);
+>  			pmd = pmd_mkclean(pmd);
 > -- 
 > 2.11.0
 > 
