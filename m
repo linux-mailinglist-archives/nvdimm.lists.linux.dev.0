@@ -1,64 +1,64 @@
-Return-Path: <nvdimm+bounces-2892-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2894-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94DEF4AC839
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Feb 2022 19:08:49 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 764734AC92B
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Feb 2022 20:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 8C20A1C06F5
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Feb 2022 18:08:48 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 451F43E0ECD
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Feb 2022 19:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72FF72CA1;
-	Mon,  7 Feb 2022 18:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E230E2CA2;
+	Mon,  7 Feb 2022 19:07:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BCC2F28
-	for <nvdimm@lists.linux.dev>; Mon,  7 Feb 2022 18:08:40 +0000 (UTC)
-Received: by mail-pj1-f50.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso21327638pjv.1
-        for <nvdimm@lists.linux.dev>; Mon, 07 Feb 2022 10:08:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A874C2F26
+	for <nvdimm@lists.linux.dev>; Mon,  7 Feb 2022 19:07:03 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id d187so14612102pfa.10
+        for <nvdimm@lists.linux.dev>; Mon, 07 Feb 2022 11:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zYdhIytWWvNZPQpgxc7JanMz43mOjz+UXOqpB/Si8gY=;
-        b=R93xjTEs3HgPo29762m4uqHy6DgEIiw341Wvf7q57zjQt/fMOf/vIggnLWq+UIkvE2
-         ItYfM1ocg4jOoHter+LGmVVn+56WIrTresjlRqOzDpxhR2gE2Z7XKfivMQnYws3oBpcN
-         Wnp4OjEX2kVSHOm5wWUaWUQHoBL2pZOajsCNpVYP+2s7M4Pt370NfYYH6tCLMb0ePa8z
-         HUeyronXi33SaNNHMgqIF/E3v+pRpLWgtLiP7uZ593CHEdxKAHCZRXlItwp/sNFJZgmH
-         Q6m9V+2GxeMGSIE/EyF8AlQqUfCTIeQOL4NCF8eo53fHgen+/6rfpdiFIvCtnwfrEBzm
-         8haA==
+        bh=+WVqg4iM1IK5woHe616yKoTPDV85yaqed+lmC/0zx4Q=;
+        b=E8Yv+tJ27QtdnqCiahy1ynDTxSrIHFQS9v3T6SGxOtbvrS4oJdOaAbBOu5WkKuOBfd
+         YZVQDjXpyCcHf5TePEiE9WLubJVn7pkXJNntqfcUu0FB+cpVUKi2U/fVQ/r2P4FuKOGP
+         rrsKex566q7w8weRBoU0ZAbtyAsexA2NArqSSGJ8aSE3asKbO/kySJdCGSVU84OEGUiB
+         QCLOFQgtfcBKBXnXRpXprEE7iAtFckobPiWULixyKadweXpHSIl4fOM/cfTnhyD31lEn
+         X5EcS76XqYpJKN3mK9thEa6gK63RHYW8pEdrhtUg2qPw6l/cPnln0K7VaxQOTiViReVV
+         h7aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zYdhIytWWvNZPQpgxc7JanMz43mOjz+UXOqpB/Si8gY=;
-        b=LP6Ge0s6mgunpbcO9GrhyxIndA7UmumF7PiwvWwyU3+wHcP2Gp/iuJSRwnUDQlAKbz
-         YRX1ZVokNEc2R0f8+unGOazLsnM970vnUHiHkno2uNlhOv3Q6a+FcjPcDxLuPelnOK2K
-         qn12QLlQ8o/RDNMqXwgw6K+JJ2f/0bMZht44H9cOGLsmUcXppHxfjH9xbRGLaQdExtur
-         fKpB6aUG+JLyqNQKSssPAEJcN8TCEE6haeZP4ezWC8MYlLqkGCyaEcfWb9JJfMjNVmjN
-         94fnbtsW+JUMKE9yDVdw8mmWROonstqqxJ3cYpSugT80rjIuZ24vtwwM6gVE/9HxyNHC
-         EiUQ==
-X-Gm-Message-State: AOAM532vzo6zG1mamGlVh3l8ylsMoz8lPT5VwGEUfNaFGW6vDCxcoCk9
-	1bEvDHnsMcXWwXpCplDfN2s+3SgA4GEnJQLlCgtRPg==
-X-Google-Smtp-Source: ABdhPJzkFzzjmqODkvgrvwQLNfbzdHBUvOVv75drXwoWtoHzOi4Qr8amdduzRjHB4i+xpu3YrgRs1ma/CEMYchNDNj0=
-X-Received: by 2002:a17:90b:1bcc:: with SMTP id oa12mr121877pjb.93.1644257320409;
- Mon, 07 Feb 2022 10:08:40 -0800 (PST)
+        bh=+WVqg4iM1IK5woHe616yKoTPDV85yaqed+lmC/0zx4Q=;
+        b=UVsCAPJRRogWFFW8fCVtwiKcgaBrOJnVNFKK4g+X2t2/ERUjoDoZqRw+VgMF0SNB5C
+         KviefnSGQZuJgyulYsk77Xx54O5SwCfnzmqlZ1ethLvNQL0qXHCZeUcl8X1Ftc/5D4QI
+         pvFWUJOsHlXGoZhdcvxc1fiEz/0A4NMhEffY5x/4oOOfm9OrHcCbFGGI/1aaZ1h2XNzm
+         D5MtK7nEoef9JeCcGEuCXixOG6I9oNnRq8mj9Xv9s9or9fJWt6OGOp6jaG9P1SyJh4wy
+         65H/EENYzaNhjDnioiU7KkYitA5B3f8tUd4FP713UTV9pETrlDce/AS3NzHM5DLMMSZ5
+         BLhQ==
+X-Gm-Message-State: AOAM530Y0Eriz85lO6wvjPKM8nCJak6roFYWyhZI2i6WgT8bOUo9bfZj
+	oHmTm6bOx1l1tIP47+OoN59rKANkgFUJXzM64AfdUA==
+X-Google-Smtp-Source: ABdhPJx4gFwHpx6eXlK2M23aHGpthiH4fAIYOpnEcI58LRfZznkCnIjyKeDQJsC3Q3CmCC8lC+fdRuCFIdo+hfnPs1A=
+X-Received: by 2002:a62:784b:: with SMTP id t72mr939106pfc.86.1644260822995;
+ Mon, 07 Feb 2022 11:07:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-3-hch@lst.de>
-In-Reply-To: <20220207063249.1833066-3-hch@lst.de>
+References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-5-hch@lst.de>
+In-Reply-To: <20220207063249.1833066-5-hch@lst.de>
 From: Dan Williams <dan.j.williams@intel.com>
-Date: Mon, 7 Feb 2022 10:08:29 -0800
-Message-ID: <CAPcyv4i3hJR9WBh6PFN9VgA0p3x4Vvgdy6T3b-3_bP_LaPK9fg@mail.gmail.com>
-Subject: Re: [PATCH 2/8] mm: remove the __KERNEL__ guard from <linux/mm.h>
+Date: Mon, 7 Feb 2022 11:06:52 -0800
+Message-ID: <CAPcyv4ipZUeCjf5teFQuJX5DEs7ViGHW_PKKfoJEK8chjJTZig@mail.gmail.com>
+Subject: Re: [PATCH 4/8] mm: move free_devmap_managed_page to memremap.c
 To: Christoph Hellwig <hch@lst.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Felix Kuehling <Felix.Kuehling@amd.com>, 
 	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
@@ -73,9 +73,11 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Sun, Feb 6, 2022 at 10:33 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> __KERNEL__ ifdefs don't make sense outside of include/uapi/.
+> free_devmap_managed_page has nothing to do with the code in swap.c,
+> move it to live with the rest of the code for devmap handling.
+>
 
-Yes.
+Looks good.
 
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
