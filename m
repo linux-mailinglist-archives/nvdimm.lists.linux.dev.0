@@ -1,171 +1,107 @@
-Return-Path: <nvdimm+bounces-2929-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2931-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0989D4AE2A2
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Feb 2022 21:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D2B4AE2A6
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Feb 2022 21:47:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id ACAED3E0FEB
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Feb 2022 20:42:38 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 620BA3E01B3
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Feb 2022 20:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81E12CA1;
-	Tue,  8 Feb 2022 20:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83A72CA1;
+	Tue,  8 Feb 2022 20:47:03 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2642F24
-	for <nvdimm@lists.linux.dev>; Tue,  8 Feb 2022 20:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644352951; x=1675888951;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6Hbe7SCFFi7aOilBmY9Td8U0nHyoptevwpwaEl6teRU=;
-  b=mBMa64DQydoAkJ623i5pnE2JxBeIORwNBSWGToKahHj7Vq6Q/2fJqTlE
-   99bSjXCmlykd7PZn8/y7NDvYWPCTJ47kXr08ckrmtTZ9BsdvnZYk6DPpU
-   pvFCEby3Bh7I3D10xkjoIGU5tGB6gvW+IwLt1I3JDuxRoTcbUJlUjQgH6
-   e+VLKtKNGNEtLAR33Eheec8Sq53A0qYQzn+3kuPgfvZOK3WCSlVjHb08m
-   by+68d2pbfPT2Cjl+9V+c7SicmA7BDrKsw1TTPUeSHp3gVZVUA5Zl7iFU
-   My8HWV7sA5SXwEVHxHM1671Jam2zDYq55EzArNnbQ1EHVGm7zNNqa0Gz/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229019993"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="229019993"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:42:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="601370783"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:42:30 -0800
-Date: Tue, 8 Feb 2022 12:46:36 -0800
-From: Alison Schofield <alison.schofield@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Ben Widawsky <ben.widawsky@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Linux NVDIMM <nvdimm@lists.linux.dev>, linux-cxl@vger.kernel.org
-Subject: Re: [ndctl PATCH v4 1/6] libcxl: add GET_PARTITION_INFO mailbox
- command and accessors
-Message-ID: <20220208204636.GA950445@alison-desk>
-References: <cover.1644271559.git.alison.schofield@intel.com>
- <396ccc39525b3eb829acd4e06f704f6fb57a94a8.1644271559.git.alison.schofield@intel.com>
- <CAPcyv4gYbLGkd99fvKixAmLAhpkfQU8gNJ0e0BHrmVUZ3wWA_A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422FC2F24
+	for <nvdimm@lists.linux.dev>; Tue,  8 Feb 2022 20:47:02 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id i186so642637pfe.0
+        for <nvdimm@lists.linux.dev>; Tue, 08 Feb 2022 12:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EtnqUgSIa3X/cpdmfWa9zlW2f1lwuqSEBAfSPO0aEM8=;
+        b=qFbqJVX6C4eNHu4MYEFs0PGNyXPEx1waVEVM8nBKinW0gK8K961vSFpJV0XNEjDxRZ
+         Sjmv1Vt1D+QSoPnLs1dUXxGs9hLLTIxbd9jvDxJSnFpIAyhSNrRsYBbCTWozZWNkIhAX
+         +P0brg01k5EZSm4PvmZWhzH1JrnqOPMHbJxxTCS313mCWyhnAzu5vJSDV0Q+9R2uCdEE
+         Uem16fG+jCk4JjeZUcLuuTIKw0kG65N4uEsGhOwvWme28ogXQo8Zwvjsd95X/0LpsHD2
+         HgTk8Itp9fTHKqOrIk9R0yD7VwgkBAW/56faO4HwRRamEhBLvwuGw/XPlp67RusaVgMs
+         SJdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EtnqUgSIa3X/cpdmfWa9zlW2f1lwuqSEBAfSPO0aEM8=;
+        b=UKErj4BfxsYAmMV9k5mwkyxAEPNjVbvGSrEMs2uO/Zf9aAXKJVZhcuMg0qBC/YkBta
+         XOjTAUENnmIArt0Lg6tUifjzfT3P712mfKY0NojFPOzGOLoyN4jrGBeDZSWmAJhL9f7A
+         HCttUrxBXvdpfyYHp3FrNqhK5LMTUXBWQfryGlFt6ZGJ7YG0+BD4XmWwkDCQ40YqTb23
+         G+fVdekOc7Q+J98N/4jAIEFiZ0NvTLLdS3ejJ2BMkyE8lBYs4KEXU0EQUXjsI3EBws8i
+         e/hR98S0o2ay6Pv7bCwkR1CerOhIjLicrK1EiEru6wrUGeNARmFaqFaQ8Z113n9LpSXY
+         kjmg==
+X-Gm-Message-State: AOAM532sNjbaiIKw/M65aOSD1G/NE+QIQf8x7mPP6nbyEhVINugEsaUK
+	0SV6pTu3lZuFOKvpeodPMhyFuQxuq1ICIj6pC/oVtQ==
+X-Google-Smtp-Source: ABdhPJxtlz9vwgaxefg+HZgHOLCqaC/jJaP2FkkSmJTG56MULfKP//dedb0UIiIO9183wWHyKPvWk5rx7It/XimTRek=
+X-Received: by 2002:a63:4717:: with SMTP id u23mr5020649pga.74.1644353221741;
+ Tue, 08 Feb 2022 12:47:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4gYbLGkd99fvKixAmLAhpkfQU8gNJ0e0BHrmVUZ3wWA_A@mail.gmail.com>
+References: <cover.1644271559.git.alison.schofield@intel.com> <7d1ebd8316584d065133ab7343e14eba2810f98e.1644271559.git.alison.schofield@intel.com>
+In-Reply-To: <7d1ebd8316584d065133ab7343e14eba2810f98e.1644271559.git.alison.schofield@intel.com>
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Tue, 8 Feb 2022 12:46:50 -0800
+Message-ID: <CAPcyv4hcTto3Aza_BTrczu_y6G7Ffh4F2Mx=ZR1NyOfCwhaHyQ@mail.gmail.com>
+Subject: Re: [ndctl PATCH v4 5/6] libcxl: add interfaces for
+ SET_PARTITION_INFO mailbox command
+To: "Schofield, Alison" <alison.schofield@intel.com>
+Cc: Ben Widawsky <ben.widawsky@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
+	linux-cxl@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks Dan! Got it all.
-<eom>
+On Mon, Feb 7, 2022 at 3:06 PM <alison.schofield@intel.com> wrote:
+>
+> From: Alison Schofield <alison.schofield@intel.com>
+>
+> Users may want the ability to change the partition layout of a CXL
+> memory device.
+>
+> Add interfaces to libcxl to allocate and send a SET_PARTITION_INFO
+> mailbox command as defined in the CXL 2.0 specification.
+>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> ---
+>  Documentation/cxl/lib/libcxl.txt |  4 ++++
+>  cxl/lib/libcxl.c                 | 28 ++++++++++++++++++++++++++++
+>  cxl/lib/libcxl.sym               |  2 ++
+>  cxl/lib/private.h                |  8 ++++++++
+>  cxl/libcxl.h                     | 10 ++++++++++
+>  5 files changed, 52 insertions(+)
+>
+> diff --git a/Documentation/cxl/lib/libcxl.txt b/Documentation/cxl/lib/libcxl.txt
+> index a6986ab..301b4d7 100644
+> --- a/Documentation/cxl/lib/libcxl.txt
+> +++ b/Documentation/cxl/lib/libcxl.txt
+> @@ -132,6 +132,8 @@ int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf, size_t length,
+>  int cxl_memdev_write_label(struct cxl_memdev *memdev, void *buf, size_t length,
+>                            size_t offset);
+>  struct cxl_cmd *cxl_cmd_new_get_partition(struct cxl_memdev *memdev);
+> +struct cxl_cmd *cxl_cmd_new_set_partition(struct cxl_memdev *memdev,
+> +                                         unsigned long long volatile_size);
 
-On Tue, Feb 08, 2022 at 12:20:56PM -0800, Dan Williams wrote:
-> On Mon, Feb 7, 2022 at 3:06 PM <alison.schofield@intel.com> wrote:
-> >
-> > From: Alison Schofield <alison.schofield@intel.com>
-> >
-> > Users need access to the CXL GET_PARTITION_INFO mailbox command
-> > to inspect and confirm changes to the partition layout of a memory
-> > device.
-> >
-> > Add libcxl APIs to create a new GET_PARTITION_INFO mailbox command,
-> > the command output data structure (privately), and accessor APIs to
-> > return the different fields in the partition info output.
-> >
-> > Per the CXL 2.0 specification, devices report partition capacities
-> > as multiples of 256MB. Define and use a capacity multiplier to
-> > convert the raw data into bytes for user consumption. Use byte
-> > format as the norm for all capacity values produced or consumed
-> > using CXL Mailbox commands.
-> >
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> > ---
-> >  Documentation/cxl/lib/libcxl.txt |  1 +
-> >  cxl/lib/libcxl.c                 | 57 ++++++++++++++++++++++++++++++++
-> >  cxl/lib/libcxl.sym               |  5 +++
-> >  cxl/lib/private.h                | 10 ++++++
-> >  cxl/libcxl.h                     |  5 +++
-> >  util/size.h                      |  1 +
-> >  6 files changed, 79 insertions(+)
-> >
-> > diff --git a/Documentation/cxl/lib/libcxl.txt b/Documentation/cxl/lib/libcxl.txt
-> > index 4392b47..a6986ab 100644
-> > --- a/Documentation/cxl/lib/libcxl.txt
-> > +++ b/Documentation/cxl/lib/libcxl.txt
-> > @@ -131,6 +131,7 @@ int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf, size_t length,
-> >                           size_t offset);
-> >  int cxl_memdev_write_label(struct cxl_memdev *memdev, void *buf, size_t length,
-> >                            size_t offset);
-> > +struct cxl_cmd *cxl_cmd_new_get_partition(struct cxl_memdev *memdev);
-> >
-> >  ----
-> >
-> > diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
-> > index e0b443f..33cf06b 100644
-> > --- a/cxl/lib/libcxl.c
-> > +++ b/cxl/lib/libcxl.c
-> > @@ -1985,6 +1985,12 @@ static int cxl_cmd_validate_status(struct cxl_cmd *cmd, u32 id)
-> >         return 0;
-> >  }
-> >
-> > +static unsigned long long
-> > +capacity_to_bytes(unsigned long long size)
-> 
-> If this helper converts an encoded le64 to bytes then the function
-> signature should reflect that:
-> 
-> static uint64_t cxl_capacity_to_bytes(leint64_t size)
-> 
-> > +{
-> > +       return le64_to_cpu(size) * CXL_CAPACITY_MULTIPLIER;
-> > +}
-> > +
-> >  /* Helpers for health_info fields (no endian conversion) */
-> >  #define cmd_get_field_u8(cmd, n, N, field)                             \
-> >  do {                                                                   \
-> > @@ -2371,6 +2377,57 @@ CXL_EXPORT ssize_t cxl_cmd_read_label_get_payload(struct cxl_cmd *cmd,
-> >         return length;
-> >  }
-> >
-> > +CXL_EXPORT struct cxl_cmd *cxl_cmd_new_get_partition(struct cxl_memdev *memdev)
-> > +{
-> > +       return cxl_cmd_new_generic(memdev,
-> > +                                  CXL_MEM_COMMAND_ID_GET_PARTITION_INFO);
-> > +}
-> > +
-> > +static struct cxl_cmd_get_partition *
-> > +cmd_to_get_partition(struct cxl_cmd *cmd)
-> > +{
-> 
-> This could also check for cmd == NULL just to be complete.
-> 
-> > +       if (cxl_cmd_validate_status(cmd, CXL_MEM_COMMAND_ID_GET_PARTITION_INFO))
-> > +               return NULL;
-> > +
-> > +       return cmd->output_payload;
-> > +}
-> > +
-> > +CXL_EXPORT unsigned long long
-> > +cxl_cmd_partition_get_active_volatile_size(struct cxl_cmd *cmd)
-> > +{
-> > +       struct cxl_cmd_get_partition *c;
-> > +
-> > +       c = cmd_to_get_partition(cmd);
-> > +       return c ? capacity_to_bytes(c->active_volatile) : ULLONG_MAX;
-> 
-> I'd prefer kernel coding style which wants:
-> 
-> if (!c)
->     return ULLONG_MAX;
-> return cxl_capacity_to_bytes(c->active_volatile);
-> 
-> Otherwise, looks good to me:
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Perhaps a note here about the role of cxl_cmd_partition_set_mode(),
+that the default sets the partition for NEXTBOOT, and that IMMEDIATE
+support depends on the device being inactive in all regions before the
+kernel will allow the change?
+
+Otherwise, looks good.
+
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
