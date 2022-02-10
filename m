@@ -1,72 +1,87 @@
-Return-Path: <nvdimm+bounces-2988-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2990-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED7E14B1454
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 18:36:41 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73C04B165F
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 20:34:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id A028F3E1078
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 17:36:40 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 1D8A31C0F05
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 19:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59312CA2;
-	Thu, 10 Feb 2022 17:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D7C2CA6;
+	Thu, 10 Feb 2022 19:34:33 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2052.outbound.protection.outlook.com [40.107.212.52])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FCC2C80
-	for <nvdimm@lists.linux.dev>; Thu, 10 Feb 2022 17:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B4A2F28
+	for <nvdimm@lists.linux.dev>; Thu, 10 Feb 2022 19:34:30 +0000 (UTC)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21AIeRud008871;
+	Thu, 10 Feb 2022 19:34:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=BD1JW+lG7pX5X54dfgctsW4clcyzAYY+ys39/qbxQ2w=;
+ b=CgPNkkpWjZcizIVJqTbjJuDGBOQsQY9qiYRe3NfW+IbuakR0xOyQNEOE5RXsYhV6Vba6
+ +kZH+GYHfEIBroQ0auFLgAzkenIEhqUV/+aK5QiNOeuhZZN+YIBgFB7zfIYbFxAioCtT
+ 4o1d5/LcOt9/uEJZqHMX8KvoMZepx1d9fRar9QUr9+E4xZOjTfrgSaHvOryKCyEdaWF8
+ zdK2tBsudy5ZR6aPx5gfCMD+aFDFU4ADz4sdB/MfMWQPDUszGG9yCpVYSFQGYEVgzSjK
+ QHJR+Y6Af8fXsP/AhIry4SxGGMkzRsHZh69W7dPtmXn/ewR4ADF6wjoi56LoHdRGvG9r BA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+	by mx0b-00069f02.pphosted.com with ESMTP id 3e3fpgscag-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Feb 2022 19:34:13 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+	by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21AJUVSl120731;
+	Thu, 10 Feb 2022 19:34:12 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
+	by userp3020.oracle.com with ESMTP id 3e1jpw3cgt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Feb 2022 19:34:11 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J7cyu7xiqAHvjwPW+45RKl69DP6PtrbT3WzMshDxfGlj0YpMeJrkPmYBXQArn6rEVcXSa65DU7yiJGUe3LeUUTELwU9/rdH36kaP/Omz6JeZbOaz4l+pYG8M3yF6s5HE+a7sWgm2XCWuc0se5fSAZ/TZa0IN4jTR/VHaIGmAiW/tm0eO7Gvld4m0PMPUhkY0bSAHZIuzvqAah1ZMfKs49Qx6IzOJARzTpRTYzkwMgMIWw1ckBApq2uXxA1nyhz8tHR40MAO5D/SoN5JFoYlmt8l5IZSryAmrWqQElmtTQ3QWawhPrtsdEbTuYTUokoqI0RHA57E5EK9ll7M9IIn0rg==
+ b=lGoeAIDUiB9D+Audusk8gGG8LLAUs7nFHthiDqs3Xf9onM0tpYJD7ER0Fp1uO0fOjoGg0BoINefoe9E5gQhzWJBtsZOhWp2KeEUYfpoH/vbRJQIu3PIHDCrAc7PEWMnF2DBdE9ZYlSc6FIvnpoN/2Cb1lRSqRmKzoLyd0d7LxdgAk255Wzs32CNTdriU96IBokbQvluNJ2N7v370TMKETQXv4TgfzgcMyjoGXCcMuSsVZY/8MZAf7mk/jowJS70Y59NhuB894782OR79p2qlUsK3j2U/nYl89oVC3qzxKxWAki3FDWBYJT9GHHQEeM3wGphSFW4pJwZVm03/Z4A6jA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZH9j1MVJ4M9avwtaAH+KtuO8LNSN19ucO1LiCqNbBSg=;
- b=QSwHm4CMXvhgnJ6r49cK20rim8WUGcDjyPUbVkZbNtgbSodvI6dm2uieqTRh2z5EbbnczAowFsWyPgnDdBblJ2YP3DM7SipdYpXxCe8xBb/KNEUvY0k0mwSYZfCr18cqKGRp3IGhwke6Hxdynjb6UiDOvFjGT413GPh1f+PdOODfh0akMyMqTUZk4o3VdtSddPyxO7ISR0YaRTkfWSnj4/L9fPiINYUhOXydgDlL9SAQ3sB4OBIvLSLZPIOn8ouB2V0fC3QNJTBGsIPHW/anbZ7bD5QDn+Xmk69Taki6b/NLwHmuakOQEaZgZSNNHq5sYgD6Mj0cVb6XvVmPGSohkg==
+ bh=BD1JW+lG7pX5X54dfgctsW4clcyzAYY+ys39/qbxQ2w=;
+ b=kGM0Kcw++K+6I3asDaXzMvOfv5UbsqpTTWzmrtL4JB+ysKrWordkkA3Dr8o717bkuf2WJBo+NBfk5HJnKDC5QADyxPHM19LWWkoyazyz6NboGp/HKoPSMZuFirwqrnxeBmYYesys/vjSRyM+tl0Pmb8I2b4rpGBViW08QbeYXUQEHPN2+siuKvftnlz+3fA28V8A6LofryCRnKRFAJQbcyMlBCrrvzS+J3uSPXJmFjI7s32aslbfhM9uvUrJ560RcSE7Hl1goIrM/+eWjJNfzRaBwYdARRRQkIWYRviKXxWetj5gzSUGNNQVtP3IYYU+zAlUo3pAWKSvSeyYiNsSmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZH9j1MVJ4M9avwtaAH+KtuO8LNSN19ucO1LiCqNbBSg=;
- b=sFYWsnpvVaIeWB3xCgbJfFK7ptog8lIf+0D/OFi6CVJrBCqQtrfBNUO2uKwkWw5NK1e6GDyoEXCPMWBVdXHh4N+kvDyDJqJ9WqxniFyVDKcUj3NNbOaBK0C/JrkIbNCte4u+zGjaiGrAK/5P6pIYCzK5ShQWIo40i26arG2Royg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2717.namprd12.prod.outlook.com (2603:10b6:805:68::29)
- by DM5PR12MB1706.namprd12.prod.outlook.com (2603:10b6:3:10f::7) with
+ bh=BD1JW+lG7pX5X54dfgctsW4clcyzAYY+ys39/qbxQ2w=;
+ b=KqO11sESiycjRObs2aDKGBDIZnoIYhieb97tmHrEy2IPV++2CSx9USp5KUmOhJfXRYL7FR0gFndp2gauJ4HVpv9I13+FqRs3PKw34diN9Xe1nNCdMYdl2XTvFFi5X6700Mb2DgAQRPavcE6+IoHiFKlYeGLASra3YJutdB9obaw=
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
+ by DM6PR10MB3033.namprd10.prod.outlook.com (2603:10b6:5:6d::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Thu, 10 Feb
- 2022 17:36:29 +0000
-Received: from SN6PR12MB2717.namprd12.prod.outlook.com
- ([fe80::c819:2722:b002:d75a]) by SN6PR12MB2717.namprd12.prod.outlook.com
- ([fe80::c819:2722:b002:d75a%3]) with mapi id 15.20.4975.014; Thu, 10 Feb 2022
- 17:36:28 +0000
-Message-ID: <955957ed-7201-71da-7a88-659da592fdb6@amd.com>
-Date: Thu, 10 Feb 2022 11:36:23 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: start sorting out the ZONE_DEVICE refcount mess v2
-Content-Language: en-US
-To: Christoph Hellwig <hch@lst.de>, Andrew Morton
- <akpm@linux-foundation.org>, Dan Williams <dan.j.williams@intel.com>
-Cc: nvdimm@lists.linux.dev, Ralph Campbell <rcampbell@nvidia.com>,
- Alistair Popple <apopple@nvidia.com>, dri-devel@lists.freedesktop.org,
- Karol Herbst <kherbst@redhat.com>, linux-mm@kvack.org,
- nouveau@lists.freedesktop.org, Felix Kuehling <Felix.Kuehling@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, Jason Gunthorpe <jgg@ziepe.ca>,
- Ben Skeggs <bskeggs@redhat.com>, Alex Deucher <alexander.deucher@amd.com>,
- Logan Gunthorpe <logang@deltatee.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220210072828.2930359-1-hch@lst.de>
-From: "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>
-In-Reply-To: <20220210072828.2930359-1-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR05CA0021.namprd05.prod.outlook.com
- (2603:10b6:208:c0::34) To SN6PR12MB2717.namprd12.prod.outlook.com
- (2603:10b6:805:68::29)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
+ 2022 19:34:09 +0000
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::4910:964a:4156:242a]) by BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::4910:964a:4156:242a%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 19:34:09 +0000
+From: Joao Martins <joao.m.martins@oracle.com>
+To: linux-mm@kvack.org
+Cc: Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Matthew Wilcox <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jane Chu <jane.chu@oracle.com>, Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
+        nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
+        Joao Martins <joao.m.martins@oracle.com>
+Subject: [PATCH v5 0/5] sparse-vmemmap: memory savings for compound devmaps (device-dax)
+Date: Thu, 10 Feb 2022 19:33:40 +0000
+Message-Id: <20220210193345.23628-1-joao.m.martins@oracle.com>
+X-Mailer: git-send-email 2.11.0
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0170.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a::14) To BLAPR10MB4835.namprd10.prod.outlook.com
+ (2603:10b6:208:331::11)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -74,137 +89,250 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 195c0eed-55f4-43fd-3e28-08d9ecbbde7c
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1706:EE_
-X-Microsoft-Antispam-PRVS:
-	<DM5PR12MB1706E8A1BB88E919A1D83423FD2F9@DM5PR12MB1706.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: 9931d280-9c3b-4de7-bfca-08d9eccc4ed0
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3033:EE_
+X-Microsoft-Antispam-PRVS: 
+	<DM6PR10MB30332BB8B5A9FBF0AF9EA231BB2F9@DM6PR10MB3033.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	TNTkbsxGbifTk+FoC/4lRzpDa85fQv7x8saayjeUozrPF8VZDXRP7r6AILt66fFYzofLwMSn59GhMOQSQmohAnLjyhPL+5CetY7UNhchoWrO+3z8WJJT8o+nBme6mQKuiM+zYCv2vna/tQSMBNMnYxoVgMa6/uBCEAxhZC5H1BZhWfkntFonYOA6fbzjdE2+kkHRame5HgHd5o1g32nA9xExNPsp2cteDkPXc5w2AOezpkq8MqER+cqXjdslwO0wpUgjnu4LCf0AfRcRYCGCX3qmQeF0+JWDVjwf7x4sq4HlIGy37bhJqSvavIDyFtaOiz76cvl73CCyvYFCAEfRNptVNC0yyti4oI4EOWtgI/h7fjkymVAGliajVdvz8V3IQ63JWc0IbwoZ1wJax7H+UNs8dPvprWmkAJjyNhzGG6W+KD7Yp2RgiKWAyTk2W1+O8Ho3HLy0uRqpSOGsUfBwPo8jQUPww8PgjnCTioyBGZoHv7YkZ/FVvSEaWGwsDGmEJLGChN1q/5W7P6Bo7MqnV9KcyMTOqQEtQ9r61pep7DKNxlRxyBcwxjfxkIeRAD27x57z4SGCT9msylXNWHK+c3uZ4nBgWbTGrl7CfXLJUkmkkPmCmI+GfXLxJtrPbb4uLiU+a1kE0R2XrERM2YDp2tKSXAOzBodUEkV6knNZihhldmvEig7vXPFgDI2eDZd/ygtV/lNEdQGrrVY2J5qxWdD0GyGhhwMVlGodGVapHJpcU/UNJf1V2i4DnvYEE5DLBWzGtkFQ3eZ5YKoFxxV9YPUWJMUqEZlWz0gL7BOJ1C00DyGVhNWjHWo1wz2qrzJW
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2717.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(186003)(36756003)(83380400001)(2616005)(2906002)(26005)(53546011)(6512007)(38100700002)(508600001)(6666004)(110136005)(6486002)(966005)(316002)(54906003)(7416002)(6506007)(66476007)(5660300002)(66946007)(66556008)(86362001)(4326008)(8936002)(8676002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 
+	o7VF6bCtnwmTd1g3699Lafvh9O4PBxQB3L28M79uRkitoM4UCNhaxzHFeggQqT1uNB9hBHuhB3XJqOiJ/ghBKUJyu+Q1ozcUDL/VVNqLwYcPkv8cOlOQMNxii0MxCnKKV09Lgg0VaeQiHJPKB7+gc4Ci0v1uyY69xKV7HdarwacB6aBkzyCywQd79rxQzM6gOUyI/UPZ27YMMmrIqQ1CZM/EWp79JHGpPKuE6IPzujXqSSR1x5tkyt2/J1cON0WlUOrpFT6ByAXq5XZUjGNHq+KWXbSnqBSOpFSlr7PNDCq/VqF8HPYyyDkHI0jfXX96iirf7Ep1sn74hYYjfik8PkN+0u2gLNRFbLcKz93U+vH38/ww/68fh77c39msEUaJZn7zvxIS8Alz3Gnx4+tISlkB/IvkqOul2lfcVTjUHe1lBQwe0qFTWtHhPnqgkS2T1e0HEOyPZog5yLDweQ9NblWjYz5nPH4q56OggWCv9dgqy9vtXTOdd4pvvz7hGksGETqVBaj/uNnB7Hu6K5fecJCPUELQMsPa6WPJTs7xV3RFj2yOVhTsKko0RiLx9nbmkmHituHtfvmb9SH4sUKtMdEbzoNNurLVj4roojKexQdWkrj99g6IqtFzBytcL3/b1kPfc2nPgczVcfH/fvWhmsatnHM9iEoqaQ0NEwrgMzbY88dhdAwCL077vmrszcFkHx3XCT0ZXCX0ZyFK74gcpqnMV6VSLIuDSbmX1awQT1gSE/eyzgJQ0XFIlzldfOHwCgKCWGxGHb21SWj1MkC+RwC7bOXhCI6yslGeSsKC8vewV97X0wCMjNhYvktMmxznv12N2yK1BEGhxl02Tl7SMA==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6916009)(38350700002)(38100700002)(966005)(6486002)(186003)(26005)(2616005)(1076003)(66476007)(66556008)(66946007)(316002)(8936002)(54906003)(4326008)(103116003)(86362001)(7416002)(6666004)(36756003)(52116002)(5660300002)(6506007)(8676002)(6512007)(107886003)(83380400001)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MDVFOFdnekhzMXNwQURpbHl6NndTcllGUnBuSjBOeVk4RWx1OXdCeUdYL24y?=
- =?utf-8?B?TXNxMzVrcEgyRXVTTThyc0hFbWcwR09XeTBZcWNrRFliUnB3a0g0Rnp0eVlD?=
- =?utf-8?B?Q0haZ3FUTGY1ODM3WVUwMGpHV0pMRDEzcG5oV0FPakJnZzZ2NEZmUThXSkZQ?=
- =?utf-8?B?NVpPZkkvaThHV0U5QllIRHYzcWYxSklyenJELzRvMzNYeUxhcC9xbU91bUZr?=
- =?utf-8?B?dXdPbG9WRENYb01KSWg3bkgwWmtReC81Ukl1NmlpWGprRVY2YlBqSldlRXUw?=
- =?utf-8?B?VENpQ201N3l1WTJJS1E4dFIyLzN5R3JLQjdCNnBhUmk4c2IvbTVDVHlOZmxE?=
- =?utf-8?B?Q2VzR21LMEl6TGlDS2tlTTZsQWVEcjN1Y0JRUnJxMWNPdngrQkRWemtWb2xE?=
- =?utf-8?B?UmNrMURCRUovcU10UnJMUSs5RFpLS1A2Z01nb2JkNmFOMWVMT3kyL1FlS1Z6?=
- =?utf-8?B?emh6d0k5R1ZxSzdhZDVUelNxdDAwL0wvS0orUTNmS2RqUFdVanlWT0s0eDRi?=
- =?utf-8?B?azl1L0tWSm5nVWZGR1RpNDBlaEtzcG80NjI1Z1lndnQvQ2YrQlZ0Z1BnZUhx?=
- =?utf-8?B?SFlQYTVXS1Bha2NBRXdXcmQ3eGVWek5DWmVLTzhpSTdZNlhPRFQ5QURpd1RR?=
- =?utf-8?B?WnlXNFE5M2s1dEwyTVQ1ejBUYitHcUhWeFQ3Y0JjeEU3bUZXa1V6Qi94Zmor?=
- =?utf-8?B?NFlLemZ6aUxaWW10OFJHLy9CUGRlUHA2YVpjekdCbUVCbmo0Yk83VFViOGwv?=
- =?utf-8?B?TUJpTzMyR1FxQTFIcVFqSS8zbXVNSFJQSnhQWVhvK2t3SnE5S1BrS2VUZXBP?=
- =?utf-8?B?amt1MlAzMXBSVTdka2FJUjFlclJ6eGJhazh0RFpYTmNweStEeXd4TjdheDR5?=
- =?utf-8?B?VmQyeXlIMG12ZHo0MGR4dVJSSlM0ZUg3VEx0VDZ2alFJbUk4bllxNnFEcS8r?=
- =?utf-8?B?bjFXRXRYdmlKLzBHTlI3RUdlRkRGcit6cUUrK1VEYlcxWVk3S2xvRlZpcGg4?=
- =?utf-8?B?WkUzN1dxcUZxdTRhdWhUNm80cVBvUkZyZFl0aUc2eHV5WUFlMno4dzliQTNi?=
- =?utf-8?B?SUVEN2d3VUlXelVlcUtCczVPS3hWL1V3UllQYUI5YTMzMERpU0o4TzluZk5H?=
- =?utf-8?B?UFdLVEpHb0xuMnBLejcxcjQ5ay9nWHQvVENZOTlVNWNyV2duQmNROVZ5ZHN5?=
- =?utf-8?B?cmFUaXZITVdkWW5vUmpYTWhWZjh3a0J0UGJRamRlVU9ya0tNekpLeWlwUGRN?=
- =?utf-8?B?SW9iNXhiWDNFdmlpTkM1N0RTL0N4K1NBNk1oNk5ZM2RrRjNmcTNpL2RMUUw4?=
- =?utf-8?B?SnBNdEpaQlFHWUJmWWpjTnczRnVGUWd4NUtWUENXOE9LTDB5Rzg3eEhMTFN4?=
- =?utf-8?B?Y0R2SmxTcTI5ODE4MFpqRFJYbXMybE4wUVllS1BTTUVORmdMZFJpa3AxdFdu?=
- =?utf-8?B?THhFdVVhTlpCYXZNTktwOWxBVVBHbXNDSXhJUWZPaUhtekczZ3BHSWdWaFNn?=
- =?utf-8?B?bCswSmJiaFovMStiWW9CWTdUTDFBTzZCQnI2L2UvaGE0cktua0pFWmVjY0ZM?=
- =?utf-8?B?TXkrYkJ3ZEFCeW9pOW1BK3dSQVgvZ0RQVHBEUmhGMWRHZVZzc3I0VEhoSG1O?=
- =?utf-8?B?bytXUFlBZ25hWU5EZ1JtYkNNUm1vTi9YM2U5Mm5XRzJuZTBQcU1mUGpXNDdv?=
- =?utf-8?B?WVNYRzFtajY1bEJVTW1TWDNMaThPV3JIUmVjaHQ0RnRpTEFHWjUvTzVFcWRy?=
- =?utf-8?B?eFRPVk9sVHRValJGZi85Z3JNSStqM2w2YW8zV2wrZnc2OUc1aEhkSjdudjA0?=
- =?utf-8?B?bEdpREwrUGtMTnNHOG1JY0xsR3lEQTJIZWJOdzB6dHhOb0pqNE9XMHlzaWJi?=
- =?utf-8?B?ZDFrakhPWWkzNm1UWjVpbnM5Q25vU1lWSWRYY2lSSk9QcTNWVkxGOUFTRDh3?=
- =?utf-8?B?RVNKL2grSnpFU3BZTjlBNmEyV01uYTFJUUx3Z1lkNWdlbHdGSXRmbmJpSDRE?=
- =?utf-8?B?elhVeEJLMDFicnVqSzRrMFdVUGwzbXdXN21COHhzb3hsZlBjVGZtMWlJMU4z?=
- =?utf-8?B?aWNtcHFsVVhiRGJDcFlvL3hJSms5MWJ6Q3ZLWXgxWHJEQnBldjBoSzBFWVJt?=
- =?utf-8?B?Q0M4OVNFZHlzTTAySGF0MUV3anBGWTlnR2h6RzlWWURjRi9kQ3AvcCtYelJP?=
- =?utf-8?Q?Oa6uhltqDaXyGpcx1WguOJY=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 195c0eed-55f4-43fd-3e28-08d9ecbbde7c
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2717.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?GPQ4Jga+tBaNqQn7qHaN+xfiDTdr+hQ7H/C4LRN8FxAOuAFe/qR+jkGftubD?=
+ =?us-ascii?Q?GjRxam6NU4TUPQKQxHpNq/4VauDb654MYSCtDPUnzdtM7jlSS8POaUAwfw+U?=
+ =?us-ascii?Q?YnzFvcTB7+jILEC2AS7Ug4gS8mDE7Dar8WwW1zKef2GQUmcLLSoMIUIpQM5q?=
+ =?us-ascii?Q?fuvUXfeVyg62tVJCNbL6bhrzXXxlFdRJKZEBSU/c+ITQfTg/DFnaw2h3t/WS?=
+ =?us-ascii?Q?W40/01mIQrTlrZC3iDo6koC5eEBikLV45DqVU4GRLhy7xNwilO1MiPAV73hr?=
+ =?us-ascii?Q?x/+/RRGfhvRMA6hP4hATG7Y5KlpUntL0oZ5IZPH0VdL/y3kBRm37tydznhCF?=
+ =?us-ascii?Q?axJz7xMFaUu216Vm30aYabfsx1PAN52IQa69FXo2wc0OOWo7zBU5oVN/qVX1?=
+ =?us-ascii?Q?INUx4AELOrLplswC32HaEFCSiyymR2eibt2M0OQqKJnpNrbBpUUJHGJDtGqG?=
+ =?us-ascii?Q?Kc3JVJWPXsnM4mT/ETgtpR+oh2OBU1gThHhJDwPParmPzfVEyA5MK1IBuJKT?=
+ =?us-ascii?Q?cseVOL8YI8s08PO4W26M0W8wdLIeWENC3QspMNPkWJTinapN5hXzZgtU/hJI?=
+ =?us-ascii?Q?qsSkGP/Lzy9wYNyaJpnOfa4AQXsATzr8vIWWjAbFX/gQ7JnUGJVv4fuMs3B2?=
+ =?us-ascii?Q?EifKT13d/JuY3EslwH+pQHaoZ8n/CnSzSSDW6tZUoT62s7ubfySn+LPLX2g6?=
+ =?us-ascii?Q?j4TZAsKnXk4VtPbTD7HgSssyJaFM7ihF6EhjwV2nr2XmUJEs0kFhAnYsx2kC?=
+ =?us-ascii?Q?cG9HUwVW7JS87fKAtIivvanDFcXkkBw1e9GSMTJb2kIlW1/q8NP9L1D6Z0S5?=
+ =?us-ascii?Q?gJolalogeqVBNjeRrug8GRM7knvqYC68zOcXEb0QFQQURdfx0e9gGZVzIkwW?=
+ =?us-ascii?Q?MxLjrfGBasunIYh9rnV35raz4+EwReju1f8slqDbq/KM8v27oEIqp3LEAL8I?=
+ =?us-ascii?Q?n2HngeFgtiEhtdnfA4zG3SMLPUA5u2EM3VZPpaahxBI/mb0I9q7RFYYaqYaf?=
+ =?us-ascii?Q?jLdZfmJCpvQvPmWhNcaHzKefoH6+eUx1Pop5GOUVXBIA2dG6PNeoog4zgXml?=
+ =?us-ascii?Q?oOUjyAUih2PR1k7rSmZl1DxJwCdNhzGBAQNpPuSqcov1mX6BqbywS/yrnicl?=
+ =?us-ascii?Q?zRRiYEuIvahC+hWQOX4ijEzkKNIY+pSt2hBFyaHGCRuMRR9NCmAjC788iNV3?=
+ =?us-ascii?Q?cjs0DJEYQoXWJYnOL2uzv8z5TjHxMUuRLO10LHOyCVbEI6wx1g+Tk9MoH3RG?=
+ =?us-ascii?Q?y+SFMGUfD1vJBon9Z1muZsdVbB0IAUCKlYD5jsK86N5DOVT180TQdqzYpx5h?=
+ =?us-ascii?Q?seo40Z+MQCZLKPuMv9JWtv7CWUXfykw1Ycmv7BFBdXo+5ChFR99izxiD93RG?=
+ =?us-ascii?Q?g+lEMFAax+mdmPPvsqT7R4i6e1DqlHRSoB82jHBj34rW2RgslOuvIZn4MFbd?=
+ =?us-ascii?Q?Y82KE//htQ9179mxT/Daa6BU4F8irBAW+4o7RvsvljRXP7Y0AEXWh5FY/k68?=
+ =?us-ascii?Q?2fhFOGvvsoez7NtTujJzF/keZnR9O2AKxmLGWa1Egkrv8CyuikSzj58awaaM?=
+ =?us-ascii?Q?fHLqHOIGq9r4p5FOD+8pb0B/d7l9zYzZzhUy/p1cwts2gxB/9w0XE8i/USbJ?=
+ =?us-ascii?Q?gbFrcvklALPy97G6D93bOgmaMBmUHBiJztH6rGJbhCf95cbGmPNXCXAjoZOp?=
+ =?us-ascii?Q?IoCQIw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9931d280-9c3b-4de7-bfca-08d9eccc4ed0
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 17:36:28.8171
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 19:34:09.2703
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8WJ9ThEeLYiV9uVA2LtvY6tBQL/gPxmBYxfRzjvhN6Ed8vaxQGR9uM8BLrSlc977cY/4LKewtjbmEcQXzslvLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1706
+X-MS-Exchange-CrossTenant-UserPrincipalName: WN5rafeWd5JaRQrMW5kHKgvWQXGHr8fGeIFJMpF/xf3UJP734SDtFlvaEvbnCfsKLc2Vy3tuZ9b/5Ks42f0fL3F74E3AFC44xkBIFsJujsE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3033
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10254 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202100103
+X-Proofpoint-GUID: -pgdBQ-TXkofY7rhoksA84o5n6-7mu4W
+X-Proofpoint-ORIG-GUID: -pgdBQ-TXkofY7rhoksA84o5n6-7mu4W
 
-Christoph,
-Thanks a lot for rebase our patches. I just ran our amdgpu hmm-tests 
-with this series and all passed.
+Changes since v4[0]:
+ * Rebased to next-20220210.
+ * Adjust patch 3, given Muchun changes to the comment block, retained
+ the Rb tags considering it is still just a move of text.
+ * Rename @geometry to @vmemmap_shift in all patches/cover-letter.
+ * Rename pgmap_geometry() calls to pgmap_vmemmap_nr().
+ * HugeTLB in mmotm now remaps all but the first head vmemmap page
+ hence adjust patch 4 to also document how device-dax is slightly different
+ in the vmemmap pagetables setup (1 less deduplicate page per hugepage).
+ * Remove the last patch that reuses PMD tail pages[1], to be a follow up
+ after getting the core improvement first.
+ * Rework cover-letter.
 
-Regards,
-Alex Sierra
+[0] https://lore.kernel.org/linux-mm/20210827145819.16471-1-joao.m.martins@oracle.com/
+[1] https://lore.kernel.org/linux-mm/20210827145819.16471-15-joao.m.martins@oracle.com/
 
-On 2/10/2022 1:28 AM, Christoph Hellwig wrote:
-> Hi all,
->
-> this series removes the offset by one refcount for ZONE_DEVICE pages
-> that are freed back to the driver owning them, which is just device
-> private ones for now, but also the planned device coherent pages
-> and the ehanced p2p ones pending.
->
-> It does not address the fsdax pages yet, which will be attacked in a
-> follow on series.
->
-> Note that if we want to get the p2p series rebased on top of this
-> we'll need a git branch for this series.  I could offer to host one.
->
-> A git tree is available here:
->
->      git://git.infradead.org/users/hch/misc.git pgmap-refcount
->
-> Gitweb:
->
->      http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/pgmap-refcount
->
-> Changes since v1:
->   - add a missing memremap.h include in memcontrol.c
->   - include rebased versions of the device coherent support and
->     device coherent migration support series as well as additional
->     cleanup patches
->
-> Diffstt:
->   arch/arm64/mm/mmu.c                      |    1
->   arch/powerpc/kvm/book3s_hv_uvmem.c       |    1
->   drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |   35 -
->   drivers/gpu/drm/amd/amdkfd/kfd_priv.h    |    1
->   drivers/gpu/drm/drm_cache.c              |    2
->   drivers/gpu/drm/nouveau/nouveau_dmem.c   |    3
->   drivers/gpu/drm/nouveau/nouveau_svm.c    |    1
->   drivers/infiniband/core/rw.c             |    1
->   drivers/nvdimm/pmem.h                    |    1
->   drivers/nvme/host/pci.c                  |    1
->   drivers/nvme/target/io-cmd-bdev.c        |    1
->   fs/Kconfig                               |    2
->   fs/fuse/virtio_fs.c                      |    1
->   include/linux/hmm.h                      |    9
->   include/linux/memremap.h                 |   36 +
->   include/linux/migrate.h                  |    1
->   include/linux/mm.h                       |   59 --
->   lib/test_hmm.c                           |  353 ++++++++++---
->   lib/test_hmm_uapi.h                      |   22
->   mm/Kconfig                               |    7
->   mm/Makefile                              |    1
->   mm/gup.c                                 |  127 +++-
->   mm/internal.h                            |    3
->   mm/memcontrol.c                          |   19
->   mm/memory-failure.c                      |    8
->   mm/memremap.c                            |   75 +-
->   mm/migrate.c                             |  763 ----------------------------
->   mm/migrate_device.c                      |  822 +++++++++++++++++++++++++++++++
->   mm/rmap.c                                |    5
->   mm/swap.c                                |   49 -
->   tools/testing/selftests/vm/Makefile      |    2
->   tools/testing/selftests/vm/hmm-tests.c   |  204 ++++++-
->   tools/testing/selftests/vm/test_hmm.sh   |   24
->   33 files changed, 1552 insertions(+), 1088 deletions(-)
+This used to be part of v4, but this was splitted between three subsets:
+ 1) compound page conversion of device-dax (in v5.17), 2) vmemmap deduplication
+ for device-dax (this series) and 3) GUP improvements (to be respinned).
+
+Full changelog (only for this series subset) at the bottom of cover letter.
+
+---
+
+This series, minimizes 'struct page' overhead by pursuing a similar approach as
+Muchun Song series "Free some vmemmap pages of hugetlb page" (now merged since
+v5.14), but applied to devmap with compound_pages. 
+
+The vmemmap dedpulication original idea (already used in HugeTLB) is to
+reuse/deduplicate tail page vmemmap areas, particular the area which only
+describes tail pages. So a vmemmap page describes 64 struct pages, and the
+first page for a given ZONE_DEVICE vmemmap would contain the head page and 63
+tail pages. The second vmemmap page would contain only tail pages, and that's
+what gets reused across the rest of the subsection/section. The bigger the page
+size, the bigger the savings (2M hpage -> save 6 vmemmap pages;
+1G hpage -> save 4094 vmemmap pages). 
+
+This is done for PMEM /specifically only/ on device-dax configured
+namespaces, not fsdax. In other words, a devmap with a @vmemmap_shift.
+
+In terms of savings, per 1Tb of memory, the struct page cost would go down
+with compound devmap:
+
+* with 2M pages we lose 4G instead of 16G (0.39% instead of 1.5% of total memory)
+* with 1G pages we lose 40MB instead of 16G (0.0014% instead of 1.5% of total memory)
+
+The series is mostly summed up by patch 4, and to summarize what the series does:
+
+Patches 1 - 3: Minor cleanups in preparation for patch 4.  Move the very nice
+docs of hugetlb_vmemmap.c into a Documentation/vm/ entry and adjust them to the
+device-dax case.
+
+Patch 4: Patch 4 is the one that takes care of the struct page savings (also
+referred to here as tail-page/vmemmap deduplication). Much like Muchun series,
+we reuse the second PTE tail page vmemmap areas across a given @vmemmap_shift
+On important difference though, is that contrary to the hugetlbfs series,
+there's no vmemmap for the area because we are late-populating it as opposed to
+remapping a system-ram range. IOW no freeing of pages of already initialized
+vmemmap like the case for hugetlbfs, which greatly simplifies the logic
+(besides not being arch-specific). altmap case unchanged and still goes via
+the vmemmap_populate().
+
+[Note that, device-dax is still a little behind HugeTLB in terms of savings.
+I have an additional simple patch that reuses the head vmemmap page too,
+as a follow-up. That will double the savings and namespaces initialization.]
+
+Patch 5: Initialize fewer struct pages depending on the page size with DRAM backed
+struct pages -- because fewer pages are unique and most tail pages (with bigger
+vmemmap_shift).
+
+    NVDIMM namespace bootstrap improves from ~268-358 ms to ~80-110/<1ms on 128G NVDIMMs
+    with 2M and 1G respectivally. And struct page needed capacity will be 3.8x / 1071x
+    smaller for 2M and 1G respectivelly. Tested on x86 with 1Tb+ of pmem,
+
+Patches apply on top of linux-next tag next-20220210 (commit 395a61741f7e).
+
+Comments and suggestions very much appreciated!
+
+Older Changelog,
+
+v3[0] -> v4[4]:
+
+ * Collect Dan's Reviewed-by on patches 8,9,11
+ * Collect Muchun Reviewed-by on patch 1,2,11
+ * Reorder patches to first introduce compound pages in ZONE_DEVICE with
+ device-dax (for pmem) as first user (patches 1-8) followed by implementing
+ the sparse-vmemmap changes for minimize struct page overhead for devmap (patches 9-14)
+ * Eliminate remnant @align references to use @geometry (Dan)
+ * Convert mentions of 'compound pagemap' to 'compound devmap' throughout
+   the series to avoid confusions of this work conflicting/referring to
+   anything Folio or pagemap related.
+ * Delete pgmap_pfn_geometry() on patch 4
+   and rework other patches to use pgmap_geometry() instead (Dan)
+ * Convert @geometry to be a number of pages rather than page size in patch 4 (Dan)
+ * Make pgmap_geometry() more readable (Christoph)
+ * Fix kdoc of @altmap and improve kdoc for @pgmap in patch 9 (Dan)
+ * Fix up missing return in vmemmap_populate_address() in patch 10
+ * Change error handling style in all patches (Dan)
+ * Change title of vmemmap_dedup.rst to be more representative of the purpose in patch 12 (Dan)
+ * Move some of the section and subsection tail page reuse code into helpers
+ reuse_compound_section() and compound_section_tail_page() for readability in patch 12 (Dan)
+ * Commit description fixes for clearity in various patches (Dan)
+ * Add pgmap_geometry_order() helper and
+   drop unneeded geometry_size, order variables in patch 12
+ * Drop unneeded byte based computation to be PFN in patch 12
+ * Add a compound_nr_pages() helper and use it in memmap_init_zone_device to calculate
+ the number of unique struct pages to initialize depending on @altmap existence in patch 13 (Dan)
+ * Add compound_section_tail_huge_page() for the tail page PMD reuse in patch 14 (Dan)
+ * Reword cover letter.
+
+v2 -> v3[3]:
+ * Rename compound_pagemaps.rst doc page (and its mentions) to vmemmap_dedup.rst (Mike, Muchun)
+ * Rebased to next-20210714
+
+v1[1] -> v2[2]:
+
+ (New patches 7, 10, 11)
+ * Remove occurences of 'we' in the commit descriptions (now for real) [Dan]
+ * Massage commit descriptions of cleanup/refactor patches to reflect [Dan]
+ that it's in preparation for bigger infra in sparse-vmemmap. (Patch 5) [Dan]
+ * Greatly improve all commit messages in terms of grammar/wording and clearity. [Dan]
+ * Simplify patch 9 as a result of having compound initialization differently [Dan]
+ * Rename Subject of patch 6 [Dan]
+ * Move hugetlb_vmemmap.c comment block to Documentation/vm Patch 7 [Dan]
+ * Add some type-safety to @block and use 'struct page *' rather than
+ void, Patch 8 [Dan]
+ * Add some comments to less obvious parts on 1G compound page case, Patch 8 [Dan]
+ * Remove vmemmap lookup function in place of
+ pmd_off_k() + pte_offset_kernel() given some guarantees on section onlining
+ serialization, Patch 8
+ * Add a comment to get_page() mentioning where/how it is, Patch 8 freed [Dan]
+ * Add docs about device-dax usage of tail dedup technique in newly added
+ compound_pagemaps.rst doc entry.
+ * Rebased to next-20210617 
+
+ RFC[0] -> v1:
+ (New patches 1-3, 5-8 but the diffstat isn't that different)
+ * Fix/Massage commit messages to be more clear and remove the 'we' occurences (Dan, John, Matthew)
+ * Use pfn_align to be clear it's nr of pages for @align value (John, Dan)
+ * Add two helpers pgmap_align() and pgmap_pfn_align() as accessors of pgmap->align;
+ * Avoid usage of vmemmap_populate_basepages() and introduce a first class
+   loop that doesn't care about passing an altmap for memmap reuse. (Dan)
+ * Completely rework the vmemmap_populate_compound() to avoid the sparse_add_section
+   hack into passing block across sparse_add_section calls. It's a lot easier to
+   follow and more explicit in what it does.
+ * Replace the vmemmap refactoring with adding a @pgmap argument and moving
+   parts of the vmemmap_populate_base_pages(). (Patch 5 and 6 are new as a result)
+ * Improve memmap_init_zone_device() to initialize compound pages when
+   struct pages are cache warm. That lead to a even further speed up further
+   from RFC series from 190ms -> 80-120ms. Patches 2 and 3 are the new ones
+   as a result (Dan)
+ * Remove PGMAP_COMPOUND and use @align as the property to detect whether
+   or not to reuse vmemmap areas (Dan)
+
+[0] https://lore.kernel.org/linux-mm/20201208172901.17384-1-joao.m.martins@oracle.com/
+[1] https://lore.kernel.org/linux-mm/20210325230938.30752-1-joao.m.martins@oracle.com/
+[2] https://lore.kernel.org/linux-mm/20210617184507.3662-1-joao.m.martins@oracle.com/
+[3] https://lore.kernel.org/linux-mm/20210617184507.3662-1-joao.m.martins@oracle.com/
+[4] https://lore.kernel.org/linux-mm/20210827145819.16471-1-joao.m.martins@oracle.com/
+
+Joao Martins (5):
+  mm/sparse-vmemmap: add a pgmap argument to section activation
+  mm/sparse-vmemmap: refactor core of vmemmap_populate_basepages() to
+    helper
+  mm/hugetlb_vmemmap: move comment block to Documentation/vm
+  mm/sparse-vmemmap: improve memory savings for compound devmaps
+  mm/page_alloc: reuse tail struct pages for compound devmaps
+
+ Documentation/vm/index.rst         |   1 +
+ Documentation/vm/vmemmap_dedup.rst | 225 +++++++++++++++++++++++++++++
+ include/linux/memory_hotplug.h     |   5 +-
+ include/linux/mm.h                 |   5 +-
+ mm/hugetlb_vmemmap.c               | 168 +--------------------
+ mm/memory_hotplug.c                |   3 +-
+ mm/memremap.c                      |   1 +
+ mm/page_alloc.c                    |  16 +-
+ mm/sparse-vmemmap.c                | 196 ++++++++++++++++++++++---
+ mm/sparse.c                        |  26 ++--
+ 10 files changed, 440 insertions(+), 206 deletions(-)
+ create mode 100644 Documentation/vm/vmemmap_dedup.rst
+
+-- 
+2.17.2
+
 
