@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-2954-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-2956-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A5F4B0701
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 08:29:09 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD464B0708
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 08:29:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 683651C0C63
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 07:29:06 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id D10D73E1014
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Feb 2022 07:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C452CAB;
-	Thu, 10 Feb 2022 07:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B372F4B;
+	Thu, 10 Feb 2022 07:28:53 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E152C9E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F19D2C9D
 	for <nvdimm@lists.linux.dev>; Thu, 10 Feb 2022 07:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
 	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=kwsvzUopQYmLEvfJMWiUtpLaBV1PgK/k5zUYKi0uPVU=; b=4pvndCL1lsKtjRKUxsi/J7Dxvo
-	nVmiNGk6UXupKHW1OLXR+4B82dW07jzHZuBVo0KXBKlc1qNmC8wL4iAMhe88kOdH+ywDPbwwF9isJ
-	zbF7vyHcH7ZB+oAO5RJzYzy8W71AUbpN1yu6LoRPEFGk3WGoUPuwiizHeTv5+Dxm5s9U8hzEyCOt8
-	I8EI2xE1INgu5bUL41ku3jeeQ+CB/t+j7R8IMGT6MS1jG+SWAmjnYIKA+e1oWVu8ukLRztAFH6T7V
-	8EjsqXGdggi7lWnCIIbd6CMvnXjnA8fpTkgrBHYPiQATMsskbuYK1ZK5kbfbgLh9UO0N1uGxviSbZ
-	SSBDKEhw==;
+	bh=biUf35pL02wIFMpMNWoBBONHWDySppy4KeY+mmnFunE=; b=z0PPCQlEy7lZgPcobsomDHfrD2
+	RfCT6XQEVnCdXpUKaH7lF2CfDOqvdrFvk/NRPjx4QMJse63pAgHxXes+8qnPvqXD6aWDtGL76LZpx
+	FNG8IhXHir0qeZeptI2V2APw9kdTX3mSqBOwlkyeLemuPxU54GKco1WhxGAlkpxo7XFIMatZOfEAt
+	p3ImLSt8j1xkULdRUb1hVXqme3Bhrxvp4qKoBJa/zO9aDPMVcygwcZXnQHE+NnuaMBowY9HByj45j
+	SOaU+8T1vGw4nb1PnKFoB0mXf1G61P2/YvFVsLwzDKNtnDwpLaq0mDNwb5PWlFqSJLbEbtB6KgQDq
+	UdATH8qQ==;
 Received: from [2001:4bb8:188:3efc:8014:b2f2:fdfd:57ea] (helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nI3sa-002rlD-Of; Thu, 10 Feb 2022 07:28:37 +0000
+	id 1nI3sd-002rlb-Lk; Thu, 10 Feb 2022 07:28:40 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Dan Williams <dan.j.williams@intel.com>
@@ -52,11 +52,10 @@ Cc: Felix Kuehling <Felix.Kuehling@amd.com>,
 	nvdimm@lists.linux.dev,
 	linux-mm@kvack.org,
 	Jason Gunthorpe <jgg@nvidia.com>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 02/27] mm: remove the __KERNEL__ guard from <linux/mm.h>
-Date: Thu, 10 Feb 2022 08:28:03 +0100
-Message-Id: <20220210072828.2930359-3-hch@lst.de>
+	Chaitanya Kulkarni <kch@nvidia.com>
+Subject: [PATCH 03/27] mm: remove pointless includes from <linux/hmm.h>
+Date: Thu, 10 Feb 2022 08:28:04 +0100
+Message-Id: <20220210072828.2930359-4-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220210072828.2930359-1-hch@lst.de>
 References: <20220210072828.2930359-1-hch@lst.de>
@@ -69,38 +68,78 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-__KERNEL__ ifdefs don't make sense outside of include/uapi/.
+hmm.h pulls in the world for no good reason at all.  Remove the
+includes and push a few ones into the users instead.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 ---
- include/linux/mm.h | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
+ drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
+ include/linux/hmm.h                      | 9 ++-------
+ lib/test_hmm.c                           | 2 ++
+ 4 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 213cc569b19223..7b46174989b086 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3,9 +3,6 @@
- #define _LINUX_MM_H
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+index ed5385137f4831..cb835f95a76e66 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+@@ -24,6 +24,7 @@
+ #include <linux/hmm.h>
+ #include <linux/dma-direction.h>
+ #include <linux/dma-mapping.h>
++#include <linux/migrate.h>
+ #include "amdgpu_sync.h"
+ #include "amdgpu_object.h"
+ #include "amdgpu_vm.h"
+diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+index 3828aafd3ac46f..e886a3b9e08c7d 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
++++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+@@ -39,6 +39,7 @@
  
- #include <linux/errno.h>
--
--#ifdef __KERNEL__
--
- #include <linux/mmdebug.h>
- #include <linux/gfp.h>
- #include <linux/bug.h>
-@@ -3381,5 +3378,4 @@ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
- }
- #endif
+ #include <linux/sched/mm.h>
+ #include <linux/hmm.h>
++#include <linux/migrate.h>
  
--#endif /* __KERNEL__ */
- #endif /* _LINUX_MM_H */
+ /*
+  * FIXME: this is ugly right now we are using TTM to allocate vram and we pin
+diff --git a/include/linux/hmm.h b/include/linux/hmm.h
+index 2fd2e91d5107c0..d5a6f101f843e6 100644
+--- a/include/linux/hmm.h
++++ b/include/linux/hmm.h
+@@ -9,14 +9,9 @@
+ #ifndef LINUX_HMM_H
+ #define LINUX_HMM_H
+ 
+-#include <linux/kconfig.h>
+-#include <linux/pgtable.h>
++#include <linux/mm.h>
+ 
+-#include <linux/device.h>
+-#include <linux/migrate.h>
+-#include <linux/memremap.h>
+-#include <linux/completion.h>
+-#include <linux/mmu_notifier.h>
++struct mmu_interval_notifier;
+ 
+ /*
+  * On output:
+diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+index 767538089a62e4..396beee6b061d4 100644
+--- a/lib/test_hmm.c
++++ b/lib/test_hmm.c
+@@ -26,6 +26,8 @@
+ #include <linux/sched/mm.h>
+ #include <linux/platform_device.h>
+ #include <linux/rmap.h>
++#include <linux/mmu_notifier.h>
++#include <linux/migrate.h>
+ 
+ #include "test_hmm_uapi.h"
+ 
 -- 
 2.30.2
 
