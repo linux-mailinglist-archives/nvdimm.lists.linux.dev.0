@@ -1,45 +1,45 @@
-Return-Path: <nvdimm+bounces-3057-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3058-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD97F4BA6C8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Feb 2022 18:13:45 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id C382D4BA6FD
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Feb 2022 18:21:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 44BD73E0F48
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Feb 2022 17:13:44 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id E47BC1C0AB4
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Feb 2022 17:21:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88153B29;
-	Thu, 17 Feb 2022 17:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CCB3D61;
+	Thu, 17 Feb 2022 17:20:56 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846B04363;
-	Thu, 17 Feb 2022 17:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7A11FD3;
+	Thu, 17 Feb 2022 17:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645118015; x=1676654015;
+  t=1645118454; x=1676654454;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0Kdj7ImYvcwQw8lmmiUOnavoXB2sUQ89Xbe3+l21UyM=;
-  b=npleOEC/eQ4gVT59dtwp/X/cUOvU789JTfepcW/kwijEPr0VNysf6sJN
-   x62RjEndMmEBqqWxhTu8YOaqX8fKna+zpb8abATbeXDqTCEJjqfFmnU8Q
-   eb/ac2g8yi3ddv9wPSXKgHTVeg7aAkJfbqPzEQKPJRqygzbQaLFqrjGwR
-   HNDYxQXL7rXLPVBIBAmsL1VNkcYN1jrZiCSIGte6gNYaquDhAhXdESsuL
-   SXuCc2I7VzeNze/R+Or5m7KanLjxV6lzUW61yL1TwWeBfG73iRm7ji4rK
-   0VKEA6Hr9Dj4XI21lLKSs9jv3q1a/Ocqb9vDtmEHC29PvA1t38qvs7DcV
+  bh=OK7fDA0dBVfpPzOfXSMQgQsi4WNr2mF12B/wyA/rass=;
+  b=hW3ll1GyFgMaHe/yoGNsIokUv3qeyMVjERgo+45TXAQ7hYKs5qzdpTLE
+   TJHT1ladx+GnwFeOvTtLztBcAWtSmvdO4DBv45EUihredXP82tENG3MYS
+   TVKLKPOldWvKGwQPWol06dS8qWacEpsPyFMBv02JZRBOFIlPcD24iuW1B
+   6dNzFkTvvdtmqFdSlYNZ11iZ+uPardG4VWoYsT3gbu7IfzoMzU1cvQfF7
+   zcMHoyqFV3OuceZ+QJuScuzB2lKc3K1lv6ENzrHsN9jgpn7PfzfbHGHYt
+   9nAjxvs9QCV1vjOiVH1VS3L8IQKFlxt0sh+pjD1cWsChRkNlpnEteHCu6
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="234454003"
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="311669939"
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="234454003"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:11:32 -0800
+   d="scan'208";a="311669939"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:19:45 -0800
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="530370337"
+   d="scan'208";a="634903955"
 Received: from lmmcwade-mobl2.amr.corp.intel.com (HELO localhost.localdomain) ([10.252.137.203])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:11:20 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:19:39 -0800
 From: Ben Widawsky <ben.widawsky@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: patches@lists.linux.dev,
@@ -52,12 +52,12 @@ Cc: patches@lists.linux.dev,
 	Bjorn Helgaas <helgaas@kernel.org>,
 	nvdimm@lists.linux.dev,
 	linux-pci@vger.kernel.org
-Subject: [PATCH v4 01/14] cxl/region: Add region creation ABI
-Date: Thu, 17 Feb 2022 09:10:57 -0800
-Message-Id: <20220217171057.685705-1-ben.widawsky@intel.com>
+Subject: [PATCH v5 01/15] cxl/region: Add region creation ABI
+Date: Thu, 17 Feb 2022 09:19:31 -0800
+Message-Id: <20220217171931.740926-1-ben.widawsky@intel.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220128002707.391076-2-ben.widawsky@intel.com>
-References: <20220128002707.391076-2-ben.widawsky@intel.com>
+In-Reply-To: <20220217171057.685705-1-ben.widawsky@intel.com>
+References: <20220217171057.685705-1-ben.widawsky@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -94,20 +94,9 @@ echo $region > /sys/bus/cxl/devices/decoder0.0/delete_region
 Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
 
 ---
-Changes since v3:
-- Change ABI for creation (cache a next) (Dan)
-- For above, Use ratelimited dev_err for new ABI
-- Use devm management for regions (Dan)
-- Move device initialization to alloc (Dan)
-- Move device alloc to add
-- Change functions naming to use foo_bar_alloc instead of foo_alloc_bar
-- Update commit message example for ABI change (Dan)
-- Update ABI documentation (Dan)
-- Update copyright date (Dan)
-- Update region kdoc (Dan)
-- Remove unnecessary WARN in region creation (Dan)
-- Remove is_cxl_region() (for now) (Jonathan)
-- Check driver binding to avoid double free of region (Dan)
+Changes since v4:
+- Add the missed base attributes addition
+
 ---
  Documentation/ABI/testing/sysfs-bus-cxl       |  23 ++
  .../driver-api/cxl/memory-devices.rst         |  11 +
@@ -520,8 +509,6 @@ index 82e49ab0937d..3fe6d34e6d59 100644
  cxl_core-y += config_check.o
  
  obj-m += test/
-
-base-commit: 3bdf187d313e067de2a81109f9a1dd3da7f3dc2c
 -- 
 2.35.1
 
