@@ -1,79 +1,73 @@
-Return-Path: <nvdimm+bounces-3138-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3141-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411E54C433E
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Feb 2022 12:24:00 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 812BA4C477D
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Feb 2022 15:31:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id C08773E0F49
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Feb 2022 11:23:58 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id B88991C0B41
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Feb 2022 14:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 988991FC9;
-	Fri, 25 Feb 2022 11:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A344923B8;
+	Fri, 25 Feb 2022 14:31:13 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6AA1FBD
-	for <nvdimm@lists.linux.dev>; Fri, 25 Feb 2022 11:23:50 +0000 (UTC)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PBNJkf009007;
-	Fri, 25 Feb 2022 11:23:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=JR6MshcxA/GhNfLYaL464dq6rM47p/hNN7EPDSzVqMY=;
- b=XhsWaXFFWpHLk2vMwXpGZmavj1SJDEO9zsWHVqHRdKaWJ+H90GpzstY6aT9NOncBJoCZ
- WWB1HjaLDuxbC0SL66M07xB7DGIZVjuZzoeeHJeD6OAFzDpyq0Y0OOM0x4UDgNaeafWA
- TOC19mG7IXLQSuzyooB1C+kzT7wg3yDOqZ7k9J7pIlYHGPpqQe9bYXgt0iSqZOen14Q1
- CmKCftUgo9Yr8HmfN9sKRTmcPl7aM7UPjmP9YOCTcB3fde142wp8EZsUfTI+q7XdJBCo
- bPcEuYYlfnE4p5F4PhqUbC3f9suc7y/WO3fxStNUGKLTCn/erYdgmDyURyjL+MjiXsV7 4Q== 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB5E23AF
+	for <nvdimm@lists.linux.dev>; Fri, 25 Feb 2022 14:31:11 +0000 (UTC)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PDDcmB002808;
+	Fri, 25 Feb 2022 14:31:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=KDwFp4dSnsUHo1ivwnOGfSoBp69V2QJcMPdFOYvncOg=;
+ b=i+LgPoHDLy7JCjEWuR4d8qdoJG4JTmIyTyjfiFblqlyNDWnD6mIy480l7SzgevKbInhN
+ spOBaLODbyj9MYfXrcVMsc6Jl8nNt39eS5jr/J3ruHRo9Y3D5sVVYdYVCRfGHBXkkuvt
+ 1uY9+cFM9TCneFyJKANszPBQi9Aa3K3ZVU55QMspB6fScujGb6hLl+mRFcP6xR0rIsi1
+ RPOHTGND/1jZ6B0iIV9efYo6Nfk4h6c1fLJvQebFaTMkOkJhs7VkxjzieLTBRFy+NttA
+ W4ewevyv2iLTrqy7zmFWl+wfU/Z7ni6PR3/WBPbifQj7EeiVZUA3AensTnxors9G2A4e 2g== 
 Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 3edsju7xm5-1
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3eeytf21mt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Feb 2022 11:23:37 +0000
+	Fri, 25 Feb 2022 14:31:02 +0000
 Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PBCiXw022989;
-	Fri, 25 Feb 2022 11:23:36 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by ppma06ams.nl.ibm.com with ESMTP id 3eaqtjr42t-1
+	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PESk2p008028;
+	Fri, 25 Feb 2022 14:30:40 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+	by ppma06ams.nl.ibm.com with ESMTP id 3eaqtjsbgw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Feb 2022 11:23:36 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PBNTBA55640460
+	Fri, 25 Feb 2022 14:30:40 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PEUavt49283470
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Feb 2022 11:23:29 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B8F652050;
-	Fri, 25 Feb 2022 11:23:29 +0000 (GMT)
-Received: from [9.43.81.177] (unknown [9.43.81.177])
-	by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0E62B5204E;
-	Fri, 25 Feb 2022 11:23:23 +0000 (GMT)
-Message-ID: <f5f5904a-aedc-2976-d392-75d4cf91e8aa@linux.ibm.com>
-Date: Fri, 25 Feb 2022 16:53:22 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 0/4] Add perf interface to expose nvdimm
-Content-Language: en-US
-To: Nageswara Sastry <rnsastry@linux.ibm.com>, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
+	Fri, 25 Feb 2022 14:30:37 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CB9214C059;
+	Fri, 25 Feb 2022 14:30:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 692BD4C058;
+	Fri, 25 Feb 2022 14:30:32 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.81.177])
+	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Fri, 25 Feb 2022 14:30:32 +0000 (GMT)
+From: Kajol Jain <kjain@linux.ibm.com>
+To: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, nvdimm@lists.linux.dev,
         linux-kernel@vger.kernel.org, peterz@infradead.org,
         dan.j.williams@intel.com, ira.weiny@intel.com,
         vishal.l.verma@intel.com
-Cc: santosh@fossix.org, maddy@linux.ibm.com, aneesh.kumar@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, vaibhav@linux.ibm.com, tglx@linutronix.de
-References: <20220217163357.276036-1-kjain@linux.ibm.com>
- <ddf18609-84ad-e263-7dff-7b2cc68557ef@linux.ibm.com>
- <ea6bc468-c7ae-c844-5111-8f0dc3207f89@linux.ibm.com>
- <d7945e63-4cd6-1947-ed9f-a81203226c47@linux.ibm.com>
-From: kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <d7945e63-4cd6-1947-ed9f-a81203226c47@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Cc: santosh@fossix.org, maddy@linux.ibm.com, rnsastry@linux.ibm.com,
+        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        vaibhav@linux.ibm.com, tglx@linutronix.de, kjain@linux.ibm.com
+Subject: [PATCH v7 0/4] Add perf interface to expose nvdimm
+Date: Fri, 25 Feb 2022 20:00:20 +0530
+Message-Id: <20220225143024.47947-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qLNX9OLKaVHLaEsfKQNSP10dcqym0tXG
-X-Proofpoint-GUID: qLNX9OLKaVHLaEsfKQNSP10dcqym0tXG
+X-Proofpoint-GUID: Hw8wQiXlk_YQQ30l3U6V_C_b1YzN4_8r
+X-Proofpoint-ORIG-GUID: Hw8wQiXlk_YQQ30l3U6V_C_b1YzN4_8r
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -84,174 +78,164 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_07,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
- bulkscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202250060
+ definitions=2022-02-25_08,2022-02-25_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 mlxlogscore=956 phishscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202250084
 
+Patchset adds performance stats reporting support for nvdimm.
+Added interface includes support for pmu register/unregister
+functions. A structure is added called nvdimm_pmu to be used for
+adding arch/platform specific data such as cpumask, nvdimm device
+pointer and pmu event functions like event_init/add/read/del.
+User could use the standard perf tool to access perf events
+exposed via pmu.
 
+Interface also defines supported event list, config fields for the
+event attributes and their corresponding bit values which are exported
+via sysfs. Patch 3 exposes IBM pseries platform nmem* device
+performance stats using this interface.
 
-On 2/25/22 16:41, Nageswara Sastry wrote:
-> 
-> 
-> On 25/02/22 12:08 pm, kajoljain wrote:
->>
->>
->> On 2/25/22 11:25, Nageswara Sastry wrote:
->>>
->>>
->>> On 17/02/22 10:03 pm, Kajol Jain wrote:
->>>> Patchset adds performance stats reporting support for nvdimm.
->>>> Added interface includes support for pmu register/unregister
->>>> functions. A structure is added called nvdimm_pmu to be used for
->>>> adding arch/platform specific data such as cpumask, nvdimm device
->>>> pointer and pmu event functions like event_init/add/read/del.
->>>> User could use the standard perf tool to access perf events
->>>> exposed via pmu.
->>>>
->>>> Interface also defines supported event list, config fields for the
->>>> event attributes and their corresponding bit values which are exported
->>>> via sysfs. Patch 3 exposes IBM pseries platform nmem* device
->>>> performance stats using this interface.
->>>>
->>>> Result from power9 pseries lpar with 2 nvdimm device:
->>>>
->>>> Ex: List all event by perf list
->>>>
->>>> command:# perf list nmem
->>>>
->>>>     nmem0/cache_rh_cnt/                                [Kernel PMU
->>>> event]
->>>>     nmem0/cache_wh_cnt/                                [Kernel PMU
->>>> event]
->>>>     nmem0/cri_res_util/                                [Kernel PMU
->>>> event]
->>>>     nmem0/ctl_res_cnt/                                 [Kernel PMU
->>>> event]
->>>>     nmem0/ctl_res_tm/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/fast_w_cnt/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/host_l_cnt/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/host_l_dur/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/host_s_cnt/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/host_s_dur/                                  [Kernel PMU
->>>> event]
->>>>     nmem0/med_r_cnt/                                   [Kernel PMU
->>>> event]
->>>>     nmem0/med_r_dur/                                   [Kernel PMU
->>>> event]
->>>>     nmem0/med_w_cnt/                                   [Kernel PMU
->>>> event]
->>>>     nmem0/med_w_dur/                                   [Kernel PMU
->>>> event]
->>>>     nmem0/mem_life/                                    [Kernel PMU
->>>> event]
->>>>     nmem0/poweron_secs/                                [Kernel PMU
->>>> event]
->>>>     ...
->>>>     nmem1/mem_life/                                    [Kernel PMU
->>>> event]
->>>>     nmem1/poweron_secs/                                [Kernel PMU
->>>> event]
->>>>
->>>> Patch1:
->>>>           Introduces the nvdimm_pmu structure
->>>> Patch2:
->>>>           Adds common interface to add arch/platform specific data
->>>>           includes nvdimm device pointer, pmu data along with
->>>>           pmu event functions. It also defines supported event list
->>>>           and adds attribute groups for format, events and cpumask.
->>>>           It also adds code for cpu hotplug support.
->>>> Patch3:
->>>>           Add code in arch/powerpc/platform/pseries/papr_scm.c to
->>>> expose
->>>>           nmem* pmu. It fills in the nvdimm_pmu structure with pmu
->>>> name,
->>>>           capabilities, cpumask and event functions and then registers
->>>>           the pmu by adding callbacks to register_nvdimm_pmu.
->>>> Patch4:
->>>>           Sysfs documentation patch
->>>>
->>>> Changelog
->>>
->>> Tested these patches with the automated tests at
->>> avocado-misc-tests/perf/perf_nmem.py
->>> URL:
->>> https://github.com/avocado-framework-tests/avocado-misc-tests/blob/master/perf/perf_nmem.py
->>>
->>>
->>>
->>> 1. On the system where target id and online id were different then not
->>> seeing value in 'cpumask' and those tests failed.
->>>
->>> Example:
->>> Log from dmesg
->>> ...
->>> papr_scm ibm,persistent-memory:ibm,pmemory@44100003: Region registered
->>> with target node 1 and online node 0
->>> ...
->>
->> Hi Nageswara Sastry,
->>         Thanks for testing the patch set. Yes you right, incase target
->> node id and online node id is different, it can happen when target
->> node is not online and hence can cause this issue, thanks for pointing
->> it.
->>
->> Function dev_to_node will return node id for a given nvdimm device which
->> can be offline in some scenarios. We should use numa node id return by
->> numa_map_to_online_node function in that scenario. This function incase
->> given node is offline, it will lookup for next closest online node and
->> return that nodeid.
->>
->> Can you try with below change and see, if you are still getting this
->> issue. Please let me know.
->>
->> diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
->> b/arch/powerpc/platforms/pseries/papr_scm.c
->> index bdf2620db461..4dd513d7c029 100644
->> --- a/arch/powerpc/platforms/pseries/papr_scm.c
->> +++ b/arch/powerpc/platforms/pseries/papr_scm.c
->> @@ -536,7 +536,7 @@ static void papr_scm_pmu_register(struct
->> papr_scm_priv *p)
->>                                  PERF_PMU_CAP_NO_EXCLUDE;
->>
->>          /*updating the cpumask variable */
->> -       nodeid = dev_to_node(&p->pdev->dev);
->> +       nodeid = numa_map_to_online_node(dev_to_node(&p->pdev->dev));
->>          nd_pmu->arch_cpumask = *cpumask_of_node(nodeid);
->>
->> Thanks,
->> Kajol Jain
->>
-> 
-> With the above patch all the tests are passing on the system where
-> target id and online id were different. Here is the the result:
-> 
-> (1/9) perf_nmem.py:perfNMEM.test_pmu_register_dmesg: PASS (3.47 s)
-> (2/9) perf_nmem.py:perfNMEM.test_sysfs: PASS (1.15 s)
-> (3/9) perf_nmem.py:perfNMEM.test_pmu_count: PASS (1.08 s)
-> (4/9) perf_nmem.py:perfNMEM.test_all_events: PASS (18.15 s)
-> (5/9) perf_nmem.py:perfNMEM.test_all_group_events: PASS (2.22 s)
-> (6/9) perf_nmem.py:perfNMEM.test_mixed_events: CANCEL: With single PMU
-> mixed events test is not possible. (1.18 s)
-> (7/9) perf_nmem.py:perfNMEM.test_pmu_cpumask: PASS (1.12 s)
-> (8/9) perf_nmem.py:perfNMEM.test_cpumask: PASS (1.17 s)
-> (9/9) perf_nmem.py:perfNMEM.test_cpumask_cpu_off: PASS (1.81 s)
-> 
-> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Result from power9 pseries lpar with 2 nvdimm device:
 
-Hi Nageswara,
-   Thanks for testing this change. I will send new patch series v7 with
-this change and also include your Tested-by tag.
+Ex: List all event by perf list
 
-Thanks,
-Kajol Jain
+command:# perf list nmem
 
-> 
+  nmem0/cache_rh_cnt/                                [Kernel PMU event]
+  nmem0/cache_wh_cnt/                                [Kernel PMU event]
+  nmem0/cri_res_util/                                [Kernel PMU event]
+  nmem0/ctl_res_cnt/                                 [Kernel PMU event]
+  nmem0/ctl_res_tm/                                  [Kernel PMU event]
+  nmem0/fast_w_cnt/                                  [Kernel PMU event]
+  nmem0/host_l_cnt/                                  [Kernel PMU event]
+  nmem0/host_l_dur/                                  [Kernel PMU event]
+  nmem0/host_s_cnt/                                  [Kernel PMU event]
+  nmem0/host_s_dur/                                  [Kernel PMU event]
+  nmem0/med_r_cnt/                                   [Kernel PMU event]
+  nmem0/med_r_dur/                                   [Kernel PMU event]
+  nmem0/med_w_cnt/                                   [Kernel PMU event]
+  nmem0/med_w_dur/                                   [Kernel PMU event]
+  nmem0/mem_life/                                    [Kernel PMU event]
+  nmem0/poweron_secs/                                [Kernel PMU event]
+  ...
+  nmem1/mem_life/                                    [Kernel PMU event]
+  nmem1/poweron_secs/                                [Kernel PMU event]
+
+Patch1:
+        Introduces the nvdimm_pmu structure
+Patch2:
+        Adds common interface to add arch/platform specific data
+        includes nvdimm device pointer, pmu data along with
+        pmu event functions. It also defines supported event list
+        and adds attribute groups for format, events and cpumask.
+        It also adds code for cpu hotplug support.
+Patch3:
+        Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
+        nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
+        capabilities, cpumask and event functions and then registers
+        the pmu by adding callbacks to register_nvdimm_pmu.
+Patch4:
+        Sysfs documentation patch
+
+Changelog
+---
+v6 -> v7
+- Add function call to numa_map_to_online_node function inorder to
+  get online numa node. As the node id returned by function dev_to_node
+  can be offline in some scenarios and can create issue in hotplug code
+  as reported by Nageswara R Sastry.
+
+- Add function declaration of perf_pmu_register, perf_pmu_unregister
+  and  perf_pmu_migrate_context functions in nd.h file to resolve
+  the implicit-function-declaration warning as reported by kernel test
+  robot.
+  Link: https://lore.kernel.org/all/202202241242.zqzGkguy-lkp@intel.com/
+
+- Add Tested-by, Acked-by and Reported-by tags from Peter Zijlstra
+  and Nageswara R Sastry.
+
+- Link to the patchset v6: https://lkml.org/lkml/2022/2/17/857
+
+Resend v5 -> v6
+- No logic change, just a rebase to latest upstream and
+  tested the patchset.
+
+- Link to the patchset Resend v5: https://lkml.org/lkml/2021/11/15/3979
+
+v5 -> Resend v5
+- Resend the patchset
+
+- Link to the patchset v5: https://lkml.org/lkml/2021/9/28/643
+
+v4 -> v5:
+- Remove multiple variables defined in nvdimm_pmu structure include
+  name and pmu functions(event_int/add/del/read) as they are just
+  used to copy them again in pmu variable. Now we are directly doing
+  this step in arch specific code as suggested by Dan Williams.
+
+- Remove attribute group field from nvdimm pmu structure and
+  defined these attribute groups in common interface which
+  includes format, event list along with cpumask as suggested by
+  Dan Williams.
+  Since we added static defination for attrbute groups needed in
+  common interface, removes corresponding code from papr.
+
+- Add nvdimm pmu event list with event codes in the common interface.
+
+- Remove Acked-by/Reviewed-by/Tested-by tags as code is refactored
+  to handle review comments from Dan.
+
+- Make nvdimm_pmu_free_hotplug_memory function static as reported
+  by kernel test robot, also add corresponding Reported-by tag.
+
+- Link to the patchset v4: https://lkml.org/lkml/2021/9/3/45
+
+v3 -> v4
+- Rebase code on top of current papr_scm code without any logical
+  changes.
+
+- Added Acked-by tag from Peter Zijlstra and Reviewed by tag
+  from Madhavan Srinivasan.
+
+- Link to the patchset v3: https://lkml.org/lkml/2021/6/17/605
+
+v2 -> v3
+- Added Tested-by tag.
+
+- Fix nvdimm mailing list in the ABI Documentation.
+
+- Link to the patchset v2: https://lkml.org/lkml/2021/6/14/25
+
+v1 -> v2
+- Fix hotplug code by adding pmu migration call
+  incase current designated cpu got offline. As
+  pointed by Peter Zijlstra.
+
+- Removed the retun -1 part from cpu hotplug offline
+  function.
+
+- Link to the patchset v1: https://lkml.org/lkml/2021/6/8/500
+
+Kajol Jain (4):
+  drivers/nvdimm: Add nvdimm pmu structure
+  drivers/nvdimm: Add perf interface to expose nvdimm performance stats
+  powerpc/papr_scm: Add perf interface support
+  docs: ABI: sysfs-bus-nvdimm: Document sysfs event format entries for
+    nvdimm pmu
+
+ Documentation/ABI/testing/sysfs-bus-nvdimm |  35 +++
+ arch/powerpc/include/asm/device.h          |   5 +
+ arch/powerpc/platforms/pseries/papr_scm.c  | 225 ++++++++++++++
+ drivers/nvdimm/Makefile                    |   1 +
+ drivers/nvdimm/nd_perf.c                   | 328 +++++++++++++++++++++
+ include/linux/nd.h                         |  44 +++
+ 6 files changed, 638 insertions(+)
+ create mode 100644 drivers/nvdimm/nd_perf.c
+
+-- 
+2.31.1
+
 
