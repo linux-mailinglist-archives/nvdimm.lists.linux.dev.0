@@ -1,68 +1,65 @@
-Return-Path: <nvdimm+bounces-3144-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3149-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B874C55AF
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 26 Feb 2022 12:40:24 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43AE74C5AF8
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 27 Feb 2022 13:09:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 25A303E0F50
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 26 Feb 2022 11:40:22 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 99F261C0551
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 27 Feb 2022 12:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1013B31;
-	Sat, 26 Feb 2022 11:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63FA548BD;
+	Sun, 27 Feb 2022 12:09:07 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6363B21
-	for <nvdimm@lists.linux.dev>; Sat, 26 Feb 2022 11:40:14 +0000 (UTC)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21Q9Egq8010619;
-	Sat, 26 Feb 2022 11:40:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=jB7a9kCbVK8WlYyUgMntxx6G2BrHntEpAWGJRG8Ofyk=;
- b=hY1HGaV+sKmLhnTabX5zAEmGD830lLfPanZuzuH46LB3QjXd6VKvGnuk3xLsSawfONp1
- 3hMuVQSUMmJZSQk3QuB45v1LJMqSbDnhAc3k84wD24KcrdpBCHsr4MG9637azkuGvaLE
- PZpzyAQsIcR9+MjsfQy2tlufRTfVjgVBMN8vXHEBiOnifWNiDVTw5N01li+QttH2TbRZ
- Xg2u1k9gC5x7HagXlvpE8MifK00l0kthRlHUWH2cNF31Po2g5EmFBRMuEOPxGTyWTjT7
- UfVi+jEVycnl5ffZQTZmfv9/yvQOsNqB14cj7tAPhfhBoVlv2D+MfQkW55dL/uS2G5Q+ Dw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 3efhdb25f5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Feb 2022 11:40:06 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-	by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21QBbIvZ003208;
-	Sat, 26 Feb 2022 11:40:04 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-	by ppma04fra.de.ibm.com with ESMTP id 3efbu8hg1b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 26 Feb 2022 11:40:04 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21QBe1ao27656582
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 26 Feb 2022 11:40:01 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 405375204F;
-	Sat, 26 Feb 2022 11:40:01 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.43.43.241])
-	by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 5B6DC52052;
-	Sat, 26 Feb 2022 11:39:58 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Sat, 26 Feb 2022 17:09:57 +0530
-From: Vaibhav Jain <vaibhav@linux.ibm.com>
-To: nvdimm@lists.linux.dev
-Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-        Tarun Sahu <tsahu@linux.ibm.com>
-Subject: [ndctl PATCH] util/size.h: Fix build error for GCC < 10
-Date: Sat, 26 Feb 2022 17:09:55 +0530
-Message-Id: <20220226113955.526036-1-vaibhav@linux.ibm.com>
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F4B48B6
+	for <nvdimm@lists.linux.dev>; Sun, 27 Feb 2022 12:09:04 +0000 (UTC)
+IronPort-Data: =?us-ascii?q?A9a23=3AhfpkI6gn03LpJm5iP9LzOcBWX161CxEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUHyjYWX2yHa/feMGenc410PIrk/EIP7JPUn9JnG1RtqHw8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl65TIkBOWLRMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTSuJsrsUlItPiMI4Wtjdn1z6xJfovR9bBBbrL4dtZ1?=
+ =?us-ascii?q?TIrrsFIAfvaIcEebFJHYBbfZBtAElQaEpQzmKGvnHaXWzlZrk+F4K8yy2vNxQd?=
+ =?us-ascii?q?ylr/3P7L9fMKGRMBQtkKZvX7duWD4BAwKctCS11Kt8Huqi6nEnT7TX5gbH7m1s?=
+ =?us-ascii?q?PVthTW7wm0VFQ1TW0C3rOe0jmagVN9FbU8Z4Cwjqe417kPDZt38WQCo5X2JpBg?=
+ =?us-ascii?q?RX/JOHOAgrgKA0KzZ50CeHGdsZjpAbsE28d84XhQ02VKT2dDkHzpitPuSU331y?=
+ =?us-ascii?q?1s+hVteIgBMdSlbO3BCFlBDvrHeTEgIpkqnZr5e/GSd07UZwQ3N/g0=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AqTB5vKvWqXOeuAG9rVpcKm5Y7skCW4Mji2hC?=
+ =?us-ascii?q?6mlwRA09TyXGra2TdaUgvyMc1gx7ZJhBo7+90ci7MBfhHPtOjbX5Uo3SOTUO1F?=
+ =?us-ascii?q?HYTr2KjrGSuwEIeReOj9K1vJ0IG8YeNDSZNykdsS+Q2mmF+rgbsbq6GPfCv5a4?=
+ =?us-ascii?q?854hd3AbV4hQqyNCTiqLGEx/QwdLQbI/CZqn/8JC4x6tY24eYMiXDmQMG7Grna?=
+ =?us-ascii?q?y4qLvWJTo9QzI34giHij2lrJb8Dhijxx8bFxdC260r/2TpmxHwoo+jr/a44BnB?=
+ =?us-ascii?q?0HK71eUkpPLRjv94QOCcgMkcLTvhziyyYp56ZrGEtDcp5Mmy9VcDirD30mEdFv?=
+ =?us-ascii?q?U2z0mUUnC+oBPr1QWl+i0p8WXexViRhmamidDlRQg9F9FKietiA2zkAnIbzZlB?=
+ =?us-ascii?q?OZ9wrimkX8I9N2KLoM293am9a/hSrDv8nZJ4+tRjwkC2UuMlGcBsRMIkjQ9o+a?=
+ =?us-ascii?q?w7bVjHAbAcYZJT5f7nlYtrmHOhHg7kVzpUsa2RtkpaJGb7fqFFgL3h7wRr?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="122037686"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 27 Feb 2022 20:07:51 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+	by cn.fujitsu.com (Postfix) with ESMTP id D5A014D169EF;
+	Sun, 27 Feb 2022 20:07:48 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Sun, 27 Feb 2022 20:07:48 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Sun, 27 Feb 2022 20:07:48 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>
+CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
+	<hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [PATCH v11 0/8] fsdax: introduce fs query to support reflink
+Date: Sun, 27 Feb 2022 20:07:39 +0800
+Message-ID: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -71,56 +68,86 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gjSihoyzvsVfHobnovhCxGlY5HpMRcvW
-X-Proofpoint-ORIG-GUID: gjSihoyzvsVfHobnovhCxGlY5HpMRcvW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_11,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 mlxscore=0 mlxlogscore=657 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202260081
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: D5A014D169EF.A274D
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-Building with GCC 8.4.1 results in following build error for 'util/size.c':
+This patchset is aimed to support shared pages tracking for fsdax.
 
-../util/size.h:57:16: error: missing binary operator before token "("
-   __has_builtin(__builtin_mul_overflow) && \
+Changes since V10:
+  - Use cmpxchg() to prevent concurrent registration/unregistration
+  - Use phys_addr_t for ->memory_failure()
+  - Add dax_entry_lock() for dax_lock_mapping_entry()
+  - Fix offset and length calculation at the boundary of a filesystem
 
-This is caused due to missing '__has_builtin' preprocessor operator in GCC
-versions < 10.0.0. The patch updates the check for CLANG's availability of
-__builtin_{mul,add}_overflow to prevent preprocessor from evaluating the
-expression "___has_builtin(__builtin_mul_overflow) &&
-__has_builtin(__builtin_add_overflow)".
+This patchset moves owner tracking from dax_assocaite_entry() to pmem
+device driver, by introducing an interface ->memory_failure() for struct
+pagemap.  This interface is called by memory_failure() in mm, and
+implemented by pmem device.
 
-Fixes:10653a171bc0("util/size.h: fix build for older compilers")
-Reported-by: Tarun Sahu <tsahu@linux.ibm.com>
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
- util/size.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Then call holder operations to find the filesystem which the corrupted
+data located in, and call filesystem handler to track files or metadata
+associated with this page.
 
-diff --git a/util/size.h b/util/size.h
-index 1cb06690261b..02baa77fe649 100644
---- a/util/size.h
-+++ b/util/size.h
-@@ -53,11 +53,12 @@ static inline bool is_power_of_2(unsigned long long v)
- #define COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW 1
- #endif
- 
--#if __clang__ && \
--    __has_builtin(__builtin_mul_overflow) && \
-+#if __clang__
-+#if __has_builtin(__builtin_mul_overflow) && \
-     __has_builtin(__builtin_add_overflow)
- #define COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW 1
- #endif
-+#endif
- 
- #if COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW
- 
+Finally we are able to try to fix the corrupted data in filesystem and
+do other necessary processing, such as killing processes who are using
+the files affected.
+
+The call trace is like this:
+memory_failure()
+|* fsdax case
+|------------
+|pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+| dax_holder_notify_failure()      =>
+|  dax_device->holder_ops->notify_failure() =>
+|                                     - xfs_dax_notify_failure()
+|  |* xfs_dax_notify_failure()
+|  |--------------------------
+|  |   xfs_rmap_query_range()
+|  |    xfs_dax_failure_fn()
+|  |    * corrupted on metadata
+|  |       try to recover data, call xfs_force_shutdown()
+|  |    * corrupted on file data
+|  |       try to recover data, call mf_dax_kill_procs()
+|* normal case
+|-------------
+|mf_generic_kill_procs()
+
+==
+Shiyang Ruan (8):
+  dax: Introduce holder for dax_device
+  mm: factor helpers for memory_failure_dev_pagemap
+  pagemap,pmem: Introduce ->memory_failure()
+  fsdax: Introduce dax_lock_mapping_entry()
+  mm: move pgoff_address() to vma_pgoff_address()
+  mm: Introduce mf_dax_kill_procs() for fsdax case
+  xfs: Implement ->notify_failure() for XFS
+  fsdax: set a CoW flag when associate reflink mappings
+
+ drivers/dax/super.c         |  89 +++++++++++++
+ drivers/nvdimm/pmem.c       |  16 +++
+ fs/dax.c                    | 140 ++++++++++++++++++---
+ fs/xfs/Makefile             |   1 +
+ fs/xfs/xfs_buf.c            |  12 ++
+ fs/xfs/xfs_fsops.c          |   3 +
+ fs/xfs/xfs_mount.h          |   1 +
+ fs/xfs/xfs_notify_failure.c | 235 +++++++++++++++++++++++++++++++++++
+ fs/xfs/xfs_notify_failure.h |  10 ++
+ fs/xfs/xfs_super.c          |   6 +
+ include/linux/dax.h         |  47 +++++++
+ include/linux/memremap.h    |  12 ++
+ include/linux/mm.h          |  17 +++
+ include/linux/page-flags.h  |   6 +
+ mm/memory-failure.c         | 240 ++++++++++++++++++++++++++----------
+ 15 files changed, 747 insertions(+), 88 deletions(-)
+ create mode 100644 fs/xfs/xfs_notify_failure.c
+ create mode 100644 fs/xfs/xfs_notify_failure.h
+
 -- 
 2.35.1
+
+
 
 
