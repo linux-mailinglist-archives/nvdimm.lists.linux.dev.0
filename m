@@ -1,50 +1,30 @@
-Return-Path: <nvdimm+bounces-3191-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3193-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id D78EA4C81FD
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 05:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9114C8B90
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 13:28:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id EA1A31C0B41
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 04:11:23 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id EB3A61C09DA
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 12:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EE017F6;
-	Tue,  1 Mar 2022 04:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225575A2A;
+	Tue,  1 Mar 2022 12:28:23 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C233217E4
-	for <nvdimm@lists.linux.dev>; Tue,  1 Mar 2022 04:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646107876; x=1677643876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qltwIc937Uu5ijgl7gEV8QkFm9r0IMF7rI6cefmccNg=;
-  b=M6i/D8mcSzertUgoZedoD2ZstrLGCCTGRxA7uO6UBU7QgXeEd11RYcJs
-   V6ee1QP1z99YCinMvfQDdQrE3XjHVBWIP5StE7FNhRTPyNgZoL34ltusE
-   p8pMONrkYdSFzNcUXNVKSYb+kHTismkd+tQT6TYwEUl0537PIZu0YKfh0
-   mq9eAXB9AkQoXgqfJOq7mHmoh5tcXhGoz6tugCfr/W9WSm5OCKP20v3HS
-   mXElobuZiJOsCZFz6bfn673RQ+uEIWWhPnIBNkcHHhtf91+0R0OcqPb67
-   EGpkMghHDT3nzGNy4KkydcReTvYd4HvD1a/mYFJZv/IFkUeihMA5V5D10
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313771457"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="313771457"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:11:16 -0800
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="550543648"
-Received: from chunhanz-mobl.amr.corp.intel.com (HELO localhost) ([10.212.29.175])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:11:15 -0800
-Date: Mon, 28 Feb 2022 20:11:15 -0800
-From: Ira Weiny <ira.weiny@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F775A12
+	for <nvdimm@lists.linux.dev>; Tue,  1 Mar 2022 12:28:21 +0000 (UTC)
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id CD72668AFE; Tue,  1 Mar 2022 13:19:26 +0100 (CET)
+Date: Tue, 1 Mar 2022 13:19:26 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Ira Weiny <ira.weiny@intel.com>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
 	Justin Sanders <justin@coraid.com>,
 	Philipp Reisner <philipp.reisner@linbit.com>,
 	Lars Ellenberg <lars.ellenberg@linbit.com>,
@@ -55,10 +35,9 @@ Cc: Jens Axboe <axboe@kernel.dk>, Chris Zankel <chris@zankel.net>,
 	linux-xtensa@linux-xtensa.org, linux-block@vger.kernel.org,
 	drbd-dev@lists.linbit.com, linux-bcache@vger.kernel.org,
 	nvdimm@lists.linux.dev
-Subject: Re: [PATCH 10/10] floppy: use memcpy_{to,from}_bvec
-Message-ID: <Yh2c41kEWmmGgWLG@iweiny-desk3>
-References: <20220222155156.597597-1-hch@lst.de>
- <20220222155156.597597-11-hch@lst.de>
+Subject: Re: [PATCH 03/10] zram: use memcpy_to_bvec in zram_bvec_read
+Message-ID: <20220301121926.GA3405@lst.de>
+References: <20220222155156.597597-1-hch@lst.de> <20220222155156.597597-4-hch@lst.de> <Yh1ycd3S/FKAtnuD@iweiny-desk3>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -67,39 +46,18 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222155156.597597-11-hch@lst.de>
+In-Reply-To: <Yh1ycd3S/FKAtnuD@iweiny-desk3>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Feb 22, 2022 at 04:51:56PM +0100, Christoph Hellwig wrote:
-> Use the helpers instead of open coding them.
+On Mon, Feb 28, 2022 at 05:10:09PM -0800, Ira Weiny wrote:
+> On Tue, Feb 22, 2022 at 04:51:49PM +0100, Christoph Hellwig wrote:
+> > Use the proper helper instead of open coding the copy.
+> > 
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Looks fine but I don't see a reason to keep the other operation atomic.  Could
+> the src map also use kmap_local_page()?
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
-> ---
->  drivers/block/floppy.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-> index 19c2d0327e157..8c647532e3ce9 100644
-> --- a/drivers/block/floppy.c
-> +++ b/drivers/block/floppy.c
-> @@ -2485,11 +2485,9 @@ static void copy_buffer(int ssize, int max_sector, int max_sector_2)
->  		}
->  
->  		if (CT(raw_cmd->cmd[COMMAND]) == FD_READ)
-> -			memcpy_to_page(bv.bv_page, bv.bv_offset, dma_buffer,
-> -				       size);
-> +			memcpy_to_bvec(&bv, dma_buffer);
->  		else
-> -			memcpy_from_page(dma_buffer, bv.bv_page, bv.bv_offset,
-> -					 size);
-> +			memcpy_from_bvec(dma_buffer, &bv);
->  
->  		remaining -= size;
->  		dma_buffer += size;
-> -- 
-> 2.30.2
-> 
-> 
+That switch obviously makes sense, but in this series I've focussed on
+the bio_vec maps so far.
 
