@@ -1,82 +1,126 @@
-Return-Path: <nvdimm+bounces-3192-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3194-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 200364C8B6D
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 13:20:55 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 105F84C9F26
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Mar 2022 09:29:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id B93E93E01F6
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Mar 2022 12:20:53 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 9EFDC1C0C4E
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  2 Mar 2022 08:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AD15A28;
-	Tue,  1 Mar 2022 12:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94202590;
+	Wed,  2 Mar 2022 08:29:07 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4A35A12
-	for <nvdimm@lists.linux.dev>; Tue,  1 Mar 2022 12:20:46 +0000 (UTC)
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id DB11D68BEB; Tue,  1 Mar 2022 13:20:42 +0100 (CET)
-Date: Tue, 1 Mar 2022 13:20:42 +0100
-From: Christoph Hellwig <hch@lst.de>
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-	Justin Sanders <justin@coraid.com>,
-	Philipp Reisner <philipp.reisner@linbit.com>,
-	Lars Ellenberg <lars.ellenberg@linbit.com>,
-	Denis Efremov <efremov@linux.com>, Minchan Kim <minchan@kernel.org>,
-	Nitin Gupta <ngupta@vflare.org>, Coly Li <colyli@suse.de>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	linux-xtensa@linux-xtensa.org, linux-block@vger.kernel.org,
-	drbd-dev@lists.linbit.com, linux-bcache@vger.kernel.org,
-	nvdimm@lists.linux.dev
-Subject: Re: [PATCH 06/10] nvdimm-btt: use bvec_kmap_local in
- btt_rw_integrity
-Message-ID: <20220301122042.GB3405@lst.de>
-References: <20220222155156.597597-1-hch@lst.de> <20220222155156.597597-7-hch@lst.de> <Yh2aCi6gtG0naC1r@iweiny-desk3>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52DA2576
+	for <nvdimm@lists.linux.dev>; Wed,  2 Mar 2022 08:29:05 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id s1so929251plg.12
+        for <nvdimm@lists.linux.dev>; Wed, 02 Mar 2022 00:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nhj2UYDv6lhlSNPLYeAs8t7voAVPXKimrviFdjCHzWM=;
+        b=DApuqsEmjJNLujancfXfCthOkTnRIUPq28/r6tOxkHmRYgOlkugPPK0h8zAh8enpIU
+         HfkQBBHhLbFz8qxRq7E2RLuHrElDGGUHS9Y244UdqIirJhWbIHaCrn4YF7xafhgTecpu
+         x6OH95W7ts5LUCdSkrPRN+VLxTqzK7oKM7OtnhOIOVkuakDHhP+07oAY8HWOUrVKWwpS
+         DnRwLDlUAcWgA1CnWdFtO0QOL8kLiRQ+vjGLe4BEgo4v9XJAX76t8Q0sNmUSx1tdL1/b
+         w7Y2MRd1la+tiYmu/lVxcH6LXEof0W4BIhpWEx+hwGiQJUbmqWHEmQaFjYs8VD1Hu04i
+         l7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nhj2UYDv6lhlSNPLYeAs8t7voAVPXKimrviFdjCHzWM=;
+        b=ipIfgatApCZwOPAC5Fb5hOL0NjrxlMIxEQ90QnyK0b4hOdmG1hFNAEwQlowZ9j9Sbg
+         XdpfxWK3t2l1iNki0pg4x+gsAnaUZdGwgiMnVBfPLWddfThgomwn3dTCpNXTMBcfy/Ne
+         FOZfo3EC/wpEpgh9+sTCMALSuh6ffq2IiulyFl8RlqqnqsEBPcfVgg1peG+L4OQhn4Xv
+         QgEu6OZH+SM78Bx194OzkCWDFWWpT+zpx+7GNBFsYDo2RjQSfsVGU1v/Wzpxmi7TANHh
+         OS2gf6wKTDGuUAb/ooN/5cuzi7GQEXnWaI7UYbx/uuxRLIKH8nYdSxUD34bBDnJt+XlH
+         3zYQ==
+X-Gm-Message-State: AOAM5308oj/1jdXNPRS6PQY5p0fcijYwt20m4eSAi5esJ02F66PwRPm9
+	9WgOYtjUcsbNvB9wYCwhFhFoFw==
+X-Google-Smtp-Source: ABdhPJw2Snc+gQoBgYJzFskUkuKAvbAT2RF7i6kPMEQuXqdEKU1ZjuWSi3E8iJ7UVQPqE+7d8aedhQ==
+X-Received: by 2002:a17:902:e5c4:b0:151:9bf6:f47f with SMTP id u4-20020a170902e5c400b001519bf6f47fmr635388plf.110.1646209745090;
+        Wed, 02 Mar 2022 00:29:05 -0800 (PST)
+Received: from FVFYT0MHHV2J.bytedance.net ([61.120.150.70])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056a000c9400b004f396b965a9sm20922228pfv.49.2022.03.02.00.28.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 00:29:04 -0800 (PST)
+From: Muchun Song <songmuchun@bytedance.com>
+To: dan.j.williams@intel.com,
+	willy@infradead.org,
+	jack@suse.cz,
+	viro@zeniv.linux.org.uk,
+	akpm@linux-foundation.org,
+	apopple@nvidia.com,
+	shy828301@gmail.com,
+	rcampbell@nvidia.com,
+	hughd@google.com,
+	xiyuyang19@fudan.edu.cn,
+	kirill.shutemov@linux.intel.com,
+	zwisler@kernel.org,
+	hch@infradead.org
+Cc: linux-fsdevel@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	duanxiongchun@bytedance.com,
+	smuchun@gmail.com,
+	Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v4 0/6] Fix some bugs related to ramp and dax
+Date: Wed,  2 Mar 2022 16:27:12 +0800
+Message-Id: <20220302082718.32268-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh2aCi6gtG0naC1r@iweiny-desk3>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 28, 2022 at 07:59:06PM -0800, Ira Weiny wrote:
-> On Tue, Feb 22, 2022 at 04:51:52PM +0100, Christoph Hellwig wrote:
-> > Using local kmaps slightly reduces the chances to stray writes, and
-> > the bvec interface cleans up the code a little bit.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >  drivers/nvdimm/btt.c | 10 ++++------
-> >  1 file changed, 4 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/nvdimm/btt.c b/drivers/nvdimm/btt.c
-> > index cbd994f7f1fe6..9613e54c7a675 100644
-> > --- a/drivers/nvdimm/btt.c
-> > +++ b/drivers/nvdimm/btt.c
-> > @@ -1163,17 +1163,15 @@ static int btt_rw_integrity(struct btt *btt, struct bio_integrity_payload *bip,
-> >  		 */
-> >  
-> >  		cur_len = min(len, bv.bv_len);
-> > -		mem = kmap_atomic(bv.bv_page);
-> > +		mem = bvec_kmap_local(&bv);
-> >  		if (rw)
-> > -			ret = arena_write_bytes(arena, meta_nsoff,
-> > -					mem + bv.bv_offset, cur_len,
-> > +			ret = arena_write_bytes(arena, meta_nsoff, mem, cur_len,
-> 
-> Why drop bv.bv_offset here and below?
+This series is based on next-20220225.
 
-Because bvec_kmap_local includes bv_offset in the pointer that it
-returns.
+Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+those on those changes, there are placed in this series.  Patch 3-4
+are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+since the previous patch remove the usage of follow_invalidate_pte().
+
+v4:
+- Fix compilation error on riscv.
+
+v3:
+- Based on next-20220225.
+
+v2:
+- Avoid the overly long line in lots of places suggested by Christoph.
+- Fix a compiler warning reported by kernel test robot since pmd_pfn()
+  is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+- Split a new patch 4 for preparation of fixing the dax bug.
+
+Muchun Song (6):
+  mm: rmap: fix cache flush on THP pages
+  dax: fix cache flush on PMD-mapped pages
+  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+  mm: pvmw: add support for walking devmap pages
+  dax: fix missing writeprotect the pte entry
+  mm: remove range parameter from follow_invalidate_pte()
+
+ fs/dax.c             | 82 +++++-----------------------------------------------
+ include/linux/mm.h   |  3 --
+ include/linux/rmap.h |  3 ++
+ mm/internal.h        | 26 +++++++++++------
+ mm/memory.c          | 23 ++-------------
+ mm/page_vma_mapped.c |  5 ++--
+ mm/rmap.c            | 68 +++++++++++++++++++++++++++++++++++--------
+ 7 files changed, 89 insertions(+), 121 deletions(-)
+
+-- 
+2.11.0
+
 
