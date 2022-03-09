@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-3263-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3265-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A4B4D38E3
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Mar 2022 19:34:42 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EA244D3AB3
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Mar 2022 20:59:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 996B43E0F24
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Mar 2022 18:34:40 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id CF17C3E0A18
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Mar 2022 19:59:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327C6510B;
-	Wed,  9 Mar 2022 18:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3618F5120;
+	Wed,  9 Mar 2022 19:59:27 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7385107
-	for <nvdimm@lists.linux.dev>; Wed,  9 Mar 2022 18:34:33 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id s11so3014128pfu.13
-        for <nvdimm@lists.linux.dev>; Wed, 09 Mar 2022 10:34:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5B15107
+	for <nvdimm@lists.linux.dev>; Wed,  9 Mar 2022 19:59:24 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so39012pjb.3
+        for <nvdimm@lists.linux.dev>; Wed, 09 Mar 2022 11:59:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=12MTmTpu13hq53lEoH6MFWeYg7xR2/fBkzr+0Z6u0Ck=;
-        b=MRRIsrlb2tD1c03r1HRBl9H3yV2f6E76atCl9PpgIr+Y1r8mp8mEEz3g6AjnN0F/AB
-         Riqw5V8wHiW0NirwZWoSeYLXhojIBGQceu/lx7Dy2Hxr+1RJUihoh0a8Tm6gHHTdj7OJ
-         UAlf0bjJIMErj04+OidGI99baw9exx5hBg3kKm2hhQOJ9bBEA9p8gZowZeZOZqTMyZHW
-         NExOBYafwY7M/GnHpOE1vm6V3TracFbCMj24rDko7OyJfM0JBrukvNRzwFPziGnwht8/
-         +jBrE2BRn+YBlHlf8l9xRD5om2A6tgGqCzzl+7tWAOAmzW+trkose8cdfzWG0BDp2g4W
-         YiVw==
+        bh=qY0faMoU6BxNREoouDEmmFkWjqNRWbbfGDDwPhgFlaA=;
+        b=ivyOe9HAmFp+PudsjkLZ5tKnlEZ4emhasp+yGMoOTg2U2ZJIqZkPIaXk1sql1I9WK/
+         nUQOffCU0ssrR/N1lWHZbUwROdhkUx1NUNSBwt2M8X/x7LR6luljUNwitO9CtXykihEV
+         7kMFECvdyoBIRJtwymkhM3klne+juuikdSIPpr4gNHAkjhB3bjU74tx0mu7aEZVFWwbD
+         84UlWp9k042Z8eHBdTXX0QlWCXBn+wKUPfpEmZeHi+kLP8NdiYFPshaM0E0/HqMx5RqT
+         ep+KpE+k3C30Da7hHMeIZR2O29RGOwYnk4gzbgAodkdGpUcAefZkLPIMO8V8FjE+ryc6
+         PukQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=12MTmTpu13hq53lEoH6MFWeYg7xR2/fBkzr+0Z6u0Ck=;
-        b=PxwvUOegjPMhyNY8st87Ouc5nvEudaEjUMIUBsM2nahAIWwipPpTSU7K7uCFpIREQo
-         3wwXW9nHOrbi5mnUHRi1bsIBamYnWPOGVAi+l7W4CfUOp07uWsnm8Z6osKGVqZVn68yh
-         io7hSrB5bI0RALIhjGljZk/pD3CAimIvey7m6645e4rYhMU6PmpmGYY1SpIa6QZHNQfk
-         ky/AFUswgOIxd/o8ee9D9/6/zDDsm06OhJsTRTlQodyk7+xHBepklRbRnSZx2ux+vZNA
-         d47pOjPxtDrt8uvVcfYeQbBc0VH4GfViDfHkzJHEtjltnIAFZ+BOTtlOFX6eZQbyIQAo
-         Y38A==
-X-Gm-Message-State: AOAM532XVdVhTnUR7m/CuLgrBne4chIU3flUR8kaLhZtNrxlvMUfC6vv
-	xj8tpL1Zk/s7en5muiDgk+iuMvEE00jaLpZ2fWOwMw==
-X-Google-Smtp-Source: ABdhPJyY9Pzhn8MeMgK0ZEOtq9SIHuzHEgfHwVIwVHOYoOPZHQJfQ5DNisp4IqmBvfdFAK/GaG0qA7iLFovv2I5S3Cs=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr897536pgb.74.1646850872623; Wed, 09 Mar
- 2022 10:34:32 -0800 (PST)
+        bh=qY0faMoU6BxNREoouDEmmFkWjqNRWbbfGDDwPhgFlaA=;
+        b=1Se7nksrNCEtIa4MF0NLs7vtwe4OiETbLmPQValDUhQA+/gxRW1gt95ynuYFWviQOz
+         rRfBxDHc8m0qDt60+2S9KV8xtTrd1iYaaTJMlDbKeYS+/T9SNO2z9ywXwgt6a0wjnT6S
+         XlYf/iK5qNvHrNdIg8aeuSQ9JvbbkS5334oERan2itDiPEvAnVtH0UR8IDJFW/shl55P
+         z4ZVdeWEUTvTNcB952HQVz044c0UjDkWzsAMHt3YamVlqoHO1nTXIUlIHFzO5cAT+wqg
+         jBE7w+7QhfP8lvXgeKfb+qyIZTOQ3ATVHF1sdMTr2BAnO+x39g4B4q+eEHGJNTy1qWsJ
+         zZqA==
+X-Gm-Message-State: AOAM531mCZNT3YF6JHB4YEn3BTsJRNDfHdDSlWrRY2VjRd7nzfToLbCI
+	PmvUUoJoBsU8tumMxoliU411sL3+ed9c9JkHiY6P4g==
+X-Google-Smtp-Source: ABdhPJyybkU4/zl86lxMdAicFm/HAASMobJ7TCzsCf62cS4iwKaWjXHvqPPPTaNM0MIrxlS5E1MmhGpaOR/XFMKMpRw=
+X-Received: by 2002:a17:903:32d1:b0:151:da5c:60ae with SMTP id
+ i17-20020a17090332d100b00151da5c60aemr1327115plr.34.1646855964287; Wed, 09
+ Mar 2022 11:59:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -55,13 +55,13 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <164610292916.2682974.12924748003366352335.stgit@dwillia2-desk3.amr.corp.intel.com>
- <164610294030.2682974.642590821548098371.stgit@dwillia2-desk3.amr.corp.intel.com>
- <20220309181843.000003fe@Huawei.com>
-In-Reply-To: <20220309181843.000003fe@Huawei.com>
+ <164610295187.2682974.18123746840987009597.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <20220309182650.00006b28@Huawei.com>
+In-Reply-To: <20220309182650.00006b28@Huawei.com>
 From: Dan Williams <dan.j.williams@intel.com>
-Date: Wed, 9 Mar 2022 10:34:21 -0800
-Message-ID: <CAPcyv4g+++6oc8RQf2vRChR+Utk08r7AhQ9Ma_JOyojz1adTqw@mail.gmail.com>
-Subject: Re: [PATCH 02/11] cxl/core: Refactor a cxl_lock_class() out of cxl_nested_lock()
+Date: Wed, 9 Mar 2022 11:59:13 -0800
+Message-ID: <CAPcyv4iw+7WzAWykbsF+4pv9a8p0G8c6Bw5fk-JGfLZQX=susQ@mail.gmail.com>
+Subject: Re: [PATCH 04/11] cxl/core: Clamp max lock_class
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: Greg KH <gregkh@linuxfoundation.org>, 
 	Rafael J Wysocki <rafael.j.wysocki@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
@@ -71,32 +71,39 @@ Cc: Greg KH <gregkh@linuxfoundation.org>,
 	Linux NVDIMM <nvdimm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 9, 2022 at 10:19 AM Jonathan Cameron
+On Wed, Mar 9, 2022 at 10:27 AM Jonathan Cameron
 <Jonathan.Cameron@huawei.com> wrote:
 >
-> On Mon, 28 Feb 2022 18:49:00 -0800
+> On Mon, 28 Feb 2022 18:49:11 -0800
 > Dan Williams <dan.j.williams@intel.com> wrote:
 >
-> > In preparation for upleveling device_lock() lockdep annotation support into
-> > the core, provide a helper to retrieve the lock class. This lock_class
-> > will be used with device_set_lock_class() to idenify the CXL nested
->
-> idenify?
-
-Indeed.
-
->
-> > locking rules.
+> > MAX_LOCKDEP_SUBCLASSES limits the depth of the CXL topology that can be
+> > validated by lockdep. Given that the cxl_test topology is already at
+> > this limit collapse some of the levels and clamp the max depth.
 > >
 > > Cc: Alison Schofield <alison.schofield@intel.com>
 > > Cc: Vishal Verma <vishal.l.verma@intel.com>
 > > Cc: Ira Weiny <ira.weiny@intel.com>
 > > Cc: Ben Widawsky <ben.widawsky@intel.com>
 > > Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> > ---
+> >  drivers/cxl/cxl.h |   21 +++++++++++++++++----
+> >  1 file changed, 17 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> > index 97e6ca7e4940..1357a245037d 100644
+> > --- a/drivers/cxl/cxl.h
+> > +++ b/drivers/cxl/cxl.h
+> > @@ -501,20 +501,33 @@ enum cxl_lock_class {
+> >       CXL_ANON_LOCK,
+> >       CXL_NVDIMM_LOCK,
+> >       CXL_NVDIMM_BRIDGE_LOCK,
 >
-> Otherwise looks fine to me.
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> I'd be tempted to give explicit value to the one above as well
+> so it's immediate clear there is deliberate duplication here.
 
-Thanks!
+Sounds good.
+
+I also notice that clamp_lock_class() should return -1 when it wants
+to disable validation, not zero.
 
