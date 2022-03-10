@@ -1,99 +1,88 @@
-Return-Path: <nvdimm+bounces-3266-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3268-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B9314D3DA1
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 00:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 438514D3DD1
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 01:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 6DDF51C0A00
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Mar 2022 23:37:01 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 7543B1C09DA
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 00:02:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024095396;
-	Wed,  9 Mar 2022 23:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A21539B;
+	Thu, 10 Mar 2022 00:01:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2F717C0
-	for <nvdimm@lists.linux.dev>; Wed,  9 Mar 2022 23:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646869013; x=1678405013;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qdEo60QuRBLpkDG9qZ0llpqweNPHFgN5NfnzxqbA+dU=;
-  b=S79dAMZpxkksvz6OKuGAfGrqFvh8/JD235plnP9MmeTEstkxCcAEs68O
-   GRSXW5UkjMcWe102nzZubIXfkMgPAexeHcCJiPFDgvuy/emgmLS48GJPW
-   iB2l1CR7p7LPRO8OxuBsArZMQJMbzv7ewCeRxvdMP5aotoo1oT/W4tV/w
-   ObjpiUilz7qw1ZNci/O9kuxaNQY965ftBFaxt8kthImMujfhEMK19gdSw
-   ro/i/D8cfytjyH0tTfiUfOoEXV/JmwftdoICKeimSH7ry2ZsNYdhVce8h
-   wf8UPX5UIz8/tLPvlEK/HpSH+UNuxYp4vEIfUkSuwpxAwCX6HHFX5pmer
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="253946024"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="253946024"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 15:36:52 -0800
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="554349178"
-Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 15:36:52 -0800
-Subject: [ndctl PATCH] build: Fix '-Wall' and '-O2' warnings
-From: Dan Williams <dan.j.williams@intel.com>
-To: vishal.l.verma@intel.com
-Cc: nvdimm@lists.linux.dev
-Date: Wed, 09 Mar 2022 15:36:52 -0800
-Message-ID: <164686901240.2874657.8473455139820858036.stgit@dwillia2-desk3.amr.corp.intel.com>
-User-Agent: StGit/0.18-3-g996c
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFE15395
+	for <nvdimm@lists.linux.dev>; Thu, 10 Mar 2022 00:01:55 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id z4so3267428pgh.12
+        for <nvdimm@lists.linux.dev>; Wed, 09 Mar 2022 16:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PUB8geEpJ+XtoTHFW5CyzSR89RxzbZocHBgXZDsT0q4=;
+        b=otdsgu05707Lk9KMy9Xl5aGoGpb6RqPU5UPULqEDsN/2l0x6ZW4fwG3smZmmXYgccr
+         uSOZID4KxBtbRYlE+5DzLmbTAZ+0UWldA4oJxDpKPrEnop8Fo9ENjzluPuJpHAt/f0Ph
+         JWHz1tJmUUKYOA51azuWN3u/HBuHP6xKdAEKkTinas859+sluZ5V6iIwToVN0w545JZ0
+         3MztadxrOxyAdk25++05k8H4fZKxTQ71SQh5zMwp9yN8iMhkMaVGQTUzYKS4c55c7s98
+         4/Uv6gYvdgNlFaNfigcT3+pjUGlyDppfCnmg8Tgo1wa+NEPrmpAzqwTGnItaDus8dWJS
+         vbZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PUB8geEpJ+XtoTHFW5CyzSR89RxzbZocHBgXZDsT0q4=;
+        b=velFJLjincPDdsIamcOhHuCPu4OxbJAIE/atU/PKkUH0H+c55Y2dDfcenyuFd3oozN
+         9a4LU65XFVDsMTqxMu1aKH4iOuyJ6ntlhCLsj5ZUVYZbkmpFWw9u3k30ZSRsDSbXve9G
+         sNu6iNCAJnPqoVPWugEM2RE5xwKyawrOxzOEbkobwKgZhtWIXkoO4sW06CgYiecdw46d
+         hAwUqwmjYCBR+AK0relQaKZdZbr8ogdlopSL9rdVfhbR3bKQ/Am/R0Mf0OKxafJDBLV7
+         Io0gCQPqLvxy+E1oDKkkzrRvCjPCi8nqVSzFwIcmwalxlzgrsAW2T1/WGLt8bzUIHKra
+         ER8g==
+X-Gm-Message-State: AOAM531LSeGSXpFLtvqTFRmWwJQO4kR9pZpgDaCNzPHumLRuQ3xke3xM
+	uUeVK9D5clqX3EuEN8mInQjV4omV7fPFUs9rPYbZIg==
+X-Google-Smtp-Source: ABdhPJxMwIgsbbMlOTDNiL7M3O6I5DfVtqlrxkmc58HdiEKBYmj4+VrHYnD7h5nPhaUJdRIDGvR7mrBpMKdCiPBYlTI=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr1821136pgb.74.1646870515046; Wed, 09
+ Mar 2022 16:01:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20220302082718.32268-1-songmuchun@bytedance.com> <20220302082718.32268-2-songmuchun@bytedance.com>
+In-Reply-To: <20220302082718.32268-2-songmuchun@bytedance.com>
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Wed, 9 Mar 2022 16:01:44 -0800
+Message-ID: <CAPcyv4j0cMaknAcMSHJ0U0QP4E2btir2b+1g=Rw+o2CHVQrH=A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] mm: rmap: fix cache flush on THP pages
+To: Muchun Song <songmuchun@bytedance.com>
+Cc: Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Andrew Morton <akpm@linux-foundation.org>, Alistair Popple <apopple@nvidia.com>, 
+	Yang Shi <shy828301@gmail.com>, Ralph Campbell <rcampbell@nvidia.com>, 
+	Hugh Dickins <hughd@google.com>, xiyuyang19@fudan.edu.cn, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Ross Zwisler <zwisler@kernel.org>, 
+	Christoph Hellwig <hch@infradead.org>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Linux NVDIMM <nvdimm@lists.linux.dev>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux MM <linux-mm@kvack.org>, 
+	duanxiongchun@bytedance.com, Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Stop specifying '-Wall and '-O2' in cc_flags, and rely on the buildtype
-and warning_level options. Fixup the '-D_FORTIFY_SOURCE=2' option to
-optionally be enabled for optimizated builds rather then forcing -O2.
+On Wed, Mar 2, 2022 at 12:29 AM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+> However, it does not cover the full pages in a THP except a head page.
+> Replace it with flush_cache_range() to fix this issue. At least, no
+> problems were found due to this. Maybe because the architectures that
+> have virtual indexed caches is less.
+>
+> Fixes: f27176cfc363 ("mm: convert page_mkclean_one() to use page_vma_mapped_walk()")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Fixes: 4e5faa1726d2 ("build: Add meson build infrastructure")
-Reported-by: Steve Scargall <steve.scargall@intel.com>
-Link: https://github.com/pmem/ndctl/issues/195
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
- meson.build |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/meson.build b/meson.build
-index 5e97e1ce3068..a4149bb7b08c 100644
---- a/meson.build
-+++ b/meson.build
-@@ -57,7 +57,6 @@ sed -e s,@VERSION@,@0@,g
- '''.format(meson.project_version(), prefixdir, libdir, includedir).split()
- 
- cc_flags = [
--  '-Wall',
-   '-Wchar-subscripts',
-   '-Wformat-security',
-   '-Wmissing-declarations',
-@@ -70,9 +69,12 @@ cc_flags = [
-   '-Wmaybe-uninitialized',
-   '-Wdeclaration-after-statement',
-   '-Wunused-result',
--  '-D_FORTIFY_SOURCE=2',
--  '-O2',
- ]
-+
-+if get_option('optimization') != '0'
-+  cc_flags += [ '-D_FORTIFY_SOURCE=2' ]
-+endif
-+
- cc = meson.get_compiler('c')
- add_project_arguments(cc.get_supported_arguments(cc_flags), language : 'c')
- 
-
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
