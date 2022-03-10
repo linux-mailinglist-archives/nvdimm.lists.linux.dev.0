@@ -1,83 +1,53 @@
-Return-Path: <nvdimm+bounces-3285-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3291-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id D48CF4D408D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 06:08:56 +0100 (CET)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A1C64D41A8
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 08:19:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 12C671C0AD2
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 05:08:56 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 57C593E0F31
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 07:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97DB17FF;
-	Thu, 10 Mar 2022 05:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7E1539F;
+	Thu, 10 Mar 2022 07:18:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC79D7A
-	for <nvdimm@lists.linux.dev>; Thu, 10 Mar 2022 05:08:47 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso4203019pjo.5
-        for <nvdimm@lists.linux.dev>; Wed, 09 Mar 2022 21:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vx3jrxPiNIo98gCv83TF5dMqDfpV8pYAw6iSM9f/F5k=;
-        b=g/MJcp38patdOv3r8qxTwnp2zPKzdbMTTbWWm8bqFpWmkiUZ9EBt1NcDDtzBdNFEjE
-         z14xUTv6AV8lVZOOK//7QzkvagSDHIDs0iBnhGb8ek/aRmvVq6sYd9K3U2S1rxaqXhhH
-         n9twbc3yFgPv2WLcAslot1DG/Y93DfMoKFnmnA+s8/2cXlz3bxtmnmX5rGe+cjEgxqOz
-         3MPSzhg1Mja+BFVKj4gEdVC4VnL2t7Dg5dgkU1JeiLNeDJr35SAjUa5YzImsmjJ1DCiC
-         z4Tb28dqPA6j0nR72zj7MoyyDwW5k2H1OX/jMvhnpZ/H76NOtWksD7KLx7o8A+zixMzM
-         0pKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vx3jrxPiNIo98gCv83TF5dMqDfpV8pYAw6iSM9f/F5k=;
-        b=2jQNN0lfNjiHVF1OwECbjZ9NafZFH+EyJrtidTFrw6bw0ZyEU+lxAZS42B/qFh/1+s
-         6YbInb4H0bvDS+FCGN4QwlhX3V42dF0aF8Zvb0GDRs/TgrZLM1MtbXLki42v7iBhDbpQ
-         erzZZdMTFgEVNQ7ENrCkNUyQrQln8DNMhSLOrsuFnXp262M5DPIGuAMoKgOMFzpNU7rh
-         U49c9SoebkRKovDkjKLM7A6EylAkcZaZRxsmNjsFgLjvk5EAoMGqv6UXwVrewt+/5QII
-         8/oxOqFRGw91GtvaPu1jSo7l5jSX/XBLAICC+xJFj0FFqPO2MO1Q3EEvWMUhlCnLrWkc
-         jMrA==
-X-Gm-Message-State: AOAM532BUw4MxR2fJ/Y8psmm0K7o0UlACVoK0S7OTZNME+MorUNTwHvc
-	MlwsuoNaUpgN9eWBTMxP3VvxFtThCMGFUnLXOK6K3w==
-X-Google-Smtp-Source: ABdhPJwbpnJGBhGCvtGDfxVPB8IEyjhbA0Vcu6XL0x5iAF4lObLLmyo2alFAEC40PFkEcocm/pnY+n3EqLanhKPd06Q=
-X-Received: by 2002:a17:903:32d1:b0:151:da5c:60ae with SMTP id
- i17-20020a17090332d100b00151da5c60aemr3299570plr.34.1646888927080; Wed, 09
- Mar 2022 21:08:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6017A
+	for <nvdimm@lists.linux.dev>; Thu, 10 Mar 2022 07:18:53 +0000 (UTC)
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 1652468B05; Thu, 10 Mar 2022 08:09:49 +0100 (CET)
+Date: Thu, 10 Mar 2022 08:09:48 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: nvdimm@lists.linux.dev, robert.hu@linux.intel.com,
+	vishal.l.verma@intel.com, hch@lst.de, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 1/6] nvdimm/region: Fix default alignment for small
+ regions
+Message-ID: <20220310070948.GA25138@lst.de>
+References: <164688415599.2879318.17035042246954533659.stgit@dwillia2-desk3.amr.corp.intel.com> <164688416128.2879318.17890707310125575258.stgit@dwillia2-desk3.amr.corp.intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220304203756.3487910-1-ira.weiny@intel.com>
-In-Reply-To: <20220304203756.3487910-1-ira.weiny@intel.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Wed, 9 Mar 2022 21:08:36 -0800
-Message-ID: <CAPcyv4juDzD4W_xAff2CdTFzKQhqfFkn93Zo_4Mw23v+Rq=1+g@mail.gmail.com>
-Subject: Re: [PATCH] fs/dax: Fix run_dax() missing prototype
-To: "Weiny, Ira" <ira.weiny@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164688416128.2879318.17890707310125575258.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Fri, Mar 4, 2022 at 12:38 PM <ira.weiny@intel.com> wrote:
->
-> From: Ira Weiny <ira.weiny@intel.com>
->
-> The function run_dax() was missing a prototype when compiling with
-> warnings.
->
-> Add bus.h to fix this.
->
+On Wed, Mar 09, 2022 at 07:49:21PM -0800, Dan Williams wrote:
+> In preparation for removing BLK aperture support the NVDIMM unit tests
+> discovered that the default alignment can be set higher than the
+> capacity of the region. Fall back to PAGE_SIZE in that case.
+> 
+> Given this has not been seen in the wild, elide notifying -stable.
 
-Always include the warning and the compiler in the changelog. I
-suspect you hit this with LLVM and not gcc?
+Looks good,
 
-super.c has no business including bus.h. If the bots are tripping over
-this a better fix is to move it into dax-private.h.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
