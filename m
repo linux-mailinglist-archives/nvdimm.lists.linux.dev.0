@@ -1,88 +1,106 @@
-Return-Path: <nvdimm+bounces-3273-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3277-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C1E4D3E89
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 02:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD0134D3FE0
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 04:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id F235B1C0B3D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 01:02:24 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id D6AB41C0BDE
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Mar 2022 03:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDCEF19C;
-	Thu, 10 Mar 2022 01:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FCB17EE;
+	Thu, 10 Mar 2022 03:49:49 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4937A
-	for <nvdimm@lists.linux.dev>; Thu, 10 Mar 2022 01:02:17 +0000 (UTC)
-Received: by mail-pj1-f49.google.com with SMTP id bx5so3825633pjb.3
-        for <nvdimm@lists.linux.dev>; Wed, 09 Mar 2022 17:02:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IhfcqA5j4A8+cMHFR/NtiJjgNVB+qOjhOgFLJgToPWQ=;
-        b=NdlCgpyR4b6VJWwPwqOC1MX6c6jvcptN0j9px6P5gSJixNo6VOfOmyZRxxRxE+VcE+
-         3nEGij+QWTIieZfJjhT4HEQ3r8HlS19ooIBYayhvUymBhIQ9hyFgxtJgI8pCRkAg+1pQ
-         wZsyJA2tqg/k12oz9Zx1hzeXs53PX/Kj85fAbo2oA10eW2hvyuDPgEUBhgXI6pkk7Y4r
-         4/vjzDmA4LTjsDjSdL3djqJkFB/CcFZI7eYmB7zcVbZW/JYEKjHk2esCGc2dbDEPdE6T
-         FFVi6RCbUv4X+dMgyidWvaHx1H1e/ThhA9xh9EmPmn8MxL3p8c6rsvYdZ7ZqiLAGwoMG
-         82mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IhfcqA5j4A8+cMHFR/NtiJjgNVB+qOjhOgFLJgToPWQ=;
-        b=q0gHw4InHsEeUb45L3ryU1Yvqbsrnccey66/wKN438DSjomTuhqMgknlZGv/dWCQqu
-         2pIPW4xcxkwdhRyhS5EACbUJ2lD4OU5uV1HqNRA0Mzn7FxVKQpJo/E7fTerx8b/A6OQX
-         u0L7aIZJWl2+lNElsShEQNzwX/Vuv2Iliu37CIIl/Wp4vLy2NRjq99bATuzeqPsLiD1P
-         ce9mWvhBKgR57UJX4GUFjgc3Ld5t8ZziBV/h+9T0eMjzFWs3DzW2VwnDslA1BnIcqu28
-         jVtNK1+R71aQwWIYMmyXT6dXFinTfEhLMmNyEnjK6blwZunzIuBkbT0n773dRbyPCPq/
-         ON+A==
-X-Gm-Message-State: AOAM532xjGOl7ZYjiEpIUVQ/aitmVXslvgDaVq5bbUOkivbwq4Qa+cb9
-	66Moq/GAh4PVD4kQo0Rs/6LKITFL803Grkh+uhx9dA==
-X-Google-Smtp-Source: ABdhPJwgZUATGKxceYX9Kl5KUvMdd8JlCChq4tHFBS02sVXYJrllv/gFImd7TLQzyeaZBA7iP0auoWsyQWoxXaoDMk0=
-X-Received: by 2002:a17:902:d506:b0:151:ced2:3cf with SMTP id
- b6-20020a170902d50600b00151ced203cfmr2284734plg.147.1646874136625; Wed, 09
- Mar 2022 17:02:16 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A807A
+	for <nvdimm@lists.linux.dev>; Thu, 10 Mar 2022 03:49:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646884188; x=1678420188;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zuLq0j0QluqQstMS5jLUVRl9HizLQhz8nCQqtScJQrc=;
+  b=Zvr7CEmUjKGmbL6Nv32uVH8Ju6coVYrrMQFyMgJ7wjttwy6odXfdCX9j
+   Eqmwh8ccaK8YlDDlZERTd0ITF5gdvx7v+tilw39RzYhlDskpJDJv5jTz+
+   V2ZIsfZs8uXttBWc+c91rQg5/mxjE1irMHRhi4H5Eio1RvsyzTS6zFCS2
+   z+w/nGPJ/OiDudeRGX73Ei95O2YR7yh94xKBzcK82BHN1+hTd+Ph1xJaB
+   FBDzSAwpSWonBbTWrMrr1bgilY86TIuAyvvTY77/zJT7imQTAbPEf9MNw
+   HF3OzNjtu95cQWebnZ3scfZ+Cb0S1h2okk6TrW0FYYClBKJkkg5nlBsqU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235760026"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="235760026"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 19:49:27 -0800
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="538287010"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 19:49:16 -0800
+Subject: [PATCH 0/6] libnvdimm: Jettison block-aperture-window support
+From: Dan Williams <dan.j.williams@intel.com>
+To: nvdimm@lists.linux.dev
+Cc: robert.hu@linux.intel.com, vishal.l.verma@intel.com, hch@lst.de,
+ linux-acpi@vger.kernel.org
+Date: Wed, 09 Mar 2022 19:49:16 -0800
+Message-ID: <164688415599.2879318.17035042246954533659.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220302082718.32268-1-songmuchun@bytedance.com> <20220302082718.32268-7-songmuchun@bytedance.com>
-In-Reply-To: <20220302082718.32268-7-songmuchun@bytedance.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Wed, 9 Mar 2022 17:02:05 -0800
-Message-ID: <CAPcyv4gnzDMWgzw9xW6PLRvDgw18RL35NtWsKYRV391SRWSuQg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] mm: remove range parameter from follow_invalidate_pte()
-To: Muchun Song <songmuchun@bytedance.com>
-Cc: Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Andrew Morton <akpm@linux-foundation.org>, Alistair Popple <apopple@nvidia.com>, 
-	Yang Shi <shy828301@gmail.com>, Ralph Campbell <rcampbell@nvidia.com>, 
-	Hugh Dickins <hughd@google.com>, xiyuyang19@fudan.edu.cn, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Ross Zwisler <zwisler@kernel.org>, 
-	Christoph Hellwig <hch@infradead.org>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux MM <linux-mm@kvack.org>, 
-	duanxiongchun@bytedance.com, Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 2, 2022 at 12:30 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The only user (DAX) of range parameter of follow_invalidate_pte()
-> is gone, it safe to remove the range paramter and make it static
-> to simlify the code.
->
+The block-aperture-window mechanism was originally conceived as a
+mechanism for NVDIMM devices to offer a block-device-like error model
+whereby poison consumption within a given transaction window could elide
+a machine check and instead set a bit in a status register. This
+mechanism was abandoned in favor of just teaching software to handle the
+machine-check exception (see copy_mc_to_kernel()).
 
-Looks good, I suspect this savings is still valid if the "just use
-page_mkclean_one" directly feedback is workable.
+Given there are no known shipping platforms with this capability.
+Jettison this code to make room for incoming integrations of CXL
+Persistent Regions with LIBNVDIMM Regions.
 
-Otherwise you can add:
+---
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Dan Williams (6):
+      nvdimm/region: Fix default alignment for small regions
+      nvdimm/blk: Delete the block-aperture window driver
+      nvdimm/namespace: Delete blk namespace consideration in shared paths
+      nvdimm/namespace: Delete nd_namespace_blk
+      ACPI: NFIT: Remove block aperture support
+      nvdimm/region: Delete nd_blk_region infrastructure
+
+
+ Documentation/driver-api/nvdimm/nvdimm.rst |  406 +++++-----------------
+ drivers/acpi/nfit/core.c                   |  387 ---------------------
+ drivers/acpi/nfit/nfit.h                   |    6 
+ drivers/nvdimm/Kconfig                     |   25 -
+ drivers/nvdimm/Makefile                    |    3 
+ drivers/nvdimm/blk.c                       |  335 -------------------
+ drivers/nvdimm/bus.c                       |    2 
+ drivers/nvdimm/dimm_devs.c                 |  204 +----------
+ drivers/nvdimm/label.c                     |  346 -------------------
+ drivers/nvdimm/label.h                     |    5 
+ drivers/nvdimm/namespace_devs.c            |  506 ++--------------------------
+ drivers/nvdimm/nd-core.h                   |   27 -
+ drivers/nvdimm/nd.h                        |   13 -
+ drivers/nvdimm/region.c                    |   31 +-
+ drivers/nvdimm/region_devs.c               |  157 +--------
+ include/linux/libnvdimm.h                  |   24 -
+ include/linux/nd.h                         |   26 -
+ include/uapi/linux/ndctl.h                 |    2 
+ tools/testing/nvdimm/Kbuild                |    4 
+ tools/testing/nvdimm/config_check.c        |    1 
+ tools/testing/nvdimm/test/ndtest.c         |   67 ----
+ tools/testing/nvdimm/test/nfit.c           |   23 -
+ 22 files changed, 181 insertions(+), 2419 deletions(-)
+ delete mode 100644 drivers/nvdimm/blk.c
 
