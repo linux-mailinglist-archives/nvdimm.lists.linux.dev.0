@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-3357-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3358-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4DE84E3AE4
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 22 Mar 2022 09:43:06 +0100 (CET)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D6674E3AED
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 22 Mar 2022 09:44:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id EAB0E1C0AF3
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 22 Mar 2022 08:43:05 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 6D78B1C0A95
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 22 Mar 2022 08:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB43A36;
-	Tue, 22 Mar 2022 08:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95842A36;
+	Tue, 22 Mar 2022 08:44:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4AA31
-	for <nvdimm@lists.linux.dev>; Tue, 22 Mar 2022 08:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0E9A31
+	for <nvdimm@lists.linux.dev>; Tue, 22 Mar 2022 08:44:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
 	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JN566uKc3ktadTMCdQh9ajk9oRH/gQn83cevsJDA16g=; b=WzTG+Kri6NXIKO65agZ9YL1KcE
-	+7l44pyNx6KCZIn8yUvwbZMvNBC6PeA/dLZt+Q7+sJKDDpXGG72Deis+K8Gb+YpdPx7MhIy5Rj16K
-	12BQVMeSiB1l6m1N3VmF3OkfDOfsmnKDu+o78MaIv/BzBUQ9VqjDTGL39pkUHNiWEoPbe9jl1bnZR
-	Kfhb3/4qI99IGspiAwFRqssW8Ml56Da8TNNxH7CQWQ8+COZd/JO2pchMUQfT6zB3aFJelGuZ6nABd
-	KM223BOwIOxhuL+eBB9cGjdnzlnLzc/a9cv4jjGRp3CVtNavfeyWAGX/2+WfZ+rRyflLC7Q4D6TLN
-	Zg51C/Cw==;
+	bh=QAMnkCbPUARhn8PReqsuR28ofrVR9sa+6IKI9MA59uc=; b=YYeEAtVT0hh7A0ZXZQf1G7Cmvm
+	kigmRFo8HKuqBMYwA3Pgh7PbkRRCntyglV30cb1JjhwP6+IyYU+qCgliuVyXnT8Q1Y2HNicRqK2u7
+	k4TcBXLdR+3l3Iy+EM0cfVbYOgUbpcVIlMIc8aLtK/HpGgB1aaZoqrooGTbw97vl4rehTa8X7PWbZ
+	PZ13nq9X6pfiy+HThwMfgTE/5YiMX3RfulLBRxnJ4AeCy3yYSnGW248GMzg9Kkcv70zjj1cWfOlaN
+	V+S8qt2mRg4M2b+Y5/66GG64uUPj6NkgM/HhLTDsCaqhdkl4RnhFfTm8eX0GlgmWry4cLaAy1BmK+
+	kjn9ABQQ==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nWa6M-00ASLb-Cr; Tue, 22 Mar 2022 08:42:50 +0000
-Date: Tue, 22 Mar 2022 01:42:50 -0700
+	id 1nWa7e-00ASlo-Ri; Tue, 22 Mar 2022 08:44:10 +0000
+Date: Tue, 22 Mar 2022 01:44:10 -0700
 From: Christoph Hellwig <hch@infradead.org>
 To: Jane Chu <jane.chu@oracle.com>
 Cc: david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
@@ -39,11 +39,11 @@ Cc: david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
 	ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
 	linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] x86/mce: relocate set{clear}_mce_nospec()
- functions
-Message-ID: <YjmMCjDuakvTzRRc@infradead.org>
+Subject: Re: [PATCH v6 3/6] mce: fix set_mce_nospec to always unmap the whole
+ page
+Message-ID: <YjmMWvDRUHE08T+a@infradead.org>
 References: <20220319062833.3136528-1-jane.chu@oracle.com>
- <20220319062833.3136528-3-jane.chu@oracle.com>
+ <20220319062833.3136528-4-jane.chu@oracle.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -52,20 +52,23 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220319062833.3136528-3-jane.chu@oracle.com>
+In-Reply-To: <20220319062833.3136528-4-jane.chu@oracle.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-> +EXPORT_SYMBOL(set_mce_nospec);
+On Sat, Mar 19, 2022 at 12:28:30AM -0600, Jane Chu wrote:
+> Mark poisoned page as not present, and to reverse the 'np' effect,
+> restate the _PAGE_PRESENT bit. Please refer to discussions here for
+> reason behind the decision.
+> https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
 
-No need for this export at all.
+I think it would be good to summarize the conclusion here instead of
+just linking to it.
 
-> +
-> +/* Restore full speculative operation to the pfn. */
-> +int clear_mce_nospec(unsigned long pfn)
+> +static int _set_memory_present(unsigned long addr, int numpages)
 > +{
-> +	return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
+> +	return change_page_attr_set(&addr, numpages, __pgprot(_PAGE_PRESENT), 0);
 > +}
-> +EXPORT_SYMBOL(clear_mce_nospec);
 
-And this should be EXPORT_SYMBOL_GPL.
+What is the point of this trivial helper with a single caller?
+
 
