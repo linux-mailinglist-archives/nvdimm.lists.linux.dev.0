@@ -1,72 +1,59 @@
-Return-Path: <nvdimm+bounces-3478-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3480-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 431914FB3DE
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 11 Apr 2022 08:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB8F04FB40E
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 11 Apr 2022 08:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 7461A1C059E
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 11 Apr 2022 06:40:09 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id D50291C09CE
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 11 Apr 2022 06:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E9E1116;
-	Mon, 11 Apr 2022 06:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E1B111A;
+	Mon, 11 Apr 2022 06:55:41 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CB510EC
-	for <nvdimm@lists.linux.dev>; Mon, 11 Apr 2022 06:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=M09IzlW+N1WwFLRoKBoXQhmkTfiayS6+tKZLiDRa9cM=; b=vuYRGKESL2/4qm8Aezet9aPx4W
-	+nyvgXHqbKV8O/sdkchzpTN0JP8s+Z+FPEBDRwarRsRbFqp2ZnRDOyu+W9z93H5iHy2pdUCD9XgL3
-	j7TJH2gQyaMfCoijPZqyy5a9A4X+cKOMX2LVS1qbnbXimkEvdbeLgdSU0uGUXBoSp0UoshnrLBNEm
-	A/V/RaLAeZrpWRq7OuusbYUJ2NFL4+Fm393i7D+mawqNJ0cZ0W9Uz48YBYQIZej1ogcwGrA+cmV8c
-	eyCdR0EJm5AqpL54XYS32PcZLYDLrDaTkXXtTvDQIk+fBd3Enmi4giwIWOQcO0B1zHVJALhjFWIxv
-	y1SlBf+g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ndniQ-006xNn-5v; Mon, 11 Apr 2022 06:39:58 +0000
-Date: Sun, 10 Apr 2022 23:39:58 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, djwong@kernel.org,
-	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
-	jane.chu@oracle.com
-Subject: Re: [PATCH v12 6/7] xfs: Implement ->notify_failure() for XFS
-Message-ID: <YlPNPn9uSfFwrPlQ@infradead.org>
-References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
- <20220410160904.3758789-7-ruansy.fnst@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553E41115
+	for <nvdimm@lists.linux.dev>; Mon, 11 Apr 2022 06:55:39 +0000 (UTC)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KcK2m4hqvzdZjT;
+	Mon, 11 Apr 2022 14:39:28 +0800 (CST)
+Received: from [10.108.234.194] (10.108.234.194) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 14:40:01 +0800
+Message-ID: <ad34d938-6131-d48f-b14b-6c1e3280b3f7@huawei.com>
+Date: Mon, 11 Apr 2022 14:40:00 +0800
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220410160904.3758789-7-ruansy.fnst@fujitsu.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v12 5/7] mm: Introduce mf_dax_kill_procs() for fsdax case
+Content-Language: en-US
+To: Shiyang Ruan <ruansy.fnst@fujitsu.com>, <linux-kernel@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>, <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>
+CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
+	<hch@infradead.org>, <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>
+References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
+ <20220410160904.3758789-6-ruansy.fnst@fujitsu.com>
+From: "wangjianjian (C)" <wangjianjian3@huawei.com>
+In-Reply-To: <20220410160904.3758789-6-ruansy.fnst@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.108.234.194]
+X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
 
-> --- a/fs/xfs/xfs_super.h
-> +++ b/fs/xfs/xfs_super.h
-> @@ -93,6 +93,7 @@ extern xfs_agnumber_t xfs_set_inode_alloc(struct xfs_mount *,
->  extern const struct export_operations xfs_export_operations;
->  extern const struct xattr_handler *xfs_xattr_handlers[];
->  extern const struct quotactl_ops xfs_quotactl_operations;
-
-
-> +extern const struct dax_holder_operations xfs_dax_holder_operations;
-
-This needs to be defined to NULL if at least one of CONFIG_FS_DAX or
-CONFIG_MEMORY_FAILURE is not set.
-
-Otherwise looks good:
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+ >> This new function is a variant of mf_generic_kill_procs that accepts a
+ >> file, offset pair instead o a struct to support multiple files sharing a
+typo, instead of
 
