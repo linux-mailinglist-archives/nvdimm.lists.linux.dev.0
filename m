@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-3526-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3529-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 349024FFDFC
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:39:00 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE7D4FFE03
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:39:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 600B01C0F34
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:38:59 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id E411A3E1092
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:39:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350453204;
-	Wed, 13 Apr 2022 18:38:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1C73D93;
+	Wed, 13 Apr 2022 18:38:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5792F56;
-	Wed, 13 Apr 2022 18:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F963205;
+	Wed, 13 Apr 2022 18:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649875095; x=1681411095;
+  t=1649875097; x=1681411097;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZwNEpFjzgDKXYjZD1HIgwd1pFDMWLxI8kgblOJUA2nE=;
-  b=Z7sc8AmTEgkbybBOprvHx5B5aHdD+2Ft9V2GRErVD+YqvafMAPxuJM1+
-   kIELsJDxZiiRHynZby4k63HTm+m/vdPvdlJBgGn45Kh+8rthcNZn6G4Q5
-   bIfosuvSICeHAAf3RKJEeM68XeIjsdmU96UPNitIG99d9TsDS/+IYodwl
-   CS5NyxalMOC/Cood999UHhgg4DJY/VoW+uTlNsWltf9mqeoZayzfpZtwZ
-   2LM+EEL+t8/gdQOh8hdlOtTBOJuT3evhzBLAaQysoRSNxkpwjQlxmJBpR
-   sGTUdfrnQBYWgBQhD87iSh3hT0sQS28p1knlEfg3lKK8XVnZ5ooa8lrEi
+  bh=rab7+/1vK899gfd3hJN113ssNf+C+OwnTeELqFJrFc0=;
+  b=ZAd/9LRaMw9MIQpk9TTE50O+RH83lj4CW24vkMQKYDU2UyFuM6vFwiYl
+   /b/C/f1UQ3vgkiW8722mGpqUVqd/C0Fs6hSLefycB+D3bakdznVkY+UWk
+   FryQQycbRiocbLg/T4z9EuvhOrYfGPYiYpQR/czFxpCLJVteIJsrCtboX
+   jSLcv5In0Ib0y/cGStPL9xsrApx3YbsX1fGRGUWx88PvAMk9Uent/7Mfw
+   IL47vZYeZ6rbSVjle3kWxWsoBJhpVaA5gLUwd9s6aSR0ExhlFZ5uMsqYO
+   wYVz7g4k5A5FYopE0IJvIps2kvH3oF2keREdUsllK2Da0i1yw11QttNMd
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631854"
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631855"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="244631854"
+   d="scan'208";a="244631855"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:50 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:51 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725013614"
+   d="scan'208";a="725013619"
 Received: from sushobhi-mobl.amr.corp.intel.com (HELO localhost.localdomain) ([10.252.131.238])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:50 -0700
 From: Ben Widawsky <ben.widawsky@intel.com>
@@ -50,9 +50,9 @@ Cc: patches@lists.linux.dev,
 	Ira Weiny <ira.weiny@intel.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [RFC PATCH 10/15] cxl/core: Extract IW/IG decoding
-Date: Wed, 13 Apr 2022 11:37:15 -0700
-Message-Id: <20220413183720.2444089-11-ben.widawsky@intel.com>
+Subject: [RFC PATCH 11/15] cxl/acpi: Use common IW/IG decoding
+Date: Wed, 13 Apr 2022 11:37:16 -0700
+Message-Id: <20220413183720.2444089-12-ben.widawsky@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220413183720.2444089-1-ben.widawsky@intel.com>
 References: <20220413183720.2444089-1-ben.widawsky@intel.com>
@@ -64,72 +64,29 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Interleave granularity and ways have specification defined encodings.
-Extracting this functionality into the common header file allows other
-consumers to make use of it.
+Now that functionality to decode interleave ways and granularity is in
+a common place, use that functionality in the cxl_acpi driver.
 
 Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
 ---
- drivers/cxl/core/hdm.c | 11 ++---------
- drivers/cxl/cxl.h      | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+), 9 deletions(-)
+ drivers/cxl/acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
-index 5326a2cd6968..b4b65aa55bd2 100644
---- a/drivers/cxl/core/hdm.c
-+++ b/drivers/cxl/core/hdm.c
-@@ -134,21 +134,14 @@ static int to_interleave_granularity(u32 ctrl)
+diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+index a6b0c3181d0e..50e54e5d58c0 100644
+--- a/drivers/cxl/acpi.c
++++ b/drivers/cxl/acpi.c
+@@ -11,8 +11,8 @@
+ #include "cxl.h"
+ 
+ /* Encode defined in CXL 2.0 8.2.5.12.7 HDM Decoder Control Register */
+-#define CFMWS_INTERLEAVE_WAYS(x)	(1 << (x)->interleave_ways)
+-#define CFMWS_INTERLEAVE_GRANULARITY(x)	((x)->granularity + 8)
++#define CFMWS_INTERLEAVE_WAYS(x)	(cxl_to_interleave_ways((x)->interleave_ways))
++#define CFMWS_INTERLEAVE_GRANULARITY(x)	(cxl_to_interleave_granularity((x)->granularity))
+ 
+ static unsigned long cfmws_to_decoder_flags(int restrictions)
  {
- 	int val = FIELD_GET(CXL_HDM_DECODER0_CTRL_IG_MASK, ctrl);
- 
--	return 256 << val;
-+	return cxl_to_interleave_granularity(val);
- }
- 
- static int to_interleave_ways(u32 ctrl)
- {
- 	int val = FIELD_GET(CXL_HDM_DECODER0_CTRL_IW_MASK, ctrl);
- 
--	switch (val) {
--	case 0 ... 4:
--		return 1 << val;
--	case 8 ... 10:
--		return 3 << (val - 8);
--	default:
--		return 0;
--	}
-+	return cxl_to_interleave_ways(val);
- }
- 
- static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 07df13f05d3d..0586c3d4592c 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -64,6 +64,23 @@ static inline int cxl_hdm_decoder_count(u32 cap_hdr)
- 	return val ? val * 2 : 1;
- }
- 
-+static inline int cxl_to_interleave_granularity(u16 ig)
-+{
-+	return 256 << ig;
-+}
-+
-+static inline int cxl_to_interleave_ways(u8 eniw)
-+{
-+	switch (eniw) {
-+	case 0 ... 4:
-+		return 1 << eniw;
-+	case 8 ... 10:
-+		return 3 << (eniw - 8);
-+	default:
-+		return 0;
-+	}
-+}
-+
- /* CXL 2.0 8.2.8.1 Device Capabilities Array Register */
- #define CXLDEV_CAP_ARRAY_OFFSET 0x0
- #define   CXLDEV_CAP_ARRAY_CAP_ID 0
 -- 
 2.35.1
 
