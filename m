@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-3524-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3528-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB174FFDFA
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:38:49 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9CB44FFE01
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id BF1E43E1018
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:38:47 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 979E13E105F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08F62F57;
-	Wed, 13 Apr 2022 18:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0913D8F;
+	Wed, 13 Apr 2022 18:38:17 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E2C2F48;
-	Wed, 13 Apr 2022 18:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AAD2F43;
+	Wed, 13 Apr 2022 18:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649875094; x=1681411094;
+  t=1649875096; x=1681411096;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9hd4g8zIfuHktQme6cUN0eLi2pbyX+YysGO8+PPESAs=;
-  b=fwe0ryLxOQf7IF9EGJpJaIlm54+QSO5dE7XzWKe+ERawQbKRhAdGjyUD
-   B9iQ/ymxsShpgZ0FBj5uie0GbsVAWoRplseh8rXJmW3zDvbhAaP0csTm7
-   OD9YLn/ilLEcnM4ixqUbDbwlSJHtb6gjb3Vx6rHl9gEeylrSl80dLPF8q
-   J3ZLG/JxbJboT9T0M1rZfYJKheCjMq+6K8bRW2l7QWB18197dxbc9SoFD
-   KOM/4xoPAXguyosPJnUvLljmU8Pglal8G0FGKeNcIPXZdW6wjMy7kTOzO
-   /W//ck2Lt90+WFx0wyRfW9Iesl9x89iTQGZ9tqyJBO+nup/8VKi5noU82
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631846"
+  bh=pRLZars87pwyZ+h8xfv4rMp3ejVZKIggcp6TbwcwTjk=;
+  b=Lvl6lUESA0bx1p7Qby2tzZcGnNtWVVIAm3Sroy7SqMRfaIxl8oFeHPln
+   rONrKWj6ltEX7mOJup/lHEsWR6EWki4YHjTO5dA2SiHoSuwWGDnVFx4YA
+   VFbE37ncDAKe0EbVjkboxwSNDScfgqXUaCB0KUGooLu3+HnTFa7Q3VTQR
+   AtuzbYwKd6vHj502z4EXQgCpMTo+To0uQZ8AAAexp8ax3TcM1sHN56Z6t
+   oHnws/e49X/0PSBjTg1CUsujTK5wdwzBa5P7bH3VTNhcHetHXK+WtUVvI
+   MmaPHcyFI9WlWJQpcWyEltBXFFKrxaKZ2LyfAWJWAorw7R2CQS31MRaJN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631847"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="244631846"
+   d="scan'208";a="244631847"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:49 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:50 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725013594"
+   d="scan'208";a="725013599"
 Received: from sushobhi-mobl.amr.corp.intel.com (HELO localhost.localdomain) ([10.252.131.238])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:49 -0700
 From: Ben Widawsky <ben.widawsky@intel.com>
@@ -50,9 +50,9 @@ Cc: patches@lists.linux.dev,
 	Ira Weiny <ira.weiny@intel.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [RFC PATCH 07/15] cxl/port: Surface ram and pmem resources
-Date: Wed, 13 Apr 2022 11:37:12 -0700
-Message-Id: <20220413183720.2444089-8-ben.widawsky@intel.com>
+Subject: [RFC PATCH 08/15] cxl/core/hdm: Allocate resources from the media
+Date: Wed, 13 Apr 2022 11:37:13 -0700
+Message-Id: <20220413183720.2444089-9-ben.widawsky@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220413183720.2444089-1-ben.widawsky@intel.com>
 References: <20220413183720.2444089-1-ben.widawsky@intel.com>
@@ -64,118 +64,174 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-CXL Type 2 and 3 endpoints may contain Host-managed Device Memory (HDM).
-This memory can be either volatile, persistent, or some combination of
-both. Similar to the root decoder the port's resources can be considered
-the host memory of which decoders allocate out of. Unlike the root
-decoder resource, device resources are in the device physical address
-space domain.
+Similar to how decoders consume address space for the root decoder, they
+also consume space on the device's physical media. For future
+allocations, it's required to mark those as used/busy.
 
-The CXL specification mandates a specific partitioning of volatile vs.
-persistent capacities. While an endpoint may contain one, or both
-capacities the volatile capacity while always be first. To accommodate
-this, two parameters are added to port creation, the offset of the
-split, and the total capacity.
+The CXL specification requires that HDM decoder are programmed in
+ascending physical address order. The device's address space can
+therefore be managed by a simple allocator. Fragmentation may occur if
+devices are taken in and out of active decoding. Fixing this is left to
+userspace to handle.
 
 Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
 ---
- drivers/cxl/core/port.c | 19 +++++++++++++++++++
- drivers/cxl/cxl.h       | 11 +++++++++++
- drivers/cxl/mem.c       |  7 +++++--
- 3 files changed, 35 insertions(+), 2 deletions(-)
+ drivers/cxl/core/core.h |  3 +++
+ drivers/cxl/core/hdm.c  | 26 +++++++++++++++++++++++++-
+ drivers/cxl/core/port.c |  9 ++++++++-
+ drivers/cxl/cxl.h       | 10 ++++++++++
+ 4 files changed, 46 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-index 8dd29c97e318..0d946711685b 100644
---- a/drivers/cxl/core/port.c
-+++ b/drivers/cxl/core/port.c
-@@ -2,6 +2,7 @@
- /* Copyright(c) 2020 Intel Corporation. All rights reserved. */
- #include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/workqueue.h>
+diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+index 1a50c0fc399c..a507a2502127 100644
+--- a/drivers/cxl/core/core.h
++++ b/drivers/cxl/core/core.h
+@@ -9,6 +9,9 @@ extern const struct device_type cxl_nvdimm_type;
+ 
+ extern struct attribute_group cxl_base_attribute_group;
+ 
++extern struct device_attribute dev_attr_create_pmem_region;
++extern struct device_attribute dev_attr_delete_region;
++
+ struct cxl_send_command;
+ struct cxl_mem_query_commands;
+ int cxl_query_cmd(struct cxl_memdev *cxlmd,
+diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+index 37c09c77e9a7..5326a2cd6968 100644
+--- a/drivers/cxl/core/hdm.c
++++ b/drivers/cxl/core/hdm.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright(c) 2022 Intel Corporation. All rights reserved. */
+ #include <linux/io-64-nonatomic-hi-lo.h>
 +#include <linux/genalloc.h>
  #include <linux/device.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -469,6 +470,24 @@ struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
- }
- EXPORT_SYMBOL_NS_GPL(devm_cxl_add_port, CXL);
+ #include <linux/delay.h>
  
-+struct cxl_port *devm_cxl_add_endpoint_port(struct device *host,
-+					    struct device *uport,
-+					    resource_size_t component_reg_phys,
-+					    u64 capacity, u64 pmem_offset,
-+					    struct cxl_port *parent_port)
-+{
-+	struct cxl_port *ep =
-+		devm_cxl_add_port(host, uport, component_reg_phys, parent_port);
-+	if (IS_ERR(ep) || !capacity)
-+		return ep;
+@@ -198,8 +199,11 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
+ 	else
+ 		cxld->target_type = CXL_DECODER_ACCELERATOR;
+ 
+-	if (is_endpoint_decoder(&cxld->dev))
++	if (is_endpoint_decoder(&cxld->dev)) {
++		to_cxl_endpoint_decoder(cxld)->skip =
++			ioread64_hi_lo(hdm + CXL_HDM_DECODER0_TL_LOW(which));
+ 		return 0;
++	}
+ 
+ 	target_list.value =
+ 		ioread64_hi_lo(hdm + CXL_HDM_DECODER0_TL_LOW(which));
+@@ -218,6 +222,7 @@ int devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm)
+ 	void __iomem *hdm = cxlhdm->regs.hdm_decoder;
+ 	struct cxl_port *port = cxlhdm->port;
+ 	int i, committed, failed;
++	u64 base = 0;
+ 	u32 ctrl;
+ 
+ 	/*
+@@ -240,6 +245,7 @@ int devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm)
+ 	for (i = 0, failed = 0; i < cxlhdm->decoder_count; i++) {
+ 		int target_map[CXL_DECODER_MAX_INTERLEAVE] = { 0 };
+ 		int rc, target_count = cxlhdm->target_count;
++		struct cxl_endpoint_decoder *cxled;
+ 		struct cxl_decoder *cxld;
+ 
+ 		if (is_cxl_endpoint(port))
+@@ -267,6 +273,24 @@ int devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm)
+ 				 "Failed to add decoder to port\n");
+ 			return rc;
+ 		}
 +
-+	ep->capacity = capacity;
-+	ep->pmem_offset = pmem_offset;
++		if (!is_cxl_endpoint(port))
++			continue;
 +
-+	return ep;
-+}
-+EXPORT_SYMBOL_NS_GPL(devm_cxl_add_endpoint_port, CXL);
++		cxled = to_cxl_endpoint_decoder(cxld);
++		cxled->drange = (struct range) {
++			.start = base,
++			.end = base + range_len(&cxld->range) - 1,
++		};
 +
- struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port)
++		if (!range_len(&cxld->range))
++			continue;
++
++		dev_dbg(&cxld->dev,
++			"Enumerated decoder with DPA range %#llx-%#llx\n", base,
++			base + range_len(&cxled->drange));
++		base += cxled->skip + range_len(&cxld->range);
++		port->last_cxled = cxled;
+ 	}
+ 
+ 	if (failed == cxlhdm->decoder_count) {
+diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+index 0d946711685b..9ef8d69dbfa5 100644
+--- a/drivers/cxl/core/port.c
++++ b/drivers/cxl/core/port.c
+@@ -84,7 +84,14 @@ static ssize_t size_show(struct device *dev, struct device_attribute *attr,
  {
- 	/* There is no pci_bus associated with a CXL platform-root port */
+ 	struct cxl_decoder *cxld = to_cxl_decoder(dev);
+ 
+-	return sysfs_emit(buf, "%#llx\n", range_len(&cxld->range));
++	if (is_endpoint_decoder(dev)) {
++		struct cxl_endpoint_decoder *cxled;
++
++		cxled = to_cxl_endpoint_decoder(cxld);
++		return sysfs_emit(buf, "%#llx\n", range_len(&cxled->drange));
++	} else {
++		return sysfs_emit(buf, "%#llx\n", range_len(&cxld->range));
++	}
+ }
+ static DEVICE_ATTR_RO(size);
+ 
 diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 0e1c65761ead..52295548a071 100644
+index 52295548a071..33f8a55f2f84 100644
 --- a/drivers/cxl/cxl.h
 +++ b/drivers/cxl/cxl.h
-@@ -309,6 +309,9 @@ struct cxl_nvdimm {
-  * @component_reg_phys: component register capability base address (optional)
-  * @dead: last ep has been removed, force port re-creation
-  * @depth: How deep this port is relative to the root. depth 0 is the root.
-+ * @capacity: How much total storage the media can hold (endpoint only)
-+ * @pmem_offset: Partition dividing volatile, [0, pmem_offset -1 ], and persistent
-+ *		 [pmem_offset, capacity - 1] addresses.
+@@ -228,9 +228,13 @@ struct cxl_decoder {
+ /**
+  * struct cxl_endpoint_decoder - An decoder residing in a CXL endpoint.
+  * @base: Base class decoder
++ * @drange: Device physical address space this decoder is using
++ * @skip: The skip count as specified in the CXL specification.
   */
- struct cxl_port {
- 	struct device dev;
-@@ -320,6 +323,9 @@ struct cxl_port {
- 	resource_size_t component_reg_phys;
- 	bool dead;
- 	unsigned int depth;
-+
-+	u64 capacity;
-+	u64 pmem_offset;
+ struct cxl_endpoint_decoder {
+ 	struct cxl_decoder base;
++	struct range drange;
++	u64 skip;
  };
  
  /**
-@@ -368,6 +374,11 @@ struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port);
- struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
- 				   resource_size_t component_reg_phys,
- 				   struct cxl_port *parent_port);
-+struct cxl_port *devm_cxl_add_endpoint_port(struct device *host,
-+					    struct device *uport,
-+					    resource_size_t component_reg_phys,
-+					    u64 capacity, u64 pmem_offset,
-+					    struct cxl_port *parent_port);
- struct cxl_port *find_cxl_root(struct device *dev);
- int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd);
- int cxl_bus_rescan(void);
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index 49a4b1c47299..b27ce13c1872 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -50,9 +50,12 @@ static int create_endpoint(struct cxl_memdev *cxlmd,
- {
- 	struct cxl_dev_state *cxlds = cxlmd->cxlds;
- 	struct cxl_port *endpoint;
-+	u64 partition = range_len(&cxlds->ram_range);
-+	u64 size = range_len(&cxlds->ram_range) + range_len(&cxlds->pmem_range);
+@@ -248,11 +252,15 @@ struct cxl_switch_decoder {
+  * @base: Base class decoder
+  * @window: host address space allocator
+  * @targets: Downstream targets (ie. hostbridges).
++ * @next_region_id: The pre-cached next region id.
++ * @id_lock: Protects next_region_id
+  */
+ struct cxl_root_decoder {
+ 	struct cxl_decoder base;
+ 	struct gen_pool *window;
+ 	struct cxl_decoder_targets *targets;
++	int next_region_id;
++	struct mutex id_lock; /* synchronizes access to next_region_id */
+ };
  
--	endpoint = devm_cxl_add_port(&parent_port->dev, &cxlmd->dev,
--				     cxlds->component_reg_phys, parent_port);
-+	endpoint = devm_cxl_add_endpoint_port(&parent_port->dev, &cxlmd->dev,
-+					      cxlds->component_reg_phys, size,
-+					      partition, parent_port);
- 	if (IS_ERR(endpoint))
- 		return PTR_ERR(endpoint);
+ #define _to_cxl_decoder(x)                                                     \
+@@ -312,6 +320,7 @@ struct cxl_nvdimm {
+  * @capacity: How much total storage the media can hold (endpoint only)
+  * @pmem_offset: Partition dividing volatile, [0, pmem_offset -1 ], and persistent
+  *		 [pmem_offset, capacity - 1] addresses.
++ * @last_cxled: Last active decoder doing decode (endpoint only)
+  */
+ struct cxl_port {
+ 	struct device dev;
+@@ -326,6 +335,7 @@ struct cxl_port {
  
+ 	u64 capacity;
+ 	u64 pmem_offset;
++	struct cxl_endpoint_decoder *last_cxled;
+ };
+ 
+ /**
 -- 
 2.35.1
 
