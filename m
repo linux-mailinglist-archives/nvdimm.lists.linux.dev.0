@@ -1,58 +1,56 @@
-Return-Path: <nvdimm+bounces-3507-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3504-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B9B4FEF1A
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 08:02:34 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E5F4FEF16
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 08:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 034D41C0F2B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 06:02:33 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 73B5C3E100C
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 06:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4774623D8;
-	Wed, 13 Apr 2022 06:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08BC23D9;
+	Wed, 13 Apr 2022 06:01:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F2D23D4
-	for <nvdimm@lists.linux.dev>; Wed, 13 Apr 2022 06:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF9923CA
+	for <nvdimm@lists.linux.dev>; Wed, 13 Apr 2022 06:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649829741; x=1681365741;
+  t=1649829716; x=1681365716;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WeXGisg3F5xd5CDMy9xUZA6jIDX7Clw9WAukSk7hrxY=;
-  b=kTCeSE/5XAvigLUqn+HFbYs89/RWl/ultYr/2T/8Ll+LzFsUw51Tqgjx
-   ctl9GmrQP5Sfn4B2jeBECFUbq1g8Y0Vx1p8C9bNK+928NjKYWuJHg7B78
-   GExqhhFDPT46uU1z7fq3Ri6CGR5jzFQzUwM++L4CqIsJOn5TiWR59zRoc
-   17Vgh4PgxF32Cn1sSonNj9bmY1EV3DyDaQmqgE5n90GUKpMEaRtYObXZI
-   Vx13dTD+uGFGQxo23goHEQBYTvtPlod8cGRyJs0OhhqoDXpZ5EaSIC4ZB
-   DXrVp4RZGbrgpb+HF0IPuOQMYgrqD7vk1fjuHehE3U+zpPulXiEATgj6C
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="262335017"
+  bh=iZkEJiezDzZSvDLuQ4QlHaZeACSH7DvqyONtGcXuk/g=;
+  b=Vu+sVrjX/nZZaD4lDok8hO5jKe4UaTK4yTTBeEQYp1H/4XyqOm0Rko4B
+   WquZfZuAZ+TeZJjCSgSWTj3BWYevMf1SyVVQrvXPeDrl5DmfWWGNWZm11
+   Lya62pmAFCHnXXE2AtlShyGg9Wuocz/2hVSwPXGe4Q74wnKd2CIkv4s6I
+   IwOWtUn2xQ1US7HZDqH3FMs4VWe6gDnnyFeEOx0/r/yxKaOPzllCHq0e8
+   26CpGNZX0Fb78Xxk8kQ5iabrikcIgqx1/Rwsf31FHakWK6YeLAJoviYRN
+   fdhTOYXWHzOGlxEYuoUi9rT3lIbn1mikbkGsW2vqeIsBC6JIRxzMvIzgi
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="262763107"
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="262335017"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:02:05 -0700
+   d="scan'208";a="262763107"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:01:55 -0700
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="623559249"
+   d="scan'208";a="724768554"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:01:44 -0700
-Subject: [PATCH v2 03/12] cxl/core: Refactor a cxl_lock_class() out of
- cxl_nested_lock()
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:01:55 -0700
+Subject: [PATCH v2 05/12] cxl/core: Clamp max lock_class
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: Alison Schofield <alison.schofield@intel.com>,
  Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Ben Widawsky <ben.widawsky@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Kevin Tian <kevin.tian@intel.com>,
- peterz@infradead.org, gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ Ben Widawsky <ben.widawsky@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Kevin Tian <kevin.tian@intel.com>, peterz@infradead.org,
+ gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
  nvdimm@lists.linux.dev
-Date: Tue, 12 Apr 2022 23:01:44 -0700
-Message-ID: <164982970436.684294.12004091884213856239.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Tue, 12 Apr 2022 23:01:55 -0700
+Message-ID: <164982971542.684294.12980151056534955888.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -65,66 +63,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-In preparation for upleveling device_lock() lockdep annotation support into
-the core, provide a helper to retrieve the lock class. This lock_class
-will be used with device_set_lock_class() to identify the CXL nested
-locking rules.
+MAX_LOCKDEP_SUBCLASSES limits the depth of the CXL topology that can be
+validated by lockdep. Given that the cxl_test topology is already at
+this limit collapse some of the levels and clamp the max depth.
 
 Cc: Alison Schofield <alison.schofield@intel.com>
 Cc: Vishal Verma <vishal.l.verma@intel.com>
 Cc: Ira Weiny <ira.weiny@intel.com>
 Cc: Ben Widawsky <ben.widawsky@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/cxl/cxl.h |   19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/cxl/cxl.h |   25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 990b6670222e..c9fda9304c54 100644
+index a6c1a027e389..b86aac8cde4f 100644
 --- a/drivers/cxl/cxl.h
 +++ b/drivers/cxl/cxl.h
-@@ -418,13 +418,12 @@ enum cxl_lock_class {
+@@ -410,20 +410,37 @@ enum cxl_lock_class {
+ 	CXL_ANON_LOCK,
+ 	CXL_NVDIMM_LOCK,
+ 	CXL_NVDIMM_BRIDGE_LOCK,
+-	CXL_PORT_LOCK,
++	/*
++	 * Collapse the compatible port and nvdimm-bridge lock classes
++	 * to save space
++	 */
++	CXL_PORT_LOCK = CXL_NVDIMM_BRIDGE_LOCK,
+ 	/*
+ 	 * Be careful to add new lock classes here, CXL_PORT_LOCK is
+ 	 * extended by the port depth, so a maximum CXL port topology
+-	 * depth would need to be defined first.
++	 * depth would need to be defined first. Also, the max
++	 * validation depth is limited by MAX_LOCKDEP_SUBCLASSES.
  	 */
  };
  
--static inline void cxl_nested_lock(struct device *dev)
-+static inline int cxl_lock_class(struct device *dev)
++static inline int clamp_lock_class(struct device *dev, int lock_class)
++{
++	if (lock_class >= MAX_LOCKDEP_SUBCLASSES) {
++		dev_warn_once(dev,
++			      "depth: %d, disabling lockdep for this device\n",
++			      lock_class);
++		return -1;
++	}
++
++	return lock_class;
++}
++
+ static inline int cxl_lock_class(struct device *dev)
  {
  	if (is_cxl_port(dev)) {
  		struct cxl_port *port = to_cxl_port(dev);
  
--		mutex_lock_nested(&dev->lockdep_mutex,
--				  CXL_PORT_LOCK + port->depth);
-+		return CXL_PORT_LOCK + port->depth;
+-		return CXL_PORT_LOCK + port->depth;
++		return clamp_lock_class(dev, CXL_PORT_LOCK + port->depth);
  	} else if (is_cxl_decoder(dev)) {
  		struct cxl_port *port = to_cxl_port(dev->parent);
  
-@@ -432,14 +431,18 @@ static inline void cxl_nested_lock(struct device *dev)
+@@ -431,7 +448,7 @@ static inline int cxl_lock_class(struct device *dev)
  		 * A decoder is the immediate child of a port, so set
  		 * its lock class equal to other child device siblings.
  		 */
--		mutex_lock_nested(&dev->lockdep_mutex,
--				  CXL_PORT_LOCK + port->depth + 1);
-+		return CXL_PORT_LOCK + port->depth + 1;
+-		return CXL_PORT_LOCK + port->depth + 1;
++		return clamp_lock_class(dev, CXL_PORT_LOCK + port->depth + 1);
  	} else if (is_cxl_nvdimm_bridge(dev))
--		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_BRIDGE_LOCK);
-+		return CXL_NVDIMM_BRIDGE_LOCK;
+ 		return CXL_NVDIMM_BRIDGE_LOCK;
  	else if (is_cxl_nvdimm(dev))
--		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_LOCK);
-+		return CXL_NVDIMM_LOCK;
- 	else
--		mutex_lock_nested(&dev->lockdep_mutex, CXL_ANON_LOCK);
-+		return CXL_ANON_LOCK;
-+}
-+
-+static inline void cxl_nested_lock(struct device *dev)
-+{
-+	mutex_lock_nested(&dev->lockdep_mutex, cxl_lock_class(dev));
- }
- 
- static inline void cxl_nested_unlock(struct device *dev)
 
 
