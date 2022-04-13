@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-3520-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3519-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CA84FFDF2
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:38:26 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [IPv6:2604:1380:1000:8100::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AF774FFDF1
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 20:38:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id BDB971C03F7
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:38:25 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 5233B3E1011
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Apr 2022 18:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B061E2F38;
-	Wed, 13 Apr 2022 18:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0522F25;
+	Wed, 13 Apr 2022 18:38:12 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60027291E;
-	Wed, 13 Apr 2022 18:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B9323AD;
+	Wed, 13 Apr 2022 18:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649875091; x=1681411091;
+  t=1649875090; x=1681411090;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aE4N3k3trSLj1FrxNaxvn8G0EZkVgDXfaelpiPyEsI4=;
-  b=Q6UTjdWliT4jpBTktAtcXI62K8BQImwSM8sQoI1NZSYOn48Ehdqg45cD
-   +Fko7Si/6ceCvcZlA2/SjwvzEyl9qCbaXOSVeCQTO9EkXu+Cqrb9yNaOJ
-   1Kxp7bz0n7vgUp79FiSf/+Hxo32dIZe8BpOitfq01g5m7bRix1dH++7KP
-   CezHADDJDxJaO1829qg/KWqh4zk8n0fzcgaD3p7Z8IScRV1Mskm9cF2hJ
-   jpHDt5Ftcs95gHWqF7HpbiOoN6sC9bfsu1LTY2aooRk4QlHgtaTL6N/OF
-   y+nHHUUpRckQUb1VwcaPvz/C3py94BXrLzBKiy6K4aowYwQyQ57Qu0XsQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631838"
+  bh=9JmB6oJKPBBDOztp/9A53kUt0HnYQkAsrrNo+Sut5u0=;
+  b=WDK14tT7Uk3Knm4zUL8vpuFVJGonlK3WOJC3k9UTlhLxk/l0aR8tRxhU
+   p19YMHBYSzp15gzhyMBNm5hGkNmyJAlMtADpoxlRnX3shGr8c7Szn9RJH
+   /ktu6hSP2R9D1MnpS/GASaSC718jIQtdUOfHmrxAl6u9tTRPc00O+pEAb
+   y3Xt4Up/U0qTrwKFjIsnfOPEzS+IotEva+knmX4tVHb3n5zPpRErLb9dY
+   UPiLRvvPXWQqMomSnkHPvmGZuX8gMFD81+vk7eV0MayACx4sWIAHB22yw
+   zl27XX3qswQgUImPqSx1aK2aoG+L6M+i+8q5xeOnZuGNCDXWkV1sjG7aV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631839"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="244631838"
+   d="scan'208";a="244631839"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:47 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:48 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725013563"
+   d="scan'208";a="725013569"
 Received: from sushobhi-mobl.amr.corp.intel.com (HELO localhost.localdomain) ([10.252.131.238])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:37:47 -0700
 From: Ben Widawsky <ben.widawsky@intel.com>
@@ -50,9 +50,9 @@ Cc: patches@lists.linux.dev,
 	Ira Weiny <ira.weiny@intel.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [RFC PATCH 01/15] cxl/core: Use is_endpoint_decoder
-Date: Wed, 13 Apr 2022 11:37:06 -0700
-Message-Id: <20220413183720.2444089-2-ben.widawsky@intel.com>
+Subject: [RFC PATCH 02/15] cxl/core/hdm: Bail on endpoint init fail
+Date: Wed, 13 Apr 2022 11:37:07 -0700
+Message-Id: <20220413183720.2444089-3-ben.widawsky@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220413183720.2444089-1-ben.widawsky@intel.com>
 References: <20220413183720.2444089-1-ben.widawsky@intel.com>
@@ -64,55 +64,32 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Save some characters and directly check decoder type rather than port
-type. There's no need to check if the port is an endpoint port since we
-already know the decoder, after alloc, has a specified type.
+Endpoint decoder enumeration is the only way in which we can determine
+Device Physical Address (DPA) -> Host Physical Address (HPA) mappings.
+Information is obtained only when the register state can be read
+sequentially. If when enumerating the decoders a failure occurs, all
+other decoders must also fail since the decoders can no longer be
+accurately managed (unless it's the last decoder in which case it can
+still work).
 
 Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
 ---
- drivers/cxl/core/hdm.c  | 2 +-
- drivers/cxl/core/port.c | 2 +-
- drivers/cxl/cxl.h       | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/cxl/core/hdm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
-index 0e89a7a932d4..bfc8ee876278 100644
+index bfc8ee876278..c3c021b54079 100644
 --- a/drivers/cxl/core/hdm.c
 +++ b/drivers/cxl/core/hdm.c
-@@ -197,7 +197,7 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
- 	else
- 		cxld->target_type = CXL_DECODER_ACCELERATOR;
- 
--	if (is_cxl_endpoint(to_cxl_port(cxld->dev.parent)))
-+	if (is_endpoint_decoder(&cxld->dev))
- 		return 0;
- 
- 	target_list.value =
-diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-index 2ab1ba4499b3..74c8e47bf915 100644
---- a/drivers/cxl/core/port.c
-+++ b/drivers/cxl/core/port.c
-@@ -272,7 +272,7 @@ static const struct device_type cxl_decoder_root_type = {
- 	.groups = cxl_decoder_root_attribute_groups,
- };
- 
--static bool is_endpoint_decoder(struct device *dev)
-+bool is_endpoint_decoder(struct device *dev)
- {
- 	return dev->type == &cxl_decoder_endpoint_type;
- }
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 990b6670222e..5102491e8d13 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -340,6 +340,7 @@ struct cxl_dport *cxl_find_dport_by_dev(struct cxl_port *port,
- 
- struct cxl_decoder *to_cxl_decoder(struct device *dev);
- bool is_root_decoder(struct device *dev);
-+bool is_endpoint_decoder(struct device *dev);
- bool is_cxl_decoder(struct device *dev);
- struct cxl_decoder *cxl_root_decoder_alloc(struct cxl_port *port,
- 					   unsigned int nr_targets);
+@@ -255,6 +255,8 @@ int devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm)
+ 				      cxlhdm->regs.hdm_decoder, i);
+ 		if (rc) {
+ 			put_device(&cxld->dev);
++			if (is_endpoint_decoder(&cxld->dev))
++				return rc;
+ 			failed++;
+ 			continue;
+ 		}
 -- 
 2.35.1
 
