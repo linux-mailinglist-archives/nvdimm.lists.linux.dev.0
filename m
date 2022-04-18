@@ -1,361 +1,175 @@
-Return-Path: <nvdimm+bounces-3565-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3567-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A4B504E14
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 11:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CD7C505CA7
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 18:47:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 5F81B1C09BB
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 09:00:01 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 4B9F71C03EC
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 16:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EEB7F9;
-	Mon, 18 Apr 2022 08:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2ABA33;
+	Mon, 18 Apr 2022 16:46:53 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mailout1.w2.samsung.com (mailout1.w2.samsung.com [211.189.100.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CD77EC
-	for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 08:59:52 +0000 (UTC)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-	by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I8aJha026680;
-	Mon, 18 Apr 2022 08:59:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=52CwmVijshxv1LdNsgXLaoCdAvAXSvAqZmScIf8Wpn4=;
- b=X+dc62MyLm6Zyp9A436tn9cJGWF5wDis1KGeDPDUOew/Gy1AVeSu99me8XKRoXay8uPF
- aB7I++mBM93tzpLOG5u8JEmCfaSE99rtkMMlBAzAYQDQRR34VC59jeG+hpovPJjZKK8K
- pE9r3GPBfmhN88FvhpumOOMe9FZF4U1W+WuB5vzkSOQeLNpQ/PP6aZdhktEhP/vhxNpZ
- pY7vSD6DMp4tJiiSuqYk+h7cso+cOULTQNyswmkVz3s+hXDSTysJWvseGbRIFiu1Ld8H
- qmuAy/KHwGBaCkVIOnTZHmFZIGW8kGd5E1oG0rpnZZZtPCTteDH6AHfMccZ4D1LQMbmA 3Q== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-	by mx0b-001b2d01.pphosted.com with ESMTP id 3ffpdxdkg2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Apr 2022 08:59:45 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-	by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I8wnM4008703;
-	Mon, 18 Apr 2022 08:59:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma01fra.de.ibm.com with ESMTP id 3ffne8t03h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Apr 2022 08:59:43 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I8xe4W27066850
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 18 Apr 2022 08:59:40 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0389C5204F;
-	Mon, 18 Apr 2022 08:59:40 +0000 (GMT)
-Received: from lep8c.aus.stglabs.ibm.com (unknown [9.40.192.207])
-	by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D4BE05204E;
-	Mon, 18 Apr 2022 08:59:38 +0000 (GMT)
-Subject: [PATCH v3] tests/nvdimm/ndtest: Simulate nvdimm health,
- DSC and smart-inject
-From: Shivaprasad G Bhat <sbhat@linux.ibm.com>
-To: nvdimm@lists.linux.dev
-Cc: linuxppc-dev@lists.ozlabs.org, aneesh.kumar@linux.ibm.com,
-        sbhat@linux.ibm.com, vaibhav@linux.ibm.com, dan.j.williams@intel.com,
-        ira.weiny@intel.com, mpe@ellerman.id.au
-Date: Mon, 18 Apr 2022 03:59:38 -0500
-Message-ID: 
- <165027233876.3035289.4353747702027907365.stgit@lep8c.aus.stglabs.ibm.com>
-User-Agent: StGit/1.1+40.g1b20
-Content-Type: text/plain; charset="utf-8"
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LGBvn_YfmMP9kq9rvHRS4VfuY6mQCcTw
-X-Proofpoint-GUID: LGBvn_YfmMP9kq9rvHRS4VfuY6mQCcTw
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06FFA29;
+	Mon, 18 Apr 2022 16:46:50 +0000 (UTC)
+Received: from uscas1p1.samsung.com (unknown [182.198.245.206])
+	by mailout1.w2.samsung.com (KnoxPortal) with ESMTP id 20220418163713usoutp01b4f5998fb2dee5945068d8fd3683dbe1~nCvSFfe2h0440104401usoutp01f;
+	Mon, 18 Apr 2022 16:37:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w2.samsung.com 20220418163713usoutp01b4f5998fb2dee5945068d8fd3683dbe1~nCvSFfe2h0440104401usoutp01f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1650299833;
+	bh=Z0wvz+w3MM7V1gqBpZNdd8vqXrtxWYIC+eAFu1GlgMo=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+	b=Qk9jQzcQ3rjMqaSWT4JUhGUkv8t+oULyiPN4fAHAGFNE9AyjsDrXnrEPQAKApHFV5
+	 qRz9Mg4NB+lz1d/wuhz13rGmPFCUPcyvbF+qGL42katElqIMnfMkbtbx1UdQPqLrzi
+	 o6H3k7pTXtQbn5tBFo9Jp5qFXlyvTjyzrPLurT6E=
+Received: from ussmges1new.samsung.com (u109.gpu85.samsung.co.kr
+	[203.254.195.109]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20220418163713uscas1p1308663154db1a06390013f6b48d9150c~nCvR5nZK-2934229342uscas1p1q;
+	Mon, 18 Apr 2022 16:37:13 +0000 (GMT)
+Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
+	ussmges1new.samsung.com (USCPEMTA) with SMTP id D6.4B.09760.9B39D526; Mon,
+	18 Apr 2022 12:37:13 -0400 (EDT)
+Received: from ussmgxs2new.samsung.com (u91.gpu85.samsung.co.kr
+	[203.254.195.91]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20220418163713uscas1p17b3b1b45c7d27e54e3ecb62eb8af2469~nCvRmzjVZ3041230412uscas1p1o;
+	Mon, 18 Apr 2022 16:37:13 +0000 (GMT)
+X-AuditID: cbfec36d-51bff70000002620-11-625d93b9a164
+Received: from SSI-EX4.ssi.samsung.com ( [105.128.2.145]) by
+	ussmgxs2new.samsung.com (USCPEXMTA) with SMTP id A3.D7.09672.8B39D526; Mon,
+	18 Apr 2022 12:37:13 -0400 (EDT)
+Received: from SSI-EX3.ssi.samsung.com (105.128.2.228) by
+	SSI-EX4.ssi.samsung.com (105.128.2.229) with Microsoft SMTP Server
+	(version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+	15.1.2375.7; Mon, 18 Apr 2022 09:37:12 -0700
+Received: from SSI-EX3.ssi.samsung.com ([fe80::ddc9:3655:8940:70fb]) by
+	SSI-EX3.ssi.samsung.com ([fe80::ddc9:3655:8940:70fb%4]) with mapi id
+	15.01.2375.007; Mon, 18 Apr 2022 09:37:12 -0700
+From: Adam Manzanares <a.manzanares@samsung.com>
+To: Dan Williams <dan.j.williams@intel.com>
+CC: Ben Widawsky <ben.widawsky@intel.com>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, Linux NVDIMM <nvdimm@lists.linux.dev>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>, Alison Schofield
+	<alison.schofield@intel.com>, Ira Weiny <ira.weiny@intel.com>, "Jonathan
+ Cameron" <Jonathan.Cameron@huawei.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, "mcgrof@kernel.org" <mcgrof@kernel.org>
+Subject: Re: [RFC PATCH 02/15] cxl/core/hdm: Bail on endpoint init fail
+Thread-Topic: [RFC PATCH 02/15] cxl/core/hdm: Bail on endpoint init fail
+Thread-Index: AQHYU0KNF8z/Gs91PkuWbFzC2yfYtA==
+Date: Mon, 18 Apr 2022 16:37:12 +0000
+Message-ID: <20220418163702.GA85141@bgt-140510-bm01>
+In-Reply-To: <CAPcyv4hKGEy_0dMQWfJAVVsGu364NjfNeup7URb7ORUYLSZncw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <469CE4F1A4A8F344B33B1C8385464CAA@ssi.samsung.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
- mlxlogscore=741 malwarescore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204180051
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDKsWRmVeSWpSXmKPExsWy7djX87o7J8cmGaybpWBx9/EFNouuZ/3M
+	FtOnXmC02P/0OYvFqoXX2CzOzzrFYnFjwlNGi5U//rBaXD5xidHi1oRjTA5cHi1H3rJ6LN7z
+	kslj06pONo8Xm2cyenzeJBfAGsVlk5Kak1mWWqRvl8CV0X9jN2NBo0DF75P9TA2Ml7i7GDk5
+	JARMJP7fPcTexcjFISSwklGi6eR7JginlUmi4fEpIIcDrKrjZTlEfC2jxPWuXkYI5yOjxIvW
+	AywQzgFGiS03ZrCAzGUTMJD4fXwjM4gtIqAtMXHOQTCbWWAOs8TEi6IgtrCAu8SJvg5GiBoP
+	iS//jrBC2HoSm/9dZQOxWQRUJS4/usAEYvMCXfH7ez9YPadAIFDvEbCZjAJiEt9PrWGCmC8u
+	cevJfCaI3wQlFs3ewwxhi0n82/WQDcJWlLj//SU7RL2OxILdn9ggbDuJ7/+WMELY2hLLFr5m
+	htgrKHFy5hMWiF5JiYMrbkDZLzgkGh9pQdguErvXrISKS0v8vbsMHIwSAu2MEh8m7GOFcCYw
+	Stx5+xPqCmuJf53X2CcwqsxCcvgsJEfNQnLULCRHzUJy1AJG1lWM4qXFxbnpqcWGeanlesWJ
+	ucWleel6yfm5mxiBCez0v8O5Oxh33Pqod4iRiYPxEKMEB7OSCG/PkugkId6UxMqq1KL8+KLS
+	nNTiQ4zSHCxK4rzLMjckCgmkJ5akZqemFqQWwWSZODilGpiWV//n3CZjsCLlwW3vvzzM1Sk/
+	/uTXBOZunNjPI5p8hsv+Xc2fe3cc2+v4Aw6/P8Z0Mi3u+zXXXQ8syq48T7po/ppPZ9MbmTPa
+	wQevvLzDs+pVXYXGJoNdtfKni+rVI2WfB1zLOy4n2mi+76vnC7YWxhRjh9smHyvibUVEQpuj
+	b3Ue/L0319BOIYY538w268jMy5umJF6XlHYosb+16emJ78vnTtr3ui5XPNX8X5fsq9ZP9u58
+	yqdjrviszalJqos1Sby4KUtF3DxwLmv4ysMfH9fE6v/Ju1/2K9SfJWlBQvpkloAdvGnu5fmN
+	ra/jdM9OnLLZNPHGo+d7U/1uHkgNnm0yMU+ixWPWjbTqXiWW4oxEQy3mouJEADm9jSXPAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsWS2cA0UXfn5Ngkg44fHBZ3H19gs+h61s9s
+	MX3qBUaL/U+fs1isWniNzeL8rFMsFjcmPGW0WPnjD6vF5ROXGC1uTTjG5MDl0XLkLavH4j0v
+	mTw2repk83ixeSajx+dNcgGsUVw2Kak5mWWpRfp2CVwZ/Td2MxY0ClT8PtnP1MB4ibuLkYND
+	QsBEouNleRcjF4eQwGpGiRUTf7NCOB8ZJX6tvQ3lHAByPuxl7mLk5GATMJD4fXwjmC0ioC0x
+	cc5BMJtZYA6zxMSLoiC2sIC7xIm+DkaIGg+JL/+OsELYehKb/11lA7FZBFQlLj+6wARi8wJd
+	8ft7PyPEsh2MEv3bb4I1cAoEAg06AraAUUBM4vupNUwQy8Qlbj2ZD2ZLCAhILNlznhnCFpV4
+	+fgfK4StKHH/+0t2iHodiQW7P7FB2HYS3/8tYYSwtSWWLXzNDHGEoMTJmU9YIHolJQ6uuMEy
+	gVFiFpJ1s5CMmoVk1Cwko2YhGbWAkXUVo3hpcXFuekWxUV5quV5xYm5xaV66XnJ+7iZGYOyf
+	/nc4egfj7Vsf9Q4xMnEwHmKU4GBWEuHtWRKdJMSbklhZlVqUH19UmpNafIhRmoNFSZz3ZdTE
+	eCGB9MSS1OzU1ILUIpgsEwenVAMTg45ibifv5usbeWTrX2v1mGrc/zsjfp7P/5nv5Pe7zSnZ
+	zWVQM/vFYebJ6eULPhyzuapkIdO8/k7AgXdOl87NFGdS/3jmYPThpkaJrGknYu18fZ2vfc0T
+	63Jkm9cueOdYxYLwspU/Dt7o2yc837iqc+7krlw5we959iJpnmLfJ7cpK4rZ74hsyt/+dePV
+	nke8uyMcXazcujtuv0stuHqoNcXYODNDZtk2c+tNwvsk31TmqG47KZswJX/Nm2easSZyye/3
+	vJ2z+tmf+WfntNyVeek0N2SFQ8G86T+WnHF4mbQ4WXmDi7ntr+pr6xlvJfLNUGDQO7SwlFNm
+	f8Qnfp/zjnVPrq7daHfOz8Np+awrSizFGYmGWsxFxYkAdOfDS2wDAAA=
+X-CMS-MailID: 20220418163713uscas1p17b3b1b45c7d27e54e3ecb62eb8af2469
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20220418163713uscas1p17b3b1b45c7d27e54e3ecb62eb8af2469
+References: <20220413183720.2444089-1-ben.widawsky@intel.com>
+	<20220413183720.2444089-3-ben.widawsky@intel.com>
+	<CAPcyv4hKGEy_0dMQWfJAVVsGu364NjfNeup7URb7ORUYLSZncw@mail.gmail.com>
+	<CGME20220418163713uscas1p17b3b1b45c7d27e54e3ecb62eb8af2469@uscas1p1.samsung.com>
 
-The 'papr_scm' module and 'papr' implementation in libndctl supports
-PDSMs for reporting PAPR NVDIMM health, dirty-shutdown-count and
-injecting smart-errors. This patch adds support for those PDSMs in
-ndtest module so that PDSM specific paths in libndctl can be exercised.
+On Wed, Apr 13, 2022 at 02:31:42PM -0700, Dan Williams wrote:
+> On Wed, Apr 13, 2022 at 11:38 AM Ben Widawsky <ben.widawsky@intel.com> wr=
+ote:
+> >
+> > Endpoint decoder enumeration is the only way in which we can determine
+> > Device Physical Address (DPA) -> Host Physical Address (HPA) mappings.
+> > Information is obtained only when the register state can be read
+> > sequentially. If when enumerating the decoders a failure occurs, all
+> > other decoders must also fail since the decoders can no longer be
+> > accurately managed (unless it's the last decoder in which case it can
+> > still work).
+>=20
+> I think this should be expanded to fail if any decoder fails to
+> allocate anywhere in the topology otherwise it leaves a mess for
+> future address translation code to work through cases where decoder
+> information is missing.
+>=20
+> The current approach is based around the current expectation that
+> nothing is enumerating pre-existing regions, and nothing is performing
+> address translation.
 
-Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
-Changelog:
-Since v2:
-Link: https://patchwork.kernel.org/project/linux-nvdimm/patch/163454437514.431245.15482985237822269917.stgit@lep8c.aus.stglabs.ibm.com/
-* Made it like v1 which had the patches based on the moved header files.
-  So, this patch depends on the patch moving the header files posted at -
-  https://patchwork.kernel.org/project/linux-nvdimm/patch/165025666388.2927278.9540058958498766114.stgit@lep8c.aus.stglabs.ibm.com/
+Does the qemu support currently allow testing of this patch? If so, it woul=
+d=20
+be good to reference qemu configurations. Any other alternatives would be=20
+welcome as well.=20
 
-Since v1:
-Link: https://patchwork.kernel.org/project/linux-nvdimm/list/?series=521767
-* Removed the dependency on a header movement patch
- tools/testing/nvdimm/test/ndtest.c |  146 ++++++++++++++++++++++++++++++++++++
- tools/testing/nvdimm/test/ndtest.h |    7 ++
- 2 files changed, 153 insertions(+)
++Luis on cc.
 
-diff --git a/tools/testing/nvdimm/test/ndtest.c b/tools/testing/nvdimm/test/ndtest.c
-index 5eb946a02c95..b07cbdd1952d 100644
---- a/tools/testing/nvdimm/test/ndtest.c
-+++ b/tools/testing/nvdimm/test/ndtest.c
-@@ -50,6 +50,10 @@ static struct ndtest_dimm dimm_group1[] = {
- 		.uuid_str = "1e5c75d2-b618-11ea-9aa3-507b9ddc0f72",
- 		.physical_id = 0,
- 		.num_formats = 2,
-+		.flags = PAPR_PMEM_HEALTH_NON_CRITICAL,
-+		.extension_flags = PDSM_DIMM_DSC_VALID | PDSM_DIMM_HEALTH_RUN_GAUGE_VALID,
-+		.dimm_fuel_gauge = 95,
-+		.dimm_dsc = 42,
- 	},
- 	{
- 		.size = DIMM_SIZE,
-@@ -57,6 +61,10 @@ static struct ndtest_dimm dimm_group1[] = {
- 		.uuid_str = "1c4d43ac-b618-11ea-be80-507b9ddc0f72",
- 		.physical_id = 1,
- 		.num_formats = 2,
-+		.flags = PAPR_PMEM_HEALTH_NON_CRITICAL,
-+		.extension_flags = PDSM_DIMM_DSC_VALID | PDSM_DIMM_HEALTH_RUN_GAUGE_VALID,
-+		.dimm_fuel_gauge = 95,
-+		.dimm_dsc = 42,
- 	},
- 	{
- 		.size = DIMM_SIZE,
-@@ -64,6 +72,10 @@ static struct ndtest_dimm dimm_group1[] = {
- 		.uuid_str = "a9f17ffc-b618-11ea-b36d-507b9ddc0f72",
- 		.physical_id = 2,
- 		.num_formats = 2,
-+		.flags = PAPR_PMEM_HEALTH_NON_CRITICAL,
-+		.extension_flags = PDSM_DIMM_DSC_VALID | PDSM_DIMM_HEALTH_RUN_GAUGE_VALID,
-+		.dimm_fuel_gauge = 95,
-+		.dimm_dsc = 42,
- 	},
- 	{
- 		.size = DIMM_SIZE,
-@@ -71,6 +83,10 @@ static struct ndtest_dimm dimm_group1[] = {
- 		.uuid_str = "b6b83b22-b618-11ea-8aae-507b9ddc0f72",
- 		.physical_id = 3,
- 		.num_formats = 2,
-+		.flags = PAPR_PMEM_HEALTH_NON_CRITICAL,
-+		.extension_flags = PDSM_DIMM_DSC_VALID | PDSM_DIMM_HEALTH_RUN_GAUGE_VALID,
-+		.dimm_fuel_gauge = 95,
-+		.dimm_dsc = 42,
- 	},
- 	{
- 		.size = DIMM_SIZE,
-@@ -237,6 +253,103 @@ static int ndtest_get_config_size(struct ndtest_dimm *dimm, unsigned int buf_len
- 	return 0;
- }
- 
-+static int ndtest_pdsm_health(struct ndtest_dimm *dimm,
-+			union nd_pdsm_payload *payload,
-+			unsigned int buf_len)
-+{
-+	struct nd_papr_pdsm_health *health = &payload->health;
-+
-+	if (buf_len < sizeof(health))
-+		return -EINVAL;
-+
-+	health->extension_flags = 0;
-+	health->dimm_unarmed = !!(dimm->flags & PAPR_PMEM_UNARMED_MASK);
-+	health->dimm_bad_shutdown = !!(dimm->flags & PAPR_PMEM_BAD_SHUTDOWN_MASK);
-+	health->dimm_bad_restore = !!(dimm->flags & PAPR_PMEM_BAD_RESTORE_MASK);
-+	health->dimm_health = PAPR_PDSM_DIMM_HEALTHY;
-+
-+	if (dimm->flags & PAPR_PMEM_HEALTH_FATAL)
-+		health->dimm_health = PAPR_PDSM_DIMM_FATAL;
-+	else if (dimm->flags & PAPR_PMEM_HEALTH_CRITICAL)
-+		health->dimm_health = PAPR_PDSM_DIMM_CRITICAL;
-+	else if (dimm->flags & PAPR_PMEM_HEALTH_UNHEALTHY ||
-+		 dimm->flags & PAPR_PMEM_HEALTH_NON_CRITICAL)
-+		health->dimm_health = PAPR_PDSM_DIMM_UNHEALTHY;
-+
-+	health->extension_flags = 0;
-+	if (dimm->extension_flags & PDSM_DIMM_HEALTH_RUN_GAUGE_VALID) {
-+		health->dimm_fuel_gauge = dimm->dimm_fuel_gauge;
-+		health->extension_flags |= PDSM_DIMM_HEALTH_RUN_GAUGE_VALID;
-+	}
-+	if (dimm->extension_flags & PDSM_DIMM_DSC_VALID) {
-+		health->dimm_dsc = dimm->dimm_dsc;
-+		health->extension_flags |= PDSM_DIMM_DSC_VALID;
-+	}
-+
-+	return 0;
-+}
-+
-+static void smart_notify(struct ndtest_dimm *dimm)
-+{
-+	struct device *bus = dimm->dev->parent;
-+
-+	if (!(dimm->flags & PAPR_PMEM_HEALTH_NON_CRITICAL) ||
-+	    (dimm->flags & PAPR_PMEM_BAD_SHUTDOWN_MASK)) {
-+		device_lock(bus);
-+		/* send smart notification */
-+		if (dimm->notify_handle)
-+			sysfs_notify_dirent(dimm->notify_handle);
-+		device_unlock(bus);
-+	}
-+}
-+
-+static int ndtest_pdsm_smart_inject(struct ndtest_dimm *dimm,
-+				union nd_pdsm_payload *payload,
-+				unsigned int buf_len)
-+{
-+	struct nd_papr_pdsm_smart_inject *inj = &payload->smart_inject;
-+
-+	if (buf_len < sizeof(inj))
-+		return -EINVAL;
-+
-+	if (inj->flags & PDSM_SMART_INJECT_HEALTH_FATAL) {
-+		if (inj->fatal_enable)
-+			dimm->flags |= PAPR_PMEM_HEALTH_FATAL;
-+		else
-+			dimm->flags &= ~PAPR_PMEM_HEALTH_FATAL;
-+	}
-+	if (inj->flags & PDSM_SMART_INJECT_BAD_SHUTDOWN) {
-+		if (inj->unsafe_shutdown_enable)
-+			dimm->flags |= PAPR_PMEM_SHUTDOWN_DIRTY;
-+		else
-+			dimm->flags &= ~PAPR_PMEM_SHUTDOWN_DIRTY;
-+	}
-+	smart_notify(dimm);
-+
-+	return 0;
-+}
-+
-+static int ndtest_dimm_cmd_call(struct ndtest_dimm *dimm, unsigned int buf_len,
-+			   void *buf)
-+{
-+	struct nd_cmd_pkg *call_pkg = buf;
-+	unsigned int len = call_pkg->nd_size_in + call_pkg->nd_size_out;
-+	struct nd_pkg_pdsm *pdsm = (struct nd_pkg_pdsm *) call_pkg->nd_payload;
-+	union nd_pdsm_payload *payload = &(pdsm->payload);
-+	unsigned int func = call_pkg->nd_command;
-+
-+	switch (func) {
-+	case PAPR_PDSM_HEALTH:
-+		return ndtest_pdsm_health(dimm, payload, len);
-+	case PAPR_PDSM_SMART_INJECT:
-+		return ndtest_pdsm_smart_inject(dimm, payload, len);
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int ndtest_ctl(struct nvdimm_bus_descriptor *nd_desc,
- 		      struct nvdimm *nvdimm, unsigned int cmd, void *buf,
- 		      unsigned int buf_len, int *cmd_rc)
-@@ -266,6 +379,9 @@ static int ndtest_ctl(struct nvdimm_bus_descriptor *nd_desc,
- 	case ND_CMD_SET_CONFIG_DATA:
- 		*cmd_rc = ndtest_config_set(dimm, buf_len, buf);
- 		break;
-+	case ND_CMD_CALL:
-+		*cmd_rc = ndtest_dimm_cmd_call(dimm, buf_len, buf);
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -482,6 +598,8 @@ static void put_dimms(void *data)
- 
- 	for (i = 0; i < p->config->dimm_count; i++)
- 		if (p->config->dimms[i].dev) {
-+			if (p->config->dimms[i].notify_handle)
-+				sysfs_put(p->config->dimms[i].notify_handle);
- 			device_unregister(p->config->dimms[i].dev);
- 			p->config->dimms[i].dev = NULL;
- 		}
-@@ -694,6 +812,16 @@ static ssize_t flags_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(flags);
- 
-+#define PAPR_PMEM_DIMM_CMD_MASK	 ((1U << PAPR_PDSM_HEALTH) | (1U << PAPR_PDSM_SMART_INJECT))
-+
-+static ssize_t dsm_mask_show(struct device *dev,
-+		struct device_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%#x\n", PAPR_PMEM_DIMM_CMD_MASK);
-+}
-+
-+static DEVICE_ATTR_RO(dsm_mask);
-+
- static struct attribute *ndtest_nvdimm_attributes[] = {
- 	&dev_attr_nvdimm_show_handle.attr,
- 	&dev_attr_vendor.attr,
-@@ -705,6 +833,7 @@ static struct attribute *ndtest_nvdimm_attributes[] = {
- 	&dev_attr_format.attr,
- 	&dev_attr_format1.attr,
- 	&dev_attr_flags.attr,
-+	&dev_attr_dsm_mask.attr,
- 	NULL,
- };
- 
-@@ -724,6 +853,7 @@ static int ndtest_dimm_register(struct ndtest_priv *priv,
- {
- 	struct device *dev = &priv->pdev.dev;
- 	unsigned long dimm_flags = dimm->flags;
-+	struct kernfs_node *papr_kernfs;
- 
- 	if (dimm->num_formats > 1)
- 		set_bit(NDD_LABELING, &dimm_flags);
-@@ -748,6 +878,20 @@ static int ndtest_dimm_register(struct ndtest_priv *priv,
- 		return -ENOMEM;
- 	}
- 
-+	nd_synchronize();
-+
-+	papr_kernfs = sysfs_get_dirent(nvdimm_kobj(dimm->nvdimm)->sd, "papr");
-+	if (!papr_kernfs) {
-+		pr_err("Could not initialize the notifier handle\n");
-+		return 0;
-+	}
-+
-+	dimm->notify_handle = sysfs_get_dirent(papr_kernfs, "flags");
-+	sysfs_put(papr_kernfs);
-+	if (!dimm->notify_handle) {
-+		pr_err("Could not initialize the notifier handle\n");
-+		return 0;
-+	}
- 	return 0;
- }
- 
-@@ -819,6 +963,8 @@ static int ndtest_bus_register(struct ndtest_priv *p)
- 	p->bus_desc.provider_name = NULL;
- 	p->bus_desc.attr_groups = ndtest_attribute_groups;
- 
-+	set_bit(NVDIMM_FAMILY_PAPR, &p->bus_desc.dimm_family_mask);
-+
- 	p->bus = nvdimm_bus_register(&p->pdev.dev, &p->bus_desc);
- 	if (!p->bus) {
- 		dev_err(&p->pdev.dev, "Error creating nvdimm bus %pOF\n", p->dn);
-diff --git a/tools/testing/nvdimm/test/ndtest.h b/tools/testing/nvdimm/test/ndtest.h
-index 8f27ad6f7319..e18b3b006fa2 100644
---- a/tools/testing/nvdimm/test/ndtest.h
-+++ b/tools/testing/nvdimm/test/ndtest.h
-@@ -49,6 +49,13 @@ struct ndtest_dimm {
- 	int id;
- 	int fail_cmd_code;
- 	u8 no_alias;
-+
-+	struct kernfs_node *notify_handle;
-+
-+	/* SMART Health information */
-+	u32 extension_flags;
-+	u16 dimm_fuel_gauge;
-+	u64 dimm_dsc;
- };
- 
- struct ndtest_mapping {
-
-
+>=20
+> >
+> > Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
+> > ---
+> >  drivers/cxl/core/hdm.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+> > index bfc8ee876278..c3c021b54079 100644
+> > --- a/drivers/cxl/core/hdm.c
+> > +++ b/drivers/cxl/core/hdm.c
+> > @@ -255,6 +255,8 @@ int devm_cxl_enumerate_decoders(struct cxl_hdm *cxl=
+hdm)
+> >                                       cxlhdm->regs.hdm_decoder, i);
+> >                 if (rc) {
+> >                         put_device(&cxld->dev);
+> > +                       if (is_endpoint_decoder(&cxld->dev))
+> > +                               return rc;
+> >                         failed++;
+> >                         continue;
+> >                 }
+> > --
+> > 2.35.1
+> >
+> =
 
