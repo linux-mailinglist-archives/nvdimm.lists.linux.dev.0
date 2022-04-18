@@ -1,312 +1,269 @@
-Return-Path: <nvdimm+bounces-3566-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3568-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA09C505C8B
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 18:42:21 +0200 (CEST)
+Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [IPv6:2604:1380:1:3600::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 281CF505D48
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 19:10:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sjc.edge.kernel.org (Postfix) with ESMTPS id 838D33E0E65
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 16:42:20 +0000 (UTC)
+	by ewr.edge.kernel.org (Postfix) with ESMTPS id 455411C03EC
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 17:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778A1A30;
-	Mon, 18 Apr 2022 16:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32E4A34;
+	Mon, 18 Apr 2022 17:10:02 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C744A2B
-	for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 16:42:11 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso295414pjk.0
-        for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 09:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PA+FG4DowT86tBEUQdZQxInwa+G/wK3+5JMw8jztpe0=;
-        b=iLcygDQcv6dCXAGjg8o5JOwk4+1eafoTm6hZR7IT+fSHKRwdRFrMWuG6L8jfLXGygT
-         Gt9qC0ObTp8dH4d/7KbufLiAd9/TJFKdBANPcP0XT48foYFlB9eH1ztg0ToIvfnuKQhC
-         b6ZImG6QXTd7bmUBJinf6qjsahpenBYarvzy9JKFnmKM3bdF1wwMzROVCF6n8HJg5AtN
-         0VxTdBwHnHcU0Gi2K+4I0wXjlnLQtWzijvNOhbz82ukyxf22HCUaJ9T1D89d9BvTa1wA
-         x87ZYA7gYwc5ErlfwT7mIi1eV1dvYuPoULNNUQK9dQUwA8v3FTR5Lf+ohL6QKiJF7aRf
-         TiiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PA+FG4DowT86tBEUQdZQxInwa+G/wK3+5JMw8jztpe0=;
-        b=CJMveSor44VumCsS6NmdW7M4YZaJENg64NXwFXwIZn+T1LQ3KJzc9guvXz1ck7sdH3
-         gTMoSMzAEvvbecTGrXlKXFIDqYIoR38cKu7pMiQVXuAWzUfCBFXIeFT4YuRzkZRa8Bi2
-         PgRgLrU6dssc1WfQClVoLb7wz26cWqUK+Ha/bHEOYc4vZciopyiFdmUMwf+142d4+AXn
-         WK9EhsTtMRCwCQtue6u8129k2LJ3vCPZW3L3dFv/av6vCYJOxsr5mDhWlSBJSkpWaUGd
-         A6jYUA9aA3mg+9bxTdetncdhZnUHMXBDerwSKrEm4COsq3MgpEUgSSHsEJlyzk6yvzFc
-         yXSA==
-X-Gm-Message-State: AOAM5300TMfqaQLNCTq56+lxhyiRizI4B+4Kw8tT3/qlWNmSd1Ww0UgZ
-	m0r0QonZoPBTIgM+7EZq5mESyKEMrbPktwDzs+nV3Q==
-X-Google-Smtp-Source: ABdhPJwpvOzKsRR6iAaCZR9rRdAPrqY+UVLyqBgacn735htTjXt45+Pu4uTkGhLn7gZjsOHVXD2SFa2+Rhlvfezwl/A=
-X-Received: by 2002:a17:902:e885:b0:158:e564:8992 with SMTP id
- w5-20020a170902e88500b00158e5648992mr11596738plg.34.1650300131412; Mon, 18
- Apr 2022 09:42:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A2CA29
+	for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 17:10:00 +0000 (UTC)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23IEkpsu011941;
+	Mon, 18 Apr 2022 17:09:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=5r+dvWk6z+oYjnXfj1ZG5MSk+ta9M9kYVoUqAhK5x8E=;
+ b=MnoJo5+Tb1o3JwUED8qt+gNPREqRxSK4lXsYFNPGwifgg2uyPEe82o0c6dOb9v3ZGQbY
+ OYqmWQVLnWAfnKbQFqqyVCj6CI7h4foa6bhpVNx6X8eKvX/RvwdT5wN5fQd63qLI96W3
+ iaqSBxShHRzoBVLK3ImOc6B91KQ/OmFWOnWKM0+u/caPskXJww+FALbRdjONmxkwmyQF
+ KCA8fMPR2hVtlDfPePGBCK4ivqvDoXAGtdr+YtEaw/rzgI4q2wY4NMDmclqZqH8gFO8W
+ n695DoURUGOH588SjwecKjJVtPYPY3th8Jl8xSzsMBrmKChc1uMvZ/7CxyMse7F0ijnB NQ== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7vn9367-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Apr 2022 17:09:58 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23IH2xqX002748;
+	Mon, 18 Apr 2022 17:09:56 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+	by ppma02fra.de.ibm.com with ESMTP id 3fgu6u0vpq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Apr 2022 17:09:56 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23IHA3Nw8520250
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 Apr 2022 17:10:03 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7DDDC4C046;
+	Mon, 18 Apr 2022 17:09:52 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8E4014C040;
+	Mon, 18 Apr 2022 17:09:51 +0000 (GMT)
+Received: from lep8c.aus.stglabs.ibm.com (unknown [9.40.192.207])
+	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Mon, 18 Apr 2022 17:09:51 +0000 (GMT)
+Subject: [RFC ndctl PATCH 0/9] test: Enable PAPR test family by default
+From: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+To: nvdimm@lists.linux.dev, dan.j.williams@intel.com, vishal.l.verma@intel.com
+Cc: aneesh.kumar@linux.ibm.com, sbhat@linux.ibm.com, vaibhav@linux.ibm.com
+Date: Mon, 18 Apr 2022 12:09:50 -0500
+Message-ID: 
+ <165030175745.3224737.6985015146263991065.stgit@lep8c.aus.stglabs.ibm.com>
+User-Agent: StGit/1.1+40.g1b20
+Content-Type: text/plain; charset="utf-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bquv_UGRz7-FB5k75POO6hY-c7HL2wBA
+X-Proofpoint-GUID: bquv_UGRz7-FB5k75POO6hY-c7HL2wBA
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220413183720.2444089-1-ben.widawsky@intel.com> <20220413183720.2444089-6-ben.widawsky@intel.com>
-In-Reply-To: <20220413183720.2444089-6-ben.widawsky@intel.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Mon, 18 Apr 2022 09:42:00 -0700
-Message-ID: <CAPcyv4iM13nzCpnF5S4oHSWF769t4Av96gQM_3n4E=RAPSnSig@mail.gmail.com>
-Subject: Re: [RFC PATCH 05/15] cxl/acpi: Reserve CXL resources from request_free_mem_region
-To: Ben Widawsky <ben.widawsky@intel.com>
-Cc: linux-cxl@vger.kernel.org, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	patches@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Christoph Hellwig <hch@infradead.org>, 
-	Jason Gunthorpe <jgg@nvidia.com>, John Hubbard <jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=878 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204180101
 
-[ add the usual HMM suspects Christoph, Jason, and John ]
+It is possible to have tests run over multiple test families if
+the respective modules can be loaded/unloaded serially on a test to
+test basis. The kernel patch [1] separated out the PAPR specific
+ndtest module on its own as "ndtest.ko".
 
-On Wed, Apr 13, 2022 at 11:38 AM Ben Widawsky <ben.widawsky@intel.com> wrote:
->
-> Define an API which allows CXL drivers to manage CXL address space.
-> CXL is unique in that the address space and various properties are only
-> known after CXL drivers come up, and therefore cannot be part of core
-> memory enumeration.
+So with [1], we have two family specific modules(nfit_test & ndtest)
+which can be loaded one after the other and have the test results
+in one go without a need for kernel recompilation with different
+kernel configs.
 
-I think this buries the lead on the problem introduced by
-MEMORY_DEVICE_PRIVATE in the first place. Let's revisit that history
-before diving into what CXL needs.
+The series ensures all the known failures/unsupported/irrelevant tests
+to be skipped on ndtest to avoid all "known" chances of false negatives.
+This is achieved using a skip file containing the list of tests to be
+skipped on the given platform. The PAPR specific tests to be skipped
+are updated in the skip_PAPR.js file.
+
+A meson config option(-Dtest-families=INTEL,PAPR default) is added.
+One can just limit the tests to INTEL or PAPR alone if required.
+
+An example run would look like,
+===========================================
+ 1/72 ndctl:ndctl+INTEL / libndctl                       OK              2.79s
+ 2/72 ndctl:ndctl+INTEL / dsm-fail                       OK              0.70s
+ 3/72 ndctl:ndctl+INTEL / create.sh                      OK              0.80s
+ 4/72 ndctl:ndctl+INTEL / clear.sh                       OK             15.04s
+ 5/72 ndctl:ndctl+INTEL / pmem-errors.sh                 OK             14.97s
+ 6/72 ndctl:dax+INTEL / daxdev-errors.sh                 OK             12.33s
+ 7/72 ndctl:dax+INTEL / multi-dax.sh                     OK              0.67s
+ 8/72 ndctl:ndctl+INTEL / btt-check.sh                   OK             16.20s
+ 9/72 ndctl:ndctl+INTEL / label-compat.sh                OK              0.82s
+10/72 ndctl:ndctl+INTEL / sector-mode.sh                 OK              1.01s
+11/72 ndctl:ndctl+INTEL / inject-error.sh                OK             14.52s
+12/72 ndctl:ndctl+INTEL / btt-errors.sh                  OK             24.01s
+13/72 ndctl:ndctl+INTEL / hugetlb                        OK              0.09s
+14/72 ndctl:ndctl+INTEL / btt-pad-compat.sh              OK              1.78s
+15/72 ndctl:ndctl+INTEL / firmware-update.sh             FAIL           10.33s   exit status 1
+>>> TEST_PATH=/home/sbhat/code/ndctl/build/test NDCTL_TEST_FAMILY=INTEL DAXCTL=/home/sbhat/code/ndctl/build/daxctl/daxctl NDCTL=/home/sbhat/code/ndctl/build/ndctl/ndctl MALLOC_PERTURB_=181 DATA_PATH=/home/sbhat/code/ndctl/test /home/sbhat
+/code/ndctl/test/firmware-update.sh
+
+16/72 ndctl:ndctl+INTEL / ack-shutdown-count-set         OK              0.26s
+17/72 ndctl:ndctl+INTEL / rescan-partitions.sh           OK              7.84s
+18/72 ndctl:ndctl+INTEL / inject-smart.sh                OK              1.89s
+19/72 ndctl:ndctl+INTEL / monitor.sh                     OK             13.22s
+20/72 ndctl:ndctl+INTEL / max_extent_ns                  OK              1.10s
+21/72 ndctl:ndctl+INTEL / pfn-meta-errors.sh             OK             14.62s
+22/72 ndctl:ndctl+INTEL / track-uuid.sh                  OK              0.78s
+23/72 ndctl:ndctl+INTEL / pmem-ns                        FAIL            0.26s   (exit status 237 or signal 109 SIGinvalid)
+>>> TEST_PATH=/home/sbhat/code/ndctl/build/test MALLOC_PERTURB_=140 NDCTL_TEST_FAMILY=INTEL DAXCTL=/home/sbhat/code/ndctl/build/daxctl/daxctl NDCTL=/home/sbhat/code/ndctl/build/ndctl/ndctl DATA_PATH=/home/sbhat/code/ndctl/test /home/sbhat
+/code/ndctl/build/test/pmem-ns
+
+24/72 ndctl:dax+INTEL / sub-section.sh                   SKIP            0.15s   exit status 77
+25/72 ndctl:dax+INTEL / dax-dev                          SKIP            0.03s   exit status 77
+26/72 ndctl:dax+INTEL / dax-ext4.sh                      SKIP            0.05s   exit status 77
+27/72 ndctl:dax+INTEL / dax-xfs.sh                       SKIP            0.05s   exit status 77
+28/72 ndctl:ndctl+INTEL / align.sh                       SKIP            0.09s   exit status 77
+29/72 ndctl:dax+INTEL / device-dax                       SKIP            0.04s   exit status 77
+30/72 ndctl:dax+INTEL / revoke-devmem                    OK              0.03s
+31/72 ndctl:dax+INTEL / device-dax-fio.sh                SKIP            0.06s   exit status 77
+32/72 ndctl:dax+INTEL / daxctl-devices.sh                SKIP            0.07s   exit status 77
+33/72 ndctl:dax+INTEL / daxctl-create.sh                 SKIP            0.02s   exit status 77
+34/72 ndctl:dax+INTEL / dm.sh                            FAIL            0.12s   exit status 1
+>>> TEST_PATH=/home/sbhat/code/ndctl/build/test NDCTL_TEST_FAMILY=INTEL DAXCTL=/home/sbhat/code/ndctl/build/daxctl/daxctl NDCTL=/home/sbhat/code/ndctl/build/ndctl/ndctl MALLOC_PERTURB_=115 DATA_PATH=/home/sbhat/code/ndctl/test /home/sbhat
+/code/ndctl/test/dm.sh
+35/72 ndctl:dax+INTEL / mmap.sh                          SKIP            0.05s   exit status 77
+36/72 ndctl:ndctl+INTEL / security.sh                    SKIP            0.38s   exit status 77
+37/72 ndctl:ndctl+PAPR / libndctl                        OK              2.63s
+38/72 ndctl:ndctl+PAPR / dsm-fail                        OK              1.41s
+39/72 ndctl:ndctl+PAPR / create.sh                       OK              1.06s
+40/72 ndctl:ndctl+PAPR / clear.sh                        SKIP            0.12s   exit status 77
+41/72 ndctl:ndctl+PAPR / pmem-errors.sh                  SKIP            0.16s   exit status 77
+42/72 ndctl:dax+PAPR / daxdev-errors.sh                  SKIP            0.08s   exit status 77
+43/72 ndctl:dax+PAPR / multi-dax.sh                      OK              1.03s
+44/72 ndctl:ndctl+PAPR / btt-check.sh                    OK             17.13s
+45/72 ndctl:ndctl+PAPR / label-compat.sh                 SKIP            0.26s   exit status 77
+46/72 ndctl:ndctl+PAPR / sector-mode.sh                  OK              1.26s
+47/72 ndctl:ndctl+PAPR / inject-error.sh                 SKIP            0.20s   exit status 77
+48/72 ndctl:ndctl+PAPR / btt-errors.sh                   SKIP            1.42s   exit status 77
+49/72 ndctl:ndctl+PAPR / hugetlb                         OK              0.16s
+50/72 ndctl:ndctl+PAPR / btt-pad-compat.sh               OK              3.06s
+51/72 ndctl:ndctl+PAPR / firmware-update.sh              SKIP            0.90s   exit status 77
+52/72 ndctl:ndctl+PAPR / ack-shutdown-count-set          SKIP            0.09s   exit status 77
+53/72 ndctl:ndctl+PAPR / rescan-partitions.sh            OK              8.11s
+54/72 ndctl:ndctl+PAPR / inject-smart.sh                 OK              1.37s
+55/72 ndctl:ndctl+PAPR / monitor.sh                      OK              7.63s
+56/72 ndctl:ndctl+PAPR / max_extent_ns                   OK              1.41s
+57/72 ndctl:ndctl+PAPR / pfn-meta-errors.sh              SKIP            0.14s   exit status 77
+58/72 ndctl:ndctl+PAPR / track-uuid.sh                   OK              1.07s
+59/72 ndctl:ndctl+PAPR / pmem-ns                         OK              0.54s
+60/72 ndctl:dax+PAPR / sub-section.sh                    SKIP            0.27s   exit status 77
+61/72 ndctl:dax+PAPR / dax-dev                           SKIP            0.04s   exit status 77
+62/72 ndctl:dax+PAPR / dax-ext4.sh                       SKIP            0.35s   exit status 77
+63/72 ndctl:dax+PAPR / dax-xfs.sh                        SKIP            0.39s   exit status 77
+64/72 ndctl:ndctl+PAPR / align.sh                        SKIP            0.46s   exit status 77
+65/72 ndctl:dax+PAPR / device-dax                        SKIP            0.04s   exit status 77
+66/72 ndctl:dax+PAPR / revoke-devmem                     OK              0.04s
+67/72 ndctl:dax+PAPR / device-dax-fio.sh                 SKIP            0.32s   exit status 77
+68/72 ndctl:dax+PAPR / daxctl-devices.sh                 SKIP            0.40s   exit status 77
+69/72 ndctl:dax+PAPR / daxctl-create.sh                  SKIP            0.48s   exit status 77
+70/72 ndctl:dax+PAPR / dm.sh                             SKIP            0.48s   exit status 77
+71/72 ndctl:dax+PAPR / mmap.sh                           SKIP            0.50s   exit status 77
+72/72 ndctl:ndctl+PAPR / security.sh                     SKIP            0.22s   exit status 77
+
+
+Ok:                 37
+Expected Fail:      0
+Fail:               3 # Not from PAPR family
+Unexpected Pass:    0
+Skipped:            32
+Timeout:            0
+===========================================
+Note the meson suite string here "ndctl+INTEL|PAPR" indicating the
+test family.
+
+The first 6 patches in the series move the code with little/no change
+to current behaviour in isolation while fixing existing bugs in
+preparation for running the tests for INTEL and PAPR families one
+after the other. The last 3 patches fix the known failures on ndtest
+and they depend on the kernel patch [2]. These 3 patches are repost of
+previously posted patches with rebase. The last patches are included
+here in this series for completeness.
+
+The patches are posted on github repos below
+Kernel - https://github.com/shivaprasadbhat/linux/tree/ndtest-runall
+ndctl  - https://github.com/shivaprasadbhat/ndctl/tree/ndctl-test-all
+
+References:
+[1] - https://patchwork.kernel.org/project/linux-nvdimm/patch/165025849452.2974989.6131145460098517848.stgit@lep8c.aus.stglabs.ibm.com/
+[2] - https://patchwork.kernel.org/project/linux-nvdimm/patch/165027233876.3035289.4353747702027907365.stgit@lep8c.aus.stglabs.ibm.com/
 
 ---
 
-Commit 4ef589dc9b10 ("mm/hmm/devmem: device memory hotplug using
-ZONE_DEVICE") introduced the concept of MEMORY_DEVICE_PRIVATE. At its
-core MEMORY_DEVICE_PRIVATE uses the ZONE_DEVICE capability to annotate
-an "unused" physical address range with 'struct page' for the purpose
-of coordinating migration of buffers onto and off of a GPU /
-accelerator. The determination of "unused" was based on a heuristic,
-not a guarantee, that any address range not expressly conveyed in the
-platform firmware map of the system can be repurposed for software
-use. The CXL Fixed Memory Windows Structure  (CFMWS) definition
-explicitly breaks the assumptions of that heuristic.
+Shivaprasad G Bhat (9):
+      test/common: Ensure to unload test modules
+      test: core: Fix module unload failures
+      test: Unload the nfit module during cleanup
+      test: Introduce skip file to skip irrelevant tests
+      test: Assign provider name based on the test family
+      test: Enable PAPR test family tests after INTEL family tests
+      test/libndctl: Enable libndctl tests on ndtest
+      test/inject-smart: Enable inject-smart tests on ndtest
+      test/monitor.sh: Partially skip monitor test on ndtest
 
----
+ meson.build                     |  10 +++
+ meson_options.txt               |   2 +
+ ndctl/bat.c                     |   4 +-
+ ndctl/test.c                    |   4 +-
+ test.h                          |  10 ++-
+ test/ack-shutdown-count-set.c   |  17 ++--
+ test/btt-check.sh               |   3 +-
+ test/btt-errors.sh              |   3 +-
+ test/btt-pad-compat.sh          |   3 +-
+ test/clear.sh                   |   4 +-
+ test/common                     |  57 ++++++++++++-
+ test/core.c                     | 140 +++++++++++++++++++++++++++++++-
+ test/create.sh                  |   4 +-
+ test/dax-dev.c                  |   2 +-
+ test/dax-pmd.c                  |   2 +-
+ test/daxdev-errors.sh           |   6 +-
+ test/device-dax.c               |   2 +-
+ test/dsm-fail.c                 |  33 +++++---
+ test/firmware-update.sh         |   3 +-
+ test/inject-error.sh            |   3 +-
+ test/inject-smart.sh            |  17 ++--
+ test/label-compat.sh            |   4 +-
+ test/libndctl.c                 |  60 ++++++++++++--
+ test/list-smart-dimm.c          |  33 +++++++-
+ test/max_available_extent_ns.sh |   3 +-
+ test/meson.build                |  59 ++++++++------
+ test/monitor.sh                 |  14 +++-
+ test/multi-dax.sh               |   4 +-
+ test/pfn-meta-errors.sh         |   3 +-
+ test/pmem-errors.sh             |   3 +-
+ test/pmem_namespaces.c          |  29 +++----
+ test/rescan-partitions.sh       |   3 +-
+ test/revoke-devmem.c            |   2 +-
+ test/sector-mode.sh             |   4 +-
+ test/security.sh                |   3 +-
+ test/skip_PAPR.js               |  32 ++++++++
+ test/track-uuid.sh              |   3 +-
+ 37 files changed, 447 insertions(+), 141 deletions(-)
+ create mode 100644 test/skip_PAPR.js
 
-...and then jump into what CFMWS is and the proposal to coordinate
-with request_free_mem_region().
+--
 
-
->
-> Compute Express Link 2.0 [ECN] defines a concept called CXL Fixed Memory
-> Window Structures (CFMWS). Each CFMWS conveys a region of host physical
-> address (HPA) space which has certain properties that are familiar to
-> CXL, mainly interleave properties, and restrictions, such as
-> persistence. The HPA ranges therefore should be owned, or at least
-> guided by the relevant CXL driver, cxl_acpi [1].
->
-> It would be desirable to simply insert this address space into
-> iomem_resource with a new flag to denote this is CXL memory. This would
-> permit request_free_mem_region() to be reused for CXL memory provided it
-> learned some new tricks. For that, it is tempting to simply use
-> insert_resource(). The API was designed specifically for cases where new
-> devices may offer new address space. This cannot work in the general
-> case. Boot firmware can pass, some, none, or all of the CFMWS range as
-> various types of memory to the kernel, and this may be left alone,
-> merged, or even expanded.
-
-s/expanded/expanded as the memory map is parsed and reconciled/
-
-> As a result iomem_resource may intersect CFMWS
-> regions in ways insert_resource cannot handle [2]. Similar reasoning
-> applies to allocate_resource().
->
-> With the insert_resource option out, the only reasonable approach left
-> is to let the CXL driver manage the address space independently of
-> iomem_resource and attempt to prevent users of device private memory
-
-s/device private memory/MEMORY_DEVICE_PRIVATE/
-
-> APIs from using CXL memory. In the case where cxl_acpi comes up first,
-> the new API allows cxl to block use of any CFMWS defined address space
-> by assuming everything above the highest CFMWS entry is fair game. It is
-> expected that this effectively will prevent usage of device private
-> memory,
-
-No, only if CFMWS consumes the full 64-bit address space which is
-unlikely. It's also unlikely going forward to need
-MEMORY_DEVICE_PRIVATE when hardware supports CXL for fully coherent
-migration of buffers onto and off of an accelearator.
-
-> but if such behavior is undesired, cxl_acpi can be blocked from
-> loading, or unloaded.
-
-I would just say if MEMORY_DEVICE_PRIVATE needs exceed the memory
-space left over by CXL then the loading of the dynamic CXL address
-space allocation infrastructure can be deferred until after
-MEMORY_DEVICE_PRIVATE consumers have
-
-> When device private memory is used before CXL
-> comes up, or, there are intersections as described above, the CXL driver
-> will have to make sure to not reuse sysram that is BUSY.
->
-> [1]: The specification defines enumeration via ACPI, however, one could
-> envision devicetree, or some other hardcoded mechanisms for doing the
-> same thing.
->
-> [2]: A common way to hit this case is when BIOS creates a volatile
-> region with extra space for hotplug. In this case, you're likely to have
->
-> |<--------------HPA space---------------------->|
-> |<---iomem_resource -->|
-> | DDR  | CXL Volatile  |
-> |      | CFMWS for volatile w/ hotplug |
->
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
-> ---
->  drivers/cxl/acpi.c     | 26 ++++++++++++++++++++++++++
->  include/linux/ioport.h |  1 +
->  kernel/resource.c      | 11 ++++++++++-
->  3 files changed, 37 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> index 9b69955b90cb..0870904fe4b5 100644
-> --- a/drivers/cxl/acpi.c
-> +++ b/drivers/cxl/acpi.c
-> @@ -76,6 +76,7 @@ static int cxl_acpi_cfmws_verify(struct device *dev,
->  struct cxl_cfmws_context {
->         struct device *dev;
->         struct cxl_port *root_port;
-> +       struct acpi_cedt_cfmws *high_cfmws;
-
-Seems more straightforward to track the max 'end' address seen so far
-rather than the "highest" cfmws entry.
-
->  };
->
->  static int cxl_parse_cfmws(union acpi_subtable_headers *header, void *arg,
-> @@ -126,6 +127,14 @@ static int cxl_parse_cfmws(union acpi_subtable_headers *header, void *arg,
->                         cfmws->base_hpa + cfmws->window_size - 1);
->                 return 0;
->         }
-> +
-> +       if (ctx->high_cfmws) {
-> +               if (cfmws->base_hpa > ctx->high_cfmws->base_hpa)
-> +                       ctx->high_cfmws = cfmws;
-
-I'd expect:
-
-end = cfmws->base_hpa + window_size;
-if (ctx->cfmws_max < end)
-   ctx->cfmws_max = end;
-
-> +       } else {
-> +               ctx->high_cfmws = cfmws;
-> +       }
-> +
->         dev_dbg(dev, "add: %s node: %d range %#llx-%#llx\n",
->                 dev_name(&cxld->dev), phys_to_target_node(cxld->range.start),
->                 cfmws->base_hpa, cfmws->base_hpa + cfmws->window_size - 1);
-> @@ -299,6 +308,7 @@ static int cxl_acpi_probe(struct platform_device *pdev)
->         ctx = (struct cxl_cfmws_context) {
->                 .dev = host,
->                 .root_port = root_port,
-> +               .high_cfmws = NULL,
->         };
->         acpi_table_parse_cedt(ACPI_CEDT_TYPE_CFMWS, cxl_parse_cfmws, &ctx);
->
-> @@ -317,10 +327,25 @@ static int cxl_acpi_probe(struct platform_device *pdev)
->         if (rc < 0)
->                 return rc;
->
-> +       if (ctx.high_cfmws) {
-
-Even if there are zero CFMWS entries there will always be a max end
-address to call set_request_free_min_base().
-
-> +               resource_size_t end =
-> +                       ctx.high_cfmws->base_hpa + ctx.high_cfmws->window_size;
-> +               dev_dbg(host,
-> +                       "Disabling free device private regions below %#llx\n",
-> +                       end);
-> +               set_request_free_min_base(end);
-> +       }
-> +
->         /* In case PCI is scanned before ACPI re-trigger memdev attach */
->         return cxl_bus_rescan();
->  }
->
-> +static int cxl_acpi_remove(struct platform_device *pdev)
-
-No need for a .remove() method, just use devm_add_action_or_reset() to
-unreserve CXL address space as cxl_acpi unloads.
-
-> +{
-> +       set_request_free_min_base(0);
-> +       return 0;
-> +}
-> +
->  static const struct acpi_device_id cxl_acpi_ids[] = {
->         { "ACPI0017" },
->         { },
-> @@ -329,6 +354,7 @@ MODULE_DEVICE_TABLE(acpi, cxl_acpi_ids);
->
->  static struct platform_driver cxl_acpi_driver = {
->         .probe = cxl_acpi_probe,
-> +       .remove = cxl_acpi_remove,
->         .driver = {
->                 .name = KBUILD_MODNAME,
->                 .acpi_match_table = cxl_acpi_ids,
-> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> index ec5f71f7135b..dc41e4be5635 100644
-> --- a/include/linux/ioport.h
-> +++ b/include/linux/ioport.h
-> @@ -325,6 +325,7 @@ extern int
->  walk_iomem_res_desc(unsigned long desc, unsigned long flags, u64 start, u64 end,
->                     void *arg, int (*func)(struct resource *, void *));
->
-> +void set_request_free_min_base(resource_size_t val);
-
-Shouldn't there also be a static inline empty routine in the
-CONFIG_DEVICE_PRIVATE=n case?
-
->  struct resource *devm_request_free_mem_region(struct device *dev,
->                 struct resource *base, unsigned long size);
->  struct resource *request_free_mem_region(struct resource *base,
-> diff --git a/kernel/resource.c b/kernel/resource.c
-> index 34eaee179689..a4750689e529 100644
-> --- a/kernel/resource.c
-> +++ b/kernel/resource.c
-> @@ -1774,6 +1774,14 @@ void resource_list_free(struct list_head *head)
->  EXPORT_SYMBOL(resource_list_free);
->
->  #ifdef CONFIG_DEVICE_PRIVATE
-> +static resource_size_t request_free_min_base;
-> +
-> +void set_request_free_min_base(resource_size_t val)
-> +{
-> +       request_free_min_base = val;
-> +}
-> +EXPORT_SYMBOL_GPL(set_request_free_min_base);
-> +
->  static struct resource *__request_free_mem_region(struct device *dev,
->                 struct resource *base, unsigned long size, const char *name)
->  {
-> @@ -1799,7 +1807,8 @@ static struct resource *__request_free_mem_region(struct device *dev,
->         }
->
->         write_lock(&resource_lock);
-> -       for (; addr > size && addr >= base->start; addr -= size) {
-> +       for (; addr > size && addr >= max(base->start, request_free_min_base);
-> +            addr -= size) {
->                 if (__region_intersects(addr, size, 0, IORES_DESC_NONE) !=
->                                 REGION_DISJOINT)
->                         continue;
-> --
-> 2.35.1
->
 
