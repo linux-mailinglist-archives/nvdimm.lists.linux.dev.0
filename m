@@ -1,206 +1,153 @@
-Return-Path: <nvdimm+bounces-3583-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3585-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ewr.edge.kernel.org (ewr.edge.kernel.org [147.75.197.195])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AF0D505FA8
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Apr 2022 00:16:08 +0200 (CEST)
+Received: from sjc.edge.kernel.org (sjc.edge.kernel.org [147.75.69.165])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A3F2506389
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Apr 2022 06:52:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ewr.edge.kernel.org (Postfix) with ESMTPS id 694801C09E9
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 18 Apr 2022 22:16:07 +0000 (UTC)
+	by sjc.edge.kernel.org (Postfix) with ESMTPS id 522AE3E0F53
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 Apr 2022 04:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA8333FE;
-	Mon, 18 Apr 2022 22:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA523EA4;
+	Tue, 19 Apr 2022 04:52:02 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD532567
-	for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 22:15:58 +0000 (UTC)
-Received: by mail-pg1-f182.google.com with SMTP id q19so21353189pgm.6
-        for <nvdimm@lists.linux.dev>; Mon, 18 Apr 2022 15:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cXn+XlB+cHweCj8dldoZHVhXGxfPdw05rCWNbSdTdc4=;
-        b=a3/CLTjzJmABS8OJFu259ZAUTBgMaKGm4qDzfxoiRymib2vIz041twXe8ofgq4beSM
-         eSQL8xTTCC4e0rZY+34Qhb/SgeNRFRHayrKIXcXN0HlKhdLw0WGzrHDgTl+fmi8NEtHv
-         os5PoVy+JqKtRigkZSJ54ftSJ2lJkVAjmMUgdpAWnNC0Vj1K/r0tTGTv7knsD4EEq2Kr
-         Mi4ySkAyfxS87q5a8/jLaxSWyv+fhnnV+QyCWzhNWQ4gaaIjE2JYJ3aZWmvOaOG8v5Zm
-         qSSPB2ZqqAlCJKHPoOdtuy3NU5l0nlThx9ctndSpbQz+609wdbCpDGtAHMYaxo5fQHTp
-         Nlcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cXn+XlB+cHweCj8dldoZHVhXGxfPdw05rCWNbSdTdc4=;
-        b=GFwzVQC5apC9ER9p31/+EgUECkCKl7n6hw7udsmrzFykqGgfQGcG61Z81TvzjxcXI+
-         V9GxjP6sYp6cGFhX4pqH35oL7+MeaJM4QGKWUvwoq+t8+TugN6eXSKd+sTQY2RUlO7N0
-         qlNv9jb8OsreJqJXw8srBVFo+cxBVcyVIIzgaVivbIaFneM6XIsz8c7Jxh5OG0WIPZG6
-         C0ONAfr2I5nHQszhizOmi+PM0ssBMsG6+6s3uJDZeRv8t1qJXAOX0ufUQ+0FneZ6LUUV
-         hxVqxS7CzV+JZKS5RlJUl9+FLDtxxWlEek9Jhyj85s81VyKgWsx+eadEDa6ZZwUnB6sV
-         Ki1w==
-X-Gm-Message-State: AOAM530vJZvMpQH1UzHNhqlhWY0J81JzvtN6DSHAPMd/GAkkDltPcK0K
-	zuQSQcIjBX5qVLNad8t9Ultv2lmpRq6O2w515j2JsA==
-X-Google-Smtp-Source: ABdhPJwWpbqzZFn6prFelZgwymqzv8uuDIY8ktJhHn2DeA4Oidn7MdV/6rumg9QinS8Ff9gdYQ4FlLujPhf5fWaz814=
-X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id
- bq20-20020a056a000e1400b004fe3cdb023fmr14519126pfb.86.1650320158259; Mon, 18
- Apr 2022 15:15:58 -0700 (PDT)
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC644EA1
+	for <nvdimm@lists.linux.dev>; Tue, 19 Apr 2022 04:52:00 +0000 (UTC)
+IronPort-Data: =?us-ascii?q?A9a23=3Au2RBvKjQPIjEua4iyUkhZ8J3X161CxEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUEyWUXXWCBOPmLYjbwfYx3aIXg/BkC78WDxoAwTFFqpXw8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl6pLMlhKaLRMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTSuJsrsUlItPiMI4Wtjdn1z6xJfovR9bBBbrL4dtZ1?=
+ =?us-ascii?q?TIrrsFIAfvaIcEebFJHYBbfZBtAElQaEpQzmKGvnHaXWzlZrk+F4K8yy2vNxQd?=
+ =?us-ascii?q?ylr/3P7L9fMKGRMBQtkKZvX7duWD4BAwKctCS11Kt8Huqi6nEnT7TX5gbH7m1s?=
+ =?us-ascii?q?PVthTW7wm0VFQ1TW0C3rOe0jmagVN9FbU8Z4Cwjqe417kPDZt38WQCo5X2JpBg?=
+ =?us-ascii?q?RX/JOHOAgrgKA0KzZ50CeHGdsZjpAbsE28d84XhQ02VKT2dDkHzpitPuSU331y?=
+ =?us-ascii?q?1s+hVteIgBMdSlbO3BCFlBDvrHeTEgIpkqnZr5e/GSd0rUZwQ3N/g0=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AOx2m76hS8LA8xk4fM2ePciqv63BQXjAji2hC?=
+ =?us-ascii?q?6mlwRA09TySZ//rOoB19726StN9xYgBHpTnuAtjifZqxz/FICOoqTNOftWvdyQ?=
+ =?us-ascii?q?mVxehZhOOIqVCNJ8SUzI5gPMlbHZSWcOeAaGSSk/yKmjWQIpIxxsWd6qC0iaP7?=
+ =?us-ascii?q?x3dpdwtjbKZt9G5Ce36mO3wzVA9bHoA4CZbZwsJGogCrcXMRYt/+KWICW4H41q?=
+ =?us-ascii?q?b2vaOjcRgbHAQm9QXLqTup7YTxGx+e0gxbcx4n+8ZazVT4?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="123671746"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 19 Apr 2022 12:50:48 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+	by cn.fujitsu.com (Postfix) with ESMTP id D439E4D17171;
+	Tue, 19 Apr 2022 12:50:47 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Tue, 19 Apr 2022 12:50:47 +0800
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Tue, 19 Apr 2022 12:50:49 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Tue, 19 Apr 2022 12:50:45 +0800
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>
+CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
+	<hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
+Date: Tue, 19 Apr 2022 12:50:38 +0800
+Message-ID: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220413183720.2444089-1-ben.widawsky@intel.com> <20220413183720.2444089-7-ben.widawsky@intel.com>
-In-Reply-To: <20220413183720.2444089-7-ben.widawsky@intel.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Mon, 18 Apr 2022 15:15:47 -0700
-Message-ID: <CAPcyv4hD93d20Sq25tPNMQ1T68uQmTTQo7aDXMKN36wrCTa1-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 06/15] cxl/acpi: Manage root decoder's address space
-To: Ben Widawsky <ben.widawsky@intel.com>
-Cc: linux-cxl@vger.kernel.org, Linux NVDIMM <nvdimm@lists.linux.dev>, 
-	patches@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: D439E4D17171.A07DF
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No
 
-On Wed, Apr 13, 2022 at 11:38 AM Ben Widawsky <ben.widawsky@intel.com> wrote:
->
-> Use a gen_pool to manage the physical address space that is routed by
-> the platform decoder (root decoder). As described in 'cxl/acpi: Resereve
-> CXL resources from request_free_mem_region' the address space does not
-> coexist well if part of all of it is conveyed in the memory map to the
-> kernel.
->
-> Since the existing resource APIs of interest all rely on the root
-> decoder's address space being in iomem_resource,
+This patchset is aimed to support shared pages tracking for fsdax.
 
-I do not understand what this is trying to convey. Nothing requires
-that a given 'struct resource' be managed under iomem_resource.
+Changes since V12:
+  - Rebased onto next-20220414
+  - Do not continue ->notify_failure() if filesystem is not ready yet
+  - Simplify the logic of setting CoW flag
+  - Fix build warning/error and typo
 
-> the choices are to roll
-> a new allocator because on struct resource, or use gen_pool. gen_pool is
-> a good choice because it already has all the capabilities needed to
-> satisfy CXL programming.
+This patchset moves owner tracking from dax_assocaite_entry() to pmem
+device driver, by introducing an interface ->memory_failure() for struct
+pagemap.  This interface is called by memory_failure() in mm, and
+implemented by pmem device.
 
-Not sure what comparison to 'struct resource' is being made here, what
-is the tradeoff as you see it? In other words, why mention 'struct
-resource' as a consideration?
+Then call holder operations to find the filesystem which the corrupted
+data located in, and call filesystem handler to track files or metadata
+associated with this page.
 
->
-> Signed-off-by: Ben Widawsky <ben.widawsky@intel.com>
-> ---
->  drivers/cxl/acpi.c | 36 ++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h  |  2 ++
->  2 files changed, 38 insertions(+)
->
-> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> index 0870904fe4b5..a6b0c3181d0e 100644
-> --- a/drivers/cxl/acpi.c
-> +++ b/drivers/cxl/acpi.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /* Copyright(c) 2021 Intel Corporation. All rights reserved. */
->  #include <linux/platform_device.h>
-> +#include <linux/genalloc.h>
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> @@ -79,6 +80,25 @@ struct cxl_cfmws_context {
->         struct acpi_cedt_cfmws *high_cfmws;
->  };
->
-> +static int cfmws_cookie;
-> +
-> +static int fill_busy_mem(struct resource *res, void *_window)
-> +{
-> +       struct gen_pool *window = _window;
-> +       struct genpool_data_fixed gpdf;
-> +       unsigned long addr;
-> +       void *type;
-> +
-> +       gpdf.offset = res->start;
-> +       addr = gen_pool_alloc_algo_owner(window, resource_size(res),
-> +                                        gen_pool_fixed_alloc, &gpdf, &type);
+Finally we are able to try to fix the corrupted data in filesystem and
+do other necessary processing, such as killing processes who are using
+the files affected.
 
-The "_owner" variant of gen_pool was only added for p2pdma as a way to
-coordinate reference counts across p2pdma space allocation and a
-'strcuct dev_pagemap' instance. The use here seems completely
-vestigial and can just move to gen_pool_alloc_algo.
+The call trace is like this:
+memory_failure()
+|* fsdax case
+|------------
+|pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+| dax_holder_notify_failure()      =>
+|  dax_device->holder_ops->notify_failure() =>
+|                                     - xfs_dax_notify_failure()
+|  |* xfs_dax_notify_failure()
+|  |--------------------------
+|  |   xfs_rmap_query_range()
+|  |    xfs_dax_failure_fn()
+|  |    * corrupted on metadata
+|  |       try to recover data, call xfs_force_shutdown()
+|  |    * corrupted on file data
+|  |       try to recover data, call mf_dax_kill_procs()
+|* normal case
+|-------------
+|mf_generic_kill_procs()
 
-> +       if (addr != res->start || (res->start == 0 && type != &cfmws_cookie))
-> +               return -ENXIO;
+==
+Shiyang Ruan (7):
+  dax: Introduce holder for dax_device
+  mm: factor helpers for memory_failure_dev_pagemap
+  pagemap,pmem: Introduce ->memory_failure()
+  fsdax: Introduce dax_lock_mapping_entry()
+  mm: Introduce mf_dax_kill_procs() for fsdax case
+  xfs: Implement ->notify_failure() for XFS
+  fsdax: set a CoW flag when associate reflink mappings
 
-How can the second condition ever be true?
+ drivers/dax/super.c         |  67 +++++++++-
+ drivers/md/dm.c             |   2 +-
+ drivers/nvdimm/pmem.c       |  17 +++
+ fs/dax.c                    | 113 ++++++++++++++--
+ fs/erofs/super.c            |  10 +-
+ fs/ext2/super.c             |   7 +-
+ fs/ext4/super.c             |   9 +-
+ fs/xfs/Makefile             |   5 +
+ fs/xfs/xfs_buf.c            |  10 +-
+ fs/xfs/xfs_fsops.c          |   3 +
+ fs/xfs/xfs_mount.h          |   1 +
+ fs/xfs/xfs_notify_failure.c | 220 +++++++++++++++++++++++++++++++
+ fs/xfs/xfs_super.h          |   1 +
+ include/linux/dax.h         |  48 +++++--
+ include/linux/memremap.h    |  12 ++
+ include/linux/mm.h          |   2 +
+ include/linux/page-flags.h  |   6 +
+ mm/memory-failure.c         | 255 +++++++++++++++++++++++++-----------
+ 18 files changed, 682 insertions(+), 106 deletions(-)
+ create mode 100644 fs/xfs/xfs_notify_failure.c
 
-> +
-> +       pr_devel("%pR removed from CFMWS\n", res);
-> +       return 0;
-> +}
-> +
->  static int cxl_parse_cfmws(union acpi_subtable_headers *header, void *arg,
->                            const unsigned long end)
->  {
-> @@ -88,6 +108,8 @@ static int cxl_parse_cfmws(union acpi_subtable_headers *header, void *arg,
->         struct device *dev = ctx->dev;
->         struct acpi_cedt_cfmws *cfmws;
->         struct cxl_decoder *cxld;
-> +       struct gen_pool *window;
-> +       char name[64];
->         int rc, i;
->
->         cfmws = (struct acpi_cedt_cfmws *) header;
-> @@ -116,6 +138,20 @@ static int cxl_parse_cfmws(union acpi_subtable_headers *header, void *arg,
->         cxld->interleave_ways = CFMWS_INTERLEAVE_WAYS(cfmws);
->         cxld->interleave_granularity = CFMWS_INTERLEAVE_GRANULARITY(cfmws);
->
-> +       sprintf(name, "cfmws@%#llx", cfmws->base_hpa);
-> +       window = devm_gen_pool_create(dev, ilog2(SZ_256M), NUMA_NO_NODE, name);
-> +       if (IS_ERR(window))
-> +               return 0;
-> +
-> +       gen_pool_add_owner(window, cfmws->base_hpa, -1, cfmws->window_size,
-> +                          NUMA_NO_NODE, &cfmws_cookie);
+-- 
+2.35.1
 
-Similar comment about the "_owner" variant serving no visible purpose.
 
-These seems to pre-suppose that only the allocator will ever want to
-interrogate the state of free space, it might be worth registering
-objects for each intersection that are not cxl_regions so that
-userspace explicitly sees what the cxl_acpi driver sees in terms of
-available resources.
 
-> +
-> +       /* Area claimed by other resources, remove those from the gen_pool. */
-> +       walk_iomem_res_desc(IORES_DESC_NONE, 0, cfmws->base_hpa,
-> +                           cfmws->base_hpa + cfmws->window_size - 1, window,
-> +                           fill_busy_mem);
-> +       to_cxl_root_decoder(cxld)->window = window;
-> +
->         rc = cxl_decoder_add(cxld, target_map);
->         if (rc)
->                 put_device(&cxld->dev);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 85fd5e84f978..0e1c65761ead 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -246,10 +246,12 @@ struct cxl_switch_decoder {
->  /**
->   * struct cxl_root_decoder - A toplevel/platform decoder
->   * @base: Base class decoder
-> + * @window: host address space allocator
->   * @targets: Downstream targets (ie. hostbridges).
->   */
->  struct cxl_root_decoder {
->         struct cxl_decoder base;
-> +       struct gen_pool *window;
->         struct cxl_decoder_targets *targets;
->  };
->
-> --
-> 2.35.1
->
 
