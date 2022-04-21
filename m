@@ -1,54 +1,52 @@
-Return-Path: <nvdimm+bounces-3649-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3652-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [IPv6:2604:1380:4040:4f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B1250A461
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Apr 2022 17:37:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D82AE50A467
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Apr 2022 17:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by da.mirrors.kernel.org (Postfix) with ESMTPS id A778F2E0CED
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Apr 2022 15:37:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89868280C05
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 Apr 2022 15:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1E61FD4;
-	Thu, 21 Apr 2022 15:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825211FC9;
+	Thu, 21 Apr 2022 15:37:39 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C0F1FC9
-	for <nvdimm@lists.linux.dev>; Thu, 21 Apr 2022 15:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D956E1FC0
+	for <nvdimm@lists.linux.dev>; Thu, 21 Apr 2022 15:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650555404; x=1682091404;
+  t=1650555457; x=1682091457;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Qo8mEyXyeD/WLpM5PUEvAxSmJze8tzwfv5FGI2P5jME=;
-  b=ODkfnlHnBNWcVt3toGsc/Qc4thyWrjAFLQkQTEgi/Lu5yYDcCYW59WJw
-   LWmqMVdGg798UHqfmvtjV+U9+fqUxkRx61Il6ozDjhV3X5fTtJM6YHD5m
-   MXo/jDINHhkRz09rDGegTMCjRTjZFo932+8Kz6xAe3HAVA8Nu4a9rVKxt
-   4pv8TlizBIfSdatwJzeKKcEHXrO4SXnw1D2fYO8b61he0fSeOT6iNIQO/
-   FVjTMhVP+DsWPMij9JUAxCX2FloTnmQZ4TYLB98iNumDBdscdSgx1s/To
-   vwV+D6Qyj15Qan0bgQelFNxjWAsithlvY5EemiJHuN5dRxS7YS1DVJie7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246290639"
+  bh=x3xS6cEt6lHXiNb+A1o9kWq7JklXoM+r+tP2gN5rJV4=;
+  b=FvZ3IPImbhBy9ySPXiIu9SP/UeHnWiXU+229yo/2CgC+zyBxHq7NmT7S
+   B/P7rxnp8AgmcRqJg8qTqZe3EEmr2R2p9MLDlzePSZBBud8sRA8Aesw5L
+   z+IpU5PBXkorlzHi0P2Jho/+WEi+8rZRbjJC/fdLvubKe6e3PCTLsHK0m
+   eb4QcW5rGv19StuSutWmadWekx935ZmmKjeDHuL+KNcaD0BPTE9T3LHIe
+   glJxBLkuQ+/pS9RZ6wMc04ZASP5kcnjlHYml13rjTpxQQCjbQcy8LDaJZ
+   6i7iDxdIMKGi/pQPwCAC7PmZhUgI7h3Ot1VJ/+FLxiPiHmuDqPotFaYUZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350833505"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="246290639"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:33:46 -0700
+   d="scan'208";a="350833505"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:33:51 -0700
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="866382131"
+   d="scan'208";a="530353769"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:33:45 -0700
-Subject: [PATCH v3 7/8] device-core: Kill the lockdep_mutex
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:33:51 -0700
+Subject: [PATCH v3 8/8] nvdimm: Fix firmware activation deadlock scenarios
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-cxl@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- vishal.l.verma@intel.com, alison.schofield@intel.com, nvdimm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Date: Thu, 21 Apr 2022 08:33:45 -0700
-Message-ID: <165055522548.3745911.14298368286915484086.stgit@dwillia2-desk3.amr.corp.intel.com>
+Cc: peterz@infradead.org, vishal.l.verma@intel.com, alison.schofield@intel.com,
+ nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Date: Thu, 21 Apr 2022 08:33:51 -0700
+Message-ID: <165055523099.3745911.9091010720291846249.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -61,56 +59,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Per Peter [1], the lockdep API has native support for all the use cases
-lockdep_mutex was attempting to enable. Now that all lockdep_mutex users
-have been converted to those APIs, drop this lock.
+Lockdep reports the following deadlock scenarios for CXL root device
+power-management, device_prepare(), operations, and device_shutdown()
+operations for 'nd_region' devices:
 
-Link: https://lore.kernel.org/r/Ylf0dewci8myLvoW@hirez.programming.kicks-ass.net [1]
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+---
+ Chain exists of:
+   &nvdimm_region_key --> &nvdimm_bus->reconfig_mutex --> system_transition_mutex
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(system_transition_mutex);
+                                lock(&nvdimm_bus->reconfig_mutex);
+                                lock(system_transition_mutex);
+   lock(&nvdimm_region_key);
+
+--
+
+ Chain exists of:
+   &cxl_nvdimm_bridge_key --> acpi_scan_lock --> &cxl_root_key
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&cxl_root_key);
+                                lock(acpi_scan_lock);
+                                lock(&cxl_root_key);
+   lock(&cxl_nvdimm_bridge_key);
+
+---
+
+These stem from holding nvdimm_bus_lock() over hibernate_quiet_exec()
+which walks the entire system device topology taking device_lock() along
+the way. The nvdimm_bus_lock() is protecting against unregistration,
+multiple simultaneous ops callers, and preventing activate_show() from
+racing activate_store(). For the first 2, the lock is redundant.
+Unregistration already flushes all ops users, and sysfs already prevents
+multiple threads to be active in an ops handler at the same time. For
+the last userspace should already be waiting for its last
+activate_store() to complete, and does not need activate_show() to flush
+the write side, so this lock usage can be deleted in these attributes.
+
+Fixes: 48001ea50d17 ("PM, libnvdimm: Add runtime firmware activation support")
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- drivers/base/core.c    |    3 ---
- include/linux/device.h |    5 -----
- 2 files changed, 8 deletions(-)
+ drivers/nvdimm/core.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 3d6430eb0c6a..2eede2ec3d64 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2864,9 +2864,6 @@ void device_initialize(struct device *dev)
- 	kobject_init(&dev->kobj, &device_ktype);
- 	INIT_LIST_HEAD(&dev->dma_pools);
- 	mutex_init(&dev->mutex);
--#ifdef CONFIG_PROVE_LOCKING
--	mutex_init(&dev->lockdep_mutex);
--#endif
- 	lockdep_set_novalidate_class(&dev->mutex);
- 	spin_lock_init(&dev->devres_lock);
- 	INIT_LIST_HEAD(&dev->devres_head);
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 82c9d307e7bd..c00ab223da50 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -400,8 +400,6 @@ struct dev_msi_info {
-  * 		This identifies the device type and carries type-specific
-  * 		information.
-  * @mutex:	Mutex to synchronize calls to its driver.
-- * @lockdep_mutex: An optional debug lock that a subsystem can use as a
-- * 		peer lock to gain localized lockdep coverage of the device_lock.
-  * @bus:	Type of bus device is on.
-  * @driver:	Which driver has allocated this
-  * @platform_data: Platform data specific to the device.
-@@ -499,9 +497,6 @@ struct device {
- 					   core doesn't touch it */
- 	void		*driver_data;	/* Driver data, set and get with
- 					   dev_set_drvdata/dev_get_drvdata */
--#ifdef CONFIG_PROVE_LOCKING
--	struct mutex		lockdep_mutex;
--#endif
- 	struct mutex		mutex;	/* mutex to synchronize calls to
- 					 * its driver.
- 					 */
+diff --git a/drivers/nvdimm/core.c b/drivers/nvdimm/core.c
+index 144926b7451c..7c7f4a43fd4f 100644
+--- a/drivers/nvdimm/core.c
++++ b/drivers/nvdimm/core.c
+@@ -395,10 +395,8 @@ static ssize_t activate_show(struct device *dev,
+ 	if (!nd_desc->fw_ops)
+ 		return -EOPNOTSUPP;
+ 
+-	nvdimm_bus_lock(dev);
+ 	cap = nd_desc->fw_ops->capability(nd_desc);
+ 	state = nd_desc->fw_ops->activate_state(nd_desc);
+-	nvdimm_bus_unlock(dev);
+ 
+ 	if (cap < NVDIMM_FWA_CAP_QUIESCE)
+ 		return -EOPNOTSUPP;
+@@ -443,7 +441,6 @@ static ssize_t activate_store(struct device *dev,
+ 	else
+ 		return -EINVAL;
+ 
+-	nvdimm_bus_lock(dev);
+ 	state = nd_desc->fw_ops->activate_state(nd_desc);
+ 
+ 	switch (state) {
+@@ -461,7 +458,6 @@ static ssize_t activate_store(struct device *dev,
+ 	default:
+ 		rc = -ENXIO;
+ 	}
+-	nvdimm_bus_unlock(dev);
+ 
+ 	if (rc == 0)
+ 		rc = len;
 
 
