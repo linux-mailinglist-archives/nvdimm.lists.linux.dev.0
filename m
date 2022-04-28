@@ -1,51 +1,51 @@
-Return-Path: <nvdimm+bounces-3741-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3740-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [139.178.84.19])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88853513E51
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 29 Apr 2022 00:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C88D6513E50
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 29 Apr 2022 00:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by da.mirrors.kernel.org (Postfix) with ESMTPS id 7E5E72E09D1
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 Apr 2022 22:10:24 +0000 (UTC)
+	by da.mirrors.kernel.org (Postfix) with ESMTPS id 62F722E09AF
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 Apr 2022 22:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AD8139F;
-	Thu, 28 Apr 2022 22:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA90E139C;
+	Thu, 28 Apr 2022 22:10:13 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB486138F
-	for <nvdimm@lists.linux.dev>; Thu, 28 Apr 2022 22:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0321E138F
+	for <nvdimm@lists.linux.dev>; Thu, 28 Apr 2022 22:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651183816; x=1682719816;
+  t=1651183812; x=1682719812;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wTOhNnGM4fH3f48hOp4pX+ub4ekvi2i7bAZMl9dNetU=;
-  b=Eys17iY6pkZR7sJ1hg4r40bSrnMooKU8KxOLz3d2Hq/tMdPR5tEXbvRp
-   G7snrdNP9ll9G+X8taLP+x1bBU/GhBwQjqEBfYv2HZUtOJ0gbo9mTgSsT
-   FVxIFlemJ2olu1Q00aeSfDgwPjO4fUo7VP/Sqd+XXjwViTvmeWyxIRQ38
-   RYuc7DcoZwpgOAyLk8sShZ4+TDW1Nc08ZqyI25jdL+kYR1Q59rH5f8YdT
-   Mg8pkfWFCyDJOY0OggK2PDHombRgY7m6tIe/q3fexjnaLw9ThaJo+AQqC
-   9G/IHpXmqCTgTvp9Od7o2DX52/pGHBlGbBV+UoelJ21NgnAM8uDYb+m7o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265967584"
+  bh=RFAyZN2/4uvSqxhe+/wCCpJLam8t6Vv9GJQX9Qczqpo=;
+  b=jWqcWTSZcKg2LmqWMIby6LqXNVsUC+VMVyNOi5klGhrxzoAOMMq8Ekp3
+   5Y035rRTdPBwyocVcaDSu1HQ5dRTozQXFANFEnCx6MycQDZHw655cJuNk
+   lnRRfF8GhZ1a1/jUaD8vGcCxu+h8Xgw6Sb4R52ZqbzVytGY7nqcZYf57z
+   rXxQhtQ13dEju+wS1faW76tazIG34STvx5oq+T+ZIvT5YoFbEtrjheBl7
+   y2j/d7hRavUJ5ZZK56K2ByyekcJcuyStUQDyvJnkt94SO05+VYAhSAJIb
+   0C6QFA+/4zBgtqZqF3X5TrGUrk+7A74Z1otaaN41nLHYhFAkiYXjuMRVj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266597231"
 X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="265967584"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:06 -0700
+   d="scan'208";a="266597231"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:11 -0700
 X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="534122457"
+   d="scan'208";a="618356191"
 Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:06 -0700
-Subject: [ndctl PATCH 01/10] build: Move utility helpers to libutil.a
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:11 -0700
+Subject: [ndctl PATCH 02/10] util: Use SZ_ size macros in display size
 From: Dan Williams <dan.j.williams@intel.com>
 To: vishal.l.verma@intel.com
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
-Date: Thu, 28 Apr 2022 15:10:05 -0700
-Message-ID: <165118380572.1676208.16232543117821121022.stgit@dwillia2-desk3.amr.corp.intel.com>
+Date: Thu, 28 Apr 2022 15:10:11 -0700
+Message-ID: <165118381109.1676208.8857362319985041575.stgit@dwillia2-desk3.amr.corp.intel.com>
 In-Reply-To: <165118380037.1676208.7644295506592461996.stgit@dwillia2-desk3.amr.corp.intel.com>
 References: <165118380037.1676208.7644295506592461996.stgit@dwillia2-desk3.amr.corp.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -58,70 +58,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Stop listing util/json.c and util/log.c per command, just add them to
-the common libutil.a object.
+In preparation for adding "Terabyte" support, cleanup the "1024"
+multiplication with the SZ_* macros.
 
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- cxl/meson.build    |    2 --
- daxctl/meson.build |    1 -
- ndctl/meson.build  |    2 --
- util/meson.build   |    2 ++
- 4 files changed, 2 insertions(+), 5 deletions(-)
+ util/json.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/cxl/meson.build b/cxl/meson.build
-index 87cfea73e40b..671c8e1626ef 100644
---- a/cxl/meson.build
-+++ b/cxl/meson.build
-@@ -3,8 +3,6 @@ cxl_src = [
-   'list.c',
-   'port.c',
-   'memdev.c',
--  '../util/json.c',
--  '../util/log.c',
-   'json.c',
-   'filter.c',
- ]
-diff --git a/daxctl/meson.build b/daxctl/meson.build
-index 8474d02f2c0d..8f27dd71b965 100644
---- a/daxctl/meson.build
-+++ b/daxctl/meson.build
-@@ -4,7 +4,6 @@ daxctl_src = [
-   'list.c',
-   'migrate.c',
-   'device.c',
--  '../util/json.c',
-   'json.c',
-   'filter.c',
- ]
-diff --git a/ndctl/meson.build b/ndctl/meson.build
-index c7889af36084..050d5769c384 100644
---- a/ndctl/meson.build
-+++ b/ndctl/meson.build
-@@ -6,11 +6,9 @@ ndctl_src = [
-   'check.c',
-   'region.c',
-   'dimm.c',
--  '../util/log.c',
-   '../daxctl/filter.c',
-   'filter.c',
-   'list.c',
--  '../util/json.c',
-   '../daxctl/json.c',
-   'json.c',
-   'json-smart.c',
-diff --git a/util/meson.build b/util/meson.build
-index 695037a924b9..a6ded7ee1473 100644
---- a/util/meson.build
-+++ b/util/meson.build
-@@ -3,6 +3,8 @@ util = static_library('util', [
-   'parse-configs.c',
-   'usage.c',
-   'size.c',
-+  'json.c',
-+  'log.c',
-   'main.c',
-   'help.c',
-   'strbuf.c',
+diff --git a/util/json.c b/util/json.c
+index f8cc81f6e706..ebdf8d9eedd9 100644
+--- a/util/json.c
++++ b/util/json.c
+@@ -5,6 +5,7 @@
+ #include <stdio.h>
+ #include <util/util.h>
+ #include <util/json.h>
++#include <util/size.h>
+ #include <json-c/json.h>
+ #include <json-c/printbuf.h>
+ 
+@@ -27,24 +28,24 @@ static int display_size(struct json_object *jobj, struct printbuf *pbuf,
+ 	 * If prefix == JEDEC, we mean prefixes like kilo,mega,giga etc.
+ 	 */
+ 
+-	if (bytes < 5000*1024)
++	if (bytes < 5000*SZ_1K)
+ 		snprintf(buf, sizeof(buf), "%lld", bytes);
+ 	else {
+ 		/* IEC */
+-		if (bytes < 2*1024LL*1024LL*1024LL) {
+-			long cMiB = (bytes * 200LL / (1LL<<20) +1) /2;
++		if (bytes < 2L*SZ_1G) {
++			long cMiB = (bytes * 200LL / SZ_1M+1) /2;
+ 
+ 			c = snprintf(buf, sizeof(buf), "\"%ld.%02ld MiB",
+ 					cMiB/100 , cMiB % 100);
+ 		} else {
+-			long cGiB = (bytes * 200LL / (1LL<<30) +1) /2;
++			long cGiB = (bytes * 200LL / SZ_1G+1) /2;
+ 
+ 			c = snprintf(buf, sizeof(buf), "\"%ld.%02ld GiB",
+ 					cGiB/100 , cGiB % 100);
+ 		}
+ 
+ 		/* JEDEC */
+-		if (bytes < 2*1024LL*1024LL*1024LL) {
++		if (bytes < 2L*SZ_1G) {
+ 			long cMB  = (bytes / (1000000LL / 200LL) + 1) / 2;
+ 
+ 			snprintf(buf + c, sizeof(buf) - c, " (%ld.%02ld MB)\"",
 
 
