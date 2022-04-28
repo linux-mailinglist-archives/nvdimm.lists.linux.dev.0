@@ -1,108 +1,111 @@
-Return-Path: <nvdimm+bounces-3738-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3739-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1A72513CF9
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 Apr 2022 23:00:09 +0200 (CEST)
+Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [IPv6:2604:1380:4040:4f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F5BB513E4F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 29 Apr 2022 00:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBF8B280A93
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 Apr 2022 21:00:07 +0000 (UTC)
+	by da.mirrors.kernel.org (Postfix) with ESMTPS id 922092E0997
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 Apr 2022 22:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FCCC1392;
-	Thu, 28 Apr 2022 21:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693B9139C;
+	Thu, 28 Apr 2022 22:10:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0030EA6
-	for <nvdimm@lists.linux.dev>; Thu, 28 Apr 2022 20:59:59 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id s14so5400373plk.8
-        for <nvdimm@lists.linux.dev>; Thu, 28 Apr 2022 13:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CLKD2dblooicmntfeXJvcRLmX0XCmID7Bco6CZgoNrs=;
-        b=QCkkZYrap++Utj5fIp+D5MezgUIkURFbeyVSdCZ3U6/QHNGkao3oNv+fENEf67G9Au
-         brpdZEYjcnUhT+lQMjIEslrQw9pic+lXkGfOlmfbeL0N+CIgagdzSThJa25nALVM5Hjs
-         av4+5OzzswgFjAWiLNX/c1DhfKHtTOu4b9JHeXQkOhBnrK3Swx+LP73ItFxdRXdlFD6+
-         BmTnI+MrJpC6YvROV+5qYwpYKYrkcSc7aIUIcy1LR+7u+9Isxc9KCAAS1ZKoKSPCEHp0
-         MFGmQvQRKYE6jQG2Ja2A0ZmQ0zo4adGFmk4ZNsWItWV6c9jLs/wbZ1PFHJrd5aSIyTT5
-         e2Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CLKD2dblooicmntfeXJvcRLmX0XCmID7Bco6CZgoNrs=;
-        b=WjsPe68PRqboPyOMHN9X1viNleYvoTL84u7altuCMp8CeuI+qatEn+vhdO3B+UEcKs
-         MF9TEK/CzAmp2IYCQAxeAMpVpCgMrzFwcyo3Y5Yjd2+R1THTwmr0+VoeBDUB+JVEjMW9
-         fRiZdkW09NavZhfQXq54pPtuJKCzbluTvjnIYojrZNZEtqddrNcrXBEzmB9qcFnDovY+
-         MAHR9pJmF4DKBXLZk1TC2kL99WNCFXkAXbFAFRW9EIOdv/4FSIFfZzgrvMiVI9Xg45TS
-         zoX/wMZ0oYCzr/TCm5F27b6ADCAi98MkTosmlXmoBjPlfavAYoKIV+GUvZr7WBLjZO1l
-         VlGA==
-X-Gm-Message-State: AOAM532X/+PH2mgggWCopc96W2wlx+nQrmXmY1YxyETz6V9UGKB/PAfP
-	Wd0bEIMHPILR0EX71ZcdGrjOnMcJBjI7R6xcEA0XZw==
-X-Google-Smtp-Source: ABdhPJyWThGFQ5e2B7qzkv/rYsXy6BBru3WAyJ6flsbWwKuN4McM4GvTLEtcgzb6GM8a/vSLd/o5TnAk2JFQkgRVpKk=
-X-Received: by 2002:a17:902:da81:b0:15d:37b9:70df with SMTP id
- j1-20020a170902da8100b0015d37b970dfmr15084382plx.34.1651179599335; Thu, 28
- Apr 2022 13:59:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E04A138F
+	for <nvdimm@lists.linux.dev>; Thu, 28 Apr 2022 22:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651183802; x=1682719802;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OGGG3wfPvKPhHFNm2pE/kyGBmEmBBn2InpMBsH1ScMs=;
+  b=hY1kPcCebfhZjLPGjZdPenOeN7+wvh1XOZYa2Cwmn+6moVWAYu+x7MkH
+   cXBPeIBGvlU8Ud2omBX0bN7GLZ2m1kNhEJHps1L1umcul01Tbzl62rqVJ
+   Cd4t30eQUlbe5a7G9K6ZspkSkDeoBcUd9XAMn2GOTwwbBZl/tdxznHOyA
+   vw6tsVFKwoBcfx0S7SXRn8d4ElizcgvY1r+LG3kT7SQGp6T8FFScIDHM2
+   p62b0BMxOhV83CKsgR/F7V6voJE9CntJ9CDL72JE6VgrNTun7nWks8Rem
+   s8m8NUhpY2IMgVLrkWDtaMDqQt1tdpFsWC48khn0TeVR2aSnZGE6ub2R/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="352871228"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="352871228"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:01 -0700
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="581670809"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:10:00 -0700
+Subject: [ndctl PATCH 00/10] CXL topology unit test
+From: Dan Williams <dan.j.williams@intel.com>
+To: vishal.l.verma@intel.com
+Cc: Luis Chamberlain <mcgrof@kernel.org>, linux-cxl@vger.kernel.org,
+ nvdimm@lists.linux.dev
+Date: Thu, 28 Apr 2022 15:10:00 -0700
+Message-ID: <165118380037.1676208.7644295506592461996.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220428190831.15251-1-msuchanek@suse.de>
-In-Reply-To: <20220428190831.15251-1-msuchanek@suse.de>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Thu, 28 Apr 2022 13:59:48 -0700
-Message-ID: <CAPcyv4gep_fFiYYRjE_kfeur75xPaTZx6s5v+fuWBmNucvQytw@mail.gmail.com>
-Subject: Re: [PATCH ndctl] test: monitor: Use in-tree configuration file
-To: Michal Suchanek <msuchanek@suse.de>
-Cc: Linux NVDIMM <nvdimm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 28, 2022 at 12:09 PM Michal Suchanek <msuchanek@suse.de> wrote:
->
-> When ndctl is not installed /etc/ndctl.conf.d does not exist and the
-> monitor fails to start. Use in-tree configuration for testing.
->
+Vishal,
 
-Looks reasonable to me:
+Here is a series that adds a unit test for CXL bus operations around
+port discovery and memory device enable/disable events. Along the way it
+adds some helper commands ('cxl disable-bus') and calling convention
+cleanups ('cxl list -p $port'). Some other miscellaneous fixups and
+cleanups are thrown in for good measure.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+---
 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->  test/monitor.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/test/monitor.sh b/test/monitor.sh
-> index e58c908..c5beb2c 100755
-> --- a/test/monitor.sh
-> +++ b/test/monitor.sh
-> @@ -13,6 +13,8 @@ smart_supported_bus=""
->
->  . $(dirname $0)/common
->
-> +monitor_conf="$TEST_PATH/../ndctl"
-> +
->  check_prereq "jq"
->
->  trap 'err $LINENO' ERR
-> @@ -22,7 +24,7 @@ check_min_kver "4.15" || do_skip "kernel $KVER may not support monitor service"
->  start_monitor()
->  {
->         logfile=$(mktemp)
-> -       $NDCTL monitor -l $logfile $1 &
-> +       $NDCTL monitor -c "$monitor_conf" -l $logfile $1 &
->         monitor_pid=$!
->         sync; sleep 3
->         truncate --size 0 $logfile #remove startup log
-> --
-> 2.36.0
->
->
+Dan Williams (10):
+      build: Move utility helpers to libutil.a
+      util: Use SZ_ size macros in display size
+      util: Pretty print terabytes
+      cxl/port: Fix disable-port man page
+      cxl/bus: Add bus disable support
+      cxl/list: Auto-enable 'single' mode for port listings
+      cxl/memdev: Fix bus_invalidate() crash
+      cxl/list: Add support for filtering by host identifiers
+      cxl/port: Relax port identifier validation
+      cxl/test: Add topology enumeration and hotplug test
+
+
+ Documentation/cxl/cxl-disable-bus.txt  |   37 +++++++
+ Documentation/cxl/cxl-disable-port.txt |    6 -
+ Documentation/cxl/lib/libcxl.txt       |   12 ++
+ Documentation/cxl/meson.build          |    1 
+ cxl/builtin.h                          |    1 
+ cxl/bus.c                              |  159 +++++++++++++++++++++++++++++++
+ cxl/cxl.c                              |    1 
+ cxl/filter.c                           |   12 ++
+ cxl/filter.h                           |    1 
+ cxl/lib/libcxl.c                       |   18 +++
+ cxl/lib/libcxl.sym                     |    1 
+ cxl/libcxl.h                           |    1 
+ cxl/list.c                             |    1 
+ cxl/meson.build                        |    3 -
+ cxl/port.c                             |   30 +-----
+ daxctl/meson.build                     |    1 
+ ndctl/meson.build                      |    2 
+ test/common                            |   12 ++
+ test/cxl-topology.sh                   |  166 ++++++++++++++++++++++++++++++++
+ test/meson.build                       |    2 
+ util/json.c                            |   26 ++++-
+ util/meson.build                       |    2 
+ 22 files changed, 448 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/cxl/cxl-disable-bus.txt
+ create mode 100644 cxl/bus.c
+ create mode 100644 test/cxl-topology.sh
+
+base-commit: 97031db9300654260bc2afb45b3600ac01beaeba
 
