@@ -1,71 +1,71 @@
-Return-Path: <nvdimm+bounces-3775-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3785-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [IPv6:2604:1380:4040:4f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FF3951EE19
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  8 May 2022 16:37:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F87151F44B
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 May 2022 08:07:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by da.mirrors.kernel.org (Postfix) with ESMTPS id 769B82E09D4
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  8 May 2022 14:37:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAEEC2809AA
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 May 2022 06:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88C21863;
-	Sun,  8 May 2022 14:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A531858;
+	Mon,  9 May 2022 06:06:53 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 206191850
-	for <nvdimm@lists.linux.dev>; Sun,  8 May 2022 14:36:44 +0000 (UTC)
-IronPort-Data: =?us-ascii?q?A9a23=3AVCeG0KroByT6upQOk0pb1Qj5K9deBmL0ZBIvgKr?=
- =?us-ascii?q?LsJaIsI5as4F+vmoWWDyOPq3YMGejedx1Oom2o0pVvMOHxtBrQFY4rCswQiMRo?=
- =?us-ascii?q?6IpJ/zDcB6oYHn6wu4v7a5fx5xHLIGGdajYd1eEzvuWGuWn/SkUOZ2gHOKmUra?=
- =?us-ascii?q?eYnkpHGeIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYtWo4nw/7rRCdUg?=
- =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
- =?us-ascii?q?9+lr6WkYMBLDPPwmSkWcQUK+n6vRAjnVqlP9la7xHMgEK49mKt4kZJNFlr4G5T?=
- =?us-ascii?q?xw4eKPKg/g1XQRaEj1lIOtN/7qvzX2X6JbPlxKbLCe9qxlpJARsVWECwc57CH9?=
- =?us-ascii?q?P+dQWMjcIaQqJhv7wy7W+IsFoh8ImLcDsPI43umxp0jzYS/0hRPjrQ67Kzd5e0?=
- =?us-ascii?q?i05is1HEbDZfcVxQSVuaBDRSxxJNE0eBJ83kKGvnHaXWzFRrhSX47U252zSxQl?=
- =?us-ascii?q?q+LnrLNfRPNeNQK19kkSHoWTJ12f0GBcXMJqY0zXt2natgPLf2Cb+cIEMHba7s?=
- =?us-ascii?q?PlwjzW7wHIfCRgTfV+6uuWizEq/Xc9PbUAZ5EIGraMy3EiwUp/xUnWQpneDrxd?=
- =?us-ascii?q?aW91KEuIn4wGM4qzZ6ECSAW1sZjxIbtFgv88rbTsw31SNkpXiAjkHmKeaTnaR6?=
- =?us-ascii?q?aaShSivIiVTIWJqTSsFSxYVptf4rIwtgxbnUNluCui2g8fzFDW2xCqFxAA6hrM?=
- =?us-ascii?q?OnYsI2r+98FTvnT2hvN7KQxQz6wGRWXiqhit9ZYi4d8m450Pz8/lNNsCaQ0OHs?=
- =?us-ascii?q?XxCnNKRhMgQDIuKvD6ARuQTWrWo4euVdjrGjhhyHPEcG56Fk5K4VdkIpmggewE?=
- =?us-ascii?q?yaYBZEQIFqXT74Wt5jKK/9lP2BUOvX7+MNg=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3APwrT5a/T7DOupuOHy0Fuk+DkI+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
- =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
- =?us-ascii?q?=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124075749"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 08 May 2022 22:36:38 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-	by cn.fujitsu.com (Postfix) with ESMTP id E64034D17198;
-	Sun,  8 May 2022 22:36:33 +0800 (CST)
-Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Sun, 8 May 2022 22:36:37 +0800
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Sun, 8 May 2022 22:36:36 +0800
-Received: from irides.mr.mr (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Sun, 8 May 2022 22:36:32 +0800
-From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To: <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-	<linux-fsdevel@vger.kernel.org>
-CC: <djwong@kernel.org>, <dan.j.williams@intel.com>, <david@fromorbit.com>,
-	<hch@infradead.org>, <jane.chu@oracle.com>, <rgoldwyn@suse.de>,
-	<viro@zeniv.linux.org.uk>, <willy@infradead.org>, <naoya.horiguchi@nec.com>,
-	<linmiaohe@huawei.com>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v11 07/07] xfs: Add dax dedupe support
-Date: Sun, 8 May 2022 22:36:20 +0800
-Message-ID: <20220508143620.1775214-15-ruansy.fnst@fujitsu.com>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9117E
+	for <nvdimm@lists.linux.dev>; Mon,  9 May 2022 06:06:51 +0000 (UTC)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2491KCxT024460;
+	Mon, 9 May 2022 06:06:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=tmCFQBvW8y/ke33sjTz6Re1Zu+2mkXSEuF8x0jW90lc=;
+ b=I7w59ImnOBlOHBml1/C1gL8jM6z3B+jvru8RonIIKoaBkZas4/AB7YFb7rfmoFDl/6KJ
+ KYXKqSErEsWq0C1CtsygbHYMym5TV1qvNvVI+qYGXZVNeXoiewRkrSTSkiisTItbM4tx
+ 1n7VMVmvWBHUIfniSe9q7EoadtICNosZTSehA5xpwzRvUYPA+fYYVFDCA8NHqRMM+bz3
+ gyEatrPSVee4xguQecWC4opOvKKXYWsRHzObJAKPMq5Yanv/O6onBGh+7vXKus17AEE0
+ XRnb2RpJa60CJ14MBTlfQbemX7hzIVVzOLhYtYcTbPm3KkhiSUAqghNA1MGoqST2030F GA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fx256b1sw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 May 2022 06:06:40 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+	by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2495wvtk002116;
+	Mon, 9 May 2022 06:06:38 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+	by ppma05fra.de.ibm.com with ESMTP id 3fwgd8shwq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 May 2022 06:06:38 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+	by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24966ZMh49414646
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 May 2022 06:06:35 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 235B9A4060;
+	Mon,  9 May 2022 06:06:35 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 029B1A405B;
+	Mon,  9 May 2022 06:06:32 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.43.80.76])
+	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
+	Mon,  9 May 2022 06:06:31 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Mon, 09 May 2022 11:36:30 +0530
+From: Vaibhav Jain <vaibhav@linux.ibm.com>
+To: nvdimm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc: Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shivaprasad G Bhat <sbhat@linux.ibm.com>
+Subject: [PATCH] powerpc/papr_scm: Fix leaking nvdimm_events_map elements
+Date: Mon,  9 May 2022 11:36:29 +0530
+Message-Id: <20220509060629.179282-1-vaibhav@linux.ibm.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
-References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -73,163 +73,134 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-yoursite-MailScanner-ID: E64034D17198.AF7AE
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yDuUiU37lfhDf8bCLhGcxeiu8gJjMog_
+X-Proofpoint-ORIG-GUID: yDuUiU37lfhDf8bCLhGcxeiu8gJjMog_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-09_01,2022-05-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 impostorscore=0 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205090035
 
-Introduce xfs_mmaplock_two_inodes_and_break_dax_layout() for dax files
-who are going to be deduped.  After that, call compare range function
-only when files are both DAX or not.
+Right now 'char *' elements allocated individual 'stat_id' in
+'papr_scm_priv.nvdimm_events_map' during papr_scm_pmu_check_events() leak in
+papr_scm_remove() and papr_scm_pmu_register(), papr_scm_pmu_check_events() error
+paths.
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Also individual 'stat_id' arent NULL terminated 'char *' instead they are fixed
+8-byte sized identifiers. However papr_scm_pmu_register() assumes it to be a
+NULL terminated 'char *' and at other places it assumes it to be a
+'papr_scm_perf_stat.stat_id' sized string which is 8-byes in size.
+
+Fix this by allocating the memory for papr_scm_priv.nvdimm_events_map to also
+include space for 'stat_id' entries. This is possible since number of available
+events/stat_ids are known upfront. This saves some memory and one extra level of
+indirection from 'nvdimm_events_map' to 'stat_id'. Also rest of the code
+can continue to call 'kfree(papr_scm_priv.nvdimm_events_map)' without needing to
+iterate over the array and free up individual elements.
+
+Also introduce a new typedef called 'state_id_t' thats a 'u8[8]' and can be used
+across papr_scm to deal with stat_ids.
+
+Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
+Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
 ---
- fs/xfs/xfs_file.c    |  2 +-
- fs/xfs/xfs_inode.c   | 69 +++++++++++++++++++++++++++++++++++++++++---
- fs/xfs/xfs_inode.h   |  1 +
- fs/xfs/xfs_reflink.c |  4 +--
- 4 files changed, 69 insertions(+), 7 deletions(-)
+ arch/powerpc/platforms/pseries/papr_scm.c | 48 +++++++++++------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 5a4508b23b51..cf78eb393258 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -807,7 +807,7 @@ xfs_wait_dax_page(
- 	xfs_ilock(ip, XFS_MMAPLOCK_EXCL);
- }
+diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
+index 39962c905542..f33a865ad5fb 100644
+--- a/arch/powerpc/platforms/pseries/papr_scm.c
++++ b/arch/powerpc/platforms/pseries/papr_scm.c
+@@ -70,8 +70,10 @@
+ #define PAPR_SCM_PERF_STATS_VERSION 0x1
  
--static int
-+int
- xfs_break_dax_layouts(
- 	struct inode		*inode,
- 	bool			*retry)
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index b2879870a17e..96308065a2b3 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -3767,6 +3767,50 @@ xfs_iolock_two_inodes_and_break_layout(
- 	return 0;
- }
+ /* Struct holding a single performance metric */
++typedef u8 stat_id_t[8];
++
+ struct papr_scm_perf_stat {
+-	u8 stat_id[8];
++	stat_id_t stat_id;
+ 	__be64 stat_val;
+ } __packed;
  
-+static int
-+xfs_mmaplock_two_inodes_and_break_dax_layout(
-+	struct xfs_inode	*ip1,
-+	struct xfs_inode	*ip2)
-+{
-+	int			error;
-+	bool			retry;
-+	struct page		*page;
-+
-+	if (ip1->i_ino > ip2->i_ino)
-+		swap(ip1, ip2);
-+
-+again:
-+	retry = false;
-+	/* Lock the first inode */
-+	xfs_ilock(ip1, XFS_MMAPLOCK_EXCL);
-+	error = xfs_break_dax_layouts(VFS_I(ip1), &retry);
-+	if (error || retry) {
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		if (error == 0 && retry)
-+			goto again;
-+		return error;
-+	}
-+
-+	if (ip1 == ip2)
-+		return 0;
-+
-+	/* Nested lock the second inode */
-+	xfs_ilock(ip2, xfs_lock_inumorder(XFS_MMAPLOCK_EXCL, 1));
-+	/*
-+	 * We cannot use xfs_break_dax_layouts() directly here because it may
-+	 * need to unlock & lock the XFS_MMAPLOCK_EXCL which is not suitable
-+	 * for this nested lock case.
-+	 */
-+	page = dax_layout_busy_page(VFS_I(ip2)->i_mapping);
-+	if (page && page_ref_count(page) != 1) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		goto again;
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Lock two inodes so that userspace cannot initiate I/O via file syscalls or
-  * mmap activity.
-@@ -3781,8 +3825,19 @@ xfs_ilock2_io_mmap(
- 	ret = xfs_iolock_two_inodes_and_break_layout(VFS_I(ip1), VFS_I(ip2));
- 	if (ret)
- 		return ret;
--	filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
--				    VFS_I(ip2)->i_mapping);
-+
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		ret = xfs_mmaplock_two_inodes_and_break_dax_layout(ip1, ip2);
-+		if (ret) {
-+			inode_unlock(VFS_I(ip2));
-+			if (ip1 != ip2)
-+				inode_unlock(VFS_I(ip1));
-+			return ret;
-+		}
-+	} else
-+		filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
-+					    VFS_I(ip2)->i_mapping);
-+
- 	return 0;
- }
+@@ -126,7 +128,7 @@ struct papr_scm_priv {
+ 	u64 health_bitmap_inject_mask;
  
-@@ -3792,8 +3847,14 @@ xfs_iunlock2_io_mmap(
- 	struct xfs_inode	*ip1,
- 	struct xfs_inode	*ip2)
+ 	 /* array to have event_code and stat_id mappings */
+-	char **nvdimm_events_map;
++	stat_id_t *nvdimm_events_map;
+ };
+ 
+ static int papr_scm_pmem_flush(struct nd_region *nd_region,
+@@ -462,7 +464,7 @@ static int papr_scm_pmu_check_events(struct papr_scm_priv *p, struct nvdimm_pmu
  {
--	filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
--				      VFS_I(ip2)->i_mapping);
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		if (ip1 != ip2)
-+			xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+	} else
-+		filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
-+					      VFS_I(ip2)->i_mapping);
-+
- 	inode_unlock(VFS_I(ip2));
- 	if (ip1 != ip2)
- 		inode_unlock(VFS_I(ip1));
-diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
-index 7be6f8e705ab..8313cc83b6ee 100644
---- a/fs/xfs/xfs_inode.h
-+++ b/fs/xfs/xfs_inode.h
-@@ -467,6 +467,7 @@ xfs_itruncate_extents(
+ 	struct papr_scm_perf_stat *stat;
+ 	struct papr_scm_perf_stats *stats;
+-	int index, rc, count;
++	int index, rc = 0;
+ 	u32 available_events;
+ 
+ 	if (!p->stat_buffer_len)
+@@ -478,35 +480,29 @@ static int papr_scm_pmu_check_events(struct papr_scm_priv *p, struct nvdimm_pmu
+ 		return rc;
+ 	}
+ 
+-	/* Allocate memory to nvdimm_event_map */
+-	p->nvdimm_events_map = kcalloc(available_events, sizeof(char *), GFP_KERNEL);
+-	if (!p->nvdimm_events_map) {
+-		rc = -ENOMEM;
+-		goto out_stats;
+-	}
+-
+ 	/* Called to get list of events supported */
+ 	rc = drc_pmem_query_stats(p, stats, 0);
+ 	if (rc)
+-		goto out_nvdimm_events_map;
+-
+-	for (index = 0, stat = stats->scm_statistic, count = 0;
+-		     index < available_events; index++, ++stat) {
+-		p->nvdimm_events_map[count] = kmemdup_nul(stat->stat_id, 8, GFP_KERNEL);
+-		if (!p->nvdimm_events_map[count]) {
+-			rc = -ENOMEM;
+-			goto out_nvdimm_events_map;
+-		}
++		goto out;
+ 
+-		count++;
++	/*
++	 * Allocate memory and populate nvdimm_event_map.
++	 * Allocate an extra element for NULL entry
++	 */
++	p->nvdimm_events_map = kcalloc(available_events + 1,
++				       sizeof(stat_id_t), GFP_KERNEL);
++	if (!p->nvdimm_events_map) {
++		rc = -ENOMEM;
++		goto out;
+ 	}
+-	p->nvdimm_events_map[count] = NULL;
+-	kfree(stats);
+-	return 0;
+ 
+-out_nvdimm_events_map:
+-	kfree(p->nvdimm_events_map);
+-out_stats:
++	/* Copy all stat_ids to event map */
++	for (index = 0, stat = stats->scm_statistic;
++	     index < available_events; index++, ++stat) {
++		memcpy(&p->nvdimm_events_map[index], &stat->stat_id,
++		       sizeof(stat_id_t));
++	}
++out:
+ 	kfree(stats);
+ 	return rc;
  }
- 
- /* from xfs_file.c */
-+int	xfs_break_dax_layouts(struct inode *inode, bool *retry);
- int	xfs_break_layouts(struct inode *inode, uint *iolock,
- 		enum layout_break_reason reason);
- 
-diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-index 10a9947e35d9..7cceea510a01 100644
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -1338,8 +1338,8 @@ xfs_reflink_remap_prep(
- 	if (XFS_IS_REALTIME_INODE(src) || XFS_IS_REALTIME_INODE(dest))
- 		goto out_unlock;
- 
--	/* Don't share DAX file data for now. */
--	if (IS_DAX(inode_in) || IS_DAX(inode_out))
-+	/* Don't share DAX file data with non-DAX file. */
-+	if (IS_DAX(inode_in) != IS_DAX(inode_out))
- 		goto out_unlock;
- 
- 	if (!IS_DAX(inode_in))
+
+base-commit: 348c71344111d7a48892e3e52264ff11956fc196
 -- 
 2.35.1
-
-
 
 
