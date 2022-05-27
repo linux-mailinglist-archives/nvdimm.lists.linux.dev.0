@@ -1,239 +1,147 @@
-Return-Path: <nvdimm+bounces-3853-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3855-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [IPv6:2604:1380:4040:4f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0625535E53
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 May 2022 12:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D265368D0
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 28 May 2022 00:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by da.mirrors.kernel.org (Postfix) with ESMTPS id 93C882E09DB
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 May 2022 10:30:56 +0000 (UTC)
+	by da.mirrors.kernel.org (Postfix) with ESMTPS id C43B02E09BF
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 May 2022 22:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899851861;
-	Fri, 27 May 2022 10:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCFD22CA7;
+	Fri, 27 May 2022 22:34:07 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168391854
-	for <nvdimm@lists.linux.dev>; Fri, 27 May 2022 10:30:43 +0000 (UTC)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24R9gCPT024008;
-	Fri, 27 May 2022 10:30:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=rqZmCcBssAhfzhJcfMohy9uQbB7bA0menjgeT37QGTM=;
- b=KAEr2SzuuThNP0F3F9keKO+h8MLaI/SRCRP/2gjmmANwyN0CY6AMEhC9XEX0FQ6KT2kJ
- t2+Nmyyw8rPu76fSChwX0/jZknqzPtxqhYYrrZwNxAflffbBcLDxn+cK2X0RVpCs4j5d
- zxk5JCebP1eXcexYeGaXjqQrJ9TR6NwhjncgrCTSX6a9l6koQiLqVRlATVbV9TgJzCGm
- iar84gGlERTHgNVwpEdy4mKL2a+Y4IgoNrvQ96+2Vifg56A4iw2h4iLtZFSkCn12ILCZ
- JXZmnwDmeZJKPT7O9vkYRQzL8cKar3fcm6SODSGMZoC7jfavvKKFwkJJcbNODEelqWka FQ== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gav84guqc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 May 2022 10:30:42 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RALDdi019796;
-	Fri, 27 May 2022 10:30:39 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma02fra.de.ibm.com with ESMTP id 3g9s6ma30f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 May 2022 10:30:39 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RAUaXn18022898
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 27 May 2022 10:30:36 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 439A35204F;
-	Fri, 27 May 2022 10:30:36 +0000 (GMT)
-Received: from li-efb8054c-3504-11b2-a85c-ca10df28279e.ibm.com.com (unknown [9.43.36.181])
-	by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9C77352050;
-	Fri, 27 May 2022 10:30:33 +0000 (GMT)
-From: Tarun Sahu <tsahu@linux.ibm.com>
-To: nvdimm@lists.linux.dev
-Cc: tsahu@linux.ibm.com, dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        aneesh.kumar@linux.ibm.com, sbhat@linux.ibm.com, vaibhav@linux.ibm.com
-Subject: [PATCH v4 2/2] ndctl/namespace: Implement write-infoblock for sector mode namespaces
-Date: Fri, 27 May 2022 16:00:21 +0530
-Message-Id: <20220527103021.452651-3-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220527103021.452651-1-tsahu@linux.ibm.com>
-References: <20220527103021.452651-1-tsahu@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E807C
+	for <nvdimm@lists.linux.dev>; Fri, 27 May 2022 22:34:06 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so8297215pju.1
+        for <nvdimm@lists.linux.dev>; Fri, 27 May 2022 15:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=rRpKdj7D4Y+lRcGkWZYYAlYoNbloXbMDg0kZp/Zyej0=;
+        b=v7VOoOZkpPJGiNcbbmBNhkg0u0vfJwQtzOb+8mPfI/BS2SZrxPg/DAWcLbxllvMI4c
+         oGwEfL4SO5jpBlgssIrRCObYlIv0dlREDRpOK6XyVgo4NTjT1nAGrBBJCn1imtu2Nyxo
+         N/0cqUJ2+CqrUGGTq+l+V5k8wZiS4Tl9rZlANCrw5Kjlae4CjTpPto4eKnwnocgjW3Bz
+         rRXsoWLNvmpnaON+jaCazEZwE/Xyt+4Wi9oSwG1MUEC5riFoeTrkzI7db8wtSleZzkWb
+         lPYC2eYSdvAA/s2Swx2HILeshurFKjrem6qLmEMIMaDrg5eW9NA0Af7M+Fm2VLLPLLYz
+         RlkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rRpKdj7D4Y+lRcGkWZYYAlYoNbloXbMDg0kZp/Zyej0=;
+        b=q1mgsfF/wIqMMSvpQ+weOb3iWJkaDgOS691pEr3jxaI9ehAWmVabzSZlIc6jeZmRIO
+         03V2kvROWVYxM0d4OG4csiwJYsWDgzDmJKr1dZXO5w0vTfKoWA72zs7douazG2BMEhe7
+         MyfeQWzXtv7T2hDWGtEq/Re2OSrC89m1cQvjaUqq0qpWng4cnX1LyuanrVYqMdV9Kwon
+         i+qOoLD3YnoT3MrQ9uoRumjitSdT8bA57+3TGiRW9wRi7pXe5DlkFyo6xieMtCGuyHFX
+         3WVI90Q6w10aNn40uqrVuV7YcTwZEsTQrXsYzAZe3ZbgAyiYJHQwLitBqVK3AF4I/mqx
+         iHxQ==
+X-Gm-Message-State: AOAM532DzOXmYcEobZYL4NTfygm33mEAHodicr296pvb0m/8nCQBrxMF
+	+VBt6PNoCdRpYqWO1EzRMyOlnEi9cdvwLxYYdbefEg==
+X-Google-Smtp-Source: ABdhPJy2ieVGG1vDfkbQ8QriUItnQrzEJiCKqHpRNPXOuVPGk2Dbct7BgrSQykHmkgwquQ4m6N+VZylSjsifz8rf5rs=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr45210939pll.132.1653690845634; Fri, 27
+ May 2022 15:34:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vojJ6Sm9nr-Pi6PO90tAbwyn00s7bSKv
-X-Proofpoint-ORIG-GUID: vojJ6Sm9nr-Pi6PO90tAbwyn00s7bSKv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-27_03,2022-05-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205270047
+From: Dan Williams <dan.j.williams@intel.com>
+Date: Fri, 27 May 2022 15:34:04 -0700
+Message-ID: <CAPcyv4gyd=k7qx7nfnLmnmTASFmrJF-nOBAs9cTqM5DSuCZU6Q@mail.gmail.com>
+Subject: [GIT PULL] LIBNVDIMM and DAX for 5.19
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux NVDIMM <nvdimm@lists.linux.dev>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-While writing to the infoblock for sector mode, collected
-namespace info in ns_info structure can be used to write the
-original infoblock values except the ones that have been
-provided by parameter arguments to write-infoblock command.
+Hi Linus, please pull from:
 
-Currently, this patch allows only uuid and parent_uuid to be
-changed. In future, support for other values can be implemented
-easily by adding condition inside write_btt_sb() function, which
-has been created to write BTT sector mode specific namespace.
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm
+tags/libnvdimm-for-5.19
 
-$ ./ndctl read-infoblock namespace0.0 -j
-[
-  {
-    "dev":"namespace0.0",
-    "signature":"BTT_ARENA_INFO",
-    "uuid":"7296ebd6-7039-4d02-9ed9-ac5f351ff0e4",
-    "parent_uuid":"46850d31-8fb5-4492-b630-9f3cd7b77500",
-    "flags":0,
-    "version":"2.0",
-    "external_lbasize":4096,
-    "external_nlba":8380160,
-    "internal_lbasize":4096,
-    "internal_nlba":8380416,
-    "nfree":256,
-    "infosize":4096,
-    "nextoff":0,
-    "dataoff":4096,
-    "mapoff":34326196224,
-    "logoff":34359717888,
-    "info2off":34359734272
-  }
-]
-read 1 infoblock
+...to receive new support for clearing memory errors when a file is in
+DAX mode, alongside with some other fixes and cleanups. Previously it
+was only possible to clear these errors using a truncate or hole-punch
+operation to trigger the filesystem to reallocate the block, now, any
+page aligned write can opportunistically clear errors as well. This
+change spans x86/mm, nvdimm, and fs/dax, and has received the
+appropriate sign-offs. Thanks to Jane for her work on this. It has
+been in -next for several releases with no known remaining issues.
 
-$ ./ndctl write-infoblock namespace0.0 \
->	--uuid "d0b19883-0874-4847-8c71-71549590949c"
-wrote 1 infoblock
-
-$ ./ndctl read-infoblock namespace0.0 -j
-[
-  {
-    "dev":"namespace0.0",
-    "signature":"BTT_ARENA_INFO",
-    "uuid":"d0b19883-0874-4847-8c71-71549590949c",
-    "parent_uuid":"46850d31-8fb5-4492-b630-9f3cd7b77500",
-    "flags":0,
-    "version":"2.0",
-    "external_lbasize":4096,
-    "external_nlba":8380160,
-    "internal_lbasize":4096,
-    "internal_nlba":8380416,
-    "nfree":256,
-    "infosize":4096,
-    "nextoff":0,
-    "dataoff":4096,
-    "mapoff":34326196224,
-    "logoff":34359717888,
-    "info2off":34359734272
-  }
-]
-read 1 infoblock
-
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
 ---
- ndctl/namespace.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
 
-diff --git a/ndctl/namespace.c b/ndctl/namespace.c
-index e890fc2..2b0c821 100644
---- a/ndctl/namespace.c
-+++ b/ndctl/namespace.c
-@@ -253,6 +253,7 @@ static int set_defaults(enum device_action action)
- 			break;
- 		case NDCTL_NS_MODE_FSDAX:
- 		case NDCTL_NS_MODE_DEVDAX:
-+		case NDCTL_NS_MODE_SECTOR:
- 			break;
- 		default:
- 			if (action == ACTION_WRITE_INFOBLOCK) {
-@@ -2021,6 +2022,48 @@ static int write_pfn_sb(int fd, unsigned long long size, const char *sig,
- 	return 0;
- }
- 
-+static int write_btt_sb(const int fd, unsigned long long size, struct ns_info *ns_info)
-+{
-+	int rc = 0;
-+	uuid_t uuid, parent_uuid;
-+
-+	// updating the original values which are asked to change,
-+	// rest will be unchanged
-+	if (param.uuid) {
-+		rc = uuid_parse(param.uuid, uuid);
-+		if (rc) {
-+			error("Failed to parse UUID");
-+			return rc;
-+		}
-+		memcpy(((struct btt_sb *)(ns_info->ns_sb_buf + ns_info->offset))->uuid,
-+				uuid, sizeof(uuid_t));
-+	}
-+	if (param.parent_uuid) {
-+		rc = uuid_parse(param.parent_uuid, parent_uuid);
-+		if (rc) {
-+			error("Failed to parse UUID");
-+			return rc;
-+		}
-+		memcpy(((struct btt_sb *)(ns_info->ns_sb_buf + ns_info->offset))->parent_uuid,
-+				parent_uuid, sizeof(uuid_t));
-+	}
-+
-+	if (pwrite(fd, ns_info->ns_sb_buf + ns_info->offset, sizeof(struct btt_sb),
-+			       ns_info->offset) < 0) {
-+		pr_verbose("Unable to write the info block: %s\n",
-+				strerror(errno));
-+		rc = -errno;
-+	}
-+
-+	if (pwrite(fd, ns_info->ns_sb_buf + ns_info->offset, sizeof(struct btt_sb),
-+				size - sizeof(struct btt_sb)) < 0) {
-+		pr_verbose("Unable to write the info block: %s\n",
-+			strerror(errno));
-+		rc = -errno;
-+	}
-+	return rc;
-+}
-+
- static int file_write_infoblock(const char *path, struct ns_info *ns_info)
- {
- 	unsigned long long size = parse_size64(param.size);
-@@ -2068,6 +2111,14 @@ static int file_write_infoblock(const char *path, struct ns_info *ns_info)
- 	case NDCTL_NS_MODE_DEVDAX:
- 		rc = write_pfn_sb(fd, size, DAX_SIG, ns_info);
- 		break;
-+	case NDCTL_NS_MODE_SECTOR:
-+		if (ns_info->mode == NDCTL_NS_MODE_SECTOR)
-+			rc = write_btt_sb(fd, size, ns_info);
-+		else {
-+			pr_verbose("Conversion from non-sector to sector mode not allowed");
-+			rc = -EPERM;
-+		}
-+		break;
- 	case NDCTL_NS_MODE_UNKNOWN:
- 		switch (ns_info->mode) {
- 		case NDCTL_NS_MODE_FSDAX:
-@@ -2076,6 +2127,9 @@ static int file_write_infoblock(const char *path, struct ns_info *ns_info)
- 		case NDCTL_NS_MODE_DEVDAX:
- 			rc = write_pfn_sb(fd, size, DAX_SIG, ns_info);
- 			break;
-+		case NDCTL_NS_MODE_SECTOR:
-+			rc = write_btt_sb(fd, size, ns_info);
-+			break;
- 		default:
- 			rc = -EINVAL;
- 			break;
--- 
-2.35.1
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
 
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm
+tags/libnvdimm-for-5.19
+
+for you to fetch changes up to f42e8e5088b9e791c8f7ac661f68e29a4996a4e3:
+
+  pmem: implement pmem_recovery_write() (2022-05-16 13:38:19 -0700)
+
+----------------------------------------------------------------
+libnvdimm for 5.19
+
+- Add support for clearing memory error via pwrite(2) on DAX
+
+- Fix 'security overwrite' support in the presence of media errors
+
+- Miscellaneous cleanups and fixes for nfit_test (nvdimm unit tests)
+
+----------------------------------------------------------------
+Dan Williams (1):
+      nvdimm: Allow overwrite in the presence of disabled dimms
+
+Jane Chu (7):
+      acpi/nfit: rely on mce->misc to determine poison granularity
+      x86/mce: relocate set{clear}_mce_nospec() functions
+      mce: fix set_mce_nospec to always unmap the whole page
+      dax: introduce DAX_RECOVERY_WRITE dax access mode
+      dax: add .recovery_write dax_operation
+      pmem: refactor pmem_clear_poison()
+      pmem: implement pmem_recovery_write()
+
+Michal Suchanek (2):
+      testing: nvdimm: iomap: make __nfit_test_ioremap a macro
+      testing: nvdimm: asm/mce.h is not needed in nfit.c
+
+ran jianping (1):
+      tools/testing/nvdimm: remove unneeded flush_workqueue
+
+ arch/x86/include/asm/set_memory.h |  52 ----------
+ arch/x86/kernel/cpu/mce/core.c    |   6 +-
+ arch/x86/mm/pat/set_memory.c      |  49 ++++++++-
+ drivers/acpi/nfit/mce.c           |   4 +-
+ drivers/dax/super.c               |  14 ++-
+ drivers/md/dm-linear.c            |  15 ++-
+ drivers/md/dm-log-writes.c        |  15 ++-
+ drivers/md/dm-stripe.c            |  15 ++-
+ drivers/md/dm-target.c            |   4 +-
+ drivers/md/dm-writecache.c        |   7 +-
+ drivers/md/dm.c                   |  25 ++++-
+ drivers/nvdimm/pmem.c             | 203 +++++++++++++++++++++++++++-----------
+ drivers/nvdimm/pmem.h             |   5 +-
+ drivers/nvdimm/security.c         |   5 -
+ drivers/s390/block/dcssblk.c      |   9 +-
+ fs/dax.c                          |  22 ++++-
+ fs/fuse/dax.c                     |   4 +-
+ fs/fuse/virtio_fs.c               |   6 +-
+ include/linux/dax.h               |  22 ++++-
+ include/linux/device-mapper.h     |  13 ++-
+ include/linux/set_memory.h        |  10 +-
+ tools/testing/nvdimm/pmem-dax.c   |   4 +-
+ tools/testing/nvdimm/test/iomap.c |  18 ++--
+ tools/testing/nvdimm/test/nfit.c  |   3 -
+ 24 files changed, 359 insertions(+), 171 deletions(-)
 
