@@ -1,46 +1,42 @@
-Return-Path: <nvdimm+bounces-3947-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-3949-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAABF55519F
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 22 Jun 2022 18:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A19B556FF3
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Jun 2022 03:36:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36212280AB4
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 22 Jun 2022 16:49:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E032280C12
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Jun 2022 01:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85ECD1869;
-	Wed, 22 Jun 2022 16:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4281842;
+	Thu, 23 Jun 2022 01:36:10 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647FF1860
-	for <nvdimm@lists.linux.dev>; Wed, 22 Jun 2022 16:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0240EC34114;
-	Wed, 22 Jun 2022 16:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655916569;
-	bh=mI4MDyHEMxaSG34Hj/fZrqohmQwQNM49s78s/LON24U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M3J1USxUtGI/7fujk6bsFc6vvzcgJ4Z9zigigTXeZZnMKi4mFcVXFlczuWFcF88M0
-	 O2ypyx3yfoPAPxXHFvJg+LXU9muZXYtkkCwfmNhvpvEmaRW2WbdYlUjhVRj9IPSNqu
-	 iBnNRmI7IHcWWR5L3kYzyJ8sQ2efKPTVIX8uN8aBIoOhuBZJnao0kMZ52Gx5FeEfkQ
-	 0QXmkk0vdQ7Yms9QT22CFikwHd6AYYdwfMqrcWqiBEGeMwkOz8mKTfZoVbxOG8vMNA
-	 T5cgKGab/XisfZBcfQKT9tGlZ3LrspUMcDUZfGnI/X4UcTSPl1IeAeGKX4DTPBLf3e
-	 cyRwFss2D8ecQ==
-Date: Wed, 22 Jun 2022 09:49:28 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-	david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
-Subject: Re: [RFC PATCH v3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <YrNIGGBK7/cztV8c@magnolia>
-References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
- <20220615125400.880067-1-ruansy.fnst@fujitsu.com>
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3813A43C1
+	for <nvdimm@lists.linux.dev>; Thu, 23 Jun 2022 01:36:08 +0000 (UTC)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+	by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id CB7675ECC0A;
+	Thu, 23 Jun 2022 11:17:59 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+	(envelope-from <david@fromorbit.com>)
+	id 1o4BTp-009ufF-Sv; Thu, 23 Jun 2022 11:17:57 +1000
+Date: Thu, 23 Jun 2022 11:17:57 +1000
+From: Dave Chinner <david@fromorbit.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+	"jack@suse.cz" <jack@suse.cz>,
+	"djwong@kernel.org" <djwong@kernel.org>,
+	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+	"Gomatam, Sravani" <sravani.gomatam@intel.com>
+Subject: Re: [PATCH 8/8] xfs: drop async cache flushes from CIL commits.
+Message-ID: <20220623011757.GT227878@dread.disaster.area>
+References: <20220330011048.1311625-1-david@fromorbit.com>
+ <20220330011048.1311625-9-david@fromorbit.com>
+ <2820766805073c176e1a65a61fad2ef8ad0f9766.camel@intel.com>
+ <20220619234011.GK227878@dread.disaster.area>
+ <62b258b6c3821_89207294c@dwillia2-xfh.notmuch>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -49,113 +45,117 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615125400.880067-1-ruansy.fnst@fujitsu.com>
+In-Reply-To: <62b258b6c3821_89207294c@dwillia2-xfh.notmuch>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62b3bf49
+	a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+	a=kj9zAlcOel0A:10 a=JPEYwPQDsx4A:10 a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8
+	a=7oVrz-HWECc2WQMnN8YA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 
-On Wed, Jun 15, 2022 at 08:54:00PM +0800, Shiyang Ruan wrote:
-> This patch is inspired by Dan's "mm, dax, pmem: Introduce
-> dev_pagemap_failure()"[1].  With the help of dax_holder and
-> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
-> (or mapped device) on it to unmap all files in use and notify processes
-> who are using those files.
+On Tue, Jun 21, 2022 at 04:48:06PM -0700, Dan Williams wrote:
+> Dave Chinner wrote:
+> > On Thu, Jun 16, 2022 at 10:23:10PM +0000, Williams, Dan J wrote:
+> > > On Wed, 2022-03-30 at 12:10 +1100, Dave Chinner wrote:
+> > > > From: Dave Chinner <dchinner@redhat.com>
+> > > Perf confirms that all of that CPU time is being spent in
+> > > arch_wb_cache_pmem(). It likely means that rather than amortizing that
+> > > same latency periodically throughout the workload run, it is all being
+> > > delayed until umount.
+> > 
+> > For completeness, this is what the umount IO looks like:
+> > 
+> > 259,1    5        1    98.680129260 10166  Q FWFSM 8392256 + 8 [umount]
+> > 259,1    5        2    98.680135797 10166  C FWFSM 8392256 + 8 [0]
+> > 259,1    3      429    98.680341063  4977  Q  WM 0 + 8 [xfsaild/pmem0]
+> > 259,1    3      430    98.680362599  4977  C  WM 0 + 8 [0]
+> > 259,1    5        3    98.680616201 10166  Q FWFSM 8392264 + 8 [umount]
+> > 259,1    5        4    98.680619218 10166  C FWFSM 8392264 + 8 [0]
+> > 259,1    3      431    98.680767121  4977  Q  WM 0 + 8 [xfsaild/pmem0]
+> > 259,1    3      432    98.680770938  4977  C  WM 0 + 8 [0]
+> > 259,1    5        5    98.680836733 10166  Q FWFSM 8392272 + 8 [umount]
+> > 259,1    5        6    98.680839560 10166  C FWFSM 8392272 + 8 [0]
+> > 259,1   12        7    98.683546633 10166  Q FWS [umount]
+> > 259,1   12        8    98.683551424 10166  C FWS 0 [0]
+> > 
+> > You can see 3 journal writes there with REQ_PREFLUSH set before XFS
+> > calls blkdev_issue_flush() (FWS of zero bytes) in xfs_free_buftarg()
+> > just before tearing down DAX state and freeing the buftarg.
+> > 
+> > Which one of these cache flush operations is taking 10 minutes to
+> > complete? That will tell us a lot more about what is going on...
+> > 
+> > > I assume this latency would also show up without DAX if page-cache is
+> > > now allowed to continue growing, or is there some other signal that
+> > > triggers async flushes in that case?
+> > 
+> > I think you've misunderstood what the "async" part of "async cache
+> > flushes" actually did. It was an internal journal write optimisation
+> > introduced in bad77c375e8d ("xfs: CIL checkpoint flushes caches
+> > unconditionally") in 5.14 that didn't work out and was reverted in
+> > 5.18. It didn't change the cache flushing semantics of the journal,
+> > just reverted to the same REQ_PREFLUSH behaviour we had for a decade
+> > leading up the the "async flush" change in the 5.14 kernel.
 > 
-> Call trace:
-> trigger unbind
->  -> unbind_store()
->   -> ... (skip)
->    -> devres_release_all()   # was pmem driver ->remove() in v1
->     -> kill_dax()
->      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE)
->       -> xfs_dax_notify_failure()
+> Oh, it would be interesting to see if pre-5.14 also has this behavior.
 > 
-> Introduce MF_MEM_REMOVE to let filesystem know this is a remove event.
-> So do not shutdown filesystem directly if something not supported, or if
-> failure range includes metadata area.  Make sure all files and processes
-> are handled correctly.
+> > To me, this smells of a pmem block device cache flush issue, not a
+> > filesystem problem...
 > 
-> [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> ...or at least an fs/dax.c problem. Sravani grabbed the call stack:
 > 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> 
-> ==
-> Changes since v2:
->   1. Rebased on next-20220615
-> 
-> Changes since v1:
->   1. Drop the needless change of moving {kill,put}_dax()
->   2. Rebased on '[PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink'[2]
-> 
-> ---
->  drivers/dax/super.c         | 2 +-
->  fs/xfs/xfs_notify_failure.c | 6 +++++-
->  include/linux/mm.h          | 1 +
->  3 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index 9b5e2a5eb0ae..d4bc83159d46 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -323,7 +323,7 @@ void kill_dax(struct dax_device *dax_dev)
->  		return;
->  
->  	if (dax_dev->holder_data != NULL)
-> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
-> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE);
+>    100.00%     0.00%             0  [kernel.vmlinux]  [k] ret_from_fork                -      -            
+>             |
+>             ---ret_from_fork
+>                kthread
+>                worker_thread
+>                process_one_work
+>                wb_workfn
+>                wb_writeback
+>                writeback_sb_inodes
+>                __writeback_single_inode
+>                do_writepages
+>                dax_writeback_mapping_range
+>                |          
+>                 --99.71%--arch_wb_cache_pmem
 
-At the point we're initiating a MEM_REMOVE call, is the pmem already
-gone, or is it about to be gone?
+So that's iterating every page that has been had a write fault on
+it without dirty data page mappings that are being flushed as a
+result of userspace page faults:
 
->  
->  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
->  	synchronize_srcu(&dax_srcu);
-> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> index aa8dc27c599c..91d3f05d4241 100644
-> --- a/fs/xfs/xfs_notify_failure.c
-> +++ b/fs/xfs/xfs_notify_failure.c
-> @@ -73,7 +73,9 @@ xfs_dax_failure_fn(
->  	struct failure_info		*notify = data;
->  	int				error = 0;
->  
-> -	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
-> +	/* Do not shutdown so early when device is to be removed */
-> +	if (!(notify->mf_flags & MF_MEM_REMOVE) ||
-> +	    XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
->  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
->  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
->  		return -EFSCORRUPTED;
-> @@ -182,6 +184,8 @@ xfs_dax_notify_failure(
->  
->  	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
->  	    mp->m_logdev_targp != mp->m_ddev_targp) {
-> +		if (mf_flags & MF_MEM_REMOVE)
-> +			return -EOPNOTSUPP;
+dax_iomap_fault
+  dax_iomap_{pte,pmd}_fault
+    dax_fault_iter
+	dax_insert_entry(dirty)
+	  xas_set_mark(xas, PAGECACHE_TAG_DIRTY);
 
-The reason I ask is that if the pmem is *about to be* but not yet
-removed from the system, shouldn't we at least try to flush all dirty
-files and the log to reduce data loss and minimize recovery time?
+without MAP_SYNC being set on the user mapping.
 
-If it's already gone, then you might as well shut down immediately,
-unless there's a chance the pmem will come back(?)
+If MAP_SYNC was set on the mapping, we'd then end up returning to
+the dax_iomap_fault() caller with VMNEEDSYNC and calling
+dax_finish_sync_fault() which then runs vfs_fsync_range() and that
+will flush the cache for the faulted page, clear the
+PAGECACHE_TAG_DIRTY, and then flush the filesystem metadata and
+device caches if necessary. Background writeback will never see this
+inode as needing writeback....
 
---D
+Hence I can't see how the XFS commit you've pointed at and the
+behaviour being reported are in any way connected together - the
+user DAX cache flush tracking and execution is completely
+independent to the journal/bdev based cache flushing mechanism and
+they don't interact at all.
 
->  		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
->  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
->  		return -EFSCORRUPTED;
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 623c2ee8330a..bbeb31883362 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3249,6 +3249,7 @@ enum mf_flags {
->  	MF_SOFT_OFFLINE = 1 << 3,
->  	MF_UNPOISON = 1 << 4,
->  	MF_NO_RETRY = 1 << 5,
-> +	MF_MEM_REMOVE = 1 << 6,
->  };
->  int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
->  		      unsigned long count, int mf_flags);
-> -- 
-> 2.36.1
-> 
-> 
-> 
+> One experiment I want to see is turn off DAX and see what the unmount
+> performance is when this is targeting page cache for mmap I/O. My
+> suspicion is that at some point dirty-page pressure triggers writeback
+> that just does not happen in the DAX case.
+
+I'd be more interesting in the result of a full bisect to find
+the actual commit that caused/fixed the behaviour you are seeing.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
 
