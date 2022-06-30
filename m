@@ -1,379 +1,199 @@
-Return-Path: <nvdimm+bounces-4112-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4119-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B3F562156
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 30 Jun 2022 19:35:11 +0200 (CEST)
+Received: from da.mirrors.kernel.org (da.mirrors.kernel.org [IPv6:2604:1380:4040:4f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 881E856224D
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 30 Jun 2022 20:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D1EF280C02
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 30 Jun 2022 17:35:07 +0000 (UTC)
+	by da.mirrors.kernel.org (Postfix) with ESMTPS id 5A3AC2E0A74
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 30 Jun 2022 18:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BB37465;
-	Thu, 30 Jun 2022 17:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C4E7476;
+	Thu, 30 Jun 2022 18:46:45 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE157B;
-	Thu, 30 Jun 2022 17:34:58 +0000 (UTC)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LYlnB4fZmz67lcR;
-	Fri,  1 Jul 2022 01:34:06 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 30 Jun 2022 19:34:55 +0200
-Received: from localhost (10.81.200.250) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
- 2022 18:34:54 +0100
-Date: Thu, 30 Jun 2022 18:34:53 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Dan Williams <dan.j.williams@intel.com>
-CC: <linux-cxl@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-	<linux-pci@vger.kernel.org>, <patches@lists.linux.dev>, <hch@lst.de>, "Ben
- Widawsky" <bwidawsk@kernel.org>
-Subject: Re: [PATCH 46/46] cxl/region: Introduce cxl_pmem_region objects
-Message-ID: <20220630183453.00007b56@Huawei.com>
-In-Reply-To: <20220624041950.559155-21-dan.j.williams@intel.com>
-References: <165603869943.551046.3498980330327696732.stgit@dwillia2-xfh>
-	<20220624041950.559155-21-dan.j.williams@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2CC3D83;
+	Thu, 30 Jun 2022 18:46:43 +0000 (UTC)
+Received: from in02.mta.xmission.com ([166.70.13.52]:44732)
+	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1o6yLn-0020mB-0Z; Thu, 30 Jun 2022 11:53:11 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:58068 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1o6yLl-001wdx-Pt; Thu, 30 Jun 2022 11:53:10 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc: Benjamin LaHaise <bcrl@kvack.org>,  Alexander Viro
+ <viro@zeniv.linux.org.uk>,  Kees Cook <keescook@chromium.org>,  Dan
+ Williams <dan.j.williams@intel.com>,  Matthew Wilcox
+ <willy@infradead.org>,  Jan Kara <jack@suse.cz>,  Jeff Layton
+ <jlayton@kernel.org>,  Chuck Lever <chuck.lever@oracle.com>,  Jens Axboe
+ <axboe@kernel.dk>,  Pavel Begunkov <asml.silence@gmail.com>,  Thomas
+ Gleixner <tglx@linutronix.de>,  Paul Walmsley <paul.walmsley@sifive.com>,
+  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,
+  Nathan Chancellor <nathan@kernel.org>,  Nick Desaulniers
+ <ndesaulniers@google.com>,  Tom Rix <trix@redhat.com>,
+  linux-aio@kvack.org,  linux-fsdevel@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-mm@kvack.org,
+  nvdimm@lists.linux.dev,  io-uring@vger.kernel.org,
+  linux-riscv@lists.infradead.org,  llvm@lists.linux.dev,  Ira Weiny
+ <ira.weiny@intel.com>
+References: <20220630163527.9776-1-fmdefrancesco@gmail.com>
+Date: Thu, 30 Jun 2022 12:38:08 -0500
+In-Reply-To: <20220630163527.9776-1-fmdefrancesco@gmail.com> (Fabio M. De
+	Francesco's message of "Thu, 30 Jun 2022 18:35:27 +0200")
+Message-ID: <8735fmqcfz.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.200.250]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-XM-SPF: eid=1o6yLl-001wdx-Pt;;;mid=<8735fmqcfz.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19nGDcBXv1cJKDV99uQtYu50l8eqi94dLE=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: ****
+X-Spam-Status: No, score=4.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+	DCC_CHECK_NEGATIVE,T_SCC_BODY_TEXT_LINE,T_TM2_M_HEADER_IN_MSG,
+	T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
+	T_TooManySym_05,T_XMDrugObfuBody_08,XMSubLong,XM_SPF_SoftFail
+	autolearn=disabled version=3.4.2
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4754]
+	*  0.7 XMSubLong Long Subject
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_04 7+ unique symbols in subject
+	*  0.0 T_TooManySym_05 8+ unique symbols in subject
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  2.5 XM_SPF_SoftFail SPF-SoftFail
+	*  0.0 T_TooManySym_02 5+ unique symbols in subject
+	*  1.0 T_XMDrugObfuBody_08 obfuscated drug references
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+	*  0.0 T_TooManySym_03 6+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;"Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 601 ms - load_scoreonly_sql: 0.07 (0.0%),
+	signal_user_changed: 11 (1.8%), b_tie_ro: 9 (1.6%), parse: 1.61 (0.3%),
+	 extract_message_metadata: 20 (3.3%), get_uri_detail_list: 3.2 (0.5%),
+	tests_pri_-1000: 17 (2.9%), tests_pri_-950: 1.40 (0.2%),
+	tests_pri_-900: 1.10 (0.2%), tests_pri_-90: 109 (18.1%), check_bayes:
+	107 (17.7%), b_tokenize: 12 (1.9%), b_tok_get_all: 10 (1.7%),
+	b_comp_prob: 4.7 (0.8%), b_tok_touch_all: 76 (12.6%), b_finish: 1.04
+	(0.2%), tests_pri_0: 426 (70.8%), check_dkim_signature: 0.89 (0.1%),
+	check_dkim_adsp: 3.2 (0.5%), poll_dns_idle: 0.80 (0.1%), tests_pri_10:
+	2.1 (0.4%), tests_pri_500: 8 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] fs: Replace kmap{,_atomic}() with kmap_local_page()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 
-On Thu, 23 Jun 2022 21:19:50 -0700
-Dan Williams <dan.j.williams@intel.com> wrote:
+"Fabio M. De Francesco" <fmdefrancesco@gmail.com> writes:
 
-> The LIBNVDIMM subsystem is a platform agnostic representation of system
-> NVDIMM / persistent memory resources. To date, the CXL subsystem's
-> interaction with LIBNVDIMM has been to register an nvdimm-bridge device
-> and cxl_nvdimm objects to proxy CXL capabilities into existing LIBNVDIMM
-> subsystem mechanics.
-> 
-> With regions the approach is the same. Create a new cxl_pmem_region
-> object to proxy CXL region details into a LIBNVDIMM definition. With
-> this enabling LIBNVDIMM can partition CXL persistent memory regions with
-> legacy namespace labels. A follow-on patch will add CXL region label and
-> CXL namespace label support to persist region configurations across
-> driver reload / system-reset events.
-ah. Now I see why we share ID space with NVDIMMs. Fair enough, I should
-have read to the end ;)
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+>
+> With kmap_local_page(), the mappings are per thread, CPU local and not
+> globally visible. Furthermore, the mappings can be acquired from any
+> context (including interrupts).
+>
+> Therefore, use kmap_local_page() in exec.c because these mappings are per
+> thread, CPU local, and not globally visible.
+>
+> Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
+> HIGHMEM64GB enabled.
 
-> 
-> Co-developed-by: Ben Widawsky <bwidawsk@kernel.org>
-> Signed-off-by: Ben Widawsky <bwidawsk@kernel.org>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Can someone please refresh my memory on what is going on.
 
-End of day, so a fairly superficial review on this and I'll hopefully
-take a second look at one or two of the earlier patches when time allows.
+I remember there were limitations that kmap_atomic had that are hard to
+meet so something I think it was kmap_local was invented and created
+to be the kmap_atomic replacement.
 
-Jonathan
+What are the requirements on kmap_local?  In copy_strings
+kmap is called in contexts that can sleep in page faults so any
+nearly any requirement except a thread local use is invalidated.
 
-...
+As you have described kmap_local above it does not sound like kmap_local
+is safe in this context, but that could just be a problem in description
+that my poor memory does is not recalling the necessary details to
+correct.
 
-> +static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
-> +{
-> +	struct cxl_pmem_region *cxlr_pmem = ERR_PTR(-ENXIO);
+Eric
 
-Rarely used, so better to set it where it is.
-
-> +	struct cxl_region_params *p = &cxlr->params;
-> +	struct device *dev;
-> +	int i;
-> +
-> +	down_read(&cxl_region_rwsem);
-> +	if (p->state != CXL_CONFIG_COMMIT)
-> +		goto out;
-> +	cxlr_pmem = kzalloc(struct_size(cxlr_pmem, mapping, p->nr_targets),
-> +			    GFP_KERNEL);
-> +	if (!cxlr_pmem) {
-> +		cxlr_pmem = ERR_PTR(-ENOMEM);
-> +		goto out;
-> +	}
-> +
-> +	cxlr_pmem->hpa_range.start = p->res->start;
-> +	cxlr_pmem->hpa_range.end = p->res->end;
-> +
-> +	/* Snapshot the region configuration underneath the cxl_region_rwsem */
-> +	cxlr_pmem->nr_mappings = p->nr_targets;
-> +	for (i = 0; i < p->nr_targets; i++) {
-> +		struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
-> +		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-> +
-> +		m->cxlmd = cxlmd;
-> +		get_device(&cxlmd->dev);
-> +		m->start = cxled->dpa_res->start;
-> +		m->size = resource_size(cxled->dpa_res);
-> +		m->position = i;
-> +	}
-> +
-> +	dev = &cxlr_pmem->dev;
-> +	cxlr_pmem->cxlr = cxlr;
-> +	device_initialize(dev);
-> +	lockdep_set_class(&dev->mutex, &cxl_pmem_region_key);
-> +	device_set_pm_not_required(dev);
-> +	dev->parent = &cxlr->dev;
-> +	dev->bus = &cxl_bus_type;
-> +	dev->type = &cxl_pmem_region_type;
-> +out:
-> +	up_read(&cxl_region_rwsem);
-> +
-> +	return cxlr_pmem;
-> +}
-> +
-> +static void cxlr_pmem_unregister(void *dev)
-> +{
-> +	device_unregister(dev);
-> +}
-> +
-> +/**
-> + * devm_cxl_add_pmem_region() - add a cxl_region to nd_region bridge
-> + * @host: same host as @cxlmd
-
-Run kernel-doc over these and clean all the warning sup.
-Parameter if cxlr not host
-
-
-> + *
-> + * Return: 0 on success negative error code on failure.
-> + */
-
-
->  /*
->   * Unit test builds overrides this to __weak, find the 'strong' version
-> diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
-> index b271f6e90b91..4ba7248275ac 100644
-> --- a/drivers/cxl/pmem.c
-> +++ b/drivers/cxl/pmem.c
-> @@ -7,6 +7,7 @@
-
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  fs/exec.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 0989fb8472a1..4a2129c0d422 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -583,11 +583,11 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
 >  
-
-
-> +static int match_cxl_nvdimm(struct device *dev, void *data)
-> +{
-> +	return is_cxl_nvdimm(dev);
-> +}
-> +
-> +static void unregister_region(void *nd_region)
-
-Better to give this a more specific name as we have several
-unregister_region() functions in CXL now.
-
-> +{
-> +	struct cxl_nvdimm_bridge *cxl_nvb;
-> +	struct cxl_pmem_region *cxlr_pmem;
-> +	int i;
-> +
-> +	cxlr_pmem = nd_region_provider_data(nd_region);
-> +	cxl_nvb = cxlr_pmem->bridge;
-> +	device_lock(&cxl_nvb->dev);
-> +	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
-> +		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-> +		struct cxl_nvdimm *cxl_nvd = m->cxl_nvd;
-> +
-> +		if (cxl_nvd->region) {
-> +			put_device(&cxlr_pmem->dev);
-> +			cxl_nvd->region = NULL;
-> +		}
-> +	}
-> +	device_unlock(&cxl_nvb->dev);
-> +
-> +	nvdimm_region_delete(nd_region);
-> +}
-> +
-
-> +
-> +static int cxl_pmem_region_probe(struct device *dev)
-> +{
-> +	struct nd_mapping_desc mappings[CXL_DECODER_MAX_INTERLEAVE];
-> +	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
-> +	struct cxl_region *cxlr = cxlr_pmem->cxlr;
-> +	struct cxl_pmem_region_info *info = NULL;
-> +	struct cxl_nvdimm_bridge *cxl_nvb;
-> +	struct nd_interleave_set *nd_set;
-> +	struct nd_region_desc ndr_desc;
-> +	struct cxl_nvdimm *cxl_nvd;
-> +	struct nvdimm *nvdimm;
-> +	struct resource *res;
-> +	int rc = 0, i;
-> +
-> +	cxl_nvb = cxl_find_nvdimm_bridge(&cxlr_pmem->mapping[0].cxlmd->dev);
-> +	if (!cxl_nvb) {
-> +		dev_dbg(dev, "bridge not found\n");
-> +		return -ENXIO;
-> +	}
-> +	cxlr_pmem->bridge = cxl_nvb;
-> +
-> +	device_lock(&cxl_nvb->dev);
-> +	if (!cxl_nvb->nvdimm_bus) {
-> +		dev_dbg(dev, "nvdimm bus not found\n");
-> +		rc = -ENXIO;
-> +		goto out;
-> +	}
-> +
-> +	memset(&mappings, 0, sizeof(mappings));
-> +	memset(&ndr_desc, 0, sizeof(ndr_desc));
-> +
-> +	res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
-> +	if (!res) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	res->name = "Persistent Memory";
-> +	res->start = cxlr_pmem->hpa_range.start;
-> +	res->end = cxlr_pmem->hpa_range.end;
-> +	res->flags = IORESOURCE_MEM;
-> +	res->desc = IORES_DESC_PERSISTENT_MEMORY;
-> +
-> +	rc = insert_resource(&iomem_resource, res);
-> +	if (rc)
-> +		goto out;
-> +
-> +	rc = devm_add_action_or_reset(dev, cxlr_pmem_remove_resource, res);
-> +	if (rc)
-> +		goto out;
-> +
-> +	ndr_desc.res = res;
-> +	ndr_desc.provider_data = cxlr_pmem;
-> +
-> +	ndr_desc.numa_node = memory_add_physaddr_to_nid(res->start);
-> +	ndr_desc.target_node = phys_to_target_node(res->start);
-> +	if (ndr_desc.target_node == NUMA_NO_NODE) {
-> +		ndr_desc.target_node = ndr_desc.numa_node;
-> +		dev_dbg(&cxlr->dev, "changing target node from %d to %d",
-> +			NUMA_NO_NODE, ndr_desc.target_node);
-> +	}
-> +
-> +	nd_set = devm_kzalloc(dev, sizeof(*nd_set), GFP_KERNEL);
-> +	if (!nd_set) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	ndr_desc.memregion = cxlr->id;
-> +	set_bit(ND_REGION_CXL, &ndr_desc.flags);
-> +	set_bit(ND_REGION_PERSIST_MEMCTRL, &ndr_desc.flags);
-> +
-> +	info = kmalloc_array(cxlr_pmem->nr_mappings, sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		goto out;
-> +
-> +	rc = -ENODEV;
-
-Personal taste, but I'd much rather see that set in the error handlers
-so I can quickly see where it applies.
-
-> +	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
-> +		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-> +		struct cxl_memdev *cxlmd = m->cxlmd;
-> +		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> +		struct device *d;
-> +
-> +		d = device_find_child(&cxlmd->dev, NULL, match_cxl_nvdimm);
-> +		if (!d) {
-> +			dev_dbg(dev, "[%d]: %s: no cxl_nvdimm found\n", i,
-> +				dev_name(&cxlmd->dev));
-> +			goto err;
-> +		}
-> +
-> +		/* safe to drop ref now with bridge lock held */
-> +		put_device(d);
-> +
-> +		cxl_nvd = to_cxl_nvdimm(d);
-> +		nvdimm = dev_get_drvdata(&cxl_nvd->dev);
-> +		if (!nvdimm) {
-> +			dev_dbg(dev, "[%d]: %s: no nvdimm found\n", i,
-> +				dev_name(&cxlmd->dev));
-> +			goto err;
-> +		}
-> +		cxl_nvd->region = cxlr_pmem;
-> +		get_device(&cxlr_pmem->dev);
-> +		m->cxl_nvd = cxl_nvd;
-> +		mappings[i] = (struct nd_mapping_desc) {
-> +			.nvdimm = nvdimm,
-> +			.start = m->start,
-> +			.size = m->size,
-> +			.position = i,
-> +		};
-> +		info[i].offset = m->start;
-> +		info[i].serial = cxlds->serial;
-> +	}
-> +	ndr_desc.num_mappings = cxlr_pmem->nr_mappings;
-> +	ndr_desc.mapping = mappings;
-> +
-> +	/*
-> +	 * TODO enable CXL labels which skip the need for 'interleave-set cookie'
-> +	 */
-> +	nd_set->cookie1 =
-> +		nd_fletcher64(info, sizeof(*info) * cxlr_pmem->nr_mappings, 0);
-> +	nd_set->cookie2 = nd_set->cookie1;
-> +	ndr_desc.nd_set = nd_set;
-> +
-> +	cxlr_pmem->nd_region =
-> +		nvdimm_pmem_region_create(cxl_nvb->nvdimm_bus, &ndr_desc);
-> +	if (IS_ERR(cxlr_pmem->nd_region)) {
-> +		rc = PTR_ERR(cxlr_pmem->nd_region);
-> +		goto err;
-> +	} else
-
-no need for else as other branch has gone flying off down to
-err.
-
-> +		rc = devm_add_action_or_reset(dev, unregister_region,
-> +					      cxlr_pmem->nd_region);
-> +out:
-
-Having labels out: and err: where both are used for errors is pretty
-confusing naming...  Perhaps you are better off just not sharing the
-good exit path with any of the error paths.
-
-
-> +	device_unlock(&cxl_nvb->dev);
-> +	put_device(&cxl_nvb->dev);
-> +	kfree(info);
-
-Ok, so safe to do this here, but would be nice to do this
-in reverse order of setup with multiple labels so we can avoid
-paths that free things that were never created. Doesn't look
-like it would hurt much to move kfree(info) above the device_unlock()
-and only do that if we have allocated info.
-
-
-
-
-
-> +
-> +	if (rc)
-> +		dev_dbg(dev, "failed to create nvdimm region\n");
-> +	return rc;
-> +
-> +err:
-> +	for (i--; i >= 0; i--) {
-> +		nvdimm = mappings[i].nvdimm;
-> +		cxl_nvd = nvdimm_provider_data(nvdimm);
-> +		put_device(&cxl_nvd->region->dev);
-> +		cxl_nvd->region = NULL;
-> +	}
-> +	goto out;
-> +}
-> +
-
-
+>  				if (kmapped_page) {
+>  					flush_dcache_page(kmapped_page);
+> -					kunmap(kmapped_page);
+> +					kunmap_local(kaddr);
+>  					put_arg_page(kmapped_page);
+>  				}
+>  				kmapped_page = page;
+> -				kaddr = kmap(kmapped_page);
+> +				kaddr = kmap_local_page(kmapped_page);
+>  				kpos = pos & PAGE_MASK;
+>  				flush_arg_page(bprm, kpos, kmapped_page);
+>  			}
+> @@ -601,7 +601,7 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
+>  out:
+>  	if (kmapped_page) {
+>  		flush_dcache_page(kmapped_page);
+> -		kunmap(kmapped_page);
+> +		kunmap_local(kaddr);
+>  		put_arg_page(kmapped_page);
+>  	}
+>  	return ret;
+> @@ -883,11 +883,11 @@ int transfer_args_to_stack(struct linux_binprm *bprm,
+>  
+>  	for (index = MAX_ARG_PAGES - 1; index >= stop; index--) {
+>  		unsigned int offset = index == stop ? bprm->p & ~PAGE_MASK : 0;
+> -		char *src = kmap(bprm->page[index]) + offset;
+> +		char *src = kmap_local_page(bprm->page[index]) + offset;
+>  		sp -= PAGE_SIZE - offset;
+>  		if (copy_to_user((void *) sp, src, PAGE_SIZE - offset) != 0)
+>  			ret = -EFAULT;
+> -		kunmap(bprm->page[index]);
+> +		kunmap_local(src);
+>  		if (ret)
+>  			goto out;
+>  	}
+> @@ -1680,13 +1680,13 @@ int remove_arg_zero(struct linux_binprm *bprm)
+>  			ret = -EFAULT;
+>  			goto out;
+>  		}
+> -		kaddr = kmap_atomic(page);
+> +		kaddr = kmap_local_page(page);
+>  
+>  		for (; offset < PAGE_SIZE && kaddr[offset];
+>  				offset++, bprm->p++)
+>  			;
+>  
+> -		kunmap_atomic(kaddr);
+> +		kunmap_local(kaddr);
+>  		put_arg_page(page);
+>  	} while (offset == PAGE_SIZE);
 
