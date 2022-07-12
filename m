@@ -1,52 +1,53 @@
-Return-Path: <nvdimm+bounces-4198-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4203-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAAAB5724DC
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 21:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DEB9A5724E1
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 21:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3CE01C20941
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 19:07:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7C1C1C2082F
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 19:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5471453BB;
-	Tue, 12 Jul 2022 19:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6339853BD;
+	Tue, 12 Jul 2022 19:08:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DE953B2
-	for <nvdimm@lists.linux.dev>; Tue, 12 Jul 2022 19:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2501B538B
+	for <nvdimm@lists.linux.dev>; Tue, 12 Jul 2022 19:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657652851; x=1689188851;
+  t=1657652882; x=1689188882;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3XEEQ2shlsXB1UcMa1ofYK+LWnGEANhuw7/bWmk4khg=;
-  b=jlOM7xilJBSYOYa4HzmuvsIIt4raqvs4dfxmNe2oE9kUjIpzPFf4XGqr
-   de96S98URM39FWTe8VJguhSWKT1BK07/E81BCMIpYtXUDkh9BPb3AaIlV
-   B5WCcpYYIRXGi79FXjXNjqMnMAcKsFoVHFtTYmeLEhfCJc7iChpd0Jgmv
-   gZli86fynX7pYuZAoRhCxv9TwYpalO5hq8laHMBJ1y6ud7dXu6QXJblVR
-   /gjsva84ZtkkqHgNj4s33FA9l278KPDJEVsnm9Y6rbeS6+ipyOyxn44FP
-   xRp1nrLqQ81AHsSuo0jt6PiGg52NDD/IucXZzgmg9XlESJZbG/4IjGVYL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371332949"
+  bh=AeWJ82o6BwFn1NlqdqKUFKk+NqL3Dqc98exzk9j2WHE=;
+  b=PlKBhURyUxXo7v5h5//QlBYzjYdCE6IUpxBuSlC3RIsceh8VwqEtqgqr
+   zthbbQ3XAX8lDea84laF8Uw3SKEFDy4ApzvpCv5K8B+sP8RATH0yfKkM1
+   9XWbAF1CMxB7p+oKCNQovSJtoB54mEjGCfC9blMqL8AkUMCxbCslaaIF+
+   1HUjr66EGEx1OgN09lKRI7c7d+N2KqkxhCViItO9bkGXqTMAKz0srmQLw
+   vCST65uOL4N6AXKmsLBdPoWUfVzOwxM5BAw21R/3gQ3Mkm05PBzo9ArCg
+   xOsb2/w9m1sTHCv2EsN1yZzgyoXMe56S7+ADSvoaGvI6yHGSyIhJIEdOw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="348995524"
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="371332949"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:31 -0700
+   d="scan'208";a="348995524"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:36 -0700
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="922326367"
+   d="scan'208";a="570316577"
 Received: from sheyting-mobl3.amr.corp.intel.com (HELO [192.168.1.117]) ([10.212.147.156])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:30 -0700
-Subject: [ndctl PATCH 01/11] cxl/list: Reformat option list
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:36 -0700
+Subject: [ndctl PATCH 02/11] cxl/list: Emit endpoint decoders filtered by
+ memdev
 From: Dan Williams <dan.j.williams@intel.com>
 To: vishal.l.verma@intel.com
 Cc: alison.schofield@intel.com, nvdimm@lists.linux.dev,
  linux-cxl@vger.kernel.org
-Date: Tue, 12 Jul 2022 12:07:29 -0700
-Message-ID: <165765284992.435671.17218875214208199972.stgit@dwillia2-xfh>
+Date: Tue, 12 Jul 2022 12:07:36 -0700
+Message-ID: <165765285600.435671.1816486143808105272.stgit@dwillia2-xfh>
 In-Reply-To: <165765284365.435671.13173937566404931163.stgit@dwillia2-xfh>
 References: <165765284365.435671.13173937566404931163.stgit@dwillia2-xfh>
 User-Agent: StGit/0.18-3-g996c
@@ -59,41 +60,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Cleanup some spurious spaces and let clang-format re-layout the options.
+For example, dump all the endpoint decoders from memdev 'mem8'.
+
+    cxl list -Di -m 8 -d endpoint
 
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- cxl/list.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ cxl/filter.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/cxl/list.c b/cxl/list.c
-index 940782d33a10..1b5f58328047 100644
---- a/cxl/list.c
-+++ b/cxl/list.c
-@@ -36,8 +36,7 @@ static const struct option options[] = {
- 		   "filter by CXL endpoint device name(s)"),
- 	OPT_BOOLEAN('E', "endpoints", &param.endpoints,
- 		    "include CXL endpoint info"),
--	OPT_STRING('d', "decoder", &param.decoder_filter,
--		   "decoder device name",
-+	OPT_STRING('d', "decoder", &param.decoder_filter, "decoder device name",
- 		   "filter by CXL decoder device name(s) / class"),
- 	OPT_BOOLEAN('D', "decoders", &param.decoders,
- 		    "include CXL decoder info"),
-@@ -45,11 +44,11 @@ static const struct option options[] = {
- 		    "include CXL target data with decoders or ports"),
- 	OPT_BOOLEAN('i', "idle", &param.idle, "include disabled devices"),
- 	OPT_BOOLEAN('u', "human", &param.human,
--		    "use human friendly number formats "),
-+		    "use human friendly number formats"),
- 	OPT_BOOLEAN('H', "health", &param.health,
--		    "include memory device health information "),
-+		    "include memory device health information"),
- 	OPT_BOOLEAN('I', "partition", &param.partition,
--		    "include memory device partition information "),
-+		    "include memory device partition information"),
- #ifdef ENABLE_DEBUG
- 	OPT_BOOLEAN(0, "debug", &debug, "debug list walk"),
- #endif
+diff --git a/cxl/filter.c b/cxl/filter.c
+index 66fd7420144a..2f88a9d2f398 100644
+--- a/cxl/filter.c
++++ b/cxl/filter.c
+@@ -428,7 +428,9 @@ util_cxl_decoder_filter_by_memdev(struct cxl_decoder *decoder,
+ 				  const char *ident, const char *serial)
+ {
+ 	struct cxl_ctx *ctx = cxl_decoder_get_ctx(decoder);
++	struct cxl_endpoint *endpoint;
+ 	struct cxl_memdev *memdev;
++	struct cxl_port *port;
+ 
+ 	if (!ident && !serial)
+ 		return decoder;
+@@ -438,6 +440,12 @@ util_cxl_decoder_filter_by_memdev(struct cxl_decoder *decoder,
+ 			continue;
+ 		if (cxl_decoder_get_target_by_memdev(decoder, memdev))
+ 			return decoder;
++		port = cxl_decoder_get_port(decoder);
++		if (!port || !cxl_port_is_endpoint(port))
++			continue;
++		endpoint = cxl_port_to_endpoint(port);
++		if (cxl_endpoint_get_memdev(endpoint) == memdev)
++			return decoder;
+ 	}
+ 
+ 	return NULL;
 
 
