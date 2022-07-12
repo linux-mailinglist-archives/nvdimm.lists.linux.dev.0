@@ -1,53 +1,52 @@
-Return-Path: <nvdimm+bounces-4203-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4199-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEB9A5724E1
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 21:08:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F4DD5724DD
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 21:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7C1C1C2082F
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 19:08:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 718401C208EE
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 12 Jul 2022 19:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6339853BD;
-	Tue, 12 Jul 2022 19:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99C953BA;
+	Tue, 12 Jul 2022 19:07:44 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2501B538B
-	for <nvdimm@lists.linux.dev>; Tue, 12 Jul 2022 19:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06307538B
+	for <nvdimm@lists.linux.dev>; Tue, 12 Jul 2022 19:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657652882; x=1689188882;
+  t=1657652863; x=1689188863;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AeWJ82o6BwFn1NlqdqKUFKk+NqL3Dqc98exzk9j2WHE=;
-  b=PlKBhURyUxXo7v5h5//QlBYzjYdCE6IUpxBuSlC3RIsceh8VwqEtqgqr
-   zthbbQ3XAX8lDea84laF8Uw3SKEFDy4ApzvpCv5K8B+sP8RATH0yfKkM1
-   9XWbAF1CMxB7p+oKCNQovSJtoB54mEjGCfC9blMqL8AkUMCxbCslaaIF+
-   1HUjr66EGEx1OgN09lKRI7c7d+N2KqkxhCViItO9bkGXqTMAKz0srmQLw
-   vCST65uOL4N6AXKmsLBdPoWUfVzOwxM5BAw21R/3gQ3Mkm05PBzo9ArCg
-   xOsb2/w9m1sTHCv2EsN1yZzgyoXMe56S7+ADSvoaGvI6yHGSyIhJIEdOw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="348995524"
+  bh=mrnwLl55GJn/AdTFh1P9ioZWwwFqWv5sPXutL333B8w=;
+  b=WuEDVyOenj4ltIkiQWWRPVSZDVMQA59LHKm19DhRRJa3LoKeIp0/22XU
+   IcPSu7Wy1ifhFyZaDeFSDzjdulWia0K9+zc8SIwX/RwEf2Enmaz2debel
+   92VEuADgQQXr9eK/1BCk/DPzPV+qDTLOvdFusEdneJp3SRxf5mvCnfZCH
+   ZAVgZzVKWby8rtp2a+5sm9x3BxMv3EaFngxCbmVNuEf5OexMOwamLn6iU
+   bS6PlPbTMhg312pMDFh/dnGCgpw0bGuDADxlfYUk03Y5SSCoT5ABU/egH
+   80jczYaJmly311+PcAt1PNDeES44XnkEYHMUnYhyp6Eh63ZRaAhpiC051
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="310646013"
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="348995524"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:36 -0700
+   d="scan'208";a="310646013"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:42 -0700
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="570316577"
+   d="scan'208";a="653039379"
 Received: from sheyting-mobl3.amr.corp.intel.com (HELO [192.168.1.117]) ([10.212.147.156])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:36 -0700
-Subject: [ndctl PATCH 02/11] cxl/list: Emit endpoint decoders filtered by
- memdev
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 12:07:42 -0700
+Subject: [ndctl PATCH 03/11] cxl/list: Hide 0s in disabled decoder listings
 From: Dan Williams <dan.j.williams@intel.com>
 To: vishal.l.verma@intel.com
 Cc: alison.schofield@intel.com, nvdimm@lists.linux.dev,
  linux-cxl@vger.kernel.org
-Date: Tue, 12 Jul 2022 12:07:36 -0700
-Message-ID: <165765285600.435671.1816486143808105272.stgit@dwillia2-xfh>
+Date: Tue, 12 Jul 2022 12:07:41 -0700
+Message-ID: <165765286159.435671.9172753303612160309.stgit@dwillia2-xfh>
 In-Reply-To: <165765284365.435671.13173937566404931163.stgit@dwillia2-xfh>
 References: <165765284365.435671.13173937566404931163.stgit@dwillia2-xfh>
 User-Agent: StGit/0.18-3-g996c
@@ -60,41 +59,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-For example, dump all the endpoint decoders from memdev 'mem8'.
-
-    cxl list -Di -m 8 -d endpoint
+Trim some redundant information from decoder listings when they are
+disabled.
 
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- cxl/filter.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ cxl/json.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/cxl/filter.c b/cxl/filter.c
-index 66fd7420144a..2f88a9d2f398 100644
---- a/cxl/filter.c
-+++ b/cxl/filter.c
-@@ -428,7 +428,9 @@ util_cxl_decoder_filter_by_memdev(struct cxl_decoder *decoder,
- 				  const char *ident, const char *serial)
- {
- 	struct cxl_ctx *ctx = cxl_decoder_get_ctx(decoder);
-+	struct cxl_endpoint *endpoint;
- 	struct cxl_memdev *memdev;
-+	struct cxl_port *port;
+diff --git a/cxl/json.c b/cxl/json.c
+index fdc6f73a86c1..a213fdad55fd 100644
+--- a/cxl/json.c
++++ b/cxl/json.c
+@@ -442,7 +442,7 @@ struct json_object *util_cxl_decoder_to_json(struct cxl_decoder *decoder,
+ 	const char *devname = cxl_decoder_get_devname(decoder);
+ 	struct cxl_port *port = cxl_decoder_get_port(decoder);
+ 	struct json_object *jdecoder, *jobj;
+-	u64 val;
++	u64 val, size;
  
- 	if (!ident && !serial)
- 		return decoder;
-@@ -438,6 +440,12 @@ util_cxl_decoder_filter_by_memdev(struct cxl_decoder *decoder,
- 			continue;
- 		if (cxl_decoder_get_target_by_memdev(decoder, memdev))
- 			return decoder;
-+		port = cxl_decoder_get_port(decoder);
-+		if (!port || !cxl_port_is_endpoint(port))
-+			continue;
-+		endpoint = cxl_port_to_endpoint(port);
-+		if (cxl_endpoint_get_memdev(endpoint) == memdev)
-+			return decoder;
+ 	jdecoder = json_object_new_object();
+ 	if (!jdecoder)
+@@ -452,21 +452,21 @@ struct json_object *util_cxl_decoder_to_json(struct cxl_decoder *decoder,
+ 	if (jobj)
+ 		json_object_object_add(jdecoder, "decoder", jobj);
+ 
++	size = cxl_decoder_get_size(decoder);
+ 	val = cxl_decoder_get_resource(decoder);
+-	if (val < ULLONG_MAX) {
++	if (size && val < ULLONG_MAX) {
+ 		jobj = util_json_object_hex(val, flags);
+ 		if (jobj)
+ 			json_object_object_add(jdecoder, "resource", jobj);
  	}
  
- 	return NULL;
+-	val = cxl_decoder_get_size(decoder);
+-	if (val < ULLONG_MAX) {
+-		jobj = util_json_object_size(val, flags);
++	if (size && size < ULLONG_MAX) {
++		jobj = util_json_object_size(size, flags);
+ 		if (jobj)
+ 			json_object_object_add(jdecoder, "size", jobj);
+ 	}
+ 
+-	if (val == 0) {
++	if (size == 0) {
+ 		jobj = json_object_new_string("disabled");
+ 		if (jobj)
+ 			json_object_object_add(jdecoder, "state", jobj);
 
 
