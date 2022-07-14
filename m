@@ -1,52 +1,53 @@
-Return-Path: <nvdimm+bounces-4246-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4251-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3956C5753A4
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 Jul 2022 19:02:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA985753AE
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 Jul 2022 19:03:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5E8D280CDA
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 Jul 2022 17:02:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E588280D07
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 Jul 2022 17:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679D16005;
-	Thu, 14 Jul 2022 17:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8FC16005;
+	Thu, 14 Jul 2022 17:03:12 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F39F6002
-	for <nvdimm@lists.linux.dev>; Thu, 14 Jul 2022 17:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C616002
+	for <nvdimm@lists.linux.dev>; Thu, 14 Jul 2022 17:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657818156; x=1689354156;
+  t=1657818191; x=1689354191;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8pHDEH3ziJVotJ1oYBiooCwlZBWAUamzVCenaWfGOWU=;
-  b=aiftfanPxMMj6MMkQnf4psmp2ALZfiyRrp3rxWr4vqrDq6aXZtzsFVth
-   i38oatHLRxq8O2of11rGjeu+IRnymcy1Q9SFSnCXhRe5m3vUac4SPHTVE
-   MwMy+VcrIiSIbQashaHUOiPfWQGavO7f+7Hc0XHl5A4bi1H2afLK2hzgv
-   D66h11M4xKXbhCfp3ClO5jf6pMWgE/IiZlM3/LedBloGt/w/mGIOAKNOn
-   GGapSFwrKienW7aAs12nCUipzknc0tokR/OFDQw00Ou0NGTTo9wTqPBZg
-   fKYQpq3Plv8ZSzrcLSWLIQByGNc4eJqxT7CfkpwZEOf5Y9+X0zgFQ1+Rs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268602718"
+  bh=z2SMMm41uIRd5DJN5abWRnM6MsMByqAH5tJ7qm43uuc=;
+  b=EMIx7pQycska+Mrtt3wUSc92fxxthYMg0tjs8Lfs1mLhZvEyiwFYp9qb
+   /lUOM9OK155cOtUFhuM1XsqzBJ5O1HsBQFRoIOM2HzdGDuJiHWC9iG0Vo
+   TH+RXcCCbedV7WUXQSBW0qiwYZzuntS50t6aVoIw+fMl7q54vB6bCsXao
+   s8wtAk16AvYzHfskoFyWulc9EjYik7ZogFfo808Jocz2ia2t1BDgDBsCb
+   cZyLnmuEYUU4TnXdot0Ze4KOLopBNIA5MBhQsHS/MkfPs++SoIaxoW9uG
+   QQoE7ZVzd8NSy+xy+vXP+iqv+tbkdHU7jcfMTy478wyrJntlLlhUI6YcA
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="284331794"
 X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="268602718"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:02:31 -0700
+   d="scan'208";a="284331794"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:02:28 -0700
 X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="842214200"
+   d="scan'208";a="653953199"
 Received: from jlcone-mobl1.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.2.90])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:02:22 -0700
-Subject: [ndctl PATCH v2 06/12] cxl/lib: Maintain decoders in id order
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:02:27 -0700
+Subject: [ndctl PATCH v2 07/12] cxl/memdev: Fix json for multi-device
+ partitioning
 From: Dan Williams <dan.j.williams@intel.com>
 To: vishal.l.verma@intel.com
-Cc: Davidlohr Bueso <dave@stgolabs.net>, alison.schofield@intel.com,
- nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-Date: Thu, 14 Jul 2022 10:02:21 -0700
-Message-ID: <165781814167.1555691.14895625637451030942.stgit@dwillia2-xfh.jf.intel.com>
+Cc: Alison Schofield <alison.schofield@intel.com>, nvdimm@lists.linux.dev,
+ linux-cxl@vger.kernel.org
+Date: Thu, 14 Jul 2022 10:02:27 -0700
+Message-ID: <165781814737.1555691.889129128205037941.stgit@dwillia2-xfh.jf.intel.com>
 In-Reply-To: <165781810717.1555691.1411727384567016588.stgit@dwillia2-xfh.jf.intel.com>
 References: <165781810717.1555691.1411727384567016588.stgit@dwillia2-xfh.jf.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -59,98 +60,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Given that decoder instance order is fundamental to the DPA translation
-sequence for endpoint decoders, enforce that cxl_decoder_for_each() returns
-decoders in instance order. Otherwise, they show up in readddir() order
-which is not predictable.
+In the case when someone partitions several devices at once, collect all
+the affected memdevs into a json array.
 
-Add a list_add_sorted() to generically handle inserting into a sorted list.
+With the move to use util_display_json_array() that also requires a set of
+flags to be specifiied. Apply the UTIL_JSON_HUMAN flag for all interactive
+command result output to bring this command in line with other tools.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Alison Schofield <alison.schofield@intel.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- cxl/lib/libcxl.c |    8 +++++++-
- util/list.h      |   39 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+), 1 deletion(-)
- create mode 100644 util/list.h
+ cxl/memdev.c |   26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
-index f36edcfc735a..e4c5d3819e88 100644
---- a/cxl/lib/libcxl.c
-+++ b/cxl/lib/libcxl.c
+diff --git a/cxl/memdev.c b/cxl/memdev.c
+index 91d914db5af6..9fcd8ae5724b 100644
+--- a/cxl/memdev.c
++++ b/cxl/memdev.c
 @@ -19,6 +19,7 @@
- #include <ccan/short_types/short_types.h>
+ struct action_context {
+ 	FILE *f_out;
+ 	FILE *f_in;
++	struct json_object *jdevs;
+ };
  
- #include <util/log.h>
-+#include <util/list.h>
- #include <util/size.h>
- #include <util/sysfs.h>
- #include <util/bitmap.h>
-@@ -908,6 +909,11 @@ cxl_endpoint_get_memdev(struct cxl_endpoint *endpoint)
- 	return NULL;
+ static struct parameters {
+@@ -339,12 +340,13 @@ out:
  }
  
-+static int decoder_id_cmp(struct cxl_decoder *d1, struct cxl_decoder *d2)
-+{
-+	return d1->id - d2->id;
-+}
-+
- static void *add_cxl_decoder(void *parent, int id, const char *cxldecoder_base)
+ static int action_setpartition(struct cxl_memdev *memdev,
+-		struct action_context *actx)
++			       struct action_context *actx)
  {
- 	const char *devname = devpath_to_devname(cxldecoder_base);
-@@ -1049,7 +1055,7 @@ static void *add_cxl_decoder(void *parent, int id, const char *cxldecoder_base)
- 			return decoder_dup;
- 		}
+ 	const char *devname = cxl_memdev_get_devname(memdev);
+ 	enum cxl_setpart_type type = CXL_SETPART_PMEM;
+ 	unsigned long long size = ULLONG_MAX;
+ 	struct json_object *jmemdev;
++	unsigned long flags;
+ 	struct cxl_cmd *cmd;
+ 	int rc;
  
--	list_add(&port->decoders, &decoder->list);
-+	list_add_sorted(&port->decoders, decoder, list, decoder_id_cmp);
+@@ -396,10 +398,12 @@ out_err:
+ 	if (rc)
+ 		log_err(&ml, "%s error: %s\n", devname, strerror(-rc));
  
- 	free(path);
- 	return decoder;
-diff --git a/util/list.h b/util/list.h
-new file mode 100644
-index 000000000000..cb7727123ea8
---- /dev/null
-+++ b/util/list.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2022 Intel Corporation. All rights reserved. */
-+#ifndef _NDCTL_LIST_H_
-+#define _NDCTL_LIST_H_
+-	jmemdev = util_cxl_memdev_to_json(memdev, UTIL_JSON_PARTITION);
+-	if (jmemdev)
+-		printf("%s\n", json_object_to_json_string_ext(jmemdev,
+-		       JSON_C_TO_STRING_PRETTY));
++	flags = UTIL_JSON_PARTITION;
++	if (actx->f_out == stdout && isatty(1))
++		flags |= UTIL_JSON_HUMAN;
++	jmemdev = util_cxl_memdev_to_json(memdev, flags);
++	if (actx->jdevs && jmemdev)
++		json_object_array_add(actx->jdevs, jmemdev);
+ 
+ 	return rc;
+ }
+@@ -446,6 +450,9 @@ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 		err++;
+ 	}
+ 
++	if (action == action_setpartition)
++		actx.jdevs = json_object_new_array();
 +
-+#include <ccan/list/list.h>
+ 	if (err == argc) {
+ 		usage_with_options(u, options);
+ 		return -EINVAL;
+@@ -528,6 +535,15 @@ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 	if (actx.f_in != stdin)
+ 		fclose(actx.f_in);
+ 
++	if (actx.jdevs) {
++		unsigned long flags = 0;
 +
-+#define list_add_sorted(head, n, node, cmp)                                    \
-+	do {                                                                   \
-+		struct list_head *__head = (head);                             \
-+		typeof(n) __iter, __next;                                      \
-+		typeof(n) __new = (n);                                         \
-+                                                                               \
-+		if (list_empty(__head)) {                                      \
-+			list_add(__head, &__new->node);                        \
-+			break;                                                 \
-+		}                                                              \
-+                                                                               \
-+		list_for_each (__head, __iter, node) {                         \
-+			if (cmp(__new, __iter) < 0) {                          \
-+				list_add_before(__head, &__iter->node,         \
-+						&__new->node);                 \
-+				break;                                         \
-+			}                                                      \
-+			__next = list_next(__head, __iter, node);              \
-+			if (!__next) {                                         \
-+				list_add_after(__head, &__iter->node,          \
-+					       &__new->node);                  \
-+				break;                                         \
-+			}                                                      \
-+			if (cmp(__new, __next) < 0) {                          \
-+				list_add_before(__head, &__next->node,         \
-+						&__new->node);                 \
-+				break;                                         \
-+			}                                                      \
-+		}                                                              \
-+	} while (0)
++		if (actx.f_out == stdout && isatty(1))
++			flags |= UTIL_JSON_HUMAN;
++		util_display_json_array(actx.f_out, actx.jdevs, flags);
++	}
 +
-+#endif /* _NDCTL_LIST_H_ */
++
+  out_close_fout:
+ 	if (actx.f_out != stdout)
+ 		fclose(actx.f_out);
 
 
