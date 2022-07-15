@@ -1,760 +1,350 @@
-Return-Path: <nvdimm+bounces-4293-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4295-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A96EC57587F
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 02:05:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 354885758EC
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 02:58:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C51B71C20A32
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 00:05:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8096F280D09
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 00:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBEC7463;
-	Fri, 15 Jul 2022 00:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE13017E8;
+	Fri, 15 Jul 2022 00:58:42 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FFF7460
-	for <nvdimm@lists.linux.dev>; Fri, 15 Jul 2022 00:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9E56647
+	for <nvdimm@lists.linux.dev>; Fri, 15 Jul 2022 00:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657843524; x=1689379524;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=smKpDNwDgoEnff0IcZhkKXyTjumqxb1p/y234UsFkk0=;
-  b=N/5H6a0P+3gC0FJaQRnevY/2JnM1uEmS1qpvwJpTw7k7VASD2GpwR8oN
-   8XGphWToXyBMtXd9BuBH0hRqT6cnv1lbl6HukoLm6tCSGZHroQdoE1zCT
-   FhBfEsdvI0rr9c/xoHivTwgWAQGme4kCLbMasrY0Rzxyt4v2k0yZVnYlL
-   /heNin+K4OPYJJLnDnBcTIGXzc34FfX2xFCuT03hIX75gRqX+h2uaqpLz
-   ZAx832CCTqzTMHxY6nZp1LEKrOb52aaZGpPL8JpqcWoAPGLwEI5PDWz6Z
-   AIkidXrlsE/qSvnQkdzFgWi0XuFoKfHVx/HXsXM3ARKlqOieC6efD/G/k
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265451462"
+  t=1657846720; x=1689382720;
+  h=date:from:to:subject:message-id:references:in-reply-to:
+   mime-version;
+  bh=92mtqkj8ilvAK4rNb/NSrD6vV0lcCipPf/sTUd5Ds9Y=;
+  b=bOb1M4k2IYvWgBPQbsRKPf06H66j6bVcir4xun1fHRU8CXPRWW46mO4o
+   ggXc0UyVMWo6kseCILvg8XtNSks9SFe8PpmAXtCdyj7llIksdHndSn+oP
+   OVk7PybATTxc1+ZWuc4vOwFAoCtRIXwvozqfz+Ua5271WSI8EaGQHyAqY
+   579EhVDIaU+/z1FxBKofLEQDKj7tA7gXB9ZBe2CELsh1Acph8jPCgY5Fg
+   XFN5t2YSwKZ37NzuklJ7qUcC+NbI9wiMre5DAmO4cLyBVI5EG+P6Odl7m
+   XXKNK2dBxdWVafaG8N5sGXZ51/8CZjCEtIiIvUDf694+rOm13biA66CT+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265460086"
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="265451462"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:03:21 -0700
+   d="scan'208";a="265460086"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:58:39 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="571303179"
-Received: from jlcone-mobl1.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.2.90])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:03:21 -0700
-Subject: [PATCH v2 28/28] cxl/region: Introduce cxl_pmem_region objects
+   d="scan'208";a="663999882"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 17:58:39 -0700
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Jul 2022 17:58:39 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 14 Jul 2022 17:58:39 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 14 Jul 2022 17:58:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnyuXY5GJGyXtvrQiJnagWORBbF/jYMhpF11+SciBBxXuAhNVD226fIvzLeBwNVImz8Jbixatdhryuddorjz7GgT9YeZx5/44eF5IGe4gGnB4BVuuWyND3HB5ZT82qPXAijGaznbtCaJd4WsKszXhIfSjkOM7uAq8TiesfAOInGLj2sPWzWTIvXzN/KGG32nIi4Y/VsA1LqY15z5pW7GuKSk8zJt2zkGJ+PE7hrddoGdx3CQFRbUUe+hJCT3y1bVvsVD/5CtO4kD4BC1SZ3uL51UoGdqXADQGj7jwZqYIUZsPAkx3GeFFQY8WeU5e7PmQVpn/MjUOlx/KR0u8tQXIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=97hKqWq+t8klp1gztVqZ1XFRXmvUxq2yXLMOHvqYbrQ=;
+ b=SkjeoqmsoIMDb2ex5PuSMJD7QxPtqQNmtJahzjq10NuoI0XJZPmfREOROKa9lYTUzTmTMGBW6UMyAIBGgZ86s8dpp1WQ3IFryeH8krL+kCwTom2Ly2Cs0jFCBy02OBLLvaUru+7KKaF0y2mFvKaPY8PK6H1bW25Qx4zWYGSaNuM98V3NgmpE4PuEB1Fglcw0vuaiQH/qNsDMEjTCYD6AhC9AhP9MeI/DaG/ZpZh41flQuBU7D6hWpgBaqA+09YrsanPxZ6kzuQUuX6V84X5bmmbNYd8U8eE/3vBYQcOcjqn2P/+OwnpGecn8bpS8ZJI2zvFML03iAZIb8UQJyyaGMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by BN7PR11MB2753.namprd11.prod.outlook.com
+ (2603:10b6:406:b0::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Fri, 15 Jul
+ 2022 00:58:28 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::6466:20a6:57b4:1edf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::6466:20a6:57b4:1edf%11]) with mapi id 15.20.5438.014; Fri, 15 Jul
+ 2022 00:58:28 +0000
+Date: Thu, 14 Jul 2022 17:58:25 -0700
 From: Dan Williams <dan.j.williams@intel.com>
-To: linux-cxl@vger.kernel.org
-Cc: Ben Widawsky <bwidawsk@kernel.org>, hch@lst.de, nvdimm@lists.linux.dev,
- linux-pci@vger.kernel.org
-Date: Thu, 14 Jul 2022 17:03:21 -0700
-Message-ID: <165784340111.1758207.3036498385188290968.stgit@dwillia2-xfh.jf.intel.com>
-In-Reply-To: <165784324066.1758207.15025479284039479071.stgit@dwillia2-xfh.jf.intel.com>
-References: <165784324066.1758207.15025479284039479071.stgit@dwillia2-xfh.jf.intel.com>
-User-Agent: StGit/0.18-3-g996c
+To: Jane Chu <jane.chu@oracle.com>, Dan Williams <dan.j.williams@intel.com>,
+	"hch@infradead.org" <hch@infradead.org>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>, "nvdimm@lists.linux.dev"
+	<nvdimm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] acpi/nfit: badrange report spill over to clean range
+Message-ID: <62d0bbb19ed1f_1643dc294cc@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20220711232658.536064-1-jane.chu@oracle.com>
+ <62ce16518e7d3_6070c29447@dwillia2-xfh.jf.intel.com.notmuch>
+ <09df842d-d8e4-0594-56b0-b4bb9ea37b67@oracle.com>
+ <62cf622a32e1_16b52e294ea@dwillia2-xfh.jf.intel.com.notmuch>
+ <8b13446a-65ac-0cbd-6c17-0f9e1cfbb048@oracle.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <8b13446a-65ac-0cbd-6c17-0f9e1cfbb048@oracle.com>
+X-ClientProxiedBy: BY3PR05CA0059.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::34) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae6e33a0-20f5-4504-2f89-08da65fd20c0
+X-MS-TrafficTypeDiagnostic: BN7PR11MB2753:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aKnzCUvgurK0sQX5liwfcM6Ad+0E8kuyKzYFeAuXiziVXT7dFRIUJkvw34oVYmkBbjMtRwAivjPfTI+/r+V+4pItTk6Ea3jt67Ry0w4czsvcGKE04rEeKoncftHDWlz/e5CHadDNUx1/pjCaNcKvf38dP3XOhzMYYOJ5a59c68KU6WVzrgk5P5GItPj0nFjl7pV5cixcVMBICje2nSp1iBmKfs/nfluIbr5bdJ0ViE49eafwttCIkXxqufB32ezTgQIbxtVfua1IqUJXKqAvJRZsJTT8st9tn9i4wrv7619+xLQ6Roob7TXLYYRdvJqnDjmpeEBYjndb8IknQ91iws528djwjxs4cEb2n8fl2sidsFxPnzrbTnAhkFn8VMjtkwXD0qBOtPSUvbMjqrIQvzEY2sMOU+/IVqzl/cqR/t59XUVZ7FwiCVQiXcwB34pBJaCLHJazRrvlOmwXEOnDNzEOyLzD7yD49XR5cDQV588GBnw8XS/3w7kxThRtwrgeqsNCO6S2oBGLVG0CHTw48Y2LWvw+v27q/fEJLwtof/mxB1RULWrp++pLwsD2Dh4G++Wxyp58MoCR7fs96icDSvgVOzDxpyU9vJLGk5QRYVLfhQizNjC7GfLboDh2LY+14gt9HkOzWLlwJORdJJfxEoitf2gCDHB2JU4kcBPVKXMK8XCtjU7/sNQZCyc2L1lRHzwD8HogOnMJbAVm56QyYmdFy9HxBnUxPlLcsuObKEcG8fWsRwuFzUE/sWrO7aJEJE7KmJvmyjkxZCA/NxfUr/F6daSPENQ6bRb+kt2WcKNyq02RyArO3ctI+km5I3O9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(396003)(366004)(136003)(39860400002)(8676002)(316002)(38100700002)(8936002)(478600001)(83380400001)(5660300002)(110136005)(41300700001)(6512007)(2906002)(82960400001)(66476007)(9686003)(66556008)(53546011)(6506007)(186003)(86362001)(6666004)(66946007)(26005)(6486002)(21314003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ikgk3qkrhB2ieK2occVSLAt/C6wMbP3C2DTa/73hmbfbklSdTJxA+CchoLOh?=
+ =?us-ascii?Q?c22hvZwHvlAdX9B1/muR9kqV1uxwyUFFE4QVvt+38hblFQwKImaO/qvDfXxs?=
+ =?us-ascii?Q?fn07p3qD+1cekcATrvtAM9IerpLQzZexA65CHfYmVtmbd48Our8mKcDnykSj?=
+ =?us-ascii?Q?wS33FXrU/9e8k9m02Y20Aw4MqFmCnTj9fXbgsXRx8HZw0PE9R30W5DiphULF?=
+ =?us-ascii?Q?KxH3QQkHX9vVyuOhaXphOl54Rlzh2JpvRbz0qsobuTNdcOmLJXVnXCFvnjAx?=
+ =?us-ascii?Q?ng4KQwW1nV4AzeHeGXlt7MZmqnsGzst6TbMmATpFumiCso5Wk1T35M0XsCEZ?=
+ =?us-ascii?Q?9Dq6FaoQKykPxwB1alvEbLELkNdEptRWBcgkcg4j3bRe99kgdBwjvGHyQltn?=
+ =?us-ascii?Q?d7WSq2v16hWpWvGZSRS9IChP2xazeOtHR41Jqjb14DoJzy/rFKfn+ba6RQ2I?=
+ =?us-ascii?Q?+7mNgn+g1u4UGGQgFHNd0sC+oQNqMCHl8oruUvlcKmMoYi0NuqGg6bJDTqLm?=
+ =?us-ascii?Q?t024V1AVnGo1S601HB018ZP+WqskSLpPTLVb3UL55RNJaNhQ+8Fw3s3Msx2L?=
+ =?us-ascii?Q?RIIVdc+qA2YY9dn4f2nMiLagCkF5I/KWlqN0uSc5ZzNWhcdqUFwF/4PpH3TC?=
+ =?us-ascii?Q?dYCOtGrIlhwugQcuz1ou48PHLccPNn2QZk2KdasAO01sqM9dxJw+vIWrEnRp?=
+ =?us-ascii?Q?Rew34lObUtuYzEE8xygmpLyZGdzxi7SPOhBqZh581smqWUb02Po6DA9jj+yO?=
+ =?us-ascii?Q?NjuOtB3Cd4fgovpZieKfNmuZYmmVfBEKD5S7Idkx32wzMNoDJniIFjqM66j1?=
+ =?us-ascii?Q?BMGjv+6/sLvMBm6vw7rvB/0gBs01JKYKabzWItuHENmt5YU2wAt20TY4vI9h?=
+ =?us-ascii?Q?zx1zXjXgc+AfL7ldt1c2QrIF1WxNvgcLoubwrADbP/McD7E3+T+nBAI3o7wU?=
+ =?us-ascii?Q?c6TuWclPKFdatv/X0RHkKMjwpMd0LYChYvIPL7GZXv2ztIDg/bfbi17vsH0I?=
+ =?us-ascii?Q?XeAe51I8V6rGk1O0Fp3v1TOuNzB5udzIgP9CgH/bTf/9A1C7dSzB1t3JDAGp?=
+ =?us-ascii?Q?qhxP5cFsnr0z6q7WtNsf90mFV3fUNkOljI+oNsUsk8ev8IZDzQ+9adJJPN7m?=
+ =?us-ascii?Q?YhNF1NdWsDnwOJRiRdtlHbpqGd/dhcHfVMShuKHIqcjtIh3uTpixf1hf7bm7?=
+ =?us-ascii?Q?/cQrgvXhw/BJ5ShKLZ9QhVoZTgIeVIMS0UH4hTcDMoCnKL/1Pu8C+rT+/GtA?=
+ =?us-ascii?Q?nLzTcnaGgasQaZVYLRlUzwnEgle7A7XWXWlKnDO/l+GoL+oH+qSsimCU165s?=
+ =?us-ascii?Q?gHb3ys2HPE1r9tF9ZFY93eFq6b9Nd6glnSL8CHI5EnKVJpjeMcdd8o1WtAce?=
+ =?us-ascii?Q?H43B355oaBm49gVzcVBpriKeeMB7monZywqoXDPAdSPatpFIC0zW9epGImGC?=
+ =?us-ascii?Q?5aW5rFqXjVjWyl8AOxXfNeQrYd3ZgGvQfVHg/D9Uy8X/tV9WVr0ThyzsAT4Q?=
+ =?us-ascii?Q?a18pttYXkPy5lbhpligXP4vfpxTzyzD6c3cTJeuPLbnGbe08jT9Xo9vhkipX?=
+ =?us-ascii?Q?jsyHek7nQzjdHbQhwiEpu+Po++JlgW/ewq8HJCVG9fr+MO+MEBVpSkFgGvL1?=
+ =?us-ascii?Q?1Q=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae6e33a0-20f5-4504-2f89-08da65fd20c0
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 00:58:27.8662
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v1FzEAWbOGXKYLxZYdps6G35XTprbGciFQBQKzyDlkjvrTjd5QK9xQqbz6WHbr5cSfLuGHZCCtn2GErk3ZUSSl+ITerFbXJ41QT9iLyEQuE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2753
+X-OriginatorOrg: intel.com
 
-The LIBNVDIMM subsystem is a platform agnostic representation of system
-NVDIMM / persistent memory resources. To date, the CXL subsystem's
-interaction with LIBNVDIMM has been to register an nvdimm-bridge device
-and cxl_nvdimm objects to proxy CXL capabilities into existing LIBNVDIMM
-subsystem mechanics.
+Jane Chu wrote:
+> On 7/13/2022 5:24 PM, Dan Williams wrote:
+> > Jane Chu wrote:
+> >> On 7/12/2022 5:48 PM, Dan Williams wrote:
+> >>> Jane Chu wrote:
+> >>>> Commit 7917f9cdb503 ("acpi/nfit: rely on mce->misc to determine poison
+> >>>> granularity") changed nfit_handle_mce() callback to report badrange for
+> >>>> each poison at an alignment indicated by 1ULL << MCI_MISC_ADDR_LSB(mce->misc)
+> >>>> instead of the hardcoded L1_CACHE_BYTES. However recently on a server
+> >>>> populated with Intel DCPMEM v2 dimms, it appears that
+> >>>> 1UL << MCI_MISC_ADDR_LSB(mce->misc) turns out is 4KiB, or 8 512-byte blocks.
+> >>>> Consequently, injecting 2 back-to-back poisons via ndctl, and it reports
+> >>>> 8 poisons.
+> >>>>
+> >>>> [29076.590281] {3}[Hardware Error]:   physical_address: 0x00000040a0602400
+> >>>> [..]
+> >>>> [29076.619447] Memory failure: 0x40a0602: recovery action for dax page: Recovered
+> >>>> [29076.627519] mce: [Hardware Error]: Machine check events logged
+> >>>> [29076.634033] nfit ACPI0012:00: addr in SPA 1 (0x4080000000, 0x1f80000000)
+> >>>> [29076.648805] nd_bus ndbus0: XXX nvdimm_bus_add_badrange: (0x40a0602000, 0x1000)
+> >>>> [..]
+> >>>> [29078.634817] {4}[Hardware Error]:   physical_address: 0x00000040a0602600
+> >>>> [..]
+> >>>> [29079.595327] nfit ACPI0012:00: addr in SPA 1 (0x4080000000, 0x1f80000000)
+> >>>> [29079.610106] nd_bus ndbus0: XXX nvdimm_bus_add_badrange: (0x40a0602000, 0x1000)
+> >>>> [..]
+> >>>> {
+> >>>>     "dev":"namespace0.0",
+> >>>>     "mode":"fsdax",
+> >>>>     "map":"dev",
+> >>>>     "size":33820770304,
+> >>>>     "uuid":"a1b0f07f-747f-40a8-bcd4-de1560a1ef75",
+> >>>>     "sector_size":512,
+> >>>>     "align":2097152,
+> >>>>     "blockdev":"pmem0",
+> >>>>     "badblock_count":8,
+> >>>>     "badblocks":[
+> >>>>       {
+> >>>>         "offset":8208,
+> >>>>         "length":8,
+> >>>>         "dimms":[
+> >>>>           "nmem0"
+> >>>>         ]
+> >>>>       }
+> >>>>     ]
+> >>>> }
+> >>>>
+> >>>> So, 1UL << MCI_MISC_ADDR_LSB(mce->misc) is an unreliable indicator for poison
+> >>>> radius and shouldn't be used.  More over, as each injected poison is being
+> >>>> reported independently, any alignment under 512-byte appear works:
+> >>>> L1_CACHE_BYTES (though inaccurate), or 256-bytes (as ars->length reports),
+> >>>> or 512-byte.
+> >>>>
+> >>>> To get around this issue, 512-bytes is chosen as the alignment because
+> >>>>     a. it happens to be the badblock granularity,
+> >>>>     b. ndctl inject-error cannot inject more than one poison to a 512-byte block,
+> >>>>     c. architecture agnostic
+> >>>
+> >>> I am failing to see the kernel bug? Yes, you injected less than 8
+> >>> "badblocks" of poison and the hardware reported 8 blocks of poison, but
+> >>> that's not the kernel's fault, that's the hardware. What happens when
+> >>> hardware really does detect 8 blocks of consective poison and this
+> >>> implementation decides to only record 1 at a time?
+> >>
+> >> In that case, there will be 8 reports of the poisons by APEI GHES,
+> > 
+> > Why would there be 8 reports for just one poison consumption event?
+> 
+> I meant to say there would be 8 calls to the nfit_handle_mce() callback,
+> one call for each poison with accurate address.
+> 
+> Also, short ARS would find 2 poisons.
+> 
+> I attached the console output, my annotation is prefixed with "<==".
+> 
+> It is from these information I concluded that no poison will be missed
+> in terms of reporting.
+> 
+> > 
+> >> ARC scan will also report 8 poisons, each will get to be added to the
+> >> bad range via nvdimm_bus_add_badrange(), so none of them will be missed.
+> > 
+> > Right, that's what I'm saying about the proposed change, trim the
+> > reported poison by what is return from a "short" ARS. Recall that
+> > short-ARS just reads from a staging buffer that the BIOS knows about, it
+> > need not go all the way to hardware.
+> 
+> Okay, that confirms my understanding of your proposal. More below.
+> 
+> > 
+> >> In the above 2 poison example, the poison in 0x00000040a0602400 and in
+> >> 0x00000040a0602600 were separately reported.
+> > 
+> > Separately reported, each with a 4K alignment?
+> 
+> Yes,  and so twice nfit_handle_mce() call
+> nvdimm_bus_add_badrange() with addr: 0x40a0602000, length: 0x1000
+> complete overlap.
+> 
+> > 
+> >>> It seems the fix you want is for the hardware to report the precise
+> >>> error bounds and that 1UL << MCI_MISC_ADDR_LSB(mce->misc) does not have
+> >>> that precision in this case.
+> >>
+> >> That field describes a 4K range even for a single poison, it confuses
+> >> people unnecessarily.
+> > 
+> > I agree with you on the problem statement, it's the fix where I have
+> > questions.
+> > 
+> >>> However, the ARS engine likely can return the precise error ranges so I
+> >>> think the fix is to just use the address range indicated by 1UL <<
+> >>> MCI_MISC_ADDR_LSB(mce->misc) to filter the results from a short ARS
+> >>> scrub request to ask the device for the precise error list.
+> >>
+> >> You mean for nfit_handle_mce() callback to issue a short ARS per each
+> >> poison report over a 4K range
+> > 
+> > Over a L1_CACHE_BYTES range...
+> > 
+> >> in order to decide the precise range as a workaround of the hardware
+> >> issue?  if there are 8 poisoned detected, there will be 8 short ARS,
+> >> sure we want to do that?
+> > 
+> > Seems ok to me, short ARS is meant to be cheap. I would hope there are
+> > no latency concerns in this path.
+> 
+> Yeah, accumulated latency is the concern here.
 
-With regions the approach is the same. Create a new cxl_pmem_region
-object to proxy CXL region details into a LIBNVDIMM definition. With
-this enabling LIBNVDIMM can partition CXL persistent memory regions with
-legacy namespace labels. A follow-on patch will add CXL region label and
-CXL namespace label support to persist region configurations across
-driver reload / system-reset events.
+An actual concern in practice? I.e. you see the round trip call to the
+BIOS violating application latency concerns?
 
-Co-developed-by: Ben Widawsky <bwidawsk@kernel.org>
-Signed-off-by: Ben Widawsky <bwidawsk@kernel.org>
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
- drivers/cxl/core/core.h      |    3 +
- drivers/cxl/core/pmem.c      |    4 -
- drivers/cxl/core/port.c      |    2 
- drivers/cxl/core/region.c    |  142 +++++++++++++++++++++++++
- drivers/cxl/cxl.h            |   36 ++++++
- drivers/cxl/pmem.c           |  238 ++++++++++++++++++++++++++++++++++++++++++
- drivers/nvdimm/region_devs.c |   28 ++++-
- include/linux/libnvdimm.h    |    5 +
- 8 files changed, 446 insertions(+), 12 deletions(-)
+> I know the upstream user call stack has timeout for getting a response
+> for certain database transaction.
 
-diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
-index 391aadf9e7fa..1d8f87be283f 100644
---- a/drivers/cxl/core/core.h
-+++ b/drivers/cxl/core/core.h
-@@ -13,11 +13,13 @@ extern struct attribute_group cxl_base_attribute_group;
- extern struct device_attribute dev_attr_create_pmem_region;
- extern struct device_attribute dev_attr_delete_region;
- extern struct device_attribute dev_attr_region;
-+extern const struct device_type cxl_pmem_region_type;
- extern const struct device_type cxl_region_type;
- void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
- #define CXL_REGION_ATTR(x) (&dev_attr_##x.attr)
- #define CXL_REGION_TYPE(x) (&cxl_region_type)
- #define SET_CXL_REGION_ATTR(x) (&dev_attr_##x.attr),
-+#define CXL_PMEM_REGION_TYPE(x) (&cxl_pmem_region_type)
- int cxl_region_init(void);
- void cxl_region_exit(void);
- #else
-@@ -34,6 +36,7 @@ static inline void cxl_region_exit(void)
- #define CXL_REGION_ATTR(x) NULL
- #define CXL_REGION_TYPE(x) NULL
- #define SET_CXL_REGION_ATTR(x)
-+#define CXL_PMEM_REGION_TYPE(x) NULL
- #endif
- 
- struct cxl_send_command;
-diff --git a/drivers/cxl/core/pmem.c b/drivers/cxl/core/pmem.c
-index bec7cfb54ebf..1d12a8206444 100644
---- a/drivers/cxl/core/pmem.c
-+++ b/drivers/cxl/core/pmem.c
-@@ -62,9 +62,9 @@ static int match_nvdimm_bridge(struct device *dev, void *data)
- 	return is_cxl_nvdimm_bridge(dev);
- }
- 
--struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct cxl_nvdimm *cxl_nvd)
-+struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct device *start)
- {
--	struct cxl_port *port = find_cxl_root(&cxl_nvd->dev);
-+	struct cxl_port *port = find_cxl_root(start);
- 	struct device *dev;
- 
- 	if (!port)
-diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-index 194003525397..af65491d878b 100644
---- a/drivers/cxl/core/port.c
-+++ b/drivers/cxl/core/port.c
-@@ -44,6 +44,8 @@ static int cxl_device_id(struct device *dev)
- 		return CXL_DEVICE_NVDIMM_BRIDGE;
- 	if (dev->type == &cxl_nvdimm_type)
- 		return CXL_DEVICE_NVDIMM;
-+	if (dev->type == CXL_PMEM_REGION_TYPE())
-+		return CXL_DEVICE_PMEM_REGION;
- 	if (is_cxl_port(dev)) {
- 		if (is_cxl_root(to_cxl_port(dev)))
- 			return CXL_DEVICE_ROOT;
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index 20871bdb6858..23d1a34077be 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -1644,6 +1644,139 @@ static ssize_t delete_region_store(struct device *dev,
- }
- DEVICE_ATTR_WO(delete_region);
- 
-+static void cxl_pmem_region_release(struct device *dev)
-+{
-+	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
-+	int i;
-+
-+	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
-+		struct cxl_memdev *cxlmd = cxlr_pmem->mapping[i].cxlmd;
-+
-+		put_device(&cxlmd->dev);
-+	}
-+
-+	kfree(cxlr_pmem);
-+}
-+
-+static const struct attribute_group *cxl_pmem_region_attribute_groups[] = {
-+	&cxl_base_attribute_group,
-+	NULL,
-+};
-+
-+const struct device_type cxl_pmem_region_type = {
-+	.name = "cxl_pmem_region",
-+	.release = cxl_pmem_region_release,
-+	.groups = cxl_pmem_region_attribute_groups,
-+};
-+
-+bool is_cxl_pmem_region(struct device *dev)
-+{
-+	return dev->type == &cxl_pmem_region_type;
-+}
-+EXPORT_SYMBOL_NS_GPL(is_cxl_pmem_region, CXL);
-+
-+struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
-+{
-+	if (dev_WARN_ONCE(dev, !is_cxl_pmem_region(dev),
-+			  "not a cxl_pmem_region device\n"))
-+		return NULL;
-+	return container_of(dev, struct cxl_pmem_region, dev);
-+}
-+EXPORT_SYMBOL_NS_GPL(to_cxl_pmem_region, CXL);
-+
-+static struct lock_class_key cxl_pmem_region_key;
-+
-+static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
-+{
-+	struct cxl_region_params *p = &cxlr->params;
-+	struct cxl_pmem_region *cxlr_pmem;
-+	struct device *dev;
-+	int i;
-+
-+	down_read(&cxl_region_rwsem);
-+	if (p->state != CXL_CONFIG_COMMIT) {
-+		cxlr_pmem = ERR_PTR(-ENXIO);
-+		goto out;
-+	}
-+
-+	cxlr_pmem = kzalloc(struct_size(cxlr_pmem, mapping, p->nr_targets),
-+			    GFP_KERNEL);
-+	if (!cxlr_pmem) {
-+		cxlr_pmem = ERR_PTR(-ENOMEM);
-+		goto out;
-+	}
-+
-+	cxlr_pmem->hpa_range.start = p->res->start;
-+	cxlr_pmem->hpa_range.end = p->res->end;
-+
-+	/* Snapshot the region configuration underneath the cxl_region_rwsem */
-+	cxlr_pmem->nr_mappings = p->nr_targets;
-+	for (i = 0; i < p->nr_targets; i++) {
-+		struct cxl_endpoint_decoder *cxled = p->targets[i];
-+		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
-+		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-+
-+		m->cxlmd = cxlmd;
-+		get_device(&cxlmd->dev);
-+		m->start = cxled->dpa_res->start;
-+		m->size = resource_size(cxled->dpa_res);
-+		m->position = i;
-+	}
-+
-+	dev = &cxlr_pmem->dev;
-+	cxlr_pmem->cxlr = cxlr;
-+	device_initialize(dev);
-+	lockdep_set_class(&dev->mutex, &cxl_pmem_region_key);
-+	device_set_pm_not_required(dev);
-+	dev->parent = &cxlr->dev;
-+	dev->bus = &cxl_bus_type;
-+	dev->type = &cxl_pmem_region_type;
-+out:
-+	up_read(&cxl_region_rwsem);
-+
-+	return cxlr_pmem;
-+}
-+
-+static void cxlr_pmem_unregister(void *dev)
-+{
-+	device_unregister(dev);
-+}
-+
-+/**
-+ * devm_cxl_add_pmem_region() - add a cxl_region-to-nd_region bridge
-+ * @cxlr: parent CXL region for this pmem region bridge device
-+ *
-+ * Return: 0 on success negative error code on failure.
-+ */
-+static int devm_cxl_add_pmem_region(struct cxl_region *cxlr)
-+{
-+	struct cxl_pmem_region *cxlr_pmem;
-+	struct device *dev;
-+	int rc;
-+
-+	cxlr_pmem = cxl_pmem_region_alloc(cxlr);
-+	if (IS_ERR(cxlr_pmem))
-+		return PTR_ERR(cxlr_pmem);
-+
-+	dev = &cxlr_pmem->dev;
-+	rc = dev_set_name(dev, "pmem_region%d", cxlr->id);
-+	if (rc)
-+		goto err;
-+
-+	rc = device_add(dev);
-+	if (rc)
-+		goto err;
-+
-+	dev_dbg(&cxlr->dev, "%s: register %s\n", dev_name(dev->parent),
-+		dev_name(dev));
-+
-+	return devm_add_action_or_reset(&cxlr->dev, cxlr_pmem_unregister, dev);
-+
-+err:
-+	put_device(dev);
-+	return rc;
-+}
-+
- static int cxl_region_probe(struct device *dev)
- {
- 	struct cxl_region *cxlr = to_cxl_region(dev);
-@@ -1667,7 +1800,14 @@ static int cxl_region_probe(struct device *dev)
- 	 */
- 	up_read(&cxl_region_rwsem);
- 
--	return rc;
-+	switch (cxlr->mode) {
-+	case CXL_DECODER_PMEM:
-+		return devm_cxl_add_pmem_region(cxlr);
-+	default:
-+		dev_dbg(&cxlr->dev, "unsupported region mode: %d\n",
-+			cxlr->mode);
-+		return -ENXIO;
-+	}
- }
- 
- static struct cxl_driver cxl_region_driver = {
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index a32093602df9..8a484acbb32d 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -419,6 +419,25 @@ struct cxl_nvdimm {
- 	struct device dev;
- 	struct cxl_memdev *cxlmd;
- 	struct cxl_nvdimm_bridge *bridge;
-+	struct cxl_pmem_region *region;
-+};
-+
-+struct cxl_pmem_region_mapping {
-+	struct cxl_memdev *cxlmd;
-+	struct cxl_nvdimm *cxl_nvd;
-+	u64 start;
-+	u64 size;
-+	int position;
-+};
-+
-+struct cxl_pmem_region {
-+	struct device dev;
-+	struct cxl_region *cxlr;
-+	struct nd_region *nd_region;
-+	struct cxl_nvdimm_bridge *bridge;
-+	struct range hpa_range;
-+	int nr_mappings;
-+	struct cxl_pmem_region_mapping mapping[];
- };
- 
- /**
-@@ -594,6 +613,7 @@ void cxl_driver_unregister(struct cxl_driver *cxl_drv);
- #define CXL_DEVICE_ROOT			4
- #define CXL_DEVICE_MEMORY_EXPANDER	5
- #define CXL_DEVICE_REGION		6
-+#define CXL_DEVICE_PMEM_REGION		7
- 
- #define MODULE_ALIAS_CXL(type) MODULE_ALIAS("cxl:t" __stringify(type) "*")
- #define CXL_MODALIAS_FMT "cxl:t%d"
-@@ -605,7 +625,21 @@ struct cxl_nvdimm *to_cxl_nvdimm(struct device *dev);
- bool is_cxl_nvdimm(struct device *dev);
- bool is_cxl_nvdimm_bridge(struct device *dev);
- int devm_cxl_add_nvdimm(struct device *host, struct cxl_memdev *cxlmd);
--struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct cxl_nvdimm *cxl_nvd);
-+struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct device *dev);
-+
-+#ifdef CONFIG_CXL_REGION
-+bool is_cxl_pmem_region(struct device *dev);
-+struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev);
-+#else
-+static inline bool is_cxl_pmem_region(struct device *dev)
-+{
-+	return false;
-+}
-+static inline struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
-+{
-+	return NULL;
-+}
-+#endif
- 
- /*
-  * Unit test builds overrides this to __weak, find the 'strong' version
-diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
-index b271f6e90b91..e69f99a0747d 100644
---- a/drivers/cxl/pmem.c
-+++ b/drivers/cxl/pmem.c
-@@ -7,6 +7,7 @@
- #include <linux/ndctl.h>
- #include <linux/async.h>
- #include <linux/slab.h>
-+#include <linux/nd.h>
- #include "cxlmem.h"
- #include "cxl.h"
- 
-@@ -27,6 +28,19 @@ static void clear_exclusive(void *cxlds)
- static void unregister_nvdimm(void *nvdimm)
- {
- 	struct cxl_nvdimm *cxl_nvd = nvdimm_provider_data(nvdimm);
-+	struct cxl_nvdimm_bridge *cxl_nvb = cxl_nvd->bridge;
-+	struct cxl_pmem_region *cxlr_pmem;
-+
-+	device_lock(&cxl_nvb->dev);
-+	cxlr_pmem = cxl_nvd->region;
-+	dev_set_drvdata(&cxl_nvd->dev, NULL);
-+	cxl_nvd->region = NULL;
-+	device_unlock(&cxl_nvb->dev);
-+
-+	if (cxlr_pmem) {
-+		device_release_driver(&cxlr_pmem->dev);
-+		put_device(&cxlr_pmem->dev);
-+	}
- 
- 	nvdimm_delete(nvdimm);
- 	cxl_nvd->bridge = NULL;
-@@ -42,7 +56,7 @@ static int cxl_nvdimm_probe(struct device *dev)
- 	struct nvdimm *nvdimm;
- 	int rc;
- 
--	cxl_nvb = cxl_find_nvdimm_bridge(cxl_nvd);
-+	cxl_nvb = cxl_find_nvdimm_bridge(dev);
- 	if (!cxl_nvb)
- 		return -ENXIO;
- 
-@@ -223,6 +237,21 @@ static int cxl_nvdimm_release_driver(struct device *dev, void *cxl_nvb)
- 	return 0;
- }
- 
-+static int cxl_pmem_region_release_driver(struct device *dev, void *cxl_nvb)
-+{
-+	struct cxl_pmem_region *cxlr_pmem;
-+
-+	if (!is_cxl_pmem_region(dev))
-+		return 0;
-+
-+	cxlr_pmem = to_cxl_pmem_region(dev);
-+	if (cxlr_pmem->bridge != cxl_nvb)
-+		return 0;
-+
-+	device_release_driver(dev);
-+	return 0;
-+}
-+
- static void offline_nvdimm_bus(struct cxl_nvdimm_bridge *cxl_nvb,
- 			       struct nvdimm_bus *nvdimm_bus)
- {
-@@ -234,6 +263,8 @@ static void offline_nvdimm_bus(struct cxl_nvdimm_bridge *cxl_nvb,
- 	 * nvdimm_bus_unregister() rips the nvdimm objects out from
- 	 * underneath them.
- 	 */
-+	bus_for_each_dev(&cxl_bus_type, NULL, cxl_nvb,
-+			 cxl_pmem_region_release_driver);
- 	bus_for_each_dev(&cxl_bus_type, NULL, cxl_nvb,
- 			 cxl_nvdimm_release_driver);
- 	nvdimm_bus_unregister(nvdimm_bus);
-@@ -328,6 +359,203 @@ static struct cxl_driver cxl_nvdimm_bridge_driver = {
- 	.id = CXL_DEVICE_NVDIMM_BRIDGE,
- };
- 
-+static int match_cxl_nvdimm(struct device *dev, void *data)
-+{
-+	return is_cxl_nvdimm(dev);
-+}
-+
-+static void unregister_nvdimm_region(void *nd_region)
-+{
-+	struct cxl_nvdimm_bridge *cxl_nvb;
-+	struct cxl_pmem_region *cxlr_pmem;
-+	int i;
-+
-+	cxlr_pmem = nd_region_provider_data(nd_region);
-+	cxl_nvb = cxlr_pmem->bridge;
-+	device_lock(&cxl_nvb->dev);
-+	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
-+		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-+		struct cxl_nvdimm *cxl_nvd = m->cxl_nvd;
-+
-+		if (cxl_nvd->region) {
-+			put_device(&cxlr_pmem->dev);
-+			cxl_nvd->region = NULL;
-+		}
-+	}
-+	device_unlock(&cxl_nvb->dev);
-+
-+	nvdimm_region_delete(nd_region);
-+}
-+
-+static void cxlr_pmem_remove_resource(void *res)
-+{
-+	remove_resource(res);
-+}
-+
-+struct cxl_pmem_region_info {
-+	u64 offset;
-+	u64 serial;
-+};
-+
-+static int cxl_pmem_region_probe(struct device *dev)
-+{
-+	struct nd_mapping_desc mappings[CXL_DECODER_MAX_INTERLEAVE];
-+	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
-+	struct cxl_region *cxlr = cxlr_pmem->cxlr;
-+	struct cxl_pmem_region_info *info = NULL;
-+	struct cxl_nvdimm_bridge *cxl_nvb;
-+	struct nd_interleave_set *nd_set;
-+	struct nd_region_desc ndr_desc;
-+	struct cxl_nvdimm *cxl_nvd;
-+	struct nvdimm *nvdimm;
-+	struct resource *res;
-+	int rc, i = 0;
-+
-+	cxl_nvb = cxl_find_nvdimm_bridge(&cxlr_pmem->mapping[0].cxlmd->dev);
-+	if (!cxl_nvb) {
-+		dev_dbg(dev, "bridge not found\n");
-+		return -ENXIO;
-+	}
-+	cxlr_pmem->bridge = cxl_nvb;
-+
-+	device_lock(&cxl_nvb->dev);
-+	if (!cxl_nvb->nvdimm_bus) {
-+		dev_dbg(dev, "nvdimm bus not found\n");
-+		rc = -ENXIO;
-+		goto err;
-+	}
-+
-+	memset(&mappings, 0, sizeof(mappings));
-+	memset(&ndr_desc, 0, sizeof(ndr_desc));
-+
-+	res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
-+	if (!res) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	res->name = "Persistent Memory";
-+	res->start = cxlr_pmem->hpa_range.start;
-+	res->end = cxlr_pmem->hpa_range.end;
-+	res->flags = IORESOURCE_MEM;
-+	res->desc = IORES_DESC_PERSISTENT_MEMORY;
-+
-+	rc = insert_resource(&iomem_resource, res);
-+	if (rc)
-+		goto err;
-+
-+	rc = devm_add_action_or_reset(dev, cxlr_pmem_remove_resource, res);
-+	if (rc)
-+		goto err;
-+
-+	ndr_desc.res = res;
-+	ndr_desc.provider_data = cxlr_pmem;
-+
-+	ndr_desc.numa_node = memory_add_physaddr_to_nid(res->start);
-+	ndr_desc.target_node = phys_to_target_node(res->start);
-+	if (ndr_desc.target_node == NUMA_NO_NODE) {
-+		ndr_desc.target_node = ndr_desc.numa_node;
-+		dev_dbg(&cxlr->dev, "changing target node from %d to %d",
-+			NUMA_NO_NODE, ndr_desc.target_node);
-+	}
-+
-+	nd_set = devm_kzalloc(dev, sizeof(*nd_set), GFP_KERNEL);
-+	if (!nd_set) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	ndr_desc.memregion = cxlr->id;
-+	set_bit(ND_REGION_CXL, &ndr_desc.flags);
-+	set_bit(ND_REGION_PERSIST_MEMCTRL, &ndr_desc.flags);
-+
-+	info = kmalloc_array(cxlr_pmem->nr_mappings, sizeof(*info), GFP_KERNEL);
-+	if (!info) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
-+		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
-+		struct cxl_memdev *cxlmd = m->cxlmd;
-+		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-+		struct device *d;
-+
-+		d = device_find_child(&cxlmd->dev, NULL, match_cxl_nvdimm);
-+		if (!d) {
-+			dev_dbg(dev, "[%d]: %s: no cxl_nvdimm found\n", i,
-+				dev_name(&cxlmd->dev));
-+			rc = -ENODEV;
-+			goto err;
-+		}
-+
-+		/* safe to drop ref now with bridge lock held */
-+		put_device(d);
-+
-+		cxl_nvd = to_cxl_nvdimm(d);
-+		nvdimm = dev_get_drvdata(&cxl_nvd->dev);
-+		if (!nvdimm) {
-+			dev_dbg(dev, "[%d]: %s: no nvdimm found\n", i,
-+				dev_name(&cxlmd->dev));
-+			rc = -ENODEV;
-+			goto err;
-+		}
-+		cxl_nvd->region = cxlr_pmem;
-+		get_device(&cxlr_pmem->dev);
-+		m->cxl_nvd = cxl_nvd;
-+		mappings[i] = (struct nd_mapping_desc) {
-+			.nvdimm = nvdimm,
-+			.start = m->start,
-+			.size = m->size,
-+			.position = i,
-+		};
-+		info[i].offset = m->start;
-+		info[i].serial = cxlds->serial;
-+	}
-+	ndr_desc.num_mappings = cxlr_pmem->nr_mappings;
-+	ndr_desc.mapping = mappings;
-+
-+	/*
-+	 * TODO enable CXL labels which skip the need for 'interleave-set cookie'
-+	 */
-+	nd_set->cookie1 =
-+		nd_fletcher64(info, sizeof(*info) * cxlr_pmem->nr_mappings, 0);
-+	nd_set->cookie2 = nd_set->cookie1;
-+	ndr_desc.nd_set = nd_set;
-+
-+	cxlr_pmem->nd_region =
-+		nvdimm_pmem_region_create(cxl_nvb->nvdimm_bus, &ndr_desc);
-+	if (IS_ERR(cxlr_pmem->nd_region)) {
-+		rc = PTR_ERR(cxlr_pmem->nd_region);
-+		goto err;
-+	}
-+
-+	rc = devm_add_action_or_reset(dev, unregister_nvdimm_region,
-+				      cxlr_pmem->nd_region);
-+out:
-+	kfree(info);
-+	device_unlock(&cxl_nvb->dev);
-+	put_device(&cxl_nvb->dev);
-+
-+	return rc;
-+
-+err:
-+	dev_dbg(dev, "failed to create nvdimm region\n");
-+	for (i--; i >= 0; i--) {
-+		nvdimm = mappings[i].nvdimm;
-+		cxl_nvd = nvdimm_provider_data(nvdimm);
-+		put_device(&cxl_nvd->region->dev);
-+		cxl_nvd->region = NULL;
-+	}
-+	goto out;
-+}
-+
-+static struct cxl_driver cxl_pmem_region_driver = {
-+	.name = "cxl_pmem_region",
-+	.probe = cxl_pmem_region_probe,
-+	.id = CXL_DEVICE_PMEM_REGION,
-+};
-+
- /*
-  * Return all bridges to the CXL_NVB_NEW state to invalidate any
-  * ->state_work referring to the now destroyed cxl_pmem_wq.
-@@ -372,8 +600,14 @@ static __init int cxl_pmem_init(void)
- 	if (rc)
- 		goto err_nvdimm;
- 
-+	rc = cxl_driver_register(&cxl_pmem_region_driver);
-+	if (rc)
-+		goto err_region;
-+
- 	return 0;
- 
-+err_region:
-+	cxl_driver_unregister(&cxl_nvdimm_driver);
- err_nvdimm:
- 	cxl_driver_unregister(&cxl_nvdimm_bridge_driver);
- err_bridge:
-@@ -383,6 +617,7 @@ static __init int cxl_pmem_init(void)
- 
- static __exit void cxl_pmem_exit(void)
- {
-+	cxl_driver_unregister(&cxl_pmem_region_driver);
- 	cxl_driver_unregister(&cxl_nvdimm_driver);
- 	cxl_driver_unregister(&cxl_nvdimm_bridge_driver);
- 	destroy_cxl_pmem_wq();
-@@ -394,3 +629,4 @@ module_exit(cxl_pmem_exit);
- MODULE_IMPORT_NS(CXL);
- MODULE_ALIAS_CXL(CXL_DEVICE_NVDIMM_BRIDGE);
- MODULE_ALIAS_CXL(CXL_DEVICE_NVDIMM);
-+MODULE_ALIAS_CXL(CXL_DEVICE_PMEM_REGION);
-diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-index d976260eca7a..473a71bbd9c9 100644
---- a/drivers/nvdimm/region_devs.c
-+++ b/drivers/nvdimm/region_devs.c
-@@ -133,7 +133,8 @@ static void nd_region_release(struct device *dev)
- 		put_device(&nvdimm->dev);
- 	}
- 	free_percpu(nd_region->lane);
--	memregion_free(nd_region->id);
-+	if (!test_bit(ND_REGION_CXL, &nd_region->flags))
-+		memregion_free(nd_region->id);
- 	kfree(nd_region);
- }
- 
-@@ -982,9 +983,14 @@ static struct nd_region *nd_region_create(struct nvdimm_bus *nvdimm_bus,
- 
- 	if (!nd_region)
- 		return NULL;
--	nd_region->id = memregion_alloc(GFP_KERNEL);
--	if (nd_region->id < 0)
--		goto err_id;
-+	/* CXL pre-assigns memregion ids before creating nvdimm regions */
-+	if (test_bit(ND_REGION_CXL, &ndr_desc->flags)) {
-+		nd_region->id = ndr_desc->memregion;
-+	} else {
-+		nd_region->id = memregion_alloc(GFP_KERNEL);
-+		if (nd_region->id < 0)
-+			goto err_id;
-+	}
- 
- 	nd_region->lane = alloc_percpu(struct nd_percpu_lane);
- 	if (!nd_region->lane)
-@@ -1043,9 +1049,10 @@ static struct nd_region *nd_region_create(struct nvdimm_bus *nvdimm_bus,
- 
- 	return nd_region;
- 
-- err_percpu:
--	memregion_free(nd_region->id);
-- err_id:
-+err_percpu:
-+	if (!test_bit(ND_REGION_CXL, &ndr_desc->flags))
-+		memregion_free(nd_region->id);
-+err_id:
- 	kfree(nd_region);
- 	return NULL;
- }
-@@ -1068,6 +1075,13 @@ struct nd_region *nvdimm_volatile_region_create(struct nvdimm_bus *nvdimm_bus,
- }
- EXPORT_SYMBOL_GPL(nvdimm_volatile_region_create);
- 
-+void nvdimm_region_delete(struct nd_region *nd_region)
-+{
-+	if (nd_region)
-+		nd_device_unregister(&nd_region->dev, ND_SYNC);
-+}
-+EXPORT_SYMBOL_GPL(nvdimm_region_delete);
-+
- int nvdimm_flush(struct nd_region *nd_region, struct bio *bio)
- {
- 	int rc = 0;
-diff --git a/include/linux/libnvdimm.h b/include/linux/libnvdimm.h
-index 0d61e07b6827..c74acfa1a3fe 100644
---- a/include/linux/libnvdimm.h
-+++ b/include/linux/libnvdimm.h
-@@ -59,6 +59,9 @@ enum {
- 	/* Platform provides asynchronous flush mechanism */
- 	ND_REGION_ASYNC = 3,
- 
-+	/* Region was created by CXL subsystem */
-+	ND_REGION_CXL = 4,
-+
- 	/* mark newly adjusted resources as requiring a label update */
- 	DPA_RESOURCE_ADJUSTED = 1 << 0,
- };
-@@ -122,6 +125,7 @@ struct nd_region_desc {
- 	int numa_node;
- 	int target_node;
- 	unsigned long flags;
-+	int memregion;
- 	struct device_node *of_node;
- 	int (*flush)(struct nd_region *nd_region, struct bio *bio);
- };
-@@ -259,6 +263,7 @@ static inline struct nvdimm *nvdimm_create(struct nvdimm_bus *nvdimm_bus,
- 			cmd_mask, num_flush, flush_wpq, NULL, NULL, NULL);
- }
- void nvdimm_delete(struct nvdimm *nvdimm);
-+void nvdimm_region_delete(struct nd_region *nd_region);
- 
- const struct nd_cmd_desc *nd_cmd_dimm_desc(int cmd);
- const struct nd_cmd_desc *nd_cmd_bus_desc(int cmd);
+I would expect that's on the order of seconds, no?
 
+> And the test folks might inject dozens of back-to-back poisons to
+> adjacent pages...
+
+I am not sure the extreme scenarios of test folks should be guiding
+kernel design, the interfaces need to make sense first, and then the
+performance can be fixed up if kernel architecture causes practical
+problems.
+
+> > 
+> >> also, for now, is it possible to log more than 1 poison per 512byte
+> >> block?
+> > 
+> > For the badrange tracking, no. So this would just be a check to say
+> > "Yes, CPU I see you think the whole 4K is gone, but lets double check
+> > with more precise information for what gets placed in the badrange
+> > tracking".
+> 
+> Okay, process-wise, this is what I am seeing -
+> 
+> - for each poison, nfit_handle_mce() issues a short ARS given (addr, 
+> 64bytes)
+
+Why would the short-ARS be performed over a 64-byte span when the MCE
+reported a 4K aligned event?
+
+> - and short ARS returns to say that's actually (addr, 256bytes),
+> - and then nvdimm_bus_add_badrange() logs the poison in (addr, 512bytes) 
+> anyway.
+
+Right, I am reacting to the fact that the patch is picking 512 as an
+arbtitrary blast radius. It's ok to expand the blast radius from
+hardware when, for example, recording a 64-byte MCE in badrange which
+only understands 512 byte records, but it's not ok to take a 4K MCE and
+trim it to 512 bytes without asking hardware for a more precise report.
+
+Recall that the NFIT driver supports platforms that may not offer ARS.
+In that case the 4K MCE from the CPU is all that the driver gets and
+there is no data source for a more precise answer.
+
+So the ask is to avoid trimming the blast radius of MCE reports unless
+and until a short-ARS says otherwise.
+
+> The precise badrange from short ARS is lost in the process, given the
+> time spent visiting the BIOS, what's the gain?
+
+Generic support for not under-recording poison on platforms that do not
+support ARS.
+
+> Could we defer the precise badrange until there is consumer of the
+> information?
+
+Ideally the consumer is immediate and this precise information can make
+it to the filesystem which might be able to make a better decision about
+what data got clobbered.
+
+See dax_notify_failure() infrastructure currently in linux-next that can
+convey poison events to filesystems. That might be a path to start
+tracking and reporting precise failure information to address the
+constraints of the badrange implementation.
 
