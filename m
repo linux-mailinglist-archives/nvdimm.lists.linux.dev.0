@@ -1,122 +1,157 @@
-Return-Path: <nvdimm+bounces-4327-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4317-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ABA55768D3
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 23:25:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B712E5768AA
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 23:09:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CDF71C209F1
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 21:25:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8ECF1C2094F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 15 Jul 2022 21:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9A45382;
-	Fri, 15 Jul 2022 21:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEB85387;
+	Fri, 15 Jul 2022 21:09:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from hamster.birch.relay.mailchannels.net (hamster.birch.relay.mailchannels.net [23.83.209.80])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09BE4C99
-	for <nvdimm@lists.linux.dev>; Fri, 15 Jul 2022 21:25:05 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id C92F88224DD;
-	Fri, 15 Jul 2022 21:24:58 +0000 (UTC)
-Received: from pdx1-sub0-mail-a220.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 431AB822466;
-	Fri, 15 Jul 2022 21:24:58 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1657920298; a=rsa-sha256;
-	cv=none;
-	b=FlG8tZVwa8kPTjOfSoZEjJMEvUuKKXYKd+5YQgWwAjdOSgnqaLKTT5UKD0KNyg9tj9WbIh
-	dEHMlYsfS/mueKmEHqWQ6eq3TvvCFZoFXDIJedPR29UYMcmwTD0Hf62EHM43vtzzyCrdwC
-	GC4p67mLQz+hzuVZNXBRcJvWDtJQJUh9yNcnhbx+YObNpN1b16dLvCpcgzDeAaxOPuiMvQ
-	8Bnjsv9V94JkjKA1Dn6OyVJj5XRH93w/nRoCJX/6W0N7W+NdlaPDimf1CExYds6L1Ienw7
-	uGLcr4pzP+4OC3cUL5yuOnRo8XR4Ch3E4yM0oAmUaID9GByPq1dZKMZX5UMSeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1657920298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=Gca+rK/1/omRgEtGZGppY4fPcaCmjyddkV4hHPuKIyY=;
-	b=KbR0DA744voFhWCsATz/wgXd1kf2Mq2F6xZW5W3C5zkmuYTeg7/omyJR/mMSUzeJkHULyt
-	0XeeCYjHMURbcIZ57Rlj3zzvIXn1rEX2s6dSTRHhz1b/yxAah766CexOyW/R7ssYiGb92g
-	QK6Um4wm+3c2KksBHAA9tfp/5dVWWr5st7JC4s0iVn6Tu9JYY6OO4QQo+D2956HBPkSQFh
-	DUPTs9304n3YTbjOtCLJiQ7Fj7HVOQhZEYnQheIPnyZ3LpHvcQzjdu/dElSzeElu0dRc/s
-	JKiK+jlyPh9QMhv8CH1pm1m75oCSX4681raiIE9LZyAanFk8UsGvACabeNygrQ==
-ARC-Authentication-Results: i=1;
-	rspamd-689699966c-l28hj;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Wipe-Fumbling: 4b8c9124732fcad9_1657920298585_3064067684
-X-MC-Loop-Signature: 1657920298585:2481239309
-X-MC-Ingress-Time: 1657920298585
-Received: from pdx1-sub0-mail-a220.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.116.106.85 (trex/6.7.1);
-	Fri, 15 Jul 2022 21:24:58 +0000
-Received: from offworld (unknown [104.36.25.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a220.dreamhost.com (Postfix) with ESMTPSA id 4Ll4Bd2HZyz9g;
-	Fri, 15 Jul 2022 14:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1657920298;
-	bh=Gca+rK/1/omRgEtGZGppY4fPcaCmjyddkV4hHPuKIyY=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=lzDJIS2jEWSIE8aTXDQbvygB8SdONXMlSw4N4kkNfqzzRWdVDRpFgzEMVHVOheWcD
-	 gbLxgxsXY7AXG1Q8sSABqEautgFcarW6CmHmLpF5Vy/VC1dOCOD/DDQGF6bhCbx8nK
-	 4rjVl3dTnCw859tGm9wzhRYuNqTFh2AEMO9POg/zKKO88jyLNcohLvl3Qpfxxf8WoG
-	 ohMUKK3AghSiw84cF+nykGGROFo56vgBw8ASQSzmgnqilAMBaXdCDJ8b32/8iyBHSv
-	 eBUkskWUk6p606b+hV026dhiRZHQbofE1SiiSrsFXrwBbEaQKgoirB5rR4vQTjvVid
-	 1OH6Nhag3/f5w==
-Date: Fri, 15 Jul 2022 14:09:04 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
-	vishal.l.verma@intel.com, alison.schofield@intel.com
-Subject: Re: [PATCH RFC 01/15] cxl/pmem: Introduce nvdimm_security_ops with
- ->get_flags() operation
-Message-ID: <20220715210904.bwqbahyya7kwixim@offworld>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791931828.2491387.3280104860123759941.stgit@djiang5-desk3.ch.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB435381
+	for <nvdimm@lists.linux.dev>; Fri, 15 Jul 2022 21:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657919348; x=1689455348;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dBQENS3znweCF0yiR8zGCtWQ5lG/ElS4TNT6oglovdw=;
+  b=JyLgtx98eLOxZXnjRgBOsvGGXZOCBHVWQkver2h1dfeNC8ueU0RgLZmL
+   nu1fQCgIyyS9hY39hjum9oL2HCBZLuOHr3RVQv4Lyk+sVF3mca+LxtTCp
+   5WHGgIqvuL4O6Ym+n3KknuhGerLPfCtaPLrReXIFV/3SgDkOPRAOwo04R
+   hh0V/t/M1B7BhqkdzOsuuws3z9czS9in6pggduEjOMJbW+XBrDwCzaM5N
+   jfifx3OdrQDCfD168yHUuPPeLvmHj+0ANSmWykP3ymtPYuoFWtTEsLRqO
+   kv9c0bef7xqENwrLbrHGj3VuKcWuFmcnM7reQU/5tzLJznKYVcIbjpr5H
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="283458383"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="283458383"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:09:08 -0700
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="629248825"
+Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:09:07 -0700
+Subject: [PATCH RFC 06/15] cxl/pmem: Add Disable Passphrase security command
+ support
+From: Dave Jiang <dave.jiang@intel.com>
+To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
+Cc: dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
+ vishal.l.verma@intel.com, alison.schofield@intel.com, dave@stgolabs.net
+Date: Fri, 15 Jul 2022 14:09:07 -0700
+Message-ID: 
+ <165791934720.2491387.11236603584810515256.stgit@djiang5-desk3.ch.intel.com>
+In-Reply-To: 
+ <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
+References: 
+ <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
+User-Agent: StGit/1.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <165791931828.2491387.3280104860123759941.stgit@djiang5-desk3.ch.intel.com>
-User-Agent: NeoMutt/20220429
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Fri, 15 Jul 2022, Dave Jiang wrote:
+Create callback function to support the nvdimm_security_ops ->disable()
+callback. Translate the operation to send "Disable Passphrase" security
+command for CXL memory device. The operation supports disabling a
+passphrase for the CXL persistent memory device. In the original
+implementation of nvdimm_security_ops, this operation only supports
+disabling of the user passphrase. This is due to the NFIT version of
+disable passphrase only supported disabling of user passphrase. The CXL
+spec allows disabling of the master passphrase as well which
+nvidmm_security_ops does not support yet. In this commit, the callback
+function will only support user passphrase.
 
->+config CXL_PMEM_SECURITY
->+	tristate "CXL PMEM SECURITY: Persistent Memory Security Support"
->+	depends on CXL_PMEM
->+	default CXL_BUS
->+	help
->+	  CXL memory device "Persistent Memory Data-at-rest Security" command set
->+	  support. Support opcode 0x4500..0x4505. The commands supported are "Get
->+	  Security State", "Set Passphrase", "Disable Passphrase", "Unlock",
->+	  "Freeze Security State", and "Passphrase Secure Erase". Security operation
->+	  is done through nvdimm security_ops.
->+
->+	  See Chapter 8.2.9.5.6 in the CXL 2.0 specification for a detailed description
->+	  of the Persistent Memory Security.
->+
->+	  If unsure say 'm'.
+See CXL 2.0 spec section 8.2.9.5.6.3 for reference.
 
-Is there any fundamental reason why we need to add a new CXL Kconfig option
-instead of just tucking this under CXL_PMEM?
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+---
+ drivers/cxl/cxlmem.h   |    8 ++++++++
+ drivers/cxl/security.c |   30 ++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index 1e76d22f4fd2..70a1eb7720d3 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -252,6 +252,7 @@ enum cxl_opcode {
+ 	CXL_MBOX_OP_GET_SCAN_MEDIA	= 0x4305,
+ 	CXL_MBOX_OP_GET_SECURITY_STATE	= 0x4500,
+ 	CXL_MBOX_OP_SET_PASSPHRASE	= 0x4501,
++	CXL_MBOX_OP_DISABLE_PASSPHRASE	= 0x4502,
+ 	CXL_MBOX_OP_MAX			= 0x10000
+ };
+ 
+@@ -359,6 +360,13 @@ struct cxl_set_pass {
+ 	u8 new_pass[NVDIMM_PASSPHRASE_LEN];
+ } __packed;
+ 
++/* disable passphrase input payload */
++struct cxl_disable_pass {
++	u8 type;
++	u8 reserved[31];
++	u8 pass[NVDIMM_PASSPHRASE_LEN];
++} __packed;
++
+ enum {
+ 	CXL_PMEM_SEC_PASS_MASTER = 0,
+ 	CXL_PMEM_SEC_PASS_USER,
+diff --git a/drivers/cxl/security.c b/drivers/cxl/security.c
+index 76ec5087f966..4aec8e41e167 100644
+--- a/drivers/cxl/security.c
++++ b/drivers/cxl/security.c
+@@ -76,9 +76,39 @@ static int cxl_pmem_security_change_key(struct nvdimm *nvdimm,
+ 	return rc;
+ }
+ 
++static int cxl_pmem_security_disable(struct nvdimm *nvdimm,
++				     const struct nvdimm_key_data *key_data)
++{
++	struct cxl_nvdimm *cxl_nvd = nvdimm_provider_data(nvdimm);
++	struct cxl_memdev *cxlmd = cxl_nvd->cxlmd;
++	struct cxl_dev_state *cxlds = cxlmd->cxlds;
++	struct cxl_disable_pass *dis_pass;
++	int rc;
++
++	dis_pass = kzalloc(sizeof(*dis_pass), GFP_KERNEL);
++	if (!dis_pass)
++		return -ENOMEM;
++
++	/*
++	 * While the CXL spec defines the ability to erase the master passphrase,
++	 * the original nvdimm security ops does not provide that capability.
++	 * In order to preserve backward compatibility, this callback will
++	 * only support disable of user passphrase. The disable master passphrase
++	 * ability will need to be added as a new callback.
++	 */
++	dis_pass->type = CXL_PMEM_SEC_PASS_USER;
++	memcpy(dis_pass->pass, key_data->data, NVDIMM_PASSPHRASE_LEN);
++
++	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_DISABLE_PASSPHRASE,
++			       dis_pass, sizeof(*dis_pass), NULL, 0);
++	kfree(dis_pass);
++	return rc;
++}
++
+ static const struct nvdimm_security_ops __cxl_security_ops = {
+ 	.get_flags = cxl_pmem_get_security_flags,
+ 	.change_key = cxl_pmem_security_change_key,
++	.disable = cxl_pmem_security_disable,
+ };
+ 
+ const struct nvdimm_security_ops *cxl_security_ops = &__cxl_security_ops;
+
+
 
