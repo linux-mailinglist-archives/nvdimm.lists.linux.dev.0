@@ -1,125 +1,109 @@
-Return-Path: <nvdimm+bounces-4395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4393-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EFDC57BDB8
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 20 Jul 2022 20:26:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C5557BD5F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 20 Jul 2022 20:05:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 561A61C20930
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 20 Jul 2022 18:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00AFD280CE1
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 20 Jul 2022 18:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616A56D1B;
-	Wed, 20 Jul 2022 18:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF896D1B;
+	Wed, 20 Jul 2022 18:05:47 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from dormouse.elm.relay.mailchannels.net (dormouse.elm.relay.mailchannels.net [23.83.212.50])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFEC6ADF
-	for <nvdimm@lists.linux.dev>; Wed, 20 Jul 2022 18:26:46 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id A43026C28C1;
-	Wed, 20 Jul 2022 18:18:58 +0000 (UTC)
-Received: from pdx1-sub0-mail-a292.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id DADB66C15C8;
-	Wed, 20 Jul 2022 18:18:57 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1658341138; a=rsa-sha256;
-	cv=none;
-	b=FA/yYhBqHFz3/jksqVbWQXLopNaOytRNnroM9zaaI7lLTHgGNaVeSxtxN9FWAGo5WTn4lu
-	Zuhzi2AIHR09CLZSSnKawPjzG1kF6dORymgp35lpJKPV9u+BK2/NEU2A3T8DB8cSuX+Oh3
-	IAhRg/7WeDNCvkAE2ZosRncxXCN3Q8GAJZUraQy98y9OkZ18AZS4CZEdNtF0QkTMdQ0wQp
-	kOF72HvLZ7UqgbC10RoveieJkxgK+YoHLOfGgv0IcZApWlnhodKe/TM+Yu9gnZ919k1MOe
-	BJrLHtsn2YRaFt1jhWaxz2t6ceqVpnMw5HtjtG4emgshZ+eaI+YUFbozTzMLXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1658341138;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=heo8NSziHONhwwYu9slaF+2VxQH2uPQqFsem70CcVnI=;
-	b=2c0aSd80TNsaC258ngjJ0029dMMxCk+UjTvcwCTtMR/ET5U5+S1T4bHZFYCHP2TSMjqrSa
-	d4qusOC7sPm6umjUCzNMu8Q1DbNgPe3d2/WAS0pRp31uAtB4CYL1UxDHDsn3/iSjIKcWIU
-	TmPkuDn9cyQru2zhcvtNI1s5tczllUpDls+LTZGdyvG9K4itM867284gs7a5uuaSEM+pyG
-	3sp0i+lKeXXnaPh+4A9q8+Hhtngho5lBVD05EwQGGdoI3oVKNK12rUSrtm1KFHAnnxr9lf
-	iv1RX8/5UShubdJ+WpXrYjnDUIXVueT9qAcDrysR+gvoISE597Uc4zTEAYJvDQ==
-ARC-Authentication-Results: i=1;
-	rspamd-674ffb986c-hjnl4;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Madly-Zesty: 3d4894d10a7afe77_1658341138268_3260986809
-X-MC-Loop-Signature: 1658341138268:3620796171
-X-MC-Ingress-Time: 1658341138268
-Received: from pdx1-sub0-mail-a292.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.115.18.78 (trex/6.7.1);
-	Wed, 20 Jul 2022 18:18:58 +0000
-Received: from offworld (unknown [104.36.29.104])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a292.dreamhost.com (Postfix) with ESMTPSA id 4Lp3qh5dPvzHy;
-	Wed, 20 Jul 2022 11:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1658341137;
-	bh=heo8NSziHONhwwYu9slaF+2VxQH2uPQqFsem70CcVnI=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=ZEopq06f0WzR8C9FbuZm0K9he2VF+N/kQQwi541gcQ00xXWR/vlhsI3jYpzJYMkUB
-	 apDGL4q14kWbSRmSy6Fx2mox+E3rHp8X+bT2qmUtQpfdbK9khTiwJ+CeOlURRP1SG3
-	 w2gHaYYRkKr1DIa4G1/EU1f6TrYmqNA3PYhI0oXK5O6z2solLZccL3S8nP2ngvQUW8
-	 cMVYasTBNJcsJribu2J85JoBPHQX95rY6Rf/eN8DwWUXOnE/2J/xuBkVKG1Crw236K
-	 M496bBFXALN4834I1d4uzgkqKxFELO+efhiabwtK9HWEspK3NJFB1E/1cxiQmfobYg
-	 jwCbrZRGJ3Glg==
-Date: Wed, 20 Jul 2022 11:02:47 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
-	vishal.l.verma@intel.com, alison.schofield@intel.com,
-	a.manzanares@samsung.com
-Subject: Re: [PATCH RFC 13/15] cxl/pmem: Add "Passphrase Secure Erase"
- security command support
-Message-ID: <20220720180247.z4i3yzdicnnsissz@offworld>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791938847.2491387.8701829648751368015.stgit@djiang5-desk3.ch.intel.com>
- <20220720061727.ufygesevkonmeelr@offworld>
- <d595bc58-7305-7f27-4ec0-218eb6492fd3@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D696D17
+	for <nvdimm@lists.linux.dev>; Wed, 20 Jul 2022 18:05:45 +0000 (UTC)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lp3SR5vYlz67MfC;
+	Thu, 21 Jul 2022 02:02:15 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Jul 2022 20:05:42 +0200
+Received: from localhost (10.81.205.121) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Jul
+ 2022 19:05:41 +0100
+Date: Wed, 20 Jul 2022 19:05:37 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Dan Williams <dan.j.williams@intel.com>
+CC: <linux-cxl@vger.kernel.org>, Ben Widawsky <bwidawsk@kernel.org>,
+	<hch@lst.de>, <nvdimm@lists.linux.dev>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v2 28/28] cxl/region: Introduce cxl_pmem_region objects
+Message-ID: <20220720190537.0000547a@Huawei.com>
+In-Reply-To: <165784340111.1758207.3036498385188290968.stgit@dwillia2-xfh.jf.intel.com>
+References: <165784324066.1758207.15025479284039479071.stgit@dwillia2-xfh.jf.intel.com>
+	<165784340111.1758207.3036498385188290968.stgit@dwillia2-xfh.jf.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <d595bc58-7305-7f27-4ec0-218eb6492fd3@intel.com>
-User-Agent: NeoMutt/20220429
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.205.121]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 
-On Wed, 20 Jul 2022, Dave Jiang wrote:
+On Thu, 14 Jul 2022 17:03:21 -0700
+Dan Williams <dan.j.williams@intel.com> wrote:
 
->Patch below is about what I had in mind for the secure erase command.
->Looks good to me. The only thing I think it needs is to make sure the
->mem devs are not "in use" before secure erase in addition to the
->security check that's already there below. I was planning on working
->on this after getting the current security commands series wrapped up.
->But if you are already developing this then I'll defer.
->
->Also here's the latest code that I'm still going through testing if
->you want to play with it. I still need to replace the x86 patch with
->your version.
+> The LIBNVDIMM subsystem is a platform agnostic representation of system
+> NVDIMM / persistent memory resources. To date, the CXL subsystem's
+> interaction with LIBNVDIMM has been to register an nvdimm-bridge device
+> and cxl_nvdimm objects to proxy CXL capabilities into existing LIBNVDIMM
+> subsystem mechanics.
+> 
+> With regions the approach is the same. Create a new cxl_pmem_region
+> object to proxy CXL region details into a LIBNVDIMM definition. With
+> this enabling LIBNVDIMM can partition CXL persistent memory regions with
+> legacy namespace labels. A follow-on patch will add CXL region label and
+> CXL namespace label support to persist region configurations across
+> driver reload / system-reset events.
+> 
+> Co-developed-by: Ben Widawsky <bwidawsk@kernel.org>
+> Signed-off-by: Ben Widawsky <bwidawsk@kernel.org>
+> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+On trivial query below.  Either way I think this looks good.
 
-Ok I will play more and test your series during the rest of the week,
-as well as my own changes. I'll end up a formal series on top of this
-one (or whatever version you are at at the time) with the sanitize
-+ secure-erase (and the relevant mock device updates).
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thanks,
-Davidlohr
+> +
+> +static void unregister_nvdimm_region(void *nd_region)
+> +{
+> +	struct cxl_nvdimm_bridge *cxl_nvb;
+> +	struct cxl_pmem_region *cxlr_pmem;
+> +	int i;
+> +
+> +	cxlr_pmem = nd_region_provider_data(nd_region);
+> +	cxl_nvb = cxlr_pmem->bridge;
+> +	device_lock(&cxl_nvb->dev);
+> +	for (i = 0; i < cxlr_pmem->nr_mappings; i++) {
+> +		struct cxl_pmem_region_mapping *m = &cxlr_pmem->mapping[i];
+> +		struct cxl_nvdimm *cxl_nvd = m->cxl_nvd;
+> +
+> +		if (cxl_nvd->region) {
+> +			put_device(&cxlr_pmem->dev);
+> +			cxl_nvd->region = NULL;
+> +		}
+> +	}
+> +	device_unlock(&cxl_nvb->dev);
+> +
+> +	nvdimm_region_delete(nd_region);
+
+I'm not convinced by the ordering in here. Can we do the nvdimm_region_delete() before
+taking the device_lock()?  That would make this a nice mirror image of what is
+going on in probe().  I may well be missing a reason that doesn't work though.
+
+> +}
+> +
 
