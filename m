@@ -1,159 +1,191 @@
-Return-Path: <nvdimm+bounces-4496-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4499-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE80058F404
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 10 Aug 2022 23:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDAC558F4A9
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 01:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9AE31C20970
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 10 Aug 2022 21:57:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 195A01C20954
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 10 Aug 2022 23:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A71468D;
-	Wed, 10 Aug 2022 21:57:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7FC4A1F;
+	Wed, 10 Aug 2022 23:09:38 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from donkey.elm.relay.mailchannels.net (donkey.elm.relay.mailchannels.net [23.83.212.49])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB90B443A
-	for <nvdimm@lists.linux.dev>; Wed, 10 Aug 2022 21:56:59 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id C1C606C176F;
-	Wed, 10 Aug 2022 21:48:33 +0000 (UTC)
-Received: from pdx1-sub0-mail-a301.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id A8F856C1F1A;
-	Wed, 10 Aug 2022 21:48:32 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660168113; a=rsa-sha256;
-	cv=none;
-	b=WYJMxqrkeP4XCTOieBVD2PSb5p6fs8JP3LLyF0OZ80zLtfrBHUZZvzwCyUFnGl2pyeYpFg
-	OSAky+QGuVZ4Bs2fbjFz1Uzh2vbJUcQZqSRIX8RTP8ZdigDjHfYM2ycaGOuZL7vKROGHC5
-	EIfXZDiz3XZ9E9PppwWKOHRM5C3mXO+53L1MFO2mw94J6NhUBuAtKnZo8dl1x6cQCopWJN
-	hCNV3v99/GrjoCFy6WMiLE62qvBo/oEBwdI5SfNQ1Z41usxp/WBUy0Y4qYgD0SM5HRnI9T
-	iybn/hUccU8mziu16/2OOfMxI+nchMsj4TCOlXSv/FHNyP2UzY4zT30NwBMscw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1660168113;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=jWp01Hcl4j0YiL9/n7IqCl4dh/n8uPqHFzk1dZ4hNj8=;
-	b=INNStFOlxSuXXOwUF/tkf8NmHL8KePZuDc2lWL2jv7EBB633F3vaq2ymNKkD80dnh5yNSo
-	bWl5PbePBYG/esel1y+16Svr16VzqJ6Q67KJw5B7kYk/UoXlMUPlc02xg4oFBhZIEZTd8W
-	u4VHk5T5P9E3piV41193RGytTWwCZUEl/g9ZtJ3R55Zmdz3QD3B13YHzmxHvj7lrORM6Xa
-	mPzwW8ebFpPbKEJLrF64kPLtD0bUx6uZy4pM9ndtbQ4BIamUmD2wRqraYIrDG8thApP2Mu
-	tee669SrSzwmLl2+9xpQD/11viUm79fr7zMSSOdoiDyfkicvGi9GGXvx3xSVmg==
-ARC-Authentication-Results: i=1;
-	rspamd-7c478d8c66-wmbcj;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Lonely-Unite: 2587f2a53c744ae3_1660168113268_3568757427
-X-MC-Loop-Signature: 1660168113268:3572167391
-X-MC-Ingress-Time: 1660168113267
-Received: from pdx1-sub0-mail-a301.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.112.55.239 (trex/6.7.1);
-	Wed, 10 Aug 2022 21:48:33 +0000
-Received: from offworld (unknown [104.36.25.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a301.dreamhost.com (Postfix) with ESMTPSA id 4M33Tq2F6MzMD;
-	Wed, 10 Aug 2022 14:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1660168112;
-	bh=jWp01Hcl4j0YiL9/n7IqCl4dh/n8uPqHFzk1dZ4hNj8=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=A6GKJe13/0xcGDk13MOtD/Lf29AjbXwG7DsGw8gAvvZtFwA3xgbgYPqjHxiN7iPDv
-	 D5k7AqupovSKVi//+eIPG84PE3FCZMln9AyHay2+GllzOCv2EnHZOKou364UCxz+ib
-	 j4O4AFEjnlRErLj1vowWcX+OiRmqciu1sZwW8N8XaFyB3sFZ1bgVkvEUzW2IUQint/
-	 YCYxGvHeunNiEGk9FJ9ratMlpHkt03pT9eejxjNvh+nuAUgk0SWzgpQegOKqBnq1Gv
-	 WvIb054m7ixCjZT6ReFxkDztcdkkfH6ZghMFTjtQ563pV9fRkX2U1CrCqwp5du+oFw
-	 dg9dzgrWnGqqw==
-Date: Wed, 10 Aug 2022 14:31:12 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-	alison.schofield@intel.com, a.manzanares@samsung.com,
-	linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 10/15] x86: add an arch helper function to invalidate
- all cache for nvdimm
-Message-ID: <20220810213112.p4fdclh4zbd3vta6@offworld>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
- <20220718053039.5whjdcxynukildlo@offworld>
- <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
- <20220803183729.00002183@huawei.com>
- <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220810211337.ha27cl24splm4wjh@offworld>
- <62f4238b5ce8a_3ce6829447@dwillia2-xfh.jf.intel.com.notmuch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E004A05
+	for <nvdimm@lists.linux.dev>; Wed, 10 Aug 2022 23:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660172975; x=1691708975;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IgDPZkTj8OWicxyeDb2nka/I4dLrq3fbpj7i9AcVc+0=;
+  b=LkKev9+3ic7TtQvnRj1KJ4yX1B0/osvQTYvTGbTO9iAIA8xhSX1sruOG
+   TyJecItpbay5YpkSM4eDYvzrVxc7iBwBCPPriX/qjPqU75wE4F4KR7I76
+   66uoJWnmPQfibrTgR+PQNAejv2nXVXGjBmmn+E6aAcBlos8TpSrS4nVTa
+   RaK3uC9r9GadkIH3gdqPL9zMfUhPa4zXRGhZASPr6/msvOOlWAbpExqU2
+   uoYNQoooyXUIqigstDKpw5R0drGqm7EV5DsuJAZam48dgWnQ3xZiKXkJw
+   rNfkDonJ0pbDMlVAWzvSIaB1zKvCGk66UXCEqecjsCUoa7FBfqq1iJHex
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292471270"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="292471270"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:32 -0700
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="581429410"
+Received: from maughenb-mobl.amr.corp.intel.com (HELO vverma7-desk1.intel.com) ([10.209.94.5])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:30 -0700
+From: Vishal Verma <vishal.l.verma@intel.com>
+To: <linux-cxl@vger.kernel.org>
+Cc: <nvdimm@lists.linux.dev>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v2 00/10] cxl: add region management
+Date: Wed, 10 Aug 2022 17:09:04 -0600
+Message-Id: <20220810230914.549611-1-vishal.l.verma@intel.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <62f4238b5ce8a_3ce6829447@dwillia2-xfh.jf.intel.com.notmuch>
-User-Agent: NeoMutt/20220429
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5805; h=from:subject; bh=IgDPZkTj8OWicxyeDb2nka/I4dLrq3fbpj7i9AcVc+0=; b=owGbwMvMwCXGf25diOft7jLG02pJDElfrKb8i34rxxl4REllksfUPQ49s+t0LtvEK7VEezyRyD6f XaXYUcrCIMbFICumyPJ3z0fGY3Lb83kCExxh5rAygQxh4OIUgIkkVzAyzH3+ycu7ccvik5bWcncnh+ ud2XIqr23+6a//uufsyfm38SDDPwupGed7tr1j+XR0+YRHyzc8FfC39ktm5VJZ7mJ5W9EgnwcA
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Aug 2022, Dan Williams wrote:
+Changes since v1[1]:
+- Collect review tags
+- Fix order of setting region size vs UUID (Dan)
+- Rename region_{commit,decommit} to region_decode{commit,reset} everywhere (Dan)
+- Add a -b <bus> option to all region management commands
+- Add a cxl-create-region unit test
+- Use walk_children pattern for root decoders vs. regions (Dan)
+- Add bus, port, and (root) decoder based filters for regions (Dan)
+- Add a 'REGIONS' section to the libcxl(3) documentation (Dan)
+- s/--interleave-ways/--ways/ and
+  s/interleave-granularity/--granularity/ (Dan)
+- Rename and clarify memdev_match_set_size() with a comment (Dan)
+- Remove a double init in memdev_match_set_size() (Dan)
+- Rework granularity determination (Dan)
+- Ensure ep_decoder is free before changing its mode (Dan)
+- Fix a mid-series compile breakage in region_action() (Dan)
+- Fix missing whitespace in region_action() (Dan)
+- Refactor region_action for too much indentation (Dan)
+- Save error state from multi-region operations in region_action()
+- Free leaky region objects (when the parent decoder is freed)
+- Consider root decoder's available size before creating a region (Dan)
 
->Davidlohr Bueso wrote:
->> On Wed, 10 Aug 2022, Dan Williams wrote:
->>
->> >I expect the interface would not be in the "flush_cache_" namespace
->> >since those functions are explicitly for virtually tagged caches that
->> >need maintenance on TLB operations that change the VA to PA association.
->> >In this case the cache needs maintenance because the data at the PA
->> >changes. That also means that putting it in the "nvdimm_" namespace is
->> >also wrong because there are provisions in the CXL spec where volatile
->> >memory ranges can also change contents at a given PA, for example caches
->> >might need to be invalidated if software resets the device, but not the
->> >platform.
->> >
->> >Something like:
->> >
->> >    region_cache_flush(resource_size_t base, resource_size_t n, bool nowait)
->> >
->> >...where internally that function can decide if it can rely on an
->> >instruction like wbinvd, use set / way based flushing (if set / way
->> >maintenance can be made to work which sounds like no for arm64), or map
->> >into VA space and loop. If it needs to fall back to that VA-based loop
->> >it might be the case that the caller would want to just fail the
->> >security op rather than suffer the loop latency.
->>
->> Yep, I was actually prototyping something similar, but want to still
->> reuse cacheflush.h machinery and just introduce cache_flush_region()
->> or whatever name, which returns any error. So all the logic would
->> just be per-arch, where x86 will do the wbinv and return 0, and arm64
->> can just do -EINVAL until VA-based is no longer the only way.
->
->cache_flush_region() works for me, but I wonder if there should be a
->cache_flush_region_capable() call to shut off dependent code early
->rather than discovering it at runtime? For example, even archs like x86,
->that have wbinvd, have scenarios where wbinvd is prohibited, or painful.
->TDX, and virtualization in general, comes to mind.
 
-Yeah I'm no fan of wbinv, but in these cases (cxl/nvdimm), at least from
-the performance angle, I am not worried: the user is explicity doing a
-security/cleaning specific op, probably decomisioning, so it's rare and
-should not expect better.
+[1]: https://lore.kernel.org/linux-cxl/20220715062550.789736-1-vishal.l.verma@intel.com/
 
-Thanks,
-Davidlohr
+---
+
+Introduce the first cut at a 'cxl create-region' command, which uses the
+ABI merged in the kernel in [2], and builds on the create-region foundation
+laid out in [3].
+
+This introduces libcxl objects for regions and their memdev mappings,
+adds listing support for them, and libcxl APIs to create, enable,
+disable, and destroy regions. These are consumed by respective cxl-cli
+commands to perform the same region management operations.
+
+The 'cxl create-region' command deserves a bit more detail. Its current
+version can be considered a fundamental 'plumbing' implementation. It
+allows, and in some cases, requires the user to specify the parameters
+for the region being created. Future enhancements to this will allow a
+simple 'cxl create-region' invocation to automatically pick suitable
+root decoders, memdev endpoints, and interleave settings to create a
+maximally sized and interleaved region.
+
+Today, the create-region command requires the following from the user:
+
+  -d <root decoder> : the root decoder (CFMWS window) under which to
+  create the region
+
+  -m or -e <targets>: the memdev or endpoint decoder targets that will
+  form the new region
+
+It can pick the following settings automatically (though the user can
+also override these if desired):
+
+  -w : interleave ways - picked based on the number of memdev / endpoint
+  decoder targets supplied
+
+  -g : interleave granularity - selects the interleave granularity
+  advertised by the root decoder
+
+  -t : type of region - defaults to pmem. The ram (volatile) type is not
+  supported yet.
+
+  -s : size of region - deduced based on sizes of the specified targets
+
+[2]: https://git.kernel.org/torvalds/c/c235698355fa94df7073b51befda7d4be00a0e23
+[3]: https://lore.kernel.org/linux-cxl/165781810717.1555691.1411727384567016588.stgit@dwillia2-xfh.jf.intel.com/
+
+
+Vishal Verma (10):
+  libcxl: add a depth attribute to cxl_port
+  cxl/port: Consolidate the debug option in cxl-port man pages
+  libcxl: Introduce libcxl region and mapping objects
+  cxl-cli: add region listing support
+  libcxl: add low level APIs for region creation
+  cxl: add a 'create-region' command
+  cxl: add commands to {enable,disable,destroy}-region
+  cxl/list: make memdevs and regions the default listing
+  test: add a cxl-create-region test
+  cxl/decoder: add a max_available_extent attribute
+
+ Documentation/cxl/bus-option.txt         |   5 +
+ Documentation/cxl/cxl-create-region.txt  | 114 +++
+ Documentation/cxl/cxl-destroy-region.txt |  41 ++
+ Documentation/cxl/cxl-disable-port.txt   |   5 +-
+ Documentation/cxl/cxl-disable-region.txt |  36 +
+ Documentation/cxl/cxl-enable-port.txt    |   5 +-
+ Documentation/cxl/cxl-enable-region.txt  |  36 +
+ Documentation/cxl/cxl-list.txt           |  13 +-
+ Documentation/cxl/debug-option.txt       |   4 +
+ Documentation/cxl/decoder-option.txt     |   6 +
+ Documentation/cxl/lib/libcxl.txt         |  69 ++
+ Documentation/cxl/region-description.txt |   7 +
+ cxl/lib/private.h                        |  38 +
+ cxl/lib/libcxl.c                         | 889 ++++++++++++++++++++++-
+ cxl/builtin.h                            |   4 +
+ cxl/filter.h                             |   6 +
+ cxl/json.h                               |   5 +
+ cxl/libcxl.h                             |  67 +-
+ cxl/cxl.c                                |   4 +
+ cxl/filter.c                             | 158 +++-
+ cxl/json.c                               | 131 ++++
+ cxl/list.c                               |  26 +-
+ cxl/region.c                             | 797 ++++++++++++++++++++
+ .clang-format                            |   2 +
+ Documentation/cxl/meson.build            |   7 +
+ cxl/lib/libcxl.sym                       |  37 +
+ cxl/meson.build                          |   1 +
+ test/cxl-create-region.sh                | 126 ++++
+ test/meson.build                         |   2 +
+ 29 files changed, 2598 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/cxl/bus-option.txt
+ create mode 100644 Documentation/cxl/cxl-create-region.txt
+ create mode 100644 Documentation/cxl/cxl-destroy-region.txt
+ create mode 100644 Documentation/cxl/cxl-disable-region.txt
+ create mode 100644 Documentation/cxl/cxl-enable-region.txt
+ create mode 100644 Documentation/cxl/debug-option.txt
+ create mode 100644 Documentation/cxl/decoder-option.txt
+ create mode 100644 Documentation/cxl/region-description.txt
+ create mode 100644 cxl/region.c
+ create mode 100644 test/cxl-create-region.sh
+
+-- 
+2.37.1
+
 
