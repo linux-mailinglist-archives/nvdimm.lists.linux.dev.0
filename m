@@ -1,100 +1,143 @@
-Return-Path: <nvdimm+bounces-4509-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4511-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACC6258F591
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 03:31:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E595358F601
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 04:53:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 088811C20981
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 01:31:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7246B280C0D
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 02:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4124117F3;
-	Thu, 11 Aug 2022 01:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF1520E8;
+	Thu, 11 Aug 2022 02:53:06 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from black.elm.relay.mailchannels.net (black.elm.relay.mailchannels.net [23.83.212.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1C517D2
-	for <nvdimm@lists.linux.dev>; Thu, 11 Aug 2022 01:31:11 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id f65so15862483pgc.12
-        for <nvdimm@lists.linux.dev>; Wed, 10 Aug 2022 18:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=H/UbhZCA4vtX3WV2ns3tNyJm9u7rXeCUnbxwgbwS87E=;
-        b=aZnBkTJ4qhQZ8MUJC2G8I+SKtxDgbskAJHDh/lPAnWiMVa+z3G8zmbuufrWCjebTUw
-         rFlg9pnnz9c+V5DWJai+AwRHe0xw/c88aWdbtoEGeUBxSellpxFi6N92X4+oUeY4ZFeA
-         4Vlpe0kJnNxWzWAyu5fKmRSI+aEOWBElY5zviy/Vf+B94QLJ9QK7Mor6mK8bBVTCpYiA
-         d3FUF6lG1sdbPMv29EWV7ZReRegig5c+ZXyeqYjl1CP9b/TVUWGj+Skfmyi9RaY2Pj6h
-         oVBshdGsGqOSt43y33WDEKYHYOfGd/RX1d+Rb2+r/qQSGZIYHhNOmEjtrA7uZ5WWH5ij
-         1phg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=H/UbhZCA4vtX3WV2ns3tNyJm9u7rXeCUnbxwgbwS87E=;
-        b=z6C5iekUDekFzP8WRZMyUFttS/dLbIiZsp7RWe7GqgBiRTdVeYd1kUcQCaLQiKTJeB
-         6SLCftW770IpLMGfc/5cWVvApgBd2TO9mOib9zs0nXP4NbCi9H5WZ9MMWbx4nB82+ssa
-         jBLbyJ/+p3rz66WdlsaJKR9WKKCnsrKyhswP1lTQYKi56gdANlVwbjfk/6wtmYLhkU9A
-         J8sPjEMdP3T0cqFEQqo5H92fSdXyfQTeJdDgjHw0ib96YZVejaMsPpXkcNQKeRywA6KT
-         EHdUearR3utTllb0yNsWiY/GZUq4NNRm+O7myYm/bAjjjYH/zhqsU7z2o1XqyCMj27ei
-         9pLQ==
-X-Gm-Message-State: ACgBeo3lHS6mbhZ6tONVXOhjY9ozFyEVOZqlFvEDn0WQTmF6fvf4IteC
-	gLztj4Hf30fp3QIp85DEsiE=
-X-Google-Smtp-Source: AA6agR6z/FsHg7kuQQRSqZewFwxTq5QNowomAfLhVXkjDPa/xg6WujlpI54PdpEu+TQF51hbvvW8Wg==
-X-Received: by 2002:a05:6a00:1813:b0:52d:cccf:e443 with SMTP id y19-20020a056a00181300b0052dcccfe443mr29591570pfa.81.1660181471123;
-        Wed, 10 Aug 2022 18:31:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a188-20020a624dc5000000b0052b29fd7982sm2658768pfb.85.2022.08.10.18.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 18:31:10 -0700 (PDT)
-From: cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To: dan.j.williams@intel.com
-Cc: vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	ira.weiny@intel.com,
-	nvdimm@lists.linux.dev,
-	ye xingchen <ye.xingchen@zte.com.cn>,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] nvdimm/namespace:Use the function kobj_to_dev()
-Date: Thu, 11 Aug 2022 01:31:06 +0000
-Message-Id: <20220811013106.15947-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27ECF19B
+	for <nvdimm@lists.linux.dev>; Thu, 11 Aug 2022 02:53:03 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id E6ECB821994;
+	Wed, 10 Aug 2022 21:13:42 +0000 (UTC)
+Received: from pdx1-sub0-mail-a301.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 2C5F882170E;
+	Wed, 10 Aug 2022 21:13:42 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660166022; a=rsa-sha256;
+	cv=none;
+	b=ps73b2SUxkvE1hdSj4jgMlJcR6SOyPrGBgxwGYcbKdP7LaqkCbUynH8M5JyWbE7VF+Ug84
+	sRgS6I3C6BGgvDJrqT7MrafW8CRyzthHOYX9kNQ1EzKibJBRAzGUB7aBtWIlB1ZqCLhysg
+	VNvpowvPjBiVJ/gAP8YJrMeNb2V+cVSIaVc2V0AfxHf0ym//CN6ztEk9N/EcDFJX7Abpvm
+	zGlHcoAJYffzoKV2B49J5NTVw/N5ZvOQf2+q0fhkpQt1FjBuFNsFqZ9NWlfY/6ISx8h0k6
+	pKr52BGJ6ZuKPk6k8AhZFetFe/lEVe8SMq0hmas4e1hMtKX53+nzpO1jqpgIhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1660166022;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=e1bm2IP5sdf1tCIrl5T23ze6bEl+DGHSYHzaFyz8rEo=;
+	b=il63h9oEHLKGUonm/gU+L9d1TP2Xo8GmUd8Ux84Gm6zQnlA3g6z3SJxlqlvWPvg5gakYie
+	luynkKhxs9A5UP9nuyMvUjmOCVgIbJcNqzlUe81NsfiedCkoABgeL8LDt+/yfyNSWICl6u
+	YPqDlaE1PzhH5mdMz6x1rPrh9Q/PLdsagJmZqL6IcKnMjnbFyppgV/G3dtRNeVgeLGU6ln
+	4WSrH/95XGxGT7bsaDn5wWTww4kR/QVexHYZ/ymnBbYro6z6ct1JoX5ZK0ribLkwOgSOPo
+	cudqVuW1DipXwyBAvVu0yXGhj1S1qj88z6cB0V5GEJ3o9AEYk27ceF5GS1OOZQ==
+ARC-Authentication-Results: i=1;
+	rspamd-7586b5656-kskzc;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Illegal-Stop: 7177ff9d6dc4c047_1660166022722_2415375917
+X-MC-Loop-Signature: 1660166022722:1709658693
+X-MC-Ingress-Time: 1660166022722
+Received: from pdx1-sub0-mail-a301.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.115.45.58 (trex/6.7.1);
+	Wed, 10 Aug 2022 21:13:42 +0000
+Received: from offworld (unknown [104.36.25.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a301.dreamhost.com (Postfix) with ESMTPSA id 4M32jc5wMYz64;
+	Wed, 10 Aug 2022 14:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1660166021;
+	bh=e1bm2IP5sdf1tCIrl5T23ze6bEl+DGHSYHzaFyz8rEo=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=A5K6iDwodcK6bM0P/mUDtKfab9ELJl8ZVSQTJL+iIC3xLsFelM8BWgnN5h+6H1Y4a
+	 t7g9m/gyPNKmQSVCK4T4z9ZRGHmLBZ2zgtqAnf10PSx5zn+RtjFd+pvg531NntEw4c
+	 ETUuYhZq9hTgXm38+M7sYoxCzrN+VlabHw5CcH4SRpmdrDPlwAXqBuhPG37F2huBuw
+	 2jh/gLiHpi4TKlVwXa3PcDLKUDTini8LpGCAcaBlgQ7sfm8nz7Hc34W84oHbhQbAFi
+	 ZIEWWdIqgSM66YTAmxOJ453R/roNMnPbN91X1teB4Embw7HtRH/Y4EPn5hW02jJOzx
+	 lPwEyZ7kmMleQ==
+Date: Wed, 10 Aug 2022 14:13:37 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+	alison.schofield@intel.com, a.manzanares@samsung.com,
+	linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC 10/15] x86: add an arch helper function to invalidate
+ all cache for nvdimm
+Message-ID: <20220810211337.ha27cl24splm4wjh@offworld>
+References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
+ <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
+ <20220718053039.5whjdcxynukildlo@offworld>
+ <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com>
+ <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+ <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
+ <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
+User-Agent: NeoMutt/20220429
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Wed, 10 Aug 2022, Dan Williams wrote:
 
-Use kobj_to_dev() instead of open-coding it.
+>I expect the interface would not be in the "flush_cache_" namespace
+>since those functions are explicitly for virtually tagged caches that
+>need maintenance on TLB operations that change the VA to PA association.
+>In this case the cache needs maintenance because the data at the PA
+>changes. That also means that putting it in the "nvdimm_" namespace is
+>also wrong because there are provisions in the CXL spec where volatile
+>memory ranges can also change contents at a given PA, for example caches
+>might need to be invalidated if software resets the device, but not the
+>platform.
+>
+>Something like:
+>
+>    region_cache_flush(resource_size_t base, resource_size_t n, bool nowait)
+>
+>...where internally that function can decide if it can rely on an
+>instruction like wbinvd, use set / way based flushing (if set / way
+>maintenance can be made to work which sounds like no for arm64), or map
+>into VA space and loop. If it needs to fall back to that VA-based loop
+>it might be the case that the caller would want to just fail the
+>security op rather than suffer the loop latency.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/nvdimm/namespace_devs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yep, I was actually prototyping something similar, but want to still
+reuse cacheflush.h machinery and just introduce cache_flush_region()
+or whatever name, which returns any error. So all the logic would
+just be per-arch, where x86 will do the wbinv and return 0, and arm64
+can just do -EINVAL until VA-based is no longer the only way.
 
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index dfade66bab73..fd2e8ca67001 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -1372,7 +1372,7 @@ static struct attribute *nd_namespace_attributes[] = {
- static umode_t namespace_visible(struct kobject *kobj,
- 		struct attribute *a, int n)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 
- 	if (is_namespace_pmem(dev)) {
- 		if (a == &dev_attr_size.attr)
--- 
-2.25.1
+Thanks,
+Davidlohr
 
