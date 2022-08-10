@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-4498-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4502-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3F4758F4A8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 01:09:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5025858F4AC
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Aug 2022 01:10:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B84B280A9B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 10 Aug 2022 23:09:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D458A1C2094C
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 10 Aug 2022 23:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022824A1A;
-	Wed, 10 Aug 2022 23:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0904A34;
+	Wed, 10 Aug 2022 23:09:39 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C914A06
-	for <nvdimm@lists.linux.dev>; Wed, 10 Aug 2022 23:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02DD4A14
+	for <nvdimm@lists.linux.dev>; Wed, 10 Aug 2022 23:09:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660172975; x=1691708975;
+  t=1660172976; x=1691708976;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yYRPJ8O/nI5XLYfuqFzW+C2ugl+ImE/phG1tck5CQp0=;
-  b=HzUHjUu3Yi9o00eKCm4xyfXoGU1BLziGr3BkWpeEBjIP+G53Lp8E56hw
-   t0BG4JpGCk4qjQBYeWaHP2lPr5vaYCC+WyQ+QiTv/zi7BsZLmc0Xbv96N
-   bKhXcmPuhtsY99ukyvefQeoHfupaJ1+7wwDj+pY3N77mhPeLmREAdkog3
-   yJ5w63H/n7JiOqf2Ed6FE0EoUBqxTOonZvy3PTK1x6StM6ctbd+YTJ9ST
-   3xHl78sa8h0ilpfd1JEB+CjPC31FCA4YrMk6NMOSAO85AjLEfDSdBbRJW
-   FYYtZUGkB0Z5G/YvwobO7MrLuVtp2RzQflxwZFlrdjwjNYuy9GXeumK/b
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="377506180"
+  bh=4ayfycPi5Ay3dElNFo2IpBfNV2KeWP7L//kKReci7Cg=;
+  b=mSkKxYgOUXbdjXPlAfOId14cXXlixLqoTVMD2y9JHRKboug7SUgCR9uB
+   goUjFzcKObmbnJdAR0Ug61rGvbcjVIaikTK8HNGCIiPiSBnFiwCV8j1Ff
+   Yks4iUr8Bq96++r7jw9Nl4LrEI05+Qkr7aHMUKFpxDMAIMsVRKhbSZbxU
+   XLvHkb/sp2j0AVeErrkF3yHkxrD13L6JVSQXqM8+Dq/0D7RDviXwWkuLu
+   qz6k2M9ZRXEDbgwJi8Ff1OLEC98se0AUfKvkbBUeFFBaN+dw8CoGafsDe
+   Cf5ct1qXVwP0D6hBRurCDxn/ngRdKbNfQ7wW/3+sNeOaEqGih5lGT5e3x
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="377506181"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="377506180"
+   d="scan'208";a="377506181"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:34 -0700
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="581429455"
+   d="scan'208";a="581429460"
 Received: from maughenb-mobl.amr.corp.intel.com (HELO vverma7-desk1.intel.com) ([10.209.94.5])
   by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:34 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
@@ -48,9 +48,9 @@ Cc: <nvdimm@lists.linux.dev>,
 	Ira Weiny <ira.weiny@intel.com>,
 	Dave Jiang <dave.jiang@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>
-Subject: [ndctl PATCH v2 08/10] cxl/list: make memdevs and regions the default listing
-Date: Wed, 10 Aug 2022 17:09:12 -0600
-Message-Id: <20220810230914.549611-9-vishal.l.verma@intel.com>
+Subject: [ndctl PATCH v2 09/10] test: add a cxl-create-region test
+Date: Wed, 10 Aug 2022 17:09:13 -0600
+Message-Id: <20220810230914.549611-10-vishal.l.verma@intel.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220810230914.549611-1-vishal.l.verma@intel.com>
 References: <20220810230914.549611-1-vishal.l.verma@intel.com>
@@ -60,39 +60,174 @@ List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1039; h=from:subject; bh=yYRPJ8O/nI5XLYfuqFzW+C2ugl+ImE/phG1tck5CQp0=; b=owGbwMvMwCXGf25diOft7jLG02pJDElfrGY+ONetvvKO4LP8xgjZ2MPa4hf3PRE7yFHGtszlul7S DHv+jlIWBjEuBlkxRZa/ez4yHpPbns8TmOAIM4eVCWQIAxenAEwk7CrDP/11LlGiwT8PWW3bvZP77w Zp0wivTzr97eE53wxXLMqUOM3IcFI+Pu6e84049zl5svzzKydvZOAQOjZDo/muT62DZb0IPwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4358; h=from:subject; bh=4ayfycPi5Ay3dElNFo2IpBfNV2KeWP7L//kKReci7Cg=; b=owGbwMvMwCXGf25diOft7jLG02pJDElfrGZ2fDiRrP19w00hs7gs4d+cYcZz27/unlDttXjKTX27 mqfpHaUsDGJcDLJiiix/93xkPCa3PZ8nMMERZg4rE8gQBi5OAZjI09WMDCcfXlkv82X+Rr7zP/9mrV o970NwVIjGxnO6X1xnXI5YuvAuw282xkMGCrMlZN2FePPWrN+uxd2t++toh02PNqfD7duJmswA
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 Content-Transfer-Encoding: 8bit
 
-Instead of only listing regions by default (which can often be empty if
-no regions have been configured), change the default listing mode to
-both memdevs and regions. This will allow a plain 'cxl-list' to be a
-quick health check of whether all the expected memdevs have enumerated
-correctly, and see any regions that have been configured.
+Add a unit test to exercise the cxl-create-region command with different
+combinations of memdevs and decoders, using cxl_test based mocked
+devices.
 
 Cc: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- cxl/list.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ test/cxl-create-region.sh | 126 ++++++++++++++++++++++++++++++++++++++
+ test/meson.build          |   2 +
+ 2 files changed, 128 insertions(+)
+ create mode 100644 test/cxl-create-region.sh
 
-diff --git a/cxl/list.c b/cxl/list.c
-index 88ca9d9..5f604ec 100644
---- a/cxl/list.c
-+++ b/cxl/list.c
-@@ -100,9 +100,10 @@ int cmd_list(int argc, const char **argv, struct cxl_ctx *ctx)
- 			param.regions = true;
- 	}
+diff --git a/test/cxl-create-region.sh b/test/cxl-create-region.sh
+new file mode 100644
+index 0000000..8e297ca
+--- /dev/null
++++ b/test/cxl-create-region.sh
+@@ -0,0 +1,126 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2022 Intel Corporation. All rights reserved.
++
++. $(dirname $0)/common
++
++rc=1
++
++set -ex
++
++trap 'err $LINENO' ERR
++
++check_prereq "jq"
++
++modprobe -r cxl_test
++modprobe cxl_test
++udevadm settle
++
++destroy_regions()
++{
++	if [[ "$*" ]]; then
++		$CXL destroy-region -f -b cxl_test "$@"
++	else
++		$CXL destroy-region -f -b cxl_test all
++	fi
++}
++
++create_x1_region()
++{
++	mem="$1"
++
++	# find a pmem capable root decoder for this mem
++	decoder=$($CXL list -b cxl_test -D -d root -m "$mem" |
++		  jq -r ".[] |
++		  select(.pmem_capable == true) |
++		  select(.nr_targets == 1) |
++		  .decoder")
++
++	if [[ ! $decoder ]]; then
++		echo "no suitable decoder found for $mem, skipping"
++		return
++	fi
++	op_attempted=1
++
++	# create region
++	region=$($CXL create-region -d "$decoder" -m "$mem" | jq -r ".region")
++
++	if [[ ! $region ]]; then
++		echo "create-region failed for $decoder / $mem"
++		err "$LINENO"
++	fi
++
++	# cycle disable/enable
++	$CXL disable-region --bus=cxl_test "$region"
++	$CXL enable-region --bus=cxl_test "$region"
++
++	# cycle destroying and creating the same region
++	destroy_regions "$region"
++	region=$($CXL create-region -d "$decoder" -m "$mem" | jq -r ".region")
++
++	if [[ ! $region ]]; then
++		echo "create-region failed for $decoder / $mem"
++		err "$LINENO"
++	fi
++}
++
++create_subregions()
++{
++	slice=$((256 << 20))
++	mem="$1"
++
++	# find a pmem capable root decoder for this mem
++	decoder=$($CXL list -b cxl_test -D -d root -m "$mem" |
++		  jq -r ".[] |
++		  select(.pmem_capable == true) |
++		  select(.nr_targets == 1) |
++		  .decoder")
++
++	if [[ ! $decoder ]]; then
++		echo "no suitable decoder found for $mem, skipping"
++		return
++	fi
++	op_attempted=1
++
++	size="$($CXL list -m "$mem" | jq -r '.[].pmem_size')"
++	if [[ ! $size ]]; then
++		echo "$mem: unable to determine size"
++		err "$LINENO"
++	fi
++
++	num_regions=$((size / slice))
++
++	declare -a regions
++	for (( i = 0; i < num_regions; i++ )); do
++		regions[$i]=$($CXL create-region -d "$decoder" -m "$mem" -s "$slice" | jq -r ".region")
++		if [[ ! $region ]]; then
++			echo "create sub-region failed for $decoder / $mem"
++			err "$LINENO"
++		fi
++		udevadm settle
++	done
++
++	for (( i = (num_regions - 1); i >= 0; i-- )); do
++		destroy_regions "${regions[$i]}"
++	done
++}
++
++# test reading labels directly through cxl-cli
++readarray -t mems < <("$CXL" list -b cxl_test -M | jq -r '.[].memdev')
++
++for mem in ${mems[@]}; do
++	op_attempted=0
++	create_x1_region "$mem"
++	if (( op_attempted == 1 )); then
++		destroy_regions
++	fi
++done
++
++# test multiple subregions under the same decoder, using slices of the same memdev
++# to test out back-to-back pmem DPA allocations on memdevs
++for mem in ${mems[@]}; do
++	op_attempted=0
++	create_subregions "$mem"
++done
++
++modprobe -r cxl_test
+diff --git a/test/meson.build b/test/meson.build
+index b382f46..5953c28 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -153,6 +153,7 @@ track_uuid = find_program('track-uuid.sh')
+ cxl_topo = find_program('cxl-topology.sh')
+ cxl_sysfs = find_program('cxl-region-sysfs.sh')
+ cxl_labels = find_program('cxl-labels.sh')
++cxl_create_region = find_program('cxl-create-region.sh')
  
--	/* List regions by default */
-+	/* List regions and memdevs by default */
- 	if (num_list_flags() == 0) {
- 		param.regions = true;
-+		param.memdevs = true;
- 	}
+ tests = [
+   [ 'libndctl',               libndctl,		  'ndctl' ],
+@@ -180,6 +181,7 @@ tests = [
+   [ 'cxl-topology.sh',	      cxl_topo,		  'cxl'   ],
+   [ 'cxl-region-sysfs.sh',    cxl_sysfs,	  'cxl'   ],
+   [ 'cxl-labels.sh',          cxl_labels,	  'cxl'   ],
++  [ 'cxl-create-region.sh',   cxl_create_region,  'cxl'   ],
+ ]
  
- 	log_init(&param.ctx, "cxl list", "CXL_LIST_LOG");
+ if get_option('destructive').enabled()
 -- 
 2.37.1
 
