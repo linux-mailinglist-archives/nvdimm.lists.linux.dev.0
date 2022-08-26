@@ -1,46 +1,46 @@
-Return-Path: <nvdimm+bounces-4598-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4595-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 424D45A2D4B
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 19:18:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A24865A2D3E
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 19:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFFD3280C8F
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 17:18:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CF9D1C20995
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 17:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30997441A;
-	Fri, 26 Aug 2022 17:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7FB4410;
+	Fri, 26 Aug 2022 17:18:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BC84411
-	for <nvdimm@lists.linux.dev>; Fri, 26 Aug 2022 17:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4194401
+	for <nvdimm@lists.linux.dev>; Fri, 26 Aug 2022 17:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661534298; x=1693070298;
+  t=1661534283; x=1693070283;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eytTo9jR/taEQMRxBFsY1ZsO/Az6sn3vkXQeKBBLxVw=;
-  b=G13jmoXE/gyRtBT6RrJMVF0R4OHWQa3fumKlJxTAzbrvyXjn2l28IBCj
-   Pmo6rDYRM6lVoTsYNvA93nYUfGA5E572lbSNhsbrLdbc6wfotrIUdFUjI
-   tOBlXGsRkJJy2wKhUpVQK1ZT5iHwQGR/aMr6/X9qYbz2KEVy48cR3OSUd
-   eAAR7w8qlZRgW726eYMcSbv4Ujtdix+mdWsigjtsASUbsszP3XLYPX9rf
-   k8/GyhXWCHcmXoIeg2K2yrQ+q4mCWS/GxX+YhpuegPIgpS9MkXHFNHBLb
-   QDBJjEPcga5DIHsx9Dft5V1fpkXwdDULLuKdQZ1mYpu1t98IzOFvfNY4A
+  bh=fs681qlkVC3ILKSgH9kmbbCYwIlE7iUgG8xYi36A6tk=;
+  b=L4oaAFtXG4Tx7mz5PMYC34D0vQ6XBJY6Og5ptbZxztM1F3jkfGZOPGK2
+   wlFWUoyaAioIzYHY+4SjWECZKjUoNLKF0HNPsgu9XNCvr6+46iYBLVihc
+   Yq2fHMxviVJLXQhx8A+3HeZmEG2hSl8LhMmLDmVEGjC5z6TWrcOE+DyQ3
+   d8BaubXJi4bLBp7/vUsiaeOjojNnNj9Pm7qEW38cqrfb6+QNNpk+ZXpKq
+   RIhRaeqEoKgckwvx1YE3ztakPmcmO54exMHoDeuIpha+BR9j/z+d7jGkf
+   eLNA01tpxLBTNd/MbAhLaukuKg/5+cP93f4DlzYAP8AMU2ve8vISmdSVO
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="277570312"
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="274956192"
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="277570312"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:55 -0700
+   d="scan'208";a="274956192"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:18:02 -0700
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="714035729"
+   d="scan'208";a="938824876"
 Received: from jodirobx-mobl2.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.108.22])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:55 -0700
-Subject: [PATCH 1/4] xfs: Quiet notify_failure EOPNOTSUPP cases
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:18:01 -0700
+Subject: [PATCH 2/4] xfs: Fix SB_BORN check in xfs_dax_notify_failure()
 From: Dan Williams <dan.j.williams@intel.com>
 To: akpm@linux-foundation.org, djwong@kernel.org
 Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>, Christoph Hellwig <hch@lst.de>,
@@ -50,8 +50,8 @@ Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>, Christoph Hellwig <hch@lst.de>,
  Naoya Horiguchi <naoya.horiguchi@nec.com>,
  Ritesh Harjani <riteshh@linux.ibm.com>, nvdimm@lists.linux.dev,
  linux-xfs@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
-Date: Fri, 26 Aug 2022 10:17:54 -0700
-Message-ID: <166153427440.2758201.6709480562966161512.stgit@dwillia2-xfh.jf.intel.com>
+Date: Fri, 26 Aug 2022 10:18:01 -0700
+Message-ID: <166153428094.2758201.7936572520826540019.stgit@dwillia2-xfh.jf.intel.com>
 In-Reply-To: <166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com>
 References: <166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -64,16 +64,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-XFS always registers dax_holder_operations regardless of whether the
-filesystem is capable of handling the notifications. The expectation is
-that if the notify_failure handler cannot run then there are no
-scenarios where it needs to run. In other words the expected semantic is
-that page->index and page->mapping are valid for memory_failure() when
-the conditions that cause -EOPNOTSUPP in xfs_dax_notify_failure() are
-present.
-
-A fallback to the generic memory_failure() path is expected so do not
-warn when that happens.
+The SB_BORN flag is stored in the vfs superblock, not xfs_sb.
 
 Fixes: 6f643c57d57c ("xfs: implement ->notify_failure() for XFS")
 Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>
@@ -90,30 +81,21 @@ Cc: Ritesh Harjani <riteshh@linux.ibm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- fs/xfs/xfs_notify_failure.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/xfs/xfs_notify_failure.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-index 69d9c83ea4b2..01e2721589c4 100644
+index 01e2721589c4..5b1f9a24ed59 100644
 --- a/fs/xfs/xfs_notify_failure.c
 +++ b/fs/xfs/xfs_notify_failure.c
-@@ -181,7 +181,7 @@ xfs_dax_notify_failure(
- 	}
+@@ -175,7 +175,7 @@ xfs_dax_notify_failure(
+ 	u64			ddev_start;
+ 	u64			ddev_end;
  
- 	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
--		xfs_warn(mp,
-+		xfs_debug(mp,
- 			 "notify_failure() not supported on realtime device!");
- 		return -EOPNOTSUPP;
+-	if (!(mp->m_sb.sb_flags & SB_BORN)) {
++	if (!(mp->m_super->s_flags & SB_BORN)) {
+ 		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+ 		return -EIO;
  	}
-@@ -194,7 +194,7 @@ xfs_dax_notify_failure(
- 	}
- 
- 	if (!xfs_has_rmapbt(mp)) {
--		xfs_warn(mp, "notify_failure() needs rmapbt enabled!");
-+		xfs_debug(mp, "notify_failure() needs rmapbt enabled!");
- 		return -EOPNOTSUPP;
- 	}
- 
 
 
