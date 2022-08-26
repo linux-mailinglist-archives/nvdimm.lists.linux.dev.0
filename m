@@ -1,57 +1,59 @@
-Return-Path: <nvdimm+bounces-4594-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4598-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 965945A2D38
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 19:17:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 424D45A2D4B
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 19:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 567E91C209A6
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 17:17:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFFD3280C8F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 26 Aug 2022 17:18:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B49A14410;
-	Fri, 26 Aug 2022 17:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30997441A;
+	Fri, 26 Aug 2022 17:18:20 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C824401
-	for <nvdimm@lists.linux.dev>; Fri, 26 Aug 2022 17:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BC84411
+	for <nvdimm@lists.linux.dev>; Fri, 26 Aug 2022 17:18:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661534270; x=1693070270;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KwjNfQYAzpFvaPY/cJlUEOzalTxntNE7gB2sV8ipr7o=;
-  b=lchMF85z9FkNJAh+b0l7Px1xIEQXtZIYk6gvknN+xPKDZ/gnkc0dd9C0
-   m2xuAQHbTW7rDU7c73Jmb/UDN4KV4rPS3v0xUiYTg9Fh+SlD0083FqEoJ
-   oQ1vjUK/xh3xuh3IL0qJH4Pq85oY82hXt6lfMuu0PPOE+6ZNHSfq3Wmv7
-   X0ob4q9lesD2FNTsCdEyhMTzyMWIw0iyUjKWSbb7DaDHSw1L24zi87Sby
-   w+r56U1cKNNMHS0c77gl17ibU4Te+ePDzW4c2DQOfRykyhxAx6vAebet3
-   gkGkDf5LCbhGPnWrGgJ1x/xLrd5JYeLzZlGutGpvmiwRUWNgguaJ/r+mK
+  t=1661534298; x=1693070298;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eytTo9jR/taEQMRxBFsY1ZsO/Az6sn3vkXQeKBBLxVw=;
+  b=G13jmoXE/gyRtBT6RrJMVF0R4OHWQa3fumKlJxTAzbrvyXjn2l28IBCj
+   Pmo6rDYRM6lVoTsYNvA93nYUfGA5E572lbSNhsbrLdbc6wfotrIUdFUjI
+   tOBlXGsRkJJy2wKhUpVQK1ZT5iHwQGR/aMr6/X9qYbz2KEVy48cR3OSUd
+   eAAR7w8qlZRgW726eYMcSbv4Ujtdix+mdWsigjtsASUbsszP3XLYPX9rf
+   k8/GyhXWCHcmXoIeg2K2yrQ+q4mCWS/GxX+YhpuegPIgpS9MkXHFNHBLb
+   QDBJjEPcga5DIHsx9Dft5V1fpkXwdDULLuKdQZ1mYpu1t98IzOFvfNY4A
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="320659722"
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="277570312"
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="320659722"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:49 -0700
+   d="scan'208";a="277570312"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:55 -0700
 X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="856078731"
+   d="scan'208";a="714035729"
 Received: from jodirobx-mobl2.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.108.22])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:48 -0700
-Subject: [PATCH 0/4] mm, xfs, dax: Fixes for memory_failure() handling
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:17:55 -0700
+Subject: [PATCH 1/4] xfs: Quiet notify_failure EOPNOTSUPP cases
 From: Dan Williams <dan.j.williams@intel.com>
 To: akpm@linux-foundation.org, djwong@kernel.org
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.de>, Jane Chu <jane.chu@oracle.com>,
- Shiyang Ruan <ruansy.fnst@fujitsu.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Christoph Hellwig <hch@lst.de>, Dave Chinner <david@fromorbit.com>,
- Matthew Wilcox <willy@infradead.org>, Ritesh Harjani <riteshh@linux.ibm.com>,
- Naoya Horiguchi <naoya.horiguchi@nec.com>, Al Viro <viro@zeniv.linux.org.uk>,
- nvdimm@lists.linux.dev, linux-xfs@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org
-Date: Fri, 26 Aug 2022 10:17:48 -0700
-Message-ID: <166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com>
+Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>, Christoph Hellwig <hch@lst.de>,
+ Al Viro <viro@zeniv.linux.org.uk>, Dave Chinner <david@fromorbit.com>,
+ Goldwyn Rodrigues <rgoldwyn@suse.de>, Jane Chu <jane.chu@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <naoya.horiguchi@nec.com>,
+ Ritesh Harjani <riteshh@linux.ibm.com>, nvdimm@lists.linux.dev,
+ linux-xfs@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Date: Fri, 26 Aug 2022 10:17:54 -0700
+Message-ID: <166153427440.2758201.6709480562966161512.stgit@dwillia2-xfh.jf.intel.com>
+In-Reply-To: <166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com>
+References: <166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com>
 User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -62,34 +64,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-I failed to run the memory error injection section of the ndctl test
-suite on linux-next prior to the merge window and as a result some bugs
-were missed. While the new enabling targeted reflink enabled XFS
-filesystems the bugs cropped up in the surrounding cases of DAX error
-injection on ext4-fsdax and device-dax.
+XFS always registers dax_holder_operations regardless of whether the
+filesystem is capable of handling the notifications. The expectation is
+that if the notify_failure handler cannot run then there are no
+scenarios where it needs to run. In other words the expected semantic is
+that page->index and page->mapping are valid for memory_failure() when
+the conditions that cause -EOPNOTSUPP in xfs_dax_notify_failure() are
+present.
 
-One new assumption / clarification in this set is the notion that if a
-filesystem's ->notify_failure() handler returns -EOPNOTSUPP, then it
-must be the case that the fsdax usage of page->index and page->mapping
-are valid. I am fairly certain this is true for
-xfs_dax_notify_failure(), but would appreciate another set of eyes.
+A fallback to the generic memory_failure() path is expected so do not
+warn when that happens.
 
-The bulk of the change is in mm/memory-failure.c, so perhaps this set
-should go through Andrew's tree.
-
+Fixes: 6f643c57d57c ("xfs: implement ->notify_failure() for XFS")
+Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Darrick J. Wong <djwong@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: Goldwyn Rodrigues <rgoldwyn@suse.de>
+Cc: Jane Chu <jane.chu@oracle.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Ritesh Harjani <riteshh@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
+ fs/xfs/xfs_notify_failure.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Dan Williams (4):
-      xfs: Quiet notify_failure EOPNOTSUPP cases
-      xfs: Fix SB_BORN check in xfs_dax_notify_failure()
-      mm/memory-failure: Fix detection of memory_failure() handlers
-      mm/memory-failure: Fall back to vma_address() when ->notify_failure() fails
+diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+index 69d9c83ea4b2..01e2721589c4 100644
+--- a/fs/xfs/xfs_notify_failure.c
++++ b/fs/xfs/xfs_notify_failure.c
+@@ -181,7 +181,7 @@ xfs_dax_notify_failure(
+ 	}
+ 
+ 	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+-		xfs_warn(mp,
++		xfs_debug(mp,
+ 			 "notify_failure() not supported on realtime device!");
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -194,7 +194,7 @@ xfs_dax_notify_failure(
+ 	}
+ 
+ 	if (!xfs_has_rmapbt(mp)) {
+-		xfs_warn(mp, "notify_failure() needs rmapbt enabled!");
++		xfs_debug(mp, "notify_failure() needs rmapbt enabled!");
+ 		return -EOPNOTSUPP;
+ 	}
+ 
 
-
- fs/xfs/xfs_notify_failure.c |    6 +++---
- include/linux/memremap.h    |    5 +++++
- mm/memory-failure.c         |   24 +++++++++++++-----------
- 3 files changed, 21 insertions(+), 14 deletions(-)
-
-base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
 
