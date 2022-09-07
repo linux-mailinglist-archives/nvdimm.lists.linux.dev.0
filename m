@@ -1,226 +1,231 @@
-Return-Path: <nvdimm+bounces-4656-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4658-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B000C5AF933
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 02:55:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F925AFA12
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 04:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 531281C20919
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 00:55:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 674A4280C66
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 02:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A987217C9;
-	Wed,  7 Sep 2022 00:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C3217F1;
+	Wed,  7 Sep 2022 02:45:21 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076157E
-	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 00:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662512101; x=1694048101;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=+VL8uqerZkRkQYIfxvY3d6COSDpk5V4SQyb3Tqs9rYc=;
-  b=L8EIz8mZ5fkwbPjABm2CqQgWvHdRCXh2SSlhaCR7Jctr345+Lzmh747X
-   dXHMC8JPeNeBusGsElH/E/zbz8QJKgk/h8Khf1vb5a0t1Ydx21S4qa581
-   FTx0CoqePIDr14jK6EVafVO6+uET0ITgKYKdFXEbZG3RC7UdMwEi2rBD3
-   l39upqaHVUrKawGIh3+i/rH6oiicCv9zEOVIjCEhKr/pWsNsPqYyCayOh
-   fJs2nMrUpr4fY/oSvICwsbqal0gwjsng+kZR8lNOrsgK7Ctd2S8YtrFbb
-   leD9HIvTWHbrf/TdX25EzIOq++g8vg7PmoBAKIQHl5DDRBsvzn6qAvKRS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322927950"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="322927950"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 17:55:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="756572639"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 17:55:00 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 17:54:59 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 17:54:59 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 6 Sep 2022 17:54:59 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 6 Sep 2022 17:54:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=civtswuBtrmbhxOIVq32yyIahY7StbI+8vmGTdwVJeyrzN2eaw84mk9uEvTbBp42Mvi8lJMY9qKmS+oabXnEAhiQM8SmrnIEZU6knzYyVQkyAYPGv1fYR0dxbo0K9EbW0wOEe4rQhnndLpqnPCV9V+U+R0fm72Qdsul9h8f69/+fZbEl/fKGPn/IxTkyjYxMDt2GYIDKkvvTIGb2ONCjS44V33qEKADemqD5oQwSwxF6feKPOZEyEHtY38eBL0OIfaeN5CgdbaprSrgd0QptCtU9uTWq50ws92omI2txDcXqpPgXahbQ5mlgxcaehLDat/mfEJEZZkChLPUapjuc6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XwtyWa3ucPTNT4mxEQr8ZhlJpAzftv92tBzfWF1dRdw=;
- b=OEesnLbt4bIhgcKrnYlw9QuuzRYPgjDipNsVQhlBkbYU5c9vNp2m8CG5lEg7dPCMqGaZtbmHRTb4QLUTr/6GL4lOMQY++Q5LkGsVjKio8kXEyBmOxvQFXBnVmZORvyp49t7U92nlgx8EfZDTRht5dvaiRZlvaPMhJMBibYj734D1AzFd4q2idVBIWkBIl6Q7RZMP+XXwKR2BFalfvL4agJuKDIiJkGtrGtuvWKMbX9IEy+hiECwDmAHJEblLZ9t9DzZdyypPy5jam7xjMtvoCPgY7gOKVxH8wIspf1FqXg9plzQfMkpwYB03X4yR43jFUi393CSvBAHXnpeMaNd+uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SN6PR11MB3309.namprd11.prod.outlook.com
- (2603:10b6:805:bd::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.15; Wed, 7 Sep
- 2022 00:54:57 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5588.017; Wed, 7 Sep 2022
- 00:54:57 +0000
-Date: Tue, 6 Sep 2022 17:54:54 -0700
-From: Dan Williams <dan.j.williams@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-CC: <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>, Christoph Hellwig
-	<hch@lst.de>, "Darrick J. Wong" <djwong@kernel.org>, John Hubbard
-	<jhubbard@nvidia.com>, Matthew Wilcox <willy@infradead.org>,
-	<linux-mm@kvack.org>, <nvdimm@lists.linux.dev>,
-	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 00/13] Fix the DAX-gup mistake
-Message-ID: <6317ebde620ec_166f29466@dwillia2-xfh.jf.intel.com.notmuch>
-References: <166225775968.2351842.11156458342486082012.stgit@dwillia2-xfh.jf.intel.com>
- <YxdFmXi/Zdr8Zi3q@nvidia.com>
- <6317821d1c465_166f29417@dwillia2-xfh.jf.intel.com.notmuch>
- <YxeDjTq526iS15Re@nvidia.com>
- <631793709f2d3_166f29415@dwillia2-xfh.jf.intel.com.notmuch>
- <YxeWQIxPZF0QJ/FL@nvidia.com>
- <6317a26d3e1ed_166f2946e@dwillia2-xfh.jf.intel.com.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6317a26d3e1ed_166f2946e@dwillia2-xfh.jf.intel.com.notmuch>
-X-ClientProxiedBy: BY5PR16CA0026.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::39) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DCB7E
+	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 02:45:18 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="75542641"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654527600"; 
+   d="scan'208";a="75542641"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Sep 2022 11:44:07 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 86C93DA696
+	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 11:44:06 +0900 (JST)
+Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id B6706BF3D4
+	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 11:44:05 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.19.3.107])
+	by m3002.s.css.fujitsu.com (Postfix) with ESMTP id 6A386200B3AC;
+	Wed,  7 Sep 2022 11:44:05 +0900 (JST)
+From: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+To: linux-rdma@vger.kernel.org,
+	leonro@nvidia.com,
+	jgg@nvidia.com,
+	zyjzyj2000@gmail.com
+Cc: nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	rpearsonhpe@gmail.com,
+	yangx.jy@fujitsu.com,
+	lizhijian@fujitsu.com,
+	y-goto@fujitsu.com,
+	Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+Subject: [RFC PATCH 0/7] RDMA/rxe: On-Demand Paging on SoftRoCE
+Date: Wed,  7 Sep 2022 11:42:58 +0900
+Message-Id: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7477329d-f44e-47ba-291b-08da906b95b0
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3309:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QyZWc9KIDLtW9uDMXYB53/VXlHiiPH+hOFSuI1ZslQ3mKqDrZiq9JgHAAzSDOXLEQ6Iq2ll6V1aQaGNLKed3lL7uAEiwDDcaB998IWaGgb88GrhSwB0Zw51gRcQkIFmoLpSvUg3M2l5YIElh7oGFngXbnaF/MIq5SwaevAdxL/QCs0JBZmIm+Zeyg6RwiNQa0Ek54c0QWEicr8rZCPUgGvOf8UvvHRaWkzAX878JdC09V1FBuspMjL/tuxjq0rTF3HOCsxGfDgxjJlJlZWs0TT7f5GSezPcKFByNW28fuU5wig1HS+pjl0MEgKmIlwXLxA0R39iMPH8/nczygSCxsYjj08ou8qpKolV4bbPR4ysIQSNIn+/ld6gHiVw52BUA+Ojx4WyUSv8jnwLHQsmsAExxGK2Jh+uzwg8ztj2E0RXnXOQbAXatlO0MoraGfscdNr4PVfodBULRHedj2ua0JGt9dBOzun26wlxrOrQIOrxZxHOooWD823Xeiq178ecEAKEAT10VQAMMtapIrQ6t+ck7yu2hbHsXzIwL6CeQ0O19JzScvLNaPzBTUR6pbMvgNc7haOhwX+U9q+DHF9D18Y0aVKIIZ246/xry0ewY0SdleOoBJxza+KeVeCg1nIuUDskSHOiBjtb+PTQZk4HuGt7ajfrrgeKGTU1pT4SfxxStiTAvZEcXujcIFn//T5bF/rDxK4bPb9AUBV54hlgPFQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(346002)(366004)(39860400002)(396003)(41300700001)(110136005)(54906003)(478600001)(82960400001)(6486002)(316002)(186003)(38100700002)(83380400001)(6512007)(9686003)(26005)(6506007)(5660300002)(8676002)(7416002)(6666004)(66556008)(86362001)(8936002)(66946007)(4326008)(66476007)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AmEaV+sIgfoSANn2oPapBc6sr4AnDiNNAkpnIvkmj8mv7PUk9G/uzcyKwPl8?=
- =?us-ascii?Q?DrE/MTVyAVSZuyRPUW7YwYbhxkt0bEQAuhzpBH3XNtuf5niEbek+GfHNW4eb?=
- =?us-ascii?Q?2XuRyKC3Ez0GUbMusfv8o35htcHrsOtrG0HBx0zwDjzSzprGvXlPtLmawQYO?=
- =?us-ascii?Q?F9awxrmnTm2AScdAwyRSGkoGkMuYMxQe+DcM+WZ0pEJMhtL3UxUa3ldQf1Ma?=
- =?us-ascii?Q?eHvq/SLZd7w5aPqysjMx4QOuhUlDVA0dIzdQlriEHa+41o3ZLZkFfwfAdGA2?=
- =?us-ascii?Q?eex89tQ3+L4Zz001CVhM+tou0owJe2ix6lTcMx4tWsrIJmpH4+x+0qhIL5kW?=
- =?us-ascii?Q?LOWkCa26mptVQY1JNg5OXBSjpXGI13+abYcohL8kXTT26+i06qEhk5O7SQqU?=
- =?us-ascii?Q?zBnmCvqsijTU+TbtNSrvCO7NIbIi3vKXi1/W3DDYCODegScD0uVPxUnWjdC+?=
- =?us-ascii?Q?9Dp6Fl+yNOW0Q+XkYwdKmzagrPVi2f8iOB3557Df+o68Yv9v2QCSzzg/Zxx1?=
- =?us-ascii?Q?f2qxi1ouwrgG3V17q2b7QqaTYycGWUDyzsVXh7shlAqJD9ODFhSKwdiSpcpC?=
- =?us-ascii?Q?wyFyjgPffHUk+yptXJyKTO0YoqcUPYh8eoF3ZU4cbz/BBTbBG8e2vdkextJ1?=
- =?us-ascii?Q?yH04u9IYClUZI1sHsKqFHhhVcvQdhyPh1WFMwZ9YN2gPoqh+H25SKcsKQ0HJ?=
- =?us-ascii?Q?2jETOs4ErZgkdQAF9+7JTrcydvkwDKl5Xu5gKWrSC1y+rDJXTrwQE7hDO3lY?=
- =?us-ascii?Q?kQUp1Gi1jZbewFl7B8keX48xsqIVaKAb0p9ySGdoAw22+2n+mycjQK86iPNu?=
- =?us-ascii?Q?jYW155iliTDiKRglgMNadkiFqgfVT9PlHcLAg0myCX9qy+TovJFIKZIwgL9w?=
- =?us-ascii?Q?H4g+PDLrccp+B+hpnZWdfv1ptgsKX8g0XWYPpdOGfC/6IA9gYTWdTR3Z8Qwt?=
- =?us-ascii?Q?1HAjEzZaa8KsCEL1t+ZpwnqJU9rSDJs4liuydUHPYQ1bGRxAp910RqlI/FdR?=
- =?us-ascii?Q?YebAG1Aid1qK6sUE/LgEOaj5C7j0CuJlBVxMK0ILqydS3BmnurR+5WUOyO65?=
- =?us-ascii?Q?qRZSpV0qslPAl/SLynovZB3ADC7QUBx/Z/1jGpjpxXXwnBr/x+a8d+TVcFB8?=
- =?us-ascii?Q?r15miL0b9humr0BVxE/hgeaIbzzIprXnE/7ND7MNRx2qlM7ODS9Atvo1PCXJ?=
- =?us-ascii?Q?TVCrrElUOxfwvU3sdHaS+zymX0stK2ldIJEL/2l5ULSBFqKw53HvqPCDMaQB?=
- =?us-ascii?Q?bldgp5bP/TToD3n/LA3JOVK4VHjvHFRkCxA2pbPxH7YIwdf4bTUP3IodQxRk?=
- =?us-ascii?Q?1b0W2mfdFghYcSqOwRarzNK5SE5TOQ3aoCrypxRJ1Pto4PnO2gUwLoLpheYd?=
- =?us-ascii?Q?34RN8OAgdhT3uyaAYnZ8+lKfGesf9D0MYFxTg9gdMRC0rCHG7PvTUFFT9/mO?=
- =?us-ascii?Q?W0zbY2uvm2lcGTlgaKEKygFTT8XMXbDV9wYEVEolYTV8BbVqDxjOQzS0Boee?=
- =?us-ascii?Q?z2JoLmoFtBCOyCjiVYkUWzLkF4OunTIa91sro1/n8wtN6Xltj/SSMf0cDtRX?=
- =?us-ascii?Q?FaRD0c/fHe7OzM6uGyuntP0WAPJDq8HBJcYxTcq2o2Sk6HbpxcAPxZbs0RqO?=
- =?us-ascii?Q?Kw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7477329d-f44e-47ba-291b-08da906b95b0
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 00:54:57.5628
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ifCT9emUnlq7I0rPad5jX5kVFqgrKBT+umvpae8Mtl/0RRvmOqSgEr8ffmch+e7DGs0+0Pi3F2vT+BArJJzmcbn328OOMVG+UB2I3IhMfWw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3309
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 
-Dan Williams wrote:
-> Jason Gunthorpe wrote:
-> > On Tue, Sep 06, 2022 at 11:37:36AM -0700, Dan Williams wrote:
-> > > Jason Gunthorpe wrote:
-> > > > On Tue, Sep 06, 2022 at 10:23:41AM -0700, Dan Williams wrote:
-> > > > 
-> > > > > > Can we continue to have the weird page->refcount behavior and still
-> > > > > > change the other things?
-> > > > > 
-> > > > > No at a minimum the pgmap vs page->refcount problem needs to be solved
-> > > > > first.
-> > > > 
-> > > > So who will do the put page after the PTE/PMD's are cleared out? In
-> > > > the normal case the tlb flusher does it integrated into zap..
-> > > 
-> > > AFAICS the zap manages the _mapcount not _refcount. Are you talking
-> > > about page_remove_rmap() or some other reference count drop?
-> > 
-> > No, page refcount.
-> > 
-> > __tlb_remove_page() eventually causes a put_page() via
-> > tlb_batch_pages_flush() calling free_pages_and_swap_cache()
-> > 
-> > Eg:
-> > 
-> >  *  MMU_GATHER_NO_GATHER
-> >  *
-> >  *  If the option is set the mmu_gather will not track individual pages for
-> >  *  delayed page free anymore. A platform that enables the option needs to
-> >  *  provide its own implementation of the __tlb_remove_page_size() function to
-> >  *  free pages.
-> 
-> Ok, yes, that is a vm_normal_page() mechanism which I was going to defer
-> since it is incremental to the _refcount handling fix and maintain that
-> DAX pages are still !vm_normal_page() in this set.
-> 
-> > > > Can we safely have the put page in the fsdax side after the zap?
-> > > 
-> > > The _refcount is managed from the lifetime insert_page() to
-> > > truncate_inode_pages(), where for DAX those are managed from
-> > > dax_insert_dentry() to dax_delete_mapping_entry().
-> > 
-> > As long as we all understand the page doesn't become re-allocatable
-> > until the refcount reaches 0 and the free op is called it may be OK!
-> 
-> Yes, but this does mean that page_maybe_dma_pinned() is not sufficient for
-> when the filesystem can safely reuse the page, it really needs to wait
-> for the reference count to drop to 0 similar to how it waits for the
-> page-idle condition today.
+Hi everyone,
 
-This gets tricky with break_layouts(). For example xfs_break_layouts()
-wants to ensure that the page is gup idle while holding the mmap lock.
-If the page is not gup idle it needs to drop locks and retry. It is
-possible the path to drop a page reference also needs to acquire
-filesystem locs. Consider odd cases like DMA from one offset to another
-in the same file. So waiting with filesystem locks held is off the
-table, which also means that deferring the wait until
-dax_delete_mapping_entry() time is also off the table.
+This patch series implements the On-Demand Paging feature on SoftRoCE(rxe)
+driver, which has been available only in mlx5 driver[1] so far.
 
-That means that even after the conversion to make DAX page references
-0-based it will still be the case that filesystem code will be waiting
-for the 2 -> 1 transition to indicate "mapped DAX page has no more
-external references".
+[Overview]
+When applications register a memory region(MR), RDMA drivers normally pin
+pages in the MR so that physical addresses are never changed during RDMA
+communication. This requires the MR to fit in physical memory and
+inevitably leads to memory pressure. On the other hand, On-Demand Paging
+(ODP) allows applications to register MRs without pinning pages. They are
+paged-in when the driver requires and paged-out when the OS reclaims. As a
+result, it is possible to register a large MR that does not fit in physical
+memory without taking up so much physical memory.
 
-Then dax_delete_mapping_entry() can validate that it is performing the 1
--> 0 transition since no more refernences should have been taken while
-holding filesystem locks.
+[Why to add this feature?]
+We, Fujitsu, have contributed to RDMA with a view to using it with
+persistent memory. Persistent memory can host a filesystem that allows
+applications to read/write files directly without involving page cache.
+This is called FS-DAX(filesystem direct access) mode. There is a problem
+that data on DAX-enabled filesystem cannot be duplicated with software RAID
+or other hardware methods. Data replication with RDMA, which features
+high-speed connections, is the best solution for the problem.
+
+However, there is a known issue that hinders using RDMA with FS-DAX. When
+RDMA operations to a file and update of the file metadata are processed
+concurrently on the same node, illegal memory accesses can be executed,
+disregarding the updated metadata. This is because RDMA operations do not
+go through page cache but access data directly. There was an effort[2] to
+solve this problem, but it was rejected in the end. Though there is no
+general solution available, it is possible to work around the problem using
+the ODP feature that has been available only in mlx5. ODP enables drivers
+to update metadata before processing RDMA operations.
+
+We have enhanced the rxe to expedite the usage of persistent memory. Our
+contribution to rxe includes RDMA Atomic write[3] and RDMA Flush[4]. With
+them being merged to rxe along with ODP, an environment will be ready for
+developers to create and test software for RDMA with FS-DAX. There is a
+library(librpma)[5] being developed for this purpose. This environment
+can be used by anybody without any special hardware but an ordinary
+computer with a normal NIC though it is inferior to hardware
+implementations in terms of performance.
+
+[Design considerations]
+ODP has been available only in mlx5, but functions and data structures
+that can be used commonly are provided in ib_uverbs(infiniband/core). The
+interface is heavily dependent on HMM infrastructure[6], and this patchset
+use them as much as possible. While mlx5 has both Explicit and Implicit ODP
+features along with prefetch feature, this patchset implements the Explicit
+ODP feature only.
+
+As an important change, it is necessary to convert triple tasklets
+(requester, responder and completer) to workqueues because they must be
+able to sleep in order to trigger page fault before accessing MRs. I did a
+test shown in the 2nd patch and found that the change makes the latency
+higher while improving the bandwidth. Though it may be possible to create a
+new independent workqueue for page fault execution, it is a not very
+sensible solution since the tasklets have to busy-wait its completion in
+that case.
+
+If responder and completer sleep, it becomes more likely that packet drop
+occurs because of overflow in receiver queue. There are multiple queues
+involved, but, as SoftRoCE uses UDP, the most important one would be the
+UDP buffers. The size can be configured in net.core.rmem_default and
+net.core.rmem_max sysconfig parameters. Users should change these values in
+case of packet drop, but page fault would be typically not so long as to
+cause the problem.
+
+[How does ODP work?]
+"struct ib_umem_odp" is used to manage pages. It is created for each
+ODP-enabled MR on its registration. This struct holds a pair of arrays
+(dma_list/pfn_list) that serve as a driver page table. DMA addresses and
+PFNs are stored in the driver page table. They are updated on page-in and
+page-out, both of which use the common interface in ib_uverbs.
+
+Page-in can occur when requester, responder or completer access an MR in
+order to process RDMA operations. If they find that the pages being
+accessed are not present on physical memory or requisite permissions are
+not set on the pages, they provoke page fault to make pages present with
+proper permissions and at the same time update the driver page table. After
+confirming the presence of the pages, they execute memory access such as
+read, write or atomic operations.
+
+Page-out is triggered by page reclaim or filesystem events (e.g. metadata
+update of a file that is being used as an MR). When creating an ODP-enabled
+MR, the driver registers an MMU notifier callback. When the kernel issues a
+page invalidation notification, the callback is provoked to unmap DMA
+addresses and update the driver page table. After that, the kernel releases
+the pages.
+
+[Supported operations]
+All operations are supported on RC connection. Atomic write[3] and Flush[4]
+operations, which are still under discussion, are also going to be
+supported after their patches are merged. On UD connection, Send, Recv,
+SRQ-Recv are supported. Because other operations are not supported on mlx5,
+I take after the decision right now.
+
+[How to test ODP?]
+There are only a few resources available for testing. pyverbs testcases in
+rdma-core and perftest[7] are recommendable ones. Note that you may have to
+build perftest from upstream since older versions do not handle ODP
+capabilities correctly.
+
+[Future work]
+My next work will be the prefetch feature. It allows applications to
+trigger page fault using ibv_advise_mr(3) to optimize performance. Some
+existing software like librpma use this feature. Additionally, I think we
+can also add the implicit ODP feature in the future.
+
+[1] [RFC 00/20] On demand paging
+https://www.spinics.net/lists/linux-rdma/msg18906.html
+
+[2] [RFC PATCH v2 00/19] RDMA/FS DAX truncate proposal V1,000,002 ;-)
+https://lore.kernel.org/nvdimm/20190809225833.6657-1-ira.weiny@intel.com/
+
+[3] [RESEND PATCH v5 0/2] RDMA/rxe: Add RDMA Atomic Write operation
+https://www.spinics.net/lists/linux-rdma/msg111428.html
+
+[4] [PATCH v4 0/6] RDMA/rxe: Add RDMA FLUSH operation
+https://www.spinics.net/lists/kernel/msg4462045.html
+
+[5] librpma: Remote Persistent Memory Access Library
+https://github.com/pmem/rpma
+
+[6] Heterogeneous Memory Management (HMM)
+https://www.kernel.org/doc/html/latest/mm/hmm.html
+
+[7] linux-rdma/perftest: Infiniband Verbs Performance Tests
+https://github.com/linux-rdma/perftest
+
+Daisuke Matsuda (7):
+  IB/mlx5: Change ib_umem_odp_map_dma_single_page() to retain umem_mutex
+  RDMA/rxe: Convert the triple tasklets to workqueues
+  RDMA/rxe: Cleanup code for responder Atomic operations
+  RDMA/rxe: Add page invalidation support
+  RDMA/rxe: Allow registering MRs for On-Demand Paging
+  RDMA/rxe: Add support for Send/Recv/Write/Read operations with ODP
+  RDMA/rxe: Add support for the traditional Atomic operations with ODP
+
+ drivers/infiniband/core/umem_odp.c    |   6 +-
+ drivers/infiniband/hw/mlx5/odp.c      |   4 +-
+ drivers/infiniband/sw/rxe/Makefile    |   5 +-
+ drivers/infiniband/sw/rxe/rxe.c       |  18 ++
+ drivers/infiniband/sw/rxe/rxe_comp.c  |  42 +++-
+ drivers/infiniband/sw/rxe/rxe_loc.h   |  11 +-
+ drivers/infiniband/sw/rxe/rxe_mr.c    |   7 +-
+ drivers/infiniband/sw/rxe/rxe_net.c   |   4 +-
+ drivers/infiniband/sw/rxe/rxe_odp.c   | 329 ++++++++++++++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_param.h |   2 +-
+ drivers/infiniband/sw/rxe/rxe_qp.c    |  68 +++---
+ drivers/infiniband/sw/rxe/rxe_recv.c  |   2 +-
+ drivers/infiniband/sw/rxe/rxe_req.c   |  14 +-
+ drivers/infiniband/sw/rxe/rxe_resp.c  | 175 +++++++-------
+ drivers/infiniband/sw/rxe/rxe_resp.h  |  44 ++++
+ drivers/infiniband/sw/rxe/rxe_task.c  | 152 ------------
+ drivers/infiniband/sw/rxe/rxe_task.h  |  69 ------
+ drivers/infiniband/sw/rxe/rxe_verbs.c |  16 +-
+ drivers/infiniband/sw/rxe/rxe_verbs.h |  10 +-
+ drivers/infiniband/sw/rxe/rxe_wq.c    | 161 +++++++++++++
+ drivers/infiniband/sw/rxe/rxe_wq.h    |  71 ++++++
+ 21 files changed, 824 insertions(+), 386 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_resp.h
+ delete mode 100644 drivers/infiniband/sw/rxe/rxe_task.c
+ delete mode 100644 drivers/infiniband/sw/rxe/rxe_task.h
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.h
+
+-- 
+2.31.1
+
 
