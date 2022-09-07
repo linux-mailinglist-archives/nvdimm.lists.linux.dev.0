@@ -1,235 +1,106 @@
-Return-Path: <nvdimm+bounces-4670-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4674-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C095B0B2F
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 19:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 831E05B0D2D
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 21:27:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72B65280C85
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 17:11:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F28A280C2C
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  7 Sep 2022 19:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379965CA6;
-	Wed,  7 Sep 2022 17:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC47539B;
+	Wed,  7 Sep 2022 19:27:14 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from donkey.elm.relay.mailchannels.net (donkey.elm.relay.mailchannels.net [23.83.212.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393CD89A5
-	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 17:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662570661; x=1694106661;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=WFvm1tv1fzBz8XQhPXEux6TiuRxGptTMjrd3F+Y7Jig=;
-  b=jk7WE6MdQrcKpZY6LaFm1Cul7180Vu5KUTfVHsuQO8lRxRV26+DHqROF
-   ADh1rcXyTRDgdaIFsaS8CPONADGgS0qwQCnm/Ga9TZ6sZZFIlnTD8ZIT6
-   UVjCfZpmWm+TrWjiu+NX8Up7q5PKGsnKUsC/jBC+Z7I8oM4wt1pWYAaRM
-   ZenvoHI8F/7kdBT6KGKKImRc65mC7/SZdx8zK+cb/ZsWv8RtfKJmNw2O3
-   lYlYzcN7Rw3yghuddmJqz5nLmZ5PjNAC3sGU2cTVajyvlQdnf9G03d5Uz
-   GqNgR0J8uIF9zS1tyAdvJr1Qy3/1arKty8mIqhzxj7vk8naStaMRV1Z1E
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297747694"
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="297747694"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 10:10:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="591800451"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 07 Sep 2022 10:10:27 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 10:10:27 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 7 Sep 2022 10:10:27 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 7 Sep 2022 10:10:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KZYL7urHhRqFNWBrDkKMOH8UZ6VzqcOjfYSJdEyZw3CAiUlPf55Ny6IZ1D2NH17Uqu21GoFxwcIynKHTJnZApcLBHrHffIds8zo3XXYZzWxB+AxltlSkvVul2zEK/MtflS5ijOaj6AKR/cWwZZPA5m8347FjMmAey+dAoLxfvRlFUhPVIrxN14Kd7kOFfCe6FXDYWraIrhMQsM8JXlMloWwM2Jc4dozugNC88S5GfS+hFHxnqC84D0UQc2eq9UWbq84erQsiCF3Rs7oeO1QpRlOB4FnUxKwXUBJqY3wm0B80EaNtmjYt5Ajpdm3sZBmDan2ucmntO1aoNcBZAm0P+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3sGQzEzRxSOo4sjN72Er3H5icXtaWif1lwLEVhp5W4M=;
- b=W+hE6GAFK8JjY7WZL08mUBgyUZ8ZVXfJY5V4qZV/vCt4szwq7g0cE1jF8pip4X3C8yp5z3zbZC3f7PFbmlthVWqCnEpocKnypjhZUxEIbp7Bp7jLakl2l8ezp5eYK78RENO7RhipBSjwOfACN4C8zmcJlXlpDCRZjO0yo8/pqWkJimng25Gn8jUF8Rvwg7pPRkoVpbv6sI7+2gPEq3+lKfUEibwVhu2ThlnjajFl6kjYkc91+z89Cg36sOKaX/mR0Ab9UyInZUmwMq/lt3AeBLGs5Gu1lz+3CkeSebq7eroVB9nXKaFnnvaBDvC+QFmy+b2zgZs+uGX32ddgskwe4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM4PR11MB6501.namprd11.prod.outlook.com
- (2603:10b6:8:88::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.15; Wed, 7 Sep
- 2022 17:10:25 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5588.017; Wed, 7 Sep 2022
- 17:10:25 +0000
-Date: Wed, 7 Sep 2022 10:10:23 -0700
-From: Dan Williams <dan.j.williams@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Dan Williams <dan.j.williams@intel.com>
-CC: <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>, Christoph Hellwig
-	<hch@lst.de>, "Darrick J. Wong" <djwong@kernel.org>, John Hubbard
-	<jhubbard@nvidia.com>, Matthew Wilcox <willy@infradead.org>,
-	<linux-mm@kvack.org>, <nvdimm@lists.linux.dev>,
-	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 00/13] Fix the DAX-gup mistake
-Message-ID: <6318d07fa17e7_166f29495@dwillia2-xfh.jf.intel.com.notmuch>
-References: <166225775968.2351842.11156458342486082012.stgit@dwillia2-xfh.jf.intel.com>
- <YxdFmXi/Zdr8Zi3q@nvidia.com>
- <6317821d1c465_166f29417@dwillia2-xfh.jf.intel.com.notmuch>
- <YxeDjTq526iS15Re@nvidia.com>
- <631793709f2d3_166f29415@dwillia2-xfh.jf.intel.com.notmuch>
- <YxeWQIxPZF0QJ/FL@nvidia.com>
- <6317a26d3e1ed_166f2946e@dwillia2-xfh.jf.intel.com.notmuch>
- <6317ebde620ec_166f29466@dwillia2-xfh.jf.intel.com.notmuch>
- <YxiVfn8+fR4I76ED@nvidia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YxiVfn8+fR4I76ED@nvidia.com>
-X-ClientProxiedBy: MW4PR04CA0094.namprd04.prod.outlook.com
- (2603:10b6:303:83::9) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295772F42
+	for <nvdimm@lists.linux.dev>; Wed,  7 Sep 2022 19:27:11 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 73871920CA7;
+	Wed,  7 Sep 2022 14:55:01 +0000 (UTC)
+Received: from pdx1-sub0-mail-a308 (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id E49C9921720;
+	Wed,  7 Sep 2022 14:55:00 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662562501; a=rsa-sha256;
+	cv=none;
+	b=3Cbtj+QgfD5v6mvODR0gJHigGaNJYEnaTOArikKYoHobDtgMnSUxZIMqoyrHTlV/gadwmG
+	TYxRma6k31jXKiSW+5j2LQLLnzLI/2DPnTxwsGOw9rE8DWbqAEJewpHwRr4k2jo/rcdCO5
+	SXM4QWMLxKk9ISK20rz0xSkY6KJubPH9jiwBu2D6faPMRUE7suDfrnI9YU5bvHKUSRL3Lt
+	6utWWNo5pBnf0YCFWl4BC96WMA8tDxF6113U7R/gRdyC1/9cm4xD49vd2Tyov42Cf4O2DD
+	6zSl0p7yXHZW1Dma0MoJTt9dtwn09pL99Sq9cGvNWAK6d3dxWT+AHtWtKjHI6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1662562501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=/a1y1ajhOu+dgDM9IiBP6SBBRRgVgt1du7NEURDFIMM=;
+	b=iqpTyWkVqInKbOg8ZIOy+r9ry+QBIV2CIq3ge7BXD19viYNXw7rGW419dBo9iurV55rANi
+	mvVc0r1/sq4/ONHWlEpT/P6Sknas8nh2V5vKIhcsXGmFH76Q1jfTT+jNJei8+NyXpLMn4i
+	hf4X2A02Bn7y1ByN80TRxP7c4wHVWLyKzcNmdduXzv12mz7Ux/qmczAwIuRALWM3asWFN3
+	ajbUW6RvrvAj1ux2hh1UedEaM4eTFunzm7GSWeCb7CKi2axNDhKqQzdWaJ8LliIjb/WklA
+	s/Ccina+haAaZcmM2WzWWvJPk+Lls6k/SNs8rB1cNi+nS0s7lNjcxFfft8rB0g==
+ARC-Authentication-Results: i=1;
+	rspamd-f776c45b8-qkcxd;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Coil-Ski: 4eda7c667a69c7d6_1662562501274_4112141017
+X-MC-Loop-Signature: 1662562501274:3431010349
+X-MC-Ingress-Time: 1662562501274
+Received: from pdx1-sub0-mail-a308 (pop.dreamhost.com [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.117.103.197 (trex/6.7.1);
+	Wed, 07 Sep 2022 14:55:01 +0000
+Received: from offworld (unknown [104.36.31.106])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a308 (Postfix) with ESMTPSA id 4MN4zk4cv2z2m;
+	Wed,  7 Sep 2022 07:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1662562500;
+	bh=/a1y1ajhOu+dgDM9IiBP6SBBRRgVgt1du7NEURDFIMM=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=YfxR/fvYcVWGXIJT6VAQgJrbTuzNrjtTJc0OM+JDu82lXV8wVoOjhxBooKVBHiVVg
+	 p3NP7YDlwder/6Wef+RpEm9L1zrHd4iSkzG0PnkXCHHsiNLs6yFFpSpP4qcZLwVicQ
+	 9TlXhKjFkumfGa7Ub1g6tjWCxw+AX/FcRSEhfoEw8Bzu/dajPX5SJOMIuAj9zrM5hp
+	 5ouJYWBpUlNxVpiwrrRiAXtWSmWeaJwe+xGT/XZi0trAyutkRno5V1yfmmd8MTa+2Q
+	 hzwClx1LL3UOFB1FuPMwMgYxfa+3oD1d8NiLPQtysqxmkQgO55s8betsUYIDaeFmqi
+	 9PXJslUNSC+HQ==
+Date: Wed, 7 Sep 2022 07:36:03 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: dan.j.williams@intel.com
+Cc: x86@kernel.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
+	peterz@infradead.org, bp@alien8.de, akpm@linux-foundation.org,
+	dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	a.manzanares@samsung.com, linux-kernel@vger.kernel.org, hch@lst.de
+Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
+Message-ID: <20220907143603.d226eyi3uitlcmi5@offworld>
+References: <20220829212918.4039240-1-dave@stgolabs.net>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a4859d6c-23dd-48f9-809d-08da90f3db02
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6501:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uMahDNyzW0d8zm+lf6vTPhYiMttL3BHFZlAAUx7T+gfPnwMTTsIH44JhzuUZVMf1NiYk3CUj7TrWPLUhMoO8TiO2uW3FpCQmi29MhdgJ5mE+EmHaoY1TTZrjOcFm6HWISjVOBOxpdvv/4Dv1Zht2iG9R1WKAqzNHaLHTnc18BYEItrO4a/k2VQUOQq3Fm915+qWkCOMJ8+iPG/ttOd843EvvDVjplDWXEzzn9XUaRJC4SB12g/GuHV9xdG20NMr/myD26f6jLRViGB1I+qzY69oCnbc2jvlHbvz2CRMxwXSmGPmtIQt0icTAW/NRzj14GWPHUrSI4XRDV7R2vvKgi5PPiyOe35Fd5WYeHk8lzayajZJ++YNqjvrFYkCSynjVv7hcaRKr/hCNLBQ/duubD7dJp3LfhRABt+9dEfJlz0k+goOTPyBIYDShRSKiLv/KNVHJ2j5Oj+HorB5W0xVZe8UxTn9NQQRdPS2noj0QY3SRNNBm6rdTSyHEFBpuOJaZw1ntTegLRyFu3u6qAWWCRSq3N/TgMHhtAWJxpbasgmygI5zOHutFF3OO6S0OGmQ8O4adFVcl1y74QatRIzOjYZKmYQD+oaNrNYvws27t09ei3/XzdFUTpDXhV+N/ulGSlC8ZBZ7Ko0V6w7UmiJmzCvwhIKmFuCYR6FYcVTS1qDiL7kXzmQqaxWfdx+Pp8wfcWMAgRDvwg6/Z624to4X1UQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(346002)(376002)(366004)(136003)(83380400001)(66476007)(8676002)(66946007)(110136005)(54906003)(66556008)(2906002)(4326008)(82960400001)(38100700002)(316002)(8936002)(7416002)(186003)(41300700001)(6506007)(5660300002)(478600001)(6486002)(6512007)(26005)(9686003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YIarxb5Gpc/CviUEp5rHPTigqXyHG3vHA7woe+WMNwh112CrTbfXYiqdiSSO?=
- =?us-ascii?Q?vKq8Cp6a81Hmf0yWJXeZEs1SMmIZZjZWAIEKAvP/yZe8Z9pxLjtkObsBqOMh?=
- =?us-ascii?Q?dR8Ogz9+RrWSdaRhpF0BOIqTaWMpWiV/5+MhFk0GDwbNTfArn6PnfnAus0Ob?=
- =?us-ascii?Q?sCsUTDXEDj8YkNNvsfgmxxIFurzTkb96wssMJd5lxFCjYomvH+nrK1lEp30+?=
- =?us-ascii?Q?K7cg/yM9CZ8VnsMJYq26LkMeoSePg3hsNy8jMqzRYz3Mm5afYb/QiPC8jvDZ?=
- =?us-ascii?Q?Lo628r9AnyPjFqoZyvOY39Q0TbqII6uhe0RVP0rl6/SwSUlOP0q4ABG8qfwJ?=
- =?us-ascii?Q?GCOUyHOraML5ByU6m+496H+zJrEJRwX5CcBeqYAl64aNXvMPok11hev0jyWh?=
- =?us-ascii?Q?4gHQLAdzBADreDUsDyhvIVTd9q5q7foyzHZ8LGawjLoFw32aMMZjfNkH0jND?=
- =?us-ascii?Q?GfcLmgbnIVvZFjxXfJan7dwbhVCyqU4cEWGF+XNqpU2TX2BEVXVlO6mqk43D?=
- =?us-ascii?Q?DFfV5QvWF9vNyM7mswT1mY76QDh3DnyFw5bSGfeyhRCZPC9AumtMk4/3CUlZ?=
- =?us-ascii?Q?in4KNuG5zJ9JR3U+Vx5jUEwKfuCaXg2AstLXCfrJmsDnnIDpctnNNAZZl3PC?=
- =?us-ascii?Q?cgMtUCv0lvLVKRmwDiK+r9zKDIHAZEfs990z7wdUFgjtMl+fJYabKZK+XkG5?=
- =?us-ascii?Q?OMozVCwDxtwrEOD/vNigqi/0HjSiJrN2kVaWt/G/DoWyONm+8RPc4VOnHopU?=
- =?us-ascii?Q?dPW3fgl1tEA/o9TUK1hUrf5EHTrJQggyLbELb5mbPyUlxMHWbqsSh23+bxIX?=
- =?us-ascii?Q?7WjRB081QWHFvxAJRIL3C5mJy8tWIuwfokwifD2kZyXNKpLOoLbPRROmw8EF?=
- =?us-ascii?Q?IxTKUBylv+bgjEeV94fWBfeENZPuj0fiewYLxl7eKNoN7q7kIoPdd9GEFfxl?=
- =?us-ascii?Q?tRzT6Ua9nBZHoaeUlsnxT1uqm7JHMQrTamvY+GAeUcf3B4V+Zpn6QlKTPxoY?=
- =?us-ascii?Q?6DhTz0eFw9xrOr/5sTpels96ZbjWgly8rHVSfQkFD9UldnA6NyMSwCx4xLQA?=
- =?us-ascii?Q?EcTg3I33zrdeS0qXH4WzDFCfLLw57qXf5/jenoxEKiFYvADelwERyYcpJW2v?=
- =?us-ascii?Q?U2tB/cO7e2CswMwHtV8hh84bp9niRe93ZC6tqBKbQy0LdnFCFS5ZKw2Hgsc4?=
- =?us-ascii?Q?p5K0lsm0KRifFzeL4VZI9T9gM6oC619uKM6BNm2JdjlRF6ByDEimvgZG4lKe?=
- =?us-ascii?Q?nMq7sNkczdDuRgqwk04Hr03iWNIY+3Lz57ALKHB+3H4QyT+3BT5hCSvQ+xTv?=
- =?us-ascii?Q?lZgUUBWfQgA68IgxuZb98EjwxTA/XIx5/XsxozrpCDPLHPlFlAjUKPD7Hl/O?=
- =?us-ascii?Q?zTdT8i70mMoKfHP3K0zOubmve8siWA75jv9Lwii+04Y91C3O8iufzY28fTsH?=
- =?us-ascii?Q?rrdtjhjQMonOne/cJr47lhtfl0voJWRWFueBOHQcBfGn7Lsu3H5hFYaT2/iW?=
- =?us-ascii?Q?vpRyOLkHToajJaDKjo1MflKP47eFgu45Jd3mtDCIIhKPaJeQgTyc1d2hs5VF?=
- =?us-ascii?Q?/Hi0gnVieB3Hy+miIPSrsWFKMrNKo95gAVmwGsd5AYaSiPVt4brNLcW02U72?=
- =?us-ascii?Q?fg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4859d6c-23dd-48f9-809d-08da90f3db02
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 17:10:25.3267
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: whMO5GKhNhHhMtWa4bzQfSTVdW5DEuUKfo7imAs6Ble5hwaC2s3giTRsbz52f8T3OMsO4VqDQelMCfshsr2tQ9erT37IDEE43FCwalUsHS0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6501
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220829212918.4039240-1-dave@stgolabs.net>
+User-Agent: NeoMutt/20220429
 
-Jason Gunthorpe wrote:
-> On Tue, Sep 06, 2022 at 05:54:54PM -0700, Dan Williams wrote:
-> > Dan Williams wrote:
-> > > Jason Gunthorpe wrote:
-> > > > On Tue, Sep 06, 2022 at 11:37:36AM -0700, Dan Williams wrote:
-> > > > > Jason Gunthorpe wrote:
-> > > > > > On Tue, Sep 06, 2022 at 10:23:41AM -0700, Dan Williams wrote:
-> > > > > > 
-> > > > > > > > Can we continue to have the weird page->refcount behavior and still
-> > > > > > > > change the other things?
-> > > > > > > 
-> > > > > > > No at a minimum the pgmap vs page->refcount problem needs to be solved
-> > > > > > > first.
-> > > > > > 
-> > > > > > So who will do the put page after the PTE/PMD's are cleared out? In
-> > > > > > the normal case the tlb flusher does it integrated into zap..
-> > > > > 
-> > > > > AFAICS the zap manages the _mapcount not _refcount. Are you talking
-> > > > > about page_remove_rmap() or some other reference count drop?
-> > > > 
-> > > > No, page refcount.
-> > > > 
-> > > > __tlb_remove_page() eventually causes a put_page() via
-> > > > tlb_batch_pages_flush() calling free_pages_and_swap_cache()
-> > > > 
-> > > > Eg:
-> > > > 
-> > > >  *  MMU_GATHER_NO_GATHER
-> > > >  *
-> > > >  *  If the option is set the mmu_gather will not track individual pages for
-> > > >  *  delayed page free anymore. A platform that enables the option needs to
-> > > >  *  provide its own implementation of the __tlb_remove_page_size() function to
-> > > >  *  free pages.
-> > > 
-> > > Ok, yes, that is a vm_normal_page() mechanism which I was going to defer
-> > > since it is incremental to the _refcount handling fix and maintain that
-> > > DAX pages are still !vm_normal_page() in this set.
-> > > 
-> > > > > > Can we safely have the put page in the fsdax side after the zap?
-> > > > > 
-> > > > > The _refcount is managed from the lifetime insert_page() to
-> > > > > truncate_inode_pages(), where for DAX those are managed from
-> > > > > dax_insert_dentry() to dax_delete_mapping_entry().
-> > > > 
-> > > > As long as we all understand the page doesn't become re-allocatable
-> > > > until the refcount reaches 0 and the free op is called it may be OK!
-> > > 
-> > > Yes, but this does mean that page_maybe_dma_pinned() is not sufficient for
-> > > when the filesystem can safely reuse the page, it really needs to wait
-> > > for the reference count to drop to 0 similar to how it waits for the
-> > > page-idle condition today.
-> > 
-> > This gets tricky with break_layouts(). For example xfs_break_layouts()
-> > wants to ensure that the page is gup idle while holding the mmap lock.
-> > If the page is not gup idle it needs to drop locks and retry. It is
-> > possible the path to drop a page reference also needs to acquire
-> > filesystem locs. Consider odd cases like DMA from one offset to another
-> > in the same file. So waiting with filesystem locks held is off the
-> > table, which also means that deferring the wait until
-> > dax_delete_mapping_entry() time is also off the table.
-> > 
-> > That means that even after the conversion to make DAX page references
-> > 0-based it will still be the case that filesystem code will be waiting
-> > for the 2 -> 1 transition to indicate "mapped DAX page has no more
-> > external references".
-> 
-> Why?
-> 
-> If you are doing the break layouts wouldn't you first zap the ptes,
-> which will bring the reference to 0 if there are not other users.
+Not sure the proper way to route this (akpm?). But unless any remaining
+objections, could this be picked up?
 
-The internals of break layouts does zap the ptes, but it does not remove
-the mapping entries. So, I was limiting my thinking to that constraint,
-but now that I push on it, the need to keep the entry around until the
-final truncate_setsize() event seems soft. It should be ok to upgrade
-break layouts to delete mapping entries, wait for _refcount to drop to
-zero, and then re-evaluate that nothing installed a new entry after
-acquiring the filesystem locks again.
+Thanks,
+Davidlohr
 
