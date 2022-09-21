@@ -1,94 +1,93 @@
-Return-Path: <nvdimm+bounces-4838-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4828-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F181D5E5521
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 23:24:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14365E54B7
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 22:50:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33E851C2092F
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 21:24:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F437280C5F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 20:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5505A90;
-	Wed, 21 Sep 2022 21:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1615A90;
+	Wed, 21 Sep 2022 20:50:41 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021897C
-	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 21:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE967C
+	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 20:50:39 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 87F67121D14;
-	Wed, 21 Sep 2022 20:29:08 +0000 (UTC)
-Received: from pdx1-sub0-mail-a310.dreamhost.com (unknown [127.0.0.6])
+	by relay.mailchannels.net (Postfix) with ESMTP id 44F087E22AC;
+	Wed, 21 Sep 2022 20:34:59 +0000 (UTC)
+Received: from pdx1-sub0-mail-a210 (unknown [127.0.0.6])
 	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id D82FE121C4D;
-	Wed, 21 Sep 2022 20:29:07 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663792148; a=rsa-sha256;
+	by relay.mailchannels.net (Postfix) with ESMTPA id B29017E2319;
+	Wed, 21 Sep 2022 20:34:58 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663792498; a=rsa-sha256;
 	cv=none;
-	b=rTF5VVyf3lHQ7q62r8OuGoqX3BVQi1YqiJLIWsNlWHvf1O5vRZq+/EqBE9tX7SZnbbQdwJ
-	zlWq/f8QGtPHz+vcItZpRNNeZVkjChR9mFZrKXqgRjRwk2ClfUy3WZ0bVqtYjwKmD0ReB3
-	o925S8UPV5b/qWbrXScCxf92OBAVTHJ36M30ZV1kS1oK6eyCKQaQRzyX2WQu7Gb+w9lgDs
-	2WTRdXJYtF4BbS3I2tXhtP0kRTvSfBx1N0TrO0Cu4Taokpv0Cvjbpl3dEMBw1Xt6JCgeGh
-	Mi8sJi7NqSkVvbYtp1tWjfrPesDyXMX6dRqVm3XHZqDYBjYsKg63G1koHU8fpw==
+	b=v8lRpjXpnHDG9fkLJpsQiKIJx04Hf8RZs4+jDncS6IqWEgFGemgt1nJ0UHGzFq1vGa2b25
+	B97D/RxBL7E9OynIFRThefWlBLFtnw3Rq4FRRIFledW4c13vCTeiCynC7IFDRjXuUlLJS0
+	FVZeZmKbdcpYYeE6AhiSw8Mk61vg4m4eqbIKwBLlcj17wxAdRVv4rV3ck0tPVxNJT1pV+X
+	NZd3gxM3WO5eCBUVpvWfQ891l6t4Unjav/5eQmpNTQrZGXIfvncx5dJiOyr8GQpjYCsHk3
+	OvcG5K6yLYB1WV+uwLJAT+6BakgMnHSnjuYb/1k4YZh/TqZR1SrwMeWvgaUXDA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-	s=arc-2022; t=1663792148;
+	s=arc-2022; t=1663792498;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=bx2KGBzPxDjPMw8nZeM1Q7GJHOCeelxY38COTqebuYU=;
-	b=UIL1eDWeNTNJaW8Z6edeKJFf7LgBJP6vZocfIYmVKH9oxYjNQcay8Nw2q9l6c771I2NeGu
-	N12zr+Vm77WVkOoR/8DN10H/X+LuQxLAHezqT0d9j5fQC/Y6UxG35cVPXnJYHI1tAH+0kn
-	xjFHm26T9zdlcEKlW42QUvEjEk0cndTSMEUPzNRkTZ6G1KIueZ69POeo3d+NK9GV7iy9GO
-	6sqgCUj+kcwVSBeWqHBaMi+yNF/Hw9lXN/Z1O1IEaZAji0F6NLzUtfxs/hgdqzTrtE1Pqc
-	UG7PQlskwQsZmIqgqoaaMMuzV6nnkF9A5/BQp5VfC0saUBMyneE++OqyHb1NXQ==
+	bh=ZVPRerw+2idjYU/blJzjBqkFXAsa4TzOH85zP/CzbTo=;
+	b=EheDYRlHERwTX7QOYVW412SmiLMEVHL8pob206mRSEgUXmdawGJqI0iA3M6zfv9EdP54cN
+	vSw9RRh2RJXukAIDojzlR9xs0BD0MhF4rPtZlNysuKtlsGNnWpIxIQ8HG2jpce3SfTNG9p
+	B8QdUHZevnEsgU+kw9VhQkFk7dyY5hmlU8ZSTnxaBsWLFkISlPL5jn/9+GVPyO/Z9HQlO8
+	Q3wTCIxP6SqxfdAvSictH7lFQ7F+4gphOGay8TcybWK9KeyRFW4XYnJN0E4AgxUUAylNJs
+	2atU/euXyxlEXDBE0ZlIL+0p7M4hGaXyKFoq6fjanexiy8wkMFALfwALA1LQmw==
 ARC-Authentication-Results: i=1;
-	rspamd-686945db84-74jrb;
+	rspamd-f776c45b8-2q8n5;
 	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Bored-Duck: 650f2ec622c91ec5_1663792148362_2229214385
-X-MC-Loop-Signature: 1663792148362:3518724697
-X-MC-Ingress-Time: 1663792148362
-Received: from pdx1-sub0-mail-a310.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
+X-Army-Thoughtful: 292ec5eb13d7aef2_1663792499066_4030479703
+X-MC-Loop-Signature: 1663792499066:558639079
+X-MC-Ingress-Time: 1663792499066
+Received: from pdx1-sub0-mail-a210 (pop.dreamhost.com [64.90.62.162])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.121.28.250 (trex/6.7.1);
-	Wed, 21 Sep 2022 20:29:08 +0000
+	by 100.126.129.208 (trex/6.7.1);
+	Wed, 21 Sep 2022 20:34:59 +0000
 Received: from offworld (ip-213-127-200-122.ip.prioritytelecom.net [213.127.200.122])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a310.dreamhost.com (Postfix) with ESMTPSA id 4MXqkm48pCzkh;
-	Wed, 21 Sep 2022 13:29:04 -0700 (PDT)
+	by pdx1-sub0-mail-a210 (Postfix) with ESMTPSA id 4MXqsW6KWbzVw;
+	Wed, 21 Sep 2022 13:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1663792147;
-	bh=bx2KGBzPxDjPMw8nZeM1Q7GJHOCeelxY38COTqebuYU=;
+	s=dreamhost; t=1663792498;
+	bh=ZVPRerw+2idjYU/blJzjBqkFXAsa4TzOH85zP/CzbTo=;
 	h=Date:From:To:Cc:Subject:Content-Type;
-	b=TeeP01eU9sHE4ig8tyxgpbdnHylK6eaJYiKTphrHbJ9rG6+O9cB11nUXqOaIkp2L0
-	 VBd/P45mhmM8WmlGUQ/7FHUJnIJl6wnjUTn6xTjTJOWWA6Mw04shuI+vUuVJXC5zw+
-	 1nijH7tjaiG/adx340TM7M7puVknoxqDRKOhV8IxbdR5dJxoDwTMTiRHO0Sibt2d8v
-	 wukDKpLGwLCYcqWFOen5L4lk8UX6+Vf6HYkSQfIK/XMls2wDGGSEnYJDmonCmQ9BJb
-	 EQeDp+apBh1cBhT1n4sEsMRZdB+nGiksvMbd7Grz7SNVG7l99NZgk6qlT30lmh2bDP
-	 7E+UXiEsU8NqA==
-Date: Wed, 21 Sep 2022 13:09:21 -0700
+	b=cFBHvhAu+Hiw71UBpBvSykNzdJW7CLZroOzyacdCG55kpoZ5BzTX/5VKVZrvhS2sC
+	 mgRvTSOnRA2PRcvMj9vZtrS85A6e5GhRw1s02FIqs2F9BtbFxri7SNfPFtl2iRZfY8
+	 u6SH/ot7/XoHCnbYIxMyoewI/TidoX/gh6gwkXYvcPpeGNK/QrvRNfbSrDmB9tqcbp
+	 EF5famasJX4P/ZhkArg2npWashZZ0OaPBmNKS2rONpuRzzK+zQqm6jcaQyCYmP90kO
+	 74zdBC4SJBaT5pRM4ICuB4bSQfuG40iYUJHkY+TD1UC1azvn41alXA5RwSz7eiRrgA
+	 zM/ghoGp5DXTA==
+Date: Wed, 21 Sep 2022 13:15:12 -0700
 From: Davidlohr Bueso <dave@stgolabs.net>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
 	vishal.l.verma@intel.com, alison.schofield@intel.com,
 	Jonathan.Cameron@huawei.com
-Subject: Re: [PATCH v2 06/19] cxl/pmem: Add Disable Passphrase security
- command support
-Message-ID: <20220921200921.acdi46sx267wkcfp@offworld>
+Subject: Re: [PATCH v2 12/19] cxl/pmem: Add "Passphrase Secure Erase"
+ security command support
+Message-ID: <20220921201512.7tjaquhroo6qezfe@offworld>
 References: <166377414787.430546.3863229455285366312.stgit@djiang5-desk3.ch.intel.com>
- <166377432466.430546.6473491783703443307.stgit@djiang5-desk3.ch.intel.com>
+ <166377436014.430546.12077333298585882653.stgit@djiang5-desk3.ch.intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -97,26 +96,24 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <166377432466.430546.6473491783703443307.stgit@djiang5-desk3.ch.intel.com>
+In-Reply-To: <166377436014.430546.12077333298585882653.stgit@djiang5-desk3.ch.intel.com>
 User-Agent: NeoMutt/20220429
 
 On Wed, 21 Sep 2022, Dave Jiang wrote:
 
->Create callback function to support the nvdimm_security_ops ->disable()
->callback. Translate the operation to send "Disable Passphrase" security
->command for CXL memory device. The operation supports disabling a
->passphrase for the CXL persistent memory device. In the original
->implementation of nvdimm_security_ops, this operation only supports
->disabling of the user passphrase. This is due to the NFIT version of
->disable passphrase only supported disabling of user passphrase. The CXL
->spec allows disabling of the master passphrase as well which
->nvidmm_security_ops does not support yet. In this commit, the callback
->function will only support user passphrase.
->
->See CXL 2.0 spec section 8.2.9.5.6.3 for reference.
->
->Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+>+static int cxl_pmem_security_passphrase_erase(struct nvdimm *nvdimm,
+>+					      const struct nvdimm_key_data *key,
+>+					      enum nvdimm_passphrase_type ptype)
+>+{
+>+	struct cxl_nvdimm *cxl_nvd = nvdimm_provider_data(nvdimm);
+>+	struct cxl_memdev *cxlmd = cxl_nvd->cxlmd;
+>+	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+>+	struct cxl_pass_erase erase;
+>+	int rc;
+>+
+>+	if (!cpu_cache_has_invalidate_memregion())
+>+		return -EOPNOTSUPP;
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+The error code should be the same as the nvdimm user. I went with EINVAL, but
+don't really have strong preferences.
 
