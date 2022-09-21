@@ -1,121 +1,199 @@
-Return-Path: <nvdimm+bounces-4839-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4836-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824595E552D
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 23:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C52DF5E54EC
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 23:09:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 063C2280C8E
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 21:27:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83718280C93
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 21:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD98366E4;
-	Wed, 21 Sep 2022 21:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F2F8465;
+	Wed, 21 Sep 2022 21:09:08 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from donkey.elm.relay.mailchannels.net (donkey.elm.relay.mailchannels.net [23.83.212.49])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3417C
-	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 21:27:46 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 85F0D801AA9;
-	Wed, 21 Sep 2022 21:27:45 +0000 (UTC)
-Received: from pdx1-sub0-mail-a310.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id BBC4F802EE0;
-	Wed, 21 Sep 2022 21:27:44 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663795665; a=rsa-sha256;
-	cv=none;
-	b=ceN0aTV8GChl6B0/r8LwsJ8cjBuUjih+Asl/FX5HRoR0xQI8fNPQJ7x2PZTY9UAx0Pg/cb
-	MijEujHP4OoC+oDSevUW8ZH86ejgu+JF23jRhvrQ+sSjtr95XHISyNuQL8h44c2ET+Drkn
-	r9Fbz5I1fBIIiw+yzIcHKTaW1irxrq637Z7MDQI6KyKA6tJ0EjA5U/kdG1i4WSVDqRF1U9
-	dsoPNcw9F/VjVNsCbHhInH++vQNbPi8h6mRSPQNVXNZN3rU82VTE7AJMYidsw3TrP61Gq2
-	2zihsL0HkplmEfNmMq1wMnDlBnYunVRIrjHoa3OVOdyNDdo7iBbP7Ce+hO2WKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1663795665;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=yGfkkVIZzvmBbglcyFtO5jLrAJHm6IVhMbw3wBg2HE0=;
-	b=avMAKmKsei3VprSlvYLt2nO+xfQ3uqeXZeNt1Otkaaz1GrcAPz2ZKJ8pjTUc2BiSO7v8f0
-	kLXbssNpNN9KKvDug0Oo8M/oLfLnFKQyHhloPmku8eQ4ZtqZQRYXmi5PaAgpKeVFoVQ7Ty
-	9nJfC1fedazi1cp6s9SBD7pdYw06MRhQqs/Aubmc3XbUUJxYQCCbMjkY6G7AsAOsGDrqMz
-	hQI6r5cN7JmLsr6RHx8Hsr9sWFBxwP8ksq5pZTt5z0k8WHo4rqucyQKtUHEWvWH9YZr3Yi
-	i4eDGsDp0wHHPEcgcIcYjgj3+pCDURaEOi4fmMubbNpQpdL42judD5MasQbKBA==
-ARC-Authentication-Results: i=1;
-	rspamd-686945db84-zznm7;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Imminent-Irritate: 3ebb68131532623a_1663795665284_650998431
-X-MC-Loop-Signature: 1663795665284:661351820
-X-MC-Ingress-Time: 1663795665284
-Received: from pdx1-sub0-mail-a310.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.121.28.250 (trex/6.7.1);
-	Wed, 21 Sep 2022 21:27:45 +0000
-Received: from offworld (ip-213-127-200-122.ip.prioritytelecom.net [213.127.200.122])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a310.dreamhost.com (Postfix) with ESMTPSA id 4MXs2P5LNkzlb;
-	Wed, 21 Sep 2022 14:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1663795664;
-	bh=yGfkkVIZzvmBbglcyFtO5jLrAJHm6IVhMbw3wBg2HE0=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=lceymlMQBx8ta6jtHO5kAFmrzAPUJWMERmqDMOQgNjC7jzn+DZTz+uzi8zSsNtU6+
-	 6VeEIwNUOmaUDwMkGBs9MKRi8n6S7EushWj9JcLzfmbvMbEKYTF/TC279N1+g/P6DC
-	 58WhddTrdQxyAv1wuCk5zuxm/+VoQmIoxSgbLxYw26JRN7CxzCb5ZUuEIbSjjvZWRs
-	 uFHRs0W3XrI3w+MaVub6tDCAaJTdYc/g8Ae9uglWOcnHl/8rhUZKC00LvUpdNa8PKd
-	 nI9Kj4ZIS+NcEn+NNbiZPHLr2AZqeJZLmRGjOJR4yZA9bbcYqQ9EX7sz/XC8dZKGVC
-	 86Ckp8KbKvHMg==
-Date: Wed, 21 Sep 2022 14:07:58 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408F7C
+	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 21:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663794545; x=1695330545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2LiO0PZ26Kh+yNpDIoXkOxtWfl77zUEx/B3YMK9csr4=;
+  b=n0OtWfbesiXaUi9I9H9dbitwk9LI8FN3gHZIsGQMIh3hw9VVOf5VYBmg
+   zMJllurZ/avMMkvHQGO+FbFHf8afLqpxtNjPKH1jFYoLNauTXAEl/Js+W
+   Df7H6kg3BGBmEqz1C37ao5VIBwsiUDn/vXjoorMU0sPcXx2o58jEgXPCO
+   GGco+EUnLjSMg7GkipME587VNF2Edh8O62ze1IictxsRiCWBENRAoOLaB
+   DweVWVy/IhgrJYeHywZpBqPH7qjmHmHzfKQsybDag8KJDHJ0fZhopC/io
+   aUDjVIXceJlHgwfYwtGy+ciqMI/mvt0QSKtPjn9fLimzDx04q+MiYipfS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279849807"
+X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
+   d="scan'208";a="279849807"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 14:09:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
+   d="scan'208";a="619519971"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.138.80])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 14:09:04 -0700
+Date: Wed, 21 Sep 2022 14:09:03 -0700
+From: Alison Schofield <alison.schofield@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
-	vishal.l.verma@intel.com, alison.schofield@intel.com,
-	Jonathan.Cameron@huawei.com
-Subject: Re: [PATCH v2 02/19] cxl/pmem: Introduce nvdimm_security_ops with
- ->get_flags() operation
-Message-ID: <20220921210758.6nmdv656zmpbhcla@offworld>
-References: <166377414787.430546.3863229455285366312.stgit@djiang5-desk3.ch.intel.com>
- <166377429922.430546.3219384653732905207.stgit@djiang5-desk3.ch.intel.com>
+Cc: linux-cxl@vger.kernel.org, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+	nafonten@amd.com, nvdimm@lists.linux.dev
+Subject: Re: [PATCH v2 2/9] cxl: add helper to parse through all current
+ events
+Message-ID: <Yyt9b99nWEaM5jEF@aschofie-mobl2>
+References: <166363103019.3861186.3067220004819656109.stgit@djiang5-desk3.ch.intel.com>
+ <166363120598.3861186.12071132915910252601.stgit@djiang5-desk3.ch.intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166377429922.430546.3219384653732905207.stgit@djiang5-desk3.ch.intel.com>
-User-Agent: NeoMutt/20220429
+In-Reply-To: <166363120598.3861186.12071132915910252601.stgit@djiang5-desk3.ch.intel.com>
 
-On Wed, 21 Sep 2022, Dave Jiang wrote:
 
->Add nvdimm_security_ops support for CXL memory device with the introduction
->of the ->get_flags() callback function. This is part of the "Persistent
->Memory Data-at-rest Security" command set for CXL memory device support.
->The ->get_flags() function provides the security state of the persistent
->memory device defined by the CXL 2.0 spec section 8.2.9.5.6.1.
->
->The nvdimm_security_ops for CXL is configured as an build option toggled by
->kernel configuration CONFIG_CXL_PMEM_SECURITY.
+On Mon, Sep 19, 2022 at 04:46:46PM -0700, Dave Jiang wrote:
+> Add common function to iterate through and extract the events in the
+> current trace buffer. The function uses tracefs_iterate_raw_events() from
+> libtracefs to go through all the events loaded into a tep_handle. A
+> callback is provided to the API call in order to parse the event. For cxl
+> monitor, an array of interested "systems" is provided in order to filter
+> for the interested events.
+> 
+> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>  cxl/event_trace.c |   33 +++++++++++++++++++++++++++++++++
+>  cxl/event_trace.h |    7 +++++++
+>  cxl/meson.build   |    1 +
+>  meson.build       |    2 ++
+>  4 files changed, 43 insertions(+)
+> 
+> diff --git a/cxl/event_trace.c b/cxl/event_trace.c
+> index ffa2a9b9b036..430146ce66f5 100644
+> --- a/cxl/event_trace.c
+> +++ b/cxl/event_trace.c
+> @@ -16,6 +16,7 @@
+>  #include <libcxl.h>
+>  #include <uuid/uuid.h>
+>  #include <traceevent/event-parse.h>
+> +#include <tracefs/tracefs.h>
+>  #include "json.h"
+>  #include "event_trace.h"
+>  
+> @@ -164,3 +165,35 @@ err_jevent:
+>  	free(jnode);
+>  	return rc;
+>  }
+> +
+> +static int cxl_event_parse_cb(struct tep_event *event, struct tep_record *record,
+> +		int cpu, void *ctx)
+> +{
+> +	struct event_ctx *event_ctx = (struct event_ctx *)ctx;
+> +	int rc;
+> +
+> +	/* Filter out all the events that the caller isn't interested in. */
+> +	if (strcmp(event->system, event_ctx->system) != 0)
+> +		return 0;
+> +
 
-This last part seems to be left over from v1.
+While integrating w poison events, I find I'd like to filter on 
+tep_event->name == "cxl_poison" here.
 
->
->Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Something like this:
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
++	if (event_ctx->name) {
++		if (strcmp(event->name, event_ctx->name) != 0)
++			return 0;
++	}
+ 
+along w this:
+
+struct event_ctx {
+ 	const char *system;
++	const char *name;
+ 	struct list_head jlist_head;
+ };
+
+I guess an all|1 option won't suffice for users wanting a subset.
+See how that fits it w your needs for monitor command. I can always
+filter after the fact if this type of change is not generally useful.
+
+Thanks,
+Alison
+
+
+> +	rc = cxl_event_to_json_callback(event, record, &event_ctx->jlist_head);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	return 0;
+> +}
+> +
+> +int cxl_parse_events(struct tracefs_instance *inst, struct event_ctx *ectx)
+> +{
+> +	struct tep_handle *tep;
+> +	int rc;
+> +
+> +	tep = tracefs_local_events(NULL);
+> +	if (!tep)
+> +		return -ENOMEM;
+> +
+> +	rc = tracefs_iterate_raw_events(tep, inst, NULL, 0,
+> +			cxl_event_parse_cb, ectx);
+> +	tep_free(tep);
+> +	return rc;
+> +}
+> diff --git a/cxl/event_trace.h b/cxl/event_trace.h
+> index 00975a0b5680..2fbefa1586d9 100644
+> --- a/cxl/event_trace.h
+> +++ b/cxl/event_trace.h
+> @@ -11,4 +11,11 @@ struct jlist_node {
+>  	struct list_node list;
+>  };
+>  
+> +struct event_ctx {
+> +	const char *system;
+> +	struct list_head jlist_head;
+> +};
+> +
+> +int cxl_parse_events(struct tracefs_instance *inst, struct event_ctx *ectx);
+> +
+>  #endif
+> diff --git a/cxl/meson.build b/cxl/meson.build
+> index 8c7733431613..c59876262e76 100644
+> --- a/cxl/meson.build
+> +++ b/cxl/meson.build
+> @@ -21,6 +21,7 @@ cxl_tool = executable('cxl',
+>      json,
+>      versiondep,
+>      traceevent,
+> +    tracefs,
+>    ],
+>    install : true,
+>    install_dir : rootbindir,
+> diff --git a/meson.build b/meson.build
+> index f611e0bdd7f3..c204c8ac52de 100644
+> --- a/meson.build
+> +++ b/meson.build
+> @@ -143,6 +143,8 @@ libudev = dependency('libudev')
+>  uuid = dependency('uuid')
+>  json = dependency('json-c')
+>  traceevent = dependency('libtraceevent')
+> +tracefs = dependency('libtracefs')
+> +
+>  if get_option('docs').enabled()
+>    if get_option('asciidoctor').enabled()
+>      asciidoc = find_program('asciidoctor', required : true)
+> 
+> 
 
