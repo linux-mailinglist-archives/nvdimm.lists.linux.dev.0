@@ -1,409 +1,121 @@
-Return-Path: <nvdimm+bounces-4835-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4839-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDE45E54E1
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 23:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 824595E552D
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 23:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B254280C7A
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 21:03:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 063C2280C8E
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Sep 2022 21:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE528464;
-	Wed, 21 Sep 2022 21:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD98366E4;
+	Wed, 21 Sep 2022 21:27:48 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from donkey.elm.relay.mailchannels.net (donkey.elm.relay.mailchannels.net [23.83.212.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BC97C
-	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 21:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663794181; x=1695330181;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6NNWNNzK4UffdcdjarrsFINSPx7MqoYkv1uX3Kiwe1U=;
-  b=TUo0/t0XniHueeFou7GLpk98ocV1PcWSHI9eIZ8MzP35uFNqoiGBGPXK
-   SVu3AunLK71HmZODcVH1XGqFtq+tqCkxz/PwV/FqcjBZBvpY2fXKGBqv5
-   XvtfUo8ufV/ZiIsj8WxQMh7ZeIkdAu62I+zosy5l2f7tW9HETdJVX58DL
-   hqLchuCu1JkJeHLqQ+jA2BktZpY6LxXM+Ffj8lGR5Oin+em8HGWfDhnB7
-   XrLrTug9lEudBIhyp3WcabSkjLBECz7A8UIxXfngI0HGR6ILeUDbcior5
-   hT0wzjJS9n55O2lE/UMPd5PhSls1HJeAYYGJCIEXxxzyY2Eqbs3pVi0xi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279848680"
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="279848680"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 14:03:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="614959299"
-Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 14:02:59 -0700
-Subject: [PATCH 4/4] ndctl/test: Add CXL test for security
-From: Dave Jiang <dave.jiang@intel.com>
-To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
-Cc: vishal.l.verma@intel.com
-Date: Wed, 21 Sep 2022 14:02:58 -0700
-Message-ID: 
- <166379417897.433612.16268594042547006566.stgit@djiang5-desk3.ch.intel.com>
-In-Reply-To: 
- <166379397620.433612.13099557870939895846.stgit@djiang5-desk3.ch.intel.com>
-References: 
- <166379397620.433612.13099557870939895846.stgit@djiang5-desk3.ch.intel.com>
-User-Agent: StGit/1.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3417C
+	for <nvdimm@lists.linux.dev>; Wed, 21 Sep 2022 21:27:46 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 85F0D801AA9;
+	Wed, 21 Sep 2022 21:27:45 +0000 (UTC)
+Received: from pdx1-sub0-mail-a310.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id BBC4F802EE0;
+	Wed, 21 Sep 2022 21:27:44 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663795665; a=rsa-sha256;
+	cv=none;
+	b=ceN0aTV8GChl6B0/r8LwsJ8cjBuUjih+Asl/FX5HRoR0xQI8fNPQJ7x2PZTY9UAx0Pg/cb
+	MijEujHP4OoC+oDSevUW8ZH86ejgu+JF23jRhvrQ+sSjtr95XHISyNuQL8h44c2ET+Drkn
+	r9Fbz5I1fBIIiw+yzIcHKTaW1irxrq637Z7MDQI6KyKA6tJ0EjA5U/kdG1i4WSVDqRF1U9
+	dsoPNcw9F/VjVNsCbHhInH++vQNbPi8h6mRSPQNVXNZN3rU82VTE7AJMYidsw3TrP61Gq2
+	2zihsL0HkplmEfNmMq1wMnDlBnYunVRIrjHoa3OVOdyNDdo7iBbP7Ce+hO2WKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1663795665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=yGfkkVIZzvmBbglcyFtO5jLrAJHm6IVhMbw3wBg2HE0=;
+	b=avMAKmKsei3VprSlvYLt2nO+xfQ3uqeXZeNt1Otkaaz1GrcAPz2ZKJ8pjTUc2BiSO7v8f0
+	kLXbssNpNN9KKvDug0Oo8M/oLfLnFKQyHhloPmku8eQ4ZtqZQRYXmi5PaAgpKeVFoVQ7Ty
+	9nJfC1fedazi1cp6s9SBD7pdYw06MRhQqs/Aubmc3XbUUJxYQCCbMjkY6G7AsAOsGDrqMz
+	hQI6r5cN7JmLsr6RHx8Hsr9sWFBxwP8ksq5pZTt5z0k8WHo4rqucyQKtUHEWvWH9YZr3Yi
+	i4eDGsDp0wHHPEcgcIcYjgj3+pCDURaEOi4fmMubbNpQpdL42judD5MasQbKBA==
+ARC-Authentication-Results: i=1;
+	rspamd-686945db84-zznm7;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Imminent-Irritate: 3ebb68131532623a_1663795665284_650998431
+X-MC-Loop-Signature: 1663795665284:661351820
+X-MC-Ingress-Time: 1663795665284
+Received: from pdx1-sub0-mail-a310.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.121.28.250 (trex/6.7.1);
+	Wed, 21 Sep 2022 21:27:45 +0000
+Received: from offworld (ip-213-127-200-122.ip.prioritytelecom.net [213.127.200.122])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a310.dreamhost.com (Postfix) with ESMTPSA id 4MXs2P5LNkzlb;
+	Wed, 21 Sep 2022 14:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1663795664;
+	bh=yGfkkVIZzvmBbglcyFtO5jLrAJHm6IVhMbw3wBg2HE0=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=lceymlMQBx8ta6jtHO5kAFmrzAPUJWMERmqDMOQgNjC7jzn+DZTz+uzi8zSsNtU6+
+	 6VeEIwNUOmaUDwMkGBs9MKRi8n6S7EushWj9JcLzfmbvMbEKYTF/TC279N1+g/P6DC
+	 58WhddTrdQxyAv1wuCk5zuxm/+VoQmIoxSgbLxYw26JRN7CxzCb5ZUuEIbSjjvZWRs
+	 uFHRs0W3XrI3w+MaVub6tDCAaJTdYc/g8Ae9uglWOcnHl/8rhUZKC00LvUpdNa8PKd
+	 nI9Kj4ZIS+NcEn+NNbiZPHLr2AZqeJZLmRGjOJR4yZA9bbcYqQ9EX7sz/XC8dZKGVC
+	 86Ckp8KbKvHMg==
+Date: Wed, 21 Sep 2022 14:07:58 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	dan.j.williams@intel.com, bwidawsk@kernel.org, ira.weiny@intel.com,
+	vishal.l.verma@intel.com, alison.schofield@intel.com,
+	Jonathan.Cameron@huawei.com
+Subject: Re: [PATCH v2 02/19] cxl/pmem: Introduce nvdimm_security_ops with
+ ->get_flags() operation
+Message-ID: <20220921210758.6nmdv656zmpbhcla@offworld>
+References: <166377414787.430546.3863229455285366312.stgit@djiang5-desk3.ch.intel.com>
+ <166377429922.430546.3219384653732905207.stgit@djiang5-desk3.ch.intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <166377429922.430546.3219384653732905207.stgit@djiang5-desk3.ch.intel.com>
+User-Agent: NeoMutt/20220429
 
-Create security-cxl.sh based off of security.sh for nfit security testing.
-The test will test a cxl_test based security commands enabling through
-nvdimm.
+On Wed, 21 Sep 2022, Dave Jiang wrote:
 
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
----
- test/common          |    7 +
- test/meson.build     |    7 +
- test/security-cxl.sh |  282 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 296 insertions(+)
- create mode 100755 test/security-cxl.sh
+>Add nvdimm_security_ops support for CXL memory device with the introduction
+>of the ->get_flags() callback function. This is part of the "Persistent
+>Memory Data-at-rest Security" command set for CXL memory device support.
+>The ->get_flags() function provides the security state of the persistent
+>memory device defined by the CXL 2.0 spec section 8.2.9.5.6.1.
+>
+>The nvdimm_security_ops for CXL is configured as an build option toggled by
+>kernel configuration CONFIG_CXL_PMEM_SECURITY.
 
-diff --git a/test/common b/test/common
-index 65615cc09a3e..e13b79728b0c 100644
---- a/test/common
-+++ b/test/common
-@@ -47,6 +47,7 @@ fi
- #
- NFIT_TEST_BUS0="nfit_test.0"
- NFIT_TEST_BUS1="nfit_test.1"
-+CXL_TEST_BUS="cxl_test"
- ACPI_BUS="ACPI.NFIT"
- E820_BUS="e820"
- 
-@@ -125,6 +126,12 @@ _cleanup()
- 	modprobe -r nfit_test
- }
- 
-+_cxl_cleanup()
-+{
-+	$NDCTL disable-region -b $CXL_TEST_BUS all
-+	modprobe -r cxl_test
-+}
-+
- # json2var
- # stdin: json
- #
-diff --git a/test/meson.build b/test/meson.build
-index 5953c286d13f..485deb89bbe2 100644
---- a/test/meson.build
-+++ b/test/meson.build
-@@ -219,6 +219,13 @@ if get_option('keyutils').enabled()
-   ]
- endif
- 
-+if get_option('keyutils').enabled()
-+  security_cxl = find_program('security-cxl.sh')
-+  tests += [
-+    [ 'security-cxl.sh', security_cxl, 'ndctl' ]
-+  ]
-+endif
-+
- foreach t : tests
-   test(t[0], t[1],
-     is_parallel : false,
-diff --git a/test/security-cxl.sh b/test/security-cxl.sh
-new file mode 100755
-index 000000000000..0ec9b335bf41
---- /dev/null
-+++ b/test/security-cxl.sh
-@@ -0,0 +1,282 @@
-+#!/bin/bash -Ex
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2022 Intel Corporation. All rights reserved.
-+
-+rc=77
-+dev=""
-+id=""
-+keypath="/etc/ndctl/keys"
-+masterkey="nvdimm-master"
-+masterpath="$keypath/$masterkey.blob"
-+backup_key=0
-+backup_handle=0
-+
-+. $(dirname $0)/common
-+
-+trap 'err $LINENO' ERR
-+
-+setup()
-+{
-+	$NDCTL disable-region -b "$CXL_TEST_BUS" all
-+}
-+
-+detect()
-+{
-+	dev="$($NDCTL list -b "$CXL_TEST_BUS" -D | jq -r 'sort_by(.id) | .[0].dev')"
-+	[ -n "$dev" ] || err "$LINENO"
-+	id="$($NDCTL list -b "$CXL_TEST_BUS" -D | jq -r 'sort_by(.id) | .[0].id')"
-+	[ -n "$id" ] || err "$LINENO"
-+}
-+
-+setup_keys()
-+{
-+	if [ ! -d "$keypath" ]; then
-+		mkdir -p "$keypath"
-+	fi
-+
-+	if [ -f "$masterpath" ]; then
-+		mv "$masterpath" "$masterpath.bak"
-+		backup_key=1
-+	fi
-+	if [ -f "$keypath/tpm.handle" ]; then
-+		mv "$keypath/tpm.handle" "$keypath/tpm.handle.bak"
-+		backup_handle=1
-+	fi
-+
-+	dd if=/dev/urandom bs=1 count=32 2>/dev/null | keyctl padd user "$masterkey" @u
-+	keyctl pipe "$(keyctl search @u user $masterkey)" > "$masterpath"
-+}
-+
-+test_cleanup()
-+{
-+	if keyctl search @u encrypted nvdimm:"$id"; then
-+		keyctl unlink "$(keyctl search @u encrypted nvdimm:"$id")"
-+	fi
-+
-+	if keyctl search @u user "$masterkey"; then
-+		keyctl unlink "$(keyctl search @u user "$masterkey")"
-+	fi
-+
-+	if [ -f "$keypath"/nvdimm_"$id"_"$(hostname)".blob ]; then
-+		rm -f "$keypath"/nvdimm_"$id"_"$(hostname)".blob
-+	fi
-+}
-+
-+post_cleanup()
-+{
-+	if [ -f $masterpath ]; then
-+		rm -f "$masterpath"
-+	fi
-+	if [ "$backup_key" -eq 1 ]; then
-+		mv "$masterpath.bak" "$masterpath"
-+	fi
-+	if [ "$backup_handle" -eq 1 ]; then
-+		mv "$keypath/tpm.handle.bak" "$keypath/tpm.handle"
-+	fi
-+}
-+
-+lock_dimm()
-+{
-+	$NDCTL disable-dimm "$dev"
-+	test_dimm_path=""
-+
-+	nmem_rpath=$(readlink -f "/sys/bus/nd/devices/${dev}")
-+	nmem_bus=$(dirname ${nmem_rpath});
-+	bus_provider_path="${nmem_bus}/provider"
-+	test -e "$bus_provider_path" || err "$LINENO"
-+	bus_provider=$(cat ${bus_provider_path})
-+
-+	[[ "$bus_provider" == "$CXL_TEST_BUS" ]] || err "$LINENO"
-+	bus="cxl"
-+	nmem_provider_path="/sys/bus/nd/devices/${dev}/${bus}/provider"
-+	nmem_provider=$(cat ${nmem_provider_path})
-+
-+	test_dimm_path=$(readlink -f /sys/bus/$bus/devices/${nmem_provider})
-+	test_dimm_path=$(dirname $(dirname ${test_dimm_path}))/security_lock
-+
-+	test -e "$test_dimm_path"
-+
-+	# now lock the dimm
-+	echo 1 > "${test_dimm_path}"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "locked" ]; then
-+		echo "Incorrect security state: $sstate expected: locked"
-+		err "$LINENO"
-+	fi
-+}
-+
-+get_frozen_state()
-+{
-+	$NDCTL list -i -b "$CXL_TEST_BUS" -d "$dev" | jq -r .[].dimms[0].security_frozen
-+}
-+
-+get_security_state()
-+{
-+	$NDCTL list -i -b "$CXL_TEST_BUS" -d "$dev" | jq -r .[].dimms[0].security
-+}
-+
-+setup_passphrase()
-+{
-+	$NDCTL setup-passphrase "$dev" -k user:"$masterkey"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "unlocked" ]; then
-+		echo "Incorrect security state: $sstate expected: unlocked"
-+		err "$LINENO"
-+	fi
-+}
-+
-+remove_passphrase()
-+{
-+	$NDCTL remove-passphrase "$dev"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "disabled" ]; then
-+		echo "Incorrect security state: $sstate expected: disabled"
-+		err "$LINENO"
-+	fi
-+}
-+
-+erase_security()
-+{
-+	$NDCTL sanitize-dimm -c "$dev"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "disabled" ]; then
-+		echo "Incorrect security state: $sstate expected: disabled"
-+		err "$LINENO"
-+	fi
-+}
-+
-+update_security()
-+{
-+	$NDCTL update-passphrase "$dev"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "unlocked" ]; then
-+		echo "Incorrect security state: $sstate expected: unlocked"
-+		err "$LINENO"
-+	fi
-+}
-+
-+freeze_security()
-+{
-+	$NDCTL freeze-security "$dev"
-+}
-+
-+test_1_security_setup_and_remove()
-+{
-+	setup_passphrase
-+	remove_passphrase
-+}
-+
-+test_2_security_setup_and_update()
-+{
-+	setup_passphrase
-+	update_security
-+	remove_passphrase
-+}
-+
-+test_3_security_setup_and_erase()
-+{
-+	setup_passphrase
-+	erase_security
-+}
-+
-+test_4_security_unlock()
-+{
-+	setup_passphrase
-+	lock_dimm
-+	$NDCTL enable-dimm "$dev"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "unlocked" ]; then
-+		echo "Incorrect security state: $sstate expected: unlocked"
-+		err "$LINENO"
-+	fi
-+	$NDCTL disable-region -b "$CXL_TEST_BUS" all
-+	remove_passphrase
-+}
-+
-+# This should always be the last nvdimm security test.
-+# with security frozen, cxl_test must be removed and is no longer usable
-+test_5_security_freeze()
-+{
-+	setup_passphrase
-+	freeze_security
-+	sstate="$(get_security_state)"
-+	fstate="$(get_frozen_state)"
-+	if [ "$fstate" != "true" ]; then
-+		echo "Incorrect security state: expected: frozen"
-+		err "$LINENO"
-+	fi
-+
-+	# need to simulate a soft reboot here to clean up
-+	lock_dimm
-+	$NDCTL enable-dimm "$dev"
-+	sstate="$(get_security_state)"
-+	if [ "$sstate" != "unlocked" ]; then
-+		echo "Incorrect security state: $sstate expected: unlocked"
-+		err "$LINENO"
-+	fi
-+}
-+
-+test_6_load_keys()
-+{
-+	if keyctl search @u encrypted nvdimm:"$id"; then
-+		keyctl unlink "$(keyctl search @u encrypted nvdimm:"$id")"
-+	fi
-+
-+	if keyctl search @u user "$masterkey"; then
-+		keyctl unlink "$(keyctl search @u user "$masterkey")"
-+	fi
-+
-+	$NDCTL load-keys
-+
-+	if keyctl search @u user "$masterkey"; then
-+		echo "master key loaded"
-+	else
-+		echo "master key failed to loaded"
-+		err "$LINENO"
-+	fi
-+
-+	if keyctl search @u encrypted nvdimm:"$id"; then
-+		echo "dimm key loaded"
-+	else
-+		echo "dimm key failed to load"
-+		err "$LINENO"
-+	fi
-+}
-+
-+check_min_kver "5.0" || do_skip "may lack security handling"
-+uid="$(keyctl show | grep -Eo "_uid.[0-9]+" | head -1 | cut -d. -f2-)"
-+if [ "$uid" -ne 0 ]; then
-+	do_skip "run as root or with a sudo login shell for test to work"
-+fi
-+
-+modprobe cxl_test
-+setup
-+check_prereq "keyctl"
-+rc=1
-+detect
-+test_cleanup
-+setup_keys
-+echo "Test 1, security setup and remove"
-+test_1_security_setup_and_remove
-+echo "Test 2, security setup, update, and remove"
-+test_2_security_setup_and_update
-+echo "Test 3, security setup and erase"
-+test_3_security_setup_and_erase
-+echo "Test 4, unlock dimm"
-+test_4_security_unlock
-+
-+# Freeze should always be the last nvdimm security test because it locks
-+# security state and require cxl_test module unload. However, this does
-+# not impact any key management testing via libkeyctl.
-+echo "Test 5, freeze security"
-+test_5_security_freeze
-+
-+# Load-keys is independent of actual nvdimm security and is part of key
-+# mangement testing.
-+echo "Test 6, test load-keys"
-+test_6_load_keys
-+
-+test_cleanup
-+post_cleanup
-+_cxl_cleanup
-+exit 0
+This last part seems to be left over from v1.
 
+>
+>Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
 
