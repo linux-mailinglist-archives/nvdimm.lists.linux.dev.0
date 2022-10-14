@@ -1,56 +1,56 @@
-Return-Path: <nvdimm+bounces-4943-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-4945-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86CC05FF748
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 15 Oct 2022 01:58:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 900B15FF74B
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 15 Oct 2022 01:58:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AA42280BFF
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 14 Oct 2022 23:58:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C21F81C2095B
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 14 Oct 2022 23:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1AD8469F;
-	Fri, 14 Oct 2022 23:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7FE469E;
+	Fri, 14 Oct 2022 23:58:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F2F4694
-	for <nvdimm@lists.linux.dev>; Fri, 14 Oct 2022 23:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E944695
+	for <nvdimm@lists.linux.dev>; Fri, 14 Oct 2022 23:58:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665791877; x=1697327877;
+  t=1665791883; x=1697327883;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2k3kBI4gAM8OQoDfEoj4je6Hcxxjiy4NKP4rIBon+AA=;
-  b=ecaUlbqQTg4Fqxqxmg2QVKRRw4e2kDdq/3vDZPOPk0c5vCTNgtOYmC/r
-   wLR1b59SpiwrQFwkUnpQOK44qYRQtckZFBd00kUUl2WV+MGZJytv/0M4t
-   r4nzLNpUkgR+DvbplXP3CuCpKiDkr1fqgE5KhWIQwixOcDMS0Phud6TAk
-   pcGGO4ZAOF5ezXfQPouOBK8ApZhakZ1oMg1s0172xM11AAasMjuj4zO4r
-   hSSmtbvKEGoZRnqEiVy9dZXL95NHBlzbxoq8gTUejfP/8LbOrsOJSDIIs
-   U/ihhv0fkRdTzvzFXtFjXigfIwDqgE7vx0oZve2/WcUS/H1Loc8tUu7gx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="292862013"
+  bh=MBvS7Cxj+AIc8d1loS44lpMvVCT4iCj1AXq9hKJEVYM=;
+  b=bli2x5tJWC7VD8o/zKWegGkuEHvq5tFGQoAjD/LQ3lqcchm0DEd4DqXQ
+   EhmpbpxDwlGopI3HD5wql5oi12pj9tZ08GBgweoAvq2c1DReBqdVN7FK4
+   9P5Irzhpmy1yQL0yFR/PrtsaaDry//ehtPODlOoT7gv3jXa4mMkHapJL0
+   V6mqVz682QqTRQqHX0CIQVyicsg4eiy++FZZ8+4sQOlGZbzY0zeE80Izv
+   hZ/puv5Wi2CEZeEWoVICDbHhJTL0w0acDDKf6R/hyv3cWzMBPSsfXr0Ne
+   6tTfzHTXNGWAUOLkP0gwnECZoWZgO0kowkdoc9pj5pAy0EuVjQhi++cJh
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="285887818"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="292862013"
+   d="scan'208";a="285887818"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 16:57:57 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="630113325"
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 16:58:02 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="630113365"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="630113325"
+   d="scan'208";a="630113365"
 Received: from uyoon-mobl.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.90.112])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 16:57:56 -0700
-Subject: [PATCH v3 10/25] fsdax: Introduce pgmap_request_folios()
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 16:58:02 -0700
+Subject: [PATCH v3 11/25] fsdax: Rework dax_insert_entry() calling convention
 From: Dan Williams <dan.j.williams@intel.com>
 To: linux-mm@kvack.org
 Cc: Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Darrick J. Wong" <djwong@kernel.org>, Christoph Hellwig <hch@lst.de>,
- John Hubbard <jhubbard@nvidia.com>, Alistair Popple <apopple@nvidia.com>,
- Jason Gunthorpe <jgg@nvidia.com>, david@fromorbit.com, nvdimm@lists.linux.dev,
- akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org
-Date: Fri, 14 Oct 2022 16:57:55 -0700
-Message-ID: <166579187573.2236710.10151157417629496558.stgit@dwillia2-xfh.jf.intel.com>
+ "Darrick J. Wong" <djwong@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>,
+ Christoph Hellwig <hch@lst.de>, John Hubbard <jhubbard@nvidia.com>,
+ david@fromorbit.com, nvdimm@lists.linux.dev, akpm@linux-foundation.org,
+ linux-fsdevel@vger.kernel.org
+Date: Fri, 14 Oct 2022 16:58:01 -0700
+Message-ID: <166579188180.2236710.6959794790871279054.stgit@dwillia2-xfh.jf.intel.com>
 In-Reply-To: <166579181584.2236710.17813547487183983273.stgit@dwillia2-xfh.jf.intel.com>
 References: <166579181584.2236710.17813547487183983273.stgit@dwillia2-xfh.jf.intel.com>
 User-Agent: StGit/0.18-3-g996c
@@ -63,255 +63,127 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-The next step in sanitizing DAX page and pgmap lifetime is to take page
-references when a pgmap user maps a page or otherwise puts it into use.
-Unlike the page allocator where the it picks the page/folio, ZONE_DEVICE
-users know in advance which folio they want to access.  Additionally,
-ZONE_DEVICE implementations know when the pgmap is alive. Introduce
-pgmap_request_folios() that pins @nr_folios folios at a time provided
-they are contiguous and of the same folio_order().
-
-Some WARN assertions are added to document expectations and catch bugs
-in future kernel work, like a potential conversion of fsdax to use
-multi-page folios, but they otherwise are not expected to fire.
-
-Note that the paired pgmap_release_folios() implementation temporarily,
-in this path, takes an @pgmap argument to drop pgmap references. A
-follow-on patch arranges for free_zone_device_page() to drop pgmap
-references in all cases. In other words, the intent is that only
-put_folio() (on each folio requested pgmap_request_folio()) is needed to
-to undo pgmap_request_folios().
-
-The intent is that this also replaces zone_device_page_init(), but that
-too requires some more preparatory reworks to unify the various
-MEMORY_DEVICE_* types.
+Move the determination of @dirty and @cow in dax_insert_entry() to flags
+(DAX_DIRTY and DAX_COW) that are passed in. This allows
+dax_insert_entry() to not require a 'struct iomap' which is a
+pre-requisitie for reusing dax_insert_entry() for device-dax.
 
 Cc: Matthew Wilcox <willy@infradead.org>
 Cc: Jan Kara <jack@suse.cz>
 Cc: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 ---
- fs/dax.c                 |   32 ++++++++++++++++-----
- include/linux/memremap.h |   17 +++++++++++
- mm/memremap.c            |   70 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 111 insertions(+), 8 deletions(-)
+ fs/dax.c |   44 +++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
 diff --git a/fs/dax.c b/fs/dax.c
-index d03c7a952d02..095c9d7b4a1d 100644
+index 095c9d7b4a1d..73e510ca5a70 100644
 --- a/fs/dax.c
 +++ b/fs/dax.c
-@@ -385,20 +385,27 @@ static inline void dax_mapping_set_cow(struct folio *folio)
- 	folio->index++;
+@@ -75,12 +75,20 @@ fs_initcall(init_dax_wait_table);
+  * block allocation.
+  */
+ #define DAX_SHIFT	(5)
++#define DAX_MASK	((1UL << DAX_SHIFT) - 1)
+ #define DAX_LOCKED	(1UL << 0)
+ #define DAX_PMD		(1UL << 1)
+ #define DAX_ZERO_PAGE	(1UL << 2)
+ #define DAX_EMPTY	(1UL << 3)
+ #define DAX_ZAP		(1UL << 4)
+ 
++/*
++ * These flags are not conveyed in Xarray value entries, they are just
++ * modifiers to dax_insert_entry().
++ */
++#define DAX_DIRTY (1UL << (DAX_SHIFT + 0))
++#define DAX_COW   (1UL << (DAX_SHIFT + 1))
++
+ static unsigned long dax_to_pfn(void *entry)
+ {
+ 	return xa_to_value(entry) >> DAX_SHIFT;
+@@ -88,7 +96,8 @@ static unsigned long dax_to_pfn(void *entry)
+ 
+ static void *dax_make_entry(pfn_t pfn, unsigned long flags)
+ {
+-	return xa_mk_value(flags | (pfn_t_to_pfn(pfn) << DAX_SHIFT));
++	return xa_mk_value((flags & DAX_MASK) |
++			   (pfn_t_to_pfn(pfn) << DAX_SHIFT));
  }
  
-+static struct dev_pagemap *folio_pgmap(struct folio *folio)
+ static bool dax_is_locked(void *entry)
+@@ -932,6 +941,20 @@ static bool dax_fault_is_cow(const struct iomap_iter *iter)
+ 		(iter->iomap.flags & IOMAP_F_SHARED);
+ }
+ 
++static unsigned long dax_iter_flags(const struct iomap_iter *iter,
++				    struct vm_fault *vmf)
 +{
-+	return folio_page(folio, 0)->pgmap;
++	unsigned long flags = 0;
++
++	if (!dax_fault_is_synchronous(iter, vmf->vma))
++		flags |= DAX_DIRTY;
++
++	if (dax_fault_is_cow(iter))
++		flags |= DAX_COW;
++
++	return flags;
 +}
 +
  /*
-  * When it is called in dax_insert_entry(), the cow flag will indicate that
-  * whether this entry is shared by multiple files.  If so, set the page->mapping
-  * FS_DAX_MAPPING_COW, and use page->index as refcount.
+  * By this point grab_mapping_entry() has ensured that we have a locked entry
+  * of the appropriate size so we don't have to worry about downgrading PMDs to
+@@ -940,13 +963,13 @@ static bool dax_fault_is_cow(const struct iomap_iter *iter)
+  * appropriate.
   */
--static void dax_associate_entry(void *entry, struct address_space *mapping,
--		struct vm_area_struct *vma, unsigned long address, bool cow)
-+static vm_fault_t dax_associate_entry(void *entry,
-+				      struct address_space *mapping,
-+				      struct vm_area_struct *vma,
-+				      unsigned long address, bool cow)
+ static vm_fault_t dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
+-				   const struct iomap_iter *iter, void **pentry,
+-				   pfn_t pfn, unsigned long flags)
++				   void **pentry, pfn_t pfn,
++				   unsigned long flags)
  {
- 	unsigned long size = dax_entry_size(entry), index;
- 	struct folio *folio;
- 	int i;
- 
- 	if (IS_ENABLED(CONFIG_FS_DAX_LIMITED))
--		return;
-+		return 0;
- 
- 	index = linear_page_index(vma, address & ~(size - 1));
- 	dax_for_each_folio(entry, folio, i)
-@@ -406,9 +413,13 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
- 			dax_mapping_set_cow(folio);
- 		} else {
- 			WARN_ON_ONCE(folio->mapping);
-+			if (!pgmap_request_folios(folio_pgmap(folio), folio, 1))
-+				return VM_FAULT_SIGBUS;
- 			folio->mapping = mapping;
- 			folio->index = index + i;
- 		}
-+
-+	return 0;
- }
- 
- static void dax_disassociate_entry(void *entry, struct address_space *mapping,
-@@ -702,9 +713,12 @@ static struct page *dax_zap_pages(struct xa_state *xas, void *entry)
- 
- 	zap = !dax_is_zapped(entry);
- 
--	dax_for_each_folio(entry, folio, i)
-+	dax_for_each_folio(entry, folio, i) {
-+		if (zap)
-+			pgmap_release_folios(folio_pgmap(folio), folio, 1);
- 		if (!ret && !dax_folio_idle(folio))
- 			ret = folio_page(folio, 0);
-+	}
- 
- 	if (zap)
- 		dax_zap_entry(xas, entry);
-@@ -934,6 +948,7 @@ static vm_fault_t dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
- 	bool dirty = !dax_fault_is_synchronous(iter, vmf->vma);
- 	bool cow = dax_fault_is_cow(iter);
+ 	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+ 	void *new_entry = dax_make_entry(pfn, flags);
+-	bool dirty = !dax_fault_is_synchronous(iter, vmf->vma);
+-	bool cow = dax_fault_is_cow(iter);
++	bool dirty = flags & DAX_DIRTY;
++	bool cow = flags & DAX_COW;
  	void *entry = *pentry;
-+	vm_fault_t ret = 0;
+ 	vm_fault_t ret = 0;
  
- 	if (dirty)
- 		__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
-@@ -954,8 +969,10 @@ static vm_fault_t dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
- 		void *old;
+@@ -1245,7 +1268,8 @@ static vm_fault_t dax_load_hole(struct xa_state *xas, struct vm_fault *vmf,
+ 	pfn_t pfn = pfn_to_pfn_t(my_zero_pfn(vaddr));
+ 	vm_fault_t ret;
  
- 		dax_disassociate_entry(entry, mapping, false);
--		dax_associate_entry(new_entry, mapping, vmf->vma, vmf->address,
-+		ret = dax_associate_entry(new_entry, mapping, vmf->vma, vmf->address,
- 				cow);
-+		if (ret)
-+			goto out;
- 		/*
- 		 * Only swap our new entry into the page cache if the current
- 		 * entry is a zero page or an empty entry.  If a normal PTE or
-@@ -978,10 +995,11 @@ static vm_fault_t dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
- 	if (cow)
- 		xas_set_mark(xas, PAGECACHE_TAG_TOWRITE);
+-	ret = dax_insert_entry(xas, vmf, iter, entry, pfn, DAX_ZERO_PAGE);
++	ret = dax_insert_entry(xas, vmf, entry, pfn,
++			       DAX_ZERO_PAGE | dax_iter_flags(iter, vmf));
+ 	if (ret)
+ 		goto out;
  
-+	*pentry = entry;
-+out:
- 	xas_unlock_irq(xas);
+@@ -1276,8 +1300,9 @@ static vm_fault_t dax_pmd_load_hole(struct xa_state *xas, struct vm_fault *vmf,
+ 		goto fallback;
  
--	*pentry = entry;
--	return 0;
-+	return ret;
- }
+ 	pfn = page_to_pfn_t(zero_page);
+-	ret = dax_insert_entry(xas, vmf, iter, entry, pfn,
+-			       DAX_PMD | DAX_ZERO_PAGE);
++	ret = dax_insert_entry(xas, vmf, entry, pfn,
++			       DAX_PMD | DAX_ZERO_PAGE |
++				       dax_iter_flags(iter, vmf));
+ 	if (ret)
+ 		return ret;
  
- static int dax_writeback_one(struct xa_state *xas, struct dax_device *dax_dev,
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index 7fcaf3180a5b..b87c16577af1 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -193,7 +193,11 @@ void memunmap_pages(struct dev_pagemap *pgmap);
- void *devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap);
- void devm_memunmap_pages(struct device *dev, struct dev_pagemap *pgmap);
- struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
--		struct dev_pagemap *pgmap);
-+				    struct dev_pagemap *pgmap);
-+bool pgmap_request_folios(struct dev_pagemap *pgmap, struct folio *folio,
-+			  int nr_folios);
-+void pgmap_release_folios(struct dev_pagemap *pgmap, struct folio *folio,
-+			  int nr_folios);
- bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn);
+@@ -1659,7 +1684,8 @@ static vm_fault_t dax_fault_iter(struct vm_fault *vmf,
+ 		return pmd ? VM_FAULT_FALLBACK : dax_fault_return(err);
+ 	}
  
- unsigned long vmem_altmap_offset(struct vmem_altmap *altmap);
-@@ -223,6 +227,17 @@ static inline struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
- 	return NULL;
- }
- 
-+static inline bool pgmap_request_folios(struct dev_pagemap *pgmap,
-+					struct folio *folio, int nr_folios)
-+{
-+	return false;
-+}
-+
-+static inline void pgmap_release_folios(struct dev_pagemap *pgmap,
-+					struct folio *folio, int nr_folios)
-+{
-+}
-+
- static inline bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn)
- {
- 	return false;
-diff --git a/mm/memremap.c b/mm/memremap.c
-index f9287babb3ce..87a649ecdc54 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -530,6 +530,76 @@ void zone_device_page_init(struct page *page)
- }
- EXPORT_SYMBOL_GPL(zone_device_page_init);
- 
-+static bool folio_span_valid(struct dev_pagemap *pgmap, struct folio *folio,
-+			     int nr_folios)
-+{
-+	unsigned long pfn_start, pfn_end;
-+
-+	pfn_start = page_to_pfn(folio_page(folio, 0));
-+	pfn_end = pfn_start + (1 << folio_order(folio)) * nr_folios - 1;
-+
-+	if (pgmap != xa_load(&pgmap_array, pfn_start))
-+		return false;
-+
-+	if (pfn_end > pfn_start && pgmap != xa_load(&pgmap_array, pfn_end))
-+		return false;
-+
-+	return true;
-+}
-+
-+/**
-+ * pgmap_request_folios - activate an contiguous span of folios in @pgmap
-+ * @pgmap: host page map for the folio array
-+ * @folio: start of the folio list, all subsequent folios have same folio_size()
-+ *
-+ * Caller is responsible for @pgmap remaining live for the duration of
-+ * this call. Caller is also responsible for not racing requests for the
-+ * same folios.
-+ */
-+bool pgmap_request_folios(struct dev_pagemap *pgmap, struct folio *folio,
-+			  int nr_folios)
-+{
-+	struct folio *iter;
-+	int i;
-+
-+	/*
-+	 * All of the WARNs below are for catching bugs in future
-+	 * development that changes the assumptions of:
-+	 * 1/ uniform folios in @pgmap
-+	 * 2/ @pgmap death does not race this routine.
-+	 */
-+	VM_WARN_ON_ONCE(!folio_span_valid(pgmap, folio, nr_folios));
-+
-+	if (WARN_ON_ONCE(percpu_ref_is_dying(&pgmap->ref)))
-+		return false;
-+
-+	for (iter = folio_next(folio), i = 1; i < nr_folios;
-+	     iter = folio_next(folio), i++)
-+		if (WARN_ON_ONCE(folio_order(iter) != folio_order(folio)))
-+			return false;
-+
-+	for (iter = folio, i = 0; i < nr_folios; iter = folio_next(iter), i++) {
-+		folio_ref_inc(iter);
-+		if (folio_ref_count(iter) == 1)
-+			percpu_ref_tryget(&pgmap->ref);
-+	}
-+
-+	return true;
-+}
-+
-+void pgmap_release_folios(struct dev_pagemap *pgmap, struct folio *folio, int nr_folios)
-+{
-+	struct folio *iter;
-+	int i;
-+
-+	for (iter = folio, i = 0; i < nr_folios; iter = folio_next(iter), i++) {
-+		if (!put_devmap_managed_page(&iter->page))
-+			folio_put(iter);
-+		if (!folio_ref_count(iter))
-+			put_dev_pagemap(pgmap);
-+	}
-+}
-+
- #ifdef CONFIG_FS_DAX
- bool __put_devmap_managed_page_refs(struct page *page, int refs)
- {
+-	ret = dax_insert_entry(xas, vmf, iter, entry, pfn, entry_flags);
++	ret = dax_insert_entry(xas, vmf, entry, pfn,
++			       entry_flags | dax_iter_flags(iter, vmf));
+ 	dax_read_unlock(id);
+ 	if (ret)
+ 		return ret;
 
 
