@@ -1,55 +1,55 @@
-Return-Path: <nvdimm+bounces-5084-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5081-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C75B5621A85
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Nov 2022 18:26:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7DE2621A76
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Nov 2022 18:26:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBE67280CCB
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Nov 2022 17:26:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09F181C2096A
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  8 Nov 2022 17:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651B88C1B;
-	Tue,  8 Nov 2022 17:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8884B8C18;
+	Tue,  8 Nov 2022 17:26:10 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4467C8C16
-	for <nvdimm@lists.linux.dev>; Tue,  8 Nov 2022 17:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA6F8BF5
+	for <nvdimm@lists.linux.dev>; Tue,  8 Nov 2022 17:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667928382; x=1699464382;
+  t=1667928368; x=1699464368;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ed3mErKgjNM1+fOixKcxiX5To77fam1chdRaKAbp6w8=;
-  b=msnHHI5Kb2ri8E+BsiggxP53pvgbBFLqU1h3mO5C8ybr+itozN0x4O83
-   BLboRTE7DzMik9Ze65NRzygxGEtLwtYz4AnZuOLUwtykqOxupDBKjnBxg
-   d+UB6QOJBe+GIz+Lj1tHcqOBUbrQzkP2PqTY8HVQ5t/zHY3+sucWdVVpJ
-   l6AniWHB5gfx/01qHmGfpDI/Ex3oGss6ESMytVfMU8zMQx+W+Fmv9Qt4A
-   k42WaBVhdL6CE0geoyq1i58xPM7/stgtVdwu8ftVbB8+ihAFGZbx2F9NJ
-   8cr0uzm4dz5fLm7J9uxynXatDh1LECnj5bO7NtO+Rd5xu1HqlXm53isva
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="294127929"
+  bh=PYWUt/bip7810i5MwBhol2mkBcIT0TNOdL2jMeGcpp4=;
+  b=BkvDX8DryKjAe9H/mJPypeP0vzSxvNuxjo1C2xX8KhyBg+EQvoN661bb
+   E96Ej9XgKvmPzHUptkS2hNWnAMEAO4HpjuNw+OeUDUBOFD8+ffQIrwkS1
+   9E5DutjnruRD+JI43CH/8EUrvZPYh0WjfsKqNNaLBv+QM2CvAPjdvfWZz
+   WwRcMqkmjuhWNL0fH0CLXRdLjLSHpl04Kaq8YIuAqKpnz1tlsy5fWrNxN
+   8iPfnKTTviOKhxCTMGDyO/TLtUVWxN06Tl/bHXZ7sUvZ4KnC8qlNNb+JC
+   SXqk/PvM5Z8+Ok51RhCC+m+cwVkBOIaSXsL05G8MHoHw95kqt0IErmMmi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="375029787"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="294127929"
+   d="scan'208";a="375029787"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 09:26:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="742038900"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 09:26:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="742038933"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="742038900"
+   d="scan'208";a="742038933"
 Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 09:26:01 -0800
-Subject: [PATCH v3 07/18] cxl/pmem: Add "Freeze Security State" security
- command support
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 09:26:07 -0800
+Subject: [PATCH v3 08/18] tools/testing/cxl: Add "Freeze Security State"
+ security opcode support
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Cc: dan.j.williams@intel.com, ira.weiny@intel.com, vishal.l.verma@intel.com,
  alison.schofield@intel.com, Jonathan.Cameron@huawei.com, dave@stgolabs.net
-Date: Tue, 08 Nov 2022 10:26:01 -0700
+Date: Tue, 08 Nov 2022 10:26:07 -0700
 Message-ID: 
- <166792836140.3767969.14852087206799797632.stgit@djiang5-desk3.ch.intel.com>
+ <166792836713.3767969.2062763420392790603.stgit@djiang5-desk3.ch.intel.com>
 In-Reply-To: 
  <166792815961.3767969.2621677491424623673.stgit@djiang5-desk3.ch.intel.com>
 References: 
@@ -64,83 +64,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Create callback function to support the nvdimm_security_ops() ->freeze()
-callback. Translate the operation to send "Freeze Security State" security
-command for CXL memory device.
+Add support to emulate a CXL mem device support the "Freeze Security State"
+operation.
 
-See CXL rev3.0 spec section 8.2.9.8.6.5 for reference.
-
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/cxl/core/mbox.c      |    1 +
- drivers/cxl/cxlmem.h         |    1 +
- drivers/cxl/security.c       |   10 ++++++++++
- include/uapi/linux/cxl_mem.h |    1 +
- 4 files changed, 13 insertions(+)
+ tools/testing/cxl/test/mem.c |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index 2563325db0f6..6b8f118b2604 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -68,6 +68,7 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
- 	CXL_CMD(GET_SECURITY_STATE, 0, 0x4, 0),
- 	CXL_CMD(SET_PASSPHRASE, 0x60, 0, 0),
- 	CXL_CMD(DISABLE_PASSPHRASE, 0x40, 0, 0),
-+	CXL_CMD(FREEZE_SECURITY, 0, 0, 0),
- };
- 
- /*
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 9ad92f975b78..9007158969fe 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -276,6 +276,7 @@ enum cxl_opcode {
- 	CXL_MBOX_OP_GET_SECURITY_STATE	= 0x4500,
- 	CXL_MBOX_OP_SET_PASSPHRASE	= 0x4501,
- 	CXL_MBOX_OP_DISABLE_PASSPHRASE	= 0x4502,
-+	CXL_MBOX_OP_FREEZE_SECURITY	= 0x4504,
- 	CXL_MBOX_OP_MAX			= 0x10000
- };
- 
-diff --git a/drivers/cxl/security.c b/drivers/cxl/security.c
-index 85b4c1f86881..d991cbee3531 100644
---- a/drivers/cxl/security.c
-+++ b/drivers/cxl/security.c
-@@ -95,10 +95,20 @@ static int cxl_pmem_security_disable(struct nvdimm *nvdimm,
- 	return rc;
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index d8bb30d82a8f..0cb2e3035636 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -303,6 +303,23 @@ static int mock_disable_passphrase(struct cxl_dev_state *cxlds, struct cxl_mbox_
+ 	return 0;
  }
  
-+static int cxl_pmem_security_freeze(struct nvdimm *nvdimm)
++static int mock_freeze_security(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
 +{
-+	struct cxl_nvdimm *cxl_nvd = nvdimm_provider_data(nvdimm);
-+	struct cxl_memdev *cxlmd = cxl_nvd->cxlmd;
-+	struct cxl_dev_state *cxlds = cxlmd->cxlds;
++	struct cxl_mock_mem_pdata *mdata = dev_get_platdata(cxlds->dev);
 +
-+	return cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_FREEZE_SECURITY, NULL, 0, NULL, 0);
++	if (cmd->size_in != 0)
++		return -EINVAL;
++
++	if (cmd->size_out != 0)
++		return -EINVAL;
++
++	if (mdata->security_state & CXL_PMEM_SEC_STATE_FROZEN)
++		return 0;
++
++	mdata->security_state |= CXL_PMEM_SEC_STATE_FROZEN;
++	return 0;
 +}
 +
- static const struct nvdimm_security_ops __cxl_security_ops = {
- 	.get_flags = cxl_pmem_get_security_flags,
- 	.change_key = cxl_pmem_security_change_key,
- 	.disable = cxl_pmem_security_disable,
-+	.freeze = cxl_pmem_security_freeze,
- };
- 
- const struct nvdimm_security_ops *cxl_security_ops = &__cxl_security_ops;
-diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-index f6d383a80f22..7c0adcd68f4c 100644
---- a/include/uapi/linux/cxl_mem.h
-+++ b/include/uapi/linux/cxl_mem.h
-@@ -44,6 +44,7 @@
- 	___C(GET_SECURITY_STATE, "Get Security State"),			  \
- 	___C(SET_PASSPHRASE, "Set Passphrase"),				  \
- 	___C(DISABLE_PASSPHRASE, "Disable Passphrase"),			  \
-+	___C(FREEZE_SECURITY, "Freeze Security"),			  \
- 	___C(MAX, "invalid / last command")
- 
- #define ___C(a, b) CXL_MEM_COMMAND_ID_##a
+ static int mock_get_lsa(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+ {
+ 	struct cxl_mbox_get_lsa *get_lsa = cmd->payload_in;
+@@ -405,6 +422,9 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
+ 	case CXL_MBOX_OP_DISABLE_PASSPHRASE:
+ 		rc = mock_disable_passphrase(cxlds, cmd);
+ 		break;
++	case CXL_MBOX_OP_FREEZE_SECURITY:
++		rc = mock_freeze_security(cxlds, cmd);
++		break;
+ 	default:
+ 		break;
+ 	}
 
 
 
