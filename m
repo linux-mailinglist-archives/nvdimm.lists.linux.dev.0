@@ -1,61 +1,53 @@
-Return-Path: <nvdimm+bounces-5110-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5113-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 744DF625174
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 04:20:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF89625696
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 10:25:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 452471C209C1
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 03:20:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE344280C8F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 09:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632E664A;
-	Fri, 11 Nov 2022 03:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FF82106;
+	Fri, 11 Nov 2022 09:25:05 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586EF633
-	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 03:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668136817; x=1699672817;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sQeRo3g4sdBJ0pWvvRj+9tOdBa8K1tS5T7mi8mKysLQ=;
-  b=OgppwqP0/MLMmTNLi/zNDqzy/wIwoUkDcm8bvNxBZVwkjWE60y5OxiPz
-   +o6r/1y16CFldge4PwZnhreMyaPa/8No8WcoV9uzz/Zho0OLdHDtG/E+d
-   gWMNICxSvmfDNC5fPwRJlqUy9Ti1Gl1M8Olqukp8pMjPmM/NI4+rkW8qO
-   fESXqx9euIQee30fp0Swdw92T32yhXmf7N2EHV0ZKxBqIwFi5uTqgQUwe
-   1Oebwv0aZ+0FDjXsPPnOYbuNrMygMrQ4rKIsqDkpIsLMj14alp2VuTAfH
-   tvg1Sk1XKJI3eOkATS5QZ4KaPKg/RGyOYUf0KEXEPo5srhcjMw5LY+W8G
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="373638357"
-X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="373638357"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="743129974"
-X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="743129974"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.161.45])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:16 -0800
-From: alison.schofield@intel.com
-To: Dan Williams <dan.j.williams@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Ben Widawsky <bwidawsk@kernel.org>
-Cc: Alison Schofield <alison.schofield@intel.com>,
-	nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org
-Subject: [ndctl PATCH 5/5] test: add a cxl-get-poison test
-Date: Thu, 10 Nov 2022 19:20:08 -0800
-Message-Id: <fe384a7dc7bc9b84db640dbbf6b7af73fe7ebd5c.1668133294.git.alison.schofield@intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1668133294.git.alison.schofield@intel.com>
-References: <cover.1668133294.git.alison.schofield@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EA680B
+	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 09:24:58 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="75166285"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665414000"; 
+   d="scan'208";a="75166285"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Nov 2022 18:23:46 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 97FD7C214E
+	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 18:23:45 +0900 (JST)
+Received: from m3004.s.css.fujitsu.com (m3004.s.css.fujitsu.com [10.128.233.124])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id BF543BCB7B
+	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 18:23:44 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.19.3.107])
+	by m3004.s.css.fujitsu.com (Postfix) with ESMTP id 730DD20607A2;
+	Fri, 11 Nov 2022 18:23:44 +0900 (JST)
+From: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+To: linux-rdma@vger.kernel.org,
+	leonro@nvidia.com,
+	jgg@nvidia.com,
+	zyjzyj2000@gmail.com
+Cc: nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	rpearsonhpe@gmail.com,
+	yangx.jy@fujitsu.com,
+	lizhijian@fujitsu.com,
+	y-goto@fujitsu.com,
+	Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+Subject: [RFC PATCH v2 0/7] On-Demand Paging on SoftRoCE
+Date: Fri, 11 Nov 2022 18:22:21 +0900
+Message-Id: <cover.1668157436.git.matsuda-daisuke@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -63,126 +55,187 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 
-From: Alison Schofield <alison.schofield@intel.com>
+This patch series implements the On-Demand Paging feature on SoftRoCE(rxe)
+driver, which has been available only in mlx5 driver[1] so far.
 
-Exercise cxl list, libcxl, and driver pieces of the get poison
-pathway. The poison records themselves are mocked by cxl_test,
-but the work of triggering the poison read, logging as trace events,
-and then collecting and parsing is all for real.
+[Overview]
+When applications register a memory region(MR), RDMA drivers normally pin
+pages in the MR so that physical addresses are never changed during RDMA
+communication. This requires the MR to fit in physical memory and
+inevitably leads to memory pressure. On the other hand, On-Demand Paging
+(ODP) allows applications to register MRs without pinning pages. They are
+paged-in when the driver requires and paged-out when the OS reclaims. As a
+result, it is possible to register a large MR that does not fit in physical
+memory without taking up so much physical memory.
 
-Signed-off-by: Alison Schofield <alison.schofield@intel.com>
----
- test/cxl-get-poison.sh | 78 ++++++++++++++++++++++++++++++++++++++++++
- test/meson.build       |  2 ++
- 2 files changed, 80 insertions(+)
- create mode 100644 test/cxl-get-poison.sh
+[Why to add this feature?]
+We, Fujitsu, have contributed to RDMA with a view to using it with
+persistent memory. Persistent memory can host a filesystem that allows
+applications to read/write files directly without involving page cache.
+This is called FS-DAX(filesystem direct access) mode. There is a problem
+that data on DAX-enabled filesystem cannot be duplicated with software RAID
+or other hardware methods. Data replication with RDMA, which features
+high-speed connections, is the best solution for the problem.
 
-diff --git a/test/cxl-get-poison.sh b/test/cxl-get-poison.sh
-new file mode 100644
-index 000000000000..fe93a67a5240
---- /dev/null
-+++ b/test/cxl-get-poison.sh
-@@ -0,0 +1,78 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2022 Intel Corporation. All rights reserved.
-+
-+. $(dirname $0)/common
-+
-+rc=1
-+
-+set -ex
-+
-+trap 'err $LINENO' ERR
-+
-+check_prereq "jq"
-+
-+modprobe -r cxl_test
-+modprobe cxl_test
-+udevadm settle
-+
-+# The number or errors that cxl_test mocks is subject to change.
-+NR_ERRS=2
-+
-+# THEORY OF OPERATION: Exercise cxl-cli and cxl driver capabilites wrt
-+# retrieving poison lists. The poison list is maintained by the device.
-+# It may be requested per memdev or per region.
-+
-+create_region()
-+{
-+	region=$($CXL create-region -d $decoder -m $memdevs | jq -r ".region")
-+
-+	if [[ ! $region ]]; then
-+		echo "create-region failed for $decoder"
-+		err "$LINENO"
-+	fi
-+}
-+
-+setup_x2_region()
-+{
-+        # Find an x2 decoder
-+        decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
-+          select(.pmem_capable == true) |
-+          select(.nr_targets == 2) |
-+          .decoder")
-+
-+        # Find a memdev for each host-bridge interleave position
-+        port_dev0=$($CXL list -T -d $decoder | jq -r ".[] |
-+            .targets | .[] | select(.position == 0) | .target")
-+        port_dev1=$($CXL list -T -d $decoder | jq -r ".[] |
-+            .targets | .[] | select(.position == 1) | .target")
-+        mem0=$($CXL list -M -p $port_dev0 | jq -r ".[0].memdev")
-+        mem1=$($CXL list -M -p $port_dev1 | jq -r ".[0].memdev")
-+        memdevs="$mem0 $mem1"
-+}
-+
-+find_media_errors()
-+{
-+	nr=$(echo $json | jq -r ".nr_media_errors")
-+	if [[ $nr -ne $NR_ERRS ]]; then
-+		echo "$mem: $NR_ERRS media errors expected, $nr found"
-+		err "$LINENO"
-+	fi
-+}
-+
-+# Read poison from each available memdev
-+readarray -t mems < <("$CXL" list -b cxl_test -Mi | jq -r '.[].memdev')
-+for mem in ${mems[@]}; do
-+	json=$("$CXL" list -m "$mem" --media-errors | jq -r '.[].media_errors')
-+	find_media_errors
-+done
-+
-+# Read poison from one region
-+setup_x2_region
-+create_region
-+json=$("$CXL" list -r "$region" --media-errors | jq -r '.[].media_errors')
-+find_media_errors
-+cxl disable-region $region
-+cxl destroy-region $region
-+
-+modprobe -r cxl_test
-diff --git a/test/meson.build b/test/meson.build
-index 5953c286d13f..721c69e79f5e 100644
---- a/test/meson.build
-+++ b/test/meson.build
-@@ -154,6 +154,7 @@ cxl_topo = find_program('cxl-topology.sh')
- cxl_sysfs = find_program('cxl-region-sysfs.sh')
- cxl_labels = find_program('cxl-labels.sh')
- cxl_create_region = find_program('cxl-create-region.sh')
-+cxl_get_poison = find_program('cxl-get-poison.sh')
- 
- tests = [
-   [ 'libndctl',               libndctl,		  'ndctl' ],
-@@ -182,6 +183,7 @@ tests = [
-   [ 'cxl-region-sysfs.sh',    cxl_sysfs,	  'cxl'   ],
-   [ 'cxl-labels.sh',          cxl_labels,	  'cxl'   ],
-   [ 'cxl-create-region.sh',   cxl_create_region,  'cxl'   ],
-+  [ 'cxl-get-poison.sh',      cxl_get_poison,     'cxl'   ],
- ]
- 
- if get_option('destructive').enabled()
+However, there is a known issue that hinders using RDMA with FS-DAX. When
+RDMA operations to a file and update of the file metadata are processed
+concurrently on the same node, illegal memory accesses can be executed,
+disregarding the updated metadata. This is because RDMA operations do not
+go through page cache but access data directly. There was an effort[2] to
+solve this problem, but it was rejected in the end. Though there is no
+general solution available, it is possible to work around the problem using
+the ODP feature. It enables the kernel driver to update metadata before
+processing RDMA operations.
+
+We have enhanced the rxe to expedite the usage of persistent memory. Our
+contribution to rxe includes RDMA Atomic write[3] and RDMA Flush[4]. With
+them being merged along with ODP, an environment will be ready for
+developers to create and test software for RDMA with FS-DAX. There is a
+library(librpma)[5] being developed for this purpose. This environment
+can be used by anybody without any special hardware but an ordinary
+computer with a normal NIC though it is inferior to hardware
+implementations in terms of performance.
+
+[Design considerations]
+ODP has been available only in mlx5, but functions and data structures
+that can be used commonly are provided in ib_uverbs(infiniband/core). The
+interface is heavily dependent on HMM infrastructure[6], and this patchset
+use them as much as possible. While mlx5 has both Explicit and Implicit ODP
+features along with prefetch feature, this patchset implements the Explicit
+ODP feature only.
+
+As an important change, it is necessary to convert triple tasklets
+(requester, responder and completer) to workqueues because they must be
+able to sleep in order to trigger page fault before accessing MRs. There
+have been some discussions, and Bob Pearson thankfully posted patches[7]
+to do this conversion. A large part of my 2nd patch will be dropped
+because Bob's workqueue implementation is likely to be adopted. However,
+I will have to modify rxe_comp_queue_pkt() and rxe_resp_queue_pkt() to
+schedule works for work items that access user MRs after all.
+
+If responder and completer sleep, it becomes more likely that packet drop
+occurs because of overflow in receiver queue. There are multiple queues
+involved, but, as SoftRoCE uses UDP, the most important one would be the
+UDP buffers. The size can be configured in net.core.rmem_default and
+net.core.rmem_max sysconfig parameters. Users should change these values in
+case of packet drop, but page fault would be typically not so long as to
+cause the problem.
+
+[How does ODP work?]
+"struct ib_umem_odp" is used to manage pages. It is created for each
+ODP-enabled MR on its registration. This struct holds a pair of arrays
+(dma_list/pfn_list) that serve as a driver page table. DMA addresses and
+PFNs are stored in the driver page table. They are updated on page-in and
+page-out, both of which use the common interfaces in ib_uverbs.
+
+Page-in can occur when requester, responder or completer access an MR in
+order to process RDMA operations. If they find that the pages being
+accessed are not present on physical memory or requisite permissions are
+not set on the pages, they provoke page fault to make pages present with
+proper permissions and at the same time update the driver page table. After
+confirming the presence of the pages, they execute memory access such as
+read, write or atomic operations.
+
+Page-out is triggered by page reclaim or filesystem events (e.g. metadata
+update of a file that is being used as an MR). When creating an ODP-enabled
+MR, the driver registers an MMU notifier callback. When the kernel issues a
+page invalidation notification, the callback is provoked to unmap DMA
+addresses and update the driver page table. After that, the kernel releases
+the pages.
+
+[Supported operations]
+All operations are supported on RC connection. Atomic write[3] and Flush[4]
+operations, which are still under review, are also going to be supported
+after these patches are merged. On UD connection, Send, Recv, SRQ-Recv are
+supported.
+
+[How to test ODP?]
+There are only a few resources available for testing. pyverbs testcases in
+rdma-core and perftest[8] are recommendable ones. I posted a patchset[9] to
+expand pyverbs testcases, but they are not merged as of now. Other than
+them, the ibv_rc_pingpong command can also used for testing. Note that you
+may have to build perftest from upstream since older versions do not handle
+ODP capabilities correctly.
+
+The tree is available from the URL below:
+https://github.com/daimatsuda/linux/tree/odp_rfc_v2
+
+[Future work]
+My next work will be the prefetch feature. It allows applications to
+trigger page fault using ibv_advise_mr(3) to optimize performance. Some
+existing software like librpma use this feature. Additionally, I think we
+can also add the implicit ODP feature in the future.
+
+[1] [RFC 00/20] On demand paging
+https://www.spinics.net/lists/linux-rdma/msg18906.html
+
+[2] [RFC PATCH v2 00/19] RDMA/FS DAX truncate proposal V1,000,002 ;-)
+https://lore.kernel.org/nvdimm/20190809225833.6657-1-ira.weiny@intel.com/
+
+[3] [PATCH v6 0/8] RDMA/rxe: Add atomic write operation
+https://lore.kernel.org/all/20221015063648.52285-1-yangx.jy@fujitsu.com/
+
+[4] [for-next PATCH v5 00/11] RDMA/rxe: Add RDMA FLUSH operation
+https://lore.kernel.org/lkml/20220927055337.22630-12-lizhijian@fujitsu.com/t/
+
+[5] librpma: Remote Persistent Memory Access Library
+https://github.com/pmem/rpma
+
+[6] Heterogeneous Memory Management (HMM)
+https://www.kernel.org/doc/html/latest/mm/hmm.html
+
+[7] [PATCH for-next v3 00/13] Implement work queues for rdma_rxe
+https://lore.kernel.org/linux-rdma/20221029031009.64467-1-rpearsonhpe@gmail.com/
+
+[8] linux-rdma/perftest: Infiniband Verbs Performance Tests
+https://github.com/linux-rdma/perftest
+
+[9] tests: ODP testcases for RDMA Write/Read and Atomic operations #1229
+https://github.com/linux-rdma/rdma-core/pull/1229
+
+v1->v2:
+ 1) Fixed a crash issue reported by Haris Iqbal.
+ 2) Tried to make lock patters clearer as pointed out by Romanovsky.
+ 3) Minor clean ups and fixes.
+
+Daisuke Matsuda (7):
+  IB/mlx5: Change ib_umem_odp_map_dma_single_page() to retain umem_mutex
+  RDMA/rxe: Convert the triple tasklets to workqueues
+  RDMA/rxe: Cleanup code for responder Atomic operations
+  RDMA/rxe: Add page invalidation support
+  RDMA/rxe: Allow registering MRs for On-Demand Paging
+  RDMA/rxe: Add support for Send/Recv/Write/Read operations with ODP
+  RDMA/rxe: Add support for the traditional Atomic operations with ODP
+
+ drivers/infiniband/core/umem_odp.c    |   8 +-
+ drivers/infiniband/hw/mlx5/odp.c      |   4 +-
+ drivers/infiniband/sw/rxe/Makefile    |   5 +-
+ drivers/infiniband/sw/rxe/rxe.c       |  18 ++
+ drivers/infiniband/sw/rxe/rxe_comp.c  |  42 +++-
+ drivers/infiniband/sw/rxe/rxe_loc.h   |  13 +-
+ drivers/infiniband/sw/rxe/rxe_mr.c    |   7 +-
+ drivers/infiniband/sw/rxe/rxe_net.c   |   4 +-
+ drivers/infiniband/sw/rxe/rxe_odp.c   | 336 ++++++++++++++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_param.h |   2 +-
+ drivers/infiniband/sw/rxe/rxe_qp.c    |  71 +++---
+ drivers/infiniband/sw/rxe/rxe_recv.c  |   4 +-
+ drivers/infiniband/sw/rxe/rxe_req.c   |  14 +-
+ drivers/infiniband/sw/rxe/rxe_resp.c  | 185 +++++++-------
+ drivers/infiniband/sw/rxe/rxe_resp.h  |  44 ++++
+ drivers/infiniband/sw/rxe/rxe_verbs.c |  16 +-
+ drivers/infiniband/sw/rxe/rxe_verbs.h |  10 +-
+ drivers/infiniband/sw/rxe/rxe_wq.c    | 160 ++++++++++++
+ drivers/infiniband/sw/rxe/rxe_wq.h    |  70 ++++++
+ 19 files changed, 843 insertions(+), 170 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_resp.h
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.h
+
+base-commit: 4508d32ccced24c972bc4592104513e1ff8439b5
 -- 
-2.37.3
+2.31.1
 
 
