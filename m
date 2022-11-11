@@ -1,46 +1,46 @@
-Return-Path: <nvdimm+bounces-5111-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5109-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ABBE625175
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 04:20:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB730625173
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 04:20:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506BB280C99
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 03:20:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBACF1C20999
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 11 Nov 2022 03:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71CD64D;
-	Fri, 11 Nov 2022 03:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53B642;
+	Fri, 11 Nov 2022 03:20:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5A062A
-	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 03:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F4C639
+	for <nvdimm@lists.linux.dev>; Fri, 11 Nov 2022 03:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668136815; x=1699672815;
+  t=1668136816; x=1699672816;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bRrw9/sMALUjvJ5/z2OV7l7YJ62K7WCyf7LWsqcrRRI=;
-  b=Wp2o4CBIAlQueUQfOOQiYT/lqYQHl428dmzxTHwCyIkJbTvCTxZDW/Vj
-   EP0E9miAP+uklyZDaqoGlnj+JufXEuSjt+Z0aPrKKvTu67AkJKNqQhedl
-   2Jna9/yvkOiEoSo455Xri9qFu8dRbp/S4yc0x7n1uCJUtLmzpB/SaJK/I
-   8UE+1xE9qYNutmdMxefhPw5NC0UIaOT8J1aOg51xTglKZ92fUmE6RmgX3
-   CR1BcCtI2xm8NpdfJhW9Nf9eBZCeMa4TvK4v/fimG65DkpERXbi+lIVaV
-   JPiOlmh6yFWh6bWnX3PgouMhcvOiLHsUK0XX+HN5BoI5Ky6escy8Byklm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="373638353"
+  bh=I+nvXp12J+biWDdGcdaPbaU5FE0X69XrhRSTjEwW9A4=;
+  b=eD1N0O1wlGQy7CR1wFqEsTIzOBtggPqL+dA6KHIQMs6eqbMCUsUJaGZW
+   14OG6bOqO8iESL24f75mCRpSd+V5iBTb2S9qrtv1ZhJuHkeqTDxWfXy31
+   HcwVc3vwiCWdAqteJCmV7TF+IsdznsNHqRNOxTalj7cpS0XUB9pTULIGy
+   vmho+IQlTuYJNUD5PbBAb8EurZ7LrS8yxCZytlwwZ1qc9ESHVTTYP4E6O
+   Gfp3pdGywOcMwmteJy0uKRc8OCPTz6I2Nt7Xwo345DE01l3sLG9snbCor
+   USiadS9/jvax3pGgUd+bEjsdTR2jF7uJFGFxkXkg4oAlyxpWDtB4/TxEd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="373638354"
 X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="373638353"
+   d="scan'208";a="373638354"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="743129966"
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="743129970"
 X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="743129966"
+   d="scan'208";a="743129970"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.161.45])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:14 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:20:15 -0800
 From: alison.schofield@intel.com
 To: Dan Williams <dan.j.williams@intel.com>,
 	Ira Weiny <ira.weiny@intel.com>,
@@ -50,9 +50,9 @@ To: Dan Williams <dan.j.williams@intel.com>,
 Cc: Alison Schofield <alison.schofield@intel.com>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org
-Subject: [ndctl PATCH 3/5] cxl/list: collect and parse the poison list records
-Date: Thu, 10 Nov 2022 19:20:06 -0800
-Message-Id: <b7b615f80c80086f17131b704d6171a0f6b01bea.1668133294.git.alison.schofield@intel.com>
+Subject: [ndctl PATCH 4/5] cxl/list: add --media-errors option to cxl list
+Date: Thu, 10 Nov 2022 19:20:07 -0800
+Message-Id: <762edeab529125d3048cf13721360b1a07260531.1668133294.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1668133294.git.alison.schofield@intel.com>
 References: <cover.1668133294.git.alison.schofield@intel.com>
@@ -66,245 +66,132 @@ Content-Transfer-Encoding: 8bit
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-When triggered, poison list error records are logged as events
-in the kernel tracing subsystem. Trace, trigger, and parse the
-events when the --media-error option is selected in cxl list.
-
-Include the total number of media-errors, even when zero.
-
-The media-error records matches the definition in the CXL 3.0
-Spec Table 8.107.
+The --media-errors option to 'cxl list' retrieves poison lists
+from memory devices (supporting the capability) and displays
+the returned media-error records in the cxl list json. This
+option can apply to memdevs or regions.
 
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- cxl/json.c | 185 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 185 insertions(+)
+ Documentation/cxl/cxl-list.txt | 64 ++++++++++++++++++++++++++++++++++
+ cxl/filter.c                   |  2 ++
+ cxl/filter.h                   |  1 +
+ cxl/list.c                     |  2 ++
+ 4 files changed, 69 insertions(+)
 
-diff --git a/cxl/json.c b/cxl/json.c
-index 63c17519aba1..1b3c0bda6bda 100644
---- a/cxl/json.c
-+++ b/cxl/json.c
-@@ -2,14 +2,18 @@
- // Copyright (C) 2015-2021 Intel Corporation. All rights reserved.
- #include <limits.h>
- #include <util/json.h>
-+#include <util/bitmap.h>
- #include <uuid/uuid.h>
- #include <cxl/libcxl.h>
- #include <json-c/json.h>
- #include <json-c/printbuf.h>
- #include <ccan/short_types/short_types.h>
-+#include <traceevent/event-parse.h>
-+#include <tracefs/tracefs.h>
+diff --git a/Documentation/cxl/cxl-list.txt b/Documentation/cxl/cxl-list.txt
+index 14a2b4bb5c2a..24a0cf97cef2 100644
+--- a/Documentation/cxl/cxl-list.txt
++++ b/Documentation/cxl/cxl-list.txt
+@@ -344,6 +344,70 @@ OPTIONS
+ --region::
+ 	Specify CXL region device name(s), or device id(s), to filter the listing.
  
- #include "filter.h"
- #include "json.h"
-+#include "event_trace.h"
- 
- static struct json_object *util_cxl_memdev_health_to_json(
- 		struct cxl_memdev *memdev, unsigned long flags)
-@@ -300,6 +304,167 @@ err_jobj:
- 	return NULL;
++-a::
++--media-errors::
++	Include media-error information. The poison list is retrieved
++	from the device(s) and media error records are added to the
++	listing. This option applies to memdevs and regions where
++	devices support the poison list capability.
++
++----
++# cxl list -m mem11 --media-errors
++[
++  {
++    "memdev":"mem11",
++    "pmem_size":268435456,
++    "ram_size":0,
++    "serial":0,
++    "host":"0000:37:00.0",
++    "media_errors":{
++      "nr_media_errors":1,
++      "media_error_records":[
++        {
++          "dpa":0,
++          "length":64,
++          "source":"Internal",
++          "flags":"",
++          "overflow_time":0
++        }
++      ]
++    }
++  }
++]
++# cxl list -r region5 --media-errors
++[
++  {
++    "region":"region5",
++    "resource":1035623989248,
++    "size":2147483648,
++    "interleave_ways":2,
++    "interleave_granularity":4096,
++    "decode_state":"commit",
++    "media_errors":{
++      "nr_media_errors":2,
++      "media_error_records":[
++        {
++          "memdev":"mem2",
++          "dpa":0,
++          "length":64,
++          "source":"Internal",
++          "flags":"",
++          "overflow_time":0
++        },
++        {
++          "memdev":"mem5",
++          "dpa":0,
++          "length":512,
++          "source":"Vendor",
++          "flags":"",
++          "overflow_time":0
++        }
++      ]
++    }
++  }
++]
++----
++
+ -v::
+ --verbose::
+ 	Increase verbosity of the output. This can be specified
+diff --git a/cxl/filter.c b/cxl/filter.c
+index 56c659965891..fe6c29148fb4 100644
+--- a/cxl/filter.c
++++ b/cxl/filter.c
+@@ -686,6 +686,8 @@ static unsigned long params_to_flags(struct cxl_filter_params *param)
+ 		flags |= UTIL_JSON_TARGETS;
+ 	if (param->partition)
+ 		flags |= UTIL_JSON_PARTITION;
++	if (param->media_errors)
++		flags |= UTIL_JSON_MEDIA_ERRORS;
+ 	return flags;
  }
  
-+/* CXL 8.2.9.5.4.1 Get Poison List: Poison Source */
-+#define CXL_POISON_SOURCE_UNKNOWN 0
-+#define CXL_POISON_SOURCE_EXTERNAL 1
-+#define CXL_POISON_SOURCE_INTERNAL 2
-+#define CXL_POISON_SOURCE_INJECTED 3
-+#define CXL_POISON_SOURCE_VENDOR 7
-+
-+/* CXL 8.2.9.5.4.1 Get Poison List: Payload out flags */
-+#define CXL_POISON_FLAG_MORE BIT(0)
-+#define CXL_POISON_FLAG_OVERFLOW BIT(1)
-+#define CXL_POISON_FLAG_SCANNING BIT(2)
-+
-+static struct json_object *
-+util_cxl_poison_events_to_json(struct tracefs_instance *inst, bool is_region,
-+			       unsigned long flags)
-+{
-+	struct json_object *jerrors, *jmedia, *jobj = NULL;
-+	struct jlist_node *jnode, *next;
-+	struct event_ctx ectx = {
-+		.event_name = "cxl_poison",
-+		.event_pid = getpid(),
-+		.system = "cxl",
-+	};
-+	int rc, count = 0;
-+
-+	list_head_init(&ectx.jlist_head);
-+	rc = cxl_parse_events(inst, &ectx);
-+	if (rc < 0) {
-+		fprintf(stderr, "Failed to parse events: %d\n", rc);
-+		return NULL;
-+	}
-+	if (list_empty(&ectx.jlist_head))
-+		return NULL;
-+
-+	jerrors = json_object_new_array();
-+	if (!jerrors)
-+		return NULL;
-+
-+	list_for_each_safe (&ectx.jlist_head, jnode, next, list) {
-+		struct json_object *jval = NULL;
-+		struct json_object *jp = NULL;
-+		int source, pflags;
-+		u64 addr, len;
-+
-+		jp = json_object_new_object();
-+		if (!jp)
-+			return NULL;
-+
-+		if (is_region) {
-+			/* Per-region JSON includes memdev names */
-+			if (json_object_object_get_ex(jnode->jobj, "memdev",
-+						      &jval))
-+				json_object_object_add(jp, "memdev", jval);
-+		}
-+		if (json_object_object_get_ex(jnode->jobj, "dpa", &jval)) {
-+			addr = json_object_get_int64(jval);
-+			jobj = util_json_object_hex(addr, flags);
-+			json_object_object_add(jp, "dpa", jobj);
-+		}
-+		if (json_object_object_get_ex(jnode->jobj, "length", &jval)) {
-+			len = json_object_get_int64(jval);
-+			jobj = util_json_object_size(len, flags);
-+			json_object_object_add(jp, "length", jobj);
-+		}
-+		if (json_object_object_get_ex(jnode->jobj, "source", &jval)) {
-+			source = json_object_get_int(jval);
-+			if (source == CXL_POISON_SOURCE_UNKNOWN)
-+				jobj = json_object_new_string("Unknown");
-+			else if (source == CXL_POISON_SOURCE_EXTERNAL)
-+				jobj = json_object_new_string("External");
-+			else if (source == CXL_POISON_SOURCE_INTERNAL)
-+				jobj = json_object_new_string("Internal");
-+			else if (source == CXL_POISON_SOURCE_INJECTED)
-+				jobj = json_object_new_string("Injected");
-+			else if (source == CXL_POISON_SOURCE_VENDOR)
-+				jobj = json_object_new_string("Vendor");
-+			else
-+				jobj = json_object_new_string("Reserved");
-+			json_object_object_add(jp, "source", jobj);
-+		}
-+		if (json_object_object_get_ex(jnode->jobj, "flags", &jval)) {
-+			char flag_str[32] = { '\0' };
-+
-+			pflags = json_object_get_int(jval);
-+			if (pflags & CXL_POISON_FLAG_MORE)
-+				strcat(flag_str, "More,");
-+			if (pflags & CXL_POISON_FLAG_OVERFLOW)
-+				strcat(flag_str, "Overflow,");
-+			if (pflags & CXL_POISON_FLAG_SCANNING)
-+				strcat(flag_str, "Scanning,");
-+			jobj = json_object_new_string(flag_str);
-+			if (jobj)
-+				json_object_object_add(jp, "flags", jobj);
-+		}
-+		if (json_object_object_get_ex(jnode->jobj, "overflow_t", &jval))
-+			json_object_object_add(jp, "overflow_time", jval);
-+
-+		json_object_array_add(jerrors, jp);
-+		count++;
-+	} /* list_for_each_safe */
-+
-+	jmedia = json_object_new_object();
-+	if (!jmedia)
-+		return NULL;
-+
-+	/* Always return the count. If count is zero, no records follow. */
-+	jobj = json_object_new_int(count);
-+	if (jobj)
-+		json_object_object_add(jmedia, "nr_media_errors", jobj);
-+	if (count)
-+		json_object_object_add(jmedia, "media_error_records", jerrors);
-+
-+	return jmedia;
-+}
-+
-+struct cxl_media_err_ctx {
-+	void *dev;
-+	bool is_region;
-+};
-+
-+static struct json_object *
-+util_cxl_media_errors_to_json(struct cxl_media_err_ctx *mectx,
-+			      unsigned long flags)
-+{
-+	struct json_object *jmedia = NULL;
-+	struct tracefs_instance *inst;
-+	int rc;
-+
-+	inst = tracefs_instance_create("cxl list");
-+	if (!inst) {
-+		fprintf(stderr, "tracefs_instance_create() failed\n");
-+		return NULL;
-+	}
-+
-+	rc = cxl_event_tracing_enable(inst, "cxl", "cxl_poison");
-+	if (rc < 0) {
-+		fprintf(stderr, "Failed to enable trace: %d\n", rc);
-+		goto err_free;
-+	}
-+
-+	if (mectx->is_region)
-+		rc = cxl_region_trigger_poison_list(mectx->dev);
-+	else
-+		rc = cxl_memdev_trigger_poison_list(mectx->dev);
-+	if (rc) {
-+		fprintf(stderr, "Failed write of sysfs attribute: %d\n", rc);
-+		goto err_free;
-+	}
-+
-+	rc = cxl_event_tracing_disable(inst);
-+	if (rc < 0) {
-+		fprintf(stderr, "Failed to disable trace: %d\n", rc);
-+		goto err_free;
-+	}
-+
-+	jmedia = util_cxl_poison_events_to_json(inst, mectx->is_region, flags);
-+err_free:
-+	tracefs_instance_free(inst);
-+	return jmedia;
-+}
-+
- struct json_object *util_cxl_memdev_to_json(struct cxl_memdev *memdev,
- 		unsigned long flags)
- {
-@@ -359,6 +524,16 @@ struct json_object *util_cxl_memdev_to_json(struct cxl_memdev *memdev,
- 		if (jobj)
- 			json_object_object_add(jdev, "partition_info", jobj);
- 	}
-+
-+	if (flags & UTIL_JSON_MEDIA_ERRORS) {
-+		struct cxl_media_err_ctx mectx = {
-+			.dev = memdev,
-+			.is_region = false,
-+		};
-+		jobj = util_cxl_media_errors_to_json(&mectx, flags);
-+		if (jobj)
-+			json_object_object_add(jdev, "media_errors", jobj);
-+	}
- 	return jdev;
- }
- 
-@@ -678,6 +853,16 @@ struct json_object *util_cxl_region_to_json(struct cxl_region *region,
- 			json_object_object_add(jregion, "state", jobj);
- 	}
- 
-+	if (flags & UTIL_JSON_MEDIA_ERRORS) {
-+		struct cxl_media_err_ctx mectx = {
-+			.dev = region,
-+			.is_region = true,
-+		};
-+		jobj = util_cxl_media_errors_to_json(&mectx, flags);
-+		if (jobj)
-+			json_object_object_add(jregion, "media_errors", jobj);
-+	}
-+
- 	util_cxl_mappings_append_json(jregion, region, flags);
- 
- 	return jregion;
+diff --git a/cxl/filter.h b/cxl/filter.h
+index 256df49c3d0c..a92295fe2511 100644
+--- a/cxl/filter.h
++++ b/cxl/filter.h
+@@ -26,6 +26,7 @@ struct cxl_filter_params {
+ 	bool human;
+ 	bool health;
+ 	bool partition;
++	bool media_errors;
+ 	int verbose;
+ 	struct log_ctx ctx;
+ };
+diff --git a/cxl/list.c b/cxl/list.c
+index 8c48fbbaaec3..df2ae5a3fec0 100644
+--- a/cxl/list.c
++++ b/cxl/list.c
+@@ -52,6 +52,8 @@ static const struct option options[] = {
+ 		    "include memory device health information"),
+ 	OPT_BOOLEAN('I', "partition", &param.partition,
+ 		    "include memory device partition information"),
++	OPT_BOOLEAN('a', "media-errors", &param.media_errors,
++		    "include media error information "),
+ 	OPT_INCR('v', "verbose", &param.verbose,
+ 		 "increase output detail"),
+ #ifdef ENABLE_DEBUG
 -- 
 2.37.3
 
