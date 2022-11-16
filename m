@@ -1,56 +1,56 @@
-Return-Path: <nvdimm+bounces-5196-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5194-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB9C762CC92
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 22:19:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 416BD62CC8F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 22:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68BB1280C8F
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 21:19:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1C86280C8F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 21:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E194122B6;
-	Wed, 16 Nov 2022 21:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36A0122B4;
+	Wed, 16 Nov 2022 21:19:21 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C258312290
-	for <nvdimm@lists.linux.dev>; Wed, 16 Nov 2022 21:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1A112290
+	for <nvdimm@lists.linux.dev>; Wed, 16 Nov 2022 21:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668633567; x=1700169567;
+  t=1668633560; x=1700169560;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aT/N4vJYhzqu7GWpD+8er9SbNffP59hfQbIFnoGY+l4=;
-  b=Cu4vmsniDIry3rUFGQSWFHdyiR4kJUN2ovhPP8P0Kpy7s9c4Ihv2d8KD
-   NxnFDnQg/04NxwGxscWdYLtNfuQSkROMKRVRxlpv2dPjk+d9TdfN5lyd7
-   VpttD+eODXi+8rNOM8HTBZSp29EcNyNKo8cgKM0t8MKiglyw3ZoE42WH7
-   8jtVQMqoUsegvHthxNPAsQM+FDSneKuM33ILv39ajTj30j7zz7cp2twOq
-   ovLDSqVif4Kf8TP8gaQOG+t5b2s22lxdH+mYmj7Bvuo620T4eKtpeyfHE
-   2+BLeu6KYDDAQTdeyAeuqv2Uc7raliO4u4j+w/dCN7VbpWyETOsIi3hUi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="311377064"
+  bh=tSd4pI/aJIfzbjPmYNaJo/fOcKhBZhna/+CZzU+JRsk=;
+  b=mxk3FJRcuSBOOArOnZbJRhUzIW/J0bH2CKItXJFQEGckMzBGTP5skOpB
+   UPkajI4WVeN3tNdnw+anWKl7UJy/WTLtFWDPKc1xWbdvtAELAn5IkxbwY
+   BDhi9mwLN3T/obfRZOUJkhAUrLNfCHz7D/zeitg3iwkdWCYs/N+HO/0SH
+   BYD18uGdpgV1D6zb+3KxaPWhgcbGYSln72wFjb847RSF3k0mlNhMCSxYT
+   Y8CDctjIZq2CA2FWuzobQnnzD1TIGArCadNexedHdQBE3SYrN7VsDU8Mf
+   W81+UulgynEvI4UWWBzR0CIzoX2FhEPlLBEQmSXp1gpaodquyLOGzHxAs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="312686471"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="311377064"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="617330426"
+   d="scan'208";a="312686471"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="670654279"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="617330426"
+   d="scan'208";a="670654279"
 Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:12 -0800
-Subject: [PATCH v5 15/18] tools/testing/cxl: add mechanism to lock mem device
- for testing
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:18 -0800
+Subject: [PATCH v5 16/18] cxl/pmem: add provider name to cxl pmem dimm
+ attribute group
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Cc: dan.j.williams@intel.com, ira.weiny@intel.com, vishal.l.verma@intel.com,
  alison.schofield@intel.com, Jonathan.Cameron@huawei.com, dave@stgolabs.net,
  benjamin.cheatham@amd.com
-Date: Wed, 16 Nov 2022 14:19:12 -0700
+Date: Wed, 16 Nov 2022 14:19:18 -0700
 Message-ID: 
- <166863355259.80269.11806404186408786011.stgit@djiang5-desk3.ch.intel.com>
+ <166863355850.80269.1180196889555844539.stgit@djiang5-desk3.ch.intel.com>
 In-Reply-To: 
  <166863336073.80269.10366236775799773727.stgit@djiang5-desk3.ch.intel.com>
 References: 
@@ -65,74 +65,58 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-The mock cxl mem devs needs a way to go into "locked" status to simulate
-when the platform is rebooted. Add a sysfs mechanism so the device security
-state is set to "locked" and the frozen state bits are cleared.
+Add provider name in order to associate cxl test dimm from cxl_test to the
+cxl pmem device when going through sysfs for security testing.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- tools/testing/cxl/test/cxl.c |   40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ Documentation/ABI/testing/sysfs-bus-nvdimm |    6 ++++++
+ drivers/cxl/pmem.c                         |   10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-index 6dd286a52839..7384573e8b12 100644
---- a/tools/testing/cxl/test/cxl.c
-+++ b/tools/testing/cxl/test/cxl.c
-@@ -628,6 +628,45 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
- #define SZ_512G (SZ_64G * 8)
- #endif
+diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
+index 91945211e53b..d78e4553d9af 100644
+--- a/Documentation/ABI/testing/sysfs-bus-nvdimm
++++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
+@@ -47,3 +47,9 @@ Date:		November 2022
+ KernelVersion:	6.2
+ Contact:	Dave Jiang <dave.jiang@intel.com>
+ Description:	(RO) Show the id (serial) of the device.
++
++What:		/sys/bus/nd/devices/nmemX/provider
++Date:		November 2022
++KernelVersion:	6.2
++Contact:	Dave Jiang <dave.jiang@intel.com>
++Description:	(RO) Shows the provider for the device. (i.e. ACPI.NFIT, ACPI.CXL)
+diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
+index 9209c7dd72d0..322f834cc27d 100644
+--- a/drivers/cxl/pmem.c
++++ b/drivers/cxl/pmem.c
+@@ -48,6 +48,15 @@ static void unregister_nvdimm(void *nvdimm)
+ 	cxl_nvd->bridge = NULL;
+ }
  
-+static ssize_t security_lock_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
++static ssize_t provider_show(struct device *dev, struct device_attribute *attr, char *buf)
 +{
-+	struct cxl_mock_mem_pdata *mdata = dev_get_platdata(dev);
++	struct nvdimm *nvdimm = to_nvdimm(dev);
++	struct cxl_nvdimm *cxl_nvd = nvdimm_provider_data(nvdimm);
 +
-+	return sysfs_emit(buf, "%u\n",
-+			  !!(mdata->security_state & CXL_PMEM_SEC_STATE_LOCKED));
++	return sysfs_emit(buf, "%s\n", dev_name(&cxl_nvd->dev));
 +}
++static DEVICE_ATTR_RO(provider);
 +
-+static ssize_t security_lock_store(struct device *dev, struct device_attribute *attr,
-+				   const char *buf, size_t count)
-+{
-+	struct cxl_mock_mem_pdata *mdata = dev_get_platdata(dev);
-+	u32 mask = CXL_PMEM_SEC_STATE_FROZEN | CXL_PMEM_SEC_STATE_USER_PLIMIT |
-+		   CXL_PMEM_SEC_STATE_MASTER_PLIMIT;
-+	int val;
-+
-+	if (kstrtoint(buf, 0, &val) < 0)
-+		return -EINVAL;
-+
-+	if (val == 1) {
-+		if (!(mdata->security_state & CXL_PMEM_SEC_STATE_USER_PASS_SET))
-+			return -ENXIO;
-+		mdata->security_state |= CXL_PMEM_SEC_STATE_LOCKED;
-+		mdata->security_state &= ~mask;
-+	} else {
-+		return -EINVAL;
-+	}
-+	return count;
-+}
-+
-+static DEVICE_ATTR_RW(security_lock);
-+
-+static struct attribute *cxl_mock_mem_attrs[] = {
-+	&dev_attr_security_lock.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(cxl_mock_mem);
-+
- static __init int cxl_test_init(void)
+ static ssize_t id_show(struct device *dev, struct device_attribute *attr, char *buf)
  {
- 	struct cxl_mock_mem_pdata *mem_pdata;
-@@ -752,6 +791,7 @@ static __init int cxl_test_init(void)
- 			goto err_mem;
- 		}
+ 	struct nvdimm *nvdimm = to_nvdimm(dev);
+@@ -60,6 +69,7 @@ static DEVICE_ATTR_RO(id);
  
-+		pdev->dev.groups = cxl_mock_mem_groups;
- 		rc = platform_device_add(pdev);
- 		if (rc) {
- 			platform_device_put(pdev);
+ static struct attribute *cxl_dimm_attributes[] = {
+ 	&dev_attr_id.attr,
++	&dev_attr_provider.attr,
+ 	NULL
+ };
+ 
 
 
 
