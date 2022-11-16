@@ -1,56 +1,55 @@
-Return-Path: <nvdimm+bounces-5195-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5197-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6615662CC91
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 22:19:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0E5D62CC94
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 22:19:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BE6A280CBA
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 21:19:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD78280C94
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 21:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C090122B0;
-	Wed, 16 Nov 2022 21:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E14122B4;
+	Wed, 16 Nov 2022 21:19:33 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC03912290
-	for <nvdimm@lists.linux.dev>; Wed, 16 Nov 2022 21:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9302312290
+	for <nvdimm@lists.linux.dev>; Wed, 16 Nov 2022 21:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668633565; x=1700169565;
+  t=1668633571; x=1700169571;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CqgCGQz11NkCovLWB0kPCFwffgPt/26j60AmAr1EC4g=;
-  b=OuHBDXMPK0SL/82e4a1UxQak16OpxI8XjaOgs7+p87ekZzh78GdnosjY
-   lkSlYKy6qsG6mnkx4oeeH6DTgj6GP4y4vrVBS8FsztDoQz7w6dixP1ELF
-   Ob55A6F6SIeYT26nLjHip/jlAOfOMiPzazVwxiLUjaBIYL+DET/YaK2Zq
-   PcP5WOKKP822r8tZ8/vGk2K76m0cuEllnRN7mAsPx+fIAmH2ddYjnp7Sf
-   1oUlQf1u0PSxxwtMGL7AGAA1M+ZDQ0rFeWAXPpAArVlTW+ERHcBdjO2i0
-   9OBbK4Ai01rZtM8iS5zb0n/k5EidsIc6ZiT1jWqb3QeW5QqSVQQbuU9da
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="376939812"
+  bh=hcha5yeEAsYB3VZJSJu4gRqE5RkS9w5rPapNT2czLC4=;
+  b=m2GNeQKkBsuIkNPDq6XGE9fj95tqYxfUaXw6Mj4pSiIIXgfDhbn2MNti
+   uw2E7xlGO8pKAZRtSXf13DdS7BJ2lPKHhIu6jUsQ0uobupIDxipOmLlho
+   b8fVU376utD0Jzkt2OQ0sYH+/RMoHXT6p8MA310vibgcavOSMj5MPCa4d
+   QGtbEhdHTHcY3Uh7j5e//08lOoAvaiLysOP4J349roRFV/8i8M2ULEZzW
+   s7TTuplIN/YHkkdiNoNhUlICcI03g9g3QPYw3obcndA5+wySBlEr6pgg5
+   5LptEZBLCyT7b492h3cNL1+gxwXZAHqfi0cLFBfBmRqgRH+idxytkVpVD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="314487975"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="376939812"
+   d="scan'208";a="314487975"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="670654294"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:31 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="670654310"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="670654294"
+   d="scan'208";a="670654310"
 Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:24 -0800
-Subject: [PATCH v5 17/18] libnvdimm: Introduce CONFIG_NVDIMM_SECURITY_TEST
- flag
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 13:19:30 -0800
+Subject: [PATCH v5 18/18] cxl: add dimm_id support for __nvdimm_create()
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Cc: dan.j.williams@intel.com, ira.weiny@intel.com, vishal.l.verma@intel.com,
  alison.schofield@intel.com, Jonathan.Cameron@huawei.com, dave@stgolabs.net,
  benjamin.cheatham@amd.com
-Date: Wed, 16 Nov 2022 14:19:24 -0700
+Date: Wed, 16 Nov 2022 14:19:30 -0700
 Message-ID: 
- <166863356449.80269.10160948733785901265.stgit@djiang5-desk3.ch.intel.com>
+ <166863357043.80269.4337575149671383294.stgit@djiang5-desk3.ch.intel.com>
 In-Reply-To: 
  <166863336073.80269.10366236775799773727.stgit@djiang5-desk3.ch.intel.com>
 References: 
@@ -65,133 +64,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-nfit_test overrode the security_show() sysfs attribute function in nvdimm
-dimm_devs in order to allow testing of security unlock. With the
-introduction of CXL security commands, the trick to override
-security_show() becomes significantly more complicated. By introdcing a
-security flag CONFIG_NVDIMM_SECURITY_TEST, libnvdimm can just toggle the
-check via a compile option. In addition the original override can can be
-removed from tools/testing/nvdimm/.
+Set the cxlds->serial as the dimm_id to be fed to __nvdimm_create(). The
+security code uses that as the key description for the security key of the
+memory device. The nvdimm unlock code cannot find the respective key
+without the dimm_id.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/nvdimm/Kconfig           |   12 ++++++++++++
- drivers/nvdimm/dimm_devs.c       |    9 ++++++++-
- drivers/nvdimm/security.c        |    4 ++++
- tools/testing/nvdimm/Kbuild      |    1 -
- tools/testing/nvdimm/dimm_devs.c |   30 ------------------------------
- 5 files changed, 24 insertions(+), 32 deletions(-)
- delete mode 100644 tools/testing/nvdimm/dimm_devs.c
+ drivers/cxl/cxlmem.h         |    3 +++
+ drivers/cxl/pci.c            |    4 ++++
+ drivers/cxl/pmem.c           |    4 +++-
+ tools/testing/cxl/test/mem.c |    4 ++++
+ 4 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-index 5a29046e3319..3eaa94f61da6 100644
---- a/drivers/nvdimm/Kconfig
-+++ b/drivers/nvdimm/Kconfig
-@@ -114,4 +114,16 @@ config NVDIMM_TEST_BUILD
- 	  core devm_memremap_pages() implementation and other
- 	  infrastructure.
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index 75baeb0bbe57..76bdec873868 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -178,6 +178,8 @@ struct cxl_endpoint_dvsec_info {
+ 	struct range dvsec_range[2];
+ };
  
-+config NVDIMM_SECURITY_TEST
-+	bool "Nvdimm security test code toggle"
-+	depends on NVDIMM_KEYS
-+	help
-+	  Debug flag for security testing when using nfit_test or cxl_test
-+	  modules in tools/testing/.
++#define CXL_DEV_ID_LEN 32
 +
-+	  Select Y if using nfit_test or cxl_test for security testing.
-+	  Selecting this option when not using cxl_test introduces 1
-+	  mailbox request to the CXL device to get security status
-+	  for DIMM unlock operation or sysfs attribute "security" read.
+ /**
+  * struct cxl_dev_state - The driver device state
+  *
+@@ -244,6 +246,7 @@ struct cxl_dev_state {
+ 
+ 	resource_size_t component_reg_phys;
+ 	u64 serial;
++	u8 dev_id[CXL_DEV_ID_LEN]; /* for nvdimm, string of 'serial' */
+ 
+ 	struct xarray doe_mbs;
+ 
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index 621a0522b554..c48fcd2a90ef 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -456,6 +456,10 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return PTR_ERR(cxlds);
+ 
+ 	cxlds->serial = pci_get_dsn(pdev);
++	rc = snprintf(cxlds->dev_id, CXL_DEV_ID_LEN, "%llu", cxlds->serial);
++	if (rc <= 0)
++		return -ENXIO;
 +
- endif
-diff --git a/drivers/nvdimm/dimm_devs.c b/drivers/nvdimm/dimm_devs.c
-index c7c980577491..1fc081dcf631 100644
---- a/drivers/nvdimm/dimm_devs.c
-+++ b/drivers/nvdimm/dimm_devs.c
-@@ -349,11 +349,18 @@ static ssize_t available_slots_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(available_slots);
- 
--__weak ssize_t security_show(struct device *dev,
-+ssize_t security_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
- 	struct nvdimm *nvdimm = to_nvdimm(dev);
- 
-+	/*
-+	 * For the test version we need to poll the "hardware" in order
-+	 * to get the updated status for unlock testing.
-+	 */
-+	if (IS_ENABLED(CONFIG_NVDIMM_SECURITY_TEST))
-+		nvdimm->sec.flags = nvdimm_security_flags(nvdimm, NVDIMM_USER);
+ 	cxlds->cxl_dvsec = pci_find_dvsec_capability(
+ 		pdev, PCI_DVSEC_VENDOR_ID_CXL, CXL_DVSEC_PCIE_DEVICE);
+ 	if (!cxlds->cxl_dvsec)
+diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
+index 322f834cc27d..80556dc8d29c 100644
+--- a/drivers/cxl/pmem.c
++++ b/drivers/cxl/pmem.c
+@@ -112,9 +112,11 @@ static int cxl_nvdimm_probe(struct device *dev)
+ 	set_bit(ND_CMD_GET_CONFIG_SIZE, &cmd_mask);
+ 	set_bit(ND_CMD_GET_CONFIG_DATA, &cmd_mask);
+ 	set_bit(ND_CMD_SET_CONFIG_DATA, &cmd_mask);
 +
- 	if (test_bit(NVDIMM_SECURITY_OVERWRITE, &nvdimm->sec.flags))
- 		return sprintf(buf, "overwrite\n");
- 	if (test_bit(NVDIMM_SECURITY_DISABLED, &nvdimm->sec.flags))
-diff --git a/drivers/nvdimm/security.c b/drivers/nvdimm/security.c
-index 92af4c3ca0d3..12a3926f4289 100644
---- a/drivers/nvdimm/security.c
-+++ b/drivers/nvdimm/security.c
-@@ -177,6 +177,10 @@ static int __nvdimm_security_unlock(struct nvdimm *nvdimm)
- 			|| !nvdimm->sec.flags)
- 		return -EIO;
+ 	nvdimm = __nvdimm_create(cxl_nvb->nvdimm_bus, cxl_nvd,
+ 				 cxl_dimm_attribute_groups, flags,
+-				 cmd_mask, 0, NULL, NULL, cxl_security_ops, NULL);
++				 cmd_mask, 0, NULL, cxlds->dev_id,
++				 cxl_security_ops, NULL);
+ 	if (!nvdimm) {
+ 		rc = -ENOMEM;
+ 		goto out;
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index 38f1cea0a353..94a3f42096c8 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -593,6 +593,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 		return PTR_ERR(cxlds);
  
-+	/* While nfit_test does not need this, cxl_test does */
-+	if (IS_ENABLED(CONFIG_NVDIMM_SECURITY_TEST))
-+		nvdimm->sec.flags = nvdimm_security_flags(nvdimm, NVDIMM_USER);
+ 	cxlds->serial = pdev->id;
++	rc = snprintf(cxlds->dev_id, CXL_DEV_ID_LEN, "%llu", cxlds->serial);
++	if (rc <= 0)
++		return -ENXIO;
 +
- 	/* No need to go further if security is disabled */
- 	if (test_bit(NVDIMM_SECURITY_DISABLED, &nvdimm->sec.flags))
- 		return 0;
-diff --git a/tools/testing/nvdimm/Kbuild b/tools/testing/nvdimm/Kbuild
-index 5eb5c23b062f..8153251ea389 100644
---- a/tools/testing/nvdimm/Kbuild
-+++ b/tools/testing/nvdimm/Kbuild
-@@ -79,7 +79,6 @@ libnvdimm-$(CONFIG_BTT) += $(NVDIMM_SRC)/btt_devs.o
- libnvdimm-$(CONFIG_NVDIMM_PFN) += $(NVDIMM_SRC)/pfn_devs.o
- libnvdimm-$(CONFIG_NVDIMM_DAX) += $(NVDIMM_SRC)/dax_devs.o
- libnvdimm-$(CONFIG_NVDIMM_KEYS) += $(NVDIMM_SRC)/security.o
--libnvdimm-y += dimm_devs.o
- libnvdimm-y += libnvdimm_test.o
- libnvdimm-y += config_check.o
+ 	cxlds->mbox_send = cxl_mock_mbox_send;
+ 	cxlds->payload_size = SZ_4K;
  
-diff --git a/tools/testing/nvdimm/dimm_devs.c b/tools/testing/nvdimm/dimm_devs.c
-deleted file mode 100644
-index 57bd27dedf1f..000000000000
---- a/tools/testing/nvdimm/dimm_devs.c
-+++ /dev/null
-@@ -1,30 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright Intel Corp. 2018 */
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/moduleparam.h>
--#include <linux/nd.h>
--#include "pmem.h"
--#include "pfn.h"
--#include "nd.h"
--#include "nd-core.h"
--
--ssize_t security_show(struct device *dev,
--		struct device_attribute *attr, char *buf)
--{
--	struct nvdimm *nvdimm = to_nvdimm(dev);
--
--	/*
--	 * For the test version we need to poll the "hardware" in order
--	 * to get the updated status for unlock testing.
--	 */
--	nvdimm->sec.flags = nvdimm_security_flags(nvdimm, NVDIMM_USER);
--
--	if (test_bit(NVDIMM_SECURITY_DISABLED, &nvdimm->sec.flags))
--		return sprintf(buf, "disabled\n");
--	if (test_bit(NVDIMM_SECURITY_UNLOCKED, &nvdimm->sec.flags))
--		return sprintf(buf, "unlocked\n");
--	if (test_bit(NVDIMM_SECURITY_LOCKED, &nvdimm->sec.flags))
--		return sprintf(buf, "locked\n");
--	return -ENOTTY;
--}
 
 
 
