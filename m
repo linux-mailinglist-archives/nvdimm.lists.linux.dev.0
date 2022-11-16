@@ -1,120 +1,84 @@
-Return-Path: <nvdimm+bounces-5163-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5166-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF6862A45C
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 15 Nov 2022 22:41:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B62B62B45A
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 08:58:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BDC6280A92
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 15 Nov 2022 21:41:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 454BF1C208FC
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 16 Nov 2022 07:58:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E408AD8;
-	Tue, 15 Nov 2022 21:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893132577;
+	Wed, 16 Nov 2022 07:57:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A908AD0
-	for <nvdimm@lists.linux.dev>; Tue, 15 Nov 2022 21:41:22 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id j73-20020a25d24c000000b006dca101748bso14328726ybg.14
-        for <nvdimm@lists.linux.dev>; Tue, 15 Nov 2022 13:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=X2q2jXZbiR4aVk+j4cgzelsOGwbnws5+6EO0kS0q+IE=;
-        b=bc8gszccDarK7qqwempMPNtbikI8jkIOiq/wh6VybGdCVg6NwG/Nx85IKREmkFRuKU
-         wShAc4YefT81y8pFMR1rxelAe/RRgfpvpPmNlQEZEKpzo+c1M3/C7NJnGgjkinSTAxWr
-         qVKQ3wauGSA/Lewwmgqvq9e006mGZVpXq682GvsurpiaXjeSpHA3QRJTFqPGwKqgTeOm
-         YpeAyY7kri8DeFOmUx37xDNBusgu4XbtjicarUdIsq0DCAcH6Us3YD5wihN/jH4yP30k
-         7W198pKVPpm5ebcBI9A8BeOfWYWFyoQiE5lu9Q9bZIYmQ82aQhzPy9WzzxM2O19DPRLm
-         ZrRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X2q2jXZbiR4aVk+j4cgzelsOGwbnws5+6EO0kS0q+IE=;
-        b=x+sUkjLO/ijypQXCFIsbD6KwPawDpppbTaTOdeCJ9cWEHT4sWSOjA2f+Rek/PPZB56
-         BsE7EGbTZTdsaSWnvSvDXMr1i44QCRBZZUjzwCgyRpY3/OjEOqtPJxgNmW8W9lWph0rL
-         nDuQehJDNv8/HADrwf0pL5XVgiYcrImoC4JcxNxznOl8l+4CpwaEI61D1c9dWjcYorrj
-         IuiJKRZlWXNKs74+Al5mupuq0WoozTPWfKKJYGcqWguqoRwRFixF8t+tkDLlX0+JjhLe
-         wtdouRRuZEgu8r5U8PF+JXH2XK5fNxqtrPdZkqf0IuO60hgvYTlrzn+bUDS4gtOGKnCV
-         5vWg==
-X-Gm-Message-State: ANoB5pkHSmZe3IDNSqjUcM1EE+V0a/zIGgeXuIx1VO3JLAAYKRk/+yWL
-	kqrANfaYU7mbkjUk76x+uUPqgGAuwnoZ
-X-Google-Smtp-Source: AA0mqf7GgKCoXOCi2F46eSyK33OlF+GBC970TPtJzlizq2rWCFH+aPNwsJ8Zy7KnDh1jhzu4fIyuMGmvV68G
-X-Received: from sammler.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:43cd])
- (user=sammler job=sendgmr) by 2002:a25:41d7:0:b0:6cb:8949:fdbb with SMTP id
- o206-20020a2541d7000000b006cb8949fdbbmr18613201yba.328.1668548481659; Tue, 15
- Nov 2022 13:41:21 -0800 (PST)
-Date: Tue, 15 Nov 2022 21:40:36 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD08B7F
+	for <nvdimm@lists.linux.dev>; Wed, 16 Nov 2022 07:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668585472; x=1700121472;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O9Hb/seFZgmAzrbGw37aYXMPN6dUPFoKLlp7bI7fqcs=;
+  b=L4l8yn416CkpnEv8Yg5+acZbdktqLBq/S9aOQsDAa9vj2qtTh3bWNi/s
+   BBvcBbXj0zCPga9pJeBoVYhZECKFcQWoKtz1iguhM3m70r4fp8qShSB6W
+   +sWU9qyDDtdoII5vlUn4D2Ue4JZiMFvg0sn8IrMEuYCWaZozrkkWAnkAO
+   jaGy6C7D7OXx1SaYHokNGvKzKwQ7uMViUQQsxcmHSV+kO5nwAc0vo0Bno
+   y0z8wDzJxGn3pLTU+1XkZRQT0yHd0wHrQVuDEHrRxSek/cfYuj/Ll1U1p
+   RU+RnNBDHPW5cNIo+ONtaYJimPHTwDaHRoca5aJDd7Rz8yr4wNIGI4flx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292186379"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="292186379"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 23:57:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="702769361"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="702769361"
+Received: from ake-mobl.amr.corp.intel.com (HELO vverma7-desk1.intel.com) ([10.209.189.231])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 23:57:48 -0800
+From: Vishal Verma <vishal.l.verma@intel.com>
+To: <linux-acpi@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	liushixin2@huawei.com,
+	Vishal Verma <vishal.l.verma@intel.com>
+Subject: [PATCH 0/2] ACPI: HMAT: fix single-initiator target registrations
+Date: Wed, 16 Nov 2022 00:57:34 -0700
+Message-Id: <20221116075736.1909690-1-vishal.l.verma@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221115214036.1571015-1-sammler@google.com>
-Subject: [PATCH v2] virtio_pmem: populate numa information
-From: Michael Sammler <sammler@google.com>
-To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Mina Almasry <almasrymina@google.com>, nvdimm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Cc: Michael Sammler <sammler@google.com>, Pankaj Gupta <pankaj.gupta@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=533; h=from:subject; bh=O9Hb/seFZgmAzrbGw37aYXMPN6dUPFoKLlp7bI7fqcs=; b=owGbwMvMwCXGf25diOft7jLG02pJDMkl0z+0n5Rd0mUS/a/ilf0+P0HJpMJrP207rmsxaLvuPHGD z+p9RykLgxgXg6yYIsvfPR8Zj8ltz+cJTHCEmcPKBDKEgYtTACZyXJbhv9P3fVOdRRa3cmeFOSg+Su wWzL0vtdZ9IndjUOGh/dY3UxgZ5n16MNvp2M3vFafNj5+K5toReiJau3+yqJ/f7c0BWcVl/AA=
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp; fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+Content-Transfer-Encoding: 8bit
 
-Compute the numa information for a virtio_pmem device from the memory
-range of the device. Previously, the target_node was always 0 since
-the ndr_desc.target_node field was never explicitly set. The code for
-computing the numa node is taken from cxl_pmem_region_probe in
-drivers/cxl/pmem.c.
+Patch 1 is an obvious cleanup found while fixing this problem.
 
-Signed-off-by: Michael Sammler <sammler@google.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Pankaj Gupta <pankaj.gupta@amd.com>
-Tested-by: Mina Almasry <almasrymina@google.com>
----
-Changes from v1:
-- added Reviewed-by and Tested-by
-- synced with mainline
+Patch 2 Fixes a bug with initiator registration for single-initiator
+systems. More details on this in its commit message.
 
-drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
-index 20da455d2ef6..a92eb172f0e7 100644
---- a/drivers/nvdimm/virtio_pmem.c
-+++ b/drivers/nvdimm/virtio_pmem.c
-@@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
- static int virtio_pmem_probe(struct virtio_device *vdev)
- {
- 	struct nd_region_desc ndr_desc = {};
--	int nid = dev_to_node(&vdev->dev);
- 	struct nd_region *nd_region;
- 	struct virtio_pmem *vpmem;
- 	struct resource res;
-@@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
- 	dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
+Vishal Verma (2):
+  ACPI: HMAT: remove unnecessary variable initialization
+  ACPI: HMAT: Fix initiator registration for single-initiator systems
 
- 	ndr_desc.res = &res;
--	ndr_desc.numa_node = nid;
-+
-+	ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
-+	ndr_desc.target_node = phys_to_target_node(res.start);
-+	if (ndr_desc.target_node == NUMA_NO_NODE) {
-+		ndr_desc.target_node = ndr_desc.numa_node;
-+		dev_dbg(&vdev->dev, "changing target node from %d to %d",
-+			NUMA_NO_NODE, ndr_desc.target_node);
-+	}
-+
- 	ndr_desc.flush = async_pmem_flush;
- 	ndr_desc.provider_data = vdev;
- 	set_bit(ND_REGION_PAGEMAP, &ndr_desc.flags);
---
-2.38.1.431.g37b22c650d-goog
+ drivers/acpi/numa/hmat.c | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
+
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.1
+
 
