@@ -1,30 +1,30 @@
-Return-Path: <nvdimm+bounces-5246-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5248-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF391638646
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Nov 2022 10:29:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4B2763864A
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Nov 2022 10:29:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FFBC1C20947
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Nov 2022 09:29:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1586C280A9D
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 25 Nov 2022 09:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7258728F0;
-	Fri, 25 Nov 2022 09:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770E42903;
+	Fri, 25 Nov 2022 09:29:29 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3352570
-	for <nvdimm@lists.linux.dev>; Fri, 25 Nov 2022 09:29:21 +0000 (UTC)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJTwr4CsJzbncT;
-	Fri, 25 Nov 2022 17:25:16 +0800 (CST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E6128E8
+	for <nvdimm@lists.linux.dev>; Fri, 25 Nov 2022 09:29:27 +0000 (UTC)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NJV0n0Mbnz15Mv3;
+	Fri, 25 Nov 2022 17:28:41 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 17:29:13 +0800
+ 15.1.2375.31; Fri, 25 Nov 2022 17:29:14 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 25 Nov
@@ -33,10 +33,12 @@ From: Yang Yingliang <yangyingliang@huawei.com>
 To: <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
 	<dave.jiang@intel.com>, <santosh@fossix.org>
 CC: <nvdimm@lists.linux.dev>, <yangyingliang@huawei.com>
-Subject: [PATCH 0/2] tools/testing/nvdimm: fix return value check
-Date: Fri, 25 Nov 2022 17:27:19 +0800
-Message-ID: <20221125092721.9433-1-yangyingliang@huawei.com>
+Subject: [PATCH 1/2] nfit_test: fix return value check in nfit_test_dimm_init()
+Date: Fri, 25 Nov 2022 17:27:20 +0800
+Message-ID: <20221125092721.9433-2-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221125092721.9433-1-yangyingliang@huawei.com>
+References: <20221125092721.9433-1-yangyingliang@huawei.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -50,17 +52,33 @@ X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 
-This patchset fixes two return value check problems when
-device_create_with_groups fails.
+If device_create_with_groups() fails, it returns ERR_PTR()
+and never return NULL, so replace NULL pointer check with
+IS_ERR() to fix this problem.
 
-Yang Yingliang (2):
-  nfit_test: fix return value check in nfit_test_dimm_init()
-  ndtest: fix return value check in ndtest_dimm_register()
+Fixes: 231bf117aada ("tools/testing/nvdimm: unit test for acpi_nvdimm_notify()")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ tools/testing/nvdimm/test/nfit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- tools/testing/nvdimm/test/ndtest.c | 4 ++--
- tools/testing/nvdimm/test/nfit.c   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
+diff --git a/tools/testing/nvdimm/test/nfit.c b/tools/testing/nvdimm/test/nfit.c
+index c75abb497a1a..220315091143 100644
+--- a/tools/testing/nvdimm/test/nfit.c
++++ b/tools/testing/nvdimm/test/nfit.c
+@@ -1833,10 +1833,10 @@ static int nfit_test_dimm_init(struct nfit_test *t)
+ 		t->dimm_dev[i] = device_create_with_groups(nfit_test_dimm,
+ 				&t->pdev.dev, 0, NULL,
+ 				nfit_test_dimm_attribute_groups,
+ 				"test_dimm%d", i + t->dcr_idx);
+-		if (!t->dimm_dev[i])
+-			return -ENOMEM;
++		if (IS_ERR(t->dimm_dev[i]))
++			return PTR_ERR(t->dimm_dev[i]);
+ 	}
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 
