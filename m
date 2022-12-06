@@ -1,76 +1,98 @@
-Return-Path: <nvdimm+bounces-5451-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5452-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E4D643D49
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  6 Dec 2022 07:47:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC71A643FA9
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  6 Dec 2022 10:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0771A280C0A
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  6 Dec 2022 06:47:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EBD1280ABC
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  6 Dec 2022 09:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC461210A;
-	Tue,  6 Dec 2022 06:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F327728F4;
+	Tue,  6 Dec 2022 09:18:19 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326652100
-	for <nvdimm@lists.linux.dev>; Tue,  6 Dec 2022 06:47:23 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VWdsB9s_1670308306;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VWdsB9s_1670308306)
-          by smtp.aliyun-inc.com;
-          Tue, 06 Dec 2022 14:31:47 +0800
-From: Yang Li <yang.lee@linux.alibaba.com>
-To: dan.j.williams@intel.com
-Cc: vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	ira.weiny@intel.com,
-	nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Yang Li <yang.lee@linux.alibaba.com>,
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] nvdimm: make security_show() static
-Date: Tue,  6 Dec 2022 14:31:42 +0800
-Message-Id: <20221206063142.52876-2-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20221206063142.52876-1-yang.lee@linux.alibaba.com>
-References: <20221206063142.52876-1-yang.lee@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F1028E7
+	for <nvdimm@lists.linux.dev>; Tue,  6 Dec 2022 09:18:17 +0000 (UTC)
+Received: from dggpeml500005.china.huawei.com (unknown [172.30.72.57])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NRF9Q3V0QzJp6T;
+	Tue,  6 Dec 2022 17:14:34 +0800 (CST)
+Received: from [10.174.178.155] (10.174.178.155) by
+ dggpeml500005.china.huawei.com (7.185.36.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Dec 2022 17:17:33 +0800
+Subject: Re: [PATCH] dax/hmem: Fix refcount leak in dax_hmem_probe()
+To: Ira Weiny <ira.weiny@intel.com>
+CC: <linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+	<dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+	<dave.jiang@intel.com>, <akpm@linux-foundation.org>,
+	<joao.m.martins@oracle.com>, <zhangxiaoxu5@huawei.com>
+References: <20221203095858.612027-1-liuyongqiang13@huawei.com>
+ <Y4u2TK4yPU9dfiDr@iweiny-mobl>
+From: Yongqiang Liu <liuyongqiang13@huawei.com>
+Message-ID: <03a5fc74-1b16-a0ee-c0a0-b45943f76bf0@huawei.com>
+Date: Tue, 6 Dec 2022 17:17:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <Y4u2TK4yPU9dfiDr@iweiny-mobl>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.155]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500005.china.huawei.com (7.185.36.59)
+X-CFilter-Loop: Reflected
 
-This symbol is not used outside of dimm_devs.c, so marks it
-static to silence missing prototype warning
 
-drivers/nvdimm/dimm_devs.c:352:9: warning: no previous prototype for function 'security_show'
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3362
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/nvdimm/dimm_devs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/nvdimm/dimm_devs.c b/drivers/nvdimm/dimm_devs.c
-index 17b56171c2c2..71fef964c5bc 100644
---- a/drivers/nvdimm/dimm_devs.c
-+++ b/drivers/nvdimm/dimm_devs.c
-@@ -349,7 +349,7 @@ static ssize_t available_slots_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(available_slots);
- 
--ssize_t security_show(struct device *dev,
-+static ssize_t security_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
- 	struct nvdimm *nvdimm = to_nvdimm(dev);
--- 
-2.20.1.7.g153144c
-
+ÔÚ 2022/12/4 4:49, Ira Weiny Ð´µÀ:
+> On Sat, Dec 03, 2022 at 09:58:58AM +0000, Yongqiang Liu wrote:
+>> We should always call dax_region_put() whenever devm_create_dev_dax()
+>> succeed or fail to avoid refcount leak of dax_region. Move the return
+>> value check after dax_region_put().
+> I think dax_region_put is called from dax_region_unregister() automatically on
+> tear down.
+Yes, Thanks for your explanation.
+>> Fixes: c01044cc8191 ("ACPI: HMAT: refactor hmat_register_target_device to hmem_register_device")
+> I'm also not sure how this patch is related to this fix.
+>
+> Ira
+>
+>> Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+>> ---
+>>   drivers/dax/hmem/hmem.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
+>> index 1bf040dbc834..09f5cd7b6c8e 100644
+>> --- a/drivers/dax/hmem/hmem.c
+>> +++ b/drivers/dax/hmem/hmem.c
+>> @@ -36,12 +36,11 @@ static int dax_hmem_probe(struct platform_device *pdev)
+>>   		.size = region_idle ? 0 : resource_size(res),
+>>   	};
+>>   	dev_dax = devm_create_dev_dax(&data);
+>> -	if (IS_ERR(dev_dax))
+>> -		return PTR_ERR(dev_dax);
+>>   
+>>   	/* child dev_dax instances now own the lifetime of the dax_region */
+>>   	dax_region_put(dax_region);
+>> -	return 0;
+>> +
+>> +	return IS_ERR(dev_dax) ? PTR_ERR(dev_dax) : 0;
+>>   }
+>>   
+>>   static int dax_hmem_remove(struct platform_device *pdev)
+>> -- 
+>> 2.25.1
+>>
+>>
+> .
 
