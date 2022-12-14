@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-5542-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5545-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90C5164D206
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 14 Dec 2022 23:00:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B8A64D20A
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 14 Dec 2022 23:01:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88DEF1C2093E
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 14 Dec 2022 22:00:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C77B280C2D
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 14 Dec 2022 22:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19685BA29;
-	Wed, 14 Dec 2022 22:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E79FBA27;
+	Wed, 14 Dec 2022 22:00:57 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A3BBA27
-	for <nvdimm@lists.linux.dev>; Wed, 14 Dec 2022 22:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59415BA24
+	for <nvdimm@lists.linux.dev>; Wed, 14 Dec 2022 22:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671055227; x=1702591227;
+  t=1671055255; x=1702591255;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JccO0gN9kEfLD1TxKiyJlWK0f5UxLjSFMPXrUfOVJeA=;
-  b=DQnzIOGMZSmlvOBrJKVxKXJyIH43mFSqCisD3jIgy99drGpEo1ZoXyvI
-   6OMgy2JZI9whr4W5sbI593scD9n2itupfth4kuYvKGggvRCyekMhCrX38
-   OEv/9yJqc6uJHhb56qcxoydzRFFMVyVhR/lQz+BFDjNaUe5kaWaGdDCed
-   vhDNFHNEgde+gdiFIU4sjsPVHuYo6n9dH1qvI9DmkiWLQo8sTiUyrIekQ
-   DcUcwukLX4USZGv9skLpYLfIaRa9teTYPiUFGu/h0om6MjRSQmJBb0rPH
-   Gll0ORzRmq1vuUshpgSlAoBhkMCl1dkk2TPx4YRAg5FkDt7bDSz80WgrN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="316159212"
+  bh=mwVah/u+qM7VhJ72QMALIWdkabtUltYcykRGgJ72ORQ=;
+  b=EpqNRzsuSJamZu2Q4rOqy5WC5+d0GHWXzHEbjl0mToz2Qkj/zFjWpRsG
+   crqK9YOsUZzFEHB0u6Smk8G55Uh90r9XHW4SW4Ysz/7jNS98CsKLRDXnY
+   xFRxQ8S/YHeVv+ACLhOfHYf0X2nLkOpAkPDbPoOM+NNtFYFT8UVF+gClB
+   tsg0x4tfdaFB+EnPsv0ddraHbxGkv9xWihf8EcepO95tRD5VsK9Kkwid7
+   yAf1mS2ZTQIRrxL8nKWfWCFBfygQjmGIPNULymGPjv14+5hXEqXz5OYrS
+   d1y6qUGCNhJILzFfzpc5lZbktEtv+pQbXhGeSVOLN308vCIZttKj0FIvH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="316159244"
 X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
-   d="scan'208";a="316159212"
+   d="scan'208";a="316159244"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 14:00:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="679907672"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 14:00:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="679907729"
 X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
-   d="scan'208";a="679907672"
+   d="scan'208";a="679907729"
 Received: from djiang5-desk3.ch.intel.com ([143.182.136.137])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 14:00:26 -0800
-Subject: [ndctl PATCH v2 1/4] ndctl: add CXL bus detection
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 14:00:32 -0800
+Subject: [ndctl PATCH v2 2/4] ndctl/libndctl: Add bus_prefix for CXL
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Cc: vishal.l.verma@intel.com
-Date: Wed, 14 Dec 2022 15:00:25 -0700
+Date: Wed, 14 Dec 2022 15:00:31 -0700
 Message-ID: 
- <167105522584.3034751.8329537593759406601.stgit@djiang5-desk3.ch.intel.com>
+ <167105523165.3034751.4940603908511673299.stgit@djiang5-desk3.ch.intel.com>
 In-Reply-To: 
  <167105505204.3034751.8113387624258581781.stgit@djiang5-desk3.ch.intel.com>
 References: 
@@ -62,141 +62,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-Add a CXL bus type, and detect whether a 'dimm' is backed by the CXL
-subsystem.
+When the 'ndbus' is backed by CXL, setup the bus_prefix for dimm object
+appropriately.
 
-Reviewed-by: Alison Schofield <alison.schofield@intel.com>
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 
 ---
 v2:
-- Improve commit log. (Vishal)
+- improve commit log. (Vishal)
 ---
- ndctl/lib/libndctl.c   |   53 ++++++++++++++++++++++++++++++++++++++++++++++++
- ndctl/lib/libndctl.sym |    1 +
- ndctl/lib/private.h    |    1 +
- ndctl/libndctl.h       |    1 +
- 4 files changed, 56 insertions(+)
+ ndctl/lib/libndctl.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/ndctl/lib/libndctl.c b/ndctl/lib/libndctl.c
-index ad54f0626510..10422e24d38b 100644
+index 10422e24d38b..d2e800bc840a 100644
 --- a/ndctl/lib/libndctl.c
 +++ b/ndctl/lib/libndctl.c
-@@ -12,6 +12,7 @@
- #include <ctype.h>
- #include <fcntl.h>
- #include <dirent.h>
-+#include <libgen.h>
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <sys/ioctl.h>
-@@ -876,6 +877,48 @@ static enum ndctl_fwa_method fwa_method_to_method(const char *fwa_method)
- 	return NDCTL_FWA_METHOD_RESET;
- }
+@@ -2012,6 +2012,12 @@ static void *add_dimm(void *parent, int id, const char *dimm_base)
+ 			goto out;
+ 		}
+ 		rc =  add_papr_dimm(dimm, dimm_base);
++	} else if (ndctl_bus_has_cxl(bus)) {
++		dimm->bus_prefix = strdup("cxl");
++		if (!dimm->bus_prefix) {
++			rc = -ENOMEM;
++			goto out;
++		}
+ 	}
  
-+static int is_ndbus_cxl(const char *ctl_base)
-+{
-+	char *path, *ppath, *subsys;
-+	char tmp_path[PATH_MAX];
-+	int rc;
-+
-+	/* get the real path of ctl_base */
-+	path = realpath(ctl_base, NULL);
-+	if (!path)
-+		return -errno;
-+
-+	/* setup to get the nd bridge device backing the ctl */
-+	sprintf(tmp_path, "%s/device", path);
-+	free(path);
-+
-+	path = realpath(tmp_path, NULL);
-+	if (!path)
-+		return -errno;
-+
-+	/* get the parent dir of the ndbus, which should be the nvdimm-bridge */
-+	ppath = dirname(path);
-+
-+	/* setup to get the subsystem of the nvdimm-bridge */
-+	sprintf(tmp_path, "%s/%s", ppath, "subsystem");
-+	free(path);
-+
-+	path = realpath(tmp_path, NULL);
-+	if (!path)
-+		return -errno;
-+
-+	subsys = basename(path);
-+
-+	/* check if subsystem is cxl */
-+	if (!strcmp(subsys, "cxl"))
-+		rc = 1;
-+	else
-+		rc = 0;
-+
-+	free(path);
-+	return rc;
-+}
-+
- static void *add_bus(void *parent, int id, const char *ctl_base)
- {
- 	char buf[SYSFS_ATTR_SIZE];
-@@ -919,6 +962,11 @@ static void *add_bus(void *parent, int id, const char *ctl_base)
- 	else
- 		bus->has_of_node = 1;
- 
-+	if (is_ndbus_cxl(ctl_base))
-+		bus->has_cxl = 1;
-+	else
-+		bus->has_cxl = 0;
-+
- 	sprintf(path, "%s/device/nfit/dsm_mask", ctl_base);
- 	if (sysfs_read_attr(ctx, path, buf) < 0)
- 		bus->nfit_dsm_mask = 0;
-@@ -1050,6 +1098,11 @@ NDCTL_EXPORT int ndctl_bus_has_of_node(struct ndctl_bus *bus)
- 	return bus->has_of_node;
- }
- 
-+NDCTL_EXPORT int ndctl_bus_has_cxl(struct ndctl_bus *bus)
-+{
-+	return bus->has_cxl;
-+}
-+
- NDCTL_EXPORT int ndctl_bus_is_papr_scm(struct ndctl_bus *bus)
- {
- 	char buf[SYSFS_ATTR_SIZE];
-diff --git a/ndctl/lib/libndctl.sym b/ndctl/lib/libndctl.sym
-index 75c32b9d4967..2892544d1985 100644
---- a/ndctl/lib/libndctl.sym
-+++ b/ndctl/lib/libndctl.sym
-@@ -464,4 +464,5 @@ LIBNDCTL_27 {
- } LIBNDCTL_26;
- LIBNDCTL_28 {
- 	ndctl_dimm_disable_master_passphrase;
-+	ndctl_bus_has_cxl;
- } LIBNDCTL_27;
-diff --git a/ndctl/lib/private.h b/ndctl/lib/private.h
-index e5c56295556d..46bc8908bd90 100644
---- a/ndctl/lib/private.h
-+++ b/ndctl/lib/private.h
-@@ -163,6 +163,7 @@ struct ndctl_bus {
- 	int regions_init;
- 	int has_nfit;
- 	int has_of_node;
-+	int has_cxl;
- 	char *bus_path;
- 	char *bus_buf;
- 	size_t buf_len;
-diff --git a/ndctl/libndctl.h b/ndctl/libndctl.h
-index c52e82a6f826..91ef0f42f654 100644
---- a/ndctl/libndctl.h
-+++ b/ndctl/libndctl.h
-@@ -133,6 +133,7 @@ struct ndctl_bus *ndctl_bus_get_next(struct ndctl_bus *bus);
- struct ndctl_ctx *ndctl_bus_get_ctx(struct ndctl_bus *bus);
- int ndctl_bus_has_nfit(struct ndctl_bus *bus);
- int ndctl_bus_has_of_node(struct ndctl_bus *bus);
-+int ndctl_bus_has_cxl(struct ndctl_bus *bus);
- int ndctl_bus_is_papr_scm(struct ndctl_bus *bus);
- unsigned int ndctl_bus_get_major(struct ndctl_bus *bus);
- unsigned int ndctl_bus_get_minor(struct ndctl_bus *bus);
+ 	if (rc == -ENODEV) {
 
 
 
