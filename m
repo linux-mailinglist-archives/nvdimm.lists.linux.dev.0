@@ -1,37 +1,37 @@
-Return-Path: <nvdimm+bounces-5564-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5566-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85662654C9A
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 23 Dec 2022 07:53:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF210654CA2
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 23 Dec 2022 07:55:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5713280AAB
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 23 Dec 2022 06:53:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24C4D280C04
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 23 Dec 2022 06:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2CB23D6;
-	Fri, 23 Dec 2022 06:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8ED23AA;
+	Fri, 23 Dec 2022 06:55:42 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF1C23A0
-	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 06:53:35 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="88943793"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD1F23A0
+	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 06:55:39 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="101163241"
 X-IronPort-AV: E=Sophos;i="5.96,267,1665414000"; 
-   d="scan'208";a="88943793"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 23 Dec 2022 15:52:23 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 87B82DF0A8
-	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 15:52:22 +0900 (JST)
+   d="scan'208";a="101163241"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 23 Dec 2022 15:52:27 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 032E3D6476
+	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 15:52:25 +0900 (JST)
 Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id AC425D6146
-	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 15:52:21 +0900 (JST)
+	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 4150DD8C86
+	for <nvdimm@lists.linux.dev>; Fri, 23 Dec 2022 15:52:24 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.19.3.107])
-	by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 653E9203EF13;
-	Fri, 23 Dec 2022 15:52:21 +0900 (JST)
+	by m3003.s.css.fujitsu.com (Postfix) with ESMTP id EDD2C200B2A8;
+	Fri, 23 Dec 2022 15:52:23 +0900 (JST)
 From: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
 To: linux-rdma@vger.kernel.org,
 	leonro@nvidia.com,
@@ -44,9 +44,9 @@ Cc: nvdimm@lists.linux.dev,
 	lizhijian@fujitsu.com,
 	y-goto@fujitsu.com,
 	Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-Subject: [PATCH for-next v3 3/7] RDMA/rxe: Cleanup code for responder Atomic operations
-Date: Fri, 23 Dec 2022 15:51:54 +0900
-Message-Id: <d95bb1de314ec3cf5a93e0c5730900d67521e08d.1671772917.git.matsuda-daisuke@fujitsu.com>
+Subject: [PATCH for-next v3 4/7] RDMA/rxe: Add page invalidation support
+Date: Fri, 23 Dec 2022 15:51:55 +0900
+Message-Id: <97b0362e256dd3eb022d81c30941edd8fb0caba9.1671772917.git.matsuda-daisuke@fujitsu.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1671772917.git.matsuda-daisuke@fujitsu.com>
 References: <cover.1671772917.git.matsuda-daisuke@fujitsu.com>
@@ -59,175 +59,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 
-Currently, rxe_responder() directly calls the function to execute Atomic
-operations. This need to be modified to insert some conditional branches
-for the ODP feature. Additionally, rxe_resp.h is newly added to be used by
-rxe_odp.c in near future.
+On page invalidation, an MMU notifier callback is invoked to unmap DMA
+addresses and update the driver page table(umem_odp->dma_list). The
+callback is registered when an ODP-enabled MR is created.
 
 Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
 ---
- drivers/infiniband/sw/rxe/rxe_resp.c | 100 +++++++++++++++++----------
- drivers/infiniband/sw/rxe/rxe_resp.h |   9 +++
- 2 files changed, 71 insertions(+), 38 deletions(-)
- create mode 100644 drivers/infiniband/sw/rxe/rxe_resp.h
+ drivers/infiniband/sw/rxe/Makefile  |  2 ++
+ drivers/infiniband/sw/rxe/rxe_odp.c | 34 +++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index 991550baef8c..e18bca076337 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -9,6 +9,7 @@
- #include "rxe.h"
- #include "rxe_loc.h"
- #include "rxe_queue.h"
-+#include "rxe_resp.h"
- 
- enum resp_states {
- 	RESPST_NONE,
-@@ -733,60 +734,83 @@ static enum resp_states process_flush(struct rxe_qp *qp,
- /* Guarantee atomicity of atomic operations at the machine level. */
- static DEFINE_SPINLOCK(atomic_ops_lock);
- 
--static enum resp_states atomic_reply(struct rxe_qp *qp,
--					 struct rxe_pkt_info *pkt)
-+enum resp_states rxe_process_atomic(struct rxe_qp *qp,
-+				    struct rxe_pkt_info *pkt, u64 *vaddr)
- {
--	u64 *vaddr;
- 	enum resp_states ret;
--	struct rxe_mr *mr = qp->resp.mr;
- 	struct resp_res *res = qp->resp.res;
- 	u64 value;
- 
--	if (!res) {
--		res = rxe_prepare_res(qp, pkt, RXE_ATOMIC_MASK);
--		qp->resp.res = res;
-+	/* check vaddr is 8 bytes aligned. */
-+	if (!vaddr || (uintptr_t)vaddr & 7) {
-+		ret = RESPST_ERR_MISALIGNED_ATOMIC;
-+		goto out;
- 	}
- 
--	if (!res->replay) {
--		if (mr->state != RXE_MR_STATE_VALID) {
--			ret = RESPST_ERR_RKEY_VIOLATION;
--			goto out;
--		}
-+	spin_lock(&atomic_ops_lock);
-+	res->atomic.orig_val = value = *vaddr;
- 
--		vaddr = iova_to_vaddr(mr, qp->resp.va + qp->resp.offset,
--					sizeof(u64));
-+	if (pkt->opcode == IB_OPCODE_RC_COMPARE_SWAP) {
-+		if (value == atmeth_comp(pkt))
-+			value = atmeth_swap_add(pkt);
-+	} else {
-+		value += atmeth_swap_add(pkt);
-+	}
- 
--		/* check vaddr is 8 bytes aligned. */
--		if (!vaddr || (uintptr_t)vaddr & 7) {
--			ret = RESPST_ERR_MISALIGNED_ATOMIC;
--			goto out;
--		}
-+	*vaddr = value;
-+	spin_unlock(&atomic_ops_lock);
- 
--		spin_lock_bh(&atomic_ops_lock);
--		res->atomic.orig_val = value = *vaddr;
-+	qp->resp.msn++;
- 
--		if (pkt->opcode == IB_OPCODE_RC_COMPARE_SWAP) {
--			if (value == atmeth_comp(pkt))
--				value = atmeth_swap_add(pkt);
--		} else {
--			value += atmeth_swap_add(pkt);
--		}
-+	/* next expected psn, read handles this separately */
-+	qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
-+	qp->resp.ack_psn = qp->resp.psn;
- 
--		*vaddr = value;
--		spin_unlock_bh(&atomic_ops_lock);
-+	qp->resp.opcode = pkt->opcode;
-+	qp->resp.status = IB_WC_SUCCESS;
- 
--		qp->resp.msn++;
-+	ret = RESPST_ACKNOWLEDGE;
-+out:
-+	return ret;
-+}
+diff --git a/drivers/infiniband/sw/rxe/Makefile b/drivers/infiniband/sw/rxe/Makefile
+index 5395a581f4bb..93134f1d1d0c 100644
+--- a/drivers/infiniband/sw/rxe/Makefile
++++ b/drivers/infiniband/sw/rxe/Makefile
+@@ -23,3 +23,5 @@ rdma_rxe-y := \
+ 	rxe_task.o \
+ 	rxe_net.o \
+ 	rxe_hw_counters.o
 +
-+static enum resp_states rxe_atomic_ops(struct rxe_qp *qp,
-+					struct rxe_pkt_info *pkt,
-+					struct rxe_mr *mr)
-+{
-+	u64 *vaddr;
-+	int ret;
-+
-+	vaddr = iova_to_vaddr(mr, qp->resp.va + qp->resp.offset,
-+			      sizeof(u64));
-+
-+	if (pkt->mask & RXE_ATOMIC_MASK)
-+		ret = rxe_process_atomic(qp, pkt, vaddr);
-+	else
-+		ret = RESPST_ERR_UNSUPPORTED_OPCODE;
-+
-+	return ret;
-+}
- 
--		/* next expected psn, read handles this separately */
--		qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
--		qp->resp.ack_psn = qp->resp.psn;
-+static enum resp_states rxe_atomic_reply(struct rxe_qp *qp,
-+					 struct rxe_pkt_info *pkt)
-+{
-+	struct rxe_mr *mr = qp->resp.mr;
-+	struct resp_res *res = qp->resp.res;
-+	int ret;
- 
--		qp->resp.opcode = pkt->opcode;
--		qp->resp.status = IB_WC_SUCCESS;
-+	if (!res) {
-+		res = rxe_prepare_res(qp, pkt, RXE_ATOMIC_MASK);
-+		qp->resp.res = res;
- 	}
- 
--	ret = RESPST_ACKNOWLEDGE;
--out:
-+	if (!res->replay) {
-+		if (mr->state != RXE_MR_STATE_VALID)
-+			return RESPST_ERR_RKEY_VIOLATION;
-+		ret = rxe_atomic_ops(qp, pkt, mr);
-+	} else
-+		ret = RESPST_ACKNOWLEDGE;
-+
- 	return ret;
- }
- 
-@@ -1556,7 +1580,7 @@ int rxe_responder(void *arg)
- 			state = read_reply(qp, pkt);
- 			break;
- 		case RESPST_ATOMIC_REPLY:
--			state = atomic_reply(qp, pkt);
-+			state = rxe_atomic_reply(qp, pkt);
- 			break;
- 		case RESPST_ATOMIC_WRITE_REPLY:
- 			state = atomic_write_reply(qp, pkt);
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.h b/drivers/infiniband/sw/rxe/rxe_resp.h
++rdma_rxe-$(CONFIG_INFINIBAND_ON_DEMAND_PAGING) += rxe_odp.o
+diff --git a/drivers/infiniband/sw/rxe/rxe_odp.c b/drivers/infiniband/sw/rxe/rxe_odp.c
 new file mode 100644
-index 000000000000..94a4869fdab6
+index 000000000000..0787a9b19646
 --- /dev/null
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
++++ b/drivers/infiniband/sw/rxe/rxe_odp.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
++/*
++ * Copyright (c) 2022 Fujitsu Ltd. All rights reserved.
++ */
 +
-+#ifndef RXE_RESP_H
-+#define RXE_RESP_H
++#include <rdma/ib_umem_odp.h>
 +
-+enum resp_states rxe_process_atomic(struct rxe_qp *qp,
-+				    struct rxe_pkt_info *pkt, u64 *vaddr);
++static bool rxe_ib_invalidate_range(struct mmu_interval_notifier *mni,
++				    const struct mmu_notifier_range *range,
++				    unsigned long cur_seq)
++{
++	struct ib_umem_odp *umem_odp =
++		container_of(mni, struct ib_umem_odp, notifier);
++	unsigned long start;
++	unsigned long end;
 +
-+#endif /* RXE_RESP_H */
++	if (!mmu_notifier_range_blockable(range))
++		return false;
++
++	mutex_lock(&umem_odp->umem_mutex);
++	mmu_interval_set_seq(mni, cur_seq);
++
++	start = max_t(u64, ib_umem_start(umem_odp), range->start);
++	end = min_t(u64, ib_umem_end(umem_odp), range->end);
++
++	ib_umem_odp_unmap_dma_pages(umem_odp, start, end);
++
++	mutex_unlock(&umem_odp->umem_mutex);
++	return true;
++}
++
++const struct mmu_interval_notifier_ops rxe_mn_ops = {
++	.invalidate = rxe_ib_invalidate_range,
++};
 -- 
 2.31.1
 
