@@ -1,50 +1,49 @@
-Return-Path: <nvdimm+bounces-5587-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5589-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564EB664F9E
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 11 Jan 2023 00:10:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E378F664FA4
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 11 Jan 2023 00:10:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 953621C208FD
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 10 Jan 2023 23:09:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78C2C1C208F5
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 10 Jan 2023 23:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B0933E6;
-	Tue, 10 Jan 2023 23:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9234611B;
+	Tue, 10 Jan 2023 23:09:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C652623A2
-	for <nvdimm@lists.linux.dev>; Tue, 10 Jan 2023 23:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5B22C80
+	for <nvdimm@lists.linux.dev>; Tue, 10 Jan 2023 23:09:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673392192; x=1704928192;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=fmSaGPa45YfheJe/4NK35ErzQMDPkD19G7Hxl9UoBDc=;
-  b=Qqc8GPnhlOHNCHFki/MAv9RvatonHGNDdoYmvZs8wE5mvaD9yvxXwaEV
-   L3kgUbBTQX6l+KJB999uVvujifdoOYYPKAHvONxdJDOiIZ/oGO9R5vxXO
-   ffkmHNSbRfMetCHrz6ZMxH13megUTYGFtGi7q4wHVqDDjr38J/mnQsHnw
-   tL7yy2d8Ha619UiKzL98c3rDBO1f6BNZI5lTgI0a8b/ugqbYuvOkBqxJs
-   l8ZNRLXapFy9z/UfxJXuhU2eGCfXw8IN86QHZwAijYhizdrbDcZG9ti3R
-   xxJluk1hyAEuF7SqaFRigNVkO5uYTTR0+L65N7pRYPXRCC9suGkm9O/GU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321981262"
+  t=1673392194; x=1704928194;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=t2rn+Iy4jdDZV+5z4dc6ZLrjqjVRNl6oqWZfHBzRwBA=;
+  b=U53m4qffQPdg5IwQjwZRJlqoPvwJcPSltiSHNMGuywPFWnzhBY/BTba6
+   HWjqsKRIyICkSx1DKsE7z5fReH64BYgngEAjqRO6ciphcVsgWRioxKc0e
+   HQlqWDNxjl2iHP55FNlq4M2fz1thR2PYQCBLuzKz/ihznjwRMKA1HvTsA
+   ypvr8dhDcTBbvCdbLx8B8hpqW6nyNDUYo+1m2+5RR72UtbxE0SiXk9oV0
+   dApysWPkIu2C83OD+2RGmi6252ZSbmdWXoNt+FkDJB3tc2hus8SMe99Yi
+   OxEVTSaPEbOnJzrgA8Ccay/Gh772lZvBSjxBIihxfnoqOIbW4wsQPlhUb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321981268"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="321981262"
+   d="scan'208";a="321981268"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 15:09:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659155901"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659155907"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="659155901"
+   d="scan'208";a="659155907"
 Received: from ffallaha-mobl.amr.corp.intel.com (HELO vverma7-desk1.local) ([10.212.116.179])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 15:09:51 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 15:09:52 -0800
 From: Vishal Verma <vishal.l.verma@intel.com>
-Subject: [PATCH ndctl 0/4] cxl: misc coverity and typo fixes
-Date: Tue, 10 Jan 2023 16:09:14 -0700
-Message-Id: <20230110-vv-coverity-fixes-v1-0-c7ee6c76b200@intel.com>
+Date: Tue, 10 Jan 2023 16:09:15 -0700
+Subject: [PATCH ndctl 2/4] cxl/region: fix a resource leak in to_csv()
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -53,43 +52,51 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABvwvWMC/x2L0QqDMAwAf0XybCCtwuZ+RXyoNZsBqaNxZSL+u
- 8HHO+4OUM7CCq/qgMxFVNZk4OoK4hzSh1EmY/DkG3KOsBSMa7Fp2/Etf1bsODynhjrf0gPsG4My
- jjmkONuZfsti8pv5rs30w3lerdWylngAAAA=
+Message-Id: <20230110-vv-coverity-fixes-v1-2-c7ee6c76b200@intel.com>
+References: <20230110-vv-coverity-fixes-v1-0-c7ee6c76b200@intel.com>
+In-Reply-To: <20230110-vv-coverity-fixes-v1-0-c7ee6c76b200@intel.com>
 To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Cc: Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>,
  Vishal Verma <vishal.l.verma@intel.com>
 X-Mailer: b4 0.12-dev-cc11a
-X-Developer-Signature: v=1; a=openpgp-sha256; l=729;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=984;
  i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=fmSaGPa45YfheJe/4NK35ErzQMDPkD19G7Hxl9UoBDc=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDMl7P9if1VjzZEJYo1Wd3ZT1O+I3zWZY3apfUhK0p7rh4NQV
- iUfbOkpZGMS4GGTFFFn+7vnIeExuez5PYIIjzBxWJpAhDFycAjAR9mqG//nWbHxvbrJEuNXejr2sKj
- AzumfGDe8NTUo3pyzdc/j8fz+G/5nNlbkiJUY6fMubNy3ve3RmWofTkjn3Y6uEFnvECx0z4wUA
+ bh=t2rn+Iy4jdDZV+5z4dc6ZLrjqjVRNl6oqWZfHBzRwBA=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDMl7P9jzLc3u1Z8pvcD56LEnYR6pE2Yk3PjykifSs+AH06TK
+ ppKKjlIWBjEuBlkxRZa/ez4yHpPbns8TmOAIM4eVCWQIAxenAExEcDojw87Y75XR26fyRHLtVFdqTr
+ A9ffBWspXkmsXvvyz/8eJY1QNGhg3JbBy/rzxmzuF2fynFJu20L29yA49FzdSmKWnGAlLXGAA=
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
  fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 
-Fix a few issues reported by Coverity, and a comment typo.
+Static analysis reports there can be a memory leak in to_csv as an exit
+path returns from the function before freeing 'csv'. Since this is the
+only errpr path exit point after the allocation, just free() before
+returning.
 
-Cc: Dave Jiang <dave.jiang@intel.com>
+Fixes: 3d6cd829ec08 ("cxl/region: Use cxl_filter_walk() to gather create-region targets")
 Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
-
 ---
-Vishal Verma (4):
-      ndctl/lib: fix usage of a non NUL-terminated string
-      cxl/region: fix a resource leak in to_csv()
-      cxl/region: fix an out of bounds access in to_csv()
-      cxl/region: fix a comment typo
+ cxl/region.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- ndctl/lib/libndctl.c | 2 ++
- cxl/region.c         | 8 +++++---
- 2 files changed, 7 insertions(+), 3 deletions(-)
----
-base-commit: 5b57c48998186b894fb94ce099c785d584773402
-change-id: 20230110-vv-coverity-fixes-9ea8d3092407
+diff --git a/cxl/region.c b/cxl/region.c
+index bb3a10a..9a81113 100644
+--- a/cxl/region.c
++++ b/cxl/region.c
+@@ -146,8 +146,10 @@ static const char *to_csv(int *count, const char **strings)
+ 		return NULL;
+ 	for (i = 0; i < *count; i++) {
+ 		list = strdup(strings[i]);
+-		if (!list)
++		if (!list) {
++			free(csv);
+ 			return NULL;
++		}
+ 
+ 		for (arg = strtok_r(list, which_sep(list), &save); arg;
+ 		     arg = strtok_r(NULL, which_sep(list), &save)) {
 
-Best regards,
 -- 
-Vishal Verma <vishal.l.verma@intel.com>
+2.39.0
 
