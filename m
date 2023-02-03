@@ -1,87 +1,74 @@
-Return-Path: <nvdimm+bounces-5702-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5703-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F4CC688A68
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  3 Feb 2023 00:01:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9684E688B77
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  3 Feb 2023 01:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5EAC280A52
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Feb 2023 23:01:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC971C20916
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  3 Feb 2023 00:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AC13AD41;
-	Thu,  2 Feb 2023 23:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331B6A31;
+	Fri,  3 Feb 2023 00:10:00 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mailsrv.cs.umass.edu (mailsrv.cs.umass.edu [128.119.240.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2EEAD3A
-	for <nvdimm@lists.linux.dev>; Thu,  2 Feb 2023 23:01:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=U96BQSukhueTg5b9SilnykHoY2bEaDS7yq/+1W3CybU=; b=EGpW+mYRg6uxPrqK1Bv3tSB4VN
-	zRyAddZ+ZtTSYNrRWVblzhiFQbwVbAdpXyuagMzQKte6HckWpoUPXKR8kal8vGocyNZ07H2L9Q6VP
-	cWhSbw6kyak1HX5PvGgOo6R6go92gvGAq/hYIHg6VlxdJ8WwEDslmrtOcO0H5ZN5HE4/IZygvUPjU
-	O2ZHSFkBb8OX8oqdWM1rNG9hnp6+oMORoSJ3jkXjuYzi6dLmqwfJmjZPJiRKWBxQla3U0kGgcHPB9
-	Li3oNK5vm2tfMAL7YwCFdiNigzFxd0LDxhFq29hdt8oKzGhOF2Jp/Se8Mu2dZoUgMrYSUay/cwCUj
-	jpJIsojQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1pNia3-00Dnyf-VY; Thu, 02 Feb 2023 23:01:24 +0000
-Date: Thu, 2 Feb 2023 23:01:23 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc: linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, djwong@kernel.org,
-	david@fromorbit.com, dan.j.williams@intel.com,
-	akpm@linux-foundation.org
-Subject: Re: [PATCH] fsdax: dax_unshare_iter() should return a valid length
-Message-ID: <Y9xAw+poZxOyMk1J@casper.infradead.org>
-References: <1675341227-14-1-git-send-email-ruansy.fnst@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D65AA20
+	for <nvdimm@lists.linux.dev>; Fri,  3 Feb 2023 00:09:57 +0000 (UTC)
+Received: from [10.28.85.193] (unknown [150.203.68.66])
+	by mailsrv.cs.umass.edu (Postfix) with ESMTPSA id C5359401DC8E;
+	Thu,  2 Feb 2023 19:03:37 -0500 (EST)
+Message-ID: <7bd7c84a-2c74-df1b-020d-a8f4a6725c18@cs.umass.edu>
+Date: Fri, 3 Feb 2023 11:03:34 +1100
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675341227-14-1-git-send-email-ruansy.fnst@fujitsu.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Reply-To: moss@cs.umass.edu
+Subject: Re: [PATCH] daxctl: Fix memblock enumeration off-by-one
+Content-Language: en-US
+To: Dan Williams <dan.j.williams@intel.com>, vishal.l.verma@intel.com
+Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
+References: <167537140762.3268840.2926966718345830138.stgit@dwillia2-xfh.jf.intel.com>
+From: Eliot Moss <moss@cs.umass.edu>
+In-Reply-To: <167537140762.3268840.2926966718345830138.stgit@dwillia2-xfh.jf.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 02, 2023 at 12:33:47PM +0000, Shiyang Ruan wrote:
-> The copy_mc_to_kernel() will return 0 if it executed successfully.
-> Then the return value should be set to the length it copied.
+On 2/3/2023 7:56 AM, Dan Williams wrote:
+> A memblock is an inclusive memory range. Bound the search by the last
+> address in the memory block.
 > 
-> Fixes: d984648e428b ("fsdax,xfs: port unshare to fsdax")
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Found by wondering why an offline 32-block (at 128MB == 4GB) range was
+> reported as 33 blocks with one online.
+> 
+> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 > ---
->  fs/dax.c | 1 +
->  1 file changed, 1 insertion(+)
+>   daxctl/lib/libdaxctl.c |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index c48a3a93ab29..a5b4deb5def3 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -1274,6 +1274,7 @@ static s64 dax_unshare_iter(struct iomap_iter *iter)
->  	ret = copy_mc_to_kernel(daddr, saddr, length);
->  	if (ret)
->  		ret = -EIO;
-> +	ret = length;
+> diff --git a/daxctl/lib/libdaxctl.c b/daxctl/lib/libdaxctl.c
+> index 5703992f5b88..d990479d8585 100644
+> --- a/daxctl/lib/libdaxctl.c
+> +++ b/daxctl/lib/libdaxctl.c
+> @@ -1477,7 +1477,7 @@ static int memblock_in_dev(struct daxctl_memory *mem, const char *memblock)
+>   		err(ctx, "%s: Unable to determine resource\n", devname);
+>   		return -EACCES;
+>   	}
+> -	dev_end = dev_start + daxctl_dev_get_size(dev);
+> +	dev_end = dev_start + daxctl_dev_get_size(dev) - 1;
+>   
+>   	memblock_size = daxctl_memory_get_block_size(mem);
+>   	if (!memblock_size) {
 
-Umm.  Surely should be:
+Might this address the bug I reported?
 
-	else
-		ret = length;
-
-otherwise you've just overwritten the -EIO.
-
-And maybe this should be:
-
-	ret = length - copy_mc_to_kernel(daddr, saddr, length);
-	if (ret < length)
-		ret = -EIO;
-
-What do you think?
+Regards - Eliot Moss
 
