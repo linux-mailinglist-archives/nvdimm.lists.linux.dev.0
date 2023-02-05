@@ -1,36 +1,36 @@
-Return-Path: <nvdimm+bounces-5714-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5716-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D2968AF9A
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  5 Feb 2023 12:51:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2781368B1D0
+	for <lists+linux-nvdimm@lfdr.de>; Sun,  5 Feb 2023 22:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35B201C208F0
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  5 Feb 2023 11:51:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A803280A86
+	for <lists+linux-nvdimm@lfdr.de>; Sun,  5 Feb 2023 21:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872A6290D;
-	Sun,  5 Feb 2023 11:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4B827718;
+	Sun,  5 Feb 2023 21:10:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C8F28E8
-	for <nvdimm@lists.linux.dev>; Sun,  5 Feb 2023 11:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA90117C5
+	for <nvdimm@lists.linux.dev>; Sun,  5 Feb 2023 21:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3gbpxE81nqEN5LIygYkPi/oBuXUyCIhUuArjW1ldGIE=; b=daogPHFeFlcPdXUq2O0cCo4ZxN
-	E9/Zc/FBn9Z7QxFWGf7S9lPsy9gBq+d6/l64ENYUQ0nKTmvI7e9dFG3FAWLynNMGVSy0WbS7vp0ht
-	VjuHHf76ZCu0YMoQrG77gnAHheousfZ2xPQyEhtP7eyIL/+z9erC23t26NFow5NGFgRRM7XFt6F+u
-	T+H384g8N3YLzesb2IGoD7teOt1dA6dP/Bh+X4WHtI8UUqgygOOrcnD5HqV0iakSGoVcIDe0H04jR
-	mKHRuKzAs3o1MVS9WSEWAt8kAA0F/mgItMJDhv494hn+BgZTcma0RPYKSFPq6y5XShYY44BSOPWHZ
-	7JUZnW2A==;
+	bh=otjeEFo/SDJToXrP0LWWRoXxWKYoByEB8N3Ut6KbeGU=; b=hg1CiB1bNbDtMRqV/PYwPFWrzf
+	L36wNFSyuAFrSIWrSOst1aZZsGviFsa70ohYRuU7LlMlvPMY8SiQeloqQmv/9rnuP+9HD98XjZ+Lv
+	7akP1v+IpS/FYxJQZ2fdC5e8zMTbrhXXl7J4JBNPSDJ9HQYAEn2e/6so29jfGi9TemSvaSMu+SYGe
+	d/awv55Pfb+LOGOg+soKrCQVauDYA+qalJt5E5sRZe6EIJEE5Kgmq5UmfSo+eUzyBvbkHyGP/mwuN
+	h4pnkPyfgA7cDB512ZkeP8Oh20wPcfq9Vn9deNUfnYe80oiyTL2WoPEYt9A58aDkyrNwqgvgPvj/g
+	FP4BSXFg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1pOdYf-00FswH-FE; Sun, 05 Feb 2023 11:51:45 +0000
-Date: Sun, 5 Feb 2023 11:51:45 +0000
+	id 1pOmHZ-00GE5v-BO; Sun, 05 Feb 2023 21:10:41 +0000
+Date: Sun, 5 Feb 2023 21:10:41 +0000
 From: Matthew Wilcox <willy@infradead.org>
 To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
 Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
@@ -38,10 +38,10 @@ Cc: linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, djwong@kernel.org,
 	dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
 	jane.chu@oracle.com
-Subject: Re: [PATCH v9 2/3] fs: move drop_pagecache_sb() for others to use
-Message-ID: <Y9+YUWUdMPKnJpyq@casper.infradead.org>
+Subject: Re: [PATCH v9 3/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <Y+AbUZoj7hLobLXK@casper.infradead.org>
 References: <1675522718-88-1-git-send-email-ruansy.fnst@fujitsu.com>
- <1675522718-88-3-git-send-email-ruansy.fnst@fujitsu.com>
+ <1675522718-88-4-git-send-email-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -50,50 +50,38 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1675522718-88-3-git-send-email-ruansy.fnst@fujitsu.com>
+In-Reply-To: <1675522718-88-4-git-send-email-ruansy.fnst@fujitsu.com>
 
-On Sat, Feb 04, 2023 at 02:58:37PM +0000, Shiyang Ruan wrote:
-> @@ -678,6 +679,48 @@ void drop_super_exclusive(struct super_block *sb)
->  }
->  EXPORT_SYMBOL(drop_super_exclusive);
->  
-> +/*
+On Sat, Feb 04, 2023 at 02:58:38PM +0000, Shiyang Ruan wrote:
+> +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> +		xfs_info(mp, "device is about to be removed!");
+> +		down_write(&mp->m_super->s_umount);
+> +		error = sync_filesystem(mp->m_super);
+> +		/* invalidate_inode_pages2() invalidates dax mapping */
+> +		super_drop_pagecache(mp->m_super, invalidate_inode_pages2);
 
-You've gone to the trouble of writing kernel-doc, just add the extra '*'
-and make it actually part of the documentation!
+OK, there's a better way to handle all of this.
 
-> + *	super_drop_pagecache - drop all page caches of a filesystem
-> + *	@sb: superblock to invalidate
-> + *	@arg: invalidate method, such as invalidate_inode_pages(),
-> + *	        invalidate_inode_pages2()
-> + *
-> + *	Scans the inodes of a filesystem, drop all page caches.
-> + */
+First, an essentially untyped interface with a void * argument is
+bad.  Second, we can do all this with invalidate_inode_pages2_range()
+and invalidate_mapping_pages() without introducing a new function.
 
-> +++ b/include/linux/fs.h
-> @@ -3308,6 +3308,7 @@ extern struct super_block *get_super(struct block_device *);
->  extern struct super_block *get_active_super(struct block_device *bdev);
->  extern void drop_super(struct super_block *sb);
->  extern void drop_super_exclusive(struct super_block *sb);
-> +void super_drop_pagecache(struct super_block *sb, void *unused);
+Here's the proposal:
 
-But the arg isn't unused.  Call it 'invalidator' here.
+void super_drop_pagecache(struct super_block *sb,
+		int (*invalidate)(struct address_space *, pgoff_t start, pgoff_t end))
 
-> +/**
-> + * invalidate_inode_pages - Invalidate all clean, unlocked cache of one inode
-> + * @mapping: the address_space which holds the cache to invalidate
-> + *
-> + * This function removes all pages that are clean, unmapped and unlocked,
-> + * as well as shadow entries. It will not block on IO activity.
-> + */
-> +int invalidate_inode_pages(struct address_space *mapping)
-> +{
-> +	invalidate_mapping_pages(mapping, 0, -1);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(invalidate_inode_pages);
+In fs/drop-caches.c:
 
-I might make this a static function in super.c but maybe you need it
-in the next patch.
+static void drop_pagecache_sb(struct super_block *sb, void *unused)
+{
+	super_drop_pagecache(sb, invalidate_mapping_pages);
+}
+
+In XFS:
+
+		super_drop_pagecache(mp->m_super,
+				invalidate_inode_pages2_range);
+
+Much smaller change ...
 
