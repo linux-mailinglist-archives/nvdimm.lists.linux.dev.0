@@ -1,51 +1,50 @@
-Return-Path: <nvdimm+bounces-5747-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5751-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2467368F880
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Feb 2023 21:00:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFA9A68F887
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Feb 2023 21:01:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA46D280C1F
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Feb 2023 20:00:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFEEB280AC3
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  8 Feb 2023 20:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63DAF749A;
-	Wed,  8 Feb 2023 20:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AFC379E1;
+	Wed,  8 Feb 2023 20:00:50 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2ED7481
-	for <nvdimm@lists.linux.dev>; Wed,  8 Feb 2023 20:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD185748A
+	for <nvdimm@lists.linux.dev>; Wed,  8 Feb 2023 20:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675886443; x=1707422443;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=nofu0ros1HhRpc3R/kAtB2DwGKH81rgPwKoOHg8P+E4=;
-  b=YAfXNPPYNTTo8wydEzsbd4m8oPjFkdrkSV65U6P0b8O0HS9aDTm5sNaz
-   fMEpNocU/txgiXehDT3p0Hz5RX2trPi7tFgpGLv4GlnVNI3sLF7gD+bYT
-   SGIb2THzjvqVx/DS9y1PQwVErzpPPKmKCQCIvbpZUzx+9DK/NczOzT143
-   Y38l3CdY7B6gVkBZHyM2CAnpymDWuS3NYa7q3Kk8YUi71rew/BZylIf8C
-   uOs0+KzzdmZeG7DbnpK6G3VvIStCCo2f6YnaI+SxKuuJxjz/tt0Lzal+3
-   7IeLUT4PLTZO36+pXwL1tJxQpAZtyXoFDIOGyxieXfJL8SxYRf3FFTwt5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="329935448"
+  t=1675886444; x=1707422444;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=KaRzxRlvB9BcP0nu0QZVD/lvIYofxBcR+epWn7ufvY0=;
+  b=fMh6BWG7nL2Qy5JUV5MPBrvXEkhtyIN76RGnasCHQHjXpyJVCQ8VXRSH
+   T6fy9ozEQJvTgEZTRB2jo8yOnx4o5jtaZCu76bC47IjzpiEPioxRvRLrK
+   Y05XWTZ5/mgKMvXJ7/urLF1QJKmcm/JaAZ2VTQQXeMk55rcF+bYUe63DR
+   rQBmtejMZEWOc+pKl03Xi/NcuEhXSB6AAjdPDTSCnlRSUfSW9OMixqYrF
+   /+qaGrUuoZ5k1IqEzmRLY9rLN3wYfEM0/8QqxXYmrtnodwvCBm71PKw/I
+   OISroReecKt8Tx0RjQ207gzvXQC22sTn9v6+dnHIT2bu8iFxirIHvtRZ5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="329935453"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="329935448"
+   d="scan'208";a="329935453"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 12:00:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776174662"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776174665"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="776174662"
+   d="scan'208";a="776174665"
 Received: from laarmstr-mobl.amr.corp.intel.com (HELO vverma7-desk1.local) ([10.251.6.109])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 12:00:41 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 12:00:42 -0800
 From: Vishal Verma <vishal.l.verma@intel.com>
-Subject: [PATCH ndctl v2 0/7] cxl: add support for listing and creating
- volatile regions
-Date: Wed, 08 Feb 2023 13:00:28 -0700
-Message-Id: <20230120-vv-volatile-regions-v2-0-4ea6253000e5@intel.com>
+Date: Wed, 08 Feb 2023 13:00:29 -0700
+Subject: [PATCH ndctl v2 1/7] cxl/region: skip region_actions for region
+ creation
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -54,10 +53,9 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFz/42MC/32NTQ6CMBBGr2Jm7ZhpESOuvIdh0ZYBJsGWtKTRE
- O5u4QAu3/eTt0LiKJzgcVohcpYkwRfQ5xO40fiBUbrCoElXpDRhzpjDZBaZGCMPZZ6QblVTk+O
- +bgjK05rEaKPxbty/M/tO/LA3c+RePofv1RYeJS0hfg99Vnv635QVEtqrtlox3zuyT/ELTxcX3
- tBu2/YDh91zhtAAAAA=
+Message-Id: <20230120-vv-volatile-regions-v2-1-4ea6253000e5@intel.com>
+References: <20230120-vv-volatile-regions-v2-0-4ea6253000e5@intel.com>
+In-Reply-To: <20230120-vv-volatile-regions-v2-0-4ea6253000e5@intel.com>
 To: linux-cxl@vger.kernel.org
 Cc: Gregory Price <gregory.price@memverge.com>, 
  Jonathan Cameron <Jonathan.Cameron@Huawei.com>, 
@@ -66,86 +64,61 @@ Cc: Gregory Price <gregory.price@memverge.com>,
  Vishal Verma <vishal.l.verma@intel.com>, nvdimm@lists.linux.dev, 
  Ira Weiny <ira.weiny@intel.com>
 X-Mailer: b4 0.13-dev-ada30
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3342;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1701;
  i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=nofu0ros1HhRpc3R/kAtB2DwGKH81rgPwKoOHg8P+E4=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDMmP/2dyXPKM/73Jj+Ws/y/reP3f+78y7lf6/ubO9txjC
- SIqm3epdZSyMIhxMciKKbL83fOR8Zjc9nyewARHmDmsTCBDGLg4BWAiNtGMDFd3JKtt1eAuNPGx
- nLH91sqZpWpnTe5EWx6bvUv4/Ez3HFeGPxzFCxfw9Fd5v/SdWr8291f3vc5Z565/qDraKi/Avkq
- YkxsA
+ bh=KaRzxRlvB9BcP0nu0QZVD/lvIYofxBcR+epWn7ufvY0=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDMmP/2cuedrLONf39nU/2YL5sonFfCbeCpF3/KT3at06p
+ Sn4NSS4o5SFQYyLQVZMkeXvno+Mx+S25/MEJjjCzGFlAhnCwMUpABMpFGL4pyWlv2i3kMLrrD7P
+ 4pjEiafu7Uk2v2F2ePscu7n97/nmTmdk+Pdd2UVPRk3J+5nENMcDOZM8dx5s6vDg/mmUZjhz1pN
+ vHAA=
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
  fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 
-While enumeration of ram type regions already works in libcxl and
-cxl-cli, it lacked an attribute to indicate pmem vs. ram. Add a new
-'type' attribute to region listings to address this. Additionally, add
-support for creating ram regions to the cxl-create-region command. The
-region listings are also updated with dax-region information for
-volatile regions.
+Commit 3d6cd829ec08 ("cxl/region: Use cxl_filter_walk() to gather create-region targets")
+removed the early return for create-region, and this caused a
+create-region operation to unnecessarily loop through buses and root
+decoders only to EINVAL out because ACTION_CREATE is handled outside of
+the other actions. This results in confusing messages such as:
 
-This also includes fixed for a few bugs / usability issues identified
-along the way - patches 1, 4, and 6. Patch 5 is a usability improvement
-where based on decoder capabilities, the type of a region can be
-inferred for the create-region command.
+  # cxl create-region -t ram -d 0.0 -m 0,4
+  {
+    "region":"region7",
+    "resource":"0xf030000000",
+    "size":"512.00 MiB (536.87 MB)",
+    ...
+  }
+  cxl region: decoder_region_action: region0: failed: Invalid argument
+  cxl region: region_action: one or more failures, last failure: Invalid argument
+  cxl region: cmd_create_region: created 1 region
 
-These have been tested against the ram-region additions to cxl_test
-which are part of the kernel support patch set[1].
-Additionally, tested against qemu using a WIP branch for volatile
-support found here[2]. The 'run_qemu' script has a branch that creates
-volatile memdevs in addition to pmem ones. This is also in a branch[3]
-since it depends on [2].
+Since there's no need to walk through the topology after creating a
+region, and especially not to perform an invalid 'action', switch
+back to returning early for create-region.
 
-These cxl-cli / libcxl patches themselves are also available in a
-branch at [4].
-
-[1]: https://lore.kernel.org/linux-cxl/167564534874.847146.5222419648551436750.stgit@dwillia2-xfh.jf.intel.com/
-[2]: https://gitlab.com/jic23/qemu/-/commits/cxl-2023-01-26
-[3]: https://github.com/pmem/run_qemu/commits/vv/ram-memdevs
-[4]: https://github.com/pmem/ndctl/tree/vv/volatile-regions
-
+Fixes: 3d6cd829ec08 ("cxl/region: Use cxl_filter_walk() to gather create-region targets")
+Cc: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
-Changes in v2:
-- Fix typos in the commit message of patch 1 (Fan)
-- Gate the type attr in region listings on mode != 'none' (Dan)
-- Clarify unreachability of the default case in collect_minsize() (Ira)
-- Simplify the mode setup in set_type_from_decoder() (Dan)
-- Fix typo in the commit message of Patch 7 (Dan)
-- Remove unneeded daxctl/json.h include from cxl/filter.c (Dan)
-- Link to v1: https://lore.kernel.org/r/20230120-vv-volatile-regions-v1-0-b42b21ee8d0b@intel.com
+ cxl/region.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
-Dan Williams (2):
-      cxl/list: Include regions in the verbose listing
-      cxl/list: Enumerate device-dax properties for regions
+diff --git a/cxl/region.c b/cxl/region.c
+index efe05aa..38aa142 100644
+--- a/cxl/region.c
++++ b/cxl/region.c
+@@ -789,7 +789,7 @@ static int region_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 		return rc;
+ 
+ 	if (action == ACTION_CREATE)
+-		rc = create_region(ctx, count, p);
++		return create_region(ctx, count, p);
+ 
+ 	cxl_bus_foreach(ctx, bus) {
+ 		struct cxl_decoder *decoder;
 
-Vishal Verma (5):
-      cxl/region: skip region_actions for region creation
-      cxl: add a type attribute to region listings
-      cxl: add core plumbing for creation of ram regions
-      cxl/region: accept user-supplied UUIDs for pmem regions
-      cxl/region: determine region type based on root decoder capability
-
- Documentation/cxl/cxl-create-region.txt |  6 ++-
- Documentation/cxl/cxl-list.txt          | 31 ++++++++++++++
- Documentation/cxl/lib/libcxl.txt        |  8 ++++
- cxl/lib/private.h                       |  2 +
- cxl/lib/libcxl.c                        | 72 +++++++++++++++++++++++++++++++--
- cxl/filter.h                            |  3 ++
- cxl/libcxl.h                            |  3 ++
- cxl/json.c                              | 23 +++++++++++
- cxl/list.c                              |  3 ++
- cxl/region.c                            | 66 +++++++++++++++++++++++++++---
- cxl/lib/libcxl.sym                      |  7 ++++
- cxl/lib/meson.build                     |  1 +
- cxl/meson.build                         |  3 ++
- 13 files changed, 217 insertions(+), 11 deletions(-)
----
-base-commit: 08720628d2ba469e203a18c0b1ffbd90f4bfab1d
-change-id: 20230120-vv-volatile-regions-063950cef590
-
-Best regards,
 -- 
-Vishal Verma <vishal.l.verma@intel.com>
+2.39.1
 
 
