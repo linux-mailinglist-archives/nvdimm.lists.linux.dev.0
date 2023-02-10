@@ -1,189 +1,159 @@
-Return-Path: <nvdimm+bounces-5763-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5765-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C295691612
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Feb 2023 02:11:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C3D4691631
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Feb 2023 02:23:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 909B11C20955
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Feb 2023 01:10:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E01C5280C0E
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Feb 2023 01:23:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDD463D;
-	Fri, 10 Feb 2023 01:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B07645;
+	Fri, 10 Feb 2023 01:23:18 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mailout2.w2.samsung.com (mailout2.w2.samsung.com [211.189.100.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CB3624
-	for <nvdimm@lists.linux.dev>; Fri, 10 Feb 2023 01:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675991452; x=1707527452;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=gojcScSSsR5ZY86S0gx+tfuTLyKlpv4MWembfSM2i8s=;
-  b=nj/3EPyQF9z4payiKLo4aAB63PpBItXx1YuanB8VTx/Mp/341RgfMpTz
-   GUAFUX98UFtHzhOlOBYciJkGg/kn93QyShBY+R6jLPH7LI6cWvflbP94j
-   mI6pJ9E+5avD0vI1HCLbFgyKCAp7V1WPqNYPDQv6MPvlj5CvxhtX1vnGj
-   tnX5gs4aBH67jTahT0x3E2n4gNZyXAASeb9ZJ8OOEAEF8Xf+hWbZPNCbV
-   +st2aIw71Gly5iWCdaEncm9C3XK90lZCf5/2uox54NY7X0m/VW8hpz7KN
-   0OfhUfmpebfowdkioMcA/KriCXr2iihwRdjMwcAL9CgABC1Ni5wiC6FKJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="318317067"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="318317067"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 17:10:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="617728822"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="617728822"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 09 Feb 2023 17:10:52 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Feb 2023 17:10:51 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 17:10:51 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 9 Feb 2023 17:10:50 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SaSgY1F2tHeAVjuDGNDaJTjBssYs/RFq9Y8fK+zlnp7JZPsIDUdoXeOb9vUNjROcXgBEs/Z/XaSv09S2jgmgOw3/SzO6pcT9AqpBBxAMTAnJxrTSKyuieg9h2WNSUvWp/GfVhTl8kn+q2ocNYu7USipAtTB2n6CfukHG5II1XN83K82Q1SmmiC8qDAlHMfCZzxACxa/58dl9OonLIWg4vRpO05tQp22zNTHy6zf7hOgbBe26aAcVTPiI43IfTBdz+cGRTg0XRZJZjwSg3jJJ7AGsv36cN5RoO8fwmhmxD76ySfkU/GJTRT+d68vSs3efrbh9BUzyrVWRKgFEq4DZ3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gojcScSSsR5ZY86S0gx+tfuTLyKlpv4MWembfSM2i8s=;
- b=fg8vqFXuq32ksFE0ZuDYFMXsyboepgXVmgG4twd1fJh4rwvL2KVtlcVG577PNIWNPfbphp0ZY8oEqNEgCHCy2du7Uye4hab1fQAGacVmrgKlMpMvjXRewQIloXwyPVuW47EinM60HZj3nlaFB9tkBPaszCi3mJCmoI5bBOl3LFE8+AmNwQxT6eLvOZ7a3yWKsZFvCDghOl58R7vHy7mavZz3kHveThcrjx6Uyb4wIR4cJSkcNAdPkCZIM9mQw9m8WNnaHQNzPtgDoHxbQLR7jdzG9qGMbzg3fCmkTL70mh3/lov5/G6YdkcoOQ2sZ0vYYoi33izt/MFc1umtNh/w9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN2PR11MB3999.namprd11.prod.outlook.com (2603:10b6:208:154::32)
- by LV2PR11MB5974.namprd11.prod.outlook.com (2603:10b6:408:17e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Fri, 10 Feb
- 2023 01:10:47 +0000
-Received: from MN2PR11MB3999.namprd11.prod.outlook.com
- ([fe80::35af:d7a8:8484:627]) by MN2PR11MB3999.namprd11.prod.outlook.com
- ([fe80::35af:d7a8:8484:627%5]) with mapi id 15.20.6086.017; Fri, 10 Feb 2023
- 01:10:45 +0000
-From: "Verma, Vishal L" <vishal.l.verma@intel.com>
-To: "fan.ni@samsung.com" <fan.ni@samsung.com>
-CC: "Williams, Dan J" <dan.j.williams@intel.com>, "gregory.price@memverge.com"
-	<gregory.price@memverge.com>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "Jonathan.Cameron@Huawei.com"
-	<Jonathan.Cameron@Huawei.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29746624
+	for <nvdimm@lists.linux.dev>; Fri, 10 Feb 2023 01:23:16 +0000 (UTC)
+Received: from uscas1p2.samsung.com (unknown [182.198.245.207])
+	by mailout2.w2.samsung.com (KnoxPortal) with ESMTP id 20230210011551usoutp02f32f0d41bd84e46a00829cb1f175bcd2~CUZ5FaOtd0197901979usoutp02e;
+	Fri, 10 Feb 2023 01:15:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w2.samsung.com 20230210011551usoutp02f32f0d41bd84e46a00829cb1f175bcd2~CUZ5FaOtd0197901979usoutp02e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1675991751;
+	bh=AbQR1VY9QdqIcFLz+i+cMgqouNzFZZoubVyXb1a9rbg=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+	b=nR5+Ha9jMGB6fJYvEv/jovxK5zshfaUuVw68RTzlAdhUKlGJ/+6Ofo0C62jD0Pa3C
+	 Eb/N1B8EFW4Nlf6ftM1TNk5JL7w8wn5fEdJRLf72IZSPjT8bxdTduSG4cXXhFvdH3/
+	 jmity0AJUty/4fGfbnmGPCj09lg/TpwpTDT88P2c=
+Received: from ussmges1new.samsung.com (u109.gpu85.samsung.co.kr
+	[203.254.195.109]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20230210011550uscas1p20dac8c01f88dea79481ad0bcc27aa596~CUZ4LlHi_2964629646uscas1p2W;
+	Fri, 10 Feb 2023 01:15:50 +0000 (GMT)
+Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
+	ussmges1new.samsung.com (USCPEMTA) with SMTP id EB.14.06976.6CA95E36; Thu, 
+	9 Feb 2023 20:15:50 -0500 (EST)
+Received: from ussmgxs3new.samsung.com (u92.gpu85.samsung.co.kr
+	[203.254.195.92]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20230210011549uscas1p22e24988115febfcd61d10e8036eb427e~CUZ3TBC8J1558415584uscas1p2y;
+	Fri, 10 Feb 2023 01:15:49 +0000 (GMT)
+X-AuditID: cbfec36d-afdff70000011b40-40-63e59ac6cdfc
+Received: from SSI-EX1.ssi.samsung.com ( [105.128.2.146]) by
+	ussmgxs3new.samsung.com (USCPEXMTA) with SMTP id EF.41.11346.5CA95E36; Thu, 
+	9 Feb 2023 20:15:49 -0500 (EST)
+Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
+	SSI-EX1.ssi.samsung.com (105.128.2.226) with Microsoft SMTP Server
+	(version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+	15.1.2375.24; Thu, 9 Feb 2023 17:15:48 -0800
+Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
+	SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2375.024; Thu,
+	9 Feb 2023 17:15:48 -0800
+From: Fan Ni <fan.ni@samsung.com>
+To: "Verma, Vishal L" <vishal.l.verma@intel.com>
+CC: "Williams, Dan J" <dan.j.williams@intel.com>,
+	"gregory.price@memverge.com" <gregory.price@memverge.com>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"Jonathan.Cameron@Huawei.com" <Jonathan.Cameron@Huawei.com>,
+	"dave@stgolabs.net" <dave@stgolabs.net>, "nvdimm@lists.linux.dev"
+	<nvdimm@lists.linux.dev>
 Subject: Re: [PATCH ndctl 3/7] cxl: add core plumbing for creation of ram
  regions
 Thread-Topic: [PATCH ndctl 3/7] cxl: add core plumbing for creation of ram
- regions
-Thread-Index: AQHZOyjQmol0gElqfEWoXyX0vnCTrq7HYNeAgAAB1YA=
-Date: Fri, 10 Feb 2023 01:10:44 +0000
-Message-ID: <4bfa274f616bc6167439d5a822b60bf4c7121f0e.camel@intel.com>
-References: <20230120-vv-volatile-regions-v1-0-b42b21ee8d0b@intel.com>
-	 <20230120-vv-volatile-regions-v1-3-b42b21ee8d0b@intel.com>
-	 <CGME20230210010415uscas1p1211243c08bc794b314f7b20bdad93267@uscas1p1.samsung.com>
-	 <20230210010409.GB883957@bgt-140510-bm03>
-In-Reply-To: <20230210010409.GB883957@bgt-140510-bm03>
+	regions
+Thread-Index: AQHZPOuUxRarl1GRc0+x0qZV9Jxml67H5UQAgAABZgA=
+Date: Fri, 10 Feb 2023 01:15:48 +0000
+Message-ID: <20230210011534.GA902201@bgt-140510-bm03>
+In-Reply-To: <4bfa274f616bc6167439d5a822b60bf4c7121f0e.camel@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR11MB3999:EE_|LV2PR11MB5974:EE_
-x-ms-office365-filtering-correlation-id: a93bf7d9-b7c8-4c8e-5a61-08db0b03a2cb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5D1Lp6JDAJZtYHPacLymRZe9xmai043lGx4eXqGdma/yGxRiBgrXjuVbUGeB24tNJVBzhlOYNEzUe95T/scG0RTs3khiutqOPIa3cvxi3Fln2rL9YfbIxtk/d0agThz/1Fs6We4uDEmWWFrTLqVpFchMh40el8kZ9/Hzjz4IAdL/7RoJPfV9mY9GuE88BauhYbsQu0hVDKP7/gS/Pn/hT++2M8aLpq0yWZuR3EhNAVMTMxMwoLw6SQ1/68LHmE8DiBphKqsAnv4yfPnZw2gcawejNcot0L0IeXjkflLB7Wo+gYVDG6mHJDSbp+b77PLAeBrr8RJ2XJINomM7wYGueNWqAN6NEbusIjxpPPSMkNxb7N1lGhA1/i3PCh4P6YTuKPAIpTGFnYcgaHZ3JN/82strxidu6m6zPFZigqHebJl82P9qjdnWARccCTxjissYjGySoKVTuic6PXkhRGdfagqFc2qa9mDY1P01WlrFa4z/jOnGPAz5KQz/6Aduj7bFJHqpEVq2X7YmXjEZJQqsOvINviDeqj/5nREzQ3yqjnmObP5+HaL/kG6DeRufOVc4na1ryrxlJAu79VCGmixDDaYqXsg1Uk+ZdoClBGEXnFE+brlaBUHIhpiQJ0zb/k78UNcEMjckK9rqV80M28w3fgY2hnPDKZNuymWo5mSYQvm4/7ysuwwJcOovsNbGpLJ3QYMUppMRg8Fh15IlDEO7ww==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB3999.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(136003)(366004)(39860400002)(396003)(376002)(451199018)(122000001)(82960400001)(38100700002)(8936002)(6512007)(186003)(26005)(5660300002)(6486002)(2616005)(36756003)(4744005)(38070700005)(71200400001)(4326008)(478600001)(6506007)(76116006)(66946007)(66556008)(91956017)(64756008)(316002)(6916009)(8676002)(66476007)(86362001)(66446008)(54906003)(2906002)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WGZpcVFXWTFsdlNyQ0V3dGlKSlFBVHptYzFCVk9hSytvWFlxMGpSQUNsNENI?=
- =?utf-8?B?OWM4RlI4aFlQTThCTmVyUm9CdVZGN0IwVmVUY3VUYlhrYVZBT09kbEs1N3VO?=
- =?utf-8?B?RDNidHAvWmxZb3FlczRLcFdtaVZCb0JWWVcreC9sekFFd2hiS1gwaHVTVUJT?=
- =?utf-8?B?elU3YUVSZWRtU25ISEJXWTEzK1F6OElZVzhadDNqK1lMcEU1Ky96ajdReWwv?=
- =?utf-8?B?U1cvYWxKenppaUlIMlM3QTFnSlB3c0I2TkZSVWpKcGEzeERndDFORzZ4aVRS?=
- =?utf-8?B?V25xWk4zUzJOZkdjNFMzMDY2dVVjQmN1V2JkN2J1Nkh6Vm5lYUNZOVNMbzla?=
- =?utf-8?B?ZmlkNjQ0Ung5ZzRZQ0p1VGhrVk83dWd0ZGVwc25sN2tSVHhpRHptckNNa1hv?=
- =?utf-8?B?UElYdy9VbTZkMlgyUWVCYTYvbjM5MUZSOGUzZGZvQ2s3cFNSeUs3dkwxemox?=
- =?utf-8?B?UlZVbjR0RlJNUHFoMkRFNzdiL1pHb1hhZndDRnJ4d0ZYOXBEclhVeHNmRFhM?=
- =?utf-8?B?Qm9ZTkt6cUUzNjhtL0dnUnN5SHRCODFmVXVmQ1RjZXVZNHpBNWQwVWZTc1l3?=
- =?utf-8?B?UlIzSVZlaEJ2TVZtcmtFYnRzY2V2ZVFwc3F6N3p5NDVieXhaaGFVc25UNkg4?=
- =?utf-8?B?RzZndGxxcWdMd2o3bEZQSHpKMVVtdzN4eFFoaWlwTkR4NWZidnFlV0hBUnBn?=
- =?utf-8?B?L3JwbmZzOGJ0MjVwWktxcHdKL1cyS1l1L1N2S05Cak54cGhOSUZDTmIvM2NG?=
- =?utf-8?B?eWJVanJ4cDd6dlpYUTlyczR6ZGRPaWxMWWJiT0ljYnlZZU13WU95S1Ywalpn?=
- =?utf-8?B?KzAwRyt5d1YyZHlYYU03WjJnQ29MZzhyd2RBQXRNdnZ0YWQ2U0c4UlNPc29C?=
- =?utf-8?B?VDVyUEdIZ1VWMnpGWkk0eVdCMC9qODZhU2tvMzNtV2U5b0lzQWwxNVVBTjRi?=
- =?utf-8?B?M0FYWWxGdFk4MHllak5OTlVsRkZzS0orUG5oNVFFMFh6bUN2MkprWVJ5YitQ?=
- =?utf-8?B?ZG84K1FHcVNiWTRwSm1rTkUybjdRNlNXQitIS0dGN25qbWxqQWM1UHU4UlFu?=
- =?utf-8?B?ZEhrQmpNUWNGM3hlQ2NnWjA4ZHh2VTdlVjQ5dE9vUmJTdVZIVnNQTHpZL3hD?=
- =?utf-8?B?SHpwYzgvVndnU3E2UzUrdSt6M29TNFVLcE1OWHR3bUNENDd4VHJQSFhMa3dq?=
- =?utf-8?B?dlFhNlJndm5ITVd5aXAwdjNSckJOcnRWdFBsLzExUFcxb0M0NkpBRE85d3Vx?=
- =?utf-8?B?ZzdmNGN1RHMzcDlVWjhRM0FqK04vcTBiYTFYa2xMbG9KWFJYaEZoZDJFaXVC?=
- =?utf-8?B?WWpDc1k4NHRmTWNKRTFqTlFyTWx3TlZpWkYyL1NTdXVFWU5UQVEzK3NkSm02?=
- =?utf-8?B?WWluUTB2WWxVVHEyQ1cyS0h1a25NUDhOTS9CWk5DUVY4TlBjWUhTdlFDemFI?=
- =?utf-8?B?SDk5b1RpZGdtMklyZ0Z1K25IdGtXb1JUWVJRQzBCMnNlQVA4TURJVXM3ZzBE?=
- =?utf-8?B?OU8wMWtvM3pKSnBBY2FhbC9pOXVGc3o5WnRuRDYrd2tkaGlvRmFkc2FzVFkv?=
- =?utf-8?B?NVM1SmFlN0lsWlNENi9oUkQ4MzhoYUJpdjljSjFTL2J1cEtvdE4zSGtJdVpT?=
- =?utf-8?B?cnZaVy9TN0NSVFlpVGM3cFNEMmxnbUw0TzZWWGY4aG9lRnhDS0NGbFFUOGc1?=
- =?utf-8?B?cGpzODRldmhkbVZqYXlneDFaWUt4ZVp4Mlltb2lvODZaVlZqSGdiRk84ZHFP?=
- =?utf-8?B?aFdUaFJrRFZqL3VxaU03YWtQckxOc0t6elE2dFJmcGJVek96bDNyb2RCWDht?=
- =?utf-8?B?eFYrb0FraGhodEdqT1AyOEFvMVQ2dmNCOVpFLzdTYzhpaEY3YzkycFNNZjda?=
- =?utf-8?B?WXhmYkwrcEJFRnFkL21NQW1ISW43eUFWcHEwWkNER2s1K1dJcTY5U0VXbjc2?=
- =?utf-8?B?a1NyRmxzaUpzV0tvUUVwZHVHTld5NDBCNUhSZE9BUlpoNVZUTmFTYlhCNVhM?=
- =?utf-8?B?QVJEQmMyK1RrU2V3U2FIRzBONU1ZR2dKV0xNZExBSXpGRlFJeGRnUzRFNkZ0?=
- =?utf-8?B?a2pyYXNHQ1RBS2pDZ2plRkZXcnVaK3ExcC9ZZlZqcFY5TDNZT1dsZitSQnla?=
- =?utf-8?B?bHVmZUpLeSt5Z3p4dVNVbFl2TWM0eEFRSUc2aXh4MGlZV09nbGVWaG9yY1d0?=
- =?utf-8?B?WGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2F1FFBB5EE79294292F0290119FFADA4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <6E42BBA7EF3EBB46A424B8E3AA4FB87B@ssi.samsung.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB3999.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a93bf7d9-b7c8-4c8e-5a61-08db0b03a2cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 01:10:44.6475
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RZNg4ogOR3YoFpDMtjeuIc9vJFR299Mtz66L9bd/TzzvdbMlDJ5OO0T27dnP8LjDAqafTKDwYwe6wJ7JWoea4ze2nJOJobR6DcymwwpNehc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB5974
-X-OriginatorOrg: intel.com
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsWy7djX87rHZj1NNnj4X9Zi+tQLjBarb65h
+	tGhoesRisWrhNTaL87NOsVis/PGH1eLWhGNMDuweLUfesnos3vOSyePF5pmMHhs//mf3mDq7
+	3uPzJrkAtigum5TUnMyy1CJ9uwSujP49z9gKWrgqTpxuZm9g/MzexcjBISFgIvG1s6CLkZND
+	SGAlo8SrK2JdjFxAdiuTxPXnn1lhavZeF4WIr2WU2HV0GyuE85FR4t6JThYIZymjxMxHM5lA
+	RrEJKErs69rOBmKLCBhIbJ+1lhGkiFngOJPE22PzwRLCAsESnyfOZ4QoCpF48/8pO4RtJbGu
+	5wQriM0ioCpxdMElMJtXwFSi8/9DFhCbU8BdYsIpiF5GATGJ76fWgC1mFhCXuPVkPpgtISAo
+	sWj2HmYIW0zi366HbBC2osT97y/ZIer1JG5MncIGYdtJnH98kQXC1pZYtvA1M8ReQYmTM5+w
+	QPRKShxccQPsYwmBFxwSO1tnMEIkXCQmX+tjh7ClJaavucwCCbtkiVUfuSDCORLzl2yBmmMt
+	sfDPeqYJjCqzkJw9C8lJs5CcNAvJSbOQnLSAkXUVo3hpcXFuemqxYV5quV5xYm5xaV66XnJ+
+	7iZGYJI6/e9w7g7GHbc+6h1iZOJgPMQowcGsJML7feLjZCHelMTKqtSi/Pii0pzU4kOM0hws
+	SuK8hrYnk4UE0hNLUrNTUwtSi2CyTBycUg1MrbnpicZdySafXsgnL31xQ+nH2ufiZxcf43L7
+	cnyZb9rmb1Ma4935PY/l1DakNf1OLIq6uXqv8r3Eq6vYl/maprwLEz/0f9Mjpm/Nmdev3/Hx
+	+jmJidNE1SOu2L3r4byIz2v+5fvERkxTdJ95K6zRpcCIu+DbLMWiB42GF0+G/Pr9KPbCRUX1
+	+n3mfo5law8HXxGM1WhdtuKWadHcnD0LwkNkL/zrTz+T3p55V/qh7EbR2cyn2vyO2KjHFbhx
+	qL0NUK/9t1XEb1NqWvmJj3/lY1i3+/XsUXvrkex3jK+/N8PYM7kut/pdauKOfXZ1rk6Mi38/
+	lj46wf1y2+SshLYY1Rnm3Rcf3a6w33vi6nMlluKMREMt5qLiRABNqBhRwQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHIsWRmVeSWpSXmKPExsWS2cA0SfforKfJBoumKVpMn3qB0WL1zTWM
+	Fg1Nj1gsVi28xmZxftYpFouVP/6wWtyacIzJgd2j5chbVo/Fe14yebzYPJPRY+PH/+weU2fX
+	e3zeJBfAFsVlk5Kak1mWWqRvl8CV0b/nGVtBC1fFidPN7A2Mn9m7GDk4JARMJPZeF+1i5OIQ
+	EljNKPFn+nc2COcjo8TZzj9QzlJGicMfe1i7GDk52AQUJfZ1bWcDsUUEDCS2z1rLCFLELHCU
+	SWLOpk0sIAlhgWCJzxPnM4KsEBEIkdj23wii3kpiXc8JsDksAqoSRxdcArN5BUwlOv8/ZIFY
+	doBJYum0p4wgCU4Bd4kJp+aD2YwCYhLfT61hArGZBcQlbj2ZD2ZLCAhILNlznhnCFpV4+fgf
+	K4StKHH/+0t2iHo9iRtTp7BB2HYS5x9fZIGwtSWWLXzNDHGEoMTJmU9YIHolJQ6uuMEygVFi
+	FpJ1s5CMmoVk1Cwko2YhGbWAkXUVo3hpcXFuekWxcV5quV5xYm5xaV66XnJ+7iZGYJSf/nc4
+	ZgfjvVsf9Q4xMnEwHmKU4GBWEuH9PvFxshBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFej9iJ8UIC
+	6YklqdmpqQWpRTBZJg5OqQamFW2TZgnVHtl4f80szknxR1l0bt+aM3fH1QWbzn2a+36uyMwH
+	MVNtkjuE9oc/Z5nbkDP/q1Ka7Ktbs+1mvDsZvmzPg4nPe39lvFjbfNZ4g87n182u4cfPcBTl
+	dAX+iDYz1Yjij9y0JrNHs7fKWOpr/x2XiaaT1xfUlP/n51GJ3BJxcdWkY4vFWz7afz+xs4HN
+	cFruk7/ZEceur0taKJSfpc33b5L2Lbsn7x91v/4sJLl6ffJdg/VHgh3/XPjVJvLz45NmxSe6
+	hy/yxh4WeZld67Tjc2b7sYcvl2fWPHvVuOuB+fOQc4GtWwvfbfBS0uD8M32G+0oek4XTuRkF
+	OSJWVhhfmWUcuqTl3QRzte4LTU+UWIozEg21mIuKEwFRvMhTYQMAAA==
+X-CMS-MailID: 20230210011549uscas1p22e24988115febfcd61d10e8036eb427e
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20230210010415uscas1p1211243c08bc794b314f7b20bdad93267
+References: <20230120-vv-volatile-regions-v1-0-b42b21ee8d0b@intel.com>
+	<20230120-vv-volatile-regions-v1-3-b42b21ee8d0b@intel.com>
+	<CGME20230210010415uscas1p1211243c08bc794b314f7b20bdad93267@uscas1p1.samsung.com>
+	<20230210010409.GB883957@bgt-140510-bm03>
+	<4bfa274f616bc6167439d5a822b60bf4c7121f0e.camel@intel.com>
 
-T24gRnJpLCAyMDIzLTAyLTEwIGF0IDAxOjA0ICswMDAwLCBGYW4gTmkgd3JvdGU6DQo+IE9uIFR1
-ZSwgRmViIDA3LCAyMDIzIGF0IDEyOjE2OjI5UE0gLTA3MDAsIFZpc2hhbCBWZXJtYSB3cm90ZToN
-Cj4gPiBBZGQgc3VwcG9ydCBpbiBsaWJjeGwgdG8gY3JlYXRlIHJhbSByZWdpb25zIHRocm91Z2gg
-YSBuZXcNCj4gPiBjeGxfZGVjb2Rlcl9jcmVhdGVfcmFtX3JlZ2lvbigpIEFQSSwgd2hpY2ggd29y
-a3Mgc2ltaWxhcmx5IHRvIGl0cyBwbWVtDQo+ID4gc2libGluZy4NCj4gPiANCj4gPiBFbmFibGUg
-cmFtIHJlZ2lvbiBjcmVhdGlvbiBpbiBjeGwtY2xpLCB3aXRoIHRoZSBvbmx5IGRpZmZlcmVuY2Vz
-IGZyb20NCj4gPiB0aGUgcG1lbSBmbG93IGJlaW5nOg0KPiA+IMKgIDEvIFVzZSB0aGUgYWJvdmUg
-Y3JlYXRlX3JhbV9yZWdpb24gQVBJLCBhbmQNCj4gPiDCoCAyLyBFbGlkZSBzZXR0aW5nIHRoZSBV
-VUlELCBzaW5jZSByYW0gcmVnaW9ucyBkb24ndCBoYXZlIG9uZQ0KPiA+IA0KPiA+IENjOiBEYW4g
-V2lsbGlhbXMgPGRhbi5qLndpbGxpYW1zQGludGVsLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBW
-aXNoYWwgVmVybWEgPHZpc2hhbC5sLnZlcm1hQGludGVsLmNvbT4NCj4gDQo+IFJldmlld2VkLWJ5
-OiBGYW4gTmkgPGZhbi5uaUBzYW1zdW5nLmNvbT4NCg0KSGkgRmFuLA0KDQpXb3VsZCB5b3UgbWlu
-ZCByZXNwb25kaW5nIG9uIHYyIG9mIHRoaXMgc2VyaWVzIC0gYjQgZG9lc24ndCB3YW50IHRvDQpw
-aWNrIHVwIHRyYWlsZXJzIGZyb20gdjEgbm93IHRoYXQgdjIgaGFzIGJlZW4gc2VudCBvdXQuDQoN
-Cj4gDQo+IE9uZSBtaW5vciB0aGluZywgdGhlcmUgZXhpc3RzIHNvbWUgY29kZSBmb3JtYXQgaW5j
-b25zaXN0ZW5jeSBpbg0KPiBjeGwvcmVnaW9uLmMgZmlsZSAobm90IGludHJvZHVjZWQgYnkgdGhl
-IHBhdGNoKS4gRm9yIGV4bWFwbGUsDQo+IHRoZSAic3dpdGNoIiBzb21ldGltZXMgaXMgZm9sbG93
-ZWQgd2l0aCBhIHNwYWNlIGJ1dCBzb21ldGltZSBub3QuDQoNCkFoIHRoYW5rcywgSSdsbCB0YWtl
-IGEgbG9vayBhbmQgc2VuZCBzZXBhcmF0ZSBjbGVhbnVwIHBhdGNoZXMuDQoNCg0KDQo=
+On Fri, Feb 10, 2023 at 01:10:44AM +0000, Verma, Vishal L wrote:
+
+> On Fri, 2023-02-10 at 01:04 +0000, Fan Ni wrote:
+> > On Tue, Feb 07, 2023 at 12:16:29PM -0700, Vishal Verma wrote:
+> > > Add support in libcxl to create ram regions through a new
+> > > cxl_decoder_create_ram_region() API, which works similarly to its pme=
+m
+> > > sibling.
+> > >=20
+> > > Enable ram region creation in cxl-cli, with the only differences from
+> > > the pmem flow being:
+> > > =A0 1/ Use the above create_ram_region API, and
+> > > =A0 2/ Elide setting the UUID, since ram regions don't have one
+> > >=20
+> > > Cc: Dan Williams <dan.j.williams@intel.com>
+> > > Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> >=20
+> > Reviewed-by: Fan Ni <fan.ni@samsung.com>
+>=20
+> Hi Fan,
+>=20
+> Would you mind responding on v2 of this series - b4 doesn't want to
+> pick up trailers from v1 now that v2 has been sent out.
+Ah, almost missed v2. Will response on that. Thanks.
+>=20
+> >=20
+> > One minor thing, there exists some code format inconsistency in
+> > cxl/region.c file (not introduced by the patch). For exmaple,
+> > the "switch" sometimes is followed with a space but sometime not.
+>=20
+> Ah thanks, I'll take a look and send separate cleanup patches.
+>=20
+>=20
+> =
 
