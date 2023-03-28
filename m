@@ -1,87 +1,126 @@
-Return-Path: <nvdimm+bounces-5906-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5908-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A52A46CAFE4
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Mar 2023 22:24:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC2EE6CBB4C
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Mar 2023 11:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F5301C20939
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 27 Mar 2023 20:24:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58944280A6A
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 28 Mar 2023 09:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A52749F;
-	Mon, 27 Mar 2023 20:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130A823B1;
+	Tue, 28 Mar 2023 09:42:32 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3E77468
-	for <nvdimm@lists.linux.dev>; Mon, 27 Mar 2023 20:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79299C4339C;
-	Mon, 27 Mar 2023 20:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1679948690;
-	bh=N1WaErzy1aVrss+F2Tlq1e+e984QICgfVMB42UQuv/A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b7ZC1e0rUfVUTI8qESO2ggXs1Z771nCiXAtpckba3SE1FkHYbuPf3FYmJybIDLZ/n
-	 v++d9p2fLpS+QRbGM4XsvtNS/OprMVctCp3VYvWZSWZfasLLonROFN/LQ0oobNDVlV
-	 lL6P7oViw+Is2VoYMQPfthpQVys5NHrvTq7gOQxI=
-Date: Mon, 27 Mar 2023 13:24:49 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc: <linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
- <linux-xfs@vger.kernel.org>, <dan.j.williams@intel.com>,
- <willy@infradead.org>, <jack@suse.cz>, <djwong@kernel.org>
-Subject: Re: [PATCH] fsdax: force clear dirty mark if CoW
-Message-Id: <20230327132449.b7389c3c00602b8e0e0d8d3f@linux-foundation.org>
-In-Reply-To: <05b9f49f-16ce-be40-4d42-049f8b3825c5@fujitsu.com>
-References: <1679653680-2-1-git-send-email-ruansy.fnst@fujitsu.com>
-	<20230324124242.c881cf384ab8a37716850413@linux-foundation.org>
-	<05b9f49f-16ce-be40-4d42-049f8b3825c5@fujitsu.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF7A1C39
+	for <nvdimm@lists.linux.dev>; Tue, 28 Mar 2023 09:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=170520fj; t=1679996547; i=@fujitsu.com;
+	bh=5ysgX3w4r/9z7wfbPe30efN793AZmmL/VAdTe4COUNg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=u5LXODGK/FG2+ThkcCErIQ3XT6s7340iM4GN/KR0FYHUojfV8FFAHtjtrG5VomqMT
+	 wpb2RGvBRPqETpHk74WqXr7fUYWYY9mv6FbS+MqyawH0rhZJPw6LdaOEGeKZpPq/q2
+	 iwiAyHHSeMojTHfdkOkmXGkDuFv4awCP3XzWI4Q3A50Q7ep1cJecW9+WAaBBtUjBM6
+	 Xkhl4uwitQUwNqimwseHj+mjpwErO2vprAm5P3YS7jYv1szSfIr8Jj0K2r0PEb0QnP
+	 h5uLSL/eJHlvF5/w9FW/t3SPQQHAEwCjDaD9m36t2yFH/EiXdkmkcKxQzK8YdPEqY+
+	 T/CwPWuLf/F+Q==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpileJIrShJLcpLzFFi42Kxs+FI1K3ZppR
+  isHC3gsWc9WvYLKZPvcBocfkJn8Xs6c1MFnv2nmSxuLfmP6vFrj872C1W/vjDavH7xxw2B06P
+  zSu0PBbvecnksWlVJ5vHpk+T2D1OzPjN4vFi80xGjzMLjrB7fN4kF8ARxZqZl5RfkcCa0XlsA
+  0vBee6K3nv/mBsYN3N2MXJxCAlsYZS4NmERI4SznEli4/leJgjnGKPEyeXTgRxODjYBHYkLC/
+  6ygtgiAoUSe5a+YwGxmQUqJBoX/WPuYuTgEBbwkjh6sBwkzCKgKjH58kN2EJtXwFli//PtzCC
+  2hICCxJSH75kh4oISJ2c+gRojIXHwxQuoGiWJi1/vsELYQOOnH2KCsNUkrp7bxDyBkX8WkvZZ
+  SNoXMDKtYjQrTi0qSy3SNTTTSyrKTM8oyU3MzNFLrNJN1Est1S1PLS7RNdJLLC/WSy0u1iuuz
+  E3OSdHLSy3ZxAiMjpRidfcdjEf6/uodYpTkYFIS5e3nVEwR4kvKT6nMSCzOiC8qzUktPsQow8
+  GhJMGrskUpRUiwKDU9tSItMwcYqTBpCQ4eJRHea6uB0rzFBYm5xZnpEKlTjLocaxsO7GUWYsn
+  Lz0uVEudN3wpUJABSlFGaBzcCljQuMcpKCfMyMjAwCPEUpBblZpagyr9iFOdgVBLmDdwMNIUn
+  M68EbtMroCOYgI74VqAAckRJIkJKqoFpz6QVKTV+2brSj5Q6/kxzz2TOnirz9Zv4iqYz6d2hs
+  09c+Wv842H/KUXDLd/Ltl8tP63DzSORKHHTyW9/5tNDl6uiDTiCW55Pt+Xrfio19d6tcMf3v6
+  5UPbNS5hb4VmK4/v53/tzcCAvWzLk3lTW/7Io71Sz1q59P2U3Q0zZVMZ+ts18lwHDu6ar6W3b
+  Py/U+h8sdc7Kynl74d6kp+7Sjz7tY4h4t29uf+kHQK9jiwIP9Wyuy15mL1h0ueXjq4KnC/soX
+  /eVbNU77bBNyjvqw5+aXbXrTmjz0ay0T1yTrBdnVBF85Xzh9wrPYiMUmUwp60zlUb/Zqi90uv
+  zahJtDubF24d9aX2jkHY7R4diixFGckGmoxFxUnAgBGx1palQMAAA==
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-3.tower-571.messagelabs.com!1679996540!574172!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received:
+X-StarScan-Version: 9.104.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 902 invoked from network); 28 Mar 2023 09:42:20 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-3.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 28 Mar 2023 09:42:20 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+	by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 29CE31001A5;
+	Tue, 28 Mar 2023 10:42:20 +0100 (BST)
+Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 1D68F10019D;
+	Tue, 28 Mar 2023 10:42:20 +0100 (BST)
+Received: from 692d629b0116.g08.fujitsu.local (10.167.234.230) by
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Tue, 28 Mar 2023 10:42:16 +0100
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To: <linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+	<linux-xfs@vger.kernel.org>, <linux-mm@kvack.org>
+CC: <dan.j.williams@intel.com>, <willy@infradead.org>, <jack@suse.cz>,
+	<akpm@linux-foundation.org>, <djwong@kernel.org>
+Subject: [PATCH v11 0/2] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Date: Tue, 28 Mar 2023 09:41:44 +0000
+Message-ID: <1679996506-2-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.167.234.230]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On Mon, 27 Mar 2023 11:19:01 +0800 Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+This patchset is to add gracefully unbind support for pmem.
+Patch1 corrects the calculation of length and end of a given range.
+Patch2 introduces a new flag call MF_MEM_REMOVE, to let dax holder know
+it is a remove event.  With the help of notify_failure mechanism, we are
+able to shutdown the filesystem on the pmem gracefully.
 
-> 
-> 
-> 在 2023/3/25 3:42, Andrew Morton 写道:
-> > On Fri, 24 Mar 2023 10:28:00 +0000 Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
-> > 
-> >> XFS allows CoW on non-shared extents to combat fragmentation[1].  The
-> >> old non-shared extent could be mwrited before, its dax entry is marked
-> >> dirty.  To be able to delete this entry, clear its dirty mark before
-> >> invalidate_inode_pages2_range().
-> > 
-> > What are the user-visible runtime effects of this flaw?
-> 
-> This bug won't leak or mess up the data of filesystem.  In dmesg it will 
-> show like this:
-> 
-> [   28.512349] ------------[ cut here ]------------
-> [   28.512622] WARNING: CPU: 2 PID: 5255 at fs/dax.c:390 
-> dax_insert_entry+0x342/0x390
-> 
-> ...
->
->  >
->  > Are we able to identify a Fixes: target for this?  Perhaps
->  > f80e1668888f3 ("fsdax: invalidate pages when CoW")?
->  >
-> 
-> Yes, it is to fix this commit.
+Changes since v10:
+ Patch1:
+  1. correct the count calculation in xfs_failure_pgcnt().
+ Patch2:
+  2. drop the patch which introduces super_drop_pagecache().
+  3. in mf_dax_kill_procs(), don't SetPageHWPoison() and search for all
+      tasks while mf_flags has MF_MEM_PRE_REMOVE.
+  4. only do mf_dax_kill_procs() on dax mapping.
+  5. do invalidate_inode_pages2_range() for each file found during rmap,
+      to make sure the dax entry are disassociated before pmem is gone.
+      Otherwise, umount filesystem after unbind will cause crash because
+      the dax entries have to be disassociated but now the pmem is not
+      exist.
 
-OK, thanks.  I added the extra changelog info, added the Fixes and a
-cc:stable.
+  For detail analysis of this change, please refer this link[1].
 
-Some review from other fsdax developers would be helpful, please.
+[1] https://lore.kernel.org/linux-xfs/b1d9fc03-1a71-a75f-f87b-5819991e4eb2@fujitsu.com/
+
+Shiyang Ruan (2):
+  xfs: fix the calculation of length and end
+  mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+
+ drivers/dax/super.c         |  3 +-
+ fs/xfs/xfs_notify_failure.c | 66 +++++++++++++++++++++++++++++++------
+ include/linux/mm.h          |  1 +
+ mm/memory-failure.c         | 17 +++++++---
+ 4 files changed, 72 insertions(+), 15 deletions(-)
+
+-- 
+2.39.2
 
 
