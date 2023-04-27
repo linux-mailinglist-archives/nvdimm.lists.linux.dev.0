@@ -1,47 +1,48 @@
-Return-Path: <nvdimm+bounces-5955-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-5957-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BBDD6F03FA
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 27 Apr 2023 12:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14AF46F040A
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 27 Apr 2023 12:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64215280A7A
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 27 Apr 2023 10:13:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61C82280AB5
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 27 Apr 2023 10:20:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E984623D5;
-	Thu, 27 Apr 2023 10:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4305E23D5;
+	Thu, 27 Apr 2023 10:19:58 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F7123BD
-	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 10:13:04 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="102761963"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3D323BD
+	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 10:19:55 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="103296150"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677510000"; 
-   d="scan'208";a="102761963"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 19:11:52 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5158BD6476
-	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 19:11:50 +0900 (JST)
-Received: from aks-ab1.gw.nic.fujitsu.com (aks-ab1.gw.nic.fujitsu.com [192.51.207.11])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 77764D6311
-	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 19:11:49 +0900 (JST)
+   d="scan'208";a="103296150"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 19:18:43 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 39106D4324
+	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 19:18:41 +0900 (JST)
+Received: from kws-ab1.gw.nic.fujitsu.com (kws-ab1.gw.nic.fujitsu.com [192.51.206.11])
+	by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 58745D55E2
+	for <nvdimm@lists.linux.dev>; Thu, 27 Apr 2023 19:18:40 +0900 (JST)
 Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
-	by aks-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id 3B2EC2FC804A;
-	Thu, 27 Apr 2023 19:11:48 +0900 (JST)
+	by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id D77BE114147F;
+	Thu, 27 Apr 2023 19:18:38 +0900 (JST)
 From: Li Zhijian <lizhijian@fujitsu.com>
-To: nvdimm@lists.linux.dev,
+To: x86@kernel.org,
+	nvdimm@lists.linux.dev,
 	kexec@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org,
 	y-goto@fujitsu.com,
 	yangx.jy@fujitsu.com,
 	ruansy.fnst@fujitsu.com
 Subject: [RFC PATCH v2 0/3] pmem memmap dump support
-Date: Thu, 27 Apr 2023 18:11:40 +0800
-Message-Id: <20230427101147.10477-1-lizhijian@fujitsu.com>
+Date: Thu, 27 Apr 2023 18:18:31 +0800
+Message-Id: <20230427101838.12267-1-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.40.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
