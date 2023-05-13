@@ -1,44 +1,46 @@
-Return-Path: <nvdimm+bounces-6027-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6025-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B44D27017C8
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 13 May 2023 16:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E99517017C4
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 13 May 2023 16:21:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C58171C210E0
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 13 May 2023 14:22:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02B01C210C6
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 13 May 2023 14:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61AA063D6;
-	Sat, 13 May 2023 14:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE36963D6;
+	Sat, 13 May 2023 14:21:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93C563C8
-	for <nvdimm@lists.linux.dev>; Sat, 13 May 2023 14:22:03 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="117626492"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A42F63C8
+	for <nvdimm@lists.linux.dev>; Sat, 13 May 2023 14:21:01 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="96025989"
 X-IronPort-AV: E=Sophos;i="5.99,272,1677510000"; 
-   d="scan'208";a="117626492"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 23:20:51 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 426BEC68E2
+   d="scan'208";a="96025989"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 23:20:51 +0900
+Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
+	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 7013CE4289
 	for <nvdimm@lists.linux.dev>; Sat, 13 May 2023 23:20:48 +0900 (JST)
 Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 82025D3F00
+	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id BB3C2CFB67
 	for <nvdimm@lists.linux.dev>; Sat, 13 May 2023 23:20:47 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.167.226.45])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id E3E572007CDDD;
-	Sat, 13 May 2023 23:20:46 +0900 (JST)
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 3A84D2007CDE5;
+	Sat, 13 May 2023 23:20:47 +0900 (JST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: nvdimm@lists.linux.dev
 Cc: Li Zhijian <lizhijian@fujitsu.com>
-Subject: [ndctl PATCH 0/6] cxl/monitor and ndctl/monitor fixes
-Date: Sat, 13 May 2023 22:20:32 +0800
-Message-Id: <20230513142038.753351-1-lizhijian@fujitsu.com>
+Subject: [ndctl PATCH 1/6] cxl/monitor: Fix monitor not working
+Date: Sat, 13 May 2023 22:20:33 +0800
+Message-Id: <20230513142038.753351-2-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230513142038.753351-1-lizhijian@fujitsu.com>
+References: <20230513142038.753351-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -50,33 +52,58 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27622.007
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27622.007
-X-TMASE-Result: 10--12.003500-10.000000
-X-TMASE-MatchedRID: 1Eu80e4q/YQvKBNTYKG+pVhRyidsElYkZR+OFNkbtdo5tco/jPiDm8rM
-	f2YsbSCKsO8/6EKWP4/pJX2bP1RYr0AmNAVBRJ9hJAtcI9QUBGsEa8g1x8eqFzVjvc93O9dkGZG
-	2q5y4jkF7MSP7SLpuGG9yZj3aufb5HxPMjOKY7A+Wlioo2ZbGwdmzcdRxL+xwKrauXd3MZDXt+7
-	WsvSOmi/C1+rKtAsAyU1pvK+qI91BB1EgYL0jh18goQpZ4D7fw
+X-TMASE-Result: 10--7.603700-10.000000
+X-TMASE-MatchedRID: iuUHfCgXiTNujdbubeNfI5jnsVPBNMvRG24YVeuZGmPk6Qbi+9i6DwzK
+	NF0GZctoN/7rnrBxoxzmn3xyPJAJoh2P280ZiGmRuLt50vtxBA5+tO36GYDlsj3SHZ6GCFLZo8W
+	MkQWv6iV3LAytsQR4e42j49Ftap9EOwBXM346/+wy9G73P9DbMVuwe9LV+wr+rZ3TaYPN2sEEbV
+	9K1w1C14m9ixJ12P85
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-It mainly fix monitor not working when log file is specified. For
-example
-$ cxl monitor -l ./cxl-monitor.log
-It seems that someone missed something at the begining.
+It looks that someone forgot to rewrite this part after
+ba5825b0b7e0 ("ndctl/monitor: move common logging functions to util/log.c")
 
-Furture, it compares the filename with reserved works more accurately
+ # build/cxl/cxl monitor -l ./monitor.log
+Segmentation fault (core dumped)
 
-Li Zhijian (6):
-  cxl/monitor: Fix monitor not working
-  cxl/monitor: compare the whole filename with reserved words
-  cxl/monitor: Enable default_log and refactor sanity check
-  cxl/monitor: always log started message
-  Documentation/cxl/cxl-monitor.txt: Fix inaccurate description
-  ndctl/monitor: compare the whole filename with reserved words
+Fixes: 299f69f974a6 ("cxl/monitor: add a new monitor command for CXL trace events")
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+ cxl/monitor.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
- Documentation/cxl/cxl-monitor.txt |  3 +-
- cxl/monitor.c                     | 47 ++++++++++++++++---------------
- ndctl/monitor.c                   |  4 +--
- 3 files changed, 27 insertions(+), 27 deletions(-)
-
+diff --git a/cxl/monitor.c b/cxl/monitor.c
+index e3469b9a4792..4043928db3ef 100644
+--- a/cxl/monitor.c
++++ b/cxl/monitor.c
+@@ -37,7 +37,6 @@ const char *default_log = "/var/log/cxl-monitor.log";
+ static struct monitor {
+ 	const char *log;
+ 	struct log_ctx ctx;
+-	FILE *log_file;
+ 	bool human;
+ 	bool verbose;
+ 	bool daemon;
+@@ -189,8 +188,8 @@ int cmd_monitor(int argc, const char **argv, struct cxl_ctx *ctx)
+ 
+ 			if (!monitor.log)
+ 				log = default_log;
+-			monitor.log_file = fopen(log, "a+");
+-			if (!monitor.log_file) {
++			monitor.ctx.log_file = fopen(log, "a+");
++			if (!monitor.ctx.log_file) {
+ 				rc = -errno;
+ 				error("open %s failed: %d\n", monitor.log, rc);
+ 				goto out;
+@@ -210,7 +209,7 @@ int cmd_monitor(int argc, const char **argv, struct cxl_ctx *ctx)
+ 	rc = monitor_event(ctx);
+ 
+ out:
+-	if (monitor.log_file)
+-		fclose(monitor.log_file);
++	if (monitor.ctx.log_file)
++		fclose(monitor.ctx.log_file);
+ 	return rc;
+ }
 -- 
 2.29.2
 
