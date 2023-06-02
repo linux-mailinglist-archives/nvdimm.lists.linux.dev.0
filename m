@@ -1,226 +1,277 @@
-Return-Path: <nvdimm+bounces-6107-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6112-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FAE471FDD3
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 11:27:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 504CC71FF4A
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 12:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2E501C20B5E
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 09:27:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 007AC2817BA
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 10:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1C817ABB;
-	Fri,  2 Jun 2023 09:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A34118AF2;
+	Fri,  2 Jun 2023 10:28:22 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9356C17757;
-	Fri,  2 Jun 2023 09:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685698006; x=1717234006;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=qowyfX7jdwuUaNUAzZolNHUEjSoT2Kl8hA0ojSlQA6M=;
-  b=ksp+2NIQIX6nR2MdQyc9WbDjE7JYJiFD1AZHZigaC6BA7g1UhNkaITA0
-   tF05j+tGa9lvW459+6mWdSbv0JerjfIua+A1eROTSuKEkE/lCK9fRVk34
-   Ck28QxbMXqRb3fKXk4WM6KCf2fYlunHhSq5RF15VF8HYS79a8omZ8dTrk
-   SUUYlfkiDu5MmXC7H24376T76ZHrldftlVmlJpWgzC6bPzrTqESjakVJz
-   0+u4PkbUScCPyKXkMV6XqbI8jRq5L3RD+6AGZlv19uVcvxXK+xkwDl+a/
-   ShD2fLEgVrobbwNSwz3WM27qNS53rvaupjdIOSSZi5XdRZC1VqrXnA1ob
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="359128754"
-X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="359128754"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 02:26:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="797534019"
-X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="797534019"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Jun 2023 02:26:44 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 02:26:44 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 2 Jun 2023 02:26:44 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 2 Jun 2023 02:26:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P488qVC5/Ri2p+4RCd4nn2Ao7TWBQRK4VgoReVdwrshgsQ4+H1qR5ML/8Bj225z3qj4UDH3SSS9CHytHdWcUTnNfSXeETNMLlkKPLJqnaFl+3AobarjA8uU2+hh77u2zSrzQInG8gfVTuQ7QrhWocyLX9Pt4+xXfFq/bBo33sxU7rsEe+Uzp0pVYZtkZGmw9G/l/n2AvEai7ez8ZeoEtO3FQA08QyadgY6WxkQ/kkNbCEeAHZcyOXC635lF8hzdl9wFRMDA0jsjelLVZxJqZkIbFm9zAGTvScO6gUYZMnMmbSjnDDgSBXHU5D2JLIJcwgAJqvgNWViWFNGuukUrlzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qowyfX7jdwuUaNUAzZolNHUEjSoT2Kl8hA0ojSlQA6M=;
- b=f2JVNOm0/nwqLWlA46G0NuVn3iE4JZ3NrBaoFLvXGre9rDjumximAFWMEHLu+f890/ipbA9aH8pC+yrqIwzKSMx6841DgFg14we6i0EC/MYGs/HsX+nBnthXy3AWaXIFTfGN1npiX3VUHz7ujW7BL0xXxJR77Yb3kngo8ddCzEjjiCRngDte5YiApbNKRJR43m8ZZf/eghjJpKPiDKsMOtbCfq/3oZLq4j5WT9RwcXBSyNYI+Hb4n8qZdoeXKpZ1C9Liy4xRiPW+RWWuocnJmtA+mc5qf9QENU6V+jXMvtOKuEBcLOKg/l0FYRaDdu+JJa5QK4FV9iDYbCgAVfBJEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com (2603:10b6:5:35c::12)
- by BL1PR11MB5553.namprd11.prod.outlook.com (2603:10b6:208:31f::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
- 2023 09:26:41 +0000
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::4287:6d31:8c78:de92]) by CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::4287:6d31:8c78:de92%6]) with mapi id 15.20.6455.024; Fri, 2 Jun 2023
- 09:26:41 +0000
-Message-ID: <cf385e99-de6d-b630-6ff5-94fb843feafb@intel.com>
-Date: Fri, 2 Jun 2023 11:26:28 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 35/35] acpi/bus: Remove notify callback and flags
-Content-Language: en-US
-To: <david.e.box@linux.intel.com>, <rafael@kernel.org>, <lenb@kernel.org>,
-	<dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
-	<dave.jiang@intel.com>, <ira.weiny@intel.com>, <rui.zhang@intel.com>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <jic23@kernel.org>,
-	<lars@metafoo.de>, <bleung@chromium.org>, <yu.c.chen@intel.com>,
-	<hdegoede@redhat.com>, <markgross@kernel.org>, <luzmaximilian@gmail.com>,
-	<corentin.chary@gmail.com>, <jprvita@gmail.com>, <cascardo@holoscopio.com>,
-	<don@syst.com.br>, <pali@kernel.org>, <jwoithe@just42.net>,
-	<matan@svgalib.org>, <kenneth.t.chan@gmail.com>, <malattia@linux.it>,
-	<jeremy@system76.com>, <productdev@system76.com>, <herton@canonical.com>,
-	<coproscefalo@gmail.com>, <tytso@mit.edu>, <Jason@zx2c4.com>,
-	<robert.moore@intel.com>
-CC: <linux-acpi@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-	<linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-	<chrome-platform@lists.linux.dev>, <platform-driver-x86@vger.kernel.org>,
-	<acpi4asus-user@lists.sourceforge.net>,
-	<acpica-devel@lists.linuxfoundation.org>
-References: <20230601132137.301802-1-michal.wilczynski@intel.com>
- <b067f6990c7e6e58c487770126a804500ce8a54a.camel@linux.intel.com>
-From: "Wilczynski, Michal" <michal.wilczynski@intel.com>
-In-Reply-To: <b067f6990c7e6e58c487770126a804500ce8a54a.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0143.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::16) To CO6PR11MB5603.namprd11.prod.outlook.com
- (2603:10b6:5:35c::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D95518AE5
+	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 10:28:18 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="119124199"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681138800"; 
+   d="scan'208";a="119124199"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:27:08 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 37A21C3F80
+	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 19:27:05 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6A4A9D67CE
+	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 19:27:04 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.167.234.230])
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 730392F4C31;
+	Fri,  2 Jun 2023 19:27:02 +0900 (JST)
+From: Li Zhijian <lizhijian@fujitsu.com>
+To: kexec@lists.infradead.org,
+	nvdimm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org,
+	dan.j.williams@intel.com,
+	bhe@redhat.com,
+	ruansy.fnst@fujitsu.com,
+	y-goto@fujitsu.com,
+	yangx.jy@fujitsu.com,
+	Li Zhijian <lizhijian@fujitsu.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Dave Young <dyoung@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Vivek Goyal <vgoyal@redhat.com>,
+	x86@kernel.org
+Subject: [RFC PATCH v3 0/3] pmem memmap dump support
+Date: Fri,  2 Jun 2023 18:26:49 +0800
+Message-Id: <20230602102656.131654-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR11MB5603:EE_|BL1PR11MB5553:EE_
-X-MS-Office365-Filtering-Correlation-Id: af30c8c0-bcd7-469a-3b5f-08db634b7946
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wp6z6sPyFL11oU19itRS8eUNlW3iKaFmiXZEZyUZ4jyYYCKMcCSG5y7MTO7JKmSEQHrF0K0p3DwbYtwRpMPyY1R10Lr1n0tj3yl+IiTPa0DT7Z1sTujLYqJ82YcOSQCvikhr/FNhbNGyH6a1SxgcKYf/6fqU0ssQNGkwCKA7Z2I6b3jngfkCpxFDFdr/jfkQO0/jyierxbuLF7tB3VSbZKT//VUdZbPWScDkOcGLYmp9DMaaz1it+R6LL/ChNLCJfo8hkQcP/qfxntV4z5mH3bJ50e4OCcdVwQSrm2aiXB5VFcVyy+CY79p4C5Y2kKrweoTc08OLEVqrDglUlpe+trIjYAG7RRgQtyQkZkJpwHYF1PswY3hRQQ4U3u+Y+N9gPmdREwjjeLhUgqXrqI7mJj1y+vjxKK0HcjAuJm9zbuOHLgZio7xCvf0VJT3e1YCTtw/GB4jNSNrijVmpTqXUAaPy20+P/0peYZ/ru8hpPncahiayOXk73rhQ2KvHeBH0b0p6vpVyE/uB9UuX4r+nG3WIMZc6F8JzQmxIHB22i9e3+wUoF5y6OelG1J3CA9OoFfF07vkoDunlCW4Sp++pbYajwoGihTVoZVYRkTISEugCROd1fowT7dRPw+eEmJ2ztOy/tOAxUXydJe2QROp5eCGpgA6GXcIEzlaUUGF0spk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(39860400002)(366004)(396003)(136003)(451199021)(36756003)(2906002)(86362001)(31696002)(7416002)(7406005)(5660300002)(31686004)(83380400001)(6486002)(6666004)(186003)(53546011)(6506007)(26005)(6512007)(921005)(478600001)(66556008)(4326008)(2616005)(6636002)(82960400001)(316002)(66476007)(41300700001)(38100700002)(66946007)(8936002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHVKb2djRVBSYi9YcWhHZVkrc3o0cjZQeE1aU2RNdnZobnZ2dlFuMjQzOHRp?=
- =?utf-8?B?TEJnT2tCTGIybVFRb2xlc2RsdnZpeGE2d1hNdVNEV29PMERobEprdmUwZ2RE?=
- =?utf-8?B?YkloQmtJU0Zmbnp3NGxFc0VRWXFydm8xbVNzd1hUeHR2ZklVOS90dXl2Q1VQ?=
- =?utf-8?B?L2F2WldweHMyWW5vTXQ2eGVHVU1oUGI0cjhVU0dJVThwcTZaVFlyZmIrWUY5?=
- =?utf-8?B?bmtNZTdlMWpWR1lMdXdkWXRacVpKR1pjbUppZzh6TVJmQ2k0SWJXZUFRV05G?=
- =?utf-8?B?VGx1MS9TSHYyVjB0c0VYQnlxTW1GNDROVnltV0R3T1d0TlFmTTRqRDVwZExi?=
- =?utf-8?B?YkthTFpCemtONFZSeklnYTBOZ0xaeEk0N0FOcEtVNXFxdkpKN3lGeU1hL0VO?=
- =?utf-8?B?MWg0UHRzVDNNV3lmZUNJNmt6R0Jza3gvZkJPaWczdktsMkNibmYvdDVXcVU3?=
- =?utf-8?B?Y2xFRzNEc1ZqK0tzbnd4Tkd2YUpwZnp0Q21aalBxU2dudmVNUUZ2MWFrM0Er?=
- =?utf-8?B?Y2ppdVBUaklab0ZEUjZPQUtqaVdxYlpzdVdnZGJ0WHRHOTZOeURaS0lGcWtN?=
- =?utf-8?B?c21Cek10N3JGdDNlZitSckp0UkZDZGdwNm80SGRNZDNzUWU5elRSTk5aWVlr?=
- =?utf-8?B?N3RiZ2c4b2RmalNnSDg2VDRkTzd1RlAyaGRSOEVIT0N0ekttSnE3N3U1aXhR?=
- =?utf-8?B?R1BseFNaeE1YSW1EdVNIMUpPZ09SM2RtL0JLZnhSUWduZ1YybzhuWExNcDNH?=
- =?utf-8?B?NkFjV25ESEliaVZMUVBVMDBKYmRoRmtmK3RpaEQzZVpsUjRPK3AyZ1BrZ0Vs?=
- =?utf-8?B?Z3ljZXNudmlvSUJmMnNXeW92MDZpZ09jMzdXaUFVYlFLbDhUSWUwTitCOVZ3?=
- =?utf-8?B?c1BtTnlpQUUvNVNENVdRSnExVWxNMW9WSVh0QWVzNVRKZGhUKzRNWUQrTmdu?=
- =?utf-8?B?M2tGK282NlU1V2FoNVZiV21HcmFtTjhOWlpJdnl4WmNObkxWeG1CYjV1MERr?=
- =?utf-8?B?eXVMSUl2dDE0ZXpZWDdiOGdkbGFIam8vZWpxTGpUeDlxWHlSQmtnUC9nTTkx?=
- =?utf-8?B?S0VjUlNyNHNCNmlNQ0tGbVZuNDgzMTZGVnVjVEhIMGR3ZmYrYWc5ckdWcDd0?=
- =?utf-8?B?MnZaVEtCNmlpUUNRdTFFcWlsTGQwdDkvak1RdHBsZkZXdEpWYnk5bzVKN3hi?=
- =?utf-8?B?SlJObks5bXBWVko2d0Nwb2ovbVhYQ3g4NlZDRjAxdHJnL2xjb1JuU3NtR2Ru?=
- =?utf-8?B?YVRjZHVXMDFmMlNzNnVWK3lQN1QzRFI0VTU2SkpRbyt5RklvVWFOUDJoaytm?=
- =?utf-8?B?OTdtdEVIN1dqNzBkOHVUT1FZYkRXVlVxRlFBdHY3ZE14cXR4MHpPZXJidlEr?=
- =?utf-8?B?NDh4blMreTAyNU5KQWpBRFgvU1dLbFR0TXRuQU9NYWcwWHlxS2JVQWpnWjhx?=
- =?utf-8?B?SEwyKzNPSWlEUUZyQUl5ZkJsUm4wenVoQ2Y5bUNwaUw0MmozTXBWdG9URSt3?=
- =?utf-8?B?VGMzUGVvUld2bDBUSUlWYm9qaCtmRVYyTDlZNEJzVXczMi9KTDlvOWQyeFpY?=
- =?utf-8?B?R20yL1RmQkE0dWIxRDhaUzZ3QWIzcFlBU1ZXK2ZkaG5uUXZXSjFIa0FwZDZQ?=
- =?utf-8?B?bmZicGJzbkdNZ2t5RUFNaFg5QWlyWWV1czIyZFdadzNyT3hqaHNaamRnNWpl?=
- =?utf-8?B?UThSaUIzZDQ4b1BybWJnbFdJeWN5emZkSHNnWDRnY2JGQS9nMFlNOEdxZzFD?=
- =?utf-8?B?NHVQdk5ONWtVVVU3Rlh5UTdHdUw2RExQaFVmY3BOKzlYQm5MaCtKbU5BOU1i?=
- =?utf-8?B?UVlmVTNyMnR5U2M4US8zVC8rNGxvS0Z3czdqK1E4V3I0WFI4VnFkdGQ3Qmx4?=
- =?utf-8?B?V1BxZGpjMDdUVG4zcW02RC9OMm84WWdtR3Q1Ymx5NlQzaytRUFQ1RWRCaER4?=
- =?utf-8?B?ZXBKQkYrV21aUmprMExKYWQyVlIycWRkMnZySFZRVXphMzc4YWFLb2tMZld0?=
- =?utf-8?B?bGdzK3Z4S1R3cXcydU11M3h2cis5WDhpMGFKZUI1RENLU2RSOWZoc2Z6Q1BW?=
- =?utf-8?B?QnNYcmt0MCt4SUhId0ZzUXcyZ083Mys1QVQweGhzOVkzUXVxYVc3S3FWbDlz?=
- =?utf-8?B?elI0YnhLcHgzb2V0K2N6U0dDMXA2WlBTMVRNT0ttM1pjN2RpSkhkWjZIUDJk?=
- =?utf-8?B?c1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: af30c8c0-bcd7-469a-3b5f-08db634b7946
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 09:26:41.5690
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qvDxgpm7dRkscfocXBjl25EulyAN5elILdXK3jJAqN3U/jB2zkgfoEuwhwcbonCACwUpzRbjm45K3iucqbo8PokxVHgWww4UJIVFuWpjPr0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5553
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27666.006
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27666.006
+X-TMASE-Result: 10--27.366500-10.000000
+X-TMASE-MatchedRID: vYzBBoYqFnIL0MkR8StpMHzmmMD/HXF+1QQ6Jx/fflZdXeeZrNJbgtSH
+	nJDq2yhM8Xo3NKXpyhevaHVEeXCQcbF6nptaEfP/KQxHYsCcxGn0swHSFcVJ6J4Q+L3BXIWuT1z
+	kvtd51Lg3hBXKCg/wwFQq+dhQEIHhk7vOomzD71wK3Ma88LL+boIw3bnTjwR6+OO8YTtOnsLJFa
+	y2oiD2TjuQeheTvyfknALOVSaqFWVn8E7VhPK+pqJVTu7sjgg1homn0bwgVmkfmRnL8RBuBBpP9
+	70zHN/Y1oO1QnWfbjp/iseCANV019DFhoVadDNxBe3KRVyu+k2/yN2q8U674pArM4zg1+iSGNtH
+	9cKwddarbBryRVQGjVW5uDlybuu3uHnt1UKh315i71i5on34Kj/FEHo4adva6ljkEk+hhAeYFC8
+	uMwGxQQUz8cUeDqKoj0RC7hmppJv8esyAp1A0ZwmyVrMCuJ9SY/8hgefJn7BLIy6IPbYWFx2rrG
+	e8rZbLZwtNYoYGSjw2mtxMhqolwypD3qhltGUjtT4jIeGRd/W/mvr+BRd9bnUJIpqzDt/HqgqKT
+	3T4weX9UygY5s61EU1i01tCTSuDH8dePSFct0l9SSAOK4bGf9Fb0ZIwh4Su31GNm6M+JKTiuX4U
+	cbdWgBcfmI3+RkHYDMsOoTK7WFBtnFZPAvryPrqQyAveNtg6uoYFb0nRiqM8cwBuO6HB3xg4MG1
+	tpr1J9XlZDxPHq+BgLfJxky5aUlFL3FSfuOf23QqJN4m15UGuLG21Eb4T8wZZ8N3RvTMxo8WMkQ
+	Wv6iXBcIE78YqRWo6HM5rqDwqtlExlQIQeRG0=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
+Hello folks,
 
+After sending out the previous version of the patch set, we received some comments,
+and we really appreciate your input. However, as you can see, the current patch
+set is still in its early stages, especially in terms of the solution selection,
+which may still undergo changes.
 
-On 6/2/2023 3:08 AM, David E. Box wrote:
-> Hi Michal,
->
-> On Thu, 2023-06-01 at 15:21 +0200, Michal Wilczynski wrote:
->> As callback has been replaced by drivers installing their handlers in
->> .add it's presence is not useful anymore.
->>
->> Remove .notify callback and flags variable from struct acpi_driver,
->> as they're not needed anymore.
->>
->> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
->> ---
->>  include/acpi/acpi_bus.h | 3 ---
->>  1 file changed, 3 deletions(-)
->>
->> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
->> index 7fb411438b6f..3326794d5b70 100644
->> --- a/include/acpi/acpi_bus.h
->> +++ b/include/acpi/acpi_bus.h
->> @@ -151,12 +151,10 @@ struct acpi_hotplug_context {
->>  
->>  typedef int (*acpi_op_add) (struct acpi_device * device);
->>  typedef void (*acpi_op_remove) (struct acpi_device *device);
->> -typedef void (*acpi_op_notify) (struct acpi_device * device, u32 event);
->>  
->>  struct acpi_device_ops {
->>         acpi_op_add add;
->>         acpi_op_remove remove;
->> -       acpi_op_notify notify;
->>  };
->>  
->>  #define ACPI_DRIVER_ALL_NOTIFY_EVENTS  0x1     /* system AND device events */
->> @@ -165,7 +163,6 @@ struct acpi_driver {
->>         char name[80];
->>         char class[80];
->>         const struct acpi_device_id *ids; /* Supported Hardware IDs */
->> -       unsigned int flags;
-> Can ACPI_DRIVER_ALL_NOTIFY_EVENTS be removed as well?
+Changes in V3:
+Mainly based on the understanding from the first version, I implemented the proposal
+suggested by Dan. In the kdump kernel, the device's superblock is read through
+a device file interface to calculate the metadata range. In the second version,
+the first kernel writes the metadata range to vmcoreinfo, and after kdump occurs,
+the kdump kernel can directly read it from /proc/vmcore.
 
-Hi David,
-Oh yeah, it should be removed as well,
+Comparing these two approaches, the advantage of Version 3 is fewer kernel
+modifications, but the downside is the introduction of a new external library,
+libndctl, to search for each namespace, which introduces a higher level of
+coupling with ndctl.
 
-Thanks !
+One important thing to note about both V2 and V3 is the introduction of a new
+ELF flag, PF_DEV, to indicate whether a range is on a device. I'm not sure if
+there are better alternatives or if we can use this flag internally without
+exposing it in elf.h.
 
->
->>         struct acpi_device_ops ops;
->>         struct device_driver drv;
->>         struct module *owner;
+We greatly appreciate your feedback and would like to hear your response.
+
+In RFC stage, I folded these 3 projects in this same cover letter for reviewing convenience.
+kernel(3):
+  nvdimm: set force_raw=1 in kdump kernel
+  x86/crash: Add pmem region into PT_LOADs of vmcore
+  kernel/kexec_file: Mark pmem region with new flag PF_DEV
+kexec-tools(1):
+  kexec: Add and mark pmem region into PT_LOADs
+makedumpfile(3):
+  elf_info.c: Introduce is_pmem_pt_load_range
+  makedumpfile.c: Exclude all pmem pages
+  makedumpfile: get metadata boundaries from pmem's infoblock
+
+Currently, this RFC has already implemented to supported case D*. And the case A&B is disabled
+deliberately in makedumpfile.
+---
+
+pmem memmap can also be called pmem metadata here.
+
+### Background and motivate overview ###
+---
+Crash dump is an important feature for trouble shooting of kernel. It is the final way to chase what
+happened at the kernel panic, slowdown, and so on. It is the most important tool for customer support.
+However, a part of data on pmem is not included in crash dump, it may cause difficulty to analyze
+trouble around pmem (especially Filesystem-DAX).
+
+A pmem namespace in "fsdax" or "devdax" mode requires allocation of per-page metadata[1]. The allocation
+can be drawn from either mem(system memory) or dev(pmem device), see `ndctl help create-namespace` for
+more details. In fsdax, struct page array becomes very important, it is one of the key data to find
+status of reverse map.
+
+So, when metadata was stored in pmem, even pmem's per-page metadata will not be dumped. That means
+troubleshooters are unable to check more details about pmem from the dumpfile.
+
+### Make pmem memmap dump support ###
+---
+Our goal is that whether metadata is stored on mem or pmem, its metadata can be dumped and then the
+crash-utilities can read more details about the pmem. Of course, this feature can be enabled/disabled.
+
+First, based on our previous investigation, according to the location of metadata and the scope of
+dump, we can divide it into the following four cases: A, B, C, D.
+It should be noted that although we mentioned case A&B below, we do not want these two cases to be
+part of this feature, because dumping the entire pmem will consume a lot of space, and more importantly,
+it may contain user sensitive data.
+
++-------------+----------+------------+
+|\+--------+\     metadata location   |
+|            ++-----------------------+
+| dump scope  |  mem     |   PMEM     |
++-------------+----------+------------+
+| entire pmem |     A    |     B      |
++-------------+----------+------------+
+| metadata    |     C    |     D      |
++-------------+----------+------------+
+
+### Testing ###
+Only x86_64 are tested. Please note that we have to disable the 2nd kernel's libnvdimm to ensure the
+metadata in 2nd kernel will not be touched again.
+
+below 2 commits use sha256 to check the metadata in 1st kernel during panic and makedumpfile in 2nd kernel.
+https://github.com/zhijianli88/makedumpfile/commit/91a135be6980e6e87b9e00b909aaaf8ef9566ec0
+https://github.com/zhijianli88/linux/commit/55bef07f8f0b2e587737b796e73b92f242947e5a
+
+### TODO ###
+Only x86 are fully supported for both kexec_load(2) and kexec_file_load(2)
+kexec_file_load(2) on other architectures are TODOs.
+---
+[1] Pmem region layout:
+   ^<--namespace0.0---->^<--namespace0.1------>^
+   |                    |                      |
+   +--+m----------------+--+m------------------+---------------------+-+a
+   |++|e                |++|e                  |                     |+|l
+   |++|t                |++|t                  |                     |+|i
+   |++|a                |++|a                  |                     |+|g
+   |++|d  namespace0.0  |++|d  namespace0.1    |     un-allocated    |+|n
+   |++|a    fsdax       |++|a     devdax       |                     |+|m
+   |++|t                |++|t                  |                     |+|e
+   +--+a----------------+--+a------------------+---------------------+-+n
+   |                                                                   |t
+   v<-----------------------pmem region------------------------------->v
+
+[2] https://lore.kernel.org/linux-mm/70F971CF-1A96-4D87-B70C-B971C2A1747C@roc.cs.umass.edu/T/
+[3] https://lore.kernel.org/linux-mm/3c752fc2-b6a0-2975-ffec-dba3edcf4155@fujitsu.com/
+
+### makedumpfile output in case B ####
+kdump.sh[224]: makedumpfile: version 1.7.2++ (released on 20 Oct 2022)
+kdump.sh[224]: command line: makedumpfile -l --message-level 31 -d 31 /proc/vmcore /sysroot/var/crash/127.0.0.1-2023-04-21-02:50:57//vmcore-incomplete
+kdump.sh[224]: sadump: does not have partition header
+kdump.sh[224]: sadump: read dump device as unknown format
+kdump.sh[224]: sadump: unknown format
+kdump.sh[224]:                phys_start         phys_end       virt_start         virt_end  is_pmem
+kdump.sh[224]: LOAD[ 0]          1000000          3c26000 ffffffff81000000 ffffffff83c26000    false
+kdump.sh[224]: LOAD[ 1]           100000         7f000000 ffff888000100000 ffff88807f000000    false
+kdump.sh[224]: LOAD[ 2]         bf000000         bffd7000 ffff8880bf000000 ffff8880bffd7000    false
+kdump.sh[224]: LOAD[ 3]        100000000        140000000 ffff888100000000 ffff888140000000    false
+kdump.sh[224]: LOAD[ 4]        140000000        23e200000 ffff888140000000 ffff88823e200000     true
+kdump.sh[224]: Linux kdump
+kdump.sh[224]: VMCOREINFO   :
+kdump.sh[224]:   OSRELEASE=6.3.0-rc3-pmem-bad+
+kdump.sh[224]:   BUILD-ID=0546bd82db93706799d3eea38194ac648790aa85
+kdump.sh[224]:   PAGESIZE=4096
+kdump.sh[224]: page_size    : 4096
+kdump.sh[224]:   SYMBOL(init_uts_ns)=ffffffff82671300
+kdump.sh[224]:   OFFSET(uts_namespace.name)=0
+kdump.sh[224]:   SYMBOL(node_online_map)=ffffffff826bbe08
+kdump.sh[224]:   SYMBOL(swapper_pg_dir)=ffffffff82446000
+kdump.sh[224]:   SYMBOL(_stext)=ffffffff81000000
+kdump.sh[224]:   SYMBOL(vmap_area_list)=ffffffff82585fb0
+kdump.sh[224]:   SYMBOL(devm_memmap_vmcore_head)=ffffffff825603c0
+kdump.sh[224]:   SIZE(devm_memmap_vmcore)=40
+kdump.sh[224]:   OFFSET(devm_memmap_vmcore.entry)=0
+kdump.sh[224]:   OFFSET(devm_memmap_vmcore.start)=16
+kdump.sh[224]:   OFFSET(devm_memmap_vmcore.end)=24
+kdump.sh[224]:   SYMBOL(mem_section)=ffff88813fff4000
+kdump.sh[224]:   LENGTH(mem_section)=2048
+kdump.sh[224]:   SIZE(mem_section)=16
+kdump.sh[224]:   OFFSET(mem_section.section_mem_map)=0
+...
+kdump.sh[224]: STEP [Checking for memory holes  ] : 0.012699 seconds
+kdump.sh[224]: STEP [Excluding unnecessary pages] : 0.538059 seconds
+kdump.sh[224]: STEP [Copying data               ] : 0.995418 seconds
+kdump.sh[224]: STEP [Copying data               ] : 0.000067 seconds
+kdump.sh[224]: Writing erase info...
+kdump.sh[224]: offset_eraseinfo: 5d02266, size_eraseinfo: 0
+kdump.sh[224]: Original pages  : 0x00000000001c0cfd
+kdump.sh[224]:   Excluded pages   : 0x00000000001a58d2
+kdump.sh[224]:     Pages filled with zero  : 0x0000000000006805
+kdump.sh[224]:     Non-private cache pages : 0x0000000000019e93
+kdump.sh[224]:     Private cache pages     : 0x0000000000077572
+kdump.sh[224]:     User process data pages : 0x0000000000002c3b
+kdump.sh[224]:     Free pages              : 0x0000000000010e8d
+kdump.sh[224]:     Hwpoison pages          : 0x0000000000000000
+kdump.sh[224]:     Offline pages           : 0x0000000000000000
+kdump.sh[224]:     pmem metadata pages     : 0x0000000000000000
+kdump.sh[224]:     pmem userdata pages     : 0x00000000000fa200
+kdump.sh[224]:   Remaining pages  : 0x000000000001b42b
+kdump.sh[224]:   (The number of pages is reduced to 6%.)
+kdump.sh[224]: Memory Hole     : 0x000000000007d503
+kdump.sh[224]: --------------------------------------------------
+kdump.sh[224]: Total pages     : 0x000000000023e200
+kdump.sh[224]: Write bytes     : 97522590
+kdump.sh[224]: Cache hit: 191669, miss: 292, hit rate: 99.8%
+kdump.sh[224]: The dumpfile is saved to /sysroot/var/crash/127.0.0.1-2023-04-21-02:50:57//vmcore-incomplete.
+kdump.sh[224]: makedumpfile Completed.
+
+CC: Baoquan He <bhe@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dan Williams <dan.j.williams@intel.com>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: Dave Jiang <dave.jiang@intel.com>
+CC: Dave Young <dyoung@redhat.com>
+CC: Eric Biederman <ebiederm@xmission.com>
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Ira Weiny <ira.weiny@intel.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Vishal Verma <vishal.l.verma@intel.com>
+CC: Vivek Goyal <vgoyal@redhat.com>
+CC: x86@kernel.org
+CC: kexec@lists.infradead.org
+CC: nvdimm@lists.linux.dev
+
+-- 
+2.29.2
 
 
