@@ -1,416 +1,502 @@
-Return-Path: <nvdimm+bounces-6111-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6116-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D73D71FF48
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 12:27:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BBA2720946
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 20:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E04D2813C8
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 10:27:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5CAD281AAB
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  2 Jun 2023 18:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C654318AFC;
-	Fri,  2 Jun 2023 10:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ABF1B912;
+	Fri,  2 Jun 2023 18:41:32 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701D318AEF
-	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 10:27:21 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="107447917"
-X-IronPort-AV: E=Sophos;i="6.00,212,1681138800"; 
-   d="scan'208";a="107447917"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:27:12 +0900
-Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 6877DCA1E8
-	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 19:27:10 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 91E0FD9A89
-	for <nvdimm@lists.linux.dev>; Fri,  2 Jun 2023 19:27:09 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.167.234.230])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 89B3840FE2;
-	Fri,  2 Jun 2023 19:27:08 +0900 (JST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: kexec@lists.infradead.org,
-	nvdimm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org,
-	dan.j.williams@intel.com,
-	bhe@redhat.com,
-	ruansy.fnst@fujitsu.com,
-	y-goto@fujitsu.com,
-	yangx.jy@fujitsu.com,
-	Li Zhijian <lizhijian@fujitsu.com>,
-	Vivek Goyal <vgoyal@redhat.com>,
-	Dave Young <dyoung@redhat.com>
-Subject: [RFC PATCH makedumpfile v3 3/3] makedumpfile: get metadata boundaries from pmem's infoblock
-Date: Fri,  2 Jun 2023 18:26:56 +0800
-Message-Id: <20230602102656.131654-8-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230602102656.131654-1-lizhijian@fujitsu.com>
-References: <20230602102656.131654-1-lizhijian@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3A233319;
+	Fri,  2 Jun 2023 18:41:28 +0000 (UTC)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id bc94c963ae8cb155; Fri, 2 Jun 2023 20:34:46 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by v370.home.net.pl (Postfix) with ESMTPSA id 5819C956FA8;
+	Fri,  2 Jun 2023 20:34:45 +0200 (CEST)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: rafael@kernel.org, lenb@kernel.org, dan.j.williams@intel.com, vishal.l.verma@intel.com, dave.jiang@intel.com, ira.weiny@intel.com, rui.zhang@intel.com, jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org, lars@metafoo.de, bleung@chromium.org, yu.c.chen@intel.com, hdegoede@redhat.com, markgross@kernel.org, luzmaximilian@gmail.com, corentin.chary@gmail.com, jprvita@gmail.com, cascardo@holoscopio.com, don@syst.com.br, pali@kernel.org, jwoithe@just42.net, matan@svgalib.org, kenneth.t.chan@gmail.com, malattia@linux.it, jeremy@system76.com, productdev@system76.com, herton@canonical.com, coproscefalo@gmail.com, tytso@mit.edu, Jason@zx2c4.com, robert.moore@intel.com, Michal Wilczynski <michal.wilczynski@intel.com>
+Cc: linux-acpi@vger.kernel.org, nvdimm@lists.linux.dev, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev, platform-driver-x86@vger.kernel.org, acpi4asus-user@lists.sourceforge.net, Michal Wilczynski <michal.wilczynski@intel.com>, acpica-devel@lists.linuxfoundation.org
+Subject: Re: [PATCH v4 01/35] acpi: Adjust functions installing bus event handlers
+Date: Fri, 02 Jun 2023 20:34:45 +0200
+Message-ID: <4500594.LvFx2qVVIh@kreacher>
+In-Reply-To: <20230601131719.300720-1-michal.wilczynski@intel.com>
+References: <20230601131719.300720-1-michal.wilczynski@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27666.006
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27666.006
-X-TMASE-Result: 10--22.341900-10.000000
-X-TMASE-MatchedRID: 44XoofGiUa/SFChHF48gQTiEPRj9j9rvUh4weWPqOWS638ZUY6gSd1YI
-	HeJwbhUqNmVYIPY+Gy2YlVLttZCaEDBF7stuNMMxEVuC0eNRYvLxKR2kbb+f1wYkj8pwyAod12k
-	t5HuVFgCbKneFtGQ4N1LlTv2kQ2/LP06ke90qDvPum6Nvy6t3NgmWvXEqQTm5wLkNMQzGl5B+Kr
-	WCPbERP2XM/1LvxbWDZva/ER92lB2cfX6Ug1yFMM36paW7ZnFoGB9/bxS68hPk6Qbi+9i6Dz/zI
-	kvUoSsdD7X3CqobQahpM4uQJ+eFBvdZ3f2rISMmfOaYwP8dcX6BiLDUCsch2+uLH9BII+4qlfC3
-	WuSrCNRwmg9/GN+fyAQTZYEbCLsYrJKo/rFyHQGVOwZbcOalSxZSD+Gbjz3IWH7Bxw4ADCPmKXL
-	lUHkJC+EjtnMuJXJurgv6vPEWDp7YsZWA4GRU5h1qGr6sYOf/wJjn8yqLU6I1Y73PdzvXZKKJ8y
-	eXnfHAZZ1LvVb67BW23YOnZxHtRsOrmarpjDAkngIgpj8eDcAZ1CdBJOsoY8RB0bsfrpPI6T/LT
-	DsmJmg=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedguddvgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegvddprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvnhgssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnrdhjrdifihhllhhirghmshesihhnthgvlhdrtghomhdprhgtphhtthhopehvihhshhgrlhdrlhdrvhgvrhhmrgesihhnthgvlhdrtghomhdprhgtphhtthhopegurghvvgdrjhhirghnghesihhnthgvlhdr
+ tghomhdprhgtphhtthhopehirhgrrdifvghinhihsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=42 Fuz1=42 Fuz2=42
 
-some code are copied from ndctl.
+On Thursday, June 1, 2023 3:17:19 PM CEST Michal Wilczynski wrote:
+> Currently acpi_device_install_notify_handler() and
+> acpi_device_remove_notify_handler() always install acpi_notify_device()
+> as a function handler, and only then the real .notify callback gets
+> called. This is not efficient and doesn't provide any real advantage.
+> 
+> Introduce new acpi_device_install_event_handler() and
+> acpi_device_remove_event_handler(). Those functions are replacing old
+> installers, and after all drivers switch to the new model, old installers
+> will be removed at the end of the patchset.
+> 
+> Make new installer/removal function arguments to take function pointer as
+> an argument instead of using .notify callback. Introduce new variable in
+> struct acpi_device, as fixed events still needs to be handled by an
+> intermediary that would schedule them for later execution. This is due to
+> fixed hardware event handlers being executed in interrupt context.
+> 
+> Make acpi_device_install_event_handler() and
+> acpi_device_remove_event_handler() non-static, and export symbols. This
+> will allow the drivers to call them directly, instead of relying on
+> .notify callback.
+> 
+> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> ---
+>  drivers/acpi/bus.c      | 59 ++++++++++++++++++++++++++++++++++++++++-
+>  include/acpi/acpi_bus.h |  7 +++++
+>  2 files changed, 65 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index d161ff707de4..cf2c2bfe29a0 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -535,7 +535,7 @@ static void acpi_notify_device_fixed(void *data)
+>  	struct acpi_device *device = data;
+>  
+>  	/* Fixed hardware devices have no handles */
+> -	acpi_notify_device(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
+> +	device->fixed_event_notify(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
+>  }
+>  
+>  static u32 acpi_device_fixed_event(void *data)
+> @@ -550,11 +550,13 @@ static int acpi_device_install_notify_handler(struct acpi_device *device,
+>  	acpi_status status;
+>  
+>  	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+> +		device->fixed_event_notify = acpi_notify_device;
+>  		status =
+>  		    acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+>  						     acpi_device_fixed_event,
+>  						     device);
+>  	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+> +		device->fixed_event_notify = acpi_notify_device;
+>  		status =
+>  		    acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+>  						     acpi_device_fixed_event,
+> @@ -579,9 +581,11 @@ static void acpi_device_remove_notify_handler(struct acpi_device *device,
+>  	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+>  		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+>  						acpi_device_fixed_event);
+> +		device->fixed_event_notify = NULL;
+>  	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+>  		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+>  						acpi_device_fixed_event);
+> +		device->fixed_event_notify = NULL;
+>  	} else {
+>  		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
+>  				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
+> @@ -592,6 +596,59 @@ static void acpi_device_remove_notify_handler(struct acpi_device *device,
+>  	acpi_os_wait_events_complete();
+>  }
+>  
+> +int acpi_device_install_event_handler(struct acpi_device *device,
+> +				      u32 type,
+> +				      void (*notify)(acpi_handle, u32, void*))
+> +{
+> +	acpi_status status;
+> +
+> +	if (!notify)
+> +		return -EINVAL;
+> +
+> +	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+> +		device->fixed_event_notify = notify;
+> +		status =
+> +		    acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+> +						     acpi_device_fixed_event,
+> +						     device);
+> +	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+> +		device->fixed_event_notify = notify;
+> +		status =
+> +		    acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+> +						     acpi_device_fixed_event,
+> +						     device);
+> +	} else {
+> +		status = acpi_install_notify_handler(device->handle, type,
+> +						     notify,
+> +						     device);
+> +	}
+> +
+> +	if (ACPI_FAILURE(status))
+> +		return -EINVAL;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(acpi_device_install_event_handler);
+> +
+> +void acpi_device_remove_event_handler(struct acpi_device *device,
+> +				      u32 type,
+> +				      void (*notify)(acpi_handle, u32, void*))
+> +{
+> +	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+> +		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+> +						acpi_device_fixed_event);
+> +		device->fixed_event_notify = NULL;
+> +	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+> +		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+> +						acpi_device_fixed_event);
+> +		device->fixed_event_notify = NULL;
+> +	} else {
+> +		acpi_remove_notify_handler(device->handle, type,
+> +					   notify);
+> +	}
+> +	acpi_os_wait_events_complete();
+> +}
+> +EXPORT_SYMBOL(acpi_device_remove_event_handler);
+> +
+>  /* Handle events targeting \_SB device (at present only graceful shutdown) */
+>  
+>  #define ACPI_SB_NOTIFY_SHUTDOWN_REQUEST 0x81
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index a6affc0550b0..7fb411438b6f 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -387,6 +387,7 @@ struct acpi_device {
+>  	struct list_head physical_node_list;
+>  	struct mutex physical_node_lock;
+>  	void (*remove)(struct acpi_device *);
+> +	void (*fixed_event_notify)(acpi_handle handle, u32 type, void *data);
 
-This change requires libndctl which provides interface to walk through
-all existing namespaces.
+This is a rather confusing change, because ->remove() above is not a driver
+callback, whereas the new one would be.
 
-This also requires the namespace entered the force_raw mode(the kernel will
-ensure that).
+Moreover, it is rather wasteful, because the only devices needing it are
+buttons, so for all of the other ACPI device objects the new callback pointer
+would always be NULL.
 
-The resource interface provides the start of namespace, and device's
-superblock provides the usedata's offset of namespace. According to this
-information, we can caculate the scope of metadata.
+Finally, it is not necessary even.
 
-A new dump level(-d 63) is introduced to skip the metadata as well in
-this patch.
+The key observation here is that there are only 2 drivers handling power and
+sleep buttons that use ACPI fixed events: the ACPI button driver (button.c in
+drivers/acpi) and the "tiny power button" driver (tiny-power-button.c in
+drivers/acpi).  All of the other drivers don't need the "fixed event notify"
+thing and these two can be modified to take care of all of it by themselves.
 
-CC: Baoquan He <bhe@redhat.com>
-CC: Vivek Goyal <vgoyal@redhat.com>
-CC: Dave Young <dyoung@redhat.com>
-CC: kexec@lists.infradead.org
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+So if something like the below is done prior to the rest of your series, the
+rest will be about acpi_install/remove_notify_handler() only and you won't
+even need the wrapper routines any more: driver may just be switched over
+to using the ACPICA functions directly.
+
+[This patch is untested and is really 3 patches in one, but since I've cut it
+already, I'll send it properly next week after some button driver testing.]
+
 ---
- Makefile       |   2 +-
- makedumpfile.c | 196 +++++++++++++++++++++++++++++++++++++++++++++++--
- makedumpfile.h |   3 +-
- 3 files changed, 192 insertions(+), 9 deletions(-)
+ drivers/acpi/bus.c               |   53 +++++-----------------------------
+ drivers/acpi/button.c            |   60 +++++++++++++++++++++++++++++++++------
+ drivers/acpi/tiny-power-button.c |   49 ++++++++++++++++++++++++++-----
+ 3 files changed, 101 insertions(+), 61 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0608035e913f..fd0a792c5647 100644
---- a/Makefile
-+++ b/Makefile
-@@ -50,7 +50,7 @@ OBJ_PART=$(patsubst %.c,%.o,$(SRC_PART))
- SRC_ARCH = arch/arm.c arch/arm64.c arch/x86.c arch/x86_64.c arch/ia64.c arch/ppc64.c arch/s390x.c arch/ppc.c arch/sparc64.c arch/mips64.c arch/loongarch64.c
- OBJ_ARCH=$(patsubst %.c,%.o,$(SRC_ARCH))
+Index: linux-pm/drivers/acpi/tiny-power-button.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/tiny-power-button.c
++++ linux-pm/drivers/acpi/tiny-power-button.c
+@@ -19,18 +19,52 @@ static const struct acpi_device_id tiny_
+ };
+ MODULE_DEVICE_TABLE(acpi, tiny_power_button_device_ids);
  
--LIBS = -ldw -lbz2 -ldl -lelf -lz
-+LIBS = -ldw -lbz2 -ldl -lelf -lz -lndctl
- ifneq ($(LINKTYPE), dynamic)
- LIBS := -static $(LIBS) -llzma
- endif
-diff --git a/makedumpfile.c b/makedumpfile.c
-index f304f752b0ec..b68d261f3d1e 100644
---- a/makedumpfile.c
-+++ b/makedumpfile.c
-@@ -27,6 +27,8 @@
- #include <limits.h>
- #include <assert.h>
- #include <zlib.h>
-+#include <sys/types.h>
-+#include <ndctl/libndctl.h>
- 
- struct symbol_table	symbol_table;
- struct size_table	size_table;
-@@ -100,6 +102,7 @@ mdf_pfn_t pfn_user;
- mdf_pfn_t pfn_free;
- mdf_pfn_t pfn_hwpoison;
- mdf_pfn_t pfn_offline;
-+mdf_pfn_t pfn_pmem_metadata;
- mdf_pfn_t pfn_pmem_userdata;
- mdf_pfn_t pfn_elf_excluded;
- 
-@@ -6374,6 +6377,173 @@ exclude_range(mdf_pfn_t *counter, mdf_pfn_t pfn, mdf_pfn_t endpfn,
- 	}
+-static int acpi_noop_add(struct acpi_device *device)
++static void acpi_tiny_power_button_notify(acpi_handle handle, u32 event, void *data)
+ {
+-	return 0;
++	kill_cad_pid(power_signal, 1);
  }
  
-+struct pmem_metadata_node {
-+	unsigned long long start;
-+	unsigned long long end;
-+	struct pmem_metadata_node *next;
-+} pmem_metadata_head;
-+
-+struct pmem_metadata_node *pmem_head = NULL;
-+
-+static void pmem_add_next(unsigned long long start, unsigned long long dataoff)
-+{
-+	struct pmem_metadata_node *tail = pmem_head, *node;
-+
-+	node = calloc(1, sizeof(*node));
-+	if (!node)
-+		return;
-+
-+	node->start = start >> info->page_shift;
-+	node->end = (start + dataoff) >> info->page_shift;
-+	node->next = NULL;
-+
-+	if (!pmem_head) {
-+		pmem_head = node;
-+		return;
-+	}
-+	while (tail->next)
-+		tail = tail->next;
-+	tail->next = node;
+-static void acpi_noop_remove(struct acpi_device *device)
++static void acpi_tiny_power_button_notify_run(void *not_used)
+ {
++	acpi_tiny_power_button_notify(NULL, ACPI_FIXED_HARDWARE_EVENT, NULL);
+ }
+ 
+-static void acpi_tiny_power_button_notify(struct acpi_device *device, u32 event)
++static u32 acpi_tiny_power_button_event(void *not_used)
+ {
+-	kill_cad_pid(power_signal, 1);
++	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_tiny_power_button_notify_run, NULL);
++	return ACPI_INTERRUPT_HANDLED;
 +}
 +
-+static void cleanup_pmem_metadata(void)
++static int acpi_tiny_power_button_add(struct acpi_device *device)
 +{
-+	struct pmem_metadata_node *head = pmem_head;
-+	while (head) {
-+		struct pmem_metadata_node *next = head->next;
-+		free(head);
-+		head = next;
++	acpi_status status;
++
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
++		status = acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
++							  acpi_tiny_power_button_event,
++							  NULL);
++	} else {
++		status = acpi_install_notify_handler(device->handle,
++						     ACPI_DEVICE_NOTIFY,
++						     acpi_tiny_power_button_notify,
++						     NULL);
 +	}
-+}
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
 +
-+static int is_pmem_metadata_range(unsigned long long start, unsigned long long end)
-+{
-+	struct pmem_metadata_node *head = pmem_head;
-+	while (head) {
-+		if (head->start <= start && head->end > end)
-+			return TRUE;
-+		head = head->next;
-+	}
-+
-+	return FALSE;
-+}
-+
-+static void dump_pmem_range(void)
-+{
-+	int i = 0;
-+	struct pmem_metadata_node *node= pmem_head;
-+
-+	fprintf(stderr, "dump_pmem_range start......\n\n\n");
-+	while (node) {
-+		fprintf(stderr, "namespace[%d]: metadata[%llx, %llx]\n", i++, node->start, node->end);
-+		node = node->next;
-+	}
-+	fprintf(stderr, "dump_pmem_range end........\n\n\n");
-+}
-+
-+#define INFOBLOCK_SZ (8192)
-+#define SZ_4K (4096)
-+#define PFN_SIG_LEN 16
-+
-+typedef uint64_t u64;
-+typedef int64_t s64;
-+typedef uint32_t u32;
-+typedef int32_t s32;
-+typedef uint16_t u16;
-+typedef int16_t s16;
-+typedef uint8_t u8;
-+typedef int8_t s8;
-+
-+typedef int64_t le64;
-+typedef int32_t le32;
-+typedef int16_t le16;
-+
-+struct pfn_sb {
-+	u8 signature[PFN_SIG_LEN];
-+	u8 uuid[16];
-+	u8 parent_uuid[16];
-+	le32 flags;
-+	le16 version_major;
-+	le16 version_minor;
-+	le64 dataoff; /* relative to namespace_base + start_pad */
-+	le64 npfns;
-+	le32 mode;
-+	/* minor-version-1 additions for section alignment */
-+	le32 start_pad;
-+	le32 end_trunc;
-+	/* minor-version-2 record the base alignment of the mapping */
-+	le32 align;
-+	/* minor-version-3 guarantee the padding and flags are zero */
-+	/* minor-version-4 record the page size and struct page size */
-+	le32 page_size;
-+	le16 page_struct_size;
-+	u8 padding[3994];
-+	le64 checksum;
-+};
-+
-+static int nd_read_infoblock_dataoff(struct ndctl_namespace *ndns)
-+{
-+	int fd, rc;
-+	char path[50];
-+	char buf[INFOBLOCK_SZ + 1];
-+	struct pfn_sb *pfn_sb = (struct pfn_sb *)(buf + SZ_4K);
-+
-+	sprintf(path, "/dev/%s", ndctl_namespace_get_block_device(ndns));
-+
-+	fd = open(path, O_RDONLY|O_EXCL);
-+	if (fd < 0)
-+		return -1;
-+
-+	rc = read(fd, buf, INFOBLOCK_SZ);
-+	if (rc < INFOBLOCK_SZ) {
-+		return -1;
-+	}
-+
-+	return pfn_sb->dataoff;
-+}
-+
-+int inspect_pmem_namespace(void)
-+{
-+	struct ndctl_ctx *ctx;
-+	struct ndctl_bus *bus;
-+	int rc = -1;
-+
-+	fprintf(stderr, "\n\ninspect_pmem_namespace!!\n\n");
-+	rc = ndctl_new(&ctx);
-+	if (rc)
-+		return -1;
-+
-+	ndctl_bus_foreach(ctx, bus) {
-+		struct ndctl_region *region;
-+
-+		ndctl_region_foreach(bus, region) {
-+			struct ndctl_namespace *ndns;
-+
-+			ndctl_namespace_foreach(region, ndns) {
-+				enum ndctl_namespace_mode mode;
-+				long long start, end_metadata;
-+
-+				mode = ndctl_namespace_get_mode(ndns);
-+				/* kdump kernel should set force_raw, mode become *safe* */
-+				if (mode == NDCTL_NS_MODE_SAFE) {
-+					fprintf(stderr, "Only raw can be dumpable\n");
-+					continue;
-+				}
-+
-+				start = ndctl_namespace_get_resource(ndns);
-+				end_metadata = nd_read_infoblock_dataoff(ndns);
-+
-+				/* metadata really starts from 2M alignment */
-+				if (start != ULLONG_MAX && end_metadata > 2 * 1024 * 1024) // 2M
-+					pmem_add_next(start, end_metadata);
-+			}
-+		}
-+	}
-+
-+	ndctl_unref(ctx);
 +	return 0;
 +}
 +
- int
- __exclude_unnecessary_pages(unsigned long mem_map,
-     mdf_pfn_t pfn_start, mdf_pfn_t pfn_end, struct cycle *cycle)
-@@ -6447,9 +6617,17 @@ __exclude_unnecessary_pages(unsigned long mem_map,
- 
- 		is_pmem = is_pmem_pt_load_range(pfn << PAGESHIFT(), (pfn + 1) << PAGESHIFT());
- 		if (is_pmem) {
--			pfn_pmem_userdata++;
--			clear_bit_on_2nd_bitmap_for_kernel(pfn, cycle);
--			continue;
-+			if (is_pmem_metadata_range(pfn, pfn + 1)) {
-+				if (info->dump_level & DL_EXCLUDE_PMEM_META) {
-+					pfn_pmem_metadata++;
-+					clear_bit_on_2nd_bitmap_for_kernel(pfn, cycle);
-+					continue;
-+				}
-+			} else {
-+				pfn_pmem_userdata++;
-+				clear_bit_on_2nd_bitmap_for_kernel(pfn, cycle);
-+				continue;
-+			}
- 		}
- 
- 		index_pg = pfn % PGMM_CACHED;
-@@ -8130,7 +8308,7 @@ write_elf_pages_cyclic(struct cache_data *cd_header, struct cache_data *cd_page)
- 	 * Reset counter for debug message.
- 	 */
- 	if (info->flag_cyclic) {
--		pfn_zero = pfn_cache = pfn_cache_private = 0;
-+		pfn_zero = pfn_cache = pfn_cache_private = pfn_pmem_metadata = 0;
- 		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = pfn_pmem_userdata = 0;
- 		pfn_memhole = info->max_mapnr;
- 	}
-@@ -9468,7 +9646,7 @@ write_kdump_pages_and_bitmap_cyclic(struct cache_data *cd_header, struct cache_d
- 		/*
- 		 * Reset counter for debug message.
- 		 */
--		pfn_zero = pfn_cache = pfn_cache_private = 0;
-+		pfn_zero = pfn_cache = pfn_cache_private = pfn_pmem_metadata = 0;
- 		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = pfn_pmem_userdata = 0;
- 		pfn_memhole = info->max_mapnr;
- 
-@@ -10418,7 +10596,7 @@ print_report(void)
- 	pfn_original = info->max_mapnr - pfn_memhole;
- 
- 	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private + pfn_pmem_userdata
--	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline;
-+	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline + pfn_pmem_metadata;
- 
- 	REPORT_MSG("\n");
- 	REPORT_MSG("Original pages  : 0x%016llx\n", pfn_original);
-@@ -10434,6 +10612,7 @@ print_report(void)
- 	REPORT_MSG("    Free pages              : 0x%016llx\n", pfn_free);
- 	REPORT_MSG("    Hwpoison pages          : 0x%016llx\n", pfn_hwpoison);
- 	REPORT_MSG("    Offline pages           : 0x%016llx\n", pfn_offline);
-+	REPORT_MSG("    pmem metadata pages     : 0x%016llx\n", pfn_pmem_metadata);
- 	REPORT_MSG("    pmem userdata pages     : 0x%016llx\n", pfn_pmem_userdata);
- 	REPORT_MSG("  Remaining pages  : 0x%016llx\n",
- 	    pfn_original - pfn_excluded);
-@@ -10475,7 +10654,7 @@ print_mem_usage(void)
- 	pfn_original = info->max_mapnr - pfn_memhole;
- 
- 	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private + pfn_pmem_userdata
--	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline;
-+	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline + pfn_pmem_metadata;
- 	shrinking = (pfn_original - pfn_excluded) * 100;
- 	shrinking = shrinking / pfn_original;
- 	total_size = info->page_size * pfn_original;
-@@ -10768,6 +10947,8 @@ create_dumpfile(void)
- 		}
- 	}
- 
-+	inspect_pmem_namespace();
-+	dump_pmem_range();
- 	print_vtop();
- 
- 	num_retry = 0;
-@@ -12441,6 +12622,7 @@ out:
- 		}
- 	}
- 	free_elf_info();
-+	cleanup_pmem_metadata();
- 
- 	return retcd;
++static void acpi_tiny_power_button_remove(struct acpi_device *device)
++{
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
++		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
++						acpi_tiny_power_button_event);
++	} else {
++		acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
++					   acpi_tiny_power_button_notify);
++	}
++	acpi_os_wait_events_complete();
  }
-diff --git a/makedumpfile.h b/makedumpfile.h
-index 85e5a4932983..ecb2fb4d7a4c 100644
---- a/makedumpfile.h
-+++ b/makedumpfile.h
-@@ -206,7 +206,7 @@ test_bit(int nr, unsigned long addr)
-  * Dump Level
-  */
- #define MIN_DUMP_LEVEL		(0)
--#define MAX_DUMP_LEVEL		(31)
-+#define MAX_DUMP_LEVEL		(63)
- #define NUM_ARRAY_DUMP_LEVEL	(MAX_DUMP_LEVEL + 1) /* enough to allocate
- 							all the dump_level */
- #define DL_EXCLUDE_ZERO		(0x001) /* Exclude Pages filled with Zeros */
-@@ -216,6 +216,7 @@ test_bit(int nr, unsigned long addr)
- 				           with Private Pages */
- #define DL_EXCLUDE_USER_DATA	(0x008) /* Exclude UserProcessData Pages */
- #define DL_EXCLUDE_FREE		(0x010)	/* Exclude Free Pages */
-+#define DL_EXCLUDE_PMEM_META   (0x020) /* Exclude pmem metadata Pages */
  
+ static struct acpi_driver acpi_tiny_power_button_driver = {
+@@ -38,9 +72,8 @@ static struct acpi_driver acpi_tiny_powe
+ 	.class = "tiny-power-button",
+ 	.ids = tiny_power_button_device_ids,
+ 	.ops = {
+-		.add = acpi_noop_add,
+-		.remove = acpi_noop_remove,
+-		.notify = acpi_tiny_power_button_notify,
++		.add = acpi_tiny_power_button_add,
++		.remove = acpi_tiny_power_button_remove,
+ 	},
+ };
  
- /*
--- 
-2.29.2
+Index: linux-pm/drivers/acpi/button.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/button.c
++++ linux-pm/drivers/acpi/button.c
+@@ -135,7 +135,6 @@ static const struct dmi_system_id dmi_li
+ 
+ static int acpi_button_add(struct acpi_device *device);
+ static void acpi_button_remove(struct acpi_device *device);
+-static void acpi_button_notify(struct acpi_device *device, u32 event);
+ 
+ #ifdef CONFIG_PM_SLEEP
+ static int acpi_button_suspend(struct device *dev);
+@@ -153,7 +152,6 @@ static struct acpi_driver acpi_button_dr
+ 	.ops = {
+ 		.add = acpi_button_add,
+ 		.remove = acpi_button_remove,
+-		.notify = acpi_button_notify,
+ 	},
+ 	.drv.pm = &acpi_button_pm,
+ };
+@@ -409,15 +407,13 @@ static void acpi_lid_initialize_state(st
+ 	button->lid_state_initialized = true;
+ }
+ 
+-static void acpi_button_notify(struct acpi_device *device, u32 event)
++static void acpi_button_notify(acpi_handle handle, u32 event, void *data)
+ {
++	struct acpi_device *device = data;
+ 	struct acpi_button *button = acpi_driver_data(device);
+ 	struct input_dev *input;
+ 
+ 	switch (event) {
+-	case ACPI_FIXED_HARDWARE_EVENT:
+-		event = ACPI_BUTTON_NOTIFY_STATUS;
+-		fallthrough;
+ 	case ACPI_BUTTON_NOTIFY_STATUS:
+ 		input = button->input;
+ 		if (button->type == ACPI_BUTTON_TYPE_LID) {
+@@ -450,6 +446,17 @@ static void acpi_button_notify(struct ac
+ 	}
+ }
+ 
++static void acpi_button_notify_run(void *data)
++{
++	acpi_button_notify(NULL, ACPI_BUTTON_NOTIFY_STATUS, data);
++}
++
++static u32 acpi_button_event(void *data)
++{
++	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_button_notify_run, data);
++	return ACPI_INTERRUPT_HANDLED;
++}
++
+ #ifdef CONFIG_PM_SLEEP
+ static int acpi_button_suspend(struct device *dev)
+ {
+@@ -492,6 +499,7 @@ static int acpi_button_add(struct acpi_d
+ 	struct acpi_button *button;
+ 	struct input_dev *input;
+ 	const char *hid = acpi_device_hid(device);
++	acpi_status status;
+ 	char *name, *class;
+ 	int error;
+ 
+@@ -568,6 +576,26 @@ static int acpi_button_add(struct acpi_d
+ 	error = input_register_device(input);
+ 	if (error)
+ 		goto err_remove_fs;
++
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
++		status = acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
++							  acpi_button_event,
++							  device);
++	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
++		status = acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
++							  acpi_button_event,
++							  device);
++	} else {
++		status = acpi_install_notify_handler(device->handle,
++						     ACPI_DEVICE_NOTIFY,
++						     acpi_button_notify,
++						     device);
++	}
++	if (ACPI_FAILURE(status)) {
++		error = -ENODEV;
++		goto err_input_unregister;
++	}
++
+ 	if (button->type == ACPI_BUTTON_TYPE_LID) {
+ 		/*
+ 		 * This assumes there's only one lid device, or if there are
+@@ -580,11 +608,13 @@ static int acpi_button_add(struct acpi_d
+ 	pr_info("%s [%s]\n", name, acpi_device_bid(device));
+ 	return 0;
+ 
+- err_remove_fs:
++err_input_unregister:
++	input_unregister_device(input);
++err_remove_fs:
+ 	acpi_button_remove_fs(device);
+- err_free_input:
++err_free_input:
+ 	input_free_device(input);
+- err_free_button:
++err_free_button:
+ 	kfree(button);
+ 	return error;
+ }
+@@ -593,6 +623,18 @@ static void acpi_button_remove(struct ac
+ {
+ 	struct acpi_button *button = acpi_driver_data(device);
+ 
++	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
++		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
++						acpi_button_event);
++	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
++		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
++						acpi_button_event);
++	} else {
++		acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
++					   acpi_button_notify);
++	}
++	acpi_os_wait_events_complete();
++
+ 	acpi_button_remove_fs(device);
+ 	input_unregister_device(button->input);
+ 	kfree(button);
+Index: linux-pm/drivers/acpi/bus.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/bus.c
++++ linux-pm/drivers/acpi/bus.c
+@@ -530,65 +530,30 @@ static void acpi_notify_device(acpi_hand
+ 	acpi_drv->ops.notify(device, event);
+ }
+ 
+-static void acpi_notify_device_fixed(void *data)
+-{
+-	struct acpi_device *device = data;
+-
+-	/* Fixed hardware devices have no handles */
+-	acpi_notify_device(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
+-}
+-
+-static u32 acpi_device_fixed_event(void *data)
+-{
+-	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_notify_device_fixed, data);
+-	return ACPI_INTERRUPT_HANDLED;
+-}
+-
+ static int acpi_device_install_notify_handler(struct acpi_device *device,
+ 					      struct acpi_driver *acpi_drv)
+ {
+-	acpi_status status;
+-
+-	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+-		status =
+-		    acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+-						     acpi_device_fixed_event,
+-						     device);
+-	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+-		status =
+-		    acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+-						     acpi_device_fixed_event,
+-						     device);
+-	} else {
+-		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
++	u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
+ 				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
++	acpi_status status;
+ 
+-		status = acpi_install_notify_handler(device->handle, type,
+-						     acpi_notify_device,
+-						     device);
+-	}
+-
++	status = acpi_install_notify_handler(device->handle, type,
++					     acpi_notify_device, device);
+ 	if (ACPI_FAILURE(status))
+ 		return -EINVAL;
++
+ 	return 0;
+ }
+ 
+ static void acpi_device_remove_notify_handler(struct acpi_device *device,
+ 					      struct acpi_driver *acpi_drv)
+ {
+-	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
+-		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+-						acpi_device_fixed_event);
+-	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
+-		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+-						acpi_device_fixed_event);
+-	} else {
+-		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
++	u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
+ 				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
+ 
+-		acpi_remove_notify_handler(device->handle, type,
+-					   acpi_notify_device);
+-	}
++	acpi_remove_notify_handler(device->handle, type,
++				   acpi_notify_device);
++
+ 	acpi_os_wait_events_complete();
+ }
+ 
+
+
 
 
