@@ -1,44 +1,68 @@
-Return-Path: <nvdimm+bounces-6206-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6209-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EB0A73848A
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 15:11:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E615738A1D
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 17:50:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DE9C280ED4
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 13:11:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D02831C20E5A
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 15:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A9C6171AF;
-	Wed, 21 Jun 2023 13:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E3D19539;
+	Wed, 21 Jun 2023 15:50:40 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9222713AEA
-	for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 13:11:37 +0000 (UTC)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QmP5p4chRz4f4DjN
-	for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 21:11:26 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3rLD79pJknOjSMA--.61999S4;
-	Wed, 21 Jun 2023 21:11:25 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@infradead.org>
-Cc: linux-block@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	virtualization@lists.linux-foundation.org,
-	Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH v2] virtio_pmem: add the missing REQ_OP_WRITE for flush bio
-Date: Wed, 21 Jun 2023 21:43:40 +0800
-Message-Id: <20230621134340.878461-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <ZJLpYMC8FgtZ0k2k@infradead.org>
-References: <ZJLpYMC8FgtZ0k2k@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4D218C2E
+	for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 15:50:37 +0000 (UTC)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LFSPb1019257;
+	Wed, 21 Jun 2023 15:50:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ApW7QKwFmZ2+/cQsgFVRC7YnEf5TnKE2evhfKwNIank=;
+ b=HNj76NOwhQFfFuLuc+Ek7NohLDHBv9zdkcRqClBwApizJ4vSR9YalXz6MfSnVgU6RbgI
+ K5ds4dlS1+bHWr6HIMnYiArTd08DZ9hsMX29GI3ZEd4jUn5PtkcvmTkrN8pHbOQSUj1E
+ Z2G1ZKWTzvaJPYbOHVodWnNklvUIGJJ5IskH7BZciqr7ixenFNy+qWEBsnp+NO+/zY+7
+ GqpX/65iIE4P+7yPqOxHnkPttsI8bO9xbt0obZpa16kWmWf4LSs5m9xH8m2bpm+3vijy
+ oxH/WiYA6ZPMUnW8KrvUMTTj/udIKin0zsZQTXK/NiSGRykeTxzY6k5zIPYHXZkOdWDB Kw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rc3vn0ta8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Jun 2023 15:50:36 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+	by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35L97h1X017775;
+	Wed, 21 Jun 2023 15:50:34 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3r94f5a578-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Jun 2023 15:50:34 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35LFoUQ021496404
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 Jun 2023 15:50:30 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 89DD42004B;
+	Wed, 21 Jun 2023 15:50:30 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0FA5720040;
+	Wed, 21 Jun 2023 15:50:28 +0000 (GMT)
+Received: from tarunpc.ibmuc.com (unknown [9.43.112.18])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 21 Jun 2023 15:50:27 +0000 (GMT)
+From: Tarun Sahu <tsahu@linux.ibm.com>
+To: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, dave.jiang@intel.com,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        aneesh.kumar@linux.ibm.com, jaypatel@linux.ibm.com,
+        tsahu@linux.ibm.com
+Subject: [PATCH v3] dax/kmem: Pass valid argument to memory_group_register_static
+Date: Wed, 21 Jun 2023 21:20:25 +0530
+Message-Id: <20230621155025.370672-1-tsahu@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -46,93 +70,87 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3rLD79pJknOjSMA--.61999S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF48Ar1DXrWUKw18AF15CFg_yoW5Jw17pr
-	90kay3tr4UGF4fuanrta12gFyfX3WDGrZrKFWfuw1xAFZrAF1DKw1DWa4Fga4UCry8Gay7
-	JFykJw1jqryDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6r
-	W3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-	cSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tV9BvsWNFqM54FmnW5_1TUU7WqWGftns
+X-Proofpoint-ORIG-GUID: tV9BvsWNFqM54FmnW5_1TUU7WqWGftns
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 clxscore=1015 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210131
 
-From: Hou Tao <houtao1@huawei.com>
+memory_group_register_static takes maximum number of pages as the argument
+while dev_dax_kmem_probe passes total_len (in bytes) as the argument.
 
-The following warning was reported when doing fsync on a pmem device:
+IIUC, I don't see any crash/panic impact as such. As,
+memory_group_register_static just set the max_pages limit which is used in
+auto_movable_zone_for_pfn to determine the zone.
 
- ------------[ cut here ]------------
- WARNING: CPU: 2 PID: 384 at block/blk-core.c:751 submit_bio_noacct+0x340/0x520
- Modules linked in:
- CPU: 2 PID: 384 Comm: mkfs.xfs Not tainted 6.4.0-rc7+ #154
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
- RIP: 0010:submit_bio_noacct+0x340/0x520
- ......
- Call Trace:
-  <TASK>
-  ? asm_exc_invalid_op+0x1b/0x20
-  ? submit_bio_noacct+0x340/0x520
-  ? submit_bio_noacct+0xd5/0x520
-  submit_bio+0x37/0x60
-  async_pmem_flush+0x79/0xa0
-  nvdimm_flush+0x17/0x40
-  pmem_submit_bio+0x370/0x390
-  __submit_bio+0xbc/0x190
-  submit_bio_noacct_nocheck+0x14d/0x370
-  submit_bio_noacct+0x1ef/0x520
-  submit_bio+0x55/0x60
-  submit_bio_wait+0x5a/0xc0
-  blkdev_issue_flush+0x44/0x60
+which might cause these condition to behave differently,
 
-The root cause is that submit_bio_noacct() needs bio_op() is either
-WRITE or ZONE_APPEND for flush bio and async_pmem_flush() doesn't assign
-REQ_OP_WRITE when allocating flush bio, so submit_bio_noacct just fail
-the flush bio.
+This will be true always so jump will happen to kernel_zone
+    ...
+    if (!auto_movable_can_online_movable(NUMA_NO_NODE, group, nr_pages))
+        goto kernel_zone;
 
-Simply fix it by adding the missing REQ_OP_WRITE for flush bio. And we
-could fix the flush order issue and do flush optimization later.
+    ...
+    kernel_zone:
+        return default_kernel_zone_for_pfn(nid, pfn, nr_pages);
 
-Fixes: b4a6bb3a67aa ("block: add a sanity check for non-write flush/fua bios")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+Here, In below, zone_intersects compare range will be larger as nr_pages
+will be higher (derived from total_len passed in dev_dax_kmem_probe).
+
+    ...
+    static struct zone *default_kernel_zone_for_pfn(int nid, unsigned long start_pfn,
+    		unsigned long nr_pages)
+    {
+    	struct pglist_data *pgdat = NODE_DATA(nid);
+    	int zid;
+
+    	for (zid = 0; zid < ZONE_NORMAL; zid++) {
+    		struct zone *zone = &pgdat->node_zones[zid];
+
+    		if (zone_intersects(zone, start_pfn, nr_pages))
+    			return zone;
+    	}
+
+    	return &pgdat->node_zones[ZONE_NORMAL];
+    }
+
+Incorrect zone will be returned here, which in later time might cause bigger
+problem.
+
+Fixes: eedf634aac3b ("dax/kmem: use a single static memory group for a single probed unit")
+Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
-v2:
-  * do a minimal fix first (Suggested by Christoph)
-v1: https://lore.kernel.org/linux-block/ZJLpYMC8FgtZ0k2k@infradead.org/T/#t
+V3<-V2
+1. Removed skip characters.
 
-Hi Jens & Dan,
+V2<-V1
+1. Added more details to commit message
 
-I found Pankaj was working on the fix and optimization of virtio-pmem
-flush bio [0], but considering the last status update was 1/12/2022, so
-could you please pick the patch up for v6.4 and we can do the flush fix
-and optimization later ?
 
-[0]: https://lore.kernel.org/lkml/20220111161937.56272-1-pankaj.gupta.linux@gmail.com/T/
-
- drivers/nvdimm/nd_virtio.c | 2 +-
+ drivers/dax/kmem.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
-index c6a648fd8744..97098099f8a3 100644
---- a/drivers/nvdimm/nd_virtio.c
-+++ b/drivers/nvdimm/nd_virtio.c
-@@ -105,7 +105,7 @@ int async_pmem_flush(struct nd_region *nd_region, struct bio *bio)
- 	 * parent bio. Otherwise directly call nd_region flush.
- 	 */
- 	if (bio && bio->bi_iter.bi_sector != -1) {
--		struct bio *child = bio_alloc(bio->bi_bdev, 0, REQ_PREFLUSH,
-+		struct bio *child = bio_alloc(bio->bi_bdev, 0, REQ_OP_WRITE | REQ_PREFLUSH,
- 					      GFP_ATOMIC);
+diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+index 7b36db6f1cbd..898ca9505754 100644
+--- a/drivers/dax/kmem.c
++++ b/drivers/dax/kmem.c
+@@ -99,7 +99,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+ 	if (!data->res_name)
+ 		goto err_res_name;
  
- 		if (!child)
+-	rc = memory_group_register_static(numa_node, total_len);
++	rc = memory_group_register_static(numa_node, PFN_UP(total_len));
+ 	if (rc < 0)
+ 		goto err_reg_mgid;
+ 	data->mgid = rc;
 -- 
-2.29.2
+2.31.1
 
 
