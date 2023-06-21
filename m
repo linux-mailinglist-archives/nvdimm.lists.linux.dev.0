@@ -1,115 +1,60 @@
-Return-Path: <nvdimm+bounces-6205-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6207-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D1C738454
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 15:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7896B7384A2
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 15:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8987D1C20E82
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 13:03:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52D3F1C20D2B
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jun 2023 13:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EAB168AA;
-	Wed, 21 Jun 2023 13:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7483171CD;
+	Wed, 21 Jun 2023 13:15:46 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD3813AEA
-	for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 13:02:59 +0000 (UTC)
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so6751557f8f.2
-        for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 06:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687352578; x=1689944578;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1snc3z/xTJ1VfTgS+xUuvVWJtWsmykCdplUwtlGRSE=;
-        b=Lv4pPl5dm1tsCSiRwC/EEKizLn2tjonFfrmr7Oafj5RDquW7/Ldy5JXUJ8F0yhXkc1
-         0ci9gANBVnN3QjvRMNMK9oBQ/9ET93rXCqnGxOmfxpUbEcicRtPwyOJ3wQ/wdSb6gIBQ
-         VIZykLT714hMtjOr9RyqgpNHJw7xxpKzoL+oWLgPXcewKCg9e3Oz5cFWQ8X/CbUWVoKW
-         A3T9SK5CRgsPQe1H5O7agHVTpp9ajp/9calCpm8iEXyCJdXOaGPhQh03ma1uaQ8E65jo
-         nyyj9jZlBiIFuaegbONQDlVBg7UK/ZAMu0rXnzJY0Et/1eYjgw3Ur6ejQZbF1B68NfKk
-         aYHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687352578; x=1689944578;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p1snc3z/xTJ1VfTgS+xUuvVWJtWsmykCdplUwtlGRSE=;
-        b=OAYZc1s6Gt76HucTPNjG0DUI2SRBMEZMtbsoWSlXVPHpMdj6T0st0DE0reOpwGa3us
-         WFPBkadaxKXjw2Ki0ISBXsMre+Qb1Bw+4RynFLlJPyLBcm4/uRqm5eBH9ii10XA6zTT0
-         k9A/0IepEVnsyE+RWozOBIsVHpNz9wl4cTd2tuAUuYfV3+Za1Uq1UM3QIn+/zoF71X95
-         GrXqggdPYoCTnFZYDnc0NVG9A2mTDAxthoysJecIv2Cg296WS0YMhTND/1UM8C3PyuuH
-         NaIYFpOTcPg54pucmcUMwfAF0CBZW+thFHtJNPBQPTreoaSXuwVVViWA1RC0n4Yv/Hw4
-         zNDA==
-X-Gm-Message-State: AC+VfDwgKrvAsHqzIPvGOMtjKXH98Xs19a12nqT/6UurmPOwvQSSegFn
-	mE4E8/7p5mnjm6ze4PzNXdE=
-X-Google-Smtp-Source: ACHHUZ5rBNQwgTcud7BCqacDwmxN/UgQThg2UpRWHJDkiKd0tH6NmS6ySa/0h+ZN+TOtXqP9XTNOpw==
-X-Received: by 2002:adf:f30b:0:b0:311:1390:7b55 with SMTP id i11-20020adff30b000000b0031113907b55mr14800141wro.68.1687352577531;
-        Wed, 21 Jun 2023 06:02:57 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w18-20020a5d6812000000b0030ae69920c9sm4413853wru.53.2023.06.21.06.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:02:56 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	nvdimm@lists.linux.dev
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] fsdax: remove redundant variable 'error'
-Date: Wed, 21 Jun 2023 14:02:56 +0100
-Message-Id: <20230621130256.2676126-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570C511CA1
+	for <nvdimm@lists.linux.dev>; Wed, 21 Jun 2023 13:15:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7KtYi3eep9XbX588SNTMn5wloXG6pscuzpNL2Pfc/eI=; b=NpVRqyd25XnP+LIMi0RBCfaMb1
+	C979QWJcaCpZ9oWDTPhnKiGBGmXmF80gnUoRdljpTV8/TiFMlIG/oCiDKnRc9ylgniKn1TocD54UV
+	Wa7Tsq+j99vPRMp2Cpymkun14uEMRTUyR9m5oRV8TYopVNzdwjke0kXM/0FEZRsK4wrkhNKEmw+fh
+	Wfhqrx1rgIiieFhpa+rqJkCqifgpvAyWMjPFvAMv3U0MOQaXAJJs6SABcM8lJXIMViHkXKyZetFXS
+	tjxIlwBNGdlbJAGIoAOPWHsteifabiK47EeBRM1I1nHsLnCbHQ1WpHp6pF7hL6kBNIIoV+MV6sp7M
+	MfcL0fnw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qBxgO-00EeS1-3C;
+	Wed, 21 Jun 2023 13:15:36 +0000
+Date: Wed, 21 Jun 2023 06:15:36 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: Dan Williams <dan.j.williams@intel.com>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@infradead.org>, linux-block@vger.kernel.org,
+	nvdimm@lists.linux.dev, virtualization@lists.linux-foundation.org,
+	Pankaj Gupta <pankaj.gupta.linux@gmail.com>, houtao1@huawei.com
+Subject: Re: [PATCH v2] virtio_pmem: add the missing REQ_OP_WRITE for flush
+ bio
+Message-ID: <ZJL3+E5P+Yw5jDKy@infradead.org>
+References: <ZJLpYMC8FgtZ0k2k@infradead.org>
+ <20230621134340.878461-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621134340.878461-1-houtao@huaweicloud.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-The variable 'error' is being assigned a value that is never read,
-the assignment and the variable and redundant and can be removed.
-Cleans up clang scan build warning:
-
-fs/dax.c:1880:10: warning: Although the value stored to 'error' is
-used in the enclosing expression, the value is never actually read
-from 'error' [deadcode.DeadStores]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/dax.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/fs/dax.c b/fs/dax.c
-index 2ababb89918d..cb36c6746fc4 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -1830,7 +1830,6 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 	vm_fault_t ret = VM_FAULT_FALLBACK;
- 	pgoff_t max_pgoff;
- 	void *entry;
--	int error;
- 
- 	if (vmf->flags & FAULT_FLAG_WRITE)
- 		iter.flags |= IOMAP_WRITE;
-@@ -1877,7 +1876,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 	}
- 
- 	iter.pos = (loff_t)xas.xa_index << PAGE_SHIFT;
--	while ((error = iomap_iter(&iter, ops)) > 0) {
-+	while (iomap_iter(&iter, ops) > 0) {
- 		if (iomap_length(&iter) < PMD_SIZE)
- 			continue; /* actually breaks out of the loop */
- 
--- 
-2.39.2
+Please avoid the overly long line.  With that fixe this looks good
+to me.
 
 
