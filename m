@@ -1,60 +1,60 @@
-Return-Path: <nvdimm+bounces-6326-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6324-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E6F674E7C3
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jul 2023 09:16:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA72174E7BB
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jul 2023 09:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFB931C20CAF
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jul 2023 07:16:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EF05281586
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 11 Jul 2023 07:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64305171D2;
-	Tue, 11 Jul 2023 07:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5946171D1;
+	Tue, 11 Jul 2023 07:14:12 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAAF171BB
-	for <nvdimm@lists.linux.dev>; Tue, 11 Jul 2023 07:16:35 +0000 (UTC)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230711070800epoutp047397d3c59ac19d757a53f553b8c0224b~wvnduQuxj1165111651epoutp04P
-	for <nvdimm@lists.linux.dev>; Tue, 11 Jul 2023 07:08:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230711070800epoutp047397d3c59ac19d757a53f553b8c0224b~wvnduQuxj1165111651epoutp04P
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC77171BB
+	for <nvdimm@lists.linux.dev>; Tue, 11 Jul 2023 07:14:09 +0000 (UTC)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230711070812epoutp0120660e1e4301ec23efc2cb4c33092146~wvnpFb53I1546315463epoutp01Q
+	for <nvdimm@lists.linux.dev>; Tue, 11 Jul 2023 07:08:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230711070812epoutp0120660e1e4301ec23efc2cb4c33092146~wvnpFb53I1546315463epoutp01Q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1689059280;
-	bh=jmfrpSvGrQEfRxZn49TEj1fGT89kP9nwXGc2KktOdng=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=tM8kX3vxQ5NEY3uXoG5KtZo1dcilN3slx5CTTwIZ0qgPbTF0+odndtxO2p46hlKIX
-	 zLiiL6OXylTXeYKLSReUfokWxWw1g0UBvnk5FPb1n6YS2ZgUJF1djRGcJ6UwLihVnL
-	 S1UUxpkqCap42NvCDdY3mLG7Q/mH0t9+7PJJe/eQ=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	s=mail20170921; t=1689059292;
+	bh=hWWV/CYz9PEFgUzb2vw2IElLf62KvNvLaJjeuRHOgIc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ERYs2aGvSdh7qulv7rV4OT+pf4J+jNLIq2UMOSUGl4WG92tkC7lH0u3D64yxgHWoZ
+	 u/uKfNgVSYF2+SaRcSuF4WUHD0n0akeFNJtDfoA5H5iwjzGvjDsGr37Xqu0x5m2/OZ
+	 rGmPuwBs/BpR1CaLAYFNUpt+K49S3SiY+EZLvcuo=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
 	epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-	20230711070759epcas2p3d65eb95de2e0576ba5eb6a7e39b7791e~wvndIgXZJ2574425744epcas2p3W;
-	Tue, 11 Jul 2023 07:07:59 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4R0X5C1l1Fz4x9QD; Tue, 11 Jul
-	2023 07:07:59 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+	20230711070812epcas2p3d765feeb1bdfd5947fd2c4de4412f130~wvnokpyUf2574425744epcas2p37;
+	Tue, 11 Jul 2023 07:08:12 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.99]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4R0X5N4Y4jz4x9Q1; Tue, 11 Jul
+	2023 07:08:08 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
 	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	25.E8.40133.ECFFCA46; Tue, 11 Jul 2023 16:07:58 +0900 (KST)
+	94.F8.40133.8DFFCA46; Tue, 11 Jul 2023 16:08:08 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20230711070758epcas2p4111d4413d669a8ef6dc8862a0f4835b9~wvnbs3dtX2093020930epcas2p4V;
-	Tue, 11 Jul 2023 07:07:58 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20230711070808epcas2p327adc8a7b29b653af17244d49eb38318~wvnk4mryt2804428044epcas2p3g;
+	Tue, 11 Jul 2023 07:08:08 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
 	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20230711070758epsmtrp1d0716f7e0904fd6557f422da4f8bc533~wvnbsF_xP2534725347epsmtrp1r;
-	Tue, 11 Jul 2023 07:07:58 +0000 (GMT)
-X-AuditID: b6c32a46-4edb870000009cc5-cc-64acffce252d
+	20230711070808epsmtrp1cb14709a3f3fd3530a0a6b7bf23edd70~wvnk2KJxz2535025350epsmtrp16;
+	Tue, 11 Jul 2023 07:08:08 +0000 (GMT)
+X-AuditID: b6c32a46-4edb870000009cc5-ea-64acffd8cb9e
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A5.B8.64355.ECFFCA46; Tue, 11 Jul 2023 16:07:58 +0900 (KST)
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D9.D3.30535.7DFFCA46; Tue, 11 Jul 2023 16:08:07 +0900 (KST)
 Received: from jehoon-Precision-7920-Tower.dsn.sec.samsung.com (unknown
 	[10.229.83.133]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20230711070758epsmtip120acf226bbe70c294dad113d4644fa95~wvnbfu3EV1608916089epsmtip1n;
-	Tue, 11 Jul 2023 07:07:58 +0000 (GMT)
+	20230711070807epsmtip10e7e1fac12adad48df1945062f854d44~wvnknuVDU1618416184epsmtip12;
+	Tue, 11 Jul 2023 07:08:07 +0000 (GMT)
 From: Jehoon Park <jehoon.park@samsung.com>
 To: linux-cxl@vger.kernel.org
 Cc: nvdimm@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>,
@@ -62,112 +62,184 @@ Cc: nvdimm@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>,
 	Ben Widawsky <bwidawsk@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
 	Dave Jiang <dave.jiang@intel.com>, Kyungsan Kim <ks0204.kim@samsung.com>,
 	Junhyeok Im <junhyeok.im@samsung.com>, Jehoon Park <jehoon.park@samsung.com>
-Subject: [ndctl PATCH 0/2] add support for Set Alert Configuration mailbox
- command
-Date: Tue, 11 Jul 2023 16:10:17 +0900
-Message-Id: <20230711071019.7151-1-jehoon.park@samsung.com>
+Subject: [ndctl PATCH 1/2] libcxl: add support for Set Alert Configuration
+ mailbox command
+Date: Tue, 11 Jul 2023 16:10:18 +0900
+Message-Id: <20230711071019.7151-2-jehoon.park@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmqe65/2tSDCat07W4+/gCm0Xz5MWM
+In-Reply-To: <20230711071019.7151-1-jehoon.park@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHKsWRmVeSWpSXmKPExsWy7bCmme6N/2tSDNZfU7S4+/gCm0Xz5MWM
 	FtOnXmC0OHGzkc1i/9PnLBYHXjewWyw+OoPZ4ugeDovzs06xWKz88YfV4taEY0wO3B6L97xk
 	8ti0qpPN48XmmYwefVtWMXp83iQXwBqVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGto
 	aWGupJCXmJtqq+TiE6DrlpkDdJmSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8C8
-	QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj0uVW9oKlwhULW2axNTB+4+ti5OSQEDCRWNO8mxHE
-	FhLYwSix6EFmFyMXkP2JUeL8rndMcM6RexsZYTomLnvDApHYyShxdeZ6Vginl0lia9sMVpAq
-	NgFtifvbN7CB2CICshLN6x6AjWIWaGCWeLfqKlCCg0NYIESi4X4WiMkioCqx+7YGSDmvgLVE
-	N9RJEgLyEqs3HGAGaZUQOMYucfDjDGaIhIvE1LblLBC2sMSr41vYIWwpiZf9bVB2vsTPk7dY
-	IewCiU9fPkDVG0u8u/mcFWQvs4CmxPpd+iCmhICyxJFbYBXMAnwSHYf/skOEeSU62oQgGlUl
-	uo5/gLpMWuLwlaPMECUeEpdbjCFhGCuxaW0b0wRG2VkI4xcwMq5iFEstKM5NTy02KjCCx1By
-	fu4mRnBK03LbwTjl7Qe9Q4xMHIyHGCU4mJVEeAsOrkoR4k1JrKxKLcqPLyrNSS0+xGgKDKyJ
-	zFKiyfnApJpXEm9oYmlgYmZmaG5kamCuJM57r3VuipBAemJJanZqakFqEUwfEwenVAPThIrz
-	tz8sC+G8+YFbQb0gweq26Mu5NnKPF767+7Q7j/PE7M6+Tq13934zXWQxNG7+bMc1+beFqco0
-	FfWklR5nOHf0b2o4axeyPDdR9MW9VQ3uzd5H390KVVmiksWlVmgbpTq/a2/BaoWbzv5LPYQd
-	GO54/FzWtmfx5FMXPxYuWhs9dwHfx/qDtf3ht54sX7Sx07MqzL3ZJOSKz9sF79e9FWp4cnPB
-	+iJLDpe98+xWJf8rz2Vxe7AoZcFLqZXN1gpTd2TPMGJ20ljgqf+tu+/yWrtVOxpTU+u3e7CK
-	aqdonj7BuMfalMFHZtrnigl10z6yvXb/w/RKxD5AvXpTs27JprXlvpGzF4dMd9l35ehsJZbi
-	jERDLeai4kQAvJPHLPIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjluLIzCtJLcpLzFFi42LZdlhJTvfc/zUpBhfuclncfXyBzaJ58mJG
-	i+lTLzBanLjZyGax/+lzFosDrxvYLRYfncFscXQPh8X5WadYLFb++MNqcWvCMSYHbo/Fe14y
-	eWxa1cnm8WLzTEaPvi2rGD0+b5ILYI3isklJzcksSy3St0vgyrh0uZW9YKlwxcKWWWwNjN/4
-	uhg5OSQETCQmLnvD0sXIxSEksJ1R4uqVDjaIhLTEveYr7BC2sMT9liOsEEXdTBI/rs5nAUmw
-	CWhL3N++AaxBREBWonndAyaQImaBLmaJg/t/gyWEBYIkPs9vA0pwcLAIqErsvq0BEuYVsJbo
-	bt7NCLFAXmL1hgPMExh5FjAyrGIUTS0ozk3PTS4w1CtOzC0uzUvXS87P3cQIDjKtoB2My9b/
-	1TvEyMTBeIhRgoNZSYS34OCqFCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8yjmdKUIC6Yklqdmp
-	qQWpRTBZJg5OqQYmheqPl19Ozfy5PUrJLoXJI/rLu1CtLVY/j5qJM7xju+lt8/7q6rjpj1a9
-	t7hb5Hl75W2zVYFN79u+TAzNrBBuv5v+l4NPMjX3WsWv94wPH+nzJG1S0l9zln2tKleieOcd
-	VjXNrEOz81cx8rFISC+7xXf76VmHd0L7JJSD+qVm8Hzf8jk+8JK/SLjx2q26e9byvX145kxj
-	4aOsP1n1TyO78vKt7qjJf3p2tHjetgM+ejWHjvB7y9nvjIqIkn10tyTdbtHlZUEXZO8f8+RY
-	esM7xNHU6vWtGaaJ86IvB7QnLTDROWanMy/6w+ZZ/K9yFGeFpJdG9boJhr1Z2NZo1cLPeHf7
-	m93X8v2lnbnrX9UqsRRnJBpqMRcVJwIADmEOcKECAAA=
-X-CMS-MailID: 20230711070758epcas2p4111d4413d669a8ef6dc8862a0f4835b9
+	QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj7zudggdaFee+HWBsYHyg3MXIySEhYCLx8UY3cxcj
+	F4eQwA5GifOvPrFDOJ8YJZZcmM8C4XxjlGh4v5INpqVr52UWEFtIYC+jxKNzhhBFvUwSu9Z/
+	ZwVJsAloS9zfvgGsQURAVqJ53QMmkCJmgQZmiXerroIlhAViJO6ueMYMYrMIqEo0znkENpVX
+	wFpi2s0lrBDb5CVWbzgAVsMpYCPxZM4ysJMkBB6xA933mxmiyEXi984pULawxKvjW9ghbCmJ
+	l/1tUHa+xM+Tt6CGFkh8+vKBBcI2lnh38zlQnAPoOk2J9bv0QUwJAWWJI7fAKpgF+CQ6Dv9l
+	hwjzSnS0CUE0qkp0Hf/ACGFLSxy+chTqAA+JW18PsUHCpJ9R4suXN6wTGOVmISxYwMi4ilEs
+	taA4Nz212KjACB5hyfm5mxjBCU/LbQfjlLcf9A4xMnEwHmKU4GBWEuEtOLgqRYg3JbGyKrUo
+	P76oNCe1+BCjKTDsJjJLiSbnA1NuXkm8oYmlgYmZmaG5kamBuZI4773WuSlCAumJJanZqakF
+	qUUwfUwcnFINTGXLJXZv6jiUN/d2bFuTFCurhlbYq87i1p3cpbfyORLsduzeMKtFsEOr13CH
+	HMcb9aVbt5yT/nnr3aaHtUslLpbd72TYuEpY8aDZ4/sV5Wuan+acLc+4k8sTNqfr9hqD1l/V
+	lbucs/z9P83adWzSMaOq9oj7ERYtyVwBpzVaLgc8ZjPb3etoI2t181jwj4NLjkh6/mL16Ll/
+	6uITsz4zM5aiyCR1WWm1FO74ux/Duhvtr6WYrmO5lpXwKWarSLbPw8gb3S5B5yTyG1evKJ0R
+	/E+tZu4uXR/txCR13veuG23r927ZWrwy2e7XkSuHN2WaHLlnU+r1zLJrU4OPQq3Yb53HwgkK
+	oane7foxMqeVWIozEg21mIuKEwGvf4lZAQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFLMWRmVeSWpSXmKPExsWy7bCSnO71/2tSDF7vt7a4+/gCm0Xz5MWM
+	FtOnXmC0OHGzkc1i/9PnLBYHXjewWyw+OoPZ4ugeDovzs06xWKz88YfV4taEY0wO3B6L97xk
+	8ti0qpPN48XmmYwefVtWMXp83iQXwBrFZZOSmpNZllqkb5fAlfH3nU7BA62Kc98OMDYwPlDu
+	YuTkkBAwkejaeZmli5GLQ0hgN6PEvl0rmCAS0hL3mq+wQ9jCEvdbjrBCFHUzSdz80cwCkmAT
+	0Ja4v30DG4gtIiAr0bzuARNIEbNAF7PEwf2/wRLCAlESiyZ/BJvEIqAq0TjnEVgzr4C1xLSb
+	S1ghNshLrN5wgBnE5hSwkXgyZxlYjRBQzZUTF1gmMPItYGRYxSiZWlCcm55bbFhglJdarlec
+	mFtcmpeul5yfu4kRHJxaWjsY96z6oHeIkYmD8RCjBAezkghvwcFVKUK8KYmVValF+fFFpTmp
+	xYcYpTlYlMR5v73uTRESSE8sSc1OTS1ILYLJMnFwSjUwZXsrH2ta+Llz6STepYF9TupaXt0v
+	fvv+OH3x+PNpfhEJR4pey+ys3PVw5sfr084f/PBo1o9q6RctT467m0yKsJ/wv6flfVeC/fO7
+	UwNVFk58fNOtXtNamud6Y+OOlukzO++3G2tYMU/lXGf48b+7nY70hz8d6147c039OD1kxXyD
+	dyc0fsRmsrC012sVRuvUdnQqlC3pS5XM1b4gMsFn7fETS29fLTsUMXWzgkhC5/81e7bpdm6d
+	ntomZH49wWr9qY5bBha6i7TzZkfoZp86rrn2CfuHpKk9qj2C9tWlU0y2SFmbRTDUF7dLLWj/
+	uKWUr/LeGbU1ajrqn/JMkvzjPP7zqSWzxot/u2IYEH5AiaU4I9FQi7moOBEA7QGPyr0CAAA=
+X-CMS-MailID: 20230711070808epcas2p327adc8a7b29b653af17244d49eb38318
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230711070758epcas2p4111d4413d669a8ef6dc8862a0f4835b9
-References: <CGME20230711070758epcas2p4111d4413d669a8ef6dc8862a0f4835b9@epcas2p4.samsung.com>
+X-CMS-RootMailID: 20230711070808epcas2p327adc8a7b29b653af17244d49eb38318
+References: <20230711071019.7151-1-jehoon.park@samsung.com>
+	<CGME20230711070808epcas2p327adc8a7b29b653af17244d49eb38318@epcas2p3.samsung.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 
-CXL 3.0 Spec 8.2.9.8.3.3 defines Set Alert Configuration mailbox command.
-This patchset adds support for the command to configure warning alert.
+CXL 3.0 Spec 8.2.9.8.3.3 defines Set Alert Configuration mailbox command which
+allows a CXL host to configure programmable warning thresholds optionally.
 
-Example:
-# ./cxl set-alert-config mem0 -L 30 --life-used-alert=on
-{
-  "memdev":"mem0",
-  "ram_size":"1024.00 MiB (1073.74 MB)",
-  "alert_config":{
-    "life_used_prog_warn_threshold_valid":true,
-    "dev_over_temperature_prog_warn_threshold_valid":false,
-    "dev_under_temperature_prog_warn_threshold_valid":false,
-    "corrected_volatile_mem_err_prog_warn_threshold_valid":false,
-    "corrected_pmem_err_prog_warn_threshold_valid":false,
-    "life_used_prog_warn_threshold_writable":true,
-    "dev_over_temperature_prog_warn_threshold_writable":true,
-    "dev_under_temperature_prog_warn_threshold_writable":true,
-    "corrected_volatile_mem_err_prog_warn_threshold_writable":true,
-    "corrected_pmem_err_prog_warn_threshold_writable":true,
-    "life_used_crit_alert_threshold":75,
-    "life_used_prog_warn_threshold":30,
-    "dev_over_temperature_crit_alert_threshold":0,
-    "dev_under_temperature_crit_alert_threshold":0,
-    "dev_over_temperature_prog_warn_threshold":0,
-    "dev_under_temperature_prog_warn_threshold":0,
-    "corrected_volatile_mem_err_prog_warn_threshold":0,
-    "corrected_pmem_err_prog_warn_threshold":0
-  },
-  "serial":"0",
-  "host":"0000:0d:00.0"
-}
-cxl memdev: cmd_set_alert_config: set alert configuration 1 mem
+Add methods to issue the command and set fields.
 
-The implementation is based on the 'ndctl-inject-smart'. Variable and function
-names are aligned with the implementation of 'Get Alert Configuration'.
+Signed-off-by: Jehoon Park <jehoon.park@samsung.com>
+---
+ Documentation/cxl/lib/libcxl.txt |  1 +
+ cxl/lib/libcxl.c                 | 21 +++++++++++++++++++++
+ cxl/lib/libcxl.sym               | 12 ++++++++++++
+ cxl/lib/private.h                | 12 ++++++++++++
+ cxl/libcxl.h                     | 16 ++++++++++++++++
+ 5 files changed, 62 insertions(+)
 
-Jehoon Park (2):
-  libcxl: add support for Set Alert Configuration mailbox command
-  cxl: add 'set-alert-config' command to cxl tool
-
- Documentation/cxl/cxl-set-alert-config.txt |  96 +++++++++
- Documentation/cxl/lib/libcxl.txt           |   1 +
- Documentation/cxl/meson.build              |   1 +
- cxl/builtin.h                              |   1 +
- cxl/cxl.c                                  |   1 +
- cxl/lib/libcxl.c                           |  21 ++
- cxl/lib/libcxl.sym                         |  12 ++
- cxl/lib/private.h                          |  12 ++
- cxl/libcxl.h                               |  16 ++
- cxl/memdev.c                               | 219 ++++++++++++++++++++-
- 10 files changed, 379 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/cxl/cxl-set-alert-config.txt
-
-
-base-commit: 7f75ce36ce3a0d41ed74d4e2dfcfd41a6fd7fe40
+diff --git a/Documentation/cxl/lib/libcxl.txt b/Documentation/cxl/lib/libcxl.txt
+index 31bc855..bcb8928 100644
+--- a/Documentation/cxl/lib/libcxl.txt
++++ b/Documentation/cxl/lib/libcxl.txt
+@@ -122,6 +122,7 @@ struct cxl_cmd *cxl_cmd_new_raw(struct cxl_memdev *memdev, int opcode);
+ struct cxl_cmd *cxl_cmd_new_identify(struct cxl_memdev *memdev);
+ struct cxl_cmd *cxl_cmd_new_get_health_info(struct cxl_memdev *memdev);
+ struct cxl_cmd *cxl_cmd_new_get_alert_config(struct cxl_memdev *memdev);
++struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev);
+ struct cxl_cmd *cxl_cmd_new_read_label(struct cxl_memdev *memdev,
+ 					unsigned int offset, unsigned int length);
+ struct cxl_cmd *cxl_cmd_new_write_label(struct cxl_memdev *memdev, void *buf,
+diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
+index 769cd8a..a70b064 100644
+--- a/cxl/lib/libcxl.c
++++ b/cxl/lib/libcxl.c
+@@ -4166,3 +4166,24 @@ CXL_EXPORT int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf,
+ {
+ 	return lsa_op(memdev, LSA_OP_GET, buf, length, offset);
+ }
++
++#define cxl_alert_config_set_field(field)                                     \
++CXL_EXPORT int cxl_cmd_alert_config_set_##field(struct cxl_cmd *cmd, int val) \
++{                                                                             \
++	struct cxl_cmd_set_alert_config *setalert = cmd->input_payload;       \
++	setalert->field = val;                                                \
++	return 0;                                                             \
++}
++
++cxl_alert_config_set_field(life_used_prog_warn_threshold)
++cxl_alert_config_set_field(dev_over_temperature_prog_warn_threshold)
++cxl_alert_config_set_field(dev_under_temperature_prog_warn_threshold)
++cxl_alert_config_set_field(corrected_volatile_mem_err_prog_warn_threshold)
++cxl_alert_config_set_field(corrected_pmem_err_prog_warn_threshold)
++cxl_alert_config_set_field(valid_alert_actions)
++cxl_alert_config_set_field(enable_alert_actions)
++
++CXL_EXPORT struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev)
++{
++	return cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_SET_ALERT_CONFIG);
++}
+diff --git a/cxl/lib/libcxl.sym b/cxl/lib/libcxl.sym
+index c6545c7..334f01f 100644
+--- a/cxl/lib/libcxl.sym
++++ b/cxl/lib/libcxl.sym
+@@ -250,3 +250,15 @@ global:
+ 	cxl_region_get_daxctl_region;
+ 	cxl_port_get_parent_dport;
+ } LIBCXL_4;
++
++LIBCXL_6 {
++global:
++	cxl_cmd_alert_config_set_life_used_prog_warn_threshold;
++	cxl_cmd_alert_config_set_dev_over_temperature_prog_warn_threshold;
++	cxl_cmd_alert_config_set_dev_under_temperature_prog_warn_threshold;
++	cxl_cmd_alert_config_set_corrected_volatile_mem_err_prog_warn_threshold;
++	cxl_cmd_alert_config_set_corrected_pmem_err_prog_warn_threshold;
++	cxl_cmd_alert_config_set_valid_alert_actions;
++	cxl_cmd_alert_config_set_enable_alert_actions;
++	cxl_cmd_new_set_alert_config;
++} LIBCXL_5;
+diff --git a/cxl/lib/private.h b/cxl/lib/private.h
+index d49b560..43bf1d7 100644
+--- a/cxl/lib/private.h
++++ b/cxl/lib/private.h
+@@ -273,6 +273,18 @@ struct cxl_cmd_get_alert_config {
+ #define CXL_CMD_ALERT_CONFIG_PROG_ALERTS_CORRECTED_PMEM_ERR_PROG_WARN_THRESHOLD_MASK \
+ 	BIT(4)
+ 
++/* CXL 3.0 8.2.9.8.3.3 Set Alert Configuration */
++struct cxl_cmd_set_alert_config {
++	u8 valid_alert_actions;
++	u8 enable_alert_actions;
++	u8 life_used_prog_warn_threshold;
++	u8 rsvd;
++	le16 dev_over_temperature_prog_warn_threshold;
++	le16 dev_under_temperature_prog_warn_threshold;
++	le16 corrected_volatile_mem_err_prog_warn_threshold;
++	le16 corrected_pmem_err_prog_warn_threshold;
++} __attribute__((packed));
++
+ struct cxl_cmd_get_partition {
+ 	le64 active_volatile;
+ 	le64 active_persistent;
+diff --git a/cxl/libcxl.h b/cxl/libcxl.h
+index 0218d73..c981683 100644
+--- a/cxl/libcxl.h
++++ b/cxl/libcxl.h
+@@ -425,6 +425,22 @@ enum cxl_setpartition_mode {
+ int cxl_cmd_partition_set_mode(struct cxl_cmd *cmd,
+ 		enum cxl_setpartition_mode mode);
+ 
++int cxl_cmd_alert_config_set_life_used_prog_warn_threshold(struct cxl_cmd *cmd,
++							   int threshold);
++int cxl_cmd_alert_config_set_dev_over_temperature_prog_warn_threshold(
++	struct cxl_cmd *cmd, int threshold);
++int cxl_cmd_alert_config_set_dev_under_temperature_prog_warn_threshold(
++	struct cxl_cmd *cmd, int threshold);
++int cxl_cmd_alert_config_set_corrected_volatile_mem_err_prog_warn_threshold(
++	struct cxl_cmd *cmd, int threshold);
++int cxl_cmd_alert_config_set_corrected_pmem_err_prog_warn_threshold(
++	struct cxl_cmd *cmd, int threshold);
++int cxl_cmd_alert_config_set_valid_alert_actions(struct cxl_cmd *cmd,
++						 int action);
++int cxl_cmd_alert_config_set_enable_alert_actions(struct cxl_cmd *cmd,
++						  int enable);
++struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
 -- 
 2.17.1
 
