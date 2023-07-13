@@ -1,90 +1,94 @@
-Return-Path: <nvdimm+bounces-6354-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6356-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 049EE751B68
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Jul 2023 10:23:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BA8F7523B1
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Jul 2023 15:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 343011C212E7
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Jul 2023 08:23:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB877281D4D
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Jul 2023 13:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A2A79DD;
-	Thu, 13 Jul 2023 08:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA36117AB5;
+	Thu, 13 Jul 2023 13:26:47 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE6679D1
-	for <nvdimm@lists.linux.dev>; Thu, 13 Jul 2023 08:23:11 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-ca4a6e11f55so367574276.1
-        for <nvdimm@lists.linux.dev>; Thu, 13 Jul 2023 01:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689236590; x=1691828590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmUvvFe5/0RHDgOhcRqf73PLJ/xjj5ik+Mt9yz3hpVE=;
-        b=JDjaxMNSCA2W0kv8QauUN8XGyZ37DEvH44KOJRlwppaz0znXSKXj+Qgcfdoq6EAXa4
-         QLkRvTydaY6wacC+a5/60no89snaYyzToT1xWjTLc9LdU7NsY3GHXvY2cCCnfGeapMG1
-         aMoKt4kFsQP6UvZTkEyJjIwLLv24UVO93sHO0jRGTEbFW4ml+l9mibdrohZQ3pRngmGk
-         Jx8r492MtUrOHqZIyPIcLUM0bOzdBGX6yhtJHVq+Cc03uvzn6pBKDC3g9wfenQU//yC+
-         7XObtu+QiwlXokKBOMBV0b8cKzrU5TCYy1nS0wrB9j8opf3aXU4c51q7yt9bxbJ1ZJBp
-         ZS3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689236590; x=1691828590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dmUvvFe5/0RHDgOhcRqf73PLJ/xjj5ik+Mt9yz3hpVE=;
-        b=GSGPlabZinpFMiNTRw9Kzfz1uSZ8z/yMnZNjs/ZZC/sqZHg+R3kEF+0lDZa83EYHnf
-         hwlhqUsyGEfIbmbKv0l/v0zlauMOhdS+dNb8Cikj2+vEOVikJKKMj8SG9Q728YkSsfOT
-         UWcFJPgJOh4+yYiaPIobwl2DXy3E7navRpGdm5Spa+uuE4ITUIAJrdJOM5kFuKLg8hAK
-         BSZvIKPgliAlY4KT34YGwwbHyrBeVADEWOPk6S7WMkZp9yRc/ZLnwduCzrTB4dsjn3V4
-         Arll62wzpbggfLuCAzzW+YDLhPrwHqaLuFtNLSMr+2xaTwAEJsaokGCMcUcA0exnmGNd
-         3X4A==
-X-Gm-Message-State: ABy/qLYypmqfbggAqjtlg4QwvAYyVcHSCTwqpy9biuhcA2y8LBUuLcKr
-	rJiWsMvgKTePiSoezuY108eaEMzYrCAdkYGjixY=
-X-Google-Smtp-Source: APBJJlEbHvkCZjLi15/lidg5v2R1Yh9AOdIR1j8W6aRCyJXeU1xYrlBOnMGufB+qGA9cE/p+Bndff1yvmURZvndbsdI=
-X-Received: by 2002:a25:d1c1:0:b0:c1a:b0e2:e930 with SMTP id
- i184-20020a25d1c1000000b00c1ab0e2e930mr945563ybg.3.1689236590340; Thu, 13 Jul
- 2023 01:23:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF717AAF
+	for <nvdimm@lists.linux.dev>; Thu, 13 Jul 2023 13:26:44 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4R1vyC6Pscz4f3jLG
+	for <nvdimm@lists.linux.dev>; Thu, 13 Jul 2023 21:06:43 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP1 (Coremail) with SMTP id cCh0CgBnhzHh9q9kbfaKNA--.19920S2;
+	Thu, 13 Jul 2023 21:06:44 +0800 (CST)
+Subject: Re: [PATCH v3] virtio_pmem: add the missing REQ_OP_WRITE for flush
+ bio
+To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Cc: Dan Williams <dan.j.williams@intel.com>, Jens Axboe <axboe@kernel.dk>,
+ Christoph Hellwig <hch@infradead.org>, linux-block@vger.kernel.org,
+ nvdimm@lists.linux.dev, virtualization@lists.linux-foundation.org,
+ houtao1@huawei.com, Vishal Verma <vishal.l.verma@intel.com>,
+ Chaitanya Kulkarni <chaitanyak@nvidia.com>
+References: <ZJL3+E5P+Yw5jDKy@infradead.org>
+ <20230625022633.2753877-1-houtao@huaweicloud.com>
+ <CAM9Jb+hrspvxXi87buwkUmhHczaC6qian36OxcMkXx=6pseOrQ@mail.gmail.com>
+ <CAM9Jb+g5rrvmw8xCcwe3REK4x=RymrcqQ8cZavwWoWu7BH+8wA@mail.gmail.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <7a2c321b-df98-618f-54d7-e93b7f4ebed6@huaweicloud.com>
+Date: Thu, 13 Jul 2023 21:06:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <ZJL3+E5P+Yw5jDKy@infradead.org> <20230625022633.2753877-1-houtao@huaweicloud.com>
- <CAM9Jb+hrspvxXi87buwkUmhHczaC6qian36OxcMkXx=6pseOrQ@mail.gmail.com>
-In-Reply-To: <CAM9Jb+hrspvxXi87buwkUmhHczaC6qian36OxcMkXx=6pseOrQ@mail.gmail.com>
-From: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date: Thu, 13 Jul 2023 10:23:01 +0200
-Message-ID: <CAM9Jb+g5rrvmw8xCcwe3REK4x=RymrcqQ8cZavwWoWu7BH+8wA@mail.gmail.com>
-Subject: Re: [PATCH v3] virtio_pmem: add the missing REQ_OP_WRITE for flush bio
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: Dan Williams <dan.j.williams@intel.com>, Jens Axboe <axboe@kernel.dk>, 
-	Christoph Hellwig <hch@infradead.org>, linux-block@vger.kernel.org, nvdimm@lists.linux.dev, 
-	virtualization@lists.linux-foundation.org, houtao1@huawei.com, 
-	Vishal Verma <vishal.l.verma@intel.com>, Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAM9Jb+g5rrvmw8xCcwe3REK4x=RymrcqQ8cZavwWoWu7BH+8wA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:cCh0CgBnhzHh9q9kbfaKNA--.19920S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYx7kC6x804xWl14x267AKxVW8JVW5JwAF
+	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
+	wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+	1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+	c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+	17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+	IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+	3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+	VFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 
-+Cc Vishal,
+Hi Pankaj,
 
-> > Fixes: b4a6bb3a67aa ("block: add a sanity check for non-write flush/fua bios")
-> > Signed-off-by: Hou Tao <houtao1@huawei.com>
+On 7/13/2023 4:23 PM, Pankaj Gupta wrote:
+> +Cc Vishal,
 >
-> With 6.3+ stable Cc, Feel free to add:
+>>> Fixes: b4a6bb3a67aa ("block: add a sanity check for non-write flush/fua bios")
+>>> Signed-off-by: Hou Tao <houtao1@huawei.com>
+>> With 6.3+ stable Cc, Feel free to add:
+> Hi Dan, Vishal,
+>
+> Do you have any suggestion on this patch? Or can we queue this please?
+>
+> Hi Hou,
+>
+> Could you please send a new version with Cc stable or as per any
+> suggestions from maintainers.
+Will add Cc stable for v6.3 in v4.
+>
+> Thanks,
+> Pankaj
+> .
 
-Hi Dan, Vishal,
-
-Do you have any suggestion on this patch? Or can we queue this please?
-
-Hi Hou,
-
-Could you please send a new version with Cc stable or as per any
-suggestions from maintainers.
-
-Thanks,
-Pankaj
 
