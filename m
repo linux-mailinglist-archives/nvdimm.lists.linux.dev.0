@@ -1,60 +1,60 @@
-Return-Path: <nvdimm+bounces-6477-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6475-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 271C4771A9B
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Aug 2023 08:41:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5A36771A89
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Aug 2023 08:40:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49DE21C20966
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Aug 2023 06:41:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E93131C209DC
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Aug 2023 06:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 515F62106;
-	Mon,  7 Aug 2023 06:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190C51FD3;
+	Mon,  7 Aug 2023 06:40:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A97800
-	for <nvdimm@lists.linux.dev>; Mon,  7 Aug 2023 06:41:31 +0000 (UTC)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230807063156epoutp041b188b6766cf3aa265c096b8cfba8bff~5BirZR6mO2894628946epoutp04Q
-	for <nvdimm@lists.linux.dev>; Mon,  7 Aug 2023 06:31:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230807063156epoutp041b188b6766cf3aa265c096b8cfba8bff~5BirZR6mO2894628946epoutp04Q
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234E117F7
+	for <nvdimm@lists.linux.dev>; Mon,  7 Aug 2023 06:40:00 +0000 (UTC)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230807063202epoutp021c6231c9c6dd2e5499d0fca86597b4d8~5BixtE-td2586525865epoutp02m
+	for <nvdimm@lists.linux.dev>; Mon,  7 Aug 2023 06:32:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230807063202epoutp021c6231c9c6dd2e5499d0fca86597b4d8~5BixtE-td2586525865epoutp02m
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1691389916;
-	bh=WITSivzty1sutl7GsE3AZ5XfJxUWoQ6qwVT9A5qu4jA=;
+	s=mail20170921; t=1691389922;
+	bh=i1NwokQPzv5a5ofSquoEuMmwvXrFjsYyHaJfgflzWAs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=E9bEUxM547kyK0BQU5qF/CxBtBkV7B57sADFGziOzBfvEblMzl3ROzi8nvnJ+uUJp
-	 ErDVXa2TLI08z/yyXPemS9kiyBJ/43DvKg8mKJcntntY2mWpSpHSZOkpx5wMrhD4Q/
-	 asIaJ4OgWqUFxWf643iW6ojn+/LjH/1w724q4O7c=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-	20230807063155epcas2p140fc2207f550440fc0be5747e757b193~5Biqzeg2Y3109831098epcas2p1q;
-	Mon,  7 Aug 2023 06:31:55 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4RK61718rzz4x9QJ; Mon,  7 Aug
-	2023 06:31:55 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	52.0F.49913.BDF80D46; Mon,  7 Aug 2023 15:31:55 +0900 (KST)
+	b=p0r9i38hMUHnoBC46UOVZ8jgvUHtrpGXYlFFPuB2Ob0L0evhNUaGWGAcj4+M9Cf8S
+	 giS9aS+qmplJCONfBIU69dC21gLwvD4HbKmejqoZccd3Av1qKPCAZ7V3m8cEGVdnVJ
+	 zYug3SV9mShgKrdmyPuhoBjnfGdlV+K32MiJHPnE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+	20230807063202epcas2p40c39b5cfbdedcd29cc8514129ab6f3de~5Biw2-zK50229202292epcas2p4Y;
+	Mon,  7 Aug 2023 06:32:02 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4RK61F2wNMz4x9Q3; Mon,  7 Aug
+	2023 06:32:01 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+	epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D8.84.32393.1EF80D46; Mon,  7 Aug 2023 15:32:01 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20230807063154epcas2p474cf88b864ca6c87f656853546256416~5BiqBUQGz0228502285epcas2p46;
-	Mon,  7 Aug 2023 06:31:54 +0000 (GMT)
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20230807063200epcas2p2c573a655c3b35de5aeb7e188430cca9a~5Bivy86ZK2048820488epcas2p2b;
+	Mon,  7 Aug 2023 06:32:00 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
 	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20230807063154epsmtrp11b86cbb9a69e1a34e3ccde927ce62f4d~5BiqAZ2G22561925619epsmtrp1J;
-	Mon,  7 Aug 2023 06:31:54 +0000 (GMT)
-X-AuditID: b6c32a45-5cfff7000000c2f9-a2-64d08fdbcca7
+	20230807063200epsmtrp1f4e4bfccc62e629ecef79b386af00035~5BivyMEO12568225682epsmtrp1C;
+	Mon,  7 Aug 2023 06:32:00 +0000 (GMT)
+X-AuditID: b6c32a48-adffa70000007e89-17-64d08fe1cb4b
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
 	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D3.FE.34491.ADF80D46; Mon,  7 Aug 2023 15:31:54 +0900 (KST)
+	35.FE.34491.0EF80D46; Mon,  7 Aug 2023 15:32:00 +0900 (KST)
 Received: from jehoon-Precision-7920-Tower.dsn.sec.samsung.com (unknown
 	[10.229.83.133]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20230807063154epsmtip17f4f34303d414ea2830f50827b27d3f4~5BipxKLmz1457214572epsmtip1D;
-	Mon,  7 Aug 2023 06:31:54 +0000 (GMT)
+	20230807063200epsmtip1dd04c9f481a0cd703c512acbe9a754ae~5Bivjy4b41186011860epsmtip1G;
+	Mon,  7 Aug 2023 06:32:00 +0000 (GMT)
 From: Jehoon Park <jehoon.park@samsung.com>
 To: linux-cxl@vger.kernel.org
 Cc: nvdimm@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>,
@@ -63,185 +63,477 @@ Cc: nvdimm@lists.linux.dev, Alison Schofield <alison.schofield@intel.com>,
 	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
 	<jonathan.cameron@huawei.com>, Kyungsan Kim <ks0204.kim@samsung.com>,
 	Junhyeok Im <junhyeok.im@samsung.com>, Jehoon Park <jehoon.park@samsung.com>
-Subject: [ndctl PATCH v2 1/2] libcxl: add support for Set Alert
- Configuration mailbox command
-Date: Mon,  7 Aug 2023 15:33:34 +0900
-Message-Id: <20230807063335.5891-2-jehoon.park@samsung.com>
+Subject: [ndctl PATCH v2 2/2] cxl: add 'set-alert-config' command to cxl
+ tool
+Date: Mon,  7 Aug 2023 15:33:35 +0900
+Message-Id: <20230807063335.5891-3-jehoon.park@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230807063335.5891-1-jehoon.park@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmqe7t/gspBttesljcfXyBzWL61AuM
-	FiduNrJZrL65htFi/9PnLBYHXjewW6xaeI3NYvHRGcwWR/dwWJyfdYrFYuWPP6wWtyYcY3Lg
-	8Wg58pbVY/Gel0weLzbPZPTo27KK0WPq7HqPz5vkAtiism0yUhNTUosUUvOS81My89JtlbyD
-	453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgE5UUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQX
-	l9gqpRak5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRnPF8RVXBLq+LNmXdMDYy3lLsYOTkk
-	BEwkbi37zdbFyMUhJLCDUWLytanMEM4nRondq55DZb4xSux4N4cNpmXygyZ2iMReRolZF24z
-	gSSEBHqZJDbO4QSx2QS0Je5v3wDWICIgK9G87gETSAOzwGZmiWU7z4ElhAXiJRb1XWUGsVkE
-	VCWmfp4KFucVsJa4uXoXC8Q2eYnVGw6A1XAK2Eg8PXcBbLOEwFd2iZvtB5khilwk5u18yQph
-	C0u8Or6FHcKWknjZ3wZl50v8PHkLqqZA4tOXD1ALjCXe3XwOFOcAuk5TYv0ufRBTQkBZ4sgt
-	sApmAT6JjsN/2SHCvBIdbUIQjaoSXcc/MELY0hKHrxyFOsZD4lT7GlZI+PQzSszvWMc6gVFu
-	FsKCBYyMqxjFUguKc9NTi40KDOERlpyfu4kRnAK1XHcwTn77Qe8QIxMH4yFGCQ5mJRHeeU/O
-	pwjxpiRWVqUW5ccXleakFh9iNAWG3URmKdHkfGASziuJNzSxNDAxMzM0NzI1MFcS573XOjdF
-	SCA9sSQ1OzW1ILUIpo+Jg1Oqgcn46H2xl72PNLPOBPvJxXgEzHLvroi5upBpSb/MZg9t7Zux
-	37wP93A+Z9EUeJwrOV1F88OxrQcWHNq/e2vm69gJWRsz+KbtUF4p/KPrutmBrpKWWevfFhsp
-	WkTLHQ40v7lpS6ZKn0zd41fHmG9xbQneGDhrntIltVm/8x9MMIhOiYu8uOLd5knxt5Zx3jy8
-	6/euM3+emu/pOqRyfyvbxYeJU/2ven1SXDXP9szvYxrx7mfU3uvXbvyfF/e8J8Y1qVPkf26b
-	8SmGi6mPhbQn3FefLCspNelm90Xnbb/2dU290j4p+/Hr3+JZoVI/Myf86ZqxIqJjksjLrWsE
-	bszf8nD26k3rbL0jhdfsPNSRlMNWqsRSnJFoqMVcVJwIAM4edoMKBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrILMWRmVeSWpSXmKPExsWy7bCSnO6t/gspBu33FCzuPr7AZjF96gVG
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsWy7bCmme7D/gspBuubeS3uPr7AZjF96gVG
 	ixM3G9ksVt9cw2ix/+lzFosDrxvYLVYtvMZmsfjoDGaLo3s4LM7POsVisfLHH1aLWxOOMTnw
-	eLQcecvqsXjPSyaPF5tnMnr0bVnF6DF1dr3H501yAWxRXDYpqTmZZalF+nYJXBnPV0QV3NKq
-	eHPmHVMD4y3lLkZODgkBE4nJD5rYuxg5OIQEdjNKLDeDCEtL3Gu+wg5hC0vcbznC2sXIBVTS
-	zSTxZ34TC0iCTUBb4v72DWwgtoiArETzugdMIEXMAnuZJTpmnmcFSQgLxEr8ed8M1sAioCox
-	9fNUsAZeAWuJm6t3sUBskJdYveEAM4jNKWAj8fTcBbDNQkA1CydsZ53AyLeAkWEVo2RqQXFu
-	em6xYYFhXmq5XnFibnFpXrpecn7uJkZwqGpp7mDcvuqD3iFGJg7GQ4wSHMxKIrzznpxPEeJN
-	SaysSi3Kjy8qzUktPsQozcGiJM4r/qI3RUggPbEkNTs1tSC1CCbLxMEp1cBk2OLvt1bcbOu8
-	td/OfJhxdPevBbx/qqJZViboLpZ/VaKsu8V27tNl38+w66SWlHybeMtxx7eQ+X9nSq7MtG6R
-	MAhL/y1bysun1q9QsE1oYrHqzrgZz05snSPWvsr06sI982xbDwd4Rc9UzymXCvU/YbaJ6bns
-	hKsveuXFdneHZ6rZPd7eNqtHbMkxh5sXD4Q7PNt58+fhhtLjG/jn75EOiSzf9tl0xrzVXy4W
-	HY58W7hWt5KPqXe7gu60qQx1u+a9b+E00l3jF1i7M9agecvUsAJfk7xrtr0aC598O8Lh2fNN
-	KUTFYW0Qlwxbj6LHy5ppbhMs+bInHlq9Sbvz+szcwJ2ML/QzM/sC1/hwsV9WYinOSDTUYi4q
-	TgQAt1lJlcQCAAA=
-X-CMS-MailID: 20230807063154epcas2p474cf88b864ca6c87f656853546256416
+	eLQcecvqsXjPSyaPF5tnMnr0bVnF6DF1dr3H501yAWxR2TYZqYkpqUUKqXnJ+SmZeem2St7B
+	8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QCcqKZQl5pQChQISi4uV9O1sivJLS1IVMvKL
+	S2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Iz+hZPZi/oras4tfAkWwPj5aguRk4O
+	CQETiX9vT7J2MXJxCAnsYJRoeDSTBSQhJPCJUeLmTQ+IxDdGia1TnjPDdBy8uZoJIrGXUWL7
+	ja9sEE4vk8TOyyeYQKrYBLQl7m/fwAZiiwjISjSvewDWwSywmVli2c5zYAlhAX+Jk6vms4LY
+	LAKqEs2XLoDZvALWEu//P2WBWCcvsXrDAbDVnAI2Ek/PXWAHGSQh8JVd4sHJHewQRS4SJz89
+	Z4SwhSVeHd8CFZeSeNnfBmXnS/w8eYsVwi6Q+PTlA9QCY4l3N58DxTmArtOUWL9LH8SUEFCW
+	OHILrIJZgE+i4/Bfdogwr0RHmxBEo6pE1/EPUEulJQ5fOQoNIA+J4+tbGSFh0s8ocbXzIeME
+	RrlZCAsWMDKuYhRLLSjOTU8tNiowgcdYcn7uJkZwEtTy2ME4++0HvUOMTByMhxglOJiVRHjn
+	PTmfIsSbklhZlVqUH19UmpNafIjRFBh2E5mlRJPzgWk4ryTe0MTSwMTMzNDcyNTAXEmc917r
+	3BQhgfTEktTs1NSC1CKYPiYOTqkGJrE/om6PJjtq53q+tZH3ldJZk+7GUXIirlz1w5a79/fk
+	HrB2vHbjU4BX2e3LCd4pR5riLc7U9K92P6M+W2Zud739Gf0JXz4bW8tPE4kTUzc+f2C9+UWJ
+	Gf8fvDbacdLcPHRadsabLz4FjvU7NSsVlyasizvutm/1k8DvF14ldgq+LX9Qqsrdb7W8pzW9
+	yPx0eYBU/4Lq/WtWsf/Xas96c9T4rIBsQpc0o1abUtblC5MPcdcHn1p/9v58jir/vW6Xvy06
+	kSwuZT1ZRmXWOV/2u/I1K312f4qXdqlYfrd/15l4n3OV/T/Wse7PURRa0F7joWv8uuTB4wnX
+	u7WrS85GRF/X3xnPsU3w3v/ZsRe/K7EUZyQaajEXFScCAB4+l9gLBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSnO6D/gspBr/P61ncfXyBzWL61AuM
+	FiduNrJZrL65htFi/9PnLBYHXjewW6xaeI3NYvHRGcwWR/dwWJyfdYrFYuWPP6wWtyYcY3Lg
+	8Wg58pbVY/Gel0weLzbPZPTo27KK0WPq7HqPz5vkAtiiuGxSUnMyy1KL9O0SuDL6Fk9mL+it
+	qzi18CRbA+PlqC5GTg4JAROJgzdXM3UxcnEICexmlDj1fAELREJa4l7zFXYIW1jifssRVoii
+	biaJG88PsYEk2AS0Je5v3wBmiwjISjSvewA2iVlgL7NEx8zzrCAJYQFfibmrP4HZLAKqEs2X
+	LoDZvALWEu//P4XaJi+xesMBZhCbU8BG4um5C2CbhYBqFk7YzjqBkW8BI8MqRsnUguLc9Nxi
+	wwLDvNRyveLE3OLSvHS95PzcTYzggNXS3MG4fdUHvUOMTByMhxglOJiVRHjnPTmfIsSbklhZ
+	lVqUH19UmpNafIhRmoNFSZxX/EVvipBAemJJanZqakFqEUyWiYNTqoFpv9mlhLsq71T60ucv
+	TTa5NaeQgSf2pLXFM4eS7QdvLbghccnrbfdzLpG09RbBOzSnKNmXL9Ln00+LW/dsl6o/+6w4
+	W5usyhsi82umBF2JvcW+eZX1t5B0o99pirP2Bm7flbQsJW4D4+3GE51neOzCLS7y2h2zOr9/
+	dtSUe9v+f5OwYq2fs7Flk3OK0I5T92ySNxzfu39GwaJrkTvWyDH8CbQ5ON/03daaTzN0HTKX
+	qtS/u6/JOGVqd4iIRiLzbEH53oMXH6Zwtby6skrvipLGza6YRYsPfL29a8nn1kO3Tf+WfF/S
+	Pv2MWLjegjvCF/ZNEksVPL7v55dq9g1rFs5Um8S7Sel26Nq0pw+qn0bn/1ViKc5INNRiLipO
+	BAAGu2x4xwIAAA==
+X-CMS-MailID: 20230807063200epcas2p2c573a655c3b35de5aeb7e188430cca9a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230807063154epcas2p474cf88b864ca6c87f656853546256416
+X-CMS-RootMailID: 20230807063200epcas2p2c573a655c3b35de5aeb7e188430cca9a
 References: <20230807063335.5891-1-jehoon.park@samsung.com>
-	<CGME20230807063154epcas2p474cf88b864ca6c87f656853546256416@epcas2p4.samsung.com>
+	<CGME20230807063200epcas2p2c573a655c3b35de5aeb7e188430cca9a@epcas2p2.samsung.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 
-CXL 3.0 Spec 8.2.9.8.3.3 defines Set Alert Configuration mailbox command which
-allows a CXL host to configure programmable warning thresholds optionally.
-
-Add methods to issue the command and set fields.
+Add a new command: 'set-alert-config', which configures device's warning alert.
 
 Signed-off-by: Jehoon Park <jehoon.park@samsung.com>
 ---
- Documentation/cxl/lib/libcxl.txt |  1 +
- cxl/lib/libcxl.c                 | 21 +++++++++++++++++++++
- cxl/lib/libcxl.sym               | 12 ++++++++++++
- cxl/lib/private.h                | 12 ++++++++++++
- cxl/libcxl.h                     | 16 ++++++++++++++++
- 5 files changed, 62 insertions(+)
+ Documentation/cxl/cxl-set-alert-config.txt |  96 +++++++++
+ Documentation/cxl/meson.build              |   1 +
+ cxl/builtin.h                              |   1 +
+ cxl/cxl.c                                  |   1 +
+ cxl/memdev.c                               | 220 ++++++++++++++++++++-
+ 5 files changed, 318 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/cxl/cxl-set-alert-config.txt
 
-diff --git a/Documentation/cxl/lib/libcxl.txt b/Documentation/cxl/lib/libcxl.txt
-index 31bc855..bcb8928 100644
---- a/Documentation/cxl/lib/libcxl.txt
-+++ b/Documentation/cxl/lib/libcxl.txt
-@@ -122,6 +122,7 @@ struct cxl_cmd *cxl_cmd_new_raw(struct cxl_memdev *memdev, int opcode);
- struct cxl_cmd *cxl_cmd_new_identify(struct cxl_memdev *memdev);
- struct cxl_cmd *cxl_cmd_new_get_health_info(struct cxl_memdev *memdev);
- struct cxl_cmd *cxl_cmd_new_get_alert_config(struct cxl_memdev *memdev);
-+struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev);
- struct cxl_cmd *cxl_cmd_new_read_label(struct cxl_memdev *memdev,
- 					unsigned int offset, unsigned int length);
- struct cxl_cmd *cxl_cmd_new_write_label(struct cxl_memdev *memdev, void *buf,
-diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
-index af4ca44..c781566 100644
---- a/cxl/lib/libcxl.c
-+++ b/cxl/lib/libcxl.c
-@@ -4465,3 +4465,24 @@ CXL_EXPORT int cxl_memdev_read_label(struct cxl_memdev *memdev, void *buf,
- {
- 	return lsa_op(memdev, LSA_OP_GET, buf, length, offset);
+diff --git a/Documentation/cxl/cxl-set-alert-config.txt b/Documentation/cxl/cxl-set-alert-config.txt
+new file mode 100644
+index 0000000..c905f7c
+--- /dev/null
++++ b/Documentation/cxl/cxl-set-alert-config.txt
+@@ -0,0 +1,96 @@
++// SPDX-License-Identifier: GPL-2.0
++
++cxl-set-alert-config(1)
++=======================
++
++NAME
++----
++cxl-set-alert-config - set the warning alert threshold on a CXL memdev
++
++SYNOPSIS
++--------
++[verse]
++'cxl set-alert-config <mem0> [<mem1>..<memN>] [<options>]'
++
++DESCRIPTION
++-----------
++CXL device raises an alert when its health status is changed. Critical alert
++shall automatically be configured by the device after a device reset.
++If supported, programmable warning thresholds also be initialized to vendor
++recommended defaults, then could be configured by the user.
++
++Use this command to configure warning alert thresholds of a device.
++Having issued this command, the newly requested warning thresholds would
++override the previously programmed warning thresholds.
++
++To enable warning alert, set both 'threshold=value' and 'alert=on'. To disable
++warning alert, set only 'alert=off'. Other cases would cause errors.
++
++Use "cxl list -m <memdev> -A" to examine the programming warning threshold
++capabilities of a device.
++
++EXAMPLES
++--------
++Set warning threshold to 30 and enable alert for life used.
++[verse]
++cxl set-alert-config mem0 -L 30 --life-used-alert=on
++
++Disable warning alert for device over temperature.
++[verse]
++cxl set-alert-config mem0 --over-temperature-alert=off
++
++OPTIONS
++-------
++<memory device(s)>::
++include::memdev-option.txt[]
++
++-v::
++--verbose=::
++        Turn on verbose debug messages in the library (if libcxl was built with
++        logging and debug enabled).
++
++-L::
++--life-used-threshold=::
++	Set <value> for the life used warning alert threshold.
++
++--life-used-alert=::
++	Enable or disable the life used warning alert.
++	Options are 'on' or 'off'.
++
++-O::
++--over-temperature-threshold=::
++	Set <value> for the device over temperature warning alert threshold.
++
++--over-temperature-alert=::
++	Enable or disable the device over temperature warning alert.
++	Options are 'on' or 'off'.
++
++-U::
++--under-temperature-threshold=::
++	Set <value> for the device under temperature warning alert threshold.
++
++--under-temperature-alert=::
++	Enable or disable the device under temperature warning alert.
++	Options are 'on' or 'off'.
++
++-V::
++--volatile-mem-err-threshold=::
++	Set <value> for the corrected volatile memory error warning alert
++	threshold.
++
++--volatile-mem-err-alert=::
++	Enable or disable the corrected volatile memory error warning alert.
++	Options are 'on' or 'off'.
++
++-P::
++--pmem-err-threshold=::
++	Set <value> for the corrected persistent memory error warning alert
++	threshold.
++
++--pmem-err-alert=::
++	Enable or disable the corrected persistent memory error warning alert.
++	Options are 'on' or 'off'.
++
++SEE ALSO
++--------
++CXL-3.0 8.2.9.8.3.3
+diff --git a/Documentation/cxl/meson.build b/Documentation/cxl/meson.build
+index c553357..865aad5 100644
+--- a/Documentation/cxl/meson.build
++++ b/Documentation/cxl/meson.build
+@@ -47,6 +47,7 @@ cxl_manpages = [
+   'cxl-destroy-region.txt',
+   'cxl-monitor.txt',
+   'cxl-update-firmware.txt',
++  'cxl-set-alert-config.txt',
+ ]
+ 
+ foreach man : cxl_manpages
+diff --git a/cxl/builtin.h b/cxl/builtin.h
+index 3ec6c6c..2c46a82 100644
+--- a/cxl/builtin.h
++++ b/cxl/builtin.h
+@@ -15,6 +15,7 @@ int cmd_enable_memdev(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_reserve_dpa(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_free_dpa(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_update_fw(int argc, const char **argv, struct cxl_ctx *ctx);
++int cmd_set_alert_config(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_disable_port(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_enable_port(int argc, const char **argv, struct cxl_ctx *ctx);
+ int cmd_set_partition(int argc, const char **argv, struct cxl_ctx *ctx);
+diff --git a/cxl/cxl.c b/cxl/cxl.c
+index e1524b8..bf4822f 100644
+--- a/cxl/cxl.c
++++ b/cxl/cxl.c
+@@ -69,6 +69,7 @@ static struct cmd_struct commands[] = {
+ 	{ "reserve-dpa", .c_fn = cmd_reserve_dpa },
+ 	{ "free-dpa", .c_fn = cmd_free_dpa },
+ 	{ "update-firmware", .c_fn = cmd_update_fw },
++	{ "set-alert-config", .c_fn = cmd_set_alert_config },
+ 	{ "disable-port", .c_fn = cmd_disable_port },
+ 	{ "enable-port", .c_fn = cmd_enable_port },
+ 	{ "set-partition", .c_fn = cmd_set_partition },
+diff --git a/cxl/memdev.c b/cxl/memdev.c
+index f6a2d3f..2dd2e7f 100644
+--- a/cxl/memdev.c
++++ b/cxl/memdev.c
+@@ -38,10 +38,38 @@ static struct parameters {
+ 	const char *type;
+ 	const char *size;
+ 	const char *decoder_filter;
++	const char *life_used_threshold;
++	const char *dev_over_temperature_threshold;
++	const char *dev_under_temperature_threshold;
++	const char *corrected_volatile_mem_err_threshold;
++	const char *corrected_pmem_err_threshold;
++	const char *life_used_alert;
++	const char *dev_over_temperature_alert;
++	const char *dev_under_temperature_alert;
++	const char *corrected_volatile_mem_err_alert;
++	const char *corrected_pmem_err_alert;
+ } param;
+ 
+ static struct log_ctx ml;
+ 
++struct alert_context {
++	int valid_alert_actions;
++	int enable_alert_actions;
++	int life_used_threshold;
++	int dev_over_temperature_threshold;
++	int dev_under_temperature_threshold;
++	int corrected_volatile_mem_err_threshold;
++	int corrected_pmem_err_threshold;
++};
++
++enum cxl_setalert_event {
++	CXL_SETALERT_LIFE_USED,
++	CXL_SETALERT_OVER_TEMP,
++	CXL_SETALERT_UNDER_TEMP,
++	CXL_SETALERT_VOLATILE_MEM_ERROR,
++	CXL_SETALERT_PMEM_ERROR,
++};
++
+ enum cxl_setpart_type {
+ 	CXL_SETPART_PMEM,
+ 	CXL_SETPART_VOLATILE,
+@@ -99,6 +127,36 @@ OPT_BOOLEAN('c', "cancel", &param.cancel,                            \
+ OPT_BOOLEAN('w', "wait", &param.wait,                                \
+ 	    "wait for firmware update to complete before returning")
+ 
++#define SET_ALERT_OPTIONS()                                                   \
++OPT_STRING('L', "life-used-threshold", &param.life_used_threshold,            \
++	   "threshold", "threshold value for life used warning alert"),       \
++OPT_STRING('\0', "life-used-alert", &param.life_used_alert,                   \
++	   "'on' or 'off'", "enable or disable life used warning alert"),     \
++OPT_STRING('O', "over-temperature-threshold",                                 \
++	   &param.dev_over_temperature_threshold, "threshold",                \
++	   "threshold value for device over temperature warning alert"),      \
++OPT_STRING('\0', "over-temperature-alert",                                    \
++	   &param.dev_over_temperature_alert, "'on' or 'off'",                \
++	   "enable or disable device over temperature warning alert"),        \
++OPT_STRING('U', "under-temperature-threshold",                                \
++	   &param.dev_under_temperature_threshold, "threshold",               \
++	   "threshold value for device under temperature warning alert"),     \
++OPT_STRING('\0', "under-temperature-alert",                                   \
++	   &param.dev_under_temperature_alert, "'on' or 'off'",               \
++	   "enable or disable device under temperature warning alert"),       \
++OPT_STRING('V', "volatile-mem-err-threshold",                                 \
++	   &param.corrected_volatile_mem_err_threshold, "threshold",          \
++	   "threshold value for corrected volatile mem error warning alert"), \
++OPT_STRING('\0', "volatile-mem-err-alert",                                    \
++	   &param.corrected_volatile_mem_err_alert, "'on' or 'off'",          \
++	   "enable or disable corrected volatile mem error warning alert"),   \
++OPT_STRING('P', "pmem-err-threshold",                                         \
++	   &param.corrected_pmem_err_threshold, "threshold",                  \
++	   "threshold value for corrected pmem error warning alert"),         \
++OPT_STRING('\0', "pmem-err-alert",                                            \
++	   &param.corrected_pmem_err_alert, "'on' or 'off'",                  \
++	   "enable or disable corrected pmem error warning alert")
++
+ static const struct option read_options[] = {
+ 	BASE_OPTIONS(),
+ 	LABEL_OPTIONS(),
+@@ -155,6 +213,12 @@ static const struct option update_fw_options[] = {
+ 	OPT_END(),
+ };
+ 
++static const struct option set_alert_options[] = {
++	BASE_OPTIONS(),
++	SET_ALERT_OPTIONS(),
++	OPT_END(),
++};
++
+ enum reserve_dpa_mode {
+ 	DPA_ALLOC,
+ 	DPA_FREE,
+@@ -706,6 +770,148 @@ static int action_update_fw(struct cxl_memdev *memdev,
+ 	return rc;
+ }
+ 
++static int validate_alert_threshold(enum cxl_setalert_event event,
++				    int threshold)
++{
++	if (event == CXL_SETALERT_LIFE_USED) {
++		if (threshold < 0 || threshold > 100) {
++			log_err(&ml, "Invalid life used threshold: %d\n",
++				threshold);
++			return -EINVAL;
++		}
++	} else if (event == CXL_SETALERT_OVER_TEMP ||
++		   event == CXL_SETALERT_UNDER_TEMP) {
++		if (threshold < SHRT_MIN || threshold > SHRT_MAX) {
++			log_err(&ml,
++				"Invalid device temperature threshold: %d\n",
++				threshold);
++			return -EINVAL;
++		}
++	} else {
++		if (threshold < 0 || threshold > USHRT_MAX) {
++			log_err(&ml,
++				"Invalid corrected mem error threshold: %d\n",
++				threshold);
++			return -EINVAL;
++		}
++	}
++	return 0;
++}
++
++#define alert_param_set_threshold(arg, alert_event)                           \
++{                                                                             \
++	if (!param.arg##_alert) {                                             \
++		if (param.arg##_threshold) {                                  \
++			log_err(&ml, "Action not specified\n");               \
++			return -EINVAL;                                       \
++		}                                                             \
++	} else if (strcmp(param.arg##_alert, "on") == 0) {                    \
++		if (param.arg##_threshold) {                                  \
++			char *endptr;                                         \
++			alertctx.arg##_threshold =                            \
++				strtol(param.arg##_threshold, &endptr, 10);   \
++			if (endptr[0] != '\0') {                              \
++				log_err(&ml, "Invalid threshold: %s\n",       \
++					param.arg##_threshold);               \
++				return -EINVAL;                               \
++			}                                                     \
++			rc = validate_alert_threshold(                        \
++				alert_event, alertctx.arg##_threshold);       \
++			if (rc != 0)                                          \
++				return rc;                                    \
++			alertctx.valid_alert_actions |= 1 << alert_event;     \
++			alertctx.enable_alert_actions |= 1 << alert_event;    \
++		} else {                                                      \
++			log_err(&ml, "Threshold not specified\n");            \
++			return -EINVAL;                                       \
++		}                                                             \
++	} else if (strcmp(param.arg##_alert, "off") == 0) {                   \
++		if (!param.arg##_threshold) {                                 \
++			alertctx.valid_alert_actions |= 1 << alert_event;     \
++			alertctx.enable_alert_actions &= ~(1 << alert_event); \
++		} else {                                                      \
++			log_err(&ml, "Disable not require threshold\n");      \
++			return -EINVAL;                                       \
++		}                                                             \
++	} else {                                                              \
++		log_err(&ml, "Invalid action: %s\n", param.arg##_alert);      \
++		return -EINVAL;                                               \
++	}                                                                     \
++}
++
++#define setup_threshold_field(arg)                                            \
++{                                                                             \
++	if (param.arg##_threshold)                                            \
++		cxl_cmd_alert_config_set_##arg##_prog_warn_threshold(         \
++			cmd, alertctx.arg##_threshold);                       \
++}
++
++static int action_set_alert_config(struct cxl_memdev *memdev,
++				   struct action_context *actx)
++{
++	const char *devname = cxl_memdev_get_devname(memdev);
++	struct cxl_cmd *cmd;
++	struct alert_context alertctx = { 0 };
++	struct json_object *jmemdev;
++	unsigned long flags;
++	int rc = 0;
++
++	alert_param_set_threshold(life_used, CXL_SETALERT_LIFE_USED)
++	alert_param_set_threshold(dev_over_temperature, CXL_SETALERT_OVER_TEMP)
++	alert_param_set_threshold(dev_under_temperature,
++				  CXL_SETALERT_UNDER_TEMP)
++	alert_param_set_threshold(corrected_volatile_mem_err,
++				  CXL_SETALERT_VOLATILE_MEM_ERROR)
++	alert_param_set_threshold(corrected_pmem_err, CXL_SETALERT_PMEM_ERROR)
++	if (alertctx.valid_alert_actions == 0) {
++		log_err(&ml, "No action specified\n");
++		return -EINVAL;
++	}
++
++	cmd = cxl_cmd_new_set_alert_config(memdev);
++	if (!cmd) {
++		rc = -ENXIO;
++		goto out_err;
++	}
++
++	setup_threshold_field(life_used)
++	setup_threshold_field(dev_over_temperature)
++	setup_threshold_field(dev_under_temperature)
++	setup_threshold_field(corrected_volatile_mem_err)
++	setup_threshold_field(corrected_pmem_err)
++	cxl_cmd_alert_config_set_valid_alert_actions(
++		cmd, alertctx.valid_alert_actions);
++	cxl_cmd_alert_config_set_enable_alert_actions(
++		cmd, alertctx.enable_alert_actions);
++
++	rc = cxl_cmd_submit(cmd);
++	if (rc < 0) {
++		log_err(&ml, "cmd submission failed: %s\n", strerror(-rc));
++		goto out_cmd;
++	}
++
++	rc = cxl_cmd_get_mbox_status(cmd);
++	if (rc != 0) {
++		log_err(&ml, "%s: mbox status: %d\n", __func__, rc);
++		rc = -ENXIO;
++	}
++
++out_cmd:
++	cxl_cmd_unref(cmd);
++out_err:
++	if (rc)
++		log_err(&ml, "%s error: %s\n", devname, strerror(-rc));
++
++	flags = UTIL_JSON_ALERT_CONFIG;
++	if (actx->f_out == stdout && isatty(1))
++		flags |= UTIL_JSON_HUMAN;
++	jmemdev = util_cxl_memdev_to_json(memdev, flags);
++	if (actx->jdevs && jmemdev)
++		json_object_array_add(actx->jdevs, jmemdev);
++
++	return rc;
++}
++
+ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 			 int (*action)(struct cxl_memdev *memdev,
+ 				       struct action_context *actx),
+@@ -749,7 +955,8 @@ static int memdev_action(int argc, const char **argv, struct cxl_ctx *ctx,
+ 	}
+ 
+ 	if (action == action_setpartition || action == action_reserve_dpa ||
+-	    action == action_free_dpa || action == action_update_fw)
++	    action == action_free_dpa || action == action_update_fw ||
++	    action == action_set_alert_config)
+ 		actx.jdevs = json_object_new_array();
+ 
+ 	if (err == argc) {
+@@ -968,3 +1175,14 @@ int cmd_update_fw(int argc, const char **argv, struct cxl_ctx *ctx)
+ 
+ 	return count >= 0 ? 0 : EXIT_FAILURE;
  }
 +
-+#define cxl_alert_config_set_field(field)                                     \
-+CXL_EXPORT int cxl_cmd_alert_config_set_##field(struct cxl_cmd *cmd, int val) \
-+{                                                                             \
-+	struct cxl_cmd_set_alert_config *setalert = cmd->input_payload;       \
-+	setalert->field = val;                                                \
-+	return 0;                                                             \
-+}
-+
-+cxl_alert_config_set_field(life_used_prog_warn_threshold)
-+cxl_alert_config_set_field(dev_over_temperature_prog_warn_threshold)
-+cxl_alert_config_set_field(dev_under_temperature_prog_warn_threshold)
-+cxl_alert_config_set_field(corrected_volatile_mem_err_prog_warn_threshold)
-+cxl_alert_config_set_field(corrected_pmem_err_prog_warn_threshold)
-+cxl_alert_config_set_field(valid_alert_actions)
-+cxl_alert_config_set_field(enable_alert_actions)
-+
-+CXL_EXPORT struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev)
++int cmd_set_alert_config(int argc, const char **argv, struct cxl_ctx *ctx)
 +{
-+	return cxl_cmd_new_generic(memdev, CXL_MEM_COMMAND_ID_SET_ALERT_CONFIG);
++	int count = memdev_action(
++		argc, argv, ctx, action_set_alert_config, set_alert_options,
++		"cxl set-alert-config <mem0> [<mem1>..<memN>] [<options>]");
++	log_info(&ml, "set alert configuration for %d mem%s\n",
++		 count >= 0 ? count : 0, count > 1 ? "s" : "");
++
++	return count >= 0 ? 0 : EXIT_FAILURE;
 +}
-diff --git a/cxl/lib/libcxl.sym b/cxl/lib/libcxl.sym
-index 8fa1cca..6beca52 100644
---- a/cxl/lib/libcxl.sym
-+++ b/cxl/lib/libcxl.sym
-@@ -264,3 +264,15 @@ global:
- 	cxl_memdev_update_fw;
- 	cxl_memdev_cancel_fw_update;
- } LIBCXL_5;
-+
-+LIBCXL_7 {
-+global:
-+	cxl_cmd_alert_config_set_life_used_prog_warn_threshold;
-+	cxl_cmd_alert_config_set_dev_over_temperature_prog_warn_threshold;
-+	cxl_cmd_alert_config_set_dev_under_temperature_prog_warn_threshold;
-+	cxl_cmd_alert_config_set_corrected_volatile_mem_err_prog_warn_threshold;
-+	cxl_cmd_alert_config_set_corrected_pmem_err_prog_warn_threshold;
-+	cxl_cmd_alert_config_set_valid_alert_actions;
-+	cxl_cmd_alert_config_set_enable_alert_actions;
-+	cxl_cmd_new_set_alert_config;
-+} LIBCXL_6;
-diff --git a/cxl/lib/private.h b/cxl/lib/private.h
-index a641727..b26a862 100644
---- a/cxl/lib/private.h
-+++ b/cxl/lib/private.h
-@@ -309,6 +309,18 @@ struct cxl_cmd_get_alert_config {
- #define CXL_CMD_ALERT_CONFIG_PROG_ALERTS_CORRECTED_PMEM_ERR_PROG_WARN_THRESHOLD_MASK \
- 	BIT(4)
- 
-+/* CXL 3.0 8.2.9.8.3.3 Set Alert Configuration */
-+struct cxl_cmd_set_alert_config {
-+	u8 valid_alert_actions;
-+	u8 enable_alert_actions;
-+	u8 life_used_prog_warn_threshold;
-+	u8 rsvd;
-+	le16 dev_over_temperature_prog_warn_threshold;
-+	le16 dev_under_temperature_prog_warn_threshold;
-+	le16 corrected_volatile_mem_err_prog_warn_threshold;
-+	le16 corrected_pmem_err_prog_warn_threshold;
-+} __attribute__((packed));
-+
- struct cxl_cmd_get_partition {
- 	le64 active_volatile;
- 	le64 active_persistent;
-diff --git a/cxl/libcxl.h b/cxl/libcxl.h
-index 0f4f4b2..b0ec369 100644
---- a/cxl/libcxl.h
-+++ b/cxl/libcxl.h
-@@ -461,6 +461,22 @@ enum cxl_setpartition_mode {
- int cxl_cmd_partition_set_mode(struct cxl_cmd *cmd,
- 		enum cxl_setpartition_mode mode);
- 
-+int cxl_cmd_alert_config_set_life_used_prog_warn_threshold(struct cxl_cmd *cmd,
-+							   int threshold);
-+int cxl_cmd_alert_config_set_dev_over_temperature_prog_warn_threshold(
-+	struct cxl_cmd *cmd, int threshold);
-+int cxl_cmd_alert_config_set_dev_under_temperature_prog_warn_threshold(
-+	struct cxl_cmd *cmd, int threshold);
-+int cxl_cmd_alert_config_set_corrected_volatile_mem_err_prog_warn_threshold(
-+	struct cxl_cmd *cmd, int threshold);
-+int cxl_cmd_alert_config_set_corrected_pmem_err_prog_warn_threshold(
-+	struct cxl_cmd *cmd, int threshold);
-+int cxl_cmd_alert_config_set_valid_alert_actions(struct cxl_cmd *cmd,
-+						 int action);
-+int cxl_cmd_alert_config_set_enable_alert_actions(struct cxl_cmd *cmd,
-+						  int enable);
-+struct cxl_cmd *cxl_cmd_new_set_alert_config(struct cxl_memdev *memdev);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
 -- 
 2.17.1
 
