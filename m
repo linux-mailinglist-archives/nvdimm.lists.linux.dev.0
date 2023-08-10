@@ -1,45 +1,45 @@
-Return-Path: <nvdimm+bounces-6493-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6495-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A7FF776459
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Aug 2023 17:48:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42E91776FB2
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Aug 2023 07:41:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEA181C212AD
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  9 Aug 2023 15:48:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 707081C21488
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 10 Aug 2023 05:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B071BB32;
-	Wed,  9 Aug 2023 15:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB06110D;
+	Thu, 10 Aug 2023 05:41:20 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C3418AE1
-	for <nvdimm@lists.linux.dev>; Wed,  9 Aug 2023 15:47:56 +0000 (UTC)
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="115950278"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684767600"; 
-   d="scan'208";a="115950278"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 00:46:42 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 26C9AE428A
-	for <nvdimm@lists.linux.dev>; Thu, 10 Aug 2023 00:46:41 +0900 (JST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFD510FC
+	for <nvdimm@lists.linux.dev>; Thu, 10 Aug 2023 05:41:17 +0000 (UTC)
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="127267077"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684767600"; 
+   d="scan'208";a="127267077"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2023 14:40:05 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+	by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id B54B7DDC88
+	for <nvdimm@lists.linux.dev>; Thu, 10 Aug 2023 14:40:02 +0900 (JST)
 Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5A453D9688
-	for <nvdimm@lists.linux.dev>; Thu, 10 Aug 2023 00:46:40 +0900 (JST)
+	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id E227CD6166
+	for <nvdimm@lists.linux.dev>; Thu, 10 Aug 2023 14:40:01 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.167.215.54])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id AC18E200501B6;
-	Thu, 10 Aug 2023 00:46:39 +0900 (JST)
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5AE29200649E0;
+	Thu, 10 Aug 2023 14:40:01 +0900 (JST)
 From: Xiao Yang <yangx.jy@fujitsu.com>
 To: vishal.l.verma@intel.com,
 	nvdimm@lists.linux.dev
 Cc: linux-cxl@vger.kernel.org,
 	Xiao Yang <yangx.jy@fujitsu.com>
-Subject: [NDCTL PATCH] daxctl: Remove unused mem_zone variable
-Date: Wed,  9 Aug 2023 23:46:36 +0800
-Message-Id: <20230809154636.11887-1-yangx.jy@fujitsu.com>
+Subject: [NDCTL PATCH 1/2] daxctl: Don't check param.no_movable when param.no_online is set
+Date: Thu, 10 Aug 2023 13:39:57 +0800
+Message-Id: <20230810053958.14992-1-yangx.jy@fujitsu.com>
 X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -49,55 +49,38 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27804.000
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27804.005
 X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27804.000
-X-TMASE-Result: 10--1.324500-10.000000
-X-TMASE-MatchedRID: wzvsWxCP1hZlJTodqNqEzhFbgtHjUWLywTlc9CcHMZerwqxtE531VIPc
-	XuILVCbaRuz+B9qwyFIQMsrEt9MpLGfwTtWE8r6mBe3KRVyu+k1JXeUbJfbZl5soi2XrUn/J8m+
-	hzBStantdY+ZoWiLImydET58jp62SQdP5uqvPxk5qdc/uc0ZG4Uhx88+6GIDS2VMt2uxVmsV+rD
-	4aHMnLq/mptzwfUCHPKq8qdRk8TPgOncV1svvHP/1hA9bmXgujwGC8e6520fKw0PJt06oJaHpaQ
-	l5xviY7wxgWdRvK9Un9g+oMf9KM6Q==
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27804.005
+X-TMASE-Result: 10--5.252800-10.000000
+X-TMASE-MatchedRID: T/UKjKdt5dO1Hdke1yr59x1kSRHxj+Z5TFQnI+epPIbAuQ0xDMaXkH4q
+	tYI9sRE/7wJL2+8U4LEQMsrEt9MpLGfwTtWE8r6mh5kaQXRvR9dAApRfVHzqNJsoi2XrUn/J8m+
+	hzBStansUGm4zriL0oQtuKBGekqUpI/NGWt0UYPAib5v3wiVe9VdYGfzWX7ubeHFxVLR7sXq8HT
+	8Ap0Ak7Ed5hikrcf0r
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-mem_zone variable has never been used so remove it.
+param.no_movable is used to online memory in ZONE_NORMAL but
+param.no_online is used to not online memory. So it's unnecessary
+to check param.no_movable when param.no_online is set.
 
 Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
 ---
- daxctl/device.c | 6 ------
- 1 file changed, 6 deletions(-)
+ daxctl/device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/daxctl/device.c b/daxctl/device.c
-index d2d206b..360ae8b 100644
+index 360ae8b..ba31eb6 100644
 --- a/daxctl/device.c
 +++ b/daxctl/device.c
-@@ -59,7 +59,6 @@ enum memory_zone {
- 	MEM_ZONE_MOVABLE,
- 	MEM_ZONE_NORMAL,
- };
--static enum memory_zone mem_zone = MEM_ZONE_MOVABLE;
+@@ -711,7 +711,7 @@ static int reconfig_mode_system_ram(struct daxctl_dev *dev)
+ 	const char *devname = daxctl_dev_get_devname(dev);
+ 	int rc, skip_enable = 0;
  
- enum device_action {
- 	ACTION_RECONFIG,
-@@ -469,8 +468,6 @@ static const char *parse_device_options(int argc, const char **argv,
- 				align = __parse_size64(param.align, &units);
- 		} else if (strcmp(param.mode, "system-ram") == 0) {
- 			reconfig_mode = DAXCTL_DEV_MODE_RAM;
--			if (param.no_movable)
--				mem_zone = MEM_ZONE_NORMAL;
- 		} else if (strcmp(param.mode, "devdax") == 0) {
- 			reconfig_mode = DAXCTL_DEV_MODE_DEVDAX;
- 			if (param.no_online) {
-@@ -494,9 +491,6 @@ static const char *parse_device_options(int argc, const char **argv,
- 			align = __parse_size64(param.align, &units);
- 		/* fall through */
- 	case ACTION_ONLINE:
--		if (param.no_movable)
--			mem_zone = MEM_ZONE_NORMAL;
--		/* fall through */
- 	case ACTION_DESTROY:
- 	case ACTION_OFFLINE:
- 	case ACTION_DISABLE:
+-	if (param.no_online || !param.no_movable) {
++	if (param.no_online) {
+ 		if (!param.force && daxctl_dev_will_auto_online_memory(dev)) {
+ 			fprintf(stderr,
+ 				"%s: error: kernel policy will auto-online memory, aborting\n",
 -- 
 2.40.1
 
