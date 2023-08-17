@@ -1,76 +1,97 @@
-Return-Path: <nvdimm+bounces-6524-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6526-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92E5277F5CE
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Aug 2023 14:00:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E27B577F8D0
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Aug 2023 16:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEF891C213B8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Aug 2023 12:00:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A0BD282027
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 17 Aug 2023 14:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6906F13AD4;
-	Thu, 17 Aug 2023 11:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A8314F6D;
+	Thu, 17 Aug 2023 14:25:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A340134DD
-	for <nvdimm@lists.linux.dev>; Thu, 17 Aug 2023 11:59:53 +0000 (UTC)
-Received: from lhrpeml500004.china.huawei.com (unknown [172.18.147.226])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RRNkB001Dz6J6ZG;
-	Thu, 17 Aug 2023 19:55:45 +0800 (CST)
-Received: from mscphis00759.huawei.com (10.123.66.134) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Thu, 17 Aug 2023 12:59:51 +0100
-From: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-To: <dan.j.williams@intel.com>
-CC: <vishal.l.verma@intel.com>, <dave.jiang@intel.com>, <ira.weiny@intel.com>,
-	<nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<yusongping@huawei.com>, <artem.kuzin@huawei.com>
-Subject: [PATCH] drivers: nvdimm: fix memleak
-Date: Thu, 17 Aug 2023 19:59:45 +0800
-Message-ID: <20230817115945.771826-1-konstantin.meskhidze@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DC412B8A
+	for <nvdimm@lists.linux.dev>; Thu, 17 Aug 2023 14:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1692282353;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YU1kedm3s1a6B75XQIpxvCnkzuYPmtz40YLYh/uOwp8=;
+	b=aqA3AVLC4NYRVFUP3Dy+hNsSO8ccTXBPO5/H5vZb8RvfjkNUr52gJ6dY3VCy9BmwwSOyiH
+	3lBu3yEc/XjbZlluUZe7OxCUMdBENPol7xLKnoAnTXLZKU32NRrqNwXnG8eqYVBWTnZHOO
+	Ry7BBTjlaDymGbiE9MgoaO9PVL+l9kw=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-mm_4aXBWMsOBdnAGOrWyqg-1; Thu, 17 Aug 2023 10:25:50 -0400
+X-MC-Unique: mm_4aXBWMsOBdnAGOrWyqg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A1B029AA3B0;
+	Thu, 17 Aug 2023 14:25:46 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 3EBEC1121314;
+	Thu, 17 Aug 2023 14:25:46 +0000 (UTC)
+From: Jeff Moyer <jmoyer@redhat.com>
+To: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc: <dan.j.williams@intel.com>,  <vishal.l.verma@intel.com>,  <dave.jiang@intel.com>,  <ira.weiny@intel.com>,  <nvdimm@lists.linux.dev>,  <linux-kernel@vger.kernel.org>,  <yusongping@huawei.com>,  <artem.kuzin@huawei.com>
+Subject: Re: [PATCH] drivers: nvdimm: fix dereference after free
+References: <20230817114103.754977-1-konstantin.meskhidze@huawei.com>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date: Thu, 17 Aug 2023 10:31:33 -0400
+In-Reply-To: <20230817114103.754977-1-konstantin.meskhidze@huawei.com>
+	(Konstantin Meskhidze's message of "Thu, 17 Aug 2023 19:41:03 +0800")
+Message-ID: <x49jzttu4e2.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.123.66.134]
-X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
- lhrpeml500004.china.huawei.com (7.191.163.9)
-X-CFilter-Loop: Reflected
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 
-Memory pointed by 'nd_pmu->pmu.attr_groups' is allocated in function
-'register_nvdimm_pmu' and is lost after 'kfree(nd_pmu)' call in function
-'unregister_nvdimm_pmu'.
+Konstantin Meskhidze <konstantin.meskhidze@huawei.com> writes:
 
-Co-developed-by: Ivanov Mikhail <ivanov.mikhail1@huawei-partners.com>
-Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
----
- drivers/nvdimm/nd_perf.c | 1 +
- 1 file changed, 1 insertion(+)
+> 'nd_pmu->pmu.attr_groups' is dereferenced in function
+> 'nvdimm_pmu_free_hotplug_memory' call after it has been freed. Because in
+> function 'nvdimm_pmu_free_hotplug_memory' memory pointed by the fields of
+> 'nd_pmu->pmu.attr_groups' is deallocated it is necessary to call 'kfree'
+> after 'nvdimm_pmu_free_hotplug_memory'.
+>
+> Co-developed-by: Ivanov Mikhail <ivanov.mikhail1@huawei-partners.com>
+> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+> ---
+>  drivers/nvdimm/nd_perf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/nvdimm/nd_perf.c b/drivers/nvdimm/nd_perf.c
+> index 14881c4e0..2b6dc80d8 100644
+> --- a/drivers/nvdimm/nd_perf.c
+> +++ b/drivers/nvdimm/nd_perf.c
+> @@ -307,10 +307,10 @@ int register_nvdimm_pmu(struct nvdimm_pmu *nd_pmu, struct platform_device *pdev)
+>  	}
+>  
+>  	rc = perf_pmu_register(&nd_pmu->pmu, nd_pmu->pmu.name, -1);
+>  	if (rc) {
+> -		kfree(nd_pmu->pmu.attr_groups);
+>  		nvdimm_pmu_free_hotplug_memory(nd_pmu);
+> +		kfree(nd_pmu->pmu.attr_groups);
+>  		return rc;
+>  	}
+>  
+>  	pr_info("%s NVDIMM performance monitor support registered\n",
 
-diff --git a/drivers/nvdimm/nd_perf.c b/drivers/nvdimm/nd_perf.c
-index 433bbb68a..14881c4e0 100644
---- a/drivers/nvdimm/nd_perf.c
-+++ b/drivers/nvdimm/nd_perf.c
-@@ -323,7 +323,8 @@ EXPORT_SYMBOL_GPL(register_nvdimm_pmu);
- void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
- {
- 	perf_pmu_unregister(&nd_pmu->pmu);
- 	nvdimm_pmu_free_hotplug_memory(nd_pmu);
-+	kfree(nd_pmu->pmu.attr_groups);
- 	kfree(nd_pmu);
- }
- EXPORT_SYMBOL_GPL(unregister_nvdimm_pmu);
--- 
-2.34.1
+Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
 
 
