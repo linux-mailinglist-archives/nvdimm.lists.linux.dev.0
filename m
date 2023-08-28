@@ -1,38 +1,37 @@
-Return-Path: <nvdimm+bounces-6573-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6574-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 935A978AF65
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Aug 2023 14:01:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A3D78AFE4
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Aug 2023 14:18:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B86D280E0D
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Aug 2023 12:01:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C64B8280E13
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 28 Aug 2023 12:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9A911CA1;
-	Mon, 28 Aug 2023 12:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D9011CA7;
+	Mon, 28 Aug 2023 12:18:36 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520406126
-	for <nvdimm@lists.linux.dev>; Mon, 28 Aug 2023 12:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCDF6125
+	for <nvdimm@lists.linux.dev>; Mon, 28 Aug 2023 12:18:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=t/UAQopVsNp4is4uoKpwagnnGQ
-	z1HSr9pWMwegGCdNOnN+AnuFV6zFD/Epz4FxFYrqkygX2JPMnl6z1ooNMvdraFw5eADQcIux8dLNy
-	Valt2dsZTWys6PQmrSNeY5wUqT11kNwCIpJFz3/VUyQ05L3XzXG1zyqhZPPU2Aa7OJaFEDfPwPriu
-	1pPhULBHmK4B+9mhdul7FgXMMtt8uDB7newAVu5InW4xTMcuXEW19gSV2J/ihEBwMuDW7HvQT0kjJ
-	yGUMLLgwVXN0Z0QNLaKfr8ouaUVPlzYgAIWtseWHelDwdB71GSFwdlmq7imD6ulaNAK9SkXizk0vO
-	sx4ijc/Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qaavM-009WdP-1n;
-	Mon, 28 Aug 2023 12:00:52 +0000
-Date: Mon, 28 Aug 2023 05:00:52 -0700
-From: Christoph Hellwig <hch@infradead.org>
+	bh=ve4BHXYYDtHmo8gKLNw/Y51LgqpTIonHiBSys2mOFvE=; b=YPhPLM4VvUMqhydvfSNnt3IVIo
+	NF6Vq7yPJcJOISvvC4reeQp3n1ILZOteFy3C8qgXMu4BN5F+3Ea5qT5OQQzKjL5vvxaF+OeuArG4/
+	9gcwlmXRv0MRBTaMxcRLKff80PQlGThqLFVyU3UU8e1RtbDQ0Rh7Iy1P7qQiz28L2FawNSPOuin+n
+	WmjOTHU6a13xRi2ppuVNSsD4Yv/Px1AQcCDqjtRQlyxj38R2gS711V7U+aQIqdfVf7OjwRA4MrYiY
+	QQG/IITuIyF6/xLNZ0cI7vhTTlAe7bcUD/i/7EFI5RN69Qp51h1s9P2mRnYh44ewIkXIDkMgD1kBV
+	bYvHDEww==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1qabBw-000BZW-FS; Mon, 28 Aug 2023 12:18:00 +0000
+Date: Mon, 28 Aug 2023 13:18:00 +0100
+From: Matthew Wilcox <willy@infradead.org>
 To: Xueshi Hu <xueshi.hu@smartx.com>
 Cc: hch@infradead.org, dan.j.williams@intel.com, vishal.l.verma@intel.com,
 	dave.jiang@intel.com, jayalk@intworks.biz, daniel@ffwll.ch,
@@ -40,14 +39,14 @@ Cc: hch@infradead.org, dan.j.williams@intel.com, vishal.l.verma@intel.com,
 	brauner@kernel.org, jack@suse.com, tytso@mit.edu,
 	adilger.kernel@dilger.ca, miklos@szeredi.hu,
 	mike.kravetz@oracle.com, muchun.song@linux.dev, djwong@kernel.org,
-	willy@infradead.org, akpm@linux-foundation.org, hughd@google.com,
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-aio@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-mm@kvack.org, linux-xfs@vger.kernel.org
+	akpm@linux-foundation.org, hughd@google.com, nvdimm@lists.linux.dev,
+	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-mm@kvack.org,
+	linux-xfs@vger.kernel.org
 Subject: Re: [PATCH v2] fs: clean up usage of noop_dirty_folio
-Message-ID: <ZOyMdA/WSZMRWkWY@infradead.org>
+Message-ID: <ZOyQePmvT6LaJst+@casper.infradead.org>
 References: <20230828075449.262510-1-xueshi.hu@smartx.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -58,9 +57,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230828075449.262510-1-xueshi.hu@smartx.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Looks good:
+On Mon, Aug 28, 2023 at 03:54:49PM +0800, Xueshi Hu wrote:
+> In folio_mark_dirty(), it can automatically fallback to
+> noop_dirty_folio() if a_ops->dirty_folio is not registered.
+> 
+> As anon_aops, dev_dax_aops and fb_deferred_io_aops becames empty, remove
+> them too.
+> 
+> Signed-off-by: Xueshi Hu <xueshi.hu@smartx.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
