@@ -1,59 +1,55 @@
-Return-Path: <nvdimm+bounces-6866-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6868-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 479637DD7B2
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Oct 2023 22:20:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA1C07DE855
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Nov 2023 23:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50FEE1C20CD0
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 31 Oct 2023 21:20:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F7D71C20E1A
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Nov 2023 22:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920E8249E2;
-	Tue, 31 Oct 2023 21:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34541B272;
+	Wed,  1 Nov 2023 22:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M20vTla8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7zfr///"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EA9225CD
-	for <nvdimm@lists.linux.dev>; Tue, 31 Oct 2023 21:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E89F846D
+	for <nvdimm@lists.linux.dev>; Wed,  1 Nov 2023 22:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698787247; x=1730323247;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eaaNHAKc3qzYecY+CBu5UqPJXE/+6KT5/W41ndHAMWE=;
-  b=M20vTla8nEVdQHptRAYm4UmYEhTWbfaNlMWXEHSYY3YY9Vw9Rym1zROP
-   bKD7Fpe4NR1gJxMRiQARCa7qCLvtX7Kn30GlbgDtr0aGxvaFfD/sU9+p4
-   Gqrd214gvykyzuJM/AC7G5IfnsoHr7LY0aQo5qCRI4uB2ilmaa10MUWgX
-   7H8abKLlBsyHdmlbnvI8E+YK2L2M6uxn5PPV9KAUEk9gtf8PPvUP5SAgB
-   lLDhW1TUpqNe+Pen4W0GT39F/gD3kqN33Y5tqMcv04wqWF0UvdJ404a6w
-   uSg+8cSyMZ8Cb/vmYy6C+MLJuWwQgSqVq8/chcMBoSLWK5znR8qxpgWS+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="474615050"
-X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
-   d="scan'208";a="474615050"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 14:20:46 -0700
+  t=1698879145; x=1730415145;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=7Zwws/L01GXfN5fAEQOoQCagibq/5sDrCEtzSmit9ns=;
+  b=G7zfr///Qz2gkI/ZfWgVIamY/Nc8SPhSbdHtm+pHipfOCmpuQvqaPQhM
+   s8Kcjt+GCWBgPQoWyt/GC84E2C//cLXkNihkug7LyTH9pHJHkwa+14W9c
+   54TCXKUxkKh93UDzKtQNaEOTiwY64yNWWlPRXxrt84ylIj+hrO8sLMsgw
+   LNLLTwFIu1eb8aXrKG6fYt3d7cdOzmQhkaRcdNrGMDxFobKcDSTyfv1ll
+   TYD6g3T6+kI/6NfMlmYj819sfLx4KmRj/GRV1e6N3g8tkY+tDM+AYvO54
+   PP/ry3cFvVk/e+N+YzObsrGcKCjwkLXHdVisgqCLWH1XeMWV1rRVeRquB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="10133600"
+X-IronPort-AV: E=Sophos;i="6.03,269,1694761200"; 
+   d="scan'208";a="10133600"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 15:52:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="831173766"
-X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
-   d="scan'208";a="831173766"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [192.168.1.177]) ([10.213.179.50])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 14:20:46 -0700
-Subject: [NDCTL PATCH v3] cxl/region: Add -f option for disable-region
-From: Dave Jiang <dave.jiang@intel.com>
-To: vishal.l.verma@intel.com
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
- dan.j.williams@intel.com, yangx.jy@fujitsu.com
-Date: Tue, 31 Oct 2023 14:20:45 -0700
-Message-ID: <169878724592.82931.11180459815481606425.stgit@djiang5-mobl3>
-User-Agent: StGit/1.5
+X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="796033553"
+X-IronPort-AV: E=Sophos;i="6.03,269,1694761200"; 
+   d="scan'208";a="796033553"
+Received: from dgopalan-mobl.amr.corp.intel.com (HELO [192.168.1.200]) ([10.212.98.103])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 15:52:21 -0700
+From: Vishal Verma <vishal.l.verma@intel.com>
+Subject: [PATCH v8 0/3] mm: use memmap_on_memory semantics for dax/kmem
+Date: Wed, 01 Nov 2023 16:51:50 -0600
+Message-Id: <20231101-vv-kmem_memmap-v8-0-5e4a83331388@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -62,144 +58,156 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIbWQmUC/3XPy2rDMBAF0F8JWldl9Jay6n+UUsZ61KKxHezUt
+ AT/e+UsamPRhRZ34MzV3MkUxxwncj7dyRjnPOWhL8E+nYhvsf+INIeSCQcuQDNB55l+drF7L6/
+ DK1XSCm8DSG4cKajBKdJmxN63hfVfl0sZXseY8vej5fWt5DZPt2H8eZTObJ3+u39mFGjSITqvM
+ XGvX3J/i5dnP3RkXTXzjRsOFeeFW9sExEZI58SRi41bYBUXhUvQ0SEmpa07crlxx23FZeE6JSN
+ S9Io5PHL1xxmAqrgqHJUMzFmWAKvP6x1nuuK6cDA2QRAehGFHbnac1+1mvR2NDkYrHpLa82VZf
+ gFS9LEBOwIAAA==
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, 
+ Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+ Huang Ying <ying.huang@intel.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
+ Michal Hocko <mhocko@suse.com>, 
+ Jonathan Cameron <Jonathan.Cameron@Huawei.com>, 
+ Jeff Moyer <jmoyer@redhat.com>, Vishal Verma <vishal.l.verma@intel.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5789;
+ i=vishal.l.verma@intel.com; h=from:subject:message-id;
+ bh=7Zwws/L01GXfN5fAEQOoQCagibq/5sDrCEtzSmit9ns=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDKlO1xZaNnlzN74y9ZSc5PYlY8WSz4wCee2Hvti7R+Q7P
+ owvnc3WUcrCIMbFICumyPJ3z0fGY3Lb83kCExxh5rAygQxh4OIUgIk8zGRkeMP461hG657V+oHf
+ u/v+NBS9XhHLcHQZx1fOl7d6Jtq6f2Fk2PeXr64/lvW8rl3FoRvOa9XNA38p6p7omfS8JWuml6k
+ VBwA=
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
+ fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 
-The current operation for disable-region does not check if the memory
-covered by a region is online before attempting to disable the cxl region.
-Have the tool attempt to offline the relevant memory before attempting to
-disable the region(s). If offline fails, stop and return error.
+The dax/kmem driver can potentially hot-add large amounts of memory
+originating from CXL memory expanders, or NVDIMMs, or other 'device
+memories'. There is a chance there isn't enough regular system memory
+available to fit the memmap for this new memory. It's therefore
+desirable, if all other conditions are met, for the kmem managed memory
+to place its memmap on the newly added memory itself.
 
-Provide a -f option for the region to continue disable the region even if
-the memory is not offlined. Add a warning to state that the physical
-memory is being leaked and unrecoverable unless reboot due to disable without
-offline.
+The main hurdle for accomplishing this for kmem is that memmap_on_memory
+can only be done if the memory being added is equal to the size of one
+memblock. To overcome this, allow the hotplug code to split an add_memory()
+request into memblock-sized chunks, and try_remove_memory() to also
+expect and handle such a scenario.
 
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Patch 1 replaces an open-coded kmemdup()
+
+Patch 2 teaches the memory_hotplug code to allow for splitting
+add_memory() and remove_memory() requests over memblock sized chunks.
+
+Patch 3 allows the dax region drivers to request memmap_on_memory
+semantics. CXL dax regions default this to 'on', all others default to
+off to keep existing behavior unchanged.
+
+Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+---
+Changes in v8:
+- Fix unwinding in create_altmaps_and_memory_blocks() to remove
+  partially added blocks and altmaps. (David, Ying)
+- Simplify remove_memory_blocks_and_altmaps() since an altmap is
+  assured. (David)
+- Since we remove per memory-block altmaps, the walk through  memory
+  blocks for a larger range isn't needed. Instead we can lookup the
+  memory block directly from the pfn, allowing the test_has_altmap_cb()
+  callback to be dropped and removed. (David)
+- Link to v7: https://lore.kernel.org/r/20231025-vv-kmem_memmap-v7-0-4a76d7652df5@intel.com
+
+Changes in v7:
+- Make the add_memory_resource() flow symmetrical w.r.t. try_remove_memory()
+  in terms of how the altmap path is taken (David Hildenbrand)
+- Move a comment, clean up usage of 'memblock' vs. 'memory_block'
+  (David Hildenbrand)
+- Don't use the altmap path for the mhp_supports_memmap_on_memory(memblock_size) == false
+  case (Huang Ying)
+- Link to v6: https://lore.kernel.org/r/20231016-vv-kmem_memmap-v6-0-078f0d3c0371@intel.com
+
+Changes in v6:
+- Add a prep patch to replace an open coded kmemdup in
+  add_memory_resource() (Dan Williams)
+- Fix ordering of firmware_map_remove w.r.t taking the hotplug lock
+  (David Hildenbrand)
+- Remove unused 'nid' variable, and a stray whitespace (David Hildenbrand)
+- Clean up and simplify the altmap vs non-altmap paths for
+  try_remove_memory (David Hildenbrand)
+- Add a note to the changelog in patch 1 linking to the PUD mappings
+  proposal (David Hildenbrand)
+- Remove the new sysfs ABI from the kmem/dax drivers until ABI
+  documentation for /sys/bus/dax can be established (will split this out
+  into a separate patchset) (Dan Williams)
+- Link to v5: https://lore.kernel.org/r/20231005-vv-kmem_memmap-v5-0-a54d1981f0a3@intel.com
+
+Changes in v5:
+- Separate out per-memblock operations from per memory block operations
+  in try_remove_memory(), and rename the inner function appropriately.
+  This does expand the scope of the memory hotplug lock to include
+  remove_memory_block_devices(), but the alternative was to drop the
+  lock in the inner function separately for each iteration, and then
+  re-acquire it in try_remove_memory() creating a small window where
+  the lock isn't held. (David Hildenbrand)
+- Remove unnecessary rc check from the memmap_on_memory_store sysfs
+  helper in patch 2 (Dan Carpenter)
+- Link to v4: https://lore.kernel.org/r/20230928-vv-kmem_memmap-v4-0-6ff73fec519a@intel.com
+
+Changes in v4:
+- Rebase to Aneesh's PPC64 memmap_on_memory series v8 [2].
+- Tweak a goto / error path in add_memory_create_devices() (Jonathan)
+- Retain the old behavior for dax devices, only default to
+  memmap_on_memory for CXL (Jonathan)
+- Link to v3: https://lore.kernel.org/r/20230801-vv-kmem_memmap-v3-0-406e9aaf5689@intel.com
+
+[2]: https://lore.kernel.org/linux-mm/20230808091501.287660-1-aneesh.kumar@linux.ibm.com
+
+Changes in v3:
+- Rebase on Aneesh's patches [1]
+- Drop Patch 1 - it is not needed since [1] allows for dynamic setting
+  of the memmap_on_memory param (David)
+- Link to v2: https://lore.kernel.org/r/20230720-vv-kmem_memmap-v2-0-88bdaab34993@intel.com
+
+[1]: https://lore.kernel.org/r/20230801044116.10674-1-aneesh.kumar@linux.ibm.com
+
+Changes in v2:
+- Drop the patch to create an override path for the memmap_on_memory
+  module param (David)
+- Move the chunking into memory_hotplug.c so that any caller of
+  add_memory() can request this behavior. (David)
+- Handle remove_memory() too. (David, Ying)
+- Add a sysfs control in the kmem driver for memmap_on_memory semantics
+  (David, Jonathan)
+- Add a #else case to define mhp_supports_memmap_on_memory() if
+  CONFIG_MEMORY_HOTPLUG is unset. (0day report)
+- Link to v1: https://lore.kernel.org/r/20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com
 
 ---
-v3:
-- Remove movable check. (Dan)
-- Attempt to offline if not offline. -f will disable region anyways even
-  if memory not offline. (Dan)
-v2:
-- Update documentation and help output. (Vishal)
+Vishal Verma (3):
+      mm/memory_hotplug: replace an open-coded kmemdup() in add_memory_resource()
+      mm/memory_hotplug: split memmap_on_memory requests across memblocks
+      dax/kmem: allow kmem to add memory with memmap_on_memory
+
+ drivers/dax/bus.h         |   1 +
+ drivers/dax/dax-private.h |   1 +
+ drivers/dax/bus.c         |   3 +
+ drivers/dax/cxl.c         |   1 +
+ drivers/dax/hmem/hmem.c   |   1 +
+ drivers/dax/kmem.c        |   8 +-
+ drivers/dax/pmem.c        |   1 +
+ mm/memory_hotplug.c       | 211 ++++++++++++++++++++++++++++++----------------
+ 8 files changed, 152 insertions(+), 75 deletions(-)
 ---
- Documentation/cxl/cxl-disable-region.txt |   10 ++++++
- cxl/region.c                             |   54 +++++++++++++++++++++++++++++-
- 2 files changed, 63 insertions(+), 1 deletion(-)
+base-commit: 25b5b1a0646c3d39e1d885e27c10be1c9e202bf2
+change-id: 20230613-vv-kmem_memmap-5483c8d04279
 
-diff --git a/Documentation/cxl/cxl-disable-region.txt b/Documentation/cxl/cxl-disable-region.txt
-index 4b0625e40bf6..9abf19e96094 100644
---- a/Documentation/cxl/cxl-disable-region.txt
-+++ b/Documentation/cxl/cxl-disable-region.txt
-@@ -14,6 +14,10 @@ SYNOPSIS
- 
- include::region-description.txt[]
- 
-+If there are memory blocks that are still online, the operation will attempt to
-+offline the relevant blocks. If the offlining fails, the operation fails when not
-+using the -f (force) parameter.
-+
- EXAMPLE
- -------
- ----
-@@ -27,6 +31,12 @@ OPTIONS
- -------
- include::bus-option.txt[]
- 
-+-f::
-+--force::
-+	Attempt to disable-region even though memory cannot be offlined successfully.
-+	Will emit warning that operation will permanently leak phiscal address space
-+	and cannot be recovered until a reboot.
-+
- include::decoder-option.txt[]
- 
- include::debug-option.txt[]
-diff --git a/cxl/region.c b/cxl/region.c
-index bcd703956207..5cbbf2749e2d 100644
---- a/cxl/region.c
-+++ b/cxl/region.c
-@@ -14,6 +14,7 @@
- #include <util/parse-options.h>
- #include <ccan/minmax/minmax.h>
- #include <ccan/short_types/short_types.h>
-+#include <daxctl/libdaxctl.h>
- 
- #include "filter.h"
- #include "json.h"
-@@ -95,6 +96,8 @@ static const struct option enable_options[] = {
- 
- static const struct option disable_options[] = {
- 	BASE_OPTIONS(),
-+	OPT_BOOLEAN('f', "force", &param.force,
-+		    "attempt to offline memory before disabling the region"),
- 	OPT_END(),
- };
- 
-@@ -789,13 +792,62 @@ static int destroy_region(struct cxl_region *region)
- 	return cxl_region_delete(region);
- }
- 
-+static int disable_region(struct cxl_region *region)
-+{
-+	const char *devname = cxl_region_get_devname(region);
-+	struct daxctl_region *dax_region;
-+	struct daxctl_memory *mem;
-+	struct daxctl_dev *dev;
-+	int failed = 0, rc;
-+
-+	dax_region = cxl_region_get_daxctl_region(region);
-+	if (!dax_region)
-+		goto out;
-+
-+	daxctl_dev_foreach(dax_region, dev) {
-+		mem = daxctl_dev_get_memory(dev);
-+		if (!mem)
-+			return -ENXIO;
-+
-+		/*
-+		 * If memory is still online and user wants to force it, attempt
-+		 * to offline it.
-+		 */
-+		if (daxctl_memory_is_online(mem)) {
-+			rc = daxctl_memory_offline(mem);
-+			if (rc < 0) {
-+				log_err(&rl, "%s: unable to offline %s: %s\n",
-+					devname,
-+					daxctl_dev_get_devname(dev),
-+					strerror(abs(rc)));
-+				if (!param.force)
-+					return rc;
-+
-+				failed++;
-+			}
-+		}
-+	}
-+
-+	if (failed) {
-+		log_err(&rl, "%s: Forcing region disable without successful offline.\n",
-+			devname);
-+		log_err(&rl, "%s: Physical address space has now been permanently leaked.\n",
-+			devname);
-+		log_err(&rl, "%s: Leaked address cannot be recovered until a reboot.\n",
-+			devname);
-+	}
-+
-+out:
-+	return cxl_region_disable(region);
-+}
-+
- static int do_region_xable(struct cxl_region *region, enum region_actions action)
- {
- 	switch (action) {
- 	case ACTION_ENABLE:
- 		return cxl_region_enable(region);
- 	case ACTION_DISABLE:
--		return cxl_region_disable(region);
-+		return disable_region(region);
- 	case ACTION_DESTROY:
- 		return destroy_region(region);
- 	default:
-
+Best regards,
+-- 
+Vishal Verma <vishal.l.verma@intel.com>
 
 
