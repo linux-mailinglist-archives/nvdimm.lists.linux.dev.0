@@ -1,240 +1,218 @@
-Return-Path: <nvdimm+bounces-6869-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-6871-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECA467DE857
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Nov 2023 23:52:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1168D7DE945
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Nov 2023 01:26:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2F7F2819E7
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Nov 2023 22:52:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 152BA1C20E0D
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  2 Nov 2023 00:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7901B29E;
-	Wed,  1 Nov 2023 22:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1271AA3D;
+	Thu,  2 Nov 2023 00:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JIuo2Gss"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VQw0M9PB"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B5918E38
-	for <nvdimm@lists.linux.dev>; Wed,  1 Nov 2023 22:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD877E
+	for <nvdimm@lists.linux.dev>; Thu,  2 Nov 2023 00:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698879150; x=1730415150;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=f/IKjiX0oUHcikJLOo2W8JK83pAYKKgmZaVVmd3uHXA=;
-  b=JIuo2GsslHzlrE3TIhH+NoSfD2GKzWkquFj2IwDPM0FnbQx+IHQ4rykb
-   wvvztYdEClX7tEpXhvVo4wwPXWC2PIw9jlUHkXNjtP4AbV1oq4ivWQA0H
-   zOZn9q4sdvBk7sNidSwilD/uOyFHUJ7l17YVSS79RXVcUcrkNsEQ338ap
-   og8ucE+OtPRFXetXBA450FQJHb41kHBbGfbrKjoSTARr/bf2yt8s2/68n
-   fnmH3+SR464uJpNPOAXu4sBeCRc8Jezha71zR8tQmMsW4adgRQUY6dGkx
-   tkZTr/Z5bCWmhwmJj+mCbOrdX7yJFp6EFB8xhJNeUImrg4PGv3MXqk+24
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="10133632"
+  t=1698884755; x=1730420755;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UXMsHwWgaVoeRUIEDSLAewg5VJbEZjiPsB221wHdp9Y=;
+  b=VQw0M9PBcfJPvBKAYPLY438ZllaiDKhFrFMgraQF4sEad3/xi99A2+Q0
+   XzNo8grD9xvH7iPUf3t63pbNIX9Gg+9PyteLGT3/GR4HGXupWtoXFWt9I
+   N3R4hjD+My124pn7XJeKCvxupRrwU+i50N1usGMuQn9S4JH5FTt+7c3DP
+   COIgmAfbJxYLFNoWjdVO1IP2gwWqzi3Al+YaB5JCr5nDpeLhhlTz2cdz2
+   jl5++KUpQtzN7M+VOQ0BmXQV0IiSBNkwrfKQVv8f++LPtjMZGaN2axU6l
+   aT90MtVWRUTlKqlBgoTkAMBd9J9uFGJJZ3cxr81M6YuBlY5w48fdDdLqW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="1525043"
 X-IronPort-AV: E=Sophos;i="6.03,269,1694761200"; 
-   d="scan'208";a="10133632"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 15:52:27 -0700
+   d="scan'208";a="1525043"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 17:25:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="796033564"
+X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="934613645"
 X-IronPort-AV: E=Sophos;i="6.03,269,1694761200"; 
-   d="scan'208";a="796033564"
-Received: from dgopalan-mobl.amr.corp.intel.com (HELO [192.168.1.200]) ([10.212.98.103])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 15:52:25 -0700
-From: Vishal Verma <vishal.l.verma@intel.com>
-Date: Wed, 01 Nov 2023 16:51:53 -0600
-Subject: [PATCH v8 3/3] dax/kmem: allow kmem to add memory with
- memmap_on_memory
+   d="scan'208";a="934613645"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 01 Nov 2023 17:25:42 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 1 Nov 2023 17:25:41 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34 via Frontend Transport; Wed, 1 Nov 2023 17:25:41 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.34; Wed, 1 Nov 2023 17:25:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gCMoI1hpEasMlxeD3AKuf4B2kUCcGV/X6wWPUAo6zwyiZkl71NkCV+XA2nd5ziBnfLiguqcmkhT1INyMh5pXGviFVOB6bi/8rCQMc/fCxE0bSvtMEjYmXO9h/ABztu3kro7u06XR65TMg6ywEUf5XRkj4hpPDWcSL3Ix2eb9QUYH8qmy2fgu/KvNvyNrE9/2M2k2jnxbCASmoHVm5YFi9vjYcQRHVmGaiIwyVOdtnGCIi72vnCF3KNeiTzsft53FokduFupPQpyTESyRlWlFiXF6NqUDkTJNFFRe2QdL7S3/+NATgyRhROZtPKRkNuKPgDimFhYbRdwBPqJI0EIeSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x/mOr3AeQGqwCWzIQNqw0tyUYb2/9fhm2S/eE9hDvRU=;
+ b=RW3dMEPho/gukVH8MDDu96qQ6T4uXSKmf6jMHoAcFJNtAcgx8shjuGC8XXRy4ou84zsuWQ+Z8RjjcOmbZm5FMgsTcGGAwmgCGobNF93VTepcCp0O31/L82RQ62EBzouI07dTHB+fL2STcxpua/FrESOzl1zxDcQK+szNVgjbD2iOFigAen08rQwUv0cBPrxkZXAUoaiGD1ekkHB4OO42hS9aiMztyzVGQLk0l+AjCVll8MTHRqnbXJeZj8kU49EoKEzSGjX2buDxLABy1F37rSJrn1wCNrzZ08zTKNHpwJ8DXqxaewJuNALGTotPrWdxWI6gT2X0tK+ktzhqH7qoEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by BL1PR11MB5429.namprd11.prod.outlook.com (2603:10b6:208:30b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Thu, 2 Nov
+ 2023 00:25:33 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::d3b2:2f2:701e:e8c7]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::d3b2:2f2:701e:e8c7%4]) with mapi id 15.20.6954.019; Thu, 2 Nov 2023
+ 00:25:33 +0000
+Date: Wed, 1 Nov 2023 17:25:30 -0700
+From: Ira Weiny <ira.weiny@intel.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Dan Williams <dan.j.williams@intel.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, Ira Weiny
+	<ira.weiny@intel.com>, <nvdimm@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: [GIT PULL] NVDIMM for 6.7
+Message-ID: <6542ec7ae6233_4dfae294bb@iweiny-mobl.notmuch>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: BYAPR11CA0054.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::31) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231101-vv-kmem_memmap-v8-3-5e4a83331388@intel.com>
-References: <20231101-vv-kmem_memmap-v8-0-5e4a83331388@intel.com>
-In-Reply-To: <20231101-vv-kmem_memmap-v8-0-5e4a83331388@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, 
- Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
- Huang Ying <ying.huang@intel.com>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
- Michal Hocko <mhocko@suse.com>, 
- Jonathan Cameron <Jonathan.Cameron@Huawei.com>, 
- Jeff Moyer <jmoyer@redhat.com>, Vishal Verma <vishal.l.verma@intel.com>, 
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5021;
- i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=f/IKjiX0oUHcikJLOo2W8JK83pAYKKgmZaVVmd3uHXA=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDKlO15YmCtyR/i/bdfNgTbjZxNSCN4xhHx5/i61d42f4d
- mtvQPnUjlIWBjEuBlkxRZa/ez4yHpPbns8TmOAIM4eVCWQIAxenAEzkyH+GP3wt3llcWzV+HX7w
- 5D77jTl7UuyUgw3cti8xTuY93ypRx8jw3/3+lb4d9p47+takWa99VNXvxt7QdvVpj5zfn8c7v7X
- x8wAA
-X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
- fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL1PR11MB5429:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0e16b8cd-2433-44ae-6f62-08dbdb3a3a58
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HhUdu1llsYVgTQHLLFbNHLKdAcOb0cC+t/XX6DtHIlF2u0kVD682f6dVotcCUp5Hx5tEN+5hYTYnQ+lGylH7WExtgbrUn2yIlaRtWkatTh3LE0gc+MUgTmNggltxBTWaHoAvgVjkC0r6cNrM0qRJt+qwxVAaNclnOgaWMiJHblv+RhOL4Nia/4HeHSV0Rjk4+jT9kNG4BCwN9eb/StzTvdR1LF0LES7ZDjhq73yvr6bmFHV1Gb4Us79Tt54xSbjWJb1whVRhv1qBEYLYF7odFtsscOiCbeGq+EuQ71L6dQEJrPPVuKsacPgT0WQ6ch3xHAJGWdDZdHEhyFMbajQieY8h6JZlDvWEu7JNieHAr3/j3AdEqAFz9fsmYiShH/wiizc0CNPKD3MKlJL/eA1I8sK/zxprMWnYHIIMc1jRc2PxikYexBoN2u7oe1yXJcd34XKnHsH6p0YsnNn0lfPQrccXKZ3Ws/1RvfWUNwGKAOZ27/nLt2A8vcJvOkvcrc8JprXeon1SSzQqfThFzgRiI4VooCIClzyUzzRPXMNbpa9cXAYLNe22QS4x6O4qw5Zaau8/IvCrUIBg/NEtpi8nBqPsa5SwpMzvMzqohaA8BhdTSAMX5DSi6dnFrm7/c8GI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(396003)(346002)(376002)(366004)(230173577357003)(230273577357003)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(9686003)(6512007)(26005)(38100700002)(86362001)(82960400001)(2906002)(4001150100001)(83380400001)(478600001)(6506007)(8676002)(4326008)(6486002)(8936002)(66476007)(66556008)(54906003)(6916009)(316002)(5660300002)(44832011)(41300700001)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e702SIlEcBacItQ3sif//duo9OsBSmxo5Q5DqIrxAtrT2BWiV1NxcsQJcjAa?=
+ =?us-ascii?Q?EOf6FhZX3YqfIEDGck46VZyA0gn09AR04tijxEsTXa4sy4xmHQkACDquO91F?=
+ =?us-ascii?Q?RDd7nALCRShRZZmma0KZH/Du16tkyNOn/QgObf/Onf7Mclyo1ovi/hzN4PAn?=
+ =?us-ascii?Q?edg4GJrtGCaBcQDOwntH8kz+Uf8yD0oXKxkIDr9RP6qANhJGFzE7/ZoHF6h2?=
+ =?us-ascii?Q?Lf1/jk4VzJYt/c2qs/PCGTHIgALriGqsgOycupUuKuo9iMm0vjyOSQulYzDc?=
+ =?us-ascii?Q?puEtvaZPOOWpS6p1/lRk8XOr+FI9GMZs7514izXuPUewgriEfz72hbapl6P+?=
+ =?us-ascii?Q?8LveKkA90Y5WfExzt8pYGyHggviQeCF+VNrjebOKhzk6eWbEUothe5A26vGX?=
+ =?us-ascii?Q?5bBJTAp15S+snLn9wg1kDdHYaRg1R9QuaBseUQaX9G0lsY/PZwNJ0Y03ZGzk?=
+ =?us-ascii?Q?30tT9z5+VLI2RgirzA92Y3OpoEKraEaNgozqmgVRM7jGdt6LW3IOmla7DXQU?=
+ =?us-ascii?Q?Wr2y9wV9wTjw7jYTB1a+4AUnOqIsrifYXm4r1di8fTsaHVpEBr6aE8rGMEGS?=
+ =?us-ascii?Q?jzZdr3ar1s9JSdGN0mMc5WThPiXJSwAwUKEN2srlJOQhVoEbtVQ9UmeLfIin?=
+ =?us-ascii?Q?no4st61dHmBHzYv/BTW3ZTvXHYz4HTwqWZRv0S2MqJzTL2V7LS2hbgR9Swib?=
+ =?us-ascii?Q?YI5RAKzAktKNSc45vN7AgPtcKrzBxOc3w5cILrsIg2QI7FaHMqOOmUhJlYk8?=
+ =?us-ascii?Q?l6N2cC/wQciAVB8yTz8JWkggEGGrhWZwEUO1uJpMosHwJufdcQ9KD9W2lTyj?=
+ =?us-ascii?Q?w1N7gPPpCwicDtopT8Bp6msyk5VXlkKoa0M59wJt2Y3mxjHDEgHwy4bzf1gq?=
+ =?us-ascii?Q?ZwcC7Mi21DbYIBHKJ5kdxYPFM1dfZiYQi68A6e0CixaYLRpJiA+pjCeqhla8?=
+ =?us-ascii?Q?VDbZNOlsAh64xQfWZ4N1FgZo4ZUp+3CchbAP/33d6p00T6Ed+YTLhJo75lNr?=
+ =?us-ascii?Q?yOLZW8iZ1Cklo7vva57yEQBGczZGFJhA0rZgseowvdYjLc85K9a1rucZH0+x?=
+ =?us-ascii?Q?BY1l3YSF3EwNr3VlCYyK/LXBNyzuIo9DhJ6TBFkYgGjXxruls48GHfbp6ZVG?=
+ =?us-ascii?Q?HrEKsazZJ0Kh/gWE9Jn1AL+UJxulbWcVNQC1nGgpK8RCEvUcvxfbv4HPgon9?=
+ =?us-ascii?Q?CNq47yZ8TX71nrSmsMIzCYC2I8Zuv/XuH6khrZHFjOAbsKPMysxmBW0oFDvd?=
+ =?us-ascii?Q?4X1wcLmgiPlc1r5UU0PPD4Jn3uW8helq6DpwLqMAkn9HOyRyPX2q5IR0oN9e?=
+ =?us-ascii?Q?hPehNmqZjWMePrMgNOFvlU0o85gX4e1NwsXjryFxz7aHRY21iMwNXTnzJ5O/?=
+ =?us-ascii?Q?Zviqqw9hZwL3V67UJNnZ/aktJJ20IPDfX0SHYC7RsO6EnnrePHhnp4MijMWD?=
+ =?us-ascii?Q?4xs3xjHZxxYUqcvHaDhiYb0QCU7fGjWcVo37+j2wuBmG5bMKQu3yhIp6D58J?=
+ =?us-ascii?Q?VxCBhvPMefGwHG8OiLElNe+Z9xMDBAajwfQwKqCwfvvLFtiv/BiSTTcA2JGP?=
+ =?us-ascii?Q?iKSlBaINuqavNSmghNGt0iXduQIeBuCwCsGHBaQo?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e16b8cd-2433-44ae-6f62-08dbdb3a3a58
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 00:25:33.7954
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4RtvzVPq+M1EZ5tP1WzLh7aL58ulxSJeHJPeRku9hALuvG6dRxuePbN7z9vbYQ+ij+IRQMpk7c8NZNVxoLGmzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5429
+X-OriginatorOrg: intel.com
 
-Large amounts of memory managed by the kmem driver may come in via CXL,
-and it is often desirable to have the memmap for this memory on the new
-memory itself.
+Hi Linus, please pull from:
 
-Enroll kmem-managed memory for memmap_on_memory semantics if the dax
-region originates via CXL. For non-CXL dax regions, retain the existing
-default behavior of hot adding without memmap_on_memory semantics.
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git tags/libnvdimm-for-6.7
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Huang Ying <ying.huang@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Huang, Ying <ying.huang@intel.com>
-Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+... to get updates to the nvdimm tree.  They are a mix of bug fixes and updates
+to interfaces used by nvdimm.
+
+Bug fixes include:
+	Fix a sleep during spinlock in PREEMPT_RT kernels when getting a BTT
+		lane
+	Check for kstrdup memory failure in region probe
+	Use the correct variables in the nvdimm_badblocks_populate() kdoc block
+
+Updates to interfaces include:
+	Use devm_kstrdup to manage memory better
+	Allow class structures to be declared at build time
+	Start using __counted_by to help with bounds checking
+	Remove use of the deprecated strncpy
+
+They have all been in -next for more than a week with no reported issues.
+
 ---
- drivers/dax/bus.h         | 1 +
- drivers/dax/dax-private.h | 1 +
- drivers/dax/bus.c         | 3 +++
- drivers/dax/cxl.c         | 1 +
- drivers/dax/hmem/hmem.c   | 1 +
- drivers/dax/kmem.c        | 8 +++++++-
- drivers/dax/pmem.c        | 1 +
- 7 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
-index 1ccd23360124..cbbf64443098 100644
---- a/drivers/dax/bus.h
-+++ b/drivers/dax/bus.h
-@@ -23,6 +23,7 @@ struct dev_dax_data {
- 	struct dev_pagemap *pgmap;
- 	resource_size_t size;
- 	int id;
-+	bool memmap_on_memory;
- };
- 
- struct dev_dax *devm_create_dev_dax(struct dev_dax_data *data);
-diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
-index 27cf2daaaa79..446617b73aea 100644
---- a/drivers/dax/dax-private.h
-+++ b/drivers/dax/dax-private.h
-@@ -70,6 +70,7 @@ struct dev_dax {
- 	struct ida ida;
- 	struct device dev;
- 	struct dev_pagemap *pgmap;
-+	bool memmap_on_memory;
- 	int nr_range;
- 	struct dev_dax_range {
- 		unsigned long pgoff;
-diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-index 0ee96e6fc426..ad9f821b8c78 100644
---- a/drivers/dax/bus.c
-+++ b/drivers/dax/bus.c
-@@ -367,6 +367,7 @@ static ssize_t create_store(struct device *dev, struct device_attribute *attr,
- 			.dax_region = dax_region,
- 			.size = 0,
- 			.id = -1,
-+			.memmap_on_memory = false,
- 		};
- 		struct dev_dax *dev_dax = devm_create_dev_dax(&data);
- 
-@@ -1400,6 +1401,8 @@ struct dev_dax *devm_create_dev_dax(struct dev_dax_data *data)
- 	dev_dax->align = dax_region->align;
- 	ida_init(&dev_dax->ida);
- 
-+	dev_dax->memmap_on_memory = data->memmap_on_memory;
-+
- 	inode = dax_inode(dax_dev);
- 	dev->devt = inode->i_rdev;
- 	dev->bus = &dax_bus_type;
-diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-index 8bc9d04034d6..c696837ab23c 100644
---- a/drivers/dax/cxl.c
-+++ b/drivers/dax/cxl.c
-@@ -26,6 +26,7 @@ static int cxl_dax_region_probe(struct device *dev)
- 		.dax_region = dax_region,
- 		.id = -1,
- 		.size = range_len(&cxlr_dax->hpa_range),
-+		.memmap_on_memory = true,
- 	};
- 
- 	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
-diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-index 5d2ddef0f8f5..b9da69f92697 100644
---- a/drivers/dax/hmem/hmem.c
-+++ b/drivers/dax/hmem/hmem.c
-@@ -36,6 +36,7 @@ static int dax_hmem_probe(struct platform_device *pdev)
- 		.dax_region = dax_region,
- 		.id = -1,
- 		.size = region_idle ? 0 : range_len(&mri->range),
-+		.memmap_on_memory = false,
- 	};
- 
- 	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
-diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-index c57acb73e3db..0aa6c45a4e5a 100644
---- a/drivers/dax/kmem.c
-+++ b/drivers/dax/kmem.c
-@@ -12,6 +12,7 @@
- #include <linux/mm.h>
- #include <linux/mman.h>
- #include <linux/memory-tiers.h>
-+#include <linux/memory_hotplug.h>
- #include "dax-private.h"
- #include "bus.h"
- 
-@@ -56,6 +57,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- 	unsigned long total_len = 0;
- 	struct dax_kmem_data *data;
- 	int i, rc, mapped = 0;
-+	mhp_t mhp_flags;
- 	int numa_node;
- 
- 	/*
-@@ -136,12 +138,16 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- 		 */
- 		res->flags = IORESOURCE_SYSTEM_RAM;
- 
-+		mhp_flags = MHP_NID_IS_MGID;
-+		if (dev_dax->memmap_on_memory)
-+			mhp_flags |= MHP_MEMMAP_ON_MEMORY;
-+
- 		/*
- 		 * Ensure that future kexec'd kernels will not treat
- 		 * this as RAM automatically.
- 		 */
- 		rc = add_memory_driver_managed(data->mgid, range.start,
--				range_len(&range), kmem_name, MHP_NID_IS_MGID);
-+				range_len(&range), kmem_name, mhp_flags);
- 
- 		if (rc) {
- 			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
-diff --git a/drivers/dax/pmem.c b/drivers/dax/pmem.c
-index ae0cb113a5d3..f3c6c67b8412 100644
---- a/drivers/dax/pmem.c
-+++ b/drivers/dax/pmem.c
-@@ -63,6 +63,7 @@ static struct dev_dax *__dax_pmem_probe(struct device *dev)
- 		.id = id,
- 		.pgmap = &pgmap,
- 		.size = range_len(&range),
-+		.memmap_on_memory = false,
- 	};
- 
- 	return devm_create_dev_dax(&data);
+The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
 
--- 
-2.41.0
+  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git tags/libnvdimm-for-6.7
+
+for you to fetch changes up to 9ea459e477dc09370cdd8ee13b61aefe8cd1f20a:
+
+  libnvdimm: remove kernel-doc warnings: (2023-10-18 09:48:05 -0700)
+
+----------------------------------------------------------------
+libnvdimm updates for v6.7
+
+- updates to deprecated and changed interfaces
+- bug/kdoc fixes
+
+----------------------------------------------------------------
+Chen Ni (1):
+      libnvdimm/of_pmem: Use devm_kstrdup instead of kstrdup and check its return value
+
+Greg Kroah-Hartman (1):
+      testing: nvdimm: make struct class structures constant
+
+Justin Stitt (1):
+      dax: refactor deprecated strncpy
+
+Kees Cook (1):
+      libnvdimm: Annotate struct nd_region with __counted_by
+
+Tomas Glozar (1):
+      nd_btt: Make BTT lanes preemptible
+
+Zhu Wang (1):
+      libnvdimm: remove kernel-doc warnings:
+
+ drivers/dax/bus.c                  |  2 +-
+ drivers/nvdimm/badrange.c          |  4 ++--
+ drivers/nvdimm/nd.h                |  2 +-
+ drivers/nvdimm/of_pmem.c           |  8 +++++++-
+ drivers/nvdimm/region_devs.c       | 10 +++++-----
+ tools/testing/nvdimm/test/ndtest.c | 17 +++++++++--------
+ tools/testing/nvdimm/test/nfit.c   | 14 +++++++-------
+ 7 files changed, 32 insertions(+), 25 deletions(-)
 
