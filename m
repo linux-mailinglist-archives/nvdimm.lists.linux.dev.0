@@ -1,273 +1,113 @@
-Return-Path: <nvdimm+bounces-7070-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7072-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4757811A5E
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Dec 2023 18:05:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F039A812292
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 Dec 2023 00:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0E7A1C212BD
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Dec 2023 17:05:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81BF4281753
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 13 Dec 2023 23:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDBB39FD7;
-	Wed, 13 Dec 2023 17:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C98981E59;
+	Wed, 13 Dec 2023 23:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lOy3KoCK"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADAD1D52D
-	for <nvdimm@lists.linux.dev>; Wed, 13 Dec 2023 17:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Sr1yb1L7qz6K7Xr;
-	Thu, 14 Dec 2023 01:03:19 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2C7FC1400CA;
-	Thu, 14 Dec 2023 01:05:15 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 13 Dec
- 2023 17:05:14 +0000
-Date: Wed, 13 Dec 2023 17:05:13 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Vishal Verma <vishal.l.verma@intel.com>
-CC: Dan Williams <dan.j.williams@intel.com>, Dave Jiang
-	<dave.jiang@intel.com>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>, David Hildenbrand
-	<david@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, Huang Ying
-	<ying.huang@intel.com>, Joao Martins <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 2/3] dax/bus: Introduce guard(device) for
- device_{lock,unlock} flows
-Message-ID: <20231213170513.000036e8@Huawei.com>
-In-Reply-To: <20231212-vv-dax_abi-v4-2-1351758f0c92@intel.com>
-References: <20231212-vv-dax_abi-v4-0-1351758f0c92@intel.com>
-	<20231212-vv-dax_abi-v4-2-1351758f0c92@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9495E7FBD3
+	for <nvdimm@lists.linux.dev>; Wed, 13 Dec 2023 23:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702508558; x=1734044558;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E7M26yPTY6+vjqYd5Bj0fpUoHUYe+VEtT6WJdnLb2Gg=;
+  b=lOy3KoCKjhVM+MVu0iG53QC6H/9NKTk6LLAXeSFrrOV8G6E7GOSj+DqV
+   NOR9gKJivlqvKA7iq2NKS86OcF3OAzwVpRWp+84VuhCuwReKJ6JJmd/hQ
+   w2+FWBFvozgIj84OHS1+ePZiCVjITKfOx8eVyLJ7A97GLjBdfhU5mA7M6
+   Z73qd6JH6fTJAi1G5mocs18aCAsRwQw5/YD7T4oJFMhRTuXsEoectE2AX
+   pCze3jS0V+y79HqxGyjl+MnFnzyDbBs5sQs1uw++8vJztCPcGSA+NknEu
+   AfBIHbEGNizI+P5D8iYR+SLQBtLOEXZlZKXnnYTEer7V+oUFjLGi5X4BN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="2210627"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="2210627"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 15:02:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="17692849"
+Received: from wardsamx-mobl.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.81.197])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 15:02:36 -0800
+Subject: [PATCH] driver core: Add a guard() definition for the device_lock()
+From: Dan Williams <dan.j.williams@intel.com>
+To: gregkh@linuxfoundation.org
+Cc: Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
+Date: Wed, 13 Dec 2023 15:02:35 -0800
+Message-ID: <170250854466.1522182.17555361077409628655.stgit@dwillia2-xfh.jf.intel.com>
+User-Agent: StGit/0.18-3-g996c
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, 12 Dec 2023 12:08:31 -0700
-Vishal Verma <vishal.l.verma@intel.com> wrote:
+At present there are ~200 usages of device_lock() in the kernel. Some of
+those usages lead to "goto unlock;" patterns which have proven to be
+error prone. Define a "device" guard() definition to allow for those to
+be cleaned up and prevent new ones from appearing.
 
-> Introduce a guard(device) macro to lock a 'struct device', and unlock it
-> automatically when going out of scope using Scope Based Resource
-> Management semantics. A lot of the sysfs attribute writes in
-> drivers/dax/bus.c benefit from a cleanup using these, so change these
-> where applicable.
-> 
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
-Hi Vishal,
+Link: http://lore.kernel.org/r/657897453dda8_269bd29492@dwillia2-mobl3.amr.corp.intel.com.notmuch
+Link: http://lore.kernel.org/r/6577b0c2a02df_a04c5294bb@dwillia2-xfh.jf.intel.com.notmuch
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+---
+Hi Greg,
 
-I'm a big fan of this cleanup.h stuff so very happen to see this getting used here.
-There are added opportunities for cleanup that result.
+I wonder if you might include this change in v6.7-rc to ease some patch
+sets alternately going through my tree and Andrew's tree. Those
+discussions are linked above. Alternately I can can just take it through
+my tree with your ack and the other use case can circle back to it in
+the v6.9 cycle.
 
-Note that almost every time I see people using this stuff they don't look again
-at the code post the change so miss the wider cleanup that it enables. So you are
-in good company ;)
+I considered also defining a __free() helper similar to __free(mutex),
+but I think "__free(device)" would be a surprising name for something
+that drops a lock. Also, I like the syntax of guard(device) over
+something like guard(device_lock) since a 'struct device *' is the
+argument, not a lock type, but I'm open to your or Peter's thoughts on
+the naming.
 
-Jonathan
+ include/linux/device.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  include/linux/device.h |   2 +
->  drivers/dax/bus.c      | 109 +++++++++++++++++++------------------------------
->  2 files changed, 44 insertions(+), 67 deletions(-)
-> 
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index d7a72a8749ea..a83efd9ae949 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -1131,6 +1131,8 @@ void set_secondary_fwnode(struct device *dev, struct fwnode_handle *fwnode);
->  void device_set_of_node_from_dev(struct device *dev, const struct device *dev2);
->  void device_set_node(struct device *dev, struct fwnode_handle *fwnode);
->  
-> +DEFINE_GUARD(device, struct device *, device_lock(_T), device_unlock(_T))
-
-Nice. I'd expect this to be widely adopted, so maybe to make things less painful
-for backporting changes that depend on it, make this a separate trivial patch
-rather than having this in here.
-
-> +
->  static inline int dev_num_vf(struct device *dev)
->  {
->  	if (dev->bus && dev->bus->num_vf)
-> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-> index 1ff1ab5fa105..ce1356ac6dc2 100644
-> --- a/drivers/dax/bus.c
-> +++ b/drivers/dax/bus.c
-> @@ -296,9 +296,8 @@ static ssize_t available_size_show(struct device *dev,
->  	struct dax_region *dax_region = dev_get_drvdata(dev);
->  	unsigned long long size;
->  
-> -	device_lock(dev);
-> +	guard(device)(dev);
->  	size = dax_region_avail_size(dax_region);
-> -	device_unlock(dev);
->  
->  	return sprintf(buf, "%llu\n", size);
-	return sprintf(buf, @%llu\n@, dax_region_avail_size(dax_region));
-and drop the local variable that adds little perhaps?
-
->  }
-> @@ -314,10 +313,9 @@ static ssize_t seed_show(struct device *dev,
->  	if (is_static(dax_region))
->  		return -EINVAL;
->  
-> -	device_lock(dev);
-> +	guard(device)(dev);
->  	seed = dax_region->seed;
->  	rc = sprintf(buf, "%s\n", seed ? dev_name(seed) : "");
-
-return sprintf();
-
-> -	device_unlock(dev);
->  
->  	return rc;
->  }
-> @@ -333,10 +331,9 @@ static ssize_t create_show(struct device *dev,
->  	if (is_static(dax_region))
->  		return -EINVAL;
->  
-> -	device_lock(dev);
-> +	guard(device)(dev);
->  	youngest = dax_region->youngest;
->  	rc = sprintf(buf, "%s\n", youngest ? dev_name(youngest) : "");
-
-return sprintf();
-
-> -	device_unlock(dev);
->  
->  	return rc;
->  }
-> @@ -345,7 +342,14 @@ static ssize_t create_store(struct device *dev, struct device_attribute *attr,
->  		const char *buf, size_t len)
->  {
->  	struct dax_region *dax_region = dev_get_drvdata(dev);
-> +	struct dev_dax_data data = {
-> +		.dax_region = dax_region,
-> +		.size = 0,
-> +		.id = -1,
-> +		.memmap_on_memory = false,
-> +	};
->  	unsigned long long avail;
-> +	struct dev_dax *dev_dax;
->  	ssize_t rc;
->  	int val;
->  
-> @@ -358,38 +362,26 @@ static ssize_t create_store(struct device *dev, struct device_attribute *attr,
->  	if (val != 1)
->  		return -EINVAL;
->  
-> -	device_lock(dev);
-> +	guard(device)(dev);
->  	avail = dax_region_avail_size(dax_region);
->  	if (avail == 0)
-> -		rc = -ENOSPC;
-> -	else {
-> -		struct dev_dax_data data = {
-> -			.dax_region = dax_region,
-> -			.size = 0,
-> -			.id = -1,
-> -			.memmap_on_memory = false,
-> -		};
-> -		struct dev_dax *dev_dax = devm_create_dev_dax(&data);
-> +		return -ENOSPC;
->  
-> -		if (IS_ERR(dev_dax))
-> -			rc = PTR_ERR(dev_dax);
-> -		else {
-> -			/*
-> -			 * In support of crafting multiple new devices
-> -			 * simultaneously multiple seeds can be created,
-> -			 * but only the first one that has not been
-> -			 * successfully bound is tracked as the region
-> -			 * seed.
-> -			 */
-> -			if (!dax_region->seed)
-> -				dax_region->seed = &dev_dax->dev;
-> -			dax_region->youngest = &dev_dax->dev;
-> -			rc = len;
-> -		}
-> -	}
-> -	device_unlock(dev);
-> +	dev_dax = devm_create_dev_dax(&data);
-> +	if (IS_ERR(dev_dax))
-> +		return PTR_ERR(dev_dax);
->  
-> -	return rc;
-> +	/*
-> +	 * In support of crafting multiple new devices
-
-rewrap this comment for the new indent.
-
-> +	 * simultaneously multiple seeds can be created,
-> +	 * but only the first one that has not been
-> +	 * successfully bound is tracked as the region
-> +	 * seed.
-> +	 */
-> +	if (!dax_region->seed)
-> +		dax_region->seed = &dev_dax->dev;
-> +	dax_region->youngest = &dev_dax->dev;
-
-Trivial but blank line here would be a nice to have
-
-> +	return len;
->  }
-
-
-...
-
-> @@ -1138,18 +1123,14 @@ static ssize_t mapping_store(struct device *dev, struct device_attribute *attr,
->  		return rc;
->  
->  	rc = -ENXIO;
-
-Not needed with suggested changes that follow.
-
-> -	device_lock(dax_region->dev);
-> -	if (!dax_region->dev->driver) {
-> -		device_unlock(dax_region->dev);
-> +	guard(device)(dax_region->dev);
-> +	if (!dax_region->dev->driver)
->  		return rc;
-		return -ENXIO;
-> -	}
-> -	device_lock(dev);
->  
-> +	guard(device)(dev);
->  	to_alloc = range_len(&r);
->  	if (alloc_is_aligned(dev_dax, to_alloc))
->  		rc = alloc_dev_dax_range(dev_dax, r.start, to_alloc);
-Flip logic here and I'd drop the ternary stuff as well - same in other
-similar cases in this patch (though that is just personal taste)
-
-	if (!alloc_is_aligned(dev_dax, to_allco))
-		return -ENXIO.
-
-	rc = alloc_dev_dax_range(dev_dax, r.start, to_allco)
-	if (rc)
-		return rc;
-
-	return len;
-
-> -	device_unlock(dev);
-> -	device_unlock(dax_region->dev);
->  
->  	return rc == 0 ? len : rc;
->  }
-
-> 
+diff --git a/include/linux/device.h b/include/linux/device.h
+index d7a72a8749ea..6c83294395ac 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -1007,6 +1007,8 @@ static inline void device_unlock(struct device *dev)
+ 	mutex_unlock(&dev->mutex);
+ }
+ 
++DEFINE_GUARD(device, struct device *, device_lock(_T), device_unlock(_T))
++
+ static inline void device_lock_assert(struct device *dev)
+ {
+ 	lockdep_assert_held(&dev->mutex);
 
 
