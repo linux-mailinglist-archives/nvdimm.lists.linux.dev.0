@@ -1,146 +1,143 @@
-Return-Path: <nvdimm+bounces-7243-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7245-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761F2842A24
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jan 2024 17:54:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B9E6842AB4
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jan 2024 18:19:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7964B22912
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jan 2024 16:54:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC195289044
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jan 2024 17:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C2112CDB6;
-	Tue, 30 Jan 2024 16:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE70E12BE93;
+	Tue, 30 Jan 2024 17:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="BUhe710j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TV1DFHzY"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFF1129A8C
-	for <nvdimm@lists.linux.dev>; Tue, 30 Jan 2024 16:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3992512836C;
+	Tue, 30 Jan 2024 17:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706633594; cv=none; b=glboj2+TrvpJdo741wecK22Az9w0VJWuKdFlUjEtixV6pdbtqyORxCaTBB0XuJMXnq8jg+9yRdJUGx+pnLGnUqonAo27i8ilQZgK1jdUKGAVJvg5SOwNvo4eYviEGAXOq3ETyVbV2VOHjPdajXTLkV3ORhD8hvxqCvP5bambfBc=
+	t=1706635173; cv=none; b=SQlx9ARxMTm7Ano0jF8EgKHpE7MlUo0PE8K7JMfEXUfoysPhrKKvcusU8ryTT8vy5SfAsiRYAYdUQZM74LQif+jPWGXSK4dWzNrAH9ufQQqjVh/G4e/BGU15IdU/tB+eRzACduUntZ4yLNQ3ZVhsLCF3fOjsoreY1vL7rJ2Ql20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706633594; c=relaxed/simple;
-	bh=39364yK8Vve2TZEwvAasv/nldxj5QFqZMMVmBMwwiu0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PgMtrCt5obc0ZOIQs8C7oxjW9UiorCnGDnYsCqlrczT8ugQIh9jzqtcI0olCsmRJrYcyt1trvMKTJFLVcgfM0UM2Tkz5HVNw5HQNlAZkscjQepJPuel9yjC1zgJIyt8/baT/YmOZO/l+ayHoCBxWs+KIj8kOdwnsUMzsvnKZus0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=BUhe710j; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1706633585;
-	bh=39364yK8Vve2TZEwvAasv/nldxj5QFqZMMVmBMwwiu0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BUhe710jU2/derdpsA0dmrgdapNQmX0LXTEssfQdWcX2L97NEiIfvqlxiNskzlCQ+
-	 uFBF2yIOIW7lLhGlgmLYL2QC0ZeqL0RkTwoEYx20D9bs890S3wdBKzVJdaeYrnozqP
-	 r4rIEq4WyYWNEKxGADF+jEmZYQH3YyuJEpH3/tIUj4UOrrV1coGgapkbjslqVS0p7F
-	 g8VCDbYKUyXI00zoYgdo6nbeTVRFmEiOfxFc5YMj8+QBGAhQlPTdTKLswnRa7tKr2a
-	 n8HrygNAcyh6r6ttOBpYmgmUin69L64Gw64u0Grq9Que0glHbaZLrtM5V+rY3Uav/H
-	 Pv8DFsI0xlUoA==
-Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TPWSd16qfzVlV;
-	Tue, 30 Jan 2024 11:53:05 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-mm@kvack.org,
-	linux-arch@vger.kernel.org,
-	Matthew Wilcox <willy@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>,
-	nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [RFC PATCH v2 8/8] dax: Fix incorrect list of dcache aliasing architectures
-Date: Tue, 30 Jan 2024 11:52:55 -0500
-Message-Id: <20240130165255.212591-9-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240130165255.212591-1-mathieu.desnoyers@efficios.com>
-References: <20240130165255.212591-1-mathieu.desnoyers@efficios.com>
+	s=arc-20240116; t=1706635173; c=relaxed/simple;
+	bh=V7diJ4YqO6S1GcyDtkgjCTNRmeE4ZsUI1fbKWHRDOzA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GsKXGFy8KbrAmRtdHGQO3PA+pCfji268zombttv58rYNpl9ptuhjF3uDr6OFft8YxtnNEnwyNOGNmbwTCzeWibMZwGxyU84KMtfQRmPSCjFgMCqL0pgrsoS7urQfYSqwUgnrXuXSnciwSEph4opzuit0n6Ehf+6767xw2BRB91k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TV1DFHzY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709EFC433C7;
+	Tue, 30 Jan 2024 17:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706635172;
+	bh=V7diJ4YqO6S1GcyDtkgjCTNRmeE4ZsUI1fbKWHRDOzA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=TV1DFHzYDZhW59OLkmEAT5zHp3Om+RiE56/Rs+zzt2cYC51I696Ozv4XqGyYhfvLs
+	 DiMhVVHFj37CPiUvZdXlMkSTNCyTF43+XZPTAny/wk4lgvcxXTU8ynkhZy5m7EqyYa
+	 LTJrrhFygZkqmEFYNAQ7/MAYdFxl29FT5xcXmYYPZ9P2JQRNHgqpd9kp1C+N4smMr9
+	 r5ontZ1b86UZ82H6/KIlrEPWd0eieYpSNHwHLZnKHA9YCpp+usbxb7LfQsqwyDs9zb
+	 Ahk84q+dt3xhTMzPIzA+m+C65eIWL/j+4uwnP4s+wpzO3N82ossDdMVCL2hnK/Xv+u
+	 Qmzjuli3IDvew==
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 30 Jan 2024 19:19:27 +0200
+Message-Id: <CYS7OCDQ54WZ.3RS9IWCQG4Y5L@suppilovahvero>
+Cc: "Jiang, Dave" <dave.jiang@intel.com>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-cxl@vger.kernel.org"
+ <linux-cxl@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "Williams, Dan J"
+ <dan.j.williams@intel.com>, "keyrings@vger.kernel.org"
+ <keyrings@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "nvdimm@lists.linux.dev"
+ <nvdimm@lists.linux.dev>
+Subject: Re: [PATCH] KEYS: encrypted: Add check for strsep
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Verma, Vishal L" <vishal.l.verma@intel.com>, "zohar@linux.ibm.com"
+ <zohar@linux.ibm.com>, "paul@paul-moore.com" <paul@paul-moore.com>,
+ "dhowells@redhat.com" <dhowells@redhat.com>, "yaelt@google.com"
+ <yaelt@google.com>, "serge@hallyn.com" <serge@hallyn.com>,
+ "nichen@iscas.ac.cn" <nichen@iscas.ac.cn>, "sumit.garg@linaro.org"
+ <sumit.garg@linaro.org>, "jmorris@namei.org" <jmorris@namei.org>
+X-Mailer: aerc 0.15.2
+References: <20231108073627.1063464-1-nichen@iscas.ac.cn>
+ <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
+In-Reply-To: <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
 
-commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-prevents DAX from building on architectures with virtually aliased
-dcache with:
+On Wed Jan 24, 2024 at 8:21 PM EET, Verma, Vishal L wrote:
+> On Wed, 2023-11-08 at 07:36 +0000, Chen Ni wrote:
+> > Add check for strsep() in order to transfer the error.
+> >=20
+> > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-
+> > provided decrypted data")
+> > Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> > ---
+> > =C2=A0security/keys/encrypted-keys/encrypted.c | 4 ++++
+> > =C2=A01 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/security/keys/encrypted-keys/encrypted.c
+> > b/security/keys/encrypted-keys/encrypted.c
+> > index 8af2136069d2..76f55dd13cb8 100644
+> > --- a/security/keys/encrypted-keys/encrypted.c
+> > +++ b/security/keys/encrypted-keys/encrypted.c
+> > @@ -237,6 +237,10 @@ static int datablob_parse(char *datablob, const
+> > char **format,
+> > =C2=A0			break;
+> > =C2=A0		}
+> > =C2=A0		*decrypted_data =3D strsep(&datablob, " \t");
+> > +		if (!*decrypted_data) {
+> > +			pr_info("encrypted_key: decrypted_data is
+> > missing\n");
+> > +			break;
+> > +		}
+>
+> Hello,
+>
+> This patch seems to break keyring usage in CXL and NVDIMM, with the
+> "decrypted_data is missing" error path being hit. Reverting this commit
+> fixes the tests. I'm not sure if there are valid scenarios where this is
+> expected to be empty?
+>
+> Here's an strace snippet of where the error occurs:
+>
+>    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "user", "nvdimm-master", =
+0) =3D 76300785
+>    openat(AT_FDCWD, "/sys/devices/platform/cxl_acpi.0/root0/nvdimm-bridge=
+0/ndbus0/nmem0/state", O_RDONLY|O_CLOEXEC) =3D 3
+>    read(3, "idle\n", 1024)                 =3D 5
+>    close(3)                                =3D 0
+>    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "encrypted", "nvdimm:0", =
+0) =3D -1 ENOKEY (Required key not available)
+>    uname({sysname=3D"Linux", nodename=3D"fedora", ...}) =3D 0
+>    newfstatat(AT_FDCWD, "/etc/ndctl/keys/nvdimm_0_fedora.blob", 0x7fff23f=
+bc210, 0) =3D -1 ENOENT (No such file or directory)
+>    add_key("encrypted", "nvdimm:0", "new enc32 user:nvdimm-master 32", 31=
+, KEY_SPEC_USER_KEYRING) =3D -1 EINVAL (Invalid argument)
+>   =20
 
-  depends on !(ARM || MIPS || SPARC)
+I think removing the klog message does not make sense meaning
+that the recent revert was wrong action taken.
 
-This check is too broad (e.g. recent ARMv7 don't have virtually aliased
-dcaches), and also misses many other architectures with virtually
-aliased dcache.
+Instead necessary actions to retain backwards compatibility
+must be taken, meaning that the branch should set "ret =3D 0;".
 
-This is a regression introduced in the v5.13 Linux kernel where the
-dax mount option is removed for 32-bit ARMv7 boards which have no dcache
-aliasing, and therefore should work fine with FS_DAX.
+Motivation to keep it is dead obvious: your examples show that
+it can reveal potentially incorrect behaviour in user space
+software packages. It is info-level to mark that it can be
+also false positive. I.e. the revert commit takes away
+functionality that previously caused kernel masking a
+potential bug.
 
-This was turned into the following implementation of dax_is_supported()
-by a preparatory change:
+Please revert the revert.
 
-        return !IS_ENABLED(CONFIG_ARM) &&
-               !IS_ENABLED(CONFIG_MIPS) &&
-               !IS_ENABLED(CONFIG_SPARC);
-
-Use dcache_is_aliasing() instead to figure out whether the environment
-has aliasing dcaches.
-
-Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-arch@vger.kernel.org
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: nvdimm@lists.linux.dev
-Cc: linux-cxl@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
----
- include/linux/dax.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/dax.h b/include/linux/dax.h
-index cfc8cd4a3eae..f59e604662e4 100644
---- a/include/linux/dax.h
-+++ b/include/linux/dax.h
-@@ -5,6 +5,7 @@
- #include <linux/fs.h>
- #include <linux/mm.h>
- #include <linux/radix-tree.h>
-+#include <linux/cacheinfo.h>
- 
- typedef unsigned long dax_entry_t;
- 
-@@ -80,9 +81,7 @@ static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
- }
- static inline bool dax_is_supported(void)
- {
--	return !IS_ENABLED(CONFIG_ARM) &&
--	       !IS_ENABLED(CONFIG_MIPS) &&
--	       !IS_ENABLED(CONFIG_SPARC);
-+	return !dcache_is_aliasing();
- }
- #else
- static inline void *dax_holder(struct dax_device *dax_dev)
--- 
-2.39.2
+BR, Jarkko
 
 
