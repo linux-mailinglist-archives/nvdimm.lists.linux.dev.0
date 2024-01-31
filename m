@@ -1,48 +1,48 @@
-Return-Path: <nvdimm+bounces-7270-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7268-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D028B844416
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 31 Jan 2024 17:26:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FC4C84440F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 31 Jan 2024 17:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB14AB23A29
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 31 Jan 2024 16:26:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B70C287347
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 31 Jan 2024 16:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F31012BF2E;
-	Wed, 31 Jan 2024 16:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF72012BF02;
+	Wed, 31 Jan 2024 16:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="EB06hVwq"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="tPFOoGUC"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4344912BE8C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D6E12BE93;
 	Wed, 31 Jan 2024 16:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706718352; cv=none; b=cN37HzENRRdJ4aDAZc9VYVuyY22dQfTtayKZovoM+oRula9L9pNTRim+ZJUHLgHvcB4hUuUmv5s3FYma57KAjCeTwKxQTBJclAmuvdn4aJMJX84T44/e3+TATN2Pz94xqTndkIzX1a6DdeJns2b8rvUSZdEXXKwuUm4L9cSjCcw=
+	t=1706718351; cv=none; b=c7JRGDPkMpq29Eth7Vo1wtZXBHoJpxAmo/U/VRjKGzS24xsBopHjkUZRJGG0D/WbmuN8ycP8OEzNqrxznc7fPYiru7gbrL93IEM54wxEELTC8opHIvU1rl2N052LQpDYmFYIqwAuWdcK5YMn7b2hXOqnrojMCbgz7i9nYPr7eqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706718352; c=relaxed/simple;
-	bh=CfmY1KnEab9DsMrJbyvT5LgUiqxfD1jYSIdakS3IZw0=;
+	s=arc-20240116; t=1706718351; c=relaxed/simple;
+	bh=QiUQHVE9OuD7A7XRfq4nHC+crkQnZ8+IZ0u7lnayc8c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tbKcMQBSUrsR8rpHTTORn6IWF6PB+hFsj18Hgec8Gwumki0WjPbtREbt+BNoLCBnNQ42Fi3S6txHfuA9DXLWc4NH0Zjefg5moHlfkaAsqf4fNx9T33MXUYCLnDvCmFKbeu1X2x23U3ToE6Uz1PCCQznathcid6Ppi9FPvlMH0pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=EB06hVwq; arc=none smtp.client-ip=167.114.26.122
+	 MIME-Version; b=i8eirmlNKK7qLXmLUEi6J2eyDudl6N0g54YdnTfSz5ed/0NLGdHzfMj/E64ezmPVPYjf20XNjeIS/wY9kFc6ccok0ZMzLimcgVvM6yrGV6HKQRM/sQRbcIVGMiQEaOHgO6x0Rte/VazBVms2kQ0LFt8NjZJcTycqGJLfwbX4pZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=tPFOoGUC; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
 	s=smtpout1; t=1706718348;
-	bh=CfmY1KnEab9DsMrJbyvT5LgUiqxfD1jYSIdakS3IZw0=;
+	bh=QiUQHVE9OuD7A7XRfq4nHC+crkQnZ8+IZ0u7lnayc8c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EB06hVwqH30Biu+iJCPUcv/terkIISNlE4G2KLYR9OPO6YHERtB+CQuC+sUJ11GiS
-	 qanrhIUz9PaLQE+1Sfk0euf5aZEOnEh0ZmU+8GuZPFIs/dUfEpFpY4aR3hMNoQ0M4K
-	 YjYn8N+vE1erhhgi+WRevsbvvXyXBUbecJrhzvF+suEsrIh0Is3m8q7H9EX/5wMjZ9
-	 p0E0sTMQLq4kN8hV//trJ3mjwoImjOLdvL5YGOOOSyKl//9q9lix/RG3EaWChntvIr
-	 cfkBAkZwRIFFgomMisFAqXV18H2U/8TgTzIZaM6+spiKRIWy+N1609kejZ5IMCInoX
-	 m8KJF4ssXA/MQ==
+	b=tPFOoGUCQpG6nbDTeV4EO+3l6CQr96GDzwrgBAkFN3BBXvvuVDa7KEgUQVhRO+9UJ
+	 OGBfhp6+IHWdIbnDgzb7rp6f5NoCAVT/MC/jdSqh/SbWXQai0GciSCZ5jGzJAZJFn9
+	 zdbBdntL/XW+dTsVqtKTP0pFMFrIkzMRY2EjvD3nxnNlRo8+GV97CGNQTyzuR04/Bv
+	 DnVLu22IZhi/FCEikncgvc+r9uRAQtDTq6OOUCYLLFl+SPLOZdSfK/om2/oxbsUHtn
+	 heRyE9JrDmR4Al+5f3ZW4R/iVTnsP1/2fKc1z18/UCX+ap0fXxxnWGMUegUer3Cath
+	 BZBJCCPLX8AoA==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TQ6ph0mWTzVnx;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TQ6ph3nMyzVny;
 	Wed, 31 Jan 2024 11:25:48 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Dan Williams <dan.j.williams@intel.com>,
@@ -50,10 +50,6 @@ To: Dan Williams <dan.j.williams@intel.com>,
 	Dave Chinner <david@fromorbit.com>
 Cc: linux-kernel@vger.kernel.org,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	dm-devel@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	linux-mm@kvack.org,
@@ -64,10 +60,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Russell King <linux@armlinux.org.uk>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [RFC PATCH v3 1/4] dm: Treat alloc_dax failure as non-fatal
-Date: Wed, 31 Jan 2024 11:25:30 -0500
-Message-Id: <20240131162533.247710-2-mathieu.desnoyers@efficios.com>
+	linux-fsdevel@vger.kernel.org,
+	dm-devel@lists.linux.dev
+Subject: [RFC PATCH v3 2/4] dax: Check for data cache aliasing at runtime
+Date: Wed, 31 Jan 2024 11:25:31 -0500
+Message-Id: <20240131162533.247710-3-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240131162533.247710-1-mathieu.desnoyers@efficios.com>
 References: <20240131162533.247710-1-mathieu.desnoyers@efficios.com>
@@ -79,17 +76,21 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for checking whether the architecture has data cache
-aliasing within alloc_dax(), modify the error handling of dm alloc_dev()
-to treat alloc_dax() failure as non-fatal.
+Replace the following fs/Kconfig:FS_DAX dependency:
+
+  depends on !(ARM || MIPS || SPARC)
+
+By a runtime check within alloc_dax().
+
+This is done in preparation for its use by each filesystem supporting
+the "dax" mount option to validate whether DAX is indeed supported.
+
+This is done in preparation for using cpu_dcache_is_aliasing() in a
+following change which will properly support architectures which detect
+data cache aliasing at runtime.
 
 Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Mike Snitzer <snitzer@kernel.org>
-Cc: Mikulas Patocka <mpatocka@redhat.com>
-Cc: dm-devel@lists.linux.dev
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: linux-mm@kvack.org
@@ -103,32 +104,41 @@ Cc: Russell King <linux@armlinux.org.uk>
 Cc: nvdimm@lists.linux.dev
 Cc: linux-cxl@vger.kernel.org
 Cc: linux-fsdevel@vger.kernel.org
+Cc: dm-devel@lists.linux.dev
 ---
- drivers/md/dm.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/dax/super.c | 6 ++++++
+ fs/Kconfig          | 1 -
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 23c32cd1f1d8..f90743a94da9 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -2126,12 +2126,12 @@ static struct mapped_device *alloc_dev(int minor)
- 		md->dax_dev = alloc_dax(md, &dm_dax_ops);
- 		if (IS_ERR(md->dax_dev)) {
- 			md->dax_dev = NULL;
--			goto bad;
-+		} else {
-+			set_dax_nocache(md->dax_dev);
-+			set_dax_nomc(md->dax_dev);
-+			if (dax_add_host(md->dax_dev, md->disk))
-+				goto bad;
- 		}
--		set_dax_nocache(md->dax_dev);
--		set_dax_nomc(md->dax_dev);
--		if (dax_add_host(md->dax_dev, md->disk))
--			goto bad;
- 	}
+diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+index 0da9232ea175..e9f397b8a5a3 100644
+--- a/drivers/dax/super.c
++++ b/drivers/dax/super.c
+@@ -445,6 +445,12 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
+ 	dev_t devt;
+ 	int minor;
  
- 	format_dev_t(md->name, MKDEV(_major, minor));
++	/* Unavailable on architectures with virtually aliased data caches. */
++	if (IS_ENABLED(CONFIG_ARM) ||
++	    IS_ENABLED(CONFIG_MIPS) ||
++	    IS_ENABLED(CONFIG_SPARC))
++		return NULL;
++
+ 	if (WARN_ON_ONCE(ops && !ops->zero_page_range))
+ 		return ERR_PTR(-EINVAL);
+ 
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 42837617a55b..e5efdb3b276b 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -56,7 +56,6 @@ endif # BLOCK
+ config FS_DAX
+ 	bool "File system based Direct Access (DAX) support"
+ 	depends on MMU
+-	depends on !(ARM || MIPS || SPARC)
+ 	depends on ZONE_DEVICE || FS_DAX_LIMITED
+ 	select FS_IOMAP
+ 	select DAX
 -- 
 2.39.2
 
