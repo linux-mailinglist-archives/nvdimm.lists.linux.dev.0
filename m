@@ -1,84 +1,64 @@
-Return-Path: <nvdimm+bounces-7316-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7324-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F6884A090
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  5 Feb 2024 18:23:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12E8F84A3B9
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  5 Feb 2024 20:28:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DC9E283207
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  5 Feb 2024 17:23:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A62131F2263D
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  5 Feb 2024 19:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56146481BF;
-	Mon,  5 Feb 2024 17:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F12B8563C;
+	Mon,  5 Feb 2024 19:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JTtemAde"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eom6jy+X"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137A481A7
-	for <nvdimm@lists.linux.dev>; Mon,  5 Feb 2024 17:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37708405D;
+	Mon,  5 Feb 2024 19:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707153752; cv=none; b=mxlQEgrPmxAkFfQYaZvr5IdX6qV3c1z1uct2lDkiAjT2F9hiKcYRSJWAUQC8yQCbrwm1RxRxgoY8Zmf+T0BrWx7HL+Oh5tf92e9BTBvAmNSEvk65IsQCkqiLWofddvDtxNzdEsMnZZLoD0Os6D7p5WmjwMaldoFVEw3yKwaUYJA=
+	t=1707159807; cv=none; b=h8gJ7Yq1mVGGzGFxXxEz3/bvN1KlnYUSEQx2MF18qCTN/rfUFita7sfWIp5h6wr7EiIAl23hjY8uLSJiAK0gPHRTcwrsewepe9eOA06fqCx7dFnQmLJa+4xhoQXqpA0J35RnNvIE8Xt9nzcLEA2GxyZbKTaZu0pRg9ealYZwHfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707153752; c=relaxed/simple;
-	bh=QYfTzVh1GhDcNX1AdSswl+d4aBc6MuUiVyM01wBfWK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jB9fDvtvi0o+kQmfSmh0xIDmbU4z+yOyBHQa6nhq3WAvClUoF4uOJjlqXsxcsJZteObu4Jn72RxTcIPASZ0MEX7jg0UxmVfM3QqNkpmAqdXnuQFFdf0ZC3MlOKKzjrkj0atbgz3+PdLGuTVBxXM+UhfGHYZK86Ykb4/AaZIKBr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JTtemAde; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707153751; x=1738689751;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QYfTzVh1GhDcNX1AdSswl+d4aBc6MuUiVyM01wBfWK4=;
-  b=JTtemAdeshg3R4feWm0FGdhPmqF69E3evjkjVVtfgus72Wq8rOExieOx
-   0oFamP0fvlh1jwZ9XZjpY5vDVV1aNBELH3KmSUbr9MZKUAzI1AEu2m6RT
-   yxrYLCrIrYa1tcQouPvkg6wkIvDOZ1qFQ8HgicRgvVnH3/kIvcHw5TLVC
-   m82uHgPQhYQGANRMXjLeDt5w1JWtCYXVsf42IIUaxeWE27V/gdq/H/lqf
-   V33H7KBsRJpzzEfVtdi9A11F0wWVVtwX9rZUFIRso3WOBke1sXK4SFqFU
-   XGabhhZIg6kZpmFBqsrxd4STa+zASW95yRdj9hgzPle6YMlCa0ESTmjZp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="11303852"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="11303852"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 09:22:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="5390550"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.246.112.181]) ([10.246.112.181])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 09:22:28 -0800
-Message-ID: <6cfd8171-a8c6-4433-8f4e-30f2ed156b0e@intel.com>
-Date: Mon, 5 Feb 2024 10:22:27 -0700
+	s=arc-20240116; t=1707159807; c=relaxed/simple;
+	bh=l8E48JqEiLUq+g7VXEPmj7k+iRCuEuoIVhBVcSOCs+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JsV49zVEQAoNIDoFMsTcBHZhGXb1E8ya79oN04GIDrFS/If5ldhgckg/vMjn1XJn/e+SGVUQ5nsknEI0f2v1ouiMabnkjdUvcseZrpssCfM1WhSuyPyLBKol/53AJ7GZn4OAjDhvWgGYBJo8B6JTiR9ITEVNd0HSbUvyTMZbtto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eom6jy+X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE90C433F1;
+	Mon,  5 Feb 2024 19:03:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707159807;
+	bh=l8E48JqEiLUq+g7VXEPmj7k+iRCuEuoIVhBVcSOCs+E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eom6jy+XEN1NN3CYocxdgzjSQF/uhre/cwG8T814AzSfNPI6TUsKWkY84As27C2kJ
+	 UnoQzbZzpncGeAbm4nDIcqmeKY98s1m733MWG4w4QGuTrjc87bl0fSJZ6kH94jQl5f
+	 EZJFPTNVTXNd+vKhKGWRo9UTF5CKwTYNOsQ5m/wM=
+Date: Mon, 5 Feb 2024 04:48:16 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvdimm: make nvdimm_bus_type const
+Message-ID: <2024020512-bondless-suction-9ad5@gregkh>
+References: <20240204-bus_cleanup-nvdimm-v1-1-77ae19fa3e3b@marliere.net>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nvdimm: make nvdimm_bus_type const
-Content-Language: en-US
-To: "Ricardo B. Marliere" <ricardo@marliere.net>,
- Dan Williams <dan.j.williams@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>
-Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20240204-bus_cleanup-nvdimm-v1-1-77ae19fa3e3b@marliere.net>
-From: Dave Jiang <dave.jiang@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240204-bus_cleanup-nvdimm-v1-1-77ae19fa3e3b@marliere.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-
-
-On 2/4/24 1:20 PM, Ricardo B. Marliere wrote:
+On Sun, Feb 04, 2024 at 05:20:07PM -0300, Ricardo B. Marliere wrote:
 > Now that the driver core can properly handle constant struct bus_type,
 > move the nvdimm_bus_type variable to be a constant structure as well,
 > placing it into read-only memory which can not be modified at runtime.
@@ -87,29 +67,5 @@ On 2/4/24 1:20 PM, Ricardo B. Marliere wrote:
 > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-> ---
->  drivers/nvdimm/bus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
-> index ef3d0f83318b..508aed017ddc 100644
-> --- a/drivers/nvdimm/bus.c
-> +++ b/drivers/nvdimm/bus.c
-> @@ -271,7 +271,7 @@ EXPORT_SYMBOL_GPL(nvdimm_clear_poison);
->  
->  static int nvdimm_bus_match(struct device *dev, struct device_driver *drv);
->  
-> -static struct bus_type nvdimm_bus_type = {
-> +static const struct bus_type nvdimm_bus_type = {
->  	.name = "nd",
->  	.uevent = nvdimm_bus_uevent,
->  	.match = nvdimm_bus_match,
-> 
-> ---
-> base-commit: a085a5eb6594a3ebe5c275e9c2c2d341f686c23c
-> change-id: 20240204-bus_cleanup-nvdimm-91771693bd4d
-> 
-> Best regards,
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
