@@ -1,260 +1,216 @@
-Return-Path: <nvdimm+bounces-7376-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7379-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890BD84E78D
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 19:18:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A55784E81A
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 19:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7D7FB2516F
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 18:18:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18FFD290A2B
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 18:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C9184FCF;
-	Thu,  8 Feb 2024 18:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F55333CF1;
+	Thu,  8 Feb 2024 18:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SK2tSB6b"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="tbRZUBYK"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2335B84FBD
-	for <nvdimm@lists.linux.dev>; Thu,  8 Feb 2024 18:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E0925634;
+	Thu,  8 Feb 2024 18:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707416287; cv=none; b=lwSpNgRK3SAUA2h2thr+wsz2DIlnnv4b22DsIzpD7mSVhzsD6vPkxbJUPCqZ3/5TSKzYMBDcKTvT8FndPs+P7jiXQtL8SIWChR+KzOCq1rPrkuttamIvwv/9FS6+av7v8PzViFfTFfFmiJEKCvoCKM8fT5/He92xzruMWRGf7qY=
+	t=1707418172; cv=none; b=OsjU8PKymBCraz/MV7AKv1XhIaFhI5cdXJ/gUjHmy37QVl9RO9ZQ5Grf0rFlsH4HYDwIbm3Eczl9tBX378NpBn4iRxb4Q74SdMnaWDtcpVf/VpLMAijPfcEtVtAzdBXXhzZlcPflDBbQUzJpHsr1uJ1Li3Apbr5gfWAqae5uP2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707416287; c=relaxed/simple;
-	bh=ez/TkWAkh28jFhrugD5Qt6GcTfab+4MkK7w8OFqyQaM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ReqRZnzCYr6lmge/SZJ0Ugl1QhtcSQv9OqOXxI5jMqNrgrWwDekJTQj8bTWcU6zPDfj6dn9/qjJ1WWz5LVhQWdjYELjXOP89rumeH2P38y3UYks1N6CXlIW6aRWPoGAiV+BEJnph+0UKG9iWVNfofhuret1/a3pM7imQQxppKtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SK2tSB6b; arc=none smtp.client-ip=134.134.136.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707416284; x=1738952284;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ez/TkWAkh28jFhrugD5Qt6GcTfab+4MkK7w8OFqyQaM=;
-  b=SK2tSB6bYTX8dAIaGp+ijlMgRr40IngAN21fqfhHWkU79J18QmxbgMIB
-   7ydbq5wWFNObRNOzXfBdBFNlGl+baVNM9KvBb0CDUTVdvPRZEhq6mHT9f
-   AoOQiQ9PfIkoWshKlQIu7MCJ2KWL4dmDFvgYtHsGcLnnxgPadg0O/VyAz
-   wZwUEzCtMxCE9pOtYNvueD1VakkCxRFbjbNg/asNegP6j3feEPFN+mYI2
-   x1EdwuHYeSIt/n4+Bjz1BWMFaWoNdQv6K9D6MomQjboYH9JoWkUtRyGu0
-   9uZWbvXOFcYUmqdbb2TyXZ6zBVcpBnzdgcGqXp83yU7hc09QGJNTINp5q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="395699270"
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="395699270"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 10:18:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="6360791"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.246.113.125]) ([10.246.113.125])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 10:18:02 -0800
-Message-ID: <9aa5564b-d649-4fcc-aaba-a39851accb9c@intel.com>
-Date: Thu, 8 Feb 2024 11:18:01 -0700
+	s=arc-20240116; t=1707418172; c=relaxed/simple;
+	bh=7Ochv10fF/HDECdDCBhY5k3B/jWscDOgrt50maoZBSM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QpRDmZe2xAymXCCWXRJ6zZtee5WTmt4yuwC9lHoRgLTDQgWJR5eeon+yU5LW7r7lPZphQNe/PQmSqzcE30BT0f1z+TnUWgOTV+vfEepRpDHn0vPzdXWjP1iB7f5QUClxXgMQ9HiTc9khSJndotiOdTJ58QK9BgLpAWFx04vh+7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=tbRZUBYK; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1707418162;
+	bh=7Ochv10fF/HDECdDCBhY5k3B/jWscDOgrt50maoZBSM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tbRZUBYKZeGuGZqoaY1DeK0hJwQjx5z1KlX4+5BjG6KbY0Wk63ANlCvJNLNHlZa3q
+	 AUni6+/Zg3BIFSkr3VSAod2+wG4om/7ONygxmnx3R8qV4KfQsZwdwxR/mM07U628WQ
+	 k19fXtoHrvLwxdcINcsb5baXKobPg9DensK1+8QFljOtCtki8OcEMSaA14ImZIluOL
+	 HBFIytcfOMxaLatB6NbpkXRQ8dIHcmIw4+3c36ghJ2FkKfkT1jBw0k4BKfFjUoRMQW
+	 0Hw8foVVlIlyyL8xJUMQOn7XN5Ij/6RqjdW4lVw7Nz7wr+wztv85CRKkRVtJejDGJn
+	 uUVzPSeTZ8zkg==
+Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TW5cf2nN2zY9Y;
+	Thu,  8 Feb 2024 13:49:22 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dave Chinner <david@fromorbit.com>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arch@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-xfs@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	nvdimm@lists.linux.dev,
+	linux-s390@vger.kernel.org
+Subject: [PATCH v4 00/12] Introduce cpu_dcache_is_aliasing() to fix DAX regression
+Date: Thu,  8 Feb 2024 13:49:01 -0500
+Message-Id: <20240208184913.484340-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [ndctl PATCH v7 7/7] cxl/test: add cxl-poison.sh unit test
-Content-Language: en-US
-To: alison.schofield@intel.com, Vishal Verma <vishal.l.verma@intel.com>
-Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-References: <cover.1707351560.git.alison.schofield@intel.com>
- <855025e88e0c261ae36dd6bd70443ebd9e7e5e6f.1707351560.git.alison.schofield@intel.com>
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <855025e88e0c261ae36dd6bd70443ebd9e7e5e6f.1707351560.git.alison.schofield@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+This commit introduced in v4.0 prevents building FS_DAX on 32-bit ARM,
+even on ARMv7 which does not have virtually aliased data caches:
 
+commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
 
-On 2/7/24 6:01 PM, alison.schofield@intel.com wrote:
-> From: Alison Schofield <alison.schofield@intel.com>
-> 
-> Exercise cxl list, libcxl, and driver pieces of the get poison list
-> pathway. Inject and clear poison using debugfs and use cxl-cli to
-> read the poison list by memdev and by region.
-> 
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+It used to work fine before: I have customers using DAX over pmem on
+ARMv7, but this regression will likely prevent them from upgrading their
+kernel.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+The root of the issue here is the fact that DAX was never designed to
+handle virtually aliasing data caches (VIVT and VIPT with aliasing data
+cache). It touches the pages through their linear mapping, which is not
+consistent with the userspace mappings with virtually aliasing data
+caches.
 
-Should circle back and use CXL CLI enabled poison injection/clear when that's available. 
-> ---
->  test/cxl-poison.sh | 137 +++++++++++++++++++++++++++++++++++++++++++++
->  test/meson.build   |   2 +
->  2 files changed, 139 insertions(+)
->  create mode 100644 test/cxl-poison.sh
-> 
-> diff --git a/test/cxl-poison.sh b/test/cxl-poison.sh
-> new file mode 100644
-> index 000000000000..6fceb0f2c360
-> --- /dev/null
-> +++ b/test/cxl-poison.sh
-> @@ -0,0 +1,137 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2023 Intel Corporation. All rights reserved.
-> +
-> +. "$(dirname "$0")"/common
-> +
-> +rc=77
-> +
-> +set -ex
-> +
-> +trap 'err $LINENO' ERR
-> +
-> +check_prereq "jq"
-> +
-> +modprobe -r cxl_test
-> +modprobe cxl_test
-> +
-> +rc=1
-> +
-> +# THEORY OF OPERATION: Exercise cxl-cli and cxl driver ability to
-> +# inject, clear, and get the poison list. Do it by memdev and by region.
-> +
-> +find_memdev()
-> +{
-> +	readarray -t capable_mems < <("$CXL" list -b "$CXL_TEST_BUS" -M |
-> +		jq -r ".[] | select(.pmem_size != null) |
-> +		select(.ram_size != null) | .memdev")
-> +
-> +	if [ ${#capable_mems[@]} == 0 ]; then
-> +		echo "no memdevs found for test"
-> +		err "$LINENO"
-> +	fi
-> +
-> +	memdev=${capable_mems[0]}
-> +}
-> +
-> +create_x2_region()
-> +{
-> +        # Find an x2 decoder
-> +        decoder="$($CXL list -b "$CXL_TEST_BUS" -D -d root | jq -r ".[] |
-> +		select(.pmem_capable == true) |
-> +		select(.nr_targets == 2) |
-> +		.decoder")"
-> +
-> +        # Find a memdev for each host-bridge interleave position
-> +        port_dev0="$($CXL list -T -d "$decoder" | jq -r ".[] |
-> +		.targets | .[] | select(.position == 0) | .target")"
-> +        port_dev1="$($CXL list -T -d "$decoder" | jq -r ".[] |
-> +		.targets | .[] | select(.position == 1) | .target")"
-> +        mem0="$($CXL list -M -p "$port_dev0" | jq -r ".[0].memdev")"
-> +        mem1="$($CXL list -M -p "$port_dev1" | jq -r ".[0].memdev")"
-> +
-> +	region="$($CXL create-region -d "$decoder" -m "$mem0" "$mem1" |
-> +		 jq -r ".region")"
-> +	if [[ ! $region ]]; then
-> +		echo "create-region failed for $decoder"
-> +		err "$LINENO"
-> +	fi
-> +	echo "$region"
-> +}
-> +
-> +# When cxl-cli support for inject and clear arrives, replace
-> +# the writes to /sys/kernel/debug with the new cxl commands.
-> +
-> +inject_poison_sysfs()
-> +{
-> +	memdev="$1"
-> +	addr="$2"
-> +
-> +	echo "$addr" > /sys/kernel/debug/cxl/"$memdev"/inject_poison
-> +}
-> +
-> +clear_poison_sysfs()
-> +{
-> +	memdev="$1"
-> +	addr="$2"
-> +
-> +	echo "$addr" > /sys/kernel/debug/cxl/"$memdev"/clear_poison
-> +}
-> +
-> +validate_poison_found()
-> +{
-> +	list_by="$1"
-> +	nr_expect="$2"
-> +
-> +	poison_list="$($CXL list "$list_by" --media-errors |
-> +		jq -r '.[].media_errors')"
-> +	if [[ ! $poison_list ]]; then
-> +		nr_found=0
-> +	else
-> +		nr_found=$(jq "length" <<< "$poison_list")
-> +	fi
-> +	if [ "$nr_found" -ne "$nr_expect" ]; then
-> +		echo "$nr_expect poison records expected, $nr_found found"
-> +		err "$LINENO"
-> +	fi
-> +}
-> +
-> +test_poison_by_memdev()
-> +{
-> +	find_memdev
-> +	inject_poison_sysfs "$memdev" "0x40000000"
-> +	inject_poison_sysfs "$memdev" "0x40001000"
-> +	inject_poison_sysfs "$memdev" "0x600"
-> +	inject_poison_sysfs "$memdev" "0x0"
-> +	validate_poison_found "-m $memdev" 4
-> +
-> +	clear_poison_sysfs "$memdev" "0x40000000"
-> +	clear_poison_sysfs "$memdev" "0x40001000"
-> +	clear_poison_sysfs "$memdev" "0x600"
-> +	clear_poison_sysfs "$memdev" "0x0"
-> +	validate_poison_found "-m $memdev" 0
-> +}
-> +
-> +test_poison_by_region()
-> +{
-> +	create_x2_region
-> +	inject_poison_sysfs "$mem0" "0x40000000"
-> +	inject_poison_sysfs "$mem1" "0x40000000"
-> +	validate_poison_found "-r $region" 2
-> +
-> +	clear_poison_sysfs "$mem0" "0x40000000"
-> +	clear_poison_sysfs "$mem1" "0x40000000"
-> +	validate_poison_found "-r $region" 0
-> +}
-> +
-> +# Turn tracing on. Note that 'cxl list --poison' does toggle the tracing.
-> +# Turning it on here allows the test user to also view inject and clear
-> +# trace events.
-> +echo 1 > /sys/kernel/tracing/events/cxl/cxl_poison/enable
-> +
-> +test_poison_by_memdev
-> +test_poison_by_region
-> +
-> +check_dmesg "$LINENO"
-> +
-> +modprobe -r cxl-test
-> diff --git a/test/meson.build b/test/meson.build
-> index 224adaf41fcc..2706fa5d633c 100644
-> --- a/test/meson.build
-> +++ b/test/meson.build
-> @@ -157,6 +157,7 @@ cxl_create_region = find_program('cxl-create-region.sh')
->  cxl_xor_region = find_program('cxl-xor-region.sh')
->  cxl_update_firmware = find_program('cxl-update-firmware.sh')
->  cxl_events = find_program('cxl-events.sh')
-> +cxl_poison = find_program('cxl-poison.sh')
->  
->  tests = [
->    [ 'libndctl',               libndctl,		  'ndctl' ],
-> @@ -186,6 +187,7 @@ tests = [
->    [ 'cxl-create-region.sh',   cxl_create_region,  'cxl'   ],
->    [ 'cxl-xor-region.sh',      cxl_xor_region,     'cxl'   ],
->    [ 'cxl-events.sh',          cxl_events,         'cxl'   ],
-> +  [ 'cxl-poison.sh',          cxl_poison,         'cxl'   ],
->  ]
->  
->  if get_option('destructive').enabled()
+This patch series introduces cpu_dcache_is_aliasing() with the new
+Kconfig option ARCH_HAS_CPU_CACHE_ALIASING and implements it for all
+architectures. The implementation of cpu_dcache_is_aliasing() is either
+evaluated to a constant at compile-time or a runtime check, which is
+what is needed on ARM.
+
+With this we can basically narrow down the list of architectures which
+are unsupported by DAX to those which are really affected.
+
+Testing done so far:
+
+- Compile allyesconfig on x86-64,
+- Compile allyesconfig on x86-64, with FS_DAX=n.
+- Compile allyesconfig on x86-64, with DAX=n.
+- Boot test after modifying alloc_dax() to force returning -EOPNOTSUPP
+  even on x86-64, thus simulating the behavior expected on an
+  architecture with data cache aliasing.
+
+There are many more axes to test however. I would welcome Tested-by for:
+
+- affected architectures,
+- affected drivers,
+- affected filesytems.
+
+Thanks,
+
+Mathieu
+
+Changes since v3:
+- Fix a leak on dax_add_host() failure in nvdimm/pmem.
+- Split the series into a bissectable sequence of changes.
+- Ensure that device-dax use-cases still works on data cache
+  aliasing architectures.
+
+Changes since v2:
+- Move DAX supported runtime check to alloc_dax(),
+- Modify DM to handle alloc_dax() error as non-fatal,
+- Remove all filesystem modifications, since the check is now done by
+  alloc_dax(),
+- rename "dcache" and "cache" to "cpu dcache" and "cpu cache" to
+  eliminate confusion with VFS terminology.
+
+Changes since v1:
+- The order of the series was completely changed based on the
+  feedback received on v1,
+- cache_is_aliasing() is renamed to dcache_is_aliasing(),
+- ARCH_HAS_CACHE_ALIASING_DYNAMIC is gone,
+- dcache_is_aliasing() vs ARCH_HAS_CACHE_ALIASING relationship is
+  simplified,
+- the dax_is_supported() check was moved to its rightful place in all
+  filesystems.
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-cxl@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-xfs@vger.kernel.org
+Cc: dm-devel@lists.linux.dev
+Cc: nvdimm@lists.linux.dev
+Cc: linux-s390@vger.kernel.org
+
+Mathieu Desnoyers (12):
+  nvdimm/pmem: Fix leak on dax_add_host() failure
+  nvdimm/pmem: Treat alloc_dax() -EOPNOTSUPP failure as non-fatal
+  dm: Treat alloc_dax() -EOPNOTSUPP failure as non-fatal
+  dcssblk: Handle alloc_dax() -EOPNOTSUPP failure
+  virtio: Treat alloc_dax() -EOPNOTSUPP failure as non-fatal
+  dax: Check for data cache aliasing at runtime
+  Introduce cpu_dcache_is_aliasing() across all architectures
+  dax: Fix incorrect list of data cache aliasing architectures
+  nvdimm/pmem: Cleanup alloc_dax() error handling
+  dm: Cleanup alloc_dax() error handling
+  dcssblk: Cleanup alloc_dax() error handling
+  virtio: Cleanup alloc_dax() error handling
+
+ arch/arc/Kconfig                    |  1 +
+ arch/arc/include/asm/cachetype.h    |  9 +++++++++
+ arch/arm/Kconfig                    |  1 +
+ arch/arm/include/asm/cachetype.h    |  2 ++
+ arch/csky/Kconfig                   |  1 +
+ arch/csky/include/asm/cachetype.h   |  9 +++++++++
+ arch/m68k/Kconfig                   |  1 +
+ arch/m68k/include/asm/cachetype.h   |  9 +++++++++
+ arch/mips/Kconfig                   |  1 +
+ arch/mips/include/asm/cachetype.h   |  9 +++++++++
+ arch/nios2/Kconfig                  |  1 +
+ arch/nios2/include/asm/cachetype.h  | 10 ++++++++++
+ arch/parisc/Kconfig                 |  1 +
+ arch/parisc/include/asm/cachetype.h |  9 +++++++++
+ arch/sh/Kconfig                     |  1 +
+ arch/sh/include/asm/cachetype.h     |  9 +++++++++
+ arch/sparc/Kconfig                  |  1 +
+ arch/sparc/include/asm/cachetype.h  | 14 ++++++++++++++
+ arch/xtensa/Kconfig                 |  1 +
+ arch/xtensa/include/asm/cachetype.h | 10 ++++++++++
+ drivers/dax/super.c                 | 14 ++++++++++++++
+ drivers/md/dm.c                     | 17 +++++++++--------
+ drivers/nvdimm/pmem.c               | 23 ++++++++++++-----------
+ drivers/s390/block/dcssblk.c        | 11 ++++++-----
+ fs/Kconfig                          |  1 -
+ fs/fuse/virtio_fs.c                 | 15 +++++++++++----
+ include/linux/cacheinfo.h           |  6 ++++++
+ include/linux/dax.h                 |  6 +-----
+ mm/Kconfig                          |  6 ++++++
+ 29 files changed, 165 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arc/include/asm/cachetype.h
+ create mode 100644 arch/csky/include/asm/cachetype.h
+ create mode 100644 arch/m68k/include/asm/cachetype.h
+ create mode 100644 arch/mips/include/asm/cachetype.h
+ create mode 100644 arch/nios2/include/asm/cachetype.h
+ create mode 100644 arch/parisc/include/asm/cachetype.h
+ create mode 100644 arch/sh/include/asm/cachetype.h
+ create mode 100644 arch/sparc/include/asm/cachetype.h
+ create mode 100644 arch/xtensa/include/asm/cachetype.h
+
+-- 
+2.39.2
 
