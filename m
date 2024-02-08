@@ -1,78 +1,41 @@
-Return-Path: <nvdimm+bounces-7388-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7390-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E69B984E862
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 19:53:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4007084E969
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 21:15:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 211071C27B12
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 18:53:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B47281F24F85
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Feb 2024 20:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBE823CF64;
-	Thu,  8 Feb 2024 18:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="FUBQbuoc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03736383AC;
+	Thu,  8 Feb 2024 20:15:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FC4364DC;
-	Thu,  8 Feb 2024 18:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA58038395;
+	Thu,  8 Feb 2024 20:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707418179; cv=none; b=kIDs7mkh37r8Mr50mwM1Cupl3WJd4RGU6dvmp4C72kYO5E9oKoS+DxjjYL5HUNioNcWQAbFfcAbG/TchkLWbLdokAV4GSudP2eCnXaGOQUEVa1V+3tUfw/D/yAIe+arT9oG6pWn4OQo3Zz7qDG98n1po1+STZNWCBb/WVpbbYYk=
+	t=1707423308; cv=none; b=bIKML0Y+pb+13AmrQ9EJQwRRxNwfL+zpcihBoXiXjlG4P71lok7yhrSaLQtMK7Fk1afPhphT9iHwqvB+UFIdQuACkTMKqLLM81aELTdBy6B+IhtAO7J/QY5MCYNYfKOMdJJeHhN++IosxjdsI6Y3u8mi7dNqHmzpmpKjKhE83OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707418179; c=relaxed/simple;
-	bh=umcqlnyoni1L+YV9DQVqbsmdwpCSWY7IqX3VvZk7A10=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FqHXnjR7pqXy2W6Ap8RhWmebM1EjZi0JG7bBcrrN4YOLpCFGqltr8ujNQoAzl6zLvi5o6jGY1fQtYrrPbwzS3/qbsSuN3R7fdIu4bTXy9Keo4l5AGDVG0I4UOqdGR36pdEbTz2mFyNGesD6Fe53PPSk1VI/U8NloNZlm7/8GYN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=FUBQbuoc; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1707418167;
-	bh=umcqlnyoni1L+YV9DQVqbsmdwpCSWY7IqX3VvZk7A10=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FUBQbuoczWUo8k5+ANycG5EnwK2AZwZz+GM2Uz2zImOXhkBzFtGTdwBZAYCenP6fC
-	 DgLffSigWmSC0rW6EM/A/gCcDBjQqYAWbEiusKZCP/jz+pOnSPLQWkJpy21cC8SmOh
-	 7iFVQnDrBxgXCvAMOSe7hVjYTOmI/BykW8ePB+qiKPACpJtReCrtD81c1ldvkSSgXY
-	 169iBhHYQPa5LIPJ3/XYMbbPDKLgg7sPaH9XXE5MMG0A2HDed+b0Hbw+qnFFAYipQh
-	 Ks5Sbzoa+ogU/4NEMlev5PchVfLYxH7lv49QChUb5wmbf1476V86H9j9CkdWhoRXIX
-	 FqmNBGS/mqM+w==
-Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TW5cl4DQpzXwg;
-	Thu,  8 Feb 2024 13:49:27 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dave Chinner <david@fromorbit.com>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arch@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-xfs@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	nvdimm@lists.linux.dev,
-	linux-s390@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>
-Subject: [PATCH v4 12/12] virtio: Cleanup alloc_dax() error handling
-Date: Thu,  8 Feb 2024 13:49:13 -0500
-Message-Id: <20240208184913.484340-13-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240208184913.484340-1-mathieu.desnoyers@efficios.com>
-References: <20240208184913.484340-1-mathieu.desnoyers@efficios.com>
+	s=arc-20240116; t=1707423308; c=relaxed/simple;
+	bh=u2RvBbxRuHq+GyWS8lxyh3CWpP5wIrWL35cL5fIz/dY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=drIXhEoQ2jjR3y2qWlQAATX1l6EwSAL9AgMsPtvro5sktfIdhfesPiWUJuACT1EyipTXbGOVTGh31hgzZxHHuvaWMfaengXThbVt3Fixn0cTAvFb+pSRSc/38sZbGoJmldhxIrto6sUYyDIo9obnOJonx1+eOwQJ+u8IwDdGKts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11730C433F1;
+	Thu,  8 Feb 2024 20:15:07 +0000 (UTC)
+From: Dave Jiang <dave.jiang@intel.com>
+To: linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev
+Cc: vishal.l.verma@intel.com
+Subject: [NDCTL PATCH v7 4/4] ndctl: Add support of qos_class for CXL CLI
+Date: Thu,  8 Feb 2024 13:11:54 -0700
+Message-ID: <20240208201435.2081583-1-dave.jiang@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -81,49 +44,40 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that alloc_dax() returns ERR_PTR(-EOPNOTSUPP) rather than NULL,
-the callers do not have to handle NULL return values anymore.
+Hi Vishal,
+With the QoS class series merged to the v6.8 kernel, can you please review and
+apply this series to ndctl if acceptable?
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Mike Snitzer <snitzer@kernel.org>
-Cc: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-cxl@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-xfs@vger.kernel.org
-Cc: dm-devel@lists.linux.dev
-Cc: nvdimm@lists.linux.dev
-Cc: linux-s390@vger.kernel.org
----
- fs/fuse/virtio_fs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v7:
+- Removed qos restriction flag entirely (Alison)
+- Added check for invalid qos_class when doing json output
+- Change -q to -Q (Vishal)
+- Add qos_class_mismatched to region output for cxl list (Vishal)
+- Add -Q test in cxl-qos-class.sh test (Vishal)
+- Change verify behavior to only do qos matching with -Q (Vishal/Dan)
+v6:
+- Check return value of create_region_validate_qos_class() (Wonjae)
+v5:
+- split out test from cxl-topology.sh (Vishal)
+v4:
+- Update against changes in kernel from multi to single qos_class entry
+- Add test in cxl-topology.sh (Dan)
+- See individual patch log for details
+v3:
+- Rebase against latest ndctl/pending branch.
 
-diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-index 621b1bca2d55..a28466c2da71 100644
---- a/fs/fuse/virtio_fs.c
-+++ b/fs/fuse/virtio_fs.c
-@@ -809,8 +809,8 @@ static int virtio_fs_setup_dax(struct virtio_device *vdev, struct virtio_fs *fs)
- 		return 0;
- 
- 	dax_dev = alloc_dax(fs, &virtio_fs_dax_ops);
--	if (IS_ERR_OR_NULL(dax_dev)) {
--		int rc = IS_ERR(dax_dev) ? PTR_ERR(dax_dev) : -EOPNOTSUPP;
-+	if (IS_ERR(dax_dev)) {
-+		int rc = PTR_ERR(dax_dev);
- 		return rc == -EOPNOTSUPP ? 0 : rc;
- 	}
- 
--- 
-2.39.2
+The series adds support for the kernel enabling of QoS class in the v6.8
+kernel. The kernel exports a qos_class token for the root decoders (CFMWS) and as
+well as for the CXL memory devices. The qos_class exported for a device is
+calculated by the driver during device probe. Currently a qos_class is exported
+for the volatile partition (ram) and another for the persistent partition (pmem).
+In the future qos_class will be exported for DCD regions. Display of qos_class is
+through the CXL CLI list command with -vvv for extra verbose.
 
+A qos_class check as also been added for region creation. A warning is emitted
+when the qos_class of a memory range of a CXL memory device being included in
+the CXL region assembly does not match the qos_class of the root decoder. Options
+are available to suppress the warning or to fail the region creation. This
+enabling provides a guidance on flagging memory ranges being used is not
+optimal for performance for the CXL region to be formed.
 
