@@ -1,31 +1,31 @@
-Return-Path: <nvdimm+bounces-7441-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7442-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E478528E1
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 13 Feb 2024 07:26:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD4D8528FC
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 13 Feb 2024 07:32:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253351F24E55
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 13 Feb 2024 06:26:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA08EB236DA
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 13 Feb 2024 06:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E188A13FFA;
-	Tue, 13 Feb 2024 06:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F4F1428D;
+	Tue, 13 Feb 2024 06:32:29 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD3F11CBC;
-	Tue, 13 Feb 2024 06:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A411754E;
+	Tue, 13 Feb 2024 06:32:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707805564; cv=none; b=NQUVNmh0nHl4ZFAxSRgjIhLGCD0r80mhqtJ20YrVe8eVwWVIFjpGzqhEsKyMDdzqRqU5XGwUJfVfGjG2phd0oX6sjti24eAKv0ZH8ZKl7xg5ewDgavHfhWL6ceMuA2hg/0cuhUvZTigoSmWdO1sFsmsjBUtGXD+/aZpHr8Jw9tw=
+	t=1707805949; cv=none; b=ulGxCyCJHSBpE44zPejqKDqF8pODF+WaXhrN3wMxRf3EdyMAX66RpKLZG8ETKHFNRsMZB4y4M2Hj+ANVaf6l77VYl4nVPu7PX565ie299bNtkgfdBFgiMwp9DBRa0PlBwZg4yw1D6JxhlGsMcJ5bdMGAHd6mDLaV++1RU5zkKt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707805564; c=relaxed/simple;
-	bh=kJpB1bbotnZFhqEVg0AeQ/Zsaj38y8uUEDRP5TOzTKw=;
+	s=arc-20240116; t=1707805949; c=relaxed/simple;
+	bh=/b2W5dfca36Y/WDoeFmMMfgnTkRpcuKoJ9AScS+hT74=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FmrsXaojpoNpksCSELHxFwCmiKABJRHPSvVY/dY9lpVRaiFWtSWhmUfnQk/vWXO/o/yrcsZiNKgMiS9sm4QSrE/MIeB+WwKneKR9x7HR4rGDio1Gl+R4JKnKBjptvlAczxn8Y2BJ4u/UKbD1bRHiLyJvYf7RyzyVA/z0DnpuSq8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=AH5qQNg2iynJ5EHEn97Cark1LJb7dVvX/80BIVyB5+Uq0prcJojeRv/wGQ6HL+MV8dYQL0LpaGePVhr0RG7barrwqjNlO2HkhJKO9qoFgheulnWGRI07PdK4jxREQI9EQDQsor7qCnyDgcA0QJqZlbMy/JMmUe+8pnUr1ATXOLA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
@@ -34,11 +34,11 @@ Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
 	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
 	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 55410300037E4;
-	Tue, 13 Feb 2024 07:25:59 +0100 (CET)
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 994DB3000086B;
+	Tue, 13 Feb 2024 07:32:26 +0100 (CET)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 413414F367; Tue, 13 Feb 2024 07:25:59 +0100 (CET)
-Date: Tue, 13 Feb 2024 07:25:59 +0100
+	id 8330C70EB7; Tue, 13 Feb 2024 07:32:26 +0100 (CET)
+Date: Tue, 13 Feb 2024 07:32:26 +0100
 From: Lukas Wunner <lukas@wunner.de>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Dan Williams <dan.j.williams@intel.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -52,14 +52,12 @@ Cc: Dan Williams <dan.j.williams@intel.com>, Arnd Bergmann <arnd@arndb.de>,
 	linux-cxl@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org, linux-xfs@vger.kernel.org,
 	dm-devel@lists.linux.dev, nvdimm@lists.linux.dev,
-	linux-s390@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>
-Subject: Re: [PATCH v5 5/8] virtio: Treat alloc_dax() -EOPNOTSUPP failure as
- non-fatal
-Message-ID: <20240213062559.GA27364@wunner.de>
+	linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] dax: alloc_dax() return ERR_PTR(-EOPNOTSUPP) for
+ CONFIG_DAX=n
+Message-ID: <20240213063226.GA4740@wunner.de>
 References: <20240212163101.19614-1-mathieu.desnoyers@efficios.com>
- <20240212163101.19614-6-mathieu.desnoyers@efficios.com>
+ <20240212163101.19614-2-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -68,24 +66,24 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212163101.19614-6-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20240212163101.19614-2-mathieu.desnoyers@efficios.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 12, 2024 at 11:30:58AM -0500, Mathieu Desnoyers wrote:
-> In preparation for checking whether the architecture has data cache
-> aliasing within alloc_dax(), modify the error handling of virtio
-> virtio_fs_setup_dax() to treat alloc_dax() -EOPNOTSUPP failure as
-> non-fatal.
-> 
-> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
+On Mon, Feb 12, 2024 at 11:30:54AM -0500, Mathieu Desnoyers wrote:
+> Change the return value from NULL to PTR_ERR(-EOPNOTSUPP) for
+> CONFIG_DAX=n to be consistent with the fact that CONFIG_DAX=y
+> never returns NULL.
 
-That's a v4.0 commit, yet this patch uses DEFINE_FREE() which is
-only available in v6.6 but not any earlier stable kernels.
+All the callers of alloc_dax() only check for IS_ERR().
 
-So the Fixes tag feels a bit weird.
+Doesn't this result in a change of behavior in all the callers?
+Previously they'd ignore the NULL return value and continue,
+now they'll error out.
 
-Apart from that,
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Given that, seems dangerous to add a Fixes tag with a v4.0 commit
+and thus risk regressing all stable kernels.
+
+Thanks,
+
+Lukas
 
