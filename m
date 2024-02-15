@@ -1,75 +1,43 @@
-Return-Path: <nvdimm+bounces-7475-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7477-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759FF856672
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Feb 2024 15:48:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507F9856954
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Feb 2024 17:17:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3128D28B1DA
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Feb 2024 14:48:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 037321F299C4
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 15 Feb 2024 16:17:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4E913475C;
-	Thu, 15 Feb 2024 14:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ENsTjpMx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BAA7134CDB;
+	Thu, 15 Feb 2024 16:16:29 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDCA1332A2;
-	Thu, 15 Feb 2024 14:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC5A133419;
+	Thu, 15 Feb 2024 16:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708008405; cv=none; b=WyycfBys3LkrfCqFluNRXYX57Wim67O/7+wHVMCeej3qZ06godTEOiufkLD2urxSHVnZa3NaCatIZV4jUZExFIAVr9ANpj0aY0qQ3lRsDx1ic24Pkcxp/ZxLTTNK4PnbrT1ej5HWBWJG6r9Fj++LQOHAjGd4NgHapg3HcEWimQQ=
+	t=1708013789; cv=none; b=rSmfGs5J5ktBMK7uY8ze8QBhiWP0oDwlv50ZStzv+4nEuQMSveJsRiMDCMczDrXRhSjHBvdij2FGW+R7jM3U4wfMijdQrQ8bRX9gWaBOjdj8SsWN2zJKPHKDqBUEyM6eLCDevMefCSx7CcSn6k8IMJNks6qj9F3vxgialC6ieos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708008405; c=relaxed/simple;
-	bh=5LHEXykJS2jSVE2sCzHC5a4cdCFsRj5a/HPr77qf3tA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dFGFEDi40JynIi834jG9o3Bv8Rnaaev9vQo2NvOhndr+sCIYfLkD/A5z60r+r4GfA2xuxzxk1EV+1FfEry469SDwO+TMq9xqPEm18xfO2kWkm8LFBGd1D5RSKBWLzotU4BQUwNyMAnYMF69jd80H/iL4INv3V6UOUeN5iUh3eDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=ENsTjpMx; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1708008402;
-	bh=5LHEXykJS2jSVE2sCzHC5a4cdCFsRj5a/HPr77qf3tA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ENsTjpMxLU1wLGqd749X/HFQGZd/c3vnn8cNkbklbkw6Pg6ZW7i6kFn81cmiMnX3+
-	 AbjNIOQ8Du3bNfmEJ8ZLtHAEh0KN98NHRKAqLepXYe1cfaCpmfcsbCNtihbA+rngpk
-	 gdKdOKG+DbN5qVXdiKBMVZ7wpzDIjNSoxyh+Vd42SjLriNTZtWbYCMLCt7u6Qn1nmu
-	 FRcBlkrrjkJK8qAxMZJRIWdmbiie8ckjCZ+DVLtUMi93fbaISmkA9HGWfDx1wJBAES
-	 AWp7GQO12TcvOlhqO1bgojD2BVkaufnnQiT6uu4SauxatVT43b1st5JzJmJMrUSf6v
-	 pZsOUVUzt8qNA==
-Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4TbHvQ3nTxzZPr;
-	Thu, 15 Feb 2024 09:46:42 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dave Chinner <david@fromorbit.com>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arch@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-xfs@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	nvdimm@lists.linux.dev,
-	linux-s390@vger.kernel.org
-Subject: [PATCH v6 9/9] dax: Fix incorrect list of data cache aliasing architectures
-Date: Thu, 15 Feb 2024 09:46:33 -0500
-Message-Id: <20240215144633.96437-10-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240215144633.96437-1-mathieu.desnoyers@efficios.com>
-References: <20240215144633.96437-1-mathieu.desnoyers@efficios.com>
+	s=arc-20240116; t=1708013789; c=relaxed/simple;
+	bh=TuUUwhc8pyEaKP1tCqFSyykTn9ECMnLWn9Jwk5ujLiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ht6LabAxg+wr2tp8N+cHvG8qa3BX4EWl4viHYewPmHXtFTmXwD5k1olJjsNfIbrB9NnDTmxKjv/3SD8WZnNt2u9YjogRiVqxAwHdKadaerK4SBiZfmSkD0qaU8F17ku8R6GXkEORozJDec4EmLFTwRwaDX9FSi1hUbLncuV4fp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABDCAC433F1;
+	Thu, 15 Feb 2024 16:16:28 +0000 (UTC)
+From: Dave Jiang <dave.jiang@intel.com>
+To: linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev
+Cc: vishal.l.verma@intel.com,
+	dan.j.williams@intel.com,
+	wj28.lee@samsung.com
+Subject: [NDCTL PATCH v2] ndctl: cxl: Remove dependency for attributes derived from IDENTIFY command
+Date: Thu, 15 Feb 2024 09:16:20 -0700
+Message-ID: <20240215161620.2739089-1-dave.jiang@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -78,77 +46,151 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-prevents DAX from building on architectures with virtually aliased
-dcache with:
+A memdev may optionally not host a mailbox and therefore not able to execute
+the IDENTIFY command. Currently the kernel emits empty strings for some of
+the attributes instead of making them invisible in order to keep backward
+compatibility for CXL CLI. Remove dependency of CXL CLI on the existance of
+these attributes and only expose them if they exist. Without the dependency
+the kernel will be able to make the non-existant attributes invisible.
 
-  depends on !(ARM || MIPS || SPARC)
-
-This check is too broad (e.g. recent ARMv7 don't have virtually aliased
-dcaches), and also misses many other architectures with virtually
-aliased data cache.
-
-This is a regression introduced in the v4.0 Linux kernel where the
-dax mount option is removed for 32-bit ARMv7 boards which have no data
-cache aliasing, and therefore should work fine with FS_DAX.
-
-This was turned into the following check in alloc_dax() by a preparatory
-change:
-
-        if (ops && (IS_ENABLED(CONFIG_ARM) ||
-            IS_ENABLED(CONFIG_MIPS) ||
-            IS_ENABLED(CONFIG_SPARC)))
-                return NULL;
-
-Use cpu_dcache_is_aliasing() instead to figure out whether the environment
-has aliasing data caches.
-
-Fixes: d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-cxl@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-xfs@vger.kernel.org
-Cc: dm-devel@lists.linux.dev
-Cc: nvdimm@lists.linux.dev
+Link: https://lore.kernel.org/all/20230606121534.00003870@Huawei.com/
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/dax/super.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+v2:
+- Add lable size check for action_write(). (Wonjae)
+---
+ cxl/lib/libcxl.c | 48 ++++++++++++++++++++++++++----------------------
+ cxl/memdev.c     | 18 +++++++++++++-----
+ 2 files changed, 39 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index ce5bffa86bba..a21a7c262382 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -13,6 +13,7 @@
- #include <linux/uio.h>
- #include <linux/dax.h>
- #include <linux/fs.h>
-+#include <linux/cacheinfo.h>
- #include "dax-private.h"
+diff --git a/cxl/lib/libcxl.c b/cxl/lib/libcxl.c
+index 1537a33d370e..f807ec4ed4e6 100644
+--- a/cxl/lib/libcxl.c
++++ b/cxl/lib/libcxl.c
+@@ -1251,28 +1251,30 @@ static void *add_cxl_memdev(void *parent, int id, const char *cxlmem_base)
+ 	memdev->minor = minor(st.st_rdev);
  
- /**
-@@ -455,9 +456,7 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
- 	 * except for device-dax (NULL operations pointer), which does
- 	 * not use aliased mappings from the kernel.
- 	 */
--	if (ops && (IS_ENABLED(CONFIG_ARM) ||
--	    IS_ENABLED(CONFIG_MIPS) ||
--	    IS_ENABLED(CONFIG_SPARC)))
-+	if (ops && cpu_dcache_is_aliasing())
- 		return ERR_PTR(-EOPNOTSUPP);
+ 	sprintf(path, "%s/pmem/size", cxlmem_base);
+-	if (sysfs_read_attr(ctx, path, buf) < 0)
+-		goto err_read;
+-	memdev->pmem_size = strtoull(buf, NULL, 0);
++	if (sysfs_read_attr(ctx, path, buf) == 0)
++		memdev->pmem_size = strtoull(buf, NULL, 0);
  
- 	if (WARN_ON_ONCE(ops && !ops->zero_page_range))
+ 	sprintf(path, "%s/ram/size", cxlmem_base);
+-	if (sysfs_read_attr(ctx, path, buf) < 0)
+-		goto err_read;
+-	memdev->ram_size = strtoull(buf, NULL, 0);
++	if (sysfs_read_attr(ctx, path, buf) == 0)
++		memdev->ram_size = strtoull(buf, NULL, 0);
+ 
+ 	sprintf(path, "%s/payload_max", cxlmem_base);
+-	if (sysfs_read_attr(ctx, path, buf) < 0)
+-		goto err_read;
+-	memdev->payload_max = strtoull(buf, NULL, 0);
+-	if (memdev->payload_max < 0)
+-		goto err_read;
++	if (sysfs_read_attr(ctx, path, buf) == 0) {
++		memdev->payload_max = strtoull(buf, NULL, 0);
++		if (memdev->payload_max < 0)
++			goto err_read;
++	} else {
++		memdev->payload_max = -1;
++	}
+ 
+ 	sprintf(path, "%s/label_storage_size", cxlmem_base);
+-	if (sysfs_read_attr(ctx, path, buf) < 0)
+-		goto err_read;
+-	memdev->lsa_size = strtoull(buf, NULL, 0);
+-	if (memdev->lsa_size == ULLONG_MAX)
+-		goto err_read;
++	if (sysfs_read_attr(ctx, path, buf) == 0) {
++		memdev->lsa_size = strtoull(buf, NULL, 0);
++		if (memdev->lsa_size == ULLONG_MAX)
++			goto err_read;
++	} else {
++		memdev->lsa_size = ULLONG_MAX;
++	}
+ 
+ 	sprintf(path, "%s/serial", cxlmem_base);
+ 	if (sysfs_read_attr(ctx, path, buf) < 0)
+@@ -1299,12 +1301,11 @@ static void *add_cxl_memdev(void *parent, int id, const char *cxlmem_base)
+ 	host[0] = '\0';
+ 
+ 	sprintf(path, "%s/firmware_version", cxlmem_base);
+-	if (sysfs_read_attr(ctx, path, buf) < 0)
+-		goto err_read;
+-
+-	memdev->firmware_version = strdup(buf);
+-	if (!memdev->firmware_version)
+-		goto err_read;
++	if (sysfs_read_attr(ctx, path, buf) == 0) {
++		memdev->firmware_version = strdup(buf);
++		if (!memdev->firmware_version)
++			goto err_read;
++	}
+ 
+ 	memdev->dev_buf = calloc(1, strlen(cxlmem_base) + 50);
+ 	if (!memdev->dev_buf)
+@@ -4543,6 +4544,9 @@ static int lsa_op(struct cxl_memdev *memdev, int op, void *buf,
+ 	if (length == 0)
+ 		return 0;
+ 
++	if (memdev->payload_max < 0)
++		return -EINVAL;
++
+ 	label_iter_max = memdev->payload_max - sizeof(struct cxl_cmd_set_lsa);
+ 	while (remaining) {
+ 		cur_len = min((size_t)label_iter_max, remaining);
+diff --git a/cxl/memdev.c b/cxl/memdev.c
+index 81f07991da06..08b6aa50175f 100644
+--- a/cxl/memdev.c
++++ b/cxl/memdev.c
+@@ -473,10 +473,13 @@ static int action_zero(struct cxl_memdev *memdev, struct action_context *actx)
+ 	size_t size;
+ 	int rc;
+ 
+-	if (param.len)
++	if (param.len) {
+ 		size = param.len;
+-	else
++	} else {
+ 		size = cxl_memdev_get_label_size(memdev);
++		if (size == ULLONG_MAX)
++			return -EINVAL;
++	}
+ 
+ 	if (cxl_memdev_nvdimm_bridge_active(memdev)) {
+ 		log_err(&ml,
+@@ -509,6 +512,9 @@ static int action_write(struct cxl_memdev *memdev, struct action_context *actx)
+ 	if (!size) {
+ 		size_t label_size = cxl_memdev_get_label_size(memdev);
+ 
++		if (label_size == ULONG_MAX)
++			return -EINVAL;
++
+ 		fseek(actx->f_in, 0L, SEEK_END);
+ 		size = ftell(actx->f_in);
+ 		fseek(actx->f_in, 0L, SEEK_SET);
+@@ -547,11 +553,13 @@ static int action_read(struct cxl_memdev *memdev, struct action_context *actx)
+ 	char *buf;
+ 	int rc;
+ 
+-	if (param.len)
++	if (param.len) {
+ 		size = param.len;
+-	else
++	} else {
+ 		size = cxl_memdev_get_label_size(memdev);
+-
++		if (size == ULLONG_MAX)
++			return -EINVAL;
++	}
+ 	buf = calloc(1, size);
+ 	if (!buf)
+ 		return -ENOMEM;
 -- 
-2.39.2
+2.43.0
 
 
