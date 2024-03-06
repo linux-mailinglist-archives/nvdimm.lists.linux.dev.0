@@ -1,66 +1,66 @@
-Return-Path: <nvdimm+bounces-7650-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7652-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4FF873438
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 11:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CF1187343E
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 11:31:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8ADD1C208A5
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 10:30:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E2401C21AF6
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 10:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272E6604A4;
-	Wed,  6 Mar 2024 10:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0633F60B85;
+	Wed,  6 Mar 2024 10:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="lGOsgFSu"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="PwKdS9ab"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB585F848
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 10:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9884960868
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 10:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.37.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709720964; cv=none; b=m1W2+rhbspvW4SjqNZPoi/MS9AiSUHm6gstDA4c5D3SZGXeCQl6rvfsiTdyErU6hRsD/GA5ha/QWMZKotvEXWbgnFN+22K1jL5rw2mWh5TnetmOIru3pfEH9y1kh4f/vxmqV5hsnqGT7Z+yG/xDVc1CkzP+TMiKLxSJ3ucjygN4=
+	t=1709721028; cv=none; b=tV/RrvQAbc9JjRt0L3QJVcEwNQ80+Dk5xpJRXvOXi9D0+ibooRaxztxfhmwMl6/9VpRq1FmarUWuA0eQ2F4699Mn/c3bWBTEfbeR2j++hFsa9SHXKyFBUqdhGaJfA05eOwbsr8QL7zL4PZ5PBW4aw/CrOXl0ibJl2B4U17Q5tuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709720964; c=relaxed/simple;
-	bh=qPTXg1j60dmCKgrUxhmFd4z9be0Rjp54MJE3FLxdEQM=;
+	s=arc-20240116; t=1709721028; c=relaxed/simple;
+	bh=8m938ej88oP8CU4LRmFGqeZ2eI8zznrXHFjHuzUAi80=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SpDZBRhTyFWsp5C6NTMfdoPnNfWfWzfOiKpa0wsNUAMOCc15gPqXVUmU1eA01B3M04V03V3DA35DDfwCT0MByR9hkE+O120PayH7FSeaj7iSy1cwjr80RZsge3Qzzj990Df0ZYFQ6lj43VPN5kVcXdWEAvRUinx31SoHxZeZs+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=lGOsgFSu; arc=none smtp.client-ip=207.54.90.47
+	 MIME-Version; b=ix3fwvX+NDY+Z20Nr15lMp/pGNkEAGaK8X58DAgskLykvNTHVCuu0/9sRLG1ghCbnjNnFkCMS/gRWW+DzVbtbCUkACBVCX/YN2wBCRd6kpsmlw7cgMVgeGYBTkBtq0Mgfuk+N9teVJCjKgw/zt2KW4Q1jux1n4JmlkbNhxh9uAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=PwKdS9ab; arc=none smtp.client-ip=139.138.37.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1709720963; x=1741256963;
+  t=1709721026; x=1741257026;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qPTXg1j60dmCKgrUxhmFd4z9be0Rjp54MJE3FLxdEQM=;
-  b=lGOsgFSuoAiXNpP5Y9RAN4XbNTumBMibnuZhhEaiTuXRM4W6f0LtQTu8
-   qjf5Y23x0trILLJxDNBXxE468SSENqKCmqgzPvsf0nv+32mloxCqbl6PP
-   P0FlfQUtquE96IBM6LBj4O514sBrcgVVPvSiHtoabJwYh7jMo3zynYCfG
-   mYTnL3iINz04yFdbEGE2/VBQKddRAB4iIX8NGGjFjBKtHjs2f5/C9LTvV
-   +9JwPyq7zx3sNq3cZd5VKPMQxxNhlLFKLyn0/iqCEQFvGpwMQmLKfFzR7
-   YPgrkuPOWBtWk7Rr4G1E+7YP3BeY/YB+yiO2H3y8owa8eZQGQIM8qNaUq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="151260033"
+  bh=8m938ej88oP8CU4LRmFGqeZ2eI8zznrXHFjHuzUAi80=;
+  b=PwKdS9abdjQvI8XscYmBP1eN+2/f0JlKJHSL5t4mWHi4gfr3st5r8op7
+   5/LYpMMRN0O6SBrJZqtfSfuj6TjSl1V4MNKGcBQj2VbTipKr6ENnAWk+Q
+   2gEMHeLK9OGMRcJFWg9HJGpgjEzNUJaxqFfvy2la5CHmEueRtEGXCa0W7
+   SPIDYO43ERXElIEuWIuPgbqhaX06d+Mo6C/L35ADv8+Ydl2VRN00LXE9D
+   1vwfjorxo74vnMQCf8214LU5iZVixY4TKOT7GDjH5kh4+zxh09MNYLLyu
+   qqEl99OQHiFJIZnXVfiETdKRJ545NTl3woFiWqFRMXqaqZ53GRoeqvHGQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="130699032"
 X-IronPort-AV: E=Sophos;i="6.06,208,1705330800"; 
-   d="scan'208";a="151260033"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:29:12 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 355A112E239
+   d="scan'208";a="130699032"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:29:13 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 2F63BEB462
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:10 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 56D53D5D17
 	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:09 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6B94DBF3C9
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:08 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id F208D202CB587
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:07 +0900 (JST)
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id C654121BD41
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:08 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 08E3D1A006A;
-	Wed,  6 Mar 2024 18:29:06 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id D32BA1A006D;
+	Wed,  6 Mar 2024 18:29:07 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kernel@vger.kernel.org
 Cc: y-goto@fujitsu.com,
@@ -83,9 +83,9 @@ Cc: y-goto@fujitsu.com,
 	x86@kernel.org,
 	kexec@lists.infradead.org,
 	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH v3 2/7] mm: memremap: add pgmap_parent_resource() helper
-Date: Wed,  6 Mar 2024 18:28:41 +0800
-Message-Id: <20240306102846.1020868-3-lizhijian@fujitsu.com>
+Subject: [PATCH v3 3/7] nvdimm: pmem: assign a parent resource for vmemmap region for the fsdax
+Date: Wed,  6 Mar 2024 18:28:42 +0800
+Message-Id: <20240306102846.1020868-4-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20240306102846.1020868-1-lizhijian@fujitsu.com>
 References: <20240306102846.1020868-1-lizhijian@fujitsu.com>
@@ -100,56 +100,60 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28234.006
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28234.006
-X-TMASE-Result: 10-1.178600-10.000000
-X-TMASE-MatchedRID: a4Q7dosAlP6Po+6vQMop+ikMR2LAnMRpCZa9cSpBObnAuQ0xDMaXkH4q
-	tYI9sRE/7qN2AY1LBYfX/4cXJB77G82IoAvAG8Cytw+xHnsmQjMRKrbwgeEU4psoi2XrUn/Jn6K
-	dMrRsL14qtq5d3cxkNePDdA+sPJoJpIWVq2FPrVRC8PbPp9VJvAwE3szHrU0AtN2HcZBPqwdFSR
-	N53IQttjRtl6ZG50f040PXgYNLw2sECcFYp/ZlI4xrU96OxkmsFcUQf3Yp/ridO0/GUi4gFb0fO
+X-TMASE-Result: 10--1.564400-10.000000
+X-TMASE-MatchedRID: BlFNdihulaZXk4HjwySOxykMR2LAnMRpFInyGi5rPwK4GyTmeN+AbL8F
+	Hrw7frluf146W0iUu2tDc4lSgrowpWptPhjDCRug9k5nZzZVBSBULRRq00o2mZsoi2XrUn/Jn6K
+	dMrRsL14qtq5d3cxkNU8XOMKR+RhSziRYTTEaxycNH0kK2Y6lBnFLca4Td9YkovbRRC+8RtSqnf
+	dPSmIOZvdj0cn+WGO3HBgXAGNBpen5KWrl6H4maf8jyjqYHnMRFcUQf3Yp/ridO0/GUi4gFb0fO
 	PzpgdcEKeJ/HkAZ8Is=
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-It's a helper to set the parent resource for the altmap of a given pgmap
+When the pmem is configured as fsdax, set the vmemmap region as a child
+of the namespace region so that it can be registered as a separate
+resource later.
 
-CC: Andrew Morton <akpm@linux-foundation.org>
 CC: Dan Williams <dan.j.williams@intel.com>
+CC: Vishal Verma <vishal.l.verma@intel.com>
+CC: Dave Jiang <dave.jiang@intel.com>
+CC: Ira Weiny <ira.weiny@intel.com>
 CC: Baoquan He <bhe@redhat.com>
-CC: linux-mm@kvack.org
+CC: nvdimm@lists.linux.dev
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- include/linux/memremap.h | 1 +
- mm/memremap.c            | 7 +++++++
- 2 files changed, 8 insertions(+)
+ drivers/nvdimm/pmem.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index ca1f12353008..1e8b25352f7c 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -193,6 +193,7 @@ static inline bool folio_is_device_coherent(const struct folio *folio)
- void zone_device_page_init(struct page *page);
- void *memremap_pages(struct dev_pagemap *pgmap, int nid);
- void memunmap_pages(struct dev_pagemap *pgmap);
-+void pgmap_parent_resource(struct dev_pagemap *pgmap, struct resource *res);
- void *devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap);
- void devm_memunmap_pages(struct device *dev, struct dev_pagemap *pgmap);
- struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
-diff --git a/mm/memremap.c b/mm/memremap.c
-index 78047157b0ee..0bbf163d4817 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -390,6 +390,13 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
- }
- EXPORT_SYMBOL_GPL(memremap_pages);
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 4e8fdcb3f1c8..b2640a3fb693 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -452,7 +452,7 @@ static int pmem_attach_disk(struct device *dev,
+ 	struct nd_namespace_io *nsio = to_nd_namespace_io(&ndns->dev);
+ 	struct nd_region *nd_region = to_nd_region(dev->parent);
+ 	int nid = dev_to_node(dev), fua;
+-	struct resource *res = &nsio->res;
++	struct resource *res = &nsio->res, *parent;
+ 	struct range bb_range;
+ 	struct nd_pfn *nd_pfn = NULL;
+ 	struct dax_device *dax_dev;
+@@ -491,12 +491,15 @@ static int pmem_attach_disk(struct device *dev,
+ 		fua = 0;
+ 	}
  
-+void pgmap_parent_resource(struct dev_pagemap *pgmap, struct resource *res)
-+{
-+	if (pgmap && res)
-+		pgmap->altmap.parent = res;
-+}
-+EXPORT_SYMBOL_GPL(pgmap_parent_resource);
+-	if (!devm_request_mem_region(dev, res->start, resource_size(res),
+-				dev_name(&ndns->dev))) {
++	parent = devm_request_mem_region(dev, res->start, resource_size(res),
++				dev_name(&ndns->dev));
++	if (!res) {
+ 		dev_warn(dev, "could not reserve region %pR\n", res);
+ 		return -EBUSY;
+ 	}
+ 
++	pgmap_parent_resource(&pmem->pgmap, parent);
 +
- /**
-  * devm_memremap_pages - remap and provide memmap backing for the given resource
-  * @dev: hosting device for @res
+ 	disk = blk_alloc_disk(nid);
+ 	if (!disk)
+ 		return -ENOMEM;
 -- 
 2.29.2
 
