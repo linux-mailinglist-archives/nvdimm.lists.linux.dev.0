@@ -1,68 +1,68 @@
-Return-Path: <nvdimm+bounces-7664-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7666-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAFC7873FDB
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 19:42:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EBA873FDC
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 19:42:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E861B239B5
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 18:42:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E13A7286F55
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 18:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9FF13E7E7;
-	Wed,  6 Mar 2024 18:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1A613E7C5;
+	Wed,  6 Mar 2024 18:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4Jyusff"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1y8CpV8"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9940E13E7CA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91A713E7C0
 	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 18:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709750554; cv=none; b=farnWeUaz1tWLe7lgdMYu3ZbM3b2BWwk/yN5JvIF4l96HKJbcsm9LVriazWsDDJB6AjERg8VneuU37efTGgp6KmniDkMvAawPCEdZQlPKX0fiYzPxd/H8EvOOFgfGFmU9WzyJHevcEMOE99Va92kHe8O9M8edy/k/faZbKFXQwM=
+	t=1709750554; cv=none; b=InL4HhsFOfu/nmf/QSQRI2N3qwjoPzaEGNxNgnmV5hfcVKaLiTsrA6LyPVQo6IsDJhRVPeTDJWqzyd313HKzUjpgv4VTUH+OPZ2eTj2/uEQrVvLsD4LflTbf8qEu5QqPIELVtfNxxwELmYUZKHVzWMNmyWTxtppseJrbYFegSKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1709750554; c=relaxed/simple;
-	bh=vAtrXMzOPQbVk0ENBhOuNC+XRIcLDIDYr/JHq12NW44=;
+	bh=p8rV7ixS6CdG+oryCs0HOp9CyxgH1ZyvlwmJtf0Zf24=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=R9ByKvbV02oGz7FVe6IpKV1+sL6ZTbqoPKU9gZdr3clcSnEKVxZccxx8NJDDWDon42JQfMhexQ1F11/2XIgkvslkwwZqcBBZ/u0cHMhfjOCE3f1Be0mRDybJOUbtnwULlJ2dM5D9Az/rwbkawq3XK2UJ7Nn1xfszCmbh/7ooHi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4Jyusff; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=LqgUlhfNUqw+MMbHK8npi+DnzxQh3Dw5dvw5Giaj+W4bM5hK0LjGer9TAoIQTOgC4fgXLBIrONycPwx7kPmcWLvSZJeEeFZ4I46mmtXNGJ2TPX2zXqRBLgJ53PSShQA4S8RQRpQXFO4vHTk6GWwGKRefyBJ+OgQTeZ3yzrfmn58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1y8CpV8; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709750552; x=1741286552;
+  t=1709750553; x=1741286553;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vAtrXMzOPQbVk0ENBhOuNC+XRIcLDIDYr/JHq12NW44=;
-  b=J4Jyusff/VW7ZKxyqo2vSHS2SiJMh/DoKAEeH3sBNLnuNvhRSwMgGctX
-   avaqLppuXFgUELsu7L1UNWiXR5W8BBxXkdWmxrQcfB1WlbnZYOR2UYPyT
-   DV+lXIT+bCcX75XYsN57gG5JQ9CdD0TLSqRs4ZGqjS4motAx8wQpALTCJ
-   7B4OxsGYoFmR5lQyHsQJz/oV2wuThmGKmXaqk8ear/+Xo4mzFy6JL/DeK
-   lDXwBFbiTzmJO47gmGV0UDOOvTRqHfCUerfZbDDegvVAMmA0VJ0a3R5rd
-   hFK9Urvv2J6JqBLd2b4rj8YNSmZyr3Kupji8DT8ykl0sYbfAfLq5v/eDM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="15819826"
+  bh=p8rV7ixS6CdG+oryCs0HOp9CyxgH1ZyvlwmJtf0Zf24=;
+  b=e1y8CpV8RVZjUShJ27lkpYrphQID0txrq1UsO/AQSaXooYOThnJz3PHc
+   YEKms3i1RoKHdRTkGK/kWnohReHoXY1lAkOwE1pMRMB0/BnM/fVsx+TzB
+   396sVKIsaDV1EmvbFvMtgeeMv1CibownjdlrwZ+NCaowRH+rNiO2aW3jk
+   K0Kzgu8YUsjTi+4t7tYjAj4Bw1kJEsN68d3nZbVD5JUeHpQ9TijE8H9gY
+   Ocewx4LHXSc87r5ghJDeyZy6n1KTfAQqED8Vlez1CcVFGniSCEl/MlWbJ
+   CrSTDKlfbqvqiKGkVmc/FdmaFozmhUDTou9jpLEOn9kvEuhnMPXU03JcQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="15819828"
 X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="15819826"
+   d="scan'208";a="15819828"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 10:42:31 -0800
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 10:42:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="9925969"
+   d="scan'208";a="9925973"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.251.9.155])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 10:42:31 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 10:42:32 -0800
 From: alison.schofield@intel.com
 To: Vishal Verma <vishal.l.verma@intel.com>
 Cc: Alison Schofield <alison.schofield@intel.com>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org,
 	Dave Jiang <dave.jiang@intel.com>
-Subject: [ndctl PATCH v10 3/7] cxl/event_trace: add a private context for private parsers
-Date: Wed,  6 Mar 2024 10:42:22 -0800
-Message-Id: <6e975df49a62cdb544791633fdd1a998a0b60164.1709748564.git.alison.schofield@intel.com>
+Subject: [ndctl PATCH v10 4/7] cxl/event_trace: add helpers to retrieve tep fields by type
+Date: Wed,  6 Mar 2024 10:42:23 -0800
+Message-Id: <3d264f1fe4c92a90eabf9cd3365a2dc69caacc4e.1709748564.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1709748564.git.alison.schofield@intel.com>
 References: <cover.1709748564.git.alison.schofield@intel.com>
@@ -76,58 +76,133 @@ Content-Transfer-Encoding: 8bit
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-CXL event tracing provides helpers to iterate through a trace
-buffer and extract events of interest. It offers two parsing
-options: a default parser that adds every field of an event to
-a json object, and a private parsing option where the caller can
-parse each event as it wishes.
+Add helpers to extract the value of an event record field given the
+field name. This is useful when the user knows the name and format
+of the field and simply needs to get it.
 
-Although the private parser can do some conditional parsing based
-on field values, it has no method to receive additional information
-needed to make parsing decisions in the callback.
-
-Add a private_ctx field to the existing 'struct event_context'.
-Replace the jlist_head parameter, used in the default parser,
-with the private_ctx.
-
-This is in preparation for adding a private parser requiring
-additional context for cxl_poison events.
+Since this is in preparation for adding a cxl_poison private parser
+for 'cxl list --media-errors' support, add those specific required
+types: u8, u32, u64, char*
 
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 ---
- cxl/event_trace.c | 2 +-
- cxl/event_trace.h | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ cxl/event_trace.c | 75 +++++++++++++++++++++++++++++++++++++++++++++++
+ cxl/event_trace.h | 10 ++++++-
+ 2 files changed, 84 insertions(+), 1 deletion(-)
 
 diff --git a/cxl/event_trace.c b/cxl/event_trace.c
-index 93a95f9729fd..bdad0c19dbd4 100644
+index bdad0c19dbd4..6cc9444f3204 100644
 --- a/cxl/event_trace.c
 +++ b/cxl/event_trace.c
-@@ -221,7 +221,7 @@ static int cxl_event_parse(struct tep_event *event, struct tep_record *record,
+@@ -15,6 +15,81 @@
+ #define _GNU_SOURCE
+ #include <string.h>
  
- 	if (event_ctx->parse_event)
- 		return event_ctx->parse_event(event, record,
--					      &event_ctx->jlist_head);
-+					      event_ctx->private_ctx);
- 
- 	return cxl_event_to_json(event, record, &event_ctx->jlist_head);
- }
++static struct tep_format_field *__find_field(struct tep_event *event,
++					     const char *name)
++{
++	struct tep_format_field **fields;
++
++	fields = tep_event_fields(event);
++	if (!fields)
++		return NULL;
++
++	for (int i = 0; fields[i]; i++) {
++		struct tep_format_field *f = fields[i];
++
++		if (strcmp(f->name, name) != 0)
++			continue;
++
++		return f;
++	}
++	return NULL;
++}
++
++u64 cxl_get_field_u64(struct tep_event *event, struct tep_record *record,
++		      const char *name)
++{
++	struct tep_format_field *f;
++	unsigned char *val;
++	int len;
++
++	f = __find_field(event, name);
++	if (!f)
++		return ULLONG_MAX;
++
++	val = tep_get_field_raw(NULL, event, f->name, record, &len, 0);
++	if (!val)
++		return ULLONG_MAX;
++
++	return *(u64 *)val;
++}
++
++char *cxl_get_field_string(struct tep_event *event, struct tep_record *record,
++			   const char *name)
++{
++	struct tep_format_field *f;
++	int len;
++
++	f = __find_field(event, name);
++	if (!f)
++		return NULL;
++
++	return tep_get_field_raw(NULL, event, f->name, record, &len, 0);
++}
++
++u32 cxl_get_field_u32(struct tep_event *event, struct tep_record *record,
++		      const char *name)
++{
++	char *val;
++
++	val = cxl_get_field_string(event, record, name);
++	if (!val)
++		return UINT_MAX;
++
++	return *(u32 *)val;
++}
++
++u8 cxl_get_field_u8(struct tep_event *event, struct tep_record *record,
++		    const char *name)
++{
++	char *val;
++
++	val = cxl_get_field_string(event, record, name);
++	if (!val)
++		return UCHAR_MAX;
++
++	return *(u8 *)val;
++}
++
+ static struct json_object *num_to_json(void *num, int elem_size, unsigned long flags)
+ {
+ 	bool sign = flags & TEP_FIELD_IS_SIGNED;
 diff --git a/cxl/event_trace.h b/cxl/event_trace.h
-index 7f7773b2201f..ec61962abbc6 100644
+index ec61962abbc6..bbdea3b896e0 100644
 --- a/cxl/event_trace.h
 +++ b/cxl/event_trace.h
-@@ -16,8 +16,9 @@ struct event_ctx {
- 	struct list_head jlist_head;
- 	const char *event_name; /* optional */
- 	int event_pid; /* optional */
-+	void *private_ctx; /* required with parse_event() */
- 	int (*parse_event)(struct tep_event *event, struct tep_record *record,
--			   struct list_head *jlist_head); /* optional */
-+			   void *private_ctx);/* optional */
- };
+@@ -5,6 +5,7 @@
  
- int cxl_parse_events(struct tracefs_instance *inst, struct event_ctx *ectx);
+ #include <json-c/json.h>
+ #include <ccan/list/list.h>
++#include <ccan/short_types/short_types.h>
+ 
+ struct jlist_node {
+ 	struct json_object *jobj;
+@@ -25,5 +26,12 @@ int cxl_parse_events(struct tracefs_instance *inst, struct event_ctx *ectx);
+ int cxl_event_tracing_enable(struct tracefs_instance *inst, const char *system,
+ 		const char *event);
+ int cxl_event_tracing_disable(struct tracefs_instance *inst);
+-
++char *cxl_get_field_string(struct tep_event *event, struct tep_record *record,
++			   const char *name);
++u8 cxl_get_field_u8(struct tep_event *event, struct tep_record *record,
++		    const char *name);
++u32 cxl_get_field_u32(struct tep_event *event, struct tep_record *record,
++		      const char *name);
++u64 cxl_get_field_u64(struct tep_event *event, struct tep_record *record,
++		      const char *name);
+ #endif
 -- 
 2.37.3
 
