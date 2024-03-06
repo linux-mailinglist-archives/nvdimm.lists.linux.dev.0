@@ -1,65 +1,66 @@
-Return-Path: <nvdimm+bounces-7648-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7651-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286C2873433
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 11:29:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B260087343A
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 11:30:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A98A91F216F0
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 10:29:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D67A31C208A5
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 10:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F5C5FB87;
-	Wed,  6 Mar 2024 10:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94211604D1;
+	Wed,  6 Mar 2024 10:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="bOOoL+v6"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="JvML1jsU"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1E15D750
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 10:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2520D604AF
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 10:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709720955; cv=none; b=bAT+2SSUzzuYZKzM/bw+QY/SeFM7GsY6GF6o4gw4lvKaRNkMaIy4/0qPuuy/3yZAQUwqGtoZfhAb9wKfn9NH+nGMxYvYvPVit9qCBR/Ue8th1oZ/LGbOpSIAdSDTwVKOeWBObOowq7bQrN4xou4/9dhappMJDvsgbjYx/3kJ5B0=
+	t=1709720965; cv=none; b=g4NnvzNLAzQHVqOi5G7swE2ceEk9TPHi1rTMjyL9sU8icvl7SkiW/b3EvyJilsjU7TqZcPtjHgt/KxIhqwECij1nGmLwiz+RHc8D+KDSwggsczKTuAxRbpmhQloNGkXy/Q2fP/6FSelFo+8rCZmYSz8MVxh3KCnZrGvb7lVzr68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709720955; c=relaxed/simple;
-	bh=L1uC7nmPQ3VWAXabC3fl20OZJAiFpMalcUh/l8cZZSY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oNt2qb3fbGKsNiTEKMrw3JCga4tD7BN7nCD0azM03GqjHo6DBupGzPZXqyGHPRSH/tZR0lzc1W/hXPobEqG4y6TFUjI1gG9sLfa4DVPvTHn3lbTJbEgyCB+vmv2xW02aaiDLNjDDNd+YNRgOImq9g/Oxl9IbUaEcuPPKsCPpDBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=bOOoL+v6; arc=none smtp.client-ip=68.232.139.139
+	s=arc-20240116; t=1709720965; c=relaxed/simple;
+	bh=ZoN1+liG2Aek8I+8vh1JTxN3rQPUF7ESoET6QRxJG2I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ivAoT7HL4vfOzGeYuAIDQ7IKghO/WxWwHFwSrstd+1GIOdU2GVfEvwj680WrnZPN73mMT0fg3aDpDZgttZuKIXOxMdj3J/a+s5+xlhUUdVaz2nJmDAu0oKU5f5rcBypFGvBQBQVsrM0fS578RjYzDmGwLddFUzwddo33ikijhN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=JvML1jsU; arc=none smtp.client-ip=207.54.90.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1709720953; x=1741256953;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=L1uC7nmPQ3VWAXabC3fl20OZJAiFpMalcUh/l8cZZSY=;
-  b=bOOoL+v6ililZ8ZqzNqCbYpDiTxSZEqkXbDK00EwvWiud90QTOin0bKO
-   P6xGRwK7ShBq71pNgQPeJrEA7bI0wZQD2pVqiPLHyb6/JeZir5NWPEU/x
-   b9NKBt0IOAFMN3f2QfbqUTsfC9aBW38EqxHgFNfp201Gf32QyLhaDoEzN
-   iNWmb0+TWwwSSn6X7MAQXiH1ZWwj66+X34fVL9rThzvpsa1pn0bkZizrk
-   IB/MupIhuZ3fNLBlC4SixwCTEWago/KF1EYAppuD+EX9W0XvmxFpgHEEZ
-   XSpYo975aEs/q1E34yZ0TKmYLJP23OHYayow6E2nvBbrcgGn4s4/9ncOm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="153205382"
+  t=1709720964; x=1741256964;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZoN1+liG2Aek8I+8vh1JTxN3rQPUF7ESoET6QRxJG2I=;
+  b=JvML1jsU/9R/DklI4dtt0iUQiMbXrBuK1nOHvch6cM7Oj057eFgLgz0t
+   s0t6SZR9AhLAyLfo5iIJDfn+NN4FbReFkk6bc5KgMe1HzNuO6j6Tbm6oD
+   i/DN9njyvNJvk0VrEgUW/hO7kBvZP++F3QMwlNXOhD1h01788CibxZHUc
+   holAxt6vwGuGgUQ/Jca84kJY94qjTxQudNp1iOAK913fn53Iv5U/+xFuK
+   nIhiRy/LMVEUtIL8EEm4dMzf8ME1BzoUfp9neVzfrnGutNjGeR+8CrKhg
+   wRAumm2N7bKj+mIx+APN546rvkCsPUMfvDkUwA3emC6ShC5GSDYHq5t+C
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="130783553"
 X-IronPort-AV: E=Sophos;i="6.06,208,1705330800"; 
-   d="scan'208";a="153205382"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:29:10 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id D42F312E239
+   d="scan'208";a="130783553"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:29:13 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 97D40D3EA9
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:08 +0900 (JST)
+Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
+	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id C1761D5603
 	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:07 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id E5387D5D17
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:06 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 6F8CB21735C
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:06 +0900 (JST)
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 261E82030C7E2
+	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:07 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 8455D1A006A;
-	Wed,  6 Mar 2024 18:29:04 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 30EC21A006D;
+	Wed,  6 Mar 2024 18:29:06 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kernel@vger.kernel.org
 Cc: y-goto@fujitsu.com,
@@ -82,10 +83,12 @@ Cc: y-goto@fujitsu.com,
 	x86@kernel.org,
 	kexec@lists.infradead.org,
 	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [RFC PATCH v3 0/7] device backed vmemmap crash dump support
-Date: Wed,  6 Mar 2024 18:28:39 +0800
-Message-Id: <20240306102846.1020868-1-lizhijian@fujitsu.com>
+Subject: [PATCH v3 1/7] mm: memremap: register/unregister altmap region to a separate resource
+Date: Wed,  6 Mar 2024 18:28:40 +0800
+Message-Id: <20240306102846.1020868-2-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20240306102846.1020868-1-lizhijian@fujitsu.com>
+References: <20240306102846.1020868-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -97,59 +100,30 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28234.006
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28234.006
-X-TMASE-Result: 10--12.047900-10.000000
-X-TMASE-MatchedRID: WgnE0i2Gnm0S1H+wJnLU0xxQCXaqsX3JICcCYi/y4c1YC5LPd7BvbZVh
-	8IAdHNwNV9EQFA1Eag8lMmENZ05/+9/K1ikJIsLOF+qQpCWTUjks9yCYjUR6S0u7cLcUs73+UAr
-	JnwHoG3RN6oLBwrNlQwp3Fx4qZRwntpor8DSuIkBIK2DGByysyvrFoSv9vjATUYkZd9+4t2+K/w
-	YsY7aZE7yLKxASOUwjkBUaTCifn9xExKw+e7wVxgPZZctd3P4BX098A7fr3Vfir9ZdeIDkfES3N
-	7Ud/ZNyw3/C2qEmiGxJ7i3niaFL/WIo6q3zeo5wqhcdnP91eXGdj7YWJLs3nTb+WPFOeKNMsX5M
-	tbDfIWiy+iBzQ4hgrIaPRWRVv3Ad5mMeg8RfsnWHmRpBdG9H1zX8AUEphxj0Blnw3dG9MzGjxYy
-	RBa/qJcFwgTvxipFajoczmuoPCq3JpPrv+A3tItKgYcJqG5qWnoRh9cAERsgMkJ+raRGIqWxKck
-	D0+Hnx
+X-TMASE-Result: 10--10.470700-10.000000
+X-TMASE-MatchedRID: 1qLRYaNAGIjSQ8oIxmHtSPSG/+sPtZVkP9kI+hf1EuqeEPi9wVyFrt3m
+	9tpwPB13LMZCJmSjFZdnvY9hxB9vc68zfGxMvR+8KQxHYsCcxGkJlr1xKkE5ucC5DTEMxpeQlAz
+	5vo1rYQ0JVj6hwZFNaEK3WEb5CMhwJSdQTuiG7Ijjpxdo/JwVm/NYQxCOihTN6hUULKzHRgQTgt
+	4grpaSCoXqHVXA333ceUDb3nIq9HleMBK5dsaSGQKDWtq/hHcNqLpXV8E1T7zozDhGeQC9EvdyG
+	0dzM6lz4vM1YF6AJbbCCfuIMF6xLSAHAopEd76vccmxpuUeZs/EDQ/FH4CdWBWn6lb2OMp5WsRb
+	K4+hKATe8vYowW/wKQ==
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Hello folks,
+The elfcorehdr descirbes the dumpable region in PT_LOADs.
 
-Compared with the V2[1] I posted a long time ago, this time it is a
-completely new proposal design.
+Generally, an iomem resource registered with flags
+(IORESOURCE_SYSTEM_RAM | IORESOUCE_BUSY) will be added to PT_LOADs by
+kexe_file_load(2). An iomem resource with name prefix "System RAM" will
+be added to PT_LOADs in kexec-tools by calling kexe_load(2).
 
-### Background and motivate overview ###
----
-Crash dump is an important feature for troubleshooting the kernel. It is the
-final way to chase what happened at the kernel panic, slowdown, and so on. It
-is one of the most important tools for customer support.
+So a simple way to make the altmap dumpable is to register altmap region
+as a separate resource with the proper name and resource flags.
 
-Currently, there are 2 syscalls(kexec_file_load(2) and kexec_load(2)) to
-configure the dumpable regions. Generally, (A)iomem resources registered with
-flags (IORESOURCE_SYSTEM_RAM | IORESOUCE_BUSY) for kexec_file_load(2) or
-(B)iomem resources registered with "System RAM" name prefix for kexec_load(2)
-are dumpable.
+Here naming it as "Device Backed Vmemmap" plus resource flags
+(IORESOURCE_DEVICE_BACKED_VMEMMAP and IORESOUCE_BUSY) to make it work first.
 
-The pmem use cases including fsdax and devdax, could map their vmemmap to
-their own devices. In this case, these part of vmemmap will not be dumped when
-crash happened since these regions are satisfied with neither the above (A)
-nor (B).
-
-In fsdax, the vmemmap(struct page array) becomes very important, it is one of
-the key data to find status of reverse map. Lacking of the information may
-cause difficulty to analyze trouble around pmem (especially Filesystem-DAX).
-That means troubleshooters are unable to check more details about pmem from
-the dumpfile.
-
-### Proposal ###
----
-In this proposal, register the device backed vmemmap as a separate resource.
-This resource has its own new flag and name, and then teaches kexec_file_load(2)
-and kexec_load(2) to mark it as dumpable.
-
-Proposed flag: IORESOURCE_DEVICE_BACKED_VMEMMAP
-Proposed name: "Device Backed Vmemmap"
-
-NOTE: crash-utils also needs to adapt to this new name for kexec_load()
-
-With current proposal, the /proc/iomem should show as following for device
-backed vmemmap
-# cat /proc/iomem
+A /proc/iomem example is as following:
+$ sudo cat /proc/iomem
 ...
 fffc0000-ffffffff : Reserved
 100000000-13fffffff : Persistent Memory
@@ -166,73 +140,97 @@ c80000000-147fffffff : PCI Bus 0000:00
   c80000000-c801fffff : PCI Bus 0000:01
 ...
 
-### Kdump service reloading ###
----
-Once the kdump service is loaded, if changes to CPUs or memory occur,
-either by hot un/plug or off/onlining, the crash elfcorehdr should also
-be updated. There are 2 approaches to make the reloading more efficient.
-1) Use udev rules to watch CPU and memory events, then reload kdump
-2) Enable kernel crash hotplug to automatically reload elfcorehdr (>= 6.5)
-
-This reloading also needed when device backed vmemmap layouts change, Similar
-to what 1) does now, one could add the following as the first lines to the
-RHEL udev rule file /usr/lib/udev/rules.d/98-kexec.rules:
-
-# namespace updated: watch daxX.Y(devdax) and pfnX.Y(fsdax) of nd
-SUBSYSTEM=="nd", KERNEL=="[dp][af][xn][0-9].*", ACTION=="bind", GOTO="kdump_reload"
-SUBSYSTEM=="nd", KERNEL=="[dp][af][xn][0-9].*", ACTION=="unbind", GOTO="kdump_reload"
-# devdax <-> system-ram updated: watch daxX.Y of dax
-SUBSYSTEM=="dax", KERNEL=="dax[0-9].*", ACTION=="bind", GOTO="kdump_reload"
-SUBSYSTEM=="dax", KERNEL=="dax[0-9].*", ACTION=="unbind", GOTO="kdump_reload"
-
-Regarding 2), my idea is that it would need to call the memory_notify() in
-devm_memremap_pages_release() and devm_memremap_pages() to trigger the crash
-hotplug. This part is not yet mature, but it does not affect the whole feature
-because we can still use method 1) alternatively.
-
-[1] https://lore.kernel.org/lkml/02066f0f-dbc0-0388-4233-8e24b6f8435b@fujitsu.com/T/
---------------------------------------------
-changes from V2[1]
-- new proposal design
-
-CC: Alison Schofield <alison.schofield@intel.com>
 CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Baoquan He <bhe@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dan Williams <dan.j.williams@intel.com>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: Dave Jiang <dave.jiang@intel.com>
 CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: "H. Peter Anvin" <hpa@zytor.com>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Ira Weiny <ira.weiny@intel.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Vishal Verma <vishal.l.verma@intel.com>
-CC: linux-cxl@vger.kernel.org
+CC: Baoquan He <bhe@redhat.com>
+CC: Dan Williams <dan.j.williams@intel.com>
 CC: linux-mm@kvack.org
-CC: nvdimm@lists.linux.dev
-CC: x86@kernel.org
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+ include/linux/ioport.h   |  1 +
+ include/linux/memremap.h |  3 +++
+ mm/memremap.c            | 23 ++++++++++++++++++++++-
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
-Li Zhijian (7):
-  mm: memremap: register/unregister altmap region to a separate resource
-  mm: memremap: add pgmap_parent_resource() helper
-  nvdimm: pmem: assign a parent resource for vmemmap region for the
-    fsdax
-  dax: pmem: assign a parent resource for vmemmap region for the devdax
-  resource: Introduce walk device_backed_vmemmap res() helper
-  x86/crash: make device backed vmemmap dumpable for kexec_file_load
-  nvdimm: set force_raw=1 in kdump kernel
-
- arch/x86/kernel/crash.c         |  5 +++++
- drivers/dax/pmem.c              |  8 ++++++--
- drivers/nvdimm/namespace_devs.c |  3 +++
- drivers/nvdimm/pmem.c           |  9 ++++++---
- include/linux/ioport.h          |  4 ++++
- include/linux/memremap.h        |  4 ++++
- kernel/resource.c               | 13 +++++++++++++
- mm/memremap.c                   | 30 +++++++++++++++++++++++++++++-
- 8 files changed, 70 insertions(+), 6 deletions(-)
-
+diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+index db7fe25f3370..3b59e924f531 100644
+--- a/include/linux/ioport.h
++++ b/include/linux/ioport.h
+@@ -69,6 +69,7 @@ struct resource {
+ #define IORESOURCE_UNSET	0x20000000	/* No address assigned yet */
+ #define IORESOURCE_AUTO		0x40000000
+ #define IORESOURCE_BUSY		0x80000000	/* Driver has marked this resource busy */
++#define IORESOURCE_DEVICE_BACKED_VMEMMAP 0xa0000000	/* device backed vmemmap resource */
+ 
+ /* I/O resource extended types */
+ #define IORESOURCE_SYSTEM_RAM		(IORESOURCE_MEM|IORESOURCE_SYSRAM)
+diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+index 744c830f4b13..ca1f12353008 100644
+--- a/include/linux/memremap.h
++++ b/include/linux/memremap.h
+@@ -17,6 +17,8 @@ struct device;
+  * @free: free pages set aside in the mapping for memmap storage
+  * @align: pages reserved to meet allocation alignments
+  * @alloc: track pages consumed, private to vmemmap_populate()
++ * @parent: the parent resource that altmap region belongs to
++ * @res: altmap region resource
+  */
+ struct vmem_altmap {
+ 	unsigned long base_pfn;
+@@ -25,6 +27,7 @@ struct vmem_altmap {
+ 	unsigned long free;
+ 	unsigned long align;
+ 	unsigned long alloc;
++	struct resource *parent, *res;
+ };
+ 
+ /*
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 9e9fb1972fff..78047157b0ee 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -157,7 +157,17 @@ EXPORT_SYMBOL_GPL(memunmap_pages);
+ 
+ static void devm_memremap_pages_release(void *data)
+ {
+-	memunmap_pages(data);
++	struct dev_pagemap *pgmap = data;
++
++	if (pgmap->flags & PGMAP_ALTMAP_VALID && pgmap->altmap.res) {
++		resource_size_t start = pgmap->altmap.res->start;
++		resource_size_t size = pgmap->altmap.res->end -
++				       pgmap->altmap.res->start + 1;
++
++		__release_region(pgmap->altmap.parent, start, size);
++	}
++
++	memunmap_pages(pgmap);
+ }
+ 
+ static void dev_pagemap_percpu_release(struct percpu_ref *ref)
+@@ -404,11 +414,22 @@ void *devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
+ {
+ 	int error;
+ 	void *ret;
++	struct vmem_altmap *altmap = &pgmap->altmap;
+ 
+ 	ret = memremap_pages(pgmap, dev_to_node(dev));
+ 	if (IS_ERR(ret))
+ 		return ret;
+ 
++	if (pgmap->flags & PGMAP_ALTMAP_VALID && altmap->parent) {
++		unsigned long start = altmap->base_pfn << PAGE_SHIFT;
++		unsigned long size = vmem_altmap_offset(altmap) << PAGE_SHIFT;
++		int flags = IORESOURCE_DEVICE_BACKED_VMEMMAP | IORESOURCE_BUSY;
++
++		altmap->res = __request_region(altmap->parent, start, size,
++					      "Device Backed Vmemmap", flags);
++		pr_debug("Insert a separate resource for altmap, %lx-%lx\n",
++			 start, start + size);
++	}
+ 	error = devm_add_action_or_reset(dev, devm_memremap_pages_release,
+ 			pgmap);
+ 	if (error)
 -- 
 2.29.2
 
