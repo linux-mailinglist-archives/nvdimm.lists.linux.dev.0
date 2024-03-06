@@ -1,94 +1,64 @@
-Return-Path: <nvdimm+bounces-7654-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7656-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC070873442
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 11:31:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CB3A87390D
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 15:28:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 774131F2259C
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 10:31:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19119286D97
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  6 Mar 2024 14:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04A560DD1;
-	Wed,  6 Mar 2024 10:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F7E13340F;
+	Wed,  6 Mar 2024 14:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="t6MRrG+I"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W1sBNu6L"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FEB60B8C
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 10:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB1F132492;
+	Wed,  6 Mar 2024 14:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709721031; cv=none; b=s87qWudjHrYyeJYxbfgYw2ifQdk4clFVX2TlxILESh2gew7qsH7yKExX0qOSINqPu9of8azqjz7VsFNrW+0XDwwN9aEK6pyQxsxwsscsLMlYN0KNvOBULLQldBpY26QTDG2FYLIfnQf10VSjI+RK4U0DxSCsAxk2mlWmjLWolpA=
+	t=1709735264; cv=none; b=Of8Sq3mV4cwuORdWKXPIsRbhhvmKNrccDCrXMNTeuOd1u35HDFlw0AgWfDWb/+G/Ab/SRf9haW1re9cmgUCd9AFDWVAQeGH6LDno/2NJ3tKR4r6xSt74dWgrvqmRuAsYLn/k0ZJgplL6IgwnWAcc4ET9BFi+c0rPDOgbCYwQ7DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709721031; c=relaxed/simple;
-	bh=cfFr9yDzIDYGuhO0ed+4EUdT/tYXSwMTNGM6ftOGOr0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pXwRGxHOleEX9bQoVmqF2edxoSroCmk18CN122McYGAk7d4dUkk8niFG5WlCfZig4TOh4D+SDmD1BFKraCRsTsgSc/Vxp+Y/3mhgWTXOxQMSmLhyZAzxBl5u6NPUmm8ANdu3f+JF97nF/HTiVbXZXELjHH90LYALIEw7bGhqyRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=t6MRrG+I; arc=none smtp.client-ip=139.138.61.252
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1709721029; x=1741257029;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cfFr9yDzIDYGuhO0ed+4EUdT/tYXSwMTNGM6ftOGOr0=;
-  b=t6MRrG+ILIbQcfC81LTnJpvHK7NuuRVz+Gww++FIofNQ5bSyxqs22UyH
-   8hzC2luLvas7yCPQ6NgB96FQhfZHLIoprv763j/VMOxKPUyAJMxC3BxVr
-   RELUwj6MgdiZkJse+EjKhLll7uu6y2O7vWRurO4hZr/jSIhdaRmPeC00N
-   49CqnBwpqQ1tiIV+Jq8p4kjFv/phzrIzH9zPcNaisJn5Ep87Jw9uPPSIv
-   4KPB21t2zQdeyz6G6+pyjtZ6ahfPLCK8/OscOtzN3n3yTZvRjb0lm+yMw
-   UYZEO8TOX8bJJYgPxDkhkuaOcjV4i1CMlu/bmETvhTEStOLmO6TW1HMIM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="130208884"
-X-IronPort-AV: E=Sophos;i="6.06,208,1705330800"; 
-   d="scan'208";a="130208884"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:29:17 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 52BAB9CCB6
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:13 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 802F0E6182
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:12 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1207F202CB587
-	for <nvdimm@lists.linux.dev>; Wed,  6 Mar 2024 19:29:12 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 1E80D1A006D;
-	Wed,  6 Mar 2024 18:29:11 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: linux-kernel@vger.kernel.org
-Cc: y-goto@fujitsu.com,
-	Alison Schofield <alison.schofield@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	hpa@zytor.com,
-	Ingo Molnar <mingo@redhat.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
+	s=arc-20240116; t=1709735264; c=relaxed/simple;
+	bh=XL6QE58M1iFe/XIAe7ruihw5Zk7dX/36Cwcp5BY2dQg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=euAdQfyv3WiPL1TM9kn5m5D9FKeOL7X5JTy/z5cq0cnJ+M7zYPygwuIKquxeg0I3a95vIRPQX/O7qKbItRvt7rl8tGctUYPrV99CjGbp+Cvl+UtYiM1aYYLQaEcHPRVu4C93xJt1jU+/dVG3teVNeZIBSDiV+zIQyQJyFvqaTn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W1sBNu6L; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=sK1ki9ofpn+/NZBKJibcoYH2pOB6nC2QnO5+csns/+M=; b=W1sBNu6L6KRdBf7oxRfOzAriSR
+	EB79TAa4Z9V7jikeI+3UVSoU/st7Nvx8/vMaVLdh7q4uX3hxlbCtAGcwSXPoGyjqfnHkxfo1p4L5H
+	QBkYHc1s7pGWKmGsH5Tx8w0j+67eH+J94VXdaAWVSmm0I1wtZ+a0u612MUpt8uxiEknB6cNqLF2W0
+	Tp5268kurqE3lrf4C0CH6o9+lAHftMlnpHqRYdW/Nq1nI/ouGCbnJhHm+Fcn+FnO1R2ITVCzkiO30
+	MZFHKuWVrJqPi9e0oVC4OgUI0zGiRNfvJKeg+w6gvSYwSl52FDU47Vpd0qq2IakxRPzRDftK0rjdw
+	dxV1utoQ==;
+Received: from [66.60.99.14] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rhsFB-00000000ZYJ-1cBR;
+	Wed, 06 Mar 2024 14:27:41 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
 	Vishal Verma <vishal.l.verma@intel.com>,
-	linux-cxl@vger.kernel.org,
-	linux-mm@kvack.org,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>
+Cc: dm-devel@lists.linux.dev,
 	nvdimm@lists.linux.dev,
-	x86@kernel.org,
-	kexec@lists.infradead.org,
-	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH v3 7/7] nvdimm: set force_raw=1 in kdump kernel
-Date: Wed,  6 Mar 2024 18:28:46 +0800
-Message-Id: <20240306102846.1020868-8-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20240306102846.1020868-1-lizhijian@fujitsu.com>
-References: <20240306102846.1020868-1-lizhijian@fujitsu.com>
+	linux-block@vger.kernel.org
+Subject: remove calls to blk_queue_max_integrity_segments
+Date: Wed,  6 Mar 2024 07:27:36 -0700
+Message-Id: <20240306142739.237234-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -96,71 +66,21 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28234.006
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28234.006
-X-TMASE-Result: 10-2.938000-10.000000
-X-TMASE-MatchedRID: MGSvkkc+rOj7w6uw5pqYnoOlbll4OMtk9LMB0hXFSeg6Zx3YUNQTG+Wh
-	NKYuM7eN4QRvjxz49tHS7j6TEIEt1D3TQfUpAv1sPkILbTHNp5vYUDvAr2Y/17fYIuZsOQ0sOXB
-	2cqV0mCIre4xpX839SBGJgBWjZYF4x7Pq8adLcfrum6Nvy6t3NlK6+0HOVoSowLkNMQzGl5B+Kr
-	WCPbERP80Age9hS2jaRMoI0qlZNIJF28kU6TjvF869emDs42ddfS0Ip2eEHnz3IzXlXlpamPoLR
-	4+zsDTtqrM46JQnL8hECPUxiiiZOrOyZvt4D+xsOs3xt1PQttJyHuAILm2j36P9W6TbIoRbP/Sq
-	eQCjGYXssHsZ3G5ixlOiTS2pFc4fpGuqGtYITgaGk+xUaqdMDwHEKwHwYevbwUSxXh+jiUgkww/
-	gwY7hMA==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-The virtually mapped memory map allows storing struct page objects for
-persistent memory devices in pre-allocated storage on those devices.
-These 'struct page objects' on devices are also known as metadata.
+Hi all,
 
-During libnvdimm/nd_pmem are loading, the previous metadata will
-be re-constructed to fit the current running kernel. For kdump purpose,
-these metadata should not be touched until the dumping is done so that
-the metadata is identical.
+I forgot to convert two callers of blk_queue_max_integrity_segments to
+the atomic queue_limits API.  This series fixes that and also cleans up
+the nvdimm code a bit.
 
-To achieve this, we have some options
-1. Don't provide libnvdimm driver in kdump kernel rootfs/initramfs
-2. Disable libnvdimm driver by specific comline parameters:
-   (initcall_blacklist=libnvdimm_init libnvdimm.blacklist=1 rd.driver.blacklist=libnvdimm)
-3. Enforce force_raw=1 for nvdimm namespace, because when force_raw=1,
-   metadata will not be re-constructed again. This may also result in
-   the pmem doesn't work before a few extra configurations.
+The patches are against Jens' for-6.9/block tree and it would be good if
+we could still get them into the 6.9 merge window.
 
-Here apply the 3rd option.
-
-CC: Dan Williams <dan.j.williams@intel.com>
-CC: Vishal Verma <vishal.l.verma@intel.com>
-CC: Dave Jiang <dave.jiang@intel.com>
-CC: Ira Weiny <ira.weiny@intel.com>
-CC: nvdimm@lists.linux.dev
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
- drivers/nvdimm/namespace_devs.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index d6d558f94d6b..04f855c7f0b1 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -9,6 +9,7 @@
- #include <linux/slab.h>
- #include <linux/list.h>
- #include <linux/nd.h>
-+#include <linux/crash_dump.h>
- #include "nd-core.h"
- #include "pmem.h"
- #include "pfn.h"
-@@ -1513,6 +1514,8 @@ struct nd_namespace_common *nvdimm_namespace_common_probe(struct device *dev)
- 			return ERR_PTR(-ENODEV);
- 	}
- 
-+	if (is_kdump_kernel())
-+		ndns->force_raw = true;
- 	return ndns;
- }
- EXPORT_SYMBOL(nvdimm_namespace_common_probe);
--- 
-2.29.2
-
+Diffstat:
+ md/dm-integrity.c |    2 +-
+ nvdimm/btt.c      |   12 ++++++++----
+ nvdimm/core.c     |   30 ------------------------------
+ nvdimm/nd.h       |    1 -
+ 4 files changed, 9 insertions(+), 36 deletions(-)
 
