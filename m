@@ -1,67 +1,67 @@
-Return-Path: <nvdimm+bounces-7958-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-7960-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B17BA8A76F6
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 16 Apr 2024 23:47:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35A68A76F8
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 16 Apr 2024 23:47:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EA41C20BFE
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 16 Apr 2024 21:47:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F7DD281819
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 16 Apr 2024 21:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08CE46EB53;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0C884DF3;
 	Tue, 16 Apr 2024 21:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtaaT1K1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B671hGoB"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2802F5A0F9
-	for <nvdimm@lists.linux.dev>; Tue, 16 Apr 2024 21:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397806EB45
+	for <nvdimm@lists.linux.dev>; Tue, 16 Apr 2024 21:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713304019; cv=none; b=L0b1vzKncsOnBSb7nyKXNZJTInt1ShOrujoowvtdfKBbjSi3ZdILlVFjjKKKL1ckgcmV7v5tS1DxDL4ltEbTKB1mVOg7oq56tq2MCL58QCYlBe4mnp8HC+pGytFPM9cctqRTVrXhsKxJkHpsSz+H0zHfwstfcuPJhuO7RFmiWtk=
+	t=1713304020; cv=none; b=R8qoFQvxMt6CyJ3b9JZJ1x9sC3QWfhJb/iNdJmhCRuw0t0JFjKdk1bO0BMBgeCajgUbB9h7FaD+Ax9Zoc/Wc05Kb/NcsI/S86lFwW76eWocbEapkvTengDqlPDcs+++aLVCO3xTd7mqt6veLkEGUGQ7KEmSYvoPHzDQesubZbpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713304019; c=relaxed/simple;
-	bh=6NKueYWbYilwLzm6MjvNGh3MReMQfTip+ZRQnpWHoXo=;
+	s=arc-20240116; t=1713304020; c=relaxed/simple;
+	bh=AYcLtBXwGHJ1lHYc9yCNHOV9e648ufAKYQk7scG7Fsg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Aze6n2adZfYDQCy8UY+2St+mkV8WnbycwhgA046dRu86zBLHxOVSgLudclxVnYUwEwxaRJaNB3vA/9jYWbqDmRZukCBUSJHTEzoUQYVw+HaihZ1Y9xjJIOEwg16j9JeNnEqivwR7u5kEarL/7CbZJiynh8Lpa1zMgi28LfdI6sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtaaT1K1; arc=none smtp.client-ip=192.198.163.12
+	 In-Reply-To:To:Cc; b=ADTE2QAz3OflPY+viRq691m3w2qks4oxyWpwOeJzLJJDh+sWaZ+dEkbvJCxTC8hS0RifMXx+a6dUnHffaU/QwtidX3dSYDUm6fpZ4Okuec3aepNXi38Y8lX3O8cVwQJ3x/NvRuZ4CFavoIm/kci2URFvx70Jal9KV2RL9MyFK60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B671hGoB; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713304018; x=1744840018;
+  t=1713304019; x=1744840019;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=6NKueYWbYilwLzm6MjvNGh3MReMQfTip+ZRQnpWHoXo=;
-  b=PtaaT1K1jfAriL6p57wGLjyljKgJfGwPfq76hub6wUU/erPoUPBsbo15
-   fupCiiLwOYOQ9x8zadet7c4uUJcUKEeCJ8+kvkhHbwEC/MYdFdvEwfMOC
-   05KN0LQKG9xuKS45S5y/LeCX846QPpkPjcl8xazqZ9qqACANK4uZpCSUk
-   AhI49ld78SjjBkNoFjI6sEd1DH0fH+HnyQMlIDDHWEYuvtoJPSf1zV5A0
-   MoEMXdgEprPLbh19InJ81qlHzH5FGDAcuNm/PknjcVD/XJuux/DfVq1ac
-   jwUZnEO+3vgjK4Vb9CGM3zdJm9YNtCuq2z/pbdNbr1P+xxlbxtJ6V7qsz
-   w==;
-X-CSE-ConnectionGUID: NHGzGzhzRuygpVZYjk8L8g==
-X-CSE-MsgGUID: QBMth8NBTjeqgfEcdqAiug==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="12553095"
+  bh=AYcLtBXwGHJ1lHYc9yCNHOV9e648ufAKYQk7scG7Fsg=;
+  b=B671hGoB1UizCUmsh9PRKV3tq0InPg8I2eP7/68w+rhdvhGS6Wd7ttRw
+   PRaqVKsfQ+1jl5NvTw3h7Gekq0y+h6Rm40IpAAPMf3/aNQkWQIWkS6qhS
+   Kblk/y0vm1/USbr/2KKB32UYDRVhSHovtxNaaSjpPgwa+LXyibp8emCJc
+   MjsJAisCUxb3JamUmVYd+Bc6Q+rETVdtCVXlb31oQr/CmgSQTQ9cYKvl+
+   MN2r1USq/72L13Tq9SnUeUnFV4tQ3JoaEmuZFVdToGRRRF8pLNoumQo++
+   3JaicI2wVJnWYyG9PIuWDGqDgfrVKgkgSRcVaqfkB6p8EK0VkanwQP6Z8
+   Q==;
+X-CSE-ConnectionGUID: J7tJOWLrQz+IwPjUGf2Wjw==
+X-CSE-MsgGUID: S4oOf4cqTdWJT7P4ytwrdQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="12553100"
 X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="12553095"
+   d="scan'208";a="12553100"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:46:41 -0700
-X-CSE-ConnectionGUID: LGzV/oikTnWcdEcJ9oelEA==
-X-CSE-MsgGUID: /IHr+JCsTxqXKXpgmhSDhA==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:46:42 -0700
+X-CSE-ConnectionGUID: s1a4Z6cJRL2V22y5xiFIww==
+X-CSE-MsgGUID: bK9wP8dUQouG4fYcXSLgKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="22464247"
+   d="scan'208";a="22464251"
 Received: from vverma7-desk1.amr.corp.intel.com (HELO [192.168.1.200]) ([10.212.14.216])
   by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:46:41 -0700
 From: Vishal Verma <vishal.l.verma@intel.com>
-Date: Tue, 16 Apr 2024 15:46:17 -0600
-Subject: [PATCH v2 2/4] dax/bus.c: fix locking for unregister_dax_dev /
- unregister_dax_mapping paths
+Date: Tue, 16 Apr 2024 15:46:18 -0600
+Subject: [PATCH v2 3/4] dax/bus.c: Don't use down_write_killable for
+ non-user processes
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240416-vv-dax_abi_fixes-v2-2-d5f0c8ec162e@intel.com>
+Message-Id: <20240416-vv-dax_abi_fixes-v2-3-d5f0c8ec162e@intel.com>
 References: <20240416-vv-dax_abi_fixes-v2-0-d5f0c8ec162e@intel.com>
 In-Reply-To: <20240416-vv-dax_abi_fixes-v2-0-d5f0c8ec162e@intel.com>
 To: Dan Williams <dan.j.williams@intel.com>, 
@@ -80,132 +80,44 @@ To: Dan Williams <dan.j.williams@intel.com>,
 Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Vishal Verma <vishal.l.verma@intel.com>
 X-Mailer: b4 0.14-dev-5ce50
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3520;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=991;
  i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=6NKueYWbYilwLzm6MjvNGh3MReMQfTip+ZRQnpWHoXo=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDGlyH/enyV98tmMC+0yHnLWTp0uWbraz8j0qZn/esdHYy
- npx0zWzjlIWBjEuBlkxRZa/ez4yHpPbns8TmOAIM4eVCWQIAxenAEzEbCMjQ8PDvw4XrybZf125
- 7XfaN/P1v1b6h32zlnnH4MHleGTHmVkM/7TzZp0N61T7+uvK3aknHi353rLU68rbOyWTCucncRQ
- uvskJAA==
+ bh=AYcLtBXwGHJ1lHYc9yCNHOV9e648ufAKYQk7scG7Fsg=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDGlyH/eznQ6+pWqQlbF2O3P16ZOcZuv1fx+ODZZUelDJr
+ T5/u3xDRykLgxgXg6yYIsvfPR8Zj8ltz+cJTHCEmcPKBDKEgYtTACYyhZfhfx5nV2XyapeCRXr5
+ C7ouPGUP+yo0baK3lMaESw9ZzerP/Gdk6De6+NvljPkOrsdnpKX2fTJhWy/MpXC20st3X/aDqPl
+ hLAA=
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
  fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 
-Commit c05ae9d85b47 ("dax/bus.c: replace driver-core lock usage by a local rwsem")
-was a bit overzealous in eliminating device_lock() usage, and ended up
-removing a couple of lock acquisitions which were needed, and as a
-result, fix some of the conditional locking missteps that the above
-commit introduced in unregister_dax_dev() and unregister_dax_mapping().
+Change an instance of down_write_killable() to a simple down_write() where
+there is no user process that might want to interrupt the operation.
 
 Fixes: c05ae9d85b47 ("dax/bus.c: replace driver-core lock usage by a local rwsem")
 Reported-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- drivers/dax/bus.c | 44 ++++++++++----------------------------------
- 1 file changed, 10 insertions(+), 34 deletions(-)
+ drivers/dax/bus.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-index 7924dd542a13..4e04b228b080 100644
+index 4e04b228b080..db183eb5ce3a 100644
 --- a/drivers/dax/bus.c
 +++ b/drivers/dax/bus.c
-@@ -465,26 +465,17 @@ static void free_dev_dax_ranges(struct dev_dax *dev_dax)
- 		trim_dev_dax_range(dev_dax);
- }
- 
--static void __unregister_dev_dax(void *dev)
-+static void unregister_dev_dax(void *dev)
+@@ -1542,12 +1542,8 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
+ struct dev_dax *devm_create_dev_dax(struct dev_dax_data *data)
  {
- 	struct dev_dax *dev_dax = to_dev_dax(dev);
- 
- 	dev_dbg(dev, "%s\n", __func__);
- 
-+	down_write(&dax_region_rwsem);
- 	kill_dev_dax(dev_dax);
- 	device_del(dev);
- 	free_dev_dax_ranges(dev_dax);
- 	put_device(dev);
--}
+ 	struct dev_dax *dev_dax;
+-	int rc;
 -
--static void unregister_dev_dax(void *dev)
--{
--	if (rwsem_is_locked(&dax_region_rwsem))
--		return __unregister_dev_dax(dev);
--
--	if (WARN_ON_ONCE(down_write_killable(&dax_region_rwsem) != 0))
--		return;
--	__unregister_dev_dax(dev);
- 	up_write(&dax_region_rwsem);
- }
- 
-@@ -560,15 +551,12 @@ static ssize_t delete_store(struct device *dev, struct device_attribute *attr,
- 	if (!victim)
- 		return -ENXIO;
- 
 -	rc = down_write_killable(&dax_region_rwsem);
 -	if (rc)
--		return rc;
--	rc = down_write_killable(&dax_dev_rwsem);
--	if (rc) {
--		up_write(&dax_region_rwsem);
--		return rc;
--	}
-+	device_lock(dev);
-+	device_lock(victim);
- 	dev_dax = to_dev_dax(victim);
-+	rc = down_write_killable(&dax_dev_rwsem);
-+	if (rc)
-+		return rc;
- 	if (victim->driver || dev_dax_size(dev_dax))
- 		rc = -EBUSY;
- 	else {
-@@ -589,11 +577,12 @@ static ssize_t delete_store(struct device *dev, struct device_attribute *attr,
- 			rc = -EBUSY;
- 	}
- 	up_write(&dax_dev_rwsem);
-+	device_unlock(victim);
+-		return ERR_PTR(rc);
  
- 	/* won the race to invalidate the device, clean it up */
- 	if (do_del)
- 		devm_release_action(dev, unregister_dev_dax, victim);
--	up_write(&dax_region_rwsem);
-+	device_unlock(dev);
- 	put_device(victim);
++	down_write(&dax_region_rwsem);
+ 	dev_dax = __devm_create_dev_dax(data);
+ 	up_write(&dax_region_rwsem);
  
- 	return rc;
-@@ -705,7 +694,7 @@ static void dax_mapping_release(struct device *dev)
- 	put_device(parent);
- }
- 
--static void __unregister_dax_mapping(void *data)
-+static void unregister_dax_mapping(void *data)
- {
- 	struct device *dev = data;
- 	struct dax_mapping *mapping = to_dax_mapping(dev);
-@@ -713,25 +702,12 @@ static void __unregister_dax_mapping(void *data)
- 
- 	dev_dbg(dev, "%s\n", __func__);
- 
--	lockdep_assert_held_write(&dax_region_rwsem);
--
- 	dev_dax->ranges[mapping->range_id].mapping = NULL;
- 	mapping->range_id = -1;
- 
- 	device_unregister(dev);
- }
- 
--static void unregister_dax_mapping(void *data)
--{
--	if (rwsem_is_locked(&dax_region_rwsem))
--		return __unregister_dax_mapping(data);
--
--	if (WARN_ON_ONCE(down_write_killable(&dax_region_rwsem) != 0))
--		return;
--	__unregister_dax_mapping(data);
--	up_write(&dax_region_rwsem);
--}
--
- static struct dev_dax_range *get_dax_range(struct device *dev)
- {
- 	struct dax_mapping *mapping = to_dax_mapping(dev);
 
 -- 
 2.44.0
