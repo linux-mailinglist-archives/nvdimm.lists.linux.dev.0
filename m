@@ -1,128 +1,91 @@
-Return-Path: <nvdimm+bounces-8126-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8131-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E68488FDD9D
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 05:53:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8CC38FDDFE
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 07:02:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6C491C225E1
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 03:53:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42F4C2822A6
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 05:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E58EF1EB48;
-	Thu,  6 Jun 2024 03:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7902E3E4;
+	Thu,  6 Jun 2024 05:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="I8JcKBeG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pc3LCuYS"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9350219D8B9
-	for <nvdimm@lists.linux.dev>; Thu,  6 Jun 2024 03:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72A2405F8;
+	Thu,  6 Jun 2024 05:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717645993; cv=none; b=CPzGJO1PQ86UnTq7eG3z7X5Roe1EmIp28tif5xC7VoOKwQKa2e3no8isQFD9wp6ptlOQmv0QJByUPi2wo/ACeHIL+VmNSxoefOhHqp3B+o+WgfPIb09PncJZDz4X3XZn+Fdf5A0YbAlrbsLZGBvJ1S4ZDsoMJxhpKQFEt+6KWxo=
+	t=1717650107; cv=none; b=k6SHiyLmkFF7PyUJ9qQdjw9luZToeFqEL6iM39LJGh50HUR1TOLTZBplrnsiYlHH5TDRgUZizQokdKtjZ11eLf2nE/tKEGwX8kw4Geh3036kfEElmhhf5odkGZvoNa8zjhhCbptbZMwYnhXneRCJvxsAd8KTVvrHRw5yqGVNcMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717645993; c=relaxed/simple;
-	bh=pfwN24pMokjgAHOp1BB69eIt/t2Yel77P+50tad7Y+A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eT2tMxIMovFituDKpKcGJAnP6Dh0pW8XDo+IS3B+Pq5Z/r7BjF9E8fmOBAlbtAjvRi3BVCHTUvCwmgAyFsWBHbc2XaQVEy2pARN5hQXWbjIZ/WKI1eTnQbtnTmG74rEAweGz5VVFwHhxW5vFVV0cS3r0qafmhiZ0Arq0BOqCXvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=I8JcKBeG; arc=none smtp.client-ip=68.232.139.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1717645991; x=1749181991;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pfwN24pMokjgAHOp1BB69eIt/t2Yel77P+50tad7Y+A=;
-  b=I8JcKBeGHN0AaX5uwQLhkgJIWPVjf+dhCPxVSLwkr7bUd5xB/jnmnLeH
-   FxSffY4ks4HuAhH5uhc/rBlAu0jA83qj2g4JHfDvUJMYsWzD2ALerpGg4
-   0hsj+c4qydRBZ2W3Wzz1RDGa8E9xLvz/8upnbxL69bTf5wd8EBQmhKL8a
-   v4xfnxk797jrIiwZX9OUOy2ZmvrUJQnodiHAoslO3qdKsA3j3xZs5H2XS
-   Rnarzmcn++YMb9iSaNBiIeS0ROkqS6YSktzoAzjQh5OkpvsvQhPEm06WT
-   iSVvnVcy2ic+69LwjU5CeAZYgxYkoQsSMhTavlgnI46OHyn4x/koxlUwJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="162228236"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712588400"; 
-   d="scan'208";a="162228236"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 12:52:00 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 23F9CD7AD6
-	for <nvdimm@lists.linux.dev>; Thu,  6 Jun 2024 12:51:58 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 69709BF3EF
-	for <nvdimm@lists.linux.dev>; Thu,  6 Jun 2024 12:51:57 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id F02B8E2B25
-	for <nvdimm@lists.linux.dev>; Thu,  6 Jun 2024 12:51:56 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 7424E1A000C;
-	Thu,  6 Jun 2024 11:51:56 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org
-Cc: Li Zhijian <lizhijian@fujitsu.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>
-Subject: [ndctl PATCH v3 2/2] daxctl: Remove unused options in create-device usage message
-Date: Thu,  6 Jun 2024 11:51:49 +0800
-Message-Id: <20240606035149.1030610-2-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20240606035149.1030610-1-lizhijian@fujitsu.com>
-References: <20240606035149.1030610-1-lizhijian@fujitsu.com>
+	s=arc-20240116; t=1717650107; c=relaxed/simple;
+	bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CMZTkv4QYznZrpOeFn66RO6matHFvu1hp0xSHV1JB0SrIQk9fk2xEC3JUd4I1FN+fn5Qu0Mv8S8e9DMoUaEm5eMeQIkVEbU5hOQ0XTblcqcX4QDFsf3/7brO/zczfNbVACAswAIkqgCEzBWTqIL4B8ndCZW/rtaNUnXECA2ULPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pc3LCuYS; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-250671a1bc7so217085fac.3;
+        Wed, 05 Jun 2024 22:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717650105; x=1718254905; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
+        b=Pc3LCuYS6LXMILMcZTdgUXgwzCj/wnYELNTcdElfI8MnzdxMVnu+29zqd8X71y5UGf
+         b1dwVPe90t+ZpyeIBu+5PrwpjS70eDVg9+DHexrYEuGYhwqLivPe1EeoOCdxMJn/dnjS
+         yXDHFDJufFEOQxlx5m3Nz3X0DK5pYcune/5m1C+wg3qttc+8R5MSsNl8mt5VxD1Eheqm
+         6aQ18Mmu/gw9My+HUFAWJxunlpVmIdNaU3d+tMfbW3ZU3glRsCpLCwDXkXEjMzjw+MLR
+         pErYXH60MMmFlagrx7sn6tNQA/fa74c3Vv4LBWtG3+kosDZCSU+Czt7cKbW6uUlYcwHX
+         DISQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717650105; x=1718254905;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
+        b=mt+4Tdb1oIAESA4KXexMF/iYkFXHxkynr4m7134ao6eDbBhPvuuVwnJ05eXHRboaTU
+         yFiKsv6MIFf56f7500wRDDVIDtzCUCvM0IHtbfoxq+vJncY9vcW4zW6JN4MRqDHROvlD
+         hF/aikEOTxNx3SL6zqhj72s5Lptf2iLiYbDzfR2azRvq+j0djeb8HHOOlJJ0uhxJUhVa
+         pD4g6VjQcSWDRxu5+TY8cGh1f/k+/5zKnDpTdDjNeRpw9NfI03uWlQoLAMUJtg4FSea8
+         B4DidMV1PE4QTfV+Z1qbHFAbf4Nr3KJ8AV1gnwVYIgn1Z4IbqrPc6agUBWLfSl7QkXgi
+         ENqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWB4Ad7ZQq6YEl5gWpm6TQqZfvAonyujehhans2w/CHodV2ycOnJ2z55DcvXndfeeweLBZrSDFaAkaVI6ndyoHSfsJ9V+yjChCbg9NewWqgoUC0VP5Zj5IthnQKuxvxUi0=
+X-Gm-Message-State: AOJu0YwYw/olKuSIX94BezQffDEcj4gkt/mkyh629eVFkpZOiTYDjoKU
+	dGNzqp6QdfY5mEJ6YJY/ahnQ80yJgCw8HROwfZudxrIKalxkqHBifmftw1VPWunHK+FLq2L4WHM
+	JRvKelnSL+DSOSplHk+ZlfvkzdxI=
+X-Google-Smtp-Source: AGHT+IG959oSX54MQq8GKfVWKo3o05hRklNZiBoCzbvR+OQgV8iL3zKUSZnj1CdwY90/HxmBqEYVn80Ozx7+RJmP7Ig=
+X-Received: by 2002:a05:6870:970d:b0:24e:896f:6a25 with SMTP id
+ 586e51a60fabf-251220b9deemr5280914fac.58.1717650104968; Wed, 05 Jun 2024
+ 22:01:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28434.004
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28434.004
-X-TMASE-Result: 10-2.789500-10.000000
-X-TMASE-MatchedRID: D7uj3L7FQ3IZHQl0dvECsQvBTB90+he+MVx/3ZYby78lTfGXXk+l8879
-	PlJmAmXDoKHWBVnoJHPmn3xyPJAJoh2P280ZiGmROWUWxTQJdI8mLcCO64Exkpsoi2XrUn/J8m+
-	hzBStansUGm4zriL0oQtuKBGekqUpnH7sbImOEBRFzth5Inra65DPQ/OWjuSi09eMkkde1DbbJi
-	uAbwHBJyPzf07AeiJ8Q1mBwk8ucWczUbs4+5aCjfBsDwidnGiRczTonAH5/C2bDRBqS2n66yzP5
-	xAyz9Oenvkw4sh/+PcMX5CwH5DTUmgGZNLBHGNe
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+References: <20240605063031.3286655-1-hch@lst.de> <20240605063031.3286655-3-hch@lst.de>
+In-Reply-To: <20240605063031.3286655-3-hch@lst.de>
+From: Kanchan Joshi <joshiiitr@gmail.com>
+Date: Thu, 6 Jun 2024 05:01:18 +0530
+Message-ID: <CA+1E3rLUA_hnGsXF7p14Hap9jKk1hHDTicYuHMque10QV3GEDQ@mail.gmail.com>
+Subject: Re: [PATCH 02/12] block: remove the unused BIP_{CTRL,DISK}_NOCHECK flags
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Song Liu <song@kernel.org>, 
+	Yu Kuai <yukuai3@huawei.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Keith Busch <kbusch@kernel.org>, 
+	Sagi Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org, 
+	dm-devel@lists.linux.dev, linux-raid@vger.kernel.org, nvdimm@lists.linux.dev, 
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-RECONFIG_OPTIONS and ZONE_OPTIONS are not implemented for create-device
-and they will be ignored by create-device. Remove them so that the usage
-message is identical to the manual.
-
-Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-V3:
-  Collect reviewed-by tags.
-  update subject # Aliso
-
-V2: make the usage match the manual because the usage is wrong.
----
- daxctl/device.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/daxctl/device.c b/daxctl/device.c
-index 6ea91eb45315..dc166d593336 100644
---- a/daxctl/device.c
-+++ b/daxctl/device.c
-@@ -98,8 +98,6 @@ OPT_BOOLEAN('\0', "no-movable", &param.no_movable, \
- static const struct option create_options[] = {
- 	BASE_OPTIONS(),
- 	CREATE_OPTIONS(),
--	RECONFIG_OPTIONS(),
--	ZONE_OPTIONS(),
- 	OPT_END(),
- };
- 
--- 
-2.29.2
-
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
