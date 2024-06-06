@@ -1,79 +1,120 @@
-Return-Path: <nvdimm+bounces-8130-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8133-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A98438FDDF1
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 06:51:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 660928FF0D8
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 17:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58EDE1F2559D
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 04:51:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45E161C21340
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 15:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F16538F87;
-	Thu,  6 Jun 2024 04:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFDB81974FC;
+	Thu,  6 Jun 2024 15:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="4vcq+ZeJ"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9398A3A8CB;
-	Thu,  6 Jun 2024 04:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E180B196431;
+	Thu,  6 Jun 2024 15:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717649500; cv=none; b=enjIG9GL2QyNBL5ZlD5S9QTt/S7IOggEFIBx7P4w41YZsr0PZrwEUbdMqxnn4uyJJmZq1aN1kaiB3nYLgHHuuYTqKLxHJNtbboTG3fxDgKrkZGXgowz8pC3ZOE7nHSiqMA1kpYoo4faRlDbCoQ3/78k9+FQ+OIUyLDIi0sYUFQU=
+	t=1717688338; cv=none; b=mRTb3EcWSqGLdh9EyoVixT+1DEpi32fXlHb+47giSifQg5RpvYJ2YdX3yqqxfDctT2dhxHE1OZwLUOd+P7cvuxkDcolaL4v38cWM9GF7tPsjgTKxEGNWTGQz+U0FCy90ezwXo7+3lpI1R0XsyEd9bUZ0/c3Ry8d1KM5/dj5j+GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717649500; c=relaxed/simple;
-	bh=B+WJSpctEPZ8zi7YTS22V3d96uUBzPNLeiUi2npSWG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DHECHcFSZ6734fjIe6vy6qxo23rubIoPrGP4tdKLEDvXhyY9hP1zEw8J3fuKgbz/zrnuVc5wCLNdVqFTUjcNzUP+bl0Rj1JC4k/CmAow3h9z9cmMkfN2iC7NVRDc9ApbWdeFLp+ZBFv9LZcytUek3HafvTXz/mxiPbUh53bkhfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 78EBA68CFE; Thu,  6 Jun 2024 06:51:36 +0200 (CEST)
-Date: Thu, 6 Jun 2024 06:51:36 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>, Song Liu <song@kernel.org>,
-	Yu Kuai <yukuai3@huawei.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
-	dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 12/12] block: move integrity information into
- queue_limits
-Message-ID: <20240606045136.GD8395@lst.de>
-References: <20240605063031.3286655-1-hch@lst.de> <20240605063031.3286655-13-hch@lst.de> <3e49207a-1efc-4fe6-99c2-8cdd9c24664c@acm.org>
+	s=arc-20240116; t=1717688338; c=relaxed/simple;
+	bh=0fqhwtTCMwg3nN0kbPbaQFo+LrZaFWCeNCebgPd87gw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jqusvW1N6Mvk/RJOaA4eNn9yolyPLdkPwX8eMxBZz0doNGTIUb6IwBFmA0UbLrKN5gUl+X3WwAJkCWOVwNjMnO/5/9i4BrHqLYz5guv7WBO3HtJ1WBR5F+5/SP02FFfdT5dLQ7mIGQJWk1n2PL42jD7rUKkJZxSg84Eps3SQxEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=4vcq+ZeJ; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Vw7lt02qZz6Cnk9X;
+	Thu,  6 Jun 2024 15:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1717688322; x=1720280323; bh=maVyEw5qAJ9exIjeLqhPdHWd
+	OFMAGD+uPnPP3rBtN3k=; b=4vcq+ZeJ2Tz8h7FvTWtkYye5ybBsQeKzH7LiB/h4
+	RYBFunjMs54P5sT/WycS/guHMkgCJiCBlloYezqTZ7mr4FVcPxejYkxIFpmibeR4
+	gNcRz8zWHzoBC0D/RNYq4CY9i+rCWkWp9HSvPl+aI/mGFgL3HEgyEyWWFY0FP7RT
+	p4mDdyjMwbI/dAP+dOok6Euj9jCvqV3uWVKT/LC4nIMzdjWLziQV0jQRBqkROenn
+	QBV7UL2/XVsMrQPtjqxzYzZ1APOdCg5KIjvDbKk6qP23vrMGcWMj4GMZHuvMCcMv
+	TzcM9QPqn10RI6Vb3+k9KbjWoPv2Osa6VBpxuHAfjkFXBQ==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id w919G5Ov9keK; Thu,  6 Jun 2024 15:38:42 +0000 (UTC)
+Received: from [172.20.24.239] (unknown [204.98.150.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Vw7lg5CCkz6Cnk9W;
+	Thu,  6 Jun 2024 15:38:39 +0000 (UTC)
+Message-ID: <2cbf3443-de1c-4bfc-a249-afd1a4e13211@acm.org>
+Date: Thu, 6 Jun 2024 09:38:38 -0600
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e49207a-1efc-4fe6-99c2-8cdd9c24664c@acm.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/12] block: remove the blk_integrity_profile structure
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
+ Song Liu <song@kernel.org>, Yu Kuai <yukuai3@huawei.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Ira Weiny <ira.weiny@intel.com>, Keith Busch <kbusch@kernel.org>,
+ Sagi Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
+References: <20240605063031.3286655-1-hch@lst.de>
+ <20240605063031.3286655-5-hch@lst.de>
+ <fee6338e-4aae-456c-90a3-228a19fae58a@acm.org> <20240606045048.GC8395@lst.de>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240606045048.GC8395@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 05, 2024 at 10:56:20AM -0600, Bart Van Assche wrote:
-> On 6/5/24 00:28, Christoph Hellwig wrote:
->>   	if (!dix && scsi_host_dix_capable(sdp->host, 0)) {
->> -		dif = 0; dix = 1;
->> +		dif = 0;
->> +		dix = 1;
->>   	}
->
-> Although the above change looks fine to me, it is unrelated to the
-> other changes in this patch?
+On 6/5/24 22:50, Christoph Hellwig wrote:
+> On Wed, Jun 05, 2024 at 10:31:27AM -0600, Bart Van Assche wrote:
+>>> +	case BLK_INTEGRITY_CSUM_CRC64:
+>>> +		if (bi->flags & BLK_INTEGRITY_REF_TAG)
+>>> +			return "EXT-DIF-TYPE1-CRC64";
+>>> +		return "EXT-DIF-TYPE3-CRC64";
+>>> +	default:
+>>> +		return "nop";
+>>> +	}
+>>> +}
+>>
+>> Since bi->csum_type has an enumeration type, please leave out the "default:"
+>> and move return "nop" outside the switch statement. This will make the
+>> compiler issue a warning if a new enumeration label would be added without
+>> updating the above switch statement. Otherwise this patch looks good to me.
+> 
+> For that to work you'd need to make csum_type the enum type and not an
+> unsigned char, which would bloat the block limits.  You'd also need to
+> keep the return "nop" where it is, but use the explicit case instead of
+> the default.
 
-Yes.  And earlier version touched this more extensible and this is what
-is left of that.
+Has it been considered to add __packed to the definition of enum
+blk_integerity_checksum such that its size changes from 4 to 1 bytes and to
+change "unsigned char csum_type" into  "enum blk_integerity csum_type"?
+
+Thanks,
+
+Bart.
+
 
 
