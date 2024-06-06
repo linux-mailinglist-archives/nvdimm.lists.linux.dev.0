@@ -1,91 +1,78 @@
-Return-Path: <nvdimm+bounces-8132-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8127-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BBB8FDE0C
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 07:02:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0136F8FDDD5
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 06:45:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EE3FB23770
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 05:02:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84121F2552E
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  6 Jun 2024 04:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C5B3AC0F;
-	Thu,  6 Jun 2024 05:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lgncuOy7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4260037165;
+	Thu,  6 Jun 2024 04:45:33 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A62328A0;
-	Thu,  6 Jun 2024 05:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E3F288D1;
+	Thu,  6 Jun 2024 04:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717650142; cv=none; b=cu6myjqAmmXHuziR/DmLdPflGPzncMId4vE5FJzcGhHCijlGABZeS6uhfbZWYedSUpJq822RyxmdlRxLzbBLusGnt/p1Y9k0+An80mIABSGSocq5xnlYBEI0MLQRV+c4qi0/Nzt8fCXkto1XVThDDbYIwPDfWwxIZ6ERbA0KkZc=
+	t=1717649133; cv=none; b=GTkEDq9kcTiy10/VO3ZtoIhq6mUwdbJmcLzFsDEnghDx5Es4xcctEW/DFaUqbifCJgDUZbMa8sqPh6FrMFxCv7SiHqrFMqmRuLXLucaPh1gQVQ+ZD4ywS/eKlJtmoh2PE1LMqtKhwh64lEt8w6RB6f8CzGGHlrZMTirfReAL6O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717650142; c=relaxed/simple;
-	bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D79jmlYNFawq0+3ovLJxQLdiB3iwaKoo+ldGmvX/sADaDN3+4v3OWMJuL3CUimwhvM+LQWSTvC+BJfjbLb6Wy7jAan6B1V5rb1k2gvO7vtVHzlto4r8KDdd9diQhccDCsRvTR6Z3Taw9IrGpF8rqErGli7ajImF7SPR3MasQhkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lgncuOy7; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2544465c9e2so182985fac.2;
-        Wed, 05 Jun 2024 22:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717650140; x=1718254940; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
-        b=lgncuOy7KBOrB/GHRwOboxXk4HU0THwIzxTUwywBOjJ0zie70yczsVJnAPN5dTRLS3
-         B+aHj/3v82cBBmNNrECbv73mcbZ5RTJWvtFWiagkSN4TaE1ZvS/Fqbrd2p3IyK6EZyV+
-         yborEd9RJ6QhWYwUHKzCVDJ/Kb+mBuJ/w/VJgUhVKPcQUon8mgh9JZX7JeNJob6ak1iy
-         Gg3Y36/B2cZ2lpcFZWHeTjhlD+xpuH7lH/2ot20TkZlXibaNWSRnaO6ZycHSUwEteWR3
-         TpyOz6d6Q40V5cHigY7nPcGAJNC0svktQE9Xwiuz8IeJId717S3La8Jk2O8VuqzeRnqT
-         21Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717650140; x=1718254940;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
-        b=OxAVvmX6ozhwmREqQtBpgVQIrst9xOO7TAObcoSSCh0A1E91GKr6CwAnmV9paxd+ac
-         7ovK8mmbssloGeCW7aOF3OBUPGvUtrUVgfYKCoOTvUj5Xhzbwup92vgNrpojs0mNzrpD
-         HAwDEXrzVkmlKNqPOKgVRUCLEQtk59+5f5YOdpjPjLC2ltjuRQVortFzJsA2F7qozisL
-         7xLr2abz8MJ5J5aHq4Z+iMF51Kj6xhOqSv330UjRa5yZoDyC3LXXirDzBhmuMIxM+6/5
-         s4kZDb+/WFQjVuJKY/rLeHo6bOD15s8hDQ9bfbhoWIKIRQc7iy75UeRewIYPlBJDANGJ
-         Gtfw==
-X-Forwarded-Encrypted: i=1; AJvYcCWuPkdlUVDbYRUDry43kJBJDSnWpvoP0AKTSyWr87g+a8JwLSEFtsDbkFQJvTrXnQIUMdhnOBaQ1yXbWrFgDF4uhaMDtWyYI9hbUJSD0UPd0zc/Ybg56CiWx2MbDKY+qSs=
-X-Gm-Message-State: AOJu0YzW89W7OumgFeAc+PL6y585FzvNcoS1MU058griJMMj/ZcMeFHz
-	8cs4zmHd0rnnBf9vXrdy5IIoe7dKdzDEnSCR3S5Qv7gpIAZxxo8TFKnGeL7QwV4+cDnWhJ2WWut
-	HuWe8eb33BJ1mZNyBCJEHE5HiBY4=
-X-Google-Smtp-Source: AGHT+IHPqrwGLrOpiYOHRKHF6jjAJEe69uLlr8JRuR9rDqq7Rjpi5pT7mqAtKEV0L+JskZqRkbXl08yzChKNyWs0Mrk=
-X-Received: by 2002:a05:6871:79c:b0:250:6be5:1fc5 with SMTP id
- 586e51a60fabf-251228adf01mr5001314fac.38.1717650140012; Wed, 05 Jun 2024
- 22:02:20 -0700 (PDT)
+	s=arc-20240116; t=1717649133; c=relaxed/simple;
+	bh=Zk1CzwA5ZfeEIP6vsC5vjX/lsrAFQyhVKO0sotfDfRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=stGa7EEUOTUTOi8dQQD/mx9buxZsN3Kpbe3210e+c9WGSAwukJ7j4lxzO6j+aP/kc1FLGeG/UGoqePyvkR8n4KnFXL2MmvFxth3VI/b7whyQGKfMHvYRL14Wi013f6r+QVvYUMDCp0KGLjJQxrcM1zWRbdIbRhe210YXiibEQWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 6CF6268CFE; Thu,  6 Jun 2024 06:45:26 +0200 (CEST)
+Date: Thu, 6 Jun 2024 06:45:25 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Milan Broz <gmazyland@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, Song Liu <song@kernel.org>,
+	Yu Kuai <yukuai3@huawei.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
+	Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
+	dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 01/12] dm-integrity: use the nop integrity profile
+Message-ID: <20240606044525.GA8395@lst.de>
+References: <20240605063031.3286655-1-hch@lst.de> <20240605063031.3286655-2-hch@lst.de> <a5570194-920c-45d8-98d5-da99db0d2f8d@gmail.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240605063031.3286655-1-hch@lst.de> <20240605063031.3286655-4-hch@lst.de>
-In-Reply-To: <20240605063031.3286655-4-hch@lst.de>
-From: Kanchan Joshi <joshiiitr@gmail.com>
-Date: Thu, 6 Jun 2024 05:01:53 +0530
-Message-ID: <CA+1E3rKjG+kG1Z1N0c69Z_P5eNq9BzshKqdB5Ee0ySPzJGg-0g@mail.gmail.com>
-Subject: Re: [PATCH 03/12] block: remove the BIP_IP_CHECKSUM flag
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Song Liu <song@kernel.org>, 
-	Yu Kuai <yukuai3@huawei.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Keith Busch <kbusch@kernel.org>, 
-	Sagi Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org, 
-	dm-devel@lists.linux.dev, linux-raid@vger.kernel.org, nvdimm@lists.linux.dev, 
-	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a5570194-920c-45d8-98d5-da99db0d2f8d@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+On Wed, Jun 05, 2024 at 04:52:27PM +0200, Milan Broz wrote:
+> On 6/5/24 8:28 AM, Christoph Hellwig wrote:
+>> Use the block layer built-in nop profile instead of reinventing it.
+>
+> As this is my "invention", I am pretty sure that "nop" profile was
+> not available at the time I was prototyping AEAD dmcrypt extension.
+> (It was months before we submitted it upstream - and then nobody
+> apparently fixed it.)
+
+Looking at the history the nop profile was moved from nvme to common
+code to also support btt in 2015, dm-integrity was added in 2017.
+So maybe you just missed it.  Anyway, I'm also happy to tone this
+down a bit, it sounds a bit too aggressive..
+
 
