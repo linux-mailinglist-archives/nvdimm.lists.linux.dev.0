@@ -1,50 +1,50 @@
-Return-Path: <nvdimm+bounces-8141-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8143-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B01238FFB89
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  7 Jun 2024 07:59:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35E468FFB93
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  7 Jun 2024 07:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D18401C247FD
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  7 Jun 2024 05:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D38BD1F25699
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  7 Jun 2024 05:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D738214F127;
-	Fri,  7 Jun 2024 05:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F70B15278B;
+	Fri,  7 Jun 2024 05:59:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="5Bb249wo"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="yELZfjv1"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CF229428;
-	Fri,  7 Jun 2024 05:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C35C14E2F7;
+	Fri,  7 Jun 2024 05:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717739968; cv=none; b=VUDg73CPBwgkcCZIyoLRX88sq4SQU5VBUNeAiCTP7LH1sv1GHLRaCxMGKOkj2oQ97+SwLITsPy/vk/scdEMMxcotU9ATuhYYj2V22DUeNKLdNnoJdL8CJDs6xqbgYlhscmZ5q31kRM3Ash/IfkinOM0ocJGjprdR9kFe87xSO1I=
+	t=1717739971; cv=none; b=rHVDIA38reWZbp4Jeirn681VrcVR0/IlsVKIqrcRGdaeQ2gFoaChOmVN2iU3wslU8VNfUutpGWneAH6EBHShnMPNaNhv0RLM3mUQSAyYyknjRXsplOy5ZQkK9Y3nWJB3H803VC0zfRJpqHnVvnrYvBUBDKP4iUp3NVW/yCdYsFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717739968; c=relaxed/simple;
-	bh=Q4gne7zGaRoQcAjCePg+bFPjkBElOwggMTq/gDbx5Z8=;
+	s=arc-20240116; t=1717739971; c=relaxed/simple;
+	bh=XPUeEdxVSLiDhIkFOWY826E1Tq/r+Yw5KyiIESk9hqE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tfbja0Lg2dwPYG3qC3ifim8HuMPa1ySF7E8247FWD402HGaH15NIhhlBrNIAGjioy957b6kcP3TGYXJP+YtYgxOWf7QN8SH0/1NBPO0VB2nfijlKUmFFlf2UPDPp8i4BoyikXLUa3WLEJvAXCyoyGF5cGtsNHi7dYvGsEC++EuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=5Bb249wo; arc=none smtp.client-ip=198.137.202.133
+	 MIME-Version; b=V+l7Znxl0xuPVvxlw7UHrMdcnTj4k5r1rASm1OPk+8nRIwysz9aocoA9vI+103Kn2+g2hkSPkIUqoY0JnsW5+Q15UR1B98vEMfKNXSAu+aUOjkb/KCCGYuek0sEDuWzribzEJ5OhVvRjgLDRuK420ZC/kPrBM+YNXRmYI5mXKkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=yELZfjv1; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
 	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=WcS17019swi+eot3hQXZLSEBmFN0nZ0zcexqseGp7yk=; b=5Bb249wozAdJbUwmxD3gYthR+0
-	lOiO3TS+PJJEnWf8yfFee/NRzbm0tjVh12WfvI7HoWE3DzfWeqMkgkWa9XUPKLqlhEmyjMBqicWwX
-	UhQDx1ExAKNTwlGFaw5+JQ4sCC/jQc8lsdu+EVceoyGOXEKXcgx/hT6gZ58wQIYCZRDOHEZbEgKqd
-	79wDm5O2vA9Xjwu4T5YDVozdyBv860acBZnWEcUdNPfQe/FqwaS2ia+MNIM0iMCUVbW6+kXNyP7qv
-	TRBl0Ut5/l9MMHh54vAvU5Ab90XuiiiElX0M7dIBkygNYbelw4ytZqUsqbf3eeXJKSlS7y+yWa24w
-	17mLaLvw==;
+	bh=luAONBAN0nJiG2qd4IVk/ym6PD3j8Tq+GbpZg5S7V1o=; b=yELZfjv1eltWXl3DgoAtHJHHpn
+	z5UclvIgckBzo4yhXi72sVg4NAAw5lgzTak5WT26YjNOwnTgYPsv2bJtS4Hn+a/YQC1r7051pXHMm
+	z7qtt6eOlV5NaZuNgLt1EVo/rjY+n99HF9Q1ZJEx1AWz91xTIvXRlOkXagKn7YDBn9+FCLSt+pdMX
+	dA/b4bNvpj0RDClPXPk0eYod2qRi+xrn7ungZUorPjKxMZ3K0Gq0PCjUOQSy8El559kLw9Xf7iMvg
+	GrvhgquL/QZotsdTdK28dGrDjFLibZdjy+1F2TQZ6vSIu+h1FLq2PCFHjfKpkm0tN8IlOsi/xJUbV
+	GDQUVtMg==;
 Received: from [2001:4bb8:2dd:aa7c:2c19:fa33:48d4:a32f] (helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sFSdF-0000000CZyO-1Bpl;
-	Fri, 07 Jun 2024 05:59:22 +0000
+	id 1sFSdI-0000000CZyr-2JmH;
+	Fri, 07 Jun 2024 05:59:25 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: Jens Axboe <axboe@kernel.dk>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
@@ -65,10 +65,11 @@ Cc: Mike Snitzer <snitzer@kernel.org>,
 	nvdimm@lists.linux.dev,
 	linux-nvme@lists.infradead.org,
 	linux-scsi@vger.kernel.org,
-	Milan Broz <gmazyland@gmail.com>
-Subject: [PATCH 01/11] dm-integrity: use the nop integrity profile
-Date: Fri,  7 Jun 2024 07:58:55 +0200
-Message-ID: <20240607055912.3586772-2-hch@lst.de>
+	Bart Van Assche <bvanassche@acm.org>,
+	Kanchan Joshi <joshi.k@samsung.com>
+Subject: [PATCH 02/11] block: remove the unused BIP_{CTRL,DISK}_NOCHECK flags
+Date: Fri,  7 Jun 2024 07:58:56 +0200
+Message-ID: <20240607055912.3586772-3-hch@lst.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240607055912.3586772-1-hch@lst.de>
 References: <20240607055912.3586772-1-hch@lst.de>
@@ -81,79 +82,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Use the block layer built-in nop profile instead of duplicating it.
-
-Tested by:
-
-$ dd if=/dev/urandom of=key.bin bs=512 count=1
-
-$ cryptsetup luksFormat -q --type luks2 --integrity hmac-sha256 \
- 	--integrity-no-wipe /dev/nvme0n1 key.bin
-$ cryptsetup luksOpen /dev/nvme0n1 luks-integrity --key-file key.bin
-
-and then doing mkfs.xfs and simple I/O on the mount file system.
+Both flags are only checked, but never set.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Milan Broz <gmazyland@gmail.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 ---
- drivers/md/dm-crypt.c     |  4 ++--
- drivers/md/dm-integrity.c | 20 --------------------
- 2 files changed, 2 insertions(+), 22 deletions(-)
+ drivers/scsi/sd.c   | 14 +++-----------
+ include/linux/bio.h |  2 --
+ 2 files changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 1b7a97cc377943..1dfc462f29cd6f 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -1176,8 +1176,8 @@ static int crypt_integrity_ctr(struct crypt_config *cc, struct dm_target *ti)
- 	struct blk_integrity *bi = blk_get_integrity(cc->dev->bdev->bd_disk);
- 	struct mapped_device *md = dm_table_get_md(ti->table);
- 
--	/* From now we require underlying device with our integrity profile */
--	if (!bi || strcasecmp(bi->profile->name, "DM-DIF-EXT-TAG")) {
-+	/* We require an underlying device with non-PI metadata */
-+	if (!bi || strcmp(bi->profile->name, "nop")) {
- 		ti->error = "Integrity profile not supported.";
- 		return -EINVAL;
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index d957e29b17a98a..b477383ccc3b2a 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -806,25 +806,17 @@ static unsigned char sd_setup_protect_cmnd(struct scsi_cmnd *scmd,
+ 	if (dix) {				/* DIX Type 0, 1, 2, 3 */
+ 		if (bio_integrity_flagged(bio, BIP_IP_CHECKSUM))
+ 			scmd->prot_flags |= SCSI_PROT_IP_CHECKSUM;
+-
+-		if (bio_integrity_flagged(bio, BIP_CTRL_NOCHECK) == false)
+-			scmd->prot_flags |= SCSI_PROT_GUARD_CHECK;
++		scmd->prot_flags |= SCSI_PROT_GUARD_CHECK;
  	}
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index 417fddebe367a2..c1cc27541673c7 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -350,25 +350,6 @@ static struct kmem_cache *journal_io_cache;
- #define DEBUG_bytes(bytes, len, msg, ...)	do { } while (0)
- #endif
  
--static void dm_integrity_prepare(struct request *rq)
--{
--}
+ 	if (dif != T10_PI_TYPE3_PROTECTION) {	/* DIX/DIF Type 0, 1, 2 */
+ 		scmd->prot_flags |= SCSI_PROT_REF_INCREMENT;
 -
--static void dm_integrity_complete(struct request *rq, unsigned int nr_bytes)
--{
--}
--
--/*
-- * DM Integrity profile, protection is performed layer above (dm-crypt)
-- */
--static const struct blk_integrity_profile dm_integrity_profile = {
--	.name			= "DM-DIF-EXT-TAG",
--	.generate_fn		= NULL,
--	.verify_fn		= NULL,
--	.prepare_fn		= dm_integrity_prepare,
--	.complete_fn		= dm_integrity_complete,
--};
--
- static void dm_integrity_map_continue(struct dm_integrity_io *dio, bool from_map);
- static void integrity_bio_wait(struct work_struct *w);
- static void dm_integrity_dtr(struct dm_target *ti);
-@@ -3656,7 +3637,6 @@ static void dm_integrity_set(struct dm_target *ti, struct dm_integrity_c *ic)
- 	struct blk_integrity bi;
+-		if (bio_integrity_flagged(bio, BIP_CTRL_NOCHECK) == false)
+-			scmd->prot_flags |= SCSI_PROT_REF_CHECK;
++		scmd->prot_flags |= SCSI_PROT_REF_CHECK;
+ 	}
  
- 	memset(&bi, 0, sizeof(bi));
--	bi.profile = &dm_integrity_profile;
- 	bi.tuple_size = ic->tag_size;
- 	bi.tag_size = bi.tuple_size;
- 	bi.interval_exp = ic->sb->log2_sectors_per_block + SECTOR_SHIFT;
+ 	if (dif) {				/* DIX/DIF Type 1, 2, 3 */
+ 		scmd->prot_flags |= SCSI_PROT_TRANSFER_PI;
+-
+-		if (bio_integrity_flagged(bio, BIP_DISK_NOCHECK))
+-			protect = 3 << 5;	/* Disable target PI checking */
+-		else
+-			protect = 1 << 5;	/* Enable target PI checking */
++		protect = 1 << 5;	/* Enable target PI checking */
+ 	}
+ 
+ 	scsi_set_prot_op(scmd, prot_op);
+diff --git a/include/linux/bio.h b/include/linux/bio.h
+index d5379548d684e1..ec5dcf8635ac66 100644
+--- a/include/linux/bio.h
++++ b/include/linux/bio.h
+@@ -324,8 +324,6 @@ static inline void bio_next_folio(struct folio_iter *fi, struct bio *bio)
+ enum bip_flags {
+ 	BIP_BLOCK_INTEGRITY	= 1 << 0, /* block layer owns integrity data */
+ 	BIP_MAPPED_INTEGRITY	= 1 << 1, /* ref tag has been remapped */
+-	BIP_CTRL_NOCHECK	= 1 << 2, /* disable HBA integrity checking */
+-	BIP_DISK_NOCHECK	= 1 << 3, /* disable disk integrity checking */
+ 	BIP_IP_CHECKSUM		= 1 << 4, /* IP checksum */
+ 	BIP_INTEGRITY_USER	= 1 << 5, /* Integrity payload is user address */
+ 	BIP_COPY_USER		= 1 << 6, /* Kernel bounce buffer in use */
 -- 
 2.43.0
 
