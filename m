@@ -1,47 +1,48 @@
-Return-Path: <nvdimm+bounces-8393-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8397-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CE3790D7CF
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 17:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA3690D7D3
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 17:52:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4EAFC1C22B0E
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 15:51:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3448F1C2261A
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 15:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52B647A6A;
-	Tue, 18 Jun 2024 15:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7DB4D8C3;
+	Tue, 18 Jun 2024 15:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ruPl0PEK"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="BdmTw2rV"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AD23EA76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542CF46435
 	for <nvdimm@lists.linux.dev>; Tue, 18 Jun 2024 15:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718725896; cv=none; b=VtbfwChWklivfxCFBzb9JmgStHK3IiM+Wq8Kr89xeptkLqKYxhMDGJQADRSZVlUZ2VL9ObU7zbs29t/VKPNivG1ZprwSRZFZ22/M0Y2oEREE80kLiGYEhTQ69SxOWYwErOyMHJP1Au2VcX8tkHjcMbM68s95ZsUou2/Kkayza1w=
+	t=1718725897; cv=none; b=ZPr45qbGjRvp65zRyhOeElYblPuXUuyOOTcC9gTb+CcTXQxCpLR79auJCKXHUGQF5xxidToyOdOIeARN2C/SFM+8IkVrnaLRAIbfR4H0FnXco1TW8FZslLaOhbSsUbQ62JE/CvOUKaTg26fNA4wbI2d7q5nDcKmCmRmJa7PkEZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718725896; c=relaxed/simple;
-	bh=z68f1glzn8W2C+bMjjEW4ShrQhXTjCIJIGeZFccSLPY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gSItBqnScDcn8Fc4W7rUEqLeT0F3oYez9m5kox1KrZSDTKyyo0TYXmohxJw16AiF2QvmyQmuxWzx+RBmT7YxKaYXhzD0iPI5RK2knAhN2QFkNSlVZr+6uqdOkY3fl5DBhGYrNazyO9CIW0685Ef25MwwNB3wu65WnN+MBAv+Wdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=ruPl0PEK; arc=none smtp.client-ip=167.114.26.122
+	s=arc-20240116; t=1718725897; c=relaxed/simple;
+	bh=jTsRXZWDrdZtdx6WmpzbW/Nftt5x+XgMG9sQFaT8uLA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gufQfHf2uJ6pBxlkCvp527N8CvCtxoGrsBCTOC3BLMJfcZoNu+xwc7qXDjhvadbJKCX5cSEkvRl3Bv+MsksAS0j9ceCnGCex3IYHQu+upHWg0Jtkfk8AovQunN/OgI6HczY0/XHEjLdKVgelwIIt/r2Eqed6DrAqhHH4wy4Pf1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=BdmTw2rV; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
 	s=smtpout1; t=1718725285;
-	bh=z68f1glzn8W2C+bMjjEW4ShrQhXTjCIJIGeZFccSLPY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ruPl0PEK6sazyyfliImMeV4N/RZ2w8trQpW+3BuxpBgfY74vvT/HTIXHFg/jkFBQc
-	 /uBO2xX+9egDFU5OrOj2KpijQr4ZUW5T+4hy6xikS7DNQecF40c7bVg/Cxc/LZoDSp
-	 DYjYYdqNCSUbc0Rz4MVpOFUjPlXBIuXLohSoA+4D5d95W41rtitl5ImkDQZdJfEjkB
-	 hSBVD6dG4LDuD+4rA29R9WFRnnKK6gQKolTmEr5i3euC7TvREsV86F0zeU99zuak82
-	 vZQ07ATaYtykem/C52Uzhjjt2JgKx769WJm5J/bFWPMniHwGcaJojALjUvaobuC0+Z
-	 oS+lXuzA5GT4A==
+	bh=jTsRXZWDrdZtdx6WmpzbW/Nftt5x+XgMG9sQFaT8uLA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BdmTw2rVkWR9+JJqI+o4JX5VlLiPCM1FILZZebXr7UYTqaAu4ZgXN67HxRBAqLs3o
+	 uiqycDFqGX5WMcgh/bQb1YaJ+Vo1NA56c+ymHFoL809xggEiEZUBhnctZY8sLWR7fH
+	 uE+Q+8PRam0T2BSpjnZyiPCZ5b3/PZqMZLkekmC9qI5smi6e9hysqUdHJKchOWsfDl
+	 +jv5pkhTpQylxH8Bi7utC+Ag+o+T7LBRqlqdpTHDLeHeYhPbg1dWH8hPrHIeQZ5zfM
+	 SNccLW3MpIavcOg/dFWT2LbKxwTkj9/ktR/kx1qU8Z7IaTxxDMs+tYaYWMpzoX6H/f
+	 bVZR18PU4rfag==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W3WFK0rrfz16Vj;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W3WFK3bDsz171G;
 	Tue, 18 Jun 2024 11:41:25 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Dan Williams <dan.j.williams@intel.com>,
@@ -61,10 +62,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH 0/4] Flush nvdimm/pmem to memory before machine restart
-Date: Tue, 18 Jun 2024 11:41:53 -0400
-Message-Id: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 1/4] kernel/reboot: Introduce pre_restart notifiers
+Date: Tue, 18 Jun 2024 11:41:54 -0400
+Message-Id: <20240618154157.334602-2-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
+References: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -77,25 +80,35 @@ Introduce a new pre_restart notifier chain for callbacks that need to
 be executed after the system has been made quiescent with
 syscore_shutdown(), before machine restart.
 
-Register pre-restart notifiers to flush pmem areas from CPU data cache
-to memory on reboot, immediately before restarting the machine. This
-ensures all other CPUs are quiescent before the pmem data is flushed to
-memory.
+This pre_restart notifier chain should be invoked on machine restart and
+on emergency machine restart.
 
 The use-case for this new notifier chain is to preserve tracing data
 within pmem areas on systems where the BIOS does not clear memory across
 warm reboots.
 
-I did an earlier POC that flushed caches on panic/die oops notifiers [1],
-but it did not cover the reboot case. I've been made aware that some
-distribution vendors have started shipping their own modified version of
-my earlier POC patch. This makes a strong argument for upstreaming this
-work.
+Why do we need a new notifier chain ?
 
-Link: https://lore.kernel.org/linux-kernel/f6067e3e-a2bc-483d-b214-6e3fe6691279@efficios.com/ [1]
+1) The reboot and restart_prepare notifiers are called too early in the
+   reboot sequence: they are invoked before syscore_shutdown(), which
+   leaves other CPUs actively running threads while those notifiers are
+   invoked.
+
+2) The "restart" notifier is meant to trigger the actual machine
+   restart, and is not meant to be invoked as a last step immediately
+   before restart. It is also not always used: some architecture code
+   choose to bypass this restart notifier and reboot directly from the
+   architecture code.
+
+Wiring up the architecture code to call this notifier chain is left to
+follow-up arch-specific patches.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
 Cc: Vishal Verma <vishal.l.verma@intel.com>
 Cc: Dave Jiang <dave.jiang@intel.com>
 Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: nvdimm@lists.linux.dev
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -106,21 +119,89 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org
+---
+ include/linux/reboot.h |  4 ++++
+ kernel/reboot.c        | 51 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
 
-Mathieu Desnoyers (4):
-  kernel/reboot: Introduce pre_restart notifiers
-  nvdimm/pmem: Flush to memory before machine restart
-  arm64: Invoke pre_restart notifiers
-  x86: Invoke pre_restart notifiers
-
- arch/arm64/kernel/process.c |  2 ++
- arch/x86/kernel/reboot.c    |  7 +++--
- drivers/nvdimm/pmem.c       | 29 ++++++++++++++++++++-
- drivers/nvdimm/pmem.h       |  2 ++
- include/linux/reboot.h      |  4 +++
- kernel/reboot.c             | 51 +++++++++++++++++++++++++++++++++++++
- 6 files changed, 92 insertions(+), 3 deletions(-)
-
+diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+index abcdde4df697..c7f340e81451 100644
+--- a/include/linux/reboot.h
++++ b/include/linux/reboot.h
+@@ -50,6 +50,10 @@ extern int register_restart_handler(struct notifier_block *);
+ extern int unregister_restart_handler(struct notifier_block *);
+ extern void do_kernel_restart(char *cmd);
+ 
++extern int register_pre_restart_handler(struct notifier_block *);
++extern int unregister_pre_restart_handler(struct notifier_block *);
++extern void do_kernel_pre_restart(char *cmd);
++
+ /*
+  * Architecture-specific implementations of sys_reboot commands.
+  */
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 22c16e2564cc..b7287dd48d35 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -235,6 +235,57 @@ void do_kernel_restart(char *cmd)
+ 	atomic_notifier_call_chain(&restart_handler_list, reboot_mode, cmd);
+ }
+ 
++/*
++ *	Notifier list for kernel code which wants to be called immediately
++ *	before restarting the system.
++ */
++static ATOMIC_NOTIFIER_HEAD(pre_restart_handler_list);
++
++/**
++ *	register_pre_restart_handler - Register function to be called in preparation
++ *				       to reset the system
++ *	@nb: Info about handler function to be called
++ *
++ *	Registers a function with code to be called in preparation to restart
++ *	the system.
++ *
++ *	Currently always returns zero, as atomic_notifier_chain_register()
++ *	always returns zero.
++ */
++int register_pre_restart_handler(struct notifier_block *nb)
++{
++	return atomic_notifier_chain_register(&pre_restart_handler_list, nb);
++}
++EXPORT_SYMBOL(register_pre_restart_handler);
++
++/**
++ *	unregister_pre_restart_handler - Unregister previously registered
++ *					 pre-restart handler
++ *	@nb: Hook to be unregistered
++ *
++ *	Unregisters a previously registered pre-restart handler function.
++ *
++ *	Returns zero on success, or %-ENOENT on failure.
++ */
++int unregister_pre_restart_handler(struct notifier_block *nb)
++{
++	return atomic_notifier_chain_unregister(&pre_restart_handler_list, nb);
++}
++EXPORT_SYMBOL(unregister_pre_restart_handler);
++
++/**
++ *	do_kernel_pre_restart - Execute kernel pre-restart handler call chain
++ *
++ *	Calls functions registered with register_pre_restart_handler.
++ *
++ *	Expected to be called from machine_restart and
++ *	machine_emergency_restart before invoking the restart handlers.
++ */
++void do_kernel_pre_restart(char *cmd)
++{
++	atomic_notifier_call_chain(&pre_restart_handler_list, reboot_mode, cmd);
++}
++
+ void migrate_to_reboot_cpu(void)
+ {
+ 	/* The boot cpu is always logical cpu 0 */
 -- 
 2.39.2
+
 
