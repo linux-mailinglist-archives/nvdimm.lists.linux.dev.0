@@ -1,48 +1,48 @@
-Return-Path: <nvdimm+bounces-8396-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8394-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B0B890D7D0
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 17:51:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6178390D7E1
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 17:55:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26AFF28749D
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 15:51:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1C9A2871BB
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 15:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1751A4AEF0;
-	Tue, 18 Jun 2024 15:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16CA47A76;
+	Tue, 18 Jun 2024 15:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="PbLw1o/q"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="JdwSHdYu"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A07A45C16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529AA46426
 	for <nvdimm@lists.linux.dev>; Tue, 18 Jun 2024 15:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718725896; cv=none; b=pECqqBMwpXoecuTdrh2mIY4w9L6HzJbPLBz2dLU5hQ/KTrbK6ODC8ayrFedUnb+gwMX0T/CDynMaCc+heCAIUfNGyTSjX4zkGI6WupJJLkG/G1r1hWjxYaboZvGQ4Cwj9v0E4aFEHEWFqlYMZn7n0UB7HHSxrfFghOZGgyAfhts=
+	t=1718725896; cv=none; b=PIg1YUsAuFJjmyuXEsEBKw+n5lOG7U9yjc4gE39qPqyx4c0kM5BNOQpsPhIlEjBDxr4OI+4QBTC9ioFx5omWy/M23k2MNHWHhyGb5PAgWpKbcSz4H+Eqnw06ANEkvZmdgi+xgd3MgzAzAiWQ8aOZf/I6LL3tEzFFEqsUhlmZrmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718725896; c=relaxed/simple;
-	bh=EC4aqitERxCehlbxkC0+MICQzxA9puJoMAcU63x/ppQ=;
+	bh=zsDwPG7tzMjzFGmeJoQG1AV2T9WH9A6kVLeIwITuy6c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JEuocg6d+VolNd+h+fqRDgKT8Yvk+iewlwkeAZJmYmN4FMXr0sqMP3UkxIzYu/S6X0zF8dSgsPrxTB7NyKrj5CR+/0CwPfo9PcY/KsCY9jtScwLlKI3ZwUrPx/Pd+oLqorvB2ene6IVbJpePOlGhrDRuATUgLurfN1iwuKkYJVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=PbLw1o/q; arc=none smtp.client-ip=167.114.26.122
+	 MIME-Version; b=gRan5MyMaJpKWhjwMX/t5qn2+CUSAjqba58HCslkVrbML+2kS6QZvURiodnKZ6DDFzPQ1kDlIR04QCEoEXmZxNJWiQKFHhtz9mDey6X/V53FlNaRp/kGKvh04CGGa1bsMAsZ3w2qbpfaUagVtd/tgfoXmfic+38WePvclawxPa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=JdwSHdYu; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
 	s=smtpout1; t=1718725286;
-	bh=EC4aqitERxCehlbxkC0+MICQzxA9puJoMAcU63x/ppQ=;
+	bh=zsDwPG7tzMjzFGmeJoQG1AV2T9WH9A6kVLeIwITuy6c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PbLw1o/q0ac0JhAzMHAQOtpU6u6hhhphom/imkTrN1lbbDJ7bPUizbKpcFnISjWi2
-	 AjjbVwuCJxj4zv8YT6DHab0xJO0glqLjLdgCGLAjWZQ3KKWJt1cMbnpaCFxS7Kmpt/
-	 3R2g2E7F9m0QdjWiULG1fPDdjpYK2/BwuvDq6OxUUxO0odHN5O75SQfHID3Zai2uH2
-	 S76+zYWU97obK98s5lAMDZ/7ig0iE0wiDL2Y8TCFvN+8hVIHyJcNXXwXMnTZAjQDWz
-	 Wg9XUfip1k7A8LUS3y1dqY0QOZOs6xADKHlMHieGrET5DMvGEd/F6vBXCQwHLVlvTC
-	 A8Qegl7XPsMVw==
+	b=JdwSHdYufZBIcz1XoKPrk/TGj0oRY8Eih1B7gx8oJ53OuGcFi2bx2dtPD87lQJ0sn
+	 5TJiMafMHN1FPtKE2au/JqTWmfHiQ/gaJI/1HUkeapGdYKSDz1yJUyTNBcm5pbBNgl
+	 r3I+zeJyO9JY1K0nqjNSFB58woQuCiDBaQA/n53AhvxzMDpWDMTYQaT+rIjOmHJj/b
+	 RSWq5or3aY+GRlnhJcWtHlhgxuyom9AkePTj6MQkjMoGeLHBhaJ0InVRvuSgXqMjB6
+	 Ejo7svBkytwJdM2zEA76F75V9ykToB7c5Jv+KjQ58D2HNARqI9TNasYDOuMx+ixhRX
+	 0x31/g1CjnfpQ==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W3WFL28PNz16Pn;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W3WFL4tw2z16qH;
 	Tue, 18 Jun 2024 11:41:26 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Dan Williams <dan.j.williams@intel.com>,
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH 3/4] arm64: Invoke pre_restart notifiers
-Date: Tue, 18 Jun 2024 11:41:56 -0400
-Message-Id: <20240618154157.334602-4-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 4/4] x86: Invoke pre_restart notifiers
+Date: Tue, 18 Jun 2024 11:41:57 -0400
+Message-Id: <20240618154157.334602-5-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
 References: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
@@ -79,8 +79,8 @@ Content-Transfer-Encoding: 8bit
 Invoke the pre_restart notifiers after shutdown, before machine restart.
 This allows preserving pmem memory across warm reboots.
 
-Invoke the pre_restart notifiers before emergency machine restart as
-well to cover the panic() scenario.
+Invoke the pre_restart notifiers on emergency_machine_restart to cover
+the panic() scenario.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Dan Williams <dan.j.williams@intel.com>
@@ -89,26 +89,47 @@ Cc: Dave Jiang <dave.jiang@intel.com>
 Cc: Ira Weiny <ira.weiny@intel.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: nvdimm@lists.linux.dev
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 ---
- arch/arm64/kernel/process.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/kernel/reboot.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 4ae31b7af6c3..4a27397617fb 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -129,6 +129,8 @@ void machine_restart(char *cmd)
- 	local_irq_disable();
- 	smp_send_stop();
+diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
+index f3130f762784..222619fa63c6 100644
+--- a/arch/x86/kernel/reboot.c
++++ b/arch/x86/kernel/reboot.c
+@@ -631,8 +631,10 @@ static void native_machine_emergency_restart(void)
+ 	int orig_reboot_type = reboot_type;
+ 	unsigned short mode;
  
+-	if (reboot_emergency)
++	if (reboot_emergency) {
++		do_kernel_pre_restart(NULL);
+ 		emergency_reboot_disable_virtualization();
++	}
+ 
+ 	tboot_shutdown(TB_SHUTDOWN_REBOOT);
+ 
+@@ -760,12 +762,13 @@ static void __machine_emergency_restart(int emergency)
+ 	machine_ops.emergency_restart();
+ }
+ 
+-static void native_machine_restart(char *__unused)
++static void native_machine_restart(char *cmd)
+ {
+ 	pr_notice("machine restart\n");
+ 
+ 	if (!reboot_force)
+ 		machine_shutdown();
 +	do_kernel_pre_restart(cmd);
-+
- 	/*
- 	 * UpdateCapsule() depends on the system being reset via
- 	 * ResetSystem().
+ 	__machine_emergency_restart(0);
+ }
+ 
 -- 
 2.39.2
 
