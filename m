@@ -1,226 +1,182 @@
-Return-Path: <nvdimm+bounces-8395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8398-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B1590D8FA
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 18:21:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBD4090F030
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Jun 2024 16:20:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49966B32119
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Jun 2024 15:51:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B847280F2D
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Jun 2024 14:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C175A47F59;
-	Tue, 18 Jun 2024 15:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6BC1F5E6;
+	Wed, 19 Jun 2024 14:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="WacNiq9z"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="r1SoSEQ2"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B3240851
-	for <nvdimm@lists.linux.dev>; Tue, 18 Jun 2024 15:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD1115E81
+	for <nvdimm@lists.linux.dev>; Wed, 19 Jun 2024 14:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718725896; cv=none; b=BvTYD4bsg1Fi59dkNAOthuLTO9YDdxv/Tm7hWxXlP479saXYPqgp9+Y2QUq3+C5/mchh+Sck6O+y24z97rAA+QwnXdHTOF/iNw/TTZ8kqruElMZo8mjnOQARHgBviw+LAC8VDfscFs8X10dRnFUigxLTcANIkb7QDeB2PrUPgTk=
+	t=1718806725; cv=none; b=sRt3v5LabNC4cCwAfq2w5uuE8PdCz8nWEypHDyqn9i7giimEra7nW/TfdQ3ax2YTl6OikFUHY9ehNG05wFzUd6btClDi6UV9LHs4+AgSKfHv4BYAx4AdX4B5GfljMWfFNwykJdSRJtocQfKImcUyWjO4YbPHlmOV2ThLEBhNVFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718725896; c=relaxed/simple;
-	bh=FctRNyLMVCXApM+zZ0hjS0VrXYFC+wVXydecSREV5uo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jYjB5vRMiFbk2JQs05xoZRvYr3IdvTHxw+nTskRDGfr8x5AA6Wd7/XNa61Ju5dtEzQXqWs1ik6+BwPn0IyMzwq1wKGKFe7/PHRmbU561awuN7HzKLgmXFczObUEoApdNVXKJNqapx1wTreRbd+Dq+jxa8+XEO8cTvf+wUi5MizI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=WacNiq9z; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1718725286;
-	bh=FctRNyLMVCXApM+zZ0hjS0VrXYFC+wVXydecSREV5uo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WacNiq9z+yhx9wZepGion63OStdao/cmKMlYCKm67HDIvEhchEczlFxFJ2tQQTwjU
-	 h6PS+ZyBPgGmpw08s7aW1taZ9RIbDzGUgoOswYRsbapzcGJcwxaDN6qHb+zJ0oFWYA
-	 2RI5cE30TiGkGQZEeBqKJR5vFwUZRgOdYH+zDGjGQLejuDOOJT5PkjmuTTvH75dHwu
-	 qjsvd05m+ujXNlZ/GzCkHRrEUqU7uPA4TXi6MeKuhosWsrs6xnDi/XFiZou8g5w4Qo
-	 ZhyqhYIGuN4g6EJ0hsFI0Kx/re1sbFzccoI03pfENXRQq1TUxYsPWErkC/gW7tbdIP
-	 i7uV1nwBsFbOQ==
-Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W3WFK6N1Vz16w4;
-	Tue, 18 Jun 2024 11:41:25 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Dan Williams <dan.j.williams@intel.com>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	nvdimm@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH 2/4] nvdimm/pmem: Flush to memory before machine restart
-Date: Tue, 18 Jun 2024 11:41:55 -0400
-Message-Id: <20240618154157.334602-3-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
-References: <20240618154157.334602-1-mathieu.desnoyers@efficios.com>
+	s=arc-20240116; t=1718806725; c=relaxed/simple;
+	bh=QWK4q+Z6QaRcjKIsA7MnW3f/QFVZHOJVpMu7UnF/4Ms=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=WL7NYQR9FDMdgHXt/pdUA9q45/NiKbczGEum8bQxomQWArRUEviCRN2yjyWmDDIKPRuXpeEq8czC0gAHpCCaSUWT58O/CCHpxU7N9BdaAX3+yTDmyHAxnegt0DRaBMx4UqXsDU8ukc+LhfL2di/GIZpjmuqo3WTDwjqESzvxLTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=r1SoSEQ2; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-6e45f896973so186749a12.2
+        for <nvdimm@lists.linux.dev>; Wed, 19 Jun 2024 07:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1718806723; x=1719411523; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kVFpcyqMw7891fhn8oME2l6O88u8sGFZorCmmUmii2A=;
+        b=r1SoSEQ213DP1IQc7lEFCO2XbN3rGl8PLPXBJKw9ZorST3oV6oE6qnvlQWzJ4QXMLy
+         xMjJSlDLmPSMyP2yQ/QaAyOC7tuBMv92xOt29jxWfVhlRyEq8VhondZDEpk3LR/66bQ8
+         aFznVSBHfRbYfLH6uAUFGxy9o0POyAxoukk374oAbDFisH0bY74UoUwZaYxDJgsYULtN
+         rVL9+p28FRqxRsrw9w/lPY+lUY7vr8isQ/D8UkOc6b1AJ7IJ/7eU1YfNe55pwnQbCWOy
+         yK8HB+SHSKALAf+v8RTP+axKfKHqDvhGjNY2AiSa617lunuma4BMv91c4XTndLg0synw
+         MwPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718806723; x=1719411523;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kVFpcyqMw7891fhn8oME2l6O88u8sGFZorCmmUmii2A=;
+        b=K0QaimXLyFH7SSvB/TMYX1g+d6MzVtegkFRVQGzpTgvO8ant0Jz6G+2SW9A+k6iqF1
+         ON+pgMmqsxDBl96A44YVsEJS5jeYKhQemTIiSJ+T1DOjtUbDTTuB8tk7OPTaPZccjKMM
+         n8i2u/XB+6Hn1BGe3QLQJwdMdv0Iz4NVeolw3flHV9GW8/5LjHwG/kw5A2Izb/1bBvje
+         RiIraw24eJxTiZ9nkKFcl/7wKJZNcGKfSTUYtc7Xex1GgKT+KwaykDkHBZHYLGfFtG7W
+         NiQAFNvZqBAkVYpiP6v7SRfAy6uc61SHNpAIw6Tjs4nkm82+6h1+MQELxoXy9yoYp4rQ
+         sUGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqbd6sr+tP4RF8Upjdpg1oLG3svGeoWSzp4nAuMu5QNhphFAbJ6Tja2oJba9xtvrhGc4IrFtBBYRNMC3OvVgylKlW2J0gG
+X-Gm-Message-State: AOJu0Yw3XBL2F/7POC2fILbM44tWCpXJ+gXnUJMy8PUYqvQOF2xPIjmS
+	eeGumnvaY3b8e95PSbWozvXA6oTAHmZXGGCFDwIabxAiAtkMHeetLCUlfLl/6NI=
+X-Google-Smtp-Source: AGHT+IEWR0naxsjqG6PjL5n5tEp1Ci8rJdxP3J1CbAApgRxLYFkmM+R0aL8qHW5Lv8+tjuuvrYAkhg==
+X-Received: by 2002:a05:6a20:3ca0:b0:1b6:fadd:8862 with SMTP id adf61e73a8af0-1bcbb8ce3e2mr2590711637.6.1718806723107;
+        Wed, 19 Jun 2024 07:18:43 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d2e8sm10689218b3a.107.2024.06.19.07.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jun 2024 07:18:42 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Richard Weinberger <richard@nod.at>, 
+ Philipp Reisner <philipp.reisner@linbit.com>, 
+ Lars Ellenberg <lars.ellenberg@linbit.com>, 
+ =?utf-8?q?Christoph_B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>, 
+ Josef Bacik <josef@toxicpanda.com>, Ming Lei <ming.lei@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+ =?utf-8?q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>, 
+ Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+ Mikulas Patocka <mpatocka@redhat.com>, Song Liu <song@kernel.org>, 
+ Yu Kuai <yukuai3@huawei.com>, Vineeth Vijayan <vneethv@linux.ibm.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ linux-m68k@lists.linux-m68k.org, linux-um@lists.infradead.org, 
+ drbd-dev@lists.linbit.com, nbd@other.debian.org, 
+ linuxppc-dev@lists.ozlabs.org, ceph-devel@vger.kernel.org, 
+ virtualization@lists.linux.dev, xen-devel@lists.xenproject.org, 
+ linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+ linux-raid@vger.kernel.org, linux-mmc@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, nvdimm@lists.linux.dev, 
+ linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
+In-Reply-To: <20240617060532.127975-1-hch@lst.de>
+References: <20240617060532.127975-1-hch@lst.de>
+Subject: Re: move features flags into queue_limits v2
+Message-Id: <171880672048.115609.5962725096227627176.b4-ty@kernel.dk>
+Date: Wed, 19 Jun 2024 08:18:40 -0600
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.0
 
-Register pre-restart notifiers to flush pmem areas from CPU data cache
-to memory on reboot, immediately before restarting the machine. This
-ensures all other CPUs are quiescent before the pmem data is flushed to
-memory.
 
-I did an earlier POC that flushed caches on panic/die oops notifiers [1],
-but it did not cover the reboot case. I've been made aware that some
-distribution vendors have started shipping their own modified version of
-my earlier POC patch. This makes a strong argument for upstreaming this
-work.
+On Mon, 17 Jun 2024 08:04:27 +0200, Christoph Hellwig wrote:
+> this is the third and last major series to convert settings to
+> queue_limits for this merge window.  After a bunch of prep patches to
+> get various drivers in shape, it moves all the queue_flags that specify
+> driver controlled features into the queue limits so that they can be
+> set atomically and are separated from the blk-mq internal flags.
+> 
+> Note that I've only Cc'ed the maintainers for drivers with non-mechanical
+> changes as the Cc list is already huge.
+> 
+> [...]
 
-Use the newly introduced "pre-restart" notifiers to flush pmem data to
-memory immediately before machine restart.
+Applied, thanks!
 
-Delta from my POC patch [1]:
+[01/26] xen-blkfront: don't disable cache flushes when they fail
+        commit: dd9300e9eaeeb212f77ffeb72d1d8756107f1f1f
+[02/26] sd: remove sd_is_zoned
+        commit: be60e7700e6df1e16a2f60f45bece08e6140a46d
+[03/26] sd: move zone limits setup out of sd_read_block_characteristics
+        commit: 308ad58af49d6c4c3b7a36b98972cc9db4d7b36a
+[04/26] loop: stop using loop_reconfigure_limits in __loop_clr_fd
+        commit: c9055b44abe60da69aa4ee4fdcb78ee7fe733335
+[05/26] loop: always update discard settings in loop_reconfigure_limits
+        commit: ae0d40ff49642651f969883ef9fc79d69c1632d7
+[06/26] loop: regularize upgrading the block size for direct I/O
+        commit: a17ece76bcfe7b86327b19cae1652d7c62068a30
+[07/26] loop: also use the default block size from an underlying block device
+        commit: 4ce37fe0938b02b7b947029c40b72d76a22a3882
+[08/26] loop: fold loop_update_rotational into loop_reconfigure_limits
+        commit: 97dd4a43d69b74a114be466d6887e257971adfe9
+[09/26] virtio_blk: remove virtblk_update_cache_mode
+        commit: bbe5c84122b35c37f2706872fe34da66f0854b56
+[10/26] nbd: move setting the cache control flags to __nbd_set_size
+        commit: 6b377787a306253111404325aee98005b361e59a
+[11/26] block: freeze the queue in queue_attr_store
+        commit: af2814149883e2c1851866ea2afcd8eadc040f79
+[12/26] block: remove blk_flush_policy
+        commit: 70905f8706b62113ae32c8df721384ff6ffb6c6a
+[13/26] block: move cache control settings out of queue->flags
+        commit: 1122c0c1cc71f740fa4d5f14f239194e06a1d5e7
+[14/26] block: move the nonrot flag to queue_limits
+        commit: bd4a633b6f7c3c6b6ebc1a07317643270e751a94
+[15/26] block: move the add_random flag to queue_limits
+        commit: 39a9f1c334f9f27b3b3e6d0005c10ed667268346
+[16/26] block: move the io_stat flag setting to queue_limits
+        commit: cdb2497918cc2929691408bac87b58433b45b6d3
+[17/26] block: move the stable_writes flag to queue_limits
+        commit: 1a02f3a73f8c670eddeb44bf52a75ae7f67cfc11
+[18/26] block: move the synchronous flag to queue_limits
+        commit: aadd5c59c910427c0464c217d5ed588ff14e2502
+[19/26] block: move the nowait flag to queue_limits
+        commit: f76af42f8bf13d2620084f305f01691de9238fc7
+[20/26] block: move the dax flag to queue_limits
+        commit: f467fee48da4500786e145489787b37adae317c3
+[21/26] block: move the poll flag to queue_limits
+        commit: 8023e144f9d6e35f8786937e2f0c2fea0aba6dbc
+[22/26] block: move the zoned flag into the features field
+        commit: b1fc937a55f5735b98d9dceae5bb6ba262501f56
+[23/26] block: move the zone_resetall flag to queue_limits
+        commit: a52758a39768f441e468a41da6c15a59d6d6011a
+[24/26] block: move the pci_p2pdma flag to queue_limits
+        commit: 9c1e42e3c876c66796eda23e79836a4d92613a61
+[25/26] block: move the skip_tagset_quiesce flag to queue_limits
+        commit: 8c8f5c85b20d0a7dc0ab9b2a17318130d69ceb5a
+[26/26] block: move the bounce flag into the features field
+        commit: 339d3948c07b4aa2940aeb874294a7d6782cec16
 
-Looking at the panic() code, it invokes emergency_restart() to restart
-the machine, which uses the new pre-restart notifiers. There is
-therefore no need to hook into panic handlers explicitly.
-
-Looking at the die notifiers, those don't actually end up triggering
-a machine restart, so it does not appear to be relevant to flush pmem
-to memory there. I must admit I originally looked at how ftrace hooked
-into panic/die-oops handlers for its ring buffers, but the use-case it
-different here: we only want to cover machine restart use-cases.
-
-Link: https://lore.kernel.org/linux-kernel/f6067e3e-a2bc-483d-b214-6e3fe6691279@efficios.com/ [1]
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: nvdimm@lists.linux.dev
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/nvdimm/pmem.c | 29 ++++++++++++++++++++++++++++-
- drivers/nvdimm/pmem.h |  2 ++
- 2 files changed, 30 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 598fe2e89bda..bf1d187a9dca 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -26,12 +26,16 @@
- #include <linux/dax.h>
- #include <linux/nd.h>
- #include <linux/mm.h>
-+#include <linux/reboot.h>
- #include <asm/cacheflush.h>
- #include "pmem.h"
- #include "btt.h"
- #include "pfn.h"
- #include "nd.h"
- 
-+static int pmem_pre_restart_handler(struct notifier_block *self,
-+		unsigned long ev, void *unused);
-+
- static struct device *to_dev(struct pmem_device *pmem)
- {
- 	/*
-@@ -423,6 +427,7 @@ static void pmem_release_disk(void *__pmem)
- {
- 	struct pmem_device *pmem = __pmem;
- 
-+	unregister_pre_restart_notifier(&pmem->pre_restart_notifier);
- 	dax_remove_host(pmem->disk);
- 	kill_dax(pmem->dax_dev);
- 	put_dax(pmem->dax_dev);
-@@ -575,9 +580,14 @@ static int pmem_attach_disk(struct device *dev,
- 			goto out_cleanup_dax;
- 		dax_write_cache(dax_dev, nvdimm_has_cache(nd_region));
- 	}
--	rc = device_add_disk(dev, disk, pmem_attribute_groups);
-+	pmem->pre_restart_notifier.notifier_call = pmem_pre_restart_handler;
-+	pmem->pre_restart_notifier.priority = 0;
-+	rc = register_pre_restart_notifier(&pmem->pre_restart_notifier);
- 	if (rc)
- 		goto out_remove_host;
-+	rc = device_add_disk(dev, disk, pmem_attribute_groups);
-+	if (rc)
-+		goto out_unregister_reboot;
- 	if (devm_add_action_or_reset(dev, pmem_release_disk, pmem))
- 		return -ENOMEM;
- 
-@@ -589,6 +599,8 @@ static int pmem_attach_disk(struct device *dev,
- 		dev_warn(dev, "'badblocks' notification disabled\n");
- 	return 0;
- 
-+out_unregister_pre_restart:
-+	unregister_pre_restart_notifier(&pmem->pre_restart_notifier);
- out_remove_host:
- 	dax_remove_host(pmem->disk);
- out_cleanup_dax:
-@@ -751,6 +763,21 @@ static void nd_pmem_notify(struct device *dev, enum nvdimm_event event)
- 	}
- }
- 
-+/*
-+ * For volatile memory use-cases where explicit flushing of the data cache is
-+ * not useful after stores, the pmem reboot notifier is called on preparation
-+ * for restart to make sure the content of the pmem memory area is flushed from
-+ * data cache to memory, so it can be preserved across warm reboot.
-+ */
-+static int pmem_pre_restart_handler(struct notifier_block *self,
-+		unsigned long ev, void *unused)
-+{
-+	struct pmem_device *pmem = container_of(self, struct pmem_device, pre_restart_notifier);
-+
-+	arch_wb_cache_pmem(pmem->virt_addr, pmem->size);
-+	return NOTIFY_DONE;
-+}
-+
- MODULE_ALIAS("pmem");
- MODULE_ALIAS_ND_DEVICE(ND_DEVICE_NAMESPACE_IO);
- MODULE_ALIAS_ND_DEVICE(ND_DEVICE_NAMESPACE_PMEM);
-diff --git a/drivers/nvdimm/pmem.h b/drivers/nvdimm/pmem.h
-index 392b0b38acb9..b8a2a518cf82 100644
---- a/drivers/nvdimm/pmem.h
-+++ b/drivers/nvdimm/pmem.h
-@@ -4,6 +4,7 @@
- #include <linux/page-flags.h>
- #include <linux/badblocks.h>
- #include <linux/memremap.h>
-+#include <linux/notifier.h>
- #include <linux/types.h>
- #include <linux/pfn_t.h>
- #include <linux/fs.h>
-@@ -27,6 +28,7 @@ struct pmem_device {
- 	struct dax_device	*dax_dev;
- 	struct gendisk		*disk;
- 	struct dev_pagemap	pgmap;
-+	struct notifier_block	pre_restart_notifier;
- };
- 
- long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+Best regards,
 -- 
-2.39.2
+Jens Axboe
+
+
 
 
