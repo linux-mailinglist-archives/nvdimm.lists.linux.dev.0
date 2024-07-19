@@ -1,151 +1,123 @@
-Return-Path: <nvdimm+bounces-8520-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8522-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E169E937222
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 19 Jul 2024 03:59:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC5B93736A
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 19 Jul 2024 07:58:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82A7A1F21CDB
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 19 Jul 2024 01:59:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B3E52811D0
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 19 Jul 2024 05:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA5761FA5;
-	Fri, 19 Jul 2024 01:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB29D4315D;
+	Fri, 19 Jul 2024 05:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="bJ1BOdqr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRFthwaJ"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FF615D1
-	for <nvdimm@lists.linux.dev>; Fri, 19 Jul 2024 01:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A678A35;
+	Fri, 19 Jul 2024 05:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354343; cv=none; b=qV9uu9DTA77sG2/6GxoO+6wtbgLSuYb+V5/h0WMocoFnW2ZHYnAQIss0A/X9xsnEGSnYyvkfB9bN8LV90DQ55weddfWBzATRoUtKwP2gt998WBZ5+uP9A7ekluMMO5TJBfpH79Va7c3kPc85UzJx0Y5ieXGA57y7YIA6inrigY0=
+	t=1721368713; cv=none; b=XP3ID2nPSH2aLtgUDGiUiaUwOhPe0Jd6W+INdwDqAA4FOBlIs05+6Rl2aXjjhAXN9fgFp3u775emQ9VQWL5Dide918X1FfzW0ZVL5AMFkilCiClxhOVgW7k85u6SJJ9cgHbaOS4ZkO58bzSYqWxo/0OcX8Qs5pLvkxdTnGEcGTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354343; c=relaxed/simple;
-	bh=cGDvTByA6KTed0UxScYm3+Rd0JNJ+VCZM7hXObyA1MA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PVT/fa6MKKkFrHPkmWk84M/o3lw3DIbJ9kZhKu/DsouKtF46gK8jLmtRxR21UrQb0e6aU+VDaUWvxFEZyfR6h8H2A/YHhF6fCJd2gGOYj99054U0+J5X8LZ7724WY2vmp/Wl2RFouseTDop2R8tWXspF1u9lJ6gFA305tYjFzlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=bJ1BOdqr; arc=none smtp.client-ip=207.54.90.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1721354341; x=1752890341;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cGDvTByA6KTed0UxScYm3+Rd0JNJ+VCZM7hXObyA1MA=;
-  b=bJ1BOdqrhfOGjJzakrkze9Z98QE6X8rwVGQJ+CQmeL45ZjyXa745Wcek
-   xrfGgoVYCR1ePP9jtEUETdG0S8IXvBR8wfB4x7OzoJKQ5SEFl4sRmBjzr
-   dWMkKTOzpizuiZ+IhOpASMePUObBC/p96P/4cdS2wHcJ91KQq4XziCuhw
-   vc2uSjsy8p/QsNJMI7j3HLy8GrSGa4Tqxl1VVHni08eU1SY/HoWwcVUDz
-   +PzpJwbdNWmKpGZuHDsveJWwK5F7BaTL2mzZDzLiuUygxOas8K9hvjfcX
-   KemtcJpvhRp18RwdUsmpBmxBhZ8108sHZPSNrTTvu1dTX0+G0PFXgEzld
-   Q==;
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="147249308"
-X-IronPort-AV: E=Sophos;i="6.09,219,1716217200"; 
-   d="scan'208";a="147249308"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2024 10:58:52 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 21379DB3CD
-	for <nvdimm@lists.linux.dev>; Fri, 19 Jul 2024 10:58:49 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 61AD2D1988
-	for <nvdimm@lists.linux.dev>; Fri, 19 Jul 2024 10:58:48 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id EF1C9224979
-	for <nvdimm@lists.linux.dev>; Fri, 19 Jul 2024 10:58:47 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 736D31A000C;
-	Fri, 19 Jul 2024 09:58:47 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: nvdimm@lists.linux.dev
-Cc: dan.j.williams@intel.com,
-	vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	ira.weiny@intel.com,
-	linux-kernel@vger.kernel.org,
-	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH v2 2/2] nvdimm: Remove dead code for ENODEV checking in scan_labels()
-Date: Fri, 19 Jul 2024 09:58:36 +0800
-Message-Id: <20240719015836.1060677-2-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20240719015836.1060677-1-lizhijian@fujitsu.com>
-References: <20240719015836.1060677-1-lizhijian@fujitsu.com>
+	s=arc-20240116; t=1721368713; c=relaxed/simple;
+	bh=UQznUIdoHoSsnmJ9kRgND1mWM0Wr77U9QEYTciDIo28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GZguJpHnX8fe8y7f/Qsn9brJu52qV8u2yaL50sznIj20S6Yvwl+AtUlL6yj9kgVEg6SoJT1sky3xSw9eq2410xHQaeJPFn7M4gpzEY2uFDb61IjzPKpNRp7mIeuz+sljKXjAka1KP0IneJmvv5NwCqdey6kKs3u+WMVmTpbFqQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YRFthwaJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38BCBC32782;
+	Fri, 19 Jul 2024 05:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721368712;
+	bh=UQznUIdoHoSsnmJ9kRgND1mWM0Wr77U9QEYTciDIo28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YRFthwaJnqijAayKx7Nr5Wz+cg7XtkKFYmu9Y+J8JOSZNkKtcyO0oPxjnmHQb5MAT
+	 +SzEDWjweXYNk8r/wQxrhgFgyaJzF2zS7ds36V+HfUkLd39/F0Jm+9Xel/QgVHiXrN
+	 u8dtVDBEcxTLfuJ09zphSq9TFj0SodZS5yh/iSTnCqMAmk0l0hgKZ81y9JEQyQLhxw
+	 sglzaaOKdzC/1FVu4YR8/PhMdvuoqPLRhEF6pZyxCI7bcLrHj8JLnnhhcpRX6xDDkZ
+	 xqyY0lHVXYowiKXrRiLwZxIMlHLP+cfRIEOh0c7+hIF8r+/xRAu73hBTRRXaUjI764
+	 7OCKjCrNEM7Gw==
+Date: Fri, 19 Jul 2024 08:55:27 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: linux-kernel@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 13/17] mm: move numa_distance and related code from x86
+ to numa_memblks
+Message-ID: <Zpn_z_NgzTl_db5t@kernel.org>
+References: <20240716111346.3676969-1-rppt@kernel.org>
+ <20240716111346.3676969-14-rppt@kernel.org>
+ <8b402e92-d874-4b30-9108-f521bd20d36c@sifive.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28538.002
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28538.002
-X-TMASE-Result: 10--6.042500-10.000000
-X-TMASE-MatchedRID: wJuAbHRzrYfH3ZCJRIiNpAXGi/7cli9jG3SoAWcU42VD0XHWdCmZPCXj
-	tnu2lwmLkPI1/ZdqoS0pVSN22QMNpsyvuTCA7wzlolVO7uyOCDXBOVz0Jwcxl6vCrG0TnfVUIb5
-	NpqK++5qbpZ8QUEHE+lcnoO4Nx+lojejKCMx4rt64u3nS+3EEDpki3iIBA3o/vy9ABIQaa1mjxY
-	yRBa/qJcFwgTvxipFa9xS3mVzWUuA4wHSyGpeEeiw2x397pFEmTHLkTUFitAOaKHuLVl3J1P0zo
-	l91xrHXEgajmqqPXvQ=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b402e92-d874-4b30-9108-f521bd20d36c@sifive.com>
 
-The only way create_namespace_pmem() returns an ENODEV code is if
-select_pmem_id(nd_region, &uuid) returns ENODEV when its 2nd parameter
-is a null pointer. However, this is impossible because &uuid is always
-valid.
+On Thu, Jul 18, 2024 at 04:46:17PM -0500, Samuel Holland wrote:
+> On 2024-07-16 6:13 AM, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Move code dealing with numa_distance array from arch/x86 to
+> > mm/numa_memblks.c
+> > 
+> > This code will be later reused by arch_numa.
+> > 
+> > No functional changes.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> >  arch/x86/mm/numa.c                   | 101 ---------------------------
+> >  arch/x86/mm/numa_internal.h          |   2 -
+> >  include/linux/numa_memblks.h         |   4 ++
+> >  {arch/x86/mm => mm}/numa_emulation.c |   0
+> >  mm/numa_memblks.c                    | 101 +++++++++++++++++++++++++++
+> >  5 files changed, 105 insertions(+), 103 deletions(-)
+> >  rename {arch/x86/mm => mm}/numa_emulation.c (100%)
+> 
+> The numa_emulation.c rename looks like it should be part of the next commit, not
+> this one.
 
-Furthermore, create_namespace_pmem() is the only user of
-select_pmem_id(), it's safe to remove the 'return -ENODEV' branch.
+Right, thanks!
 
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-V2:
-  new patch.
-  It's found when I'm Reviewing/tracing the return values of create_namespace_pmem()
----
- drivers/nvdimm/namespace_devs.c | 9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index 28c9afc01dca..21020cd16117 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -1612,9 +1612,6 @@ static int select_pmem_id(struct nd_region *nd_region, const uuid_t *pmem_id)
- {
- 	int i;
- 
--	if (!pmem_id)
--		return -ENODEV;
--
- 	for (i = 0; i < nd_region->ndr_mappings; i++) {
- 		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
- 		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
-@@ -1790,9 +1787,6 @@ static struct device *create_namespace_pmem(struct nd_region *nd_region,
- 	case -EINVAL:
- 		dev_dbg(&nd_region->dev, "invalid label(s)\n");
- 		break;
--	case -ENODEV:
--		dev_dbg(&nd_region->dev, "label not found\n");
--		break;
- 	default:
- 		dev_dbg(&nd_region->dev, "unexpected err: %d\n", rc);
- 		break;
-@@ -1974,9 +1968,6 @@ static struct device **scan_labels(struct nd_region *nd_region)
- 			case -EAGAIN:
- 				/* skip invalid labels */
- 				continue;
--			case -ENODEV:
--				/* fallthrough to seed creation */
--				break;
- 			default:
- 				goto err;
- 			}
 -- 
-2.29.2
-
+Sincerely yours,
+Mike.
 
