@@ -1,123 +1,156 @@
-Return-Path: <nvdimm+bounces-8797-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8800-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28D68958DF9
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Aug 2024 20:27:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7AA1958EF7
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Aug 2024 21:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B8CF1C20AD9
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Aug 2024 18:27:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08B77B21939
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Aug 2024 19:59:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C92C1C3F25;
-	Tue, 20 Aug 2024 18:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E4A15CD64;
+	Tue, 20 Aug 2024 19:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Id7GJg0w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDWkoWTz"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF6F1990B5
-	for <nvdimm@lists.linux.dev>; Tue, 20 Aug 2024 18:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A4715C13E
+	for <nvdimm@lists.linux.dev>; Tue, 20 Aug 2024 19:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724178436; cv=none; b=EBIpZR0/8YMTIrpctbVuVs26iHhA76DqT/9M1rP+khJ8UdZG+Rm7xjLoYuDxL+7sdh+1eDRUPkj7q8b2OQ8l8BIR+MyykT1Q1pZ5hdGSGvhpRztamuyeZLoZhnulrbAzS+mfv9+VKYM4mzruv8/labmMsyt214kz9BIRioBBsow=
+	t=1724183947; cv=none; b=Ex4jrQ2SO3ncDVQEHe/6fY4VBYxyHzRypWSE5cgEY2Zaybf7jYjVz7ehNMIztq02kGBV+tA2OgKrdFYiBwlMUc2Z5EcuUADAKNrmIpRg/HNI7m5oSzvgjkFYaWBpYrxP+s05Qh+offeM5JsL3XW7Ju+2TDHLaZBn4VikH/AQEDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724178436; c=relaxed/simple;
-	bh=r/0VVvIh1ICVoRY8ZnDee3hXMlgEX26A6icGSipczhw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lZ+Jrj31Zm3j/plS6Gfp2P1rIvlguj6+tPI2meySG8xajHs9HBgJ1WUUp3RZg/sXefE93QlpCwFqp8wHjZBANtBcENJxfphapZTYq5GYeaTXh7wBIyhk3iiZVazJ2IdpZZg7bEPWt3y/fCg2ISSDhRokhWc7/zkUGXC59W8xqtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Id7GJg0w; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724178433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KFjd8rs2HCbyk4O3ZbMEg6FulInHI9ojnAFErBM4d08=;
-	b=Id7GJg0wr2yTgCXpUZvla5JoX/jRGBh1zKw3YhicFNjyXvMYNRc0XNA0BfRJvrufLv4emP
-	TTzvVEPlkhsrEvHHPzrfYHqnVYVvh4y9iTn3pN0b5OyyPhQk1tWxUSVogYdwRdOw7ihtRz
-	fHkjLbFA88JUd384K5MPQU7eOz4uZtI=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-459-uDG6S43QNSKnC-C4aaEp3g-1; Tue,
- 20 Aug 2024 14:27:12 -0400
-X-MC-Unique: uDG6S43QNSKnC-C4aaEp3g-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0C2F71955F42
-	for <nvdimm@lists.linux.dev>; Tue, 20 Aug 2024 18:27:11 +0000 (UTC)
-Received: from segfault.usersys.redhat.com (unknown [10.22.32.128])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A8941955F54
-	for <nvdimm@lists.linux.dev>; Tue, 20 Aug 2024 18:27:10 +0000 (UTC)
-Received: by segfault.usersys.redhat.com (Postfix, from userid 3734)
-	id 371EC22B0C5A; Tue, 20 Aug 2024 14:27:08 -0400 (EDT)
-From: jmoyer@redhat.com
-To: nvdimm@lists.linux.dev
-Subject: [PATCH ndctl 2/2] libndctl.c: major and minor numbers are unsigned
-Date: Tue, 20 Aug 2024 14:26:41 -0400
-Message-ID: <20240820182705.139842-3-jmoyer@redhat.com>
-In-Reply-To: <20240820182705.139842-1-jmoyer@redhat.com>
-References: <20240820182705.139842-1-jmoyer@redhat.com>
+	s=arc-20240116; t=1724183947; c=relaxed/simple;
+	bh=xhAVo+kjcvMHnq1gFSCI2mBbqvKq52RVOl845p1g/Uk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=crx1o3In7uBztGMsCVj6AoicMtJQbWUg1oJnFHEEHV84ZT31cZVdlg2EoMo8Vr2JAknzBP4YulmVVXh3pGEeScCSMk1u4/xO/ZDJIOVbDlhi33e04GmdhyKd6DKljHhW9jABFqikndQxgrK6Mk5e4hhe+HwH/5j/xAMOJLDPMEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDWkoWTz; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724183945; x=1755719945;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=xhAVo+kjcvMHnq1gFSCI2mBbqvKq52RVOl845p1g/Uk=;
+  b=MDWkoWTzMLnsqU/Bx/QEpY5QaO8VjUxkssS0XHV3j/HMmE9wnDbRTJQl
+   pqhNMYEbKrUL03Ng3RG+51ZZTXHu2CfxiZhIvuxkdN7btYH6UNtImDY6q
+   yj0uqxFD3v1Co9nHgROXXkd57V6t9/w/rm1+yl0vlPBUsVxTOnS72MQdy
+   kbn6LLnNGqASRSb/50xd8eq1O0sP79oVEmSTdvALz0CqbI4pMzzZ4VEA/
+   U1vrzwVvefOChy6DiTTY+rBwkXQmiUPHM40RNaLkXDWux27HmdeVpyUdm
+   0tV98+IKsl0bB4e8Xc4VfYnb3bNTT6B70Qbg7pSZJPDbsuL+bdXepIaQF
+   w==;
+X-CSE-ConnectionGUID: hnlFfacPQ/mZVpIF/Bmaqw==
+X-CSE-MsgGUID: RX5wwjKHTXi7jYwgxPt4AA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="40023802"
+X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
+   d="scan'208";a="40023802"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 12:59:04 -0700
+X-CSE-ConnectionGUID: pGpHl6dfSCq2RvfGioguOA==
+X-CSE-MsgGUID: xUR6hFW9Tz+Jt2XUIo5jFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
+   d="scan'208";a="65199041"
+Received: from cdpresto-mobl2.amr.corp.intel.com.amr.corp.intel.com (HELO [10.125.108.88]) ([10.125.108.88])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 12:59:04 -0700
+Message-ID: <5eed5740-d77e-4774-95e5-2320ae1386a5@intel.com>
+Date: Tue, 20 Aug 2024 12:59:03 -0700
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH ndctl 1/2] ndctl/keys.c: don't leak fd in error cases
+To: jmoyer@redhat.com, nvdimm@lists.linux.dev
+References: <20240820182705.139842-1-jmoyer@redhat.com>
+ <20240820182705.139842-2-jmoyer@redhat.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20240820182705.139842-2-jmoyer@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Jeff Moyer <jmoyer@redhat.com>
 
-Static analysis points out that the cast of bus->major and bus->minor
-to a signed type in the call to parent_dev_path could result in a
-negative number.  I sincerely doubt we'll see major and minor numbers
-that large, but let's fix it.
 
-Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
----
- ndctl/lib/libndctl.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+On 8/20/24 11:26 AM, jmoyer@redhat.com wrote:
+> From: Jeff Moyer <jmoyer@redhat.com>
+> 
+> Static analysis points out that fd is leaked in some cases.  The
+> change to the while loop is optional.  I only did that to make the
+> code consistent.
+> 
+> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
 
-diff --git a/ndctl/lib/libndctl.c b/ndctl/lib/libndctl.c
-index ddbdd9a..f75dbd4 100644
---- a/ndctl/lib/libndctl.c
-+++ b/ndctl/lib/libndctl.c
-@@ -710,11 +710,12 @@ NDCTL_EXPORT void ndctl_set_log_priority(struct ndctl_ctx *ctx, int priority)
- 	daxctl_set_log_priority(ctx->daxctl_ctx, priority);
- }
- 
--static char *__dev_path(char *type, int major, int minor, int parent)
-+static char *__dev_path(char *type, unsigned int major, unsigned int minor,
-+			int parent)
- {
- 	char *path, *dev_path;
- 
--	if (asprintf(&path, "/sys/dev/%s/%d:%d%s", type, major, minor,
-+	if (asprintf(&path, "/sys/dev/%s/%u:%u%s", type, major, minor,
- 				parent ? "/device" : "") < 0)
- 		return NULL;
- 
-@@ -723,7 +724,7 @@ static char *__dev_path(char *type, int major, int minor, int parent)
- 	return dev_path;
- }
- 
--static char *parent_dev_path(char *type, int major, int minor)
-+static char *parent_dev_path(char *type, unsigned int major, unsigned int minor)
- {
-         return __dev_path(type, major, minor, 1);
- }
--- 
-2.43.5
-
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>  ndctl/keys.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/ndctl/keys.c b/ndctl/keys.c
+> index 2c1f474..cc55204 100644
+> --- a/ndctl/keys.c
+> +++ b/ndctl/keys.c
+> @@ -108,7 +108,7 @@ char *ndctl_load_key_blob(const char *path, int *size, const char *postfix,
+>  	struct stat st;
+>  	ssize_t read_bytes = 0;
+>  	int rc, fd;
+> -	char *blob, *pl, *rdptr;
+> +	char *blob = NULL, *pl, *rdptr;
+>  	char prefix[] = "load ";
+>  	bool need_prefix = false;
+>  
+> @@ -125,16 +125,16 @@ char *ndctl_load_key_blob(const char *path, int *size, const char *postfix,
+>  	rc = fstat(fd, &st);
+>  	if (rc < 0) {
+>  		fprintf(stderr, "stat: %s\n", strerror(errno));
+> -		return NULL;
+> +		goto out_close;
+>  	}
+>  	if ((st.st_mode & S_IFMT) != S_IFREG) {
+>  		fprintf(stderr, "%s not a regular file\n", path);
+> -		return NULL;
+> +		goto out_close;
+>  	}
+>  
+>  	if (st.st_size == 0 || st.st_size > 4096) {
+>  		fprintf(stderr, "Invalid blob file size\n");
+> -		return NULL;
+> +		goto out_close;
+>  	}
+>  
+>  	*size = st.st_size;
+> @@ -166,15 +166,13 @@ char *ndctl_load_key_blob(const char *path, int *size, const char *postfix,
+>  			fprintf(stderr, "Failed to read from blob file: %s\n",
+>  					strerror(errno));
+>  			free(blob);
+> -			close(fd);
+> -			return NULL;
+> +			blob = NULL;
+> +			goto out_close;
+>  		}
+>  		read_bytes += rc;
+>  		rdptr += rc;
+>  	} while (read_bytes != st.st_size);
+>  
+> -	close(fd);
+> -
+>  	if (postfix) {
+>  		pl += read_bytes;
+>  		*pl = ' ';
+> @@ -182,6 +180,8 @@ char *ndctl_load_key_blob(const char *path, int *size, const char *postfix,
+>  		rc = sprintf(pl, "keyhandle=%s", postfix);
+>  	}
+>  
+> +out_close:
+> +	close(fd);
+>  	return blob;
+>  }
+>  
 
