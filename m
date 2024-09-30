@@ -1,105 +1,106 @@
-Return-Path: <nvdimm+bounces-8970-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-8972-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF2598AD0A
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 30 Sep 2024 21:39:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 620ED98B098
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  1 Oct 2024 01:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92BF21C21A6D
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 30 Sep 2024 19:39:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 181C4283173
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 30 Sep 2024 23:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9275D199930;
-	Mon, 30 Sep 2024 19:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32BF18754F;
+	Mon, 30 Sep 2024 23:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="Ka4ws+iS"
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="AXP9ciQm"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from weasel.tulip.relay.mailchannels.net (weasel.tulip.relay.mailchannels.net [23.83.218.247])
+Received: from poodle.tulip.relay.mailchannels.net (poodle.tulip.relay.mailchannels.net [23.83.218.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675F1199234
-	for <nvdimm@lists.linux.dev>; Mon, 30 Sep 2024 19:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.218.247
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C831185B78
+	for <nvdimm@lists.linux.dev>; Mon, 30 Sep 2024 23:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=23.83.218.249
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727725132; cv=pass; b=nfHmvEcGDkXV5yFLAyoP7oMwAka0nATbcJY7eRMHwX7piZVvty2vXlLz1Uphsns7ZBoTLVRY+1O/olYbX7jNqCdh6AY4tkjnPvS+UqZXnz+9SjHiiNZw7pmzNJzaEn1hnG57tGzEPE2u7hRMMcopPl/ukewfqCKb9lFFdrB4Oas=
+	t=1727737231; cv=fail; b=qbKADtavk53FoCF5stv+mV5R0+54mPid0hr5UIEgMZwZGPRPF/WNzwyHmb6mpBC7mql22QyKNKsa7fo8DSCGhQuhIXCjll7MWUSfVPL2TlLKf9olXTeahLB+1to9aS8NGtbN6tlWuWg1NWwpE/+hshQBPzDFdyYZtkG5Gf1E020=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727725132; c=relaxed/simple;
-	bh=drvfoqRwLTPzEhF/GU5GtuJlQm1UODZr1pFD/5K1JrU=;
+	s=arc-20240116; t=1727737231; c=relaxed/simple;
+	bh=KGQa5lwA0CQtpO3ICzPVu3rf6sS/+2ak6kzxmj4+Z7Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lxlq9Ac7d8ersxNFi5oX0gnxzlTwhqxAN7uR6ys92ubOhGwGQ9IDbqArqr4274TtucaWsLqNFsUPyR6N4A5c/g38zmUdw0xzH+rm6r7v4XCP9HlkP+njr2m0AZY+vk15bdCDNkWjTJ1Yzt+VoObv/61yFbVvBRlOaLc1A48eO/I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=Ka4ws+iS; arc=pass smtp.client-ip=23.83.218.247
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJYCPDtVO7QFPbMiO6X9LX/me0sTbv21gb9IeEJu9jVw9Pz5Y5QnwKd1SbaHr5F/RD2LlnW5MB5qFZsHhoOWzyw3ycAeCql9rJFY2LgQdRu9XXlCzR0reDIUwZ/HSAav86qwZ7YvYUBsr+lcYB6KKmqx1IH0Qaec+ZMxgPy1NWc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=AXP9ciQm; arc=fail smtp.client-ip=23.83.218.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 755E95C626B;
-	Mon, 30 Sep 2024 19:31:03 +0000 (UTC)
-Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
+	by relay.mailchannels.net (Postfix) with ESMTP id 9DE3D163FD9;
+	Mon, 30 Sep 2024 21:41:01 +0000 (UTC)
+Received: from pdx1-sub0-mail-a244.dreamhost.com (100-99-145-32.trex-nlb.outbound.svc.cluster.local [100.99.145.32])
 	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 1128A5C6634;
-	Mon, 30 Sep 2024 19:31:03 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1727724663; a=rsa-sha256;
+	by relay.mailchannels.net (Postfix) with ESMTPA id 36B221640C0;
+	Mon, 30 Sep 2024 21:41:01 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1727732461; a=rsa-sha256;
 	cv=none;
-	b=Ey+7Dmd50zH8+noevr5o877sRUjywh3eDgJ0x+tqIWAzzGKoj9902R1siYjDo5xBJvnnvo
-	OAbTbRNo2wTWEC+W5xuqmz6R9tBAgNhYfDZh8Qs0ofzRabMfczPNNI27eZ6lMIrg0AlrK6
-	TaDOttwbDN2oglQGxz1tmC68a3gSyuWfMo3lPATZdoGXZb+MsmFwWT+2N6XD1e01/kIL7A
-	sFr0KygRoystzJDzWjwD6l991FESBdDach0Ht7UuXK99KTWF/lcnCAeaIqHsQft95Yx6wq
-	ox6vfA5RpWOTfLTDpjk78ntjaqos2Kp5DQjFAtXjMOHnErUhUnR5HP9eNq+SnA==
+	b=bBGaeKzoz+76+3M42BDwGGaxwdm92yOnu8h1sSyaldwXstSGEtvNrDtBj6LrXnC4I4qReY
+	ZdFe5XEy46uiO7BYs+hea7zfXlsn4Fbx5LGByt3YtURDwkPmBRXcraSLS+5fG2IwQ2lRdG
+	2S1wUwCQC2NrBdjNRNayAJxQ8XPg5bYWVm7BZ2JvcdzJEpeEY52/Tc+UZSdWKVWZM+M2I9
+	qbcHvEeuV6a527R9G78SRUPE2ZVjPMNHPpVLdM6ABHx+8eN6FrRH2c2TOHzM43nDo26lCk
+	Rs7pIQRJtI/2ERce+6TW8RrmVx0Ah3xfXaAr3KDac/66NUgmLlpTnXamUiZ31Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-	s=arc-2022; t=1727724663;
+	s=arc-2022; t=1727732461;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=aRWDBQPsV6KbvpbJ88AAbGqasNK6ffj6dOPqME6msik=;
-	b=DVkuASwblSHzC8Wb3d89NoPn12vfNMLDFliGevfXLWR6VFoDfKCOYWHqVuYDfNeeGgEEYG
-	5oQoD+eDB2VU+d2pme4hbgX4SgSD0KcRsbLxh6viHli6dtmTrlJtMrDonEYn1naeR3jRRq
-	BBD3W9wcOj1/K/tUcrhicrjwF53N42AxfvStzUc8U+19yxayWXxJ7WfLZjr58peSR1e8dv
-	lrNp9Hq0+JLO/Qt9PL9iRfJElnK6Azp12kkerQkx/k5Ri4HaKtDWOaDrWKEhSbaGLgLgCn
-	k20JWKpcOhrUwE/C6IJpA1u0WSyJ67IDZgRLzHxef1J5kRRGEFr6qIKvNWfb7A==
+	bh=lIdkrqI+cq4xAtYGgNrIChsgwaZla+y553BzB6wMkVM=;
+	b=Sj9RptH9POwyd6VqZECa5+I/FHcSCM/f+Kd/cPHEFDPJSbTuwCpJgTLtlTdv935WRweMnT
+	S3Yu/dzVLqOxjbqSFX8I55F+fFdWE5hDe2hm2mcskQ905hgVk1RVnGyusTuXVZE8jEELSS
+	jPkgdc99BbSw4+Gb7l++euDpzfB3v/7Pl6zTn5RSXOMu9y4wTb+Ex8xjCcuHdpIPDJw+C7
+	LE6eQfCEPwsh37LIis5yRQFLS1z8ol5jV5WyCjlIRGErSwgoEAQrEKzwcbiQ2cPOfB8cFw
+	xcgqRd1N//D07rvdqfP+ul4jDnkqjOzCH0ZYcSTXyKRuyJ60bPkwrJ4wSRF8iA==
 ARC-Authentication-Results: i=1;
-	rspamd-5b468d8b77-4ctkl;
+	rspamd-657f47799c-zn9dx;
 	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Drop-Thoughtful: 1a96d8b7640a480b_1727724663307_2316578376
-X-MC-Loop-Signature: 1727724663307:2520058090
-X-MC-Ingress-Time: 1727724663307
-Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
+X-Zesty-Cooing: 7f33fdac763de419_1727732461461_1316246610
+X-MC-Loop-Signature: 1727732461461:167932956
+X-MC-Ingress-Time: 1727732461460
+Received: from pdx1-sub0-mail-a244.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.114.165.125 (trex/7.0.2);
-	Mon, 30 Sep 2024 19:31:03 +0000
+	by 100.99.145.32 (trex/7.0.2);
+	Mon, 30 Sep 2024 21:41:01 +0000
 Received: from offworld (unknown [104.36.31.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4XHWQG2jfszKk;
-	Mon, 30 Sep 2024 12:31:02 -0700 (PDT)
+	by pdx1-sub0-mail-a244.dreamhost.com (Postfix) with ESMTPSA id 4XHZJD3B3lz5Z;
+	Mon, 30 Sep 2024 14:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1727724662;
-	bh=aRWDBQPsV6KbvpbJ88AAbGqasNK6ffj6dOPqME6msik=;
+	s=dreamhost; t=1727732461;
+	bh=UNJQohW8Zsni2T4+DfIQDy74rbrJsCFmu6epjouBvf4=;
 	h=Date:From:To:Cc:Subject:Content-Type;
-	b=Ka4ws+iS4gXGBIQ9t8Sa9VaX9Pz5vmqpgsB2Lx2FgIP1Ymh+TtIVlOwjbTh4mORRA
-	 twM2du+w5aJFbPeUGSo0wYNCEzAMGlJkRg87QW3aYF1d4bHTQKX5si3FQWiLKForAH
-	 mg1+Qg57D56o6z8ov3+TLsIhTYo12dHt3eei4FPtUtCSCCsCw6fwDE8zMdfQ7vg3aj
-	 HdiymQD+u+jC1dxOTQFBmRnC+CMiMqq9MWq1hu04cGIa3J29hzdk0McEqqkCe6/omK
-	 km7OU4rJhofkSV4U2Q0GBaGLck/PZPjKevMAa9EHoWSqu5+J/jDMxbgmWY5SJkA1tY
-	 qJtAzQKu0lkaA==
-Date: Mon, 30 Sep 2024 12:29:35 -0700
+	b=AXP9ciQm5e5NVzOgO6pth+7WwL7y7BQTfZOyg2qIr1Kb5X2UmXObx9aD2Ms0VAhvV
+	 1nwp9Vd1iwHygUMAxCzwXWibVFE4W1Y36mShgMpAUBbSk0Mfig8cG9qTqHNDEjLOWk
+	 0jzPUbYbrMm7hrvOG9nLTZKgHzXnpqKvg+4eajAg8YtU71/+x/G3cOO2ynPONsCcYQ
+	 MJQjoxtKg/euvPnYA428Ahff6Zret7l7jNbFMMzOJBtaoskIFKv7yIe8sPaa4JNOpM
+	 ObddNgkRCryhGFwtx7kAa5D8fNU2tHL3vcmhfm/gzyB9pIn2SFddvOOxYMz9Psz0pK
+	 22kThuS6RnKtw==
+Date: Mon, 30 Sep 2024 14:39:33 -0700
 From: Davidlohr Bueso <dave@stgolabs.net>
 To: Alison Schofield <alison.schofield@intel.com>
 Cc: vishal.l.verma@intel.com, y-goto@fujitsu.com, dave.jiang@intel.com, 
 	dan.j.williams@intel.com, linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
 Subject: Re: [PATCH -ndctl] cxl/memdev: Introduce sanitize-memdev
  functionality
-Message-ID: <f6ybfabcft5wcpx2wuoxf3qgwset3h4nhngn5c4jk6ssudl5gj@o2ssocnihy6t>
+Message-ID: <ngnoxz6w6q3y6korof6mepzvw2jyx4trlii7zon5jcoafobbfp@4z5ld55qgvqy>
 References: <20240928211643.140264-1-dave@stgolabs.net>
  <ZvrhusA7So_u51W_@aschofie-mobl2.lan>
+ <f6ybfabcft5wcpx2wuoxf3qgwset3h4nhngn5c4jk6ssudl5gj@o2ssocnihy6t>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -108,66 +109,26 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <ZvrhusA7So_u51W_@aschofie-mobl2.lan>
+In-Reply-To: <f6ybfabcft5wcpx2wuoxf3qgwset3h4nhngn5c4jk6ssudl5gj@o2ssocnihy6t>
 User-Agent: NeoMutt/20240425
 
-Hi Alison,
+On Mon, 30 Sep 2024, Davidlohr Bueso wrote:\n
 
-On Mon, 30 Sep 2024, Alison Schofield wrote:\n
->+ nvdimm@lists.linux.dev
->
->On Sat, Sep 28, 2024 at 02:16:42PM -0700, Davidlohr Bueso wrote:
->> Add a new cxl_memdev_sanitize() to libcxl to support triggering memory
->> device sanitation, in either Sanitize and/or Secure Erase, per the
->> CXL 3.0 spec.
->>
->> This is analogous to 'ndctl sanitize-dimm'.
->>
->> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
->
->Hi David,
->
->I'm wrangling patches for ndctl now and need your help with this one.
+>     cxl sanitize-memdev -e mem0 <-- secure erase
+>     cxl sanitize-memdev mem0 <-- sanitize
 
-Ah I missed that, sorry I didn't Cc you.
+Not related to this patch (I will post v2), but just for future reference, and
+perhaps someone has thoughts. Whenever the kernel supports Media Operation
+(4402h in 3.1), I see this utility expanding to something like:
 
->
->Looking at the lore history, you posted a patchset for wait-sanitize &
->sanitize-memdev in Apr'03.[1] and update with rev2.[2] Later in Oct'23
->Dan posted a patchset with wait-sanitize and a unit test that was merged
->in ndctl v80.[3,4]  A quick look at the code tells me Dan did not just
->grab your implementation. It differs.
+       cxl sanitize-memdev --zero A1-A2 [B1-B2 C1-C2] <-- zero-out ranges
+       cxl sanitize-memdev --zero mem0 <-- internally use all the mem0 range
+       cxl sanitize-memdev A1-A2 [B1-B2 C1-C2] <-- sanitize ranges
+       cxl sanitize-memdev -e A1-A2 [B1-B2 C1-C2] <-- error
 
-While the implementations of wait-sanitize are slightly different between
-what I posted and Dan's patches, it is not fundamentally very different
-(poll on the file).
+... and perhaps the kernel would need a security/zero as well as a
+security/{sanitize_range,zero_range} set of files.
 
->
->Can you confirm that the two features as a set are what you want today?
-
-I can.
-
->Are the last comments from Vishal and I addressed? [2]
-
-So I had made sure to address the libcxl.sym comments but just noticed
-that the -s option wanted to be removed as it will the the default. So
-only have the -e option for secure erase alternative (and not allow for
-both to be specified at the same time).
-
-      cxl sanitize-memdev -e mem0 <-- secure erase
-      cxl sanitize-memdev mem0 <-- sanitize
-
->Can the existing unit test be expanded with a sanitize-memdev test case?
-
-Good point. Yeah we could trivially replace those
-
-      echo 1 > /sys/bus/cxl/devices/${inactive}/security/sanitize && err $LINENO
-
-with
-
-      "$CXL" sanitize-memdev $inactive || err $LINENO
-
-
-Thanks,
-Davidlohr
+Of course the underlying memdev for the specified ranges would still need to be
+offline entirely, just as is now.
 
