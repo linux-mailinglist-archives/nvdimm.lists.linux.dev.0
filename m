@@ -1,291 +1,307 @@
-Return-Path: <nvdimm+bounces-9117-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9119-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF8DD9A3211
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 18 Oct 2024 03:30:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F9459A3959
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 18 Oct 2024 11:03:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D289C1C216F5
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 18 Oct 2024 01:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DA70284FFB
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 18 Oct 2024 09:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD4145C18;
-	Fri, 18 Oct 2024 01:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="be+RhvSV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42CA18FDDE;
+	Fri, 18 Oct 2024 09:03:15 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E552D7BF
-	for <nvdimm@lists.linux.dev>; Fri, 18 Oct 2024 01:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED24018E76B
+	for <nvdimm@lists.linux.dev>; Fri, 18 Oct 2024 09:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729215011; cv=none; b=LokYIJgaMJ2x+/ghb0SKTnwKbc8T6gY77goOG/BqMcL7v6D+o9+sFGGoitt96A+zwCQ4R4i7Rg7u7NDgIzO7vF4br03nOWPhdeqKSg7VpfUR986YMtI4x2kB7PqXllxBffCxi7aMNdVn/2PXggWsxF4RxOuUeYDNxwvDnEiJJA0=
+	t=1729242195; cv=none; b=Pe5PPM6glP11oNLaHaEONOovxBko4nPFxHXs+HEyn6OZrSS6BZNFvKQQQcUASmmy5KLeVoa2sSfFeXvehnwrZsmoK6dHKeGf80U5ksQDUrntkl+f29iLEOX+1h7Dvelbv/vR1Yw0MFSe/ix7Xa63kJkXPci617aXzvdgna0VXZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729215011; c=relaxed/simple;
-	bh=ARm9CdF/CqkuZrcM7QwN+wl9hZM+rn5ag6V2mqobYvg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YjqcXcYjZcuEsulH11zjcjPm/g4VJEeewRMXWMmLQQxmnv6jZCZgFm12r4LDfbgRZhx7VE/ZpVRiRQhdscIM9yVIncN64/oZU94R0D3nPWls2JA41eit1Lmg5SD80nCbbDfIeJcbKIiJop6oeZD+FVSm0KcL9gfYru354pWz0ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=be+RhvSV; arc=none smtp.client-ip=68.232.139.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1729215008; x=1760751008;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ARm9CdF/CqkuZrcM7QwN+wl9hZM+rn5ag6V2mqobYvg=;
-  b=be+RhvSVUtUpLKvs3FxlcUKkRtpie9AI+3wfc+CDTQMo/LzwI9tcJbjQ
-   XFM5CKIcetn/KRe6UawoX/8RwZ3r1vbErOD7U34t1Elg9KDxOmMZ9bTyo
-   Q6Lr3eZGD38rF+7RVLKvYcilOhfwAco3BBkkVid0gJ/e1wSrnPpTUd/qO
-   aP8AibPgo0M1T6o8asBdfMvixrrsUSOqbohGgPyGYs3UUbZtmDoCLVbfq
-   txrbNqmOua8C8PKBfiJFaHykyno0SsgaYAtf8p/eAag7rlMV3hhNxSQxe
-   zVBfTvE+GaOx7/tUl5hd5SqhGIJKcdWrIL9+p5AEWOe9tneuvuVKyUhkZ
-   g==;
-X-CSE-ConnectionGUID: 3/iQO9IlTEyVHWfcRyYiNg==
-X-CSE-MsgGUID: +u1V3QOnSMa6Rz/YMaq8GA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="179323637"
-X-IronPort-AV: E=Sophos;i="6.11,212,1725289200"; 
-   d="scan'208";a="179323637"
-Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 10:29:43 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 91DE7C9440
-	for <nvdimm@lists.linux.dev>; Fri, 18 Oct 2024 10:29:40 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id BF0CACFBA4
-	for <nvdimm@lists.linux.dev>; Fri, 18 Oct 2024 10:29:39 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 55BA340A7D
-	for <nvdimm@lists.linux.dev>; Fri, 18 Oct 2024 10:29:39 +0900 (JST)
-Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id E486F1A01ED;
-	Fri, 18 Oct 2024 09:29:38 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: nvdimm@lists.linux.dev
-Cc: linux-cxl@vger.kernel.org,
-	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [ndctl PATCH v3 2/2] test/monitor.sh: Fix shellcheck SC2086 issues as more as possible
-Date: Fri, 18 Oct 2024 09:30:20 +0800
-Message-ID: <20241018013020.2523845-2-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20241018013020.2523845-1-lizhijian@fujitsu.com>
-References: <20241018013020.2523845-1-lizhijian@fujitsu.com>
+	s=arc-20240116; t=1729242195; c=relaxed/simple;
+	bh=7nnWLfvroPjQ3WSiLUmBIOWohRKgJsHdFTrjyFHfjxA=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ae/PNii/UMjffZE1stMFk/rnBcD9WpeY7MEFme4HpUp96YvdLjtgBwTbcm3LgFz9zb07UJk8CvsAimrtTBpjAECMGFirEqI4wgRnn9KJPAg3Pr8zEUIF1m2qP5jlqGGuawJJ4puNMkSZ9hrqD+HeTHM73tV1TgvP/VClahiytC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XVJbR06lDz6K6YX;
+	Fri, 18 Oct 2024 17:01:23 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id C6075140CF4;
+	Fri, 18 Oct 2024 17:03:09 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 18 Oct
+ 2024 11:03:09 +0200
+Date: Fri, 18 Oct 2024 10:03:07 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Ira Weiny <ira.weiny@intel.com>
+CC: "Li, Ming4" <ming4.li@intel.com>, Dave Jiang <dave.jiang@intel.com>, "Fan
+ Ni" <fan.ni@samsung.com>, Navneet Singh <navneet.singh@intel.com>, "Jonathan
+ Corbet" <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>, "Dan
+ Williams" <dan.j.williams@intel.com>, Davidlohr Bueso <dave@stgolabs.net>,
+	Alison Schofield <alison.schofield@intel.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, <linux-btrfs@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 21/28] cxl/extent: Process DCD events and realize
+ region extents
+Message-ID: <20241018100307.000008a9@Huawei.com>
+In-Reply-To: <67117e57479b3_2cee2942d@iweiny-mobl.notmuch>
+References: <20241007-dcd-type2-upstream-v4-0-c261ee6eeded@intel.com>
+	<20241007-dcd-type2-upstream-v4-21-c261ee6eeded@intel.com>
+	<4337ddd9-312b-4fb7-9597-81e8b00d57cb@intel.com>
+	<6706de3530f5c_40429294b8@iweiny-mobl.notmuch>
+	<20241010155014.00004bdd@Huawei.com>
+	<67117e57479b3_2cee2942d@iweiny-mobl.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28738.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28738.003
-X-TMASE-Result: 10--10.532800-10.000000
-X-TMASE-MatchedRID: GJWipKZ49enCS1NeCvs3qIdlc1JaOB1TqMXw4YFVmwhf/JRqlbLSV7Sn
-	Jfu7KIKtEi5XEH00QubCsyZB1bKGqCqQO0zIUpyn8IK7yRWPRNEk2ugFoZn4tZE8TgOkbzEohEz
-	I3+mkzifvPrWB/m7DX0y+rse8BOXw0hQoRxePIEGfrLSY2RbRpE3yuY9BGW8r9Iz2KSWO8hx7j+
-	VBlZHsEjjiJ+c203Ms8vc3EUpCmrVzE1fI6N2sO0hwlOfYeSqxIm2Js0m7E8KhuT/MQ6uAV/qAD
-	eqinEVf2cknzgMeAbs51K+dagOOz/XhWE12qWg+GYJhRh6sses4Ddbs3t0GCZ6fSoF3Lt+M5aE0
-	pi4zt43jfe52KJUqfc/7jrKpSJx3HxPMjOKY7A8LbigRnpKlKSPzRlrdFGDwZbSJQ9f2HSlhgIr
-	YE2VKa7ZEfCsCXb1sr/ygZ6K2Kn21GQ3EnYnJTA==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-SC2086 [1], aka. Double quote to prevent globbing and word splitting.
+On Thu, 17 Oct 2024 16:15:03 -0500
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-Previously, SC2086 will cause error in [[]] or [], for example
-$ grep -w line build/meson-logs/testlog.txt
-test/monitor.sh: line 99: [: too many arguments
-test/monitor.sh: line 99: [: nmem0: binary operator expected
+> Jonathan Cameron wrote:
+> > On Wed, 9 Oct 2024 14:49:09 -0500
+> > Ira Weiny <ira.weiny@intel.com> wrote:
+> >   
+> > > Li, Ming4 wrote:  
+> > > > On 10/8/2024 7:16 AM, ira.weiny@intel.com wrote:    
+> > > > > From: Navneet Singh <navneet.singh@intel.com>
+> > > > >    
+> 
+> [snip]
+> 
+> > >   
+> > > > > +static int cxl_send_dc_response(struct cxl_memdev_state *mds, int opcode,
+> > > > > +				struct xarray *extent_array, int cnt)
+> > > > > +{
+> > > > > +	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+> > > > > +	struct cxl_mbox_dc_response *p;
+> > > > > +	struct cxl_mbox_cmd mbox_cmd;
+> > > > > +	struct cxl_extent *extent;
+> > > > > +	unsigned long index;
+> > > > > +	u32 pl_index;
+> > > > > +	int rc;
+> > > > > +
+> > > > > +	size_t pl_size = struct_size(p, extent_list, cnt);
+> > > > > +	u32 max_extents = cnt;
+> > > > > +
+> > > > > +	/* May have to use more bit on response. */
+> > > > > +	if (pl_size > cxl_mbox->payload_size) {
+> > > > > +		max_extents = (cxl_mbox->payload_size - sizeof(*p)) /
+> > > > > +			      sizeof(struct updated_extent_list);
+> > > > > +		pl_size = struct_size(p, extent_list, max_extents);
+> > > > > +	}
+> > > > > +
+> > > > > +	struct cxl_mbox_dc_response *response __free(kfree) =
+> > > > > +						kzalloc(pl_size, GFP_KERNEL);
+> > > > > +	if (!response)
+> > > > > +		return -ENOMEM;
+> > > > > +
+> > > > > +	pl_index = 0;
+> > > > > +	xa_for_each(extent_array, index, extent) {
+> > > > > +
+> > > > > +		response->extent_list[pl_index].dpa_start = extent->start_dpa;
+> > > > > +		response->extent_list[pl_index].length = extent->length;
+> > > > > +		pl_index++;
+> > > > > +		response->extent_list_size = cpu_to_le32(pl_index);
+> > > > > +
+> > > > > +		if (pl_index == max_extents) {
+> > > > > +			mbox_cmd = (struct cxl_mbox_cmd) {
+> > > > > +				.opcode = opcode,
+> > > > > +				.size_in = struct_size(response, extent_list,
+> > > > > +						       pl_index),
+> > > > > +				.payload_in = response,
+> > > > > +			};
+> > > > > +
+> > > > > +			response->flags = 0;
+> > > > > +			if (pl_index < cnt)
+> > > > > +				response->flags &= CXL_DCD_EVENT_MORE;    
+> > > > 
+> > > > It should be 'response->flags |= CXL_DCD_EVENT_MORE' here.    
+> > > 
+> > > Ah yea.  Good catch.
+> > >   
+> > > > 
+> > > > Another issue is if 'cnt' is N times bigger than 'max_extents'(e,g. cnt=20, max_extents=10). all responses will be sent in this xa_for_each(), and CXL_DCD_EVENT_MORE will be set in the last response but it should not be set in these cases.
+> > > >     
+> > > 
+> > > Ah yes.  cnt must be decremented.  As I looked at the patch just now the
+> > > 
+> > > 	if (cnt == 0 || pl_index)
+> > > 
+> > > ... seemed very wrong to me.  That change masked this bug.
+> > > 
+> > > This should fix it:
+> > > 
+> > > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> > > index d66beec687a0..99200274dea8 100644
+> > > --- a/drivers/cxl/core/mbox.c
+> > > +++ b/drivers/cxl/core/mbox.c
+> > > @@ -1119,10 +1119,11 @@ static int cxl_send_dc_response(struct cxl_memdev_state *mds, int opcode,
+> > >                         if (rc)
+> > >                                 return rc;
+> > >                         pl_index = 0;
+> > > +                       cnt -= pl_index;
+> > >                 }
+> > >         }
+> > >  
+> > > -       if (cnt == 0 || pl_index) {  
+> > 
+> > I thought this cnt == 0 check was to deal with the no valid
+> > extents case where an empty reply is needed.  
+> 
+> Yes but the bug found by Ming needs to be handled too.  I see Fan is also
+> questioning this code.
+> 
+> So...  for clarity among all of us here is the new function.  I'm not thrilled
+> with the use of a goto but I think it is ok here.
 
-Firstly,  generated diff by shellcheck tool:
-$ shellcheck -i SC2086 -f diff test/monitor.sh
+Easy enough to avoid and I don't think it hurts readability much to do so.
 
-In addition, we have remove the double quote around $1 like below
-changes. That's because when an empty "$1" passed to a command will open to ''
-it would cause an error, for example
-$ ndctl/build/test/list-smart-dimm -b nfit_test.0 ''
-  Error: unknown parameter ""
+Your code should work though.
 
--       $NDCTL monitor -c "$monitor_conf" -l "$logfile" "$1" &
-+       $NDCTL monitor -c "$monitor_conf" -l "$logfile" $1 &
+> 
+> Ira
+> 
+> static int cxl_send_dc_response(struct cxl_memdev_state *mds, int opcode,      
+>                                struct xarray *extent_array, int cnt)           
+> {                                                                              
+>        struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;                    
+>        struct cxl_mbox_dc_response *p;                                         
+>        struct cxl_mbox_cmd mbox_cmd;                                           
+>        struct cxl_extent *extent;                                              
+>        unsigned long index;                                                    
+>        u32 pl_index;                                                           
+>        int rc;                                                                 
+>                                                                                
+>        size_t pl_size = struct_size(p, extent_list, cnt);                      
+>        u32 max_extents = cnt;                                              
+>                                                                                
+>        /* May have to use more bit on response. */                             
+>        if (pl_size > cxl_mbox->payload_size) {                                 
+>                max_extents = (cxl_mbox->payload_size - sizeof(*p)) /           
+>                              sizeof(struct updated_extent_list);               
+>                pl_size = struct_size(p, extent_list, max_extents);
+             
+>        }                                                                       
+>                                                                                
+>        struct cxl_mbox_dc_response *response __free(kfree) =                   
+>                                                kzalloc(pl_size, GFP_KERNEL);   
+>        if (!response)                                                          
+>                return -ENOMEM;                                                 
+>                                                                                
+>        pl_index = 0;                                                           
+>        if (cnt == 0)                                                           
+>                goto send_zero_accepted;
+>        xa_for_each(extent_array, index, extent) {                              
+>                response->extent_list[pl_index].dpa_start = extent->start_dpa;  
+>                response->extent_list[pl_index].length = extent->length;        
+>                pl_index++;                                                     
+>                response->extent_list_size = cpu_to_le32(pl_index);    
 
--       jlist=$("$TEST_PATH"/list-smart-dimm -b "$smart_supported_bus" "$1")
-+       jlist=$("$TEST_PATH"/list-smart-dimm -b "$smart_supported_bus" $1)
+Why set this here - to me makes more sense to set it only once but I can
+see the logic either way.
+         
+>   
+>                if (pl_index == max_extents) {                                  
+>                        mbox_cmd = (struct cxl_mbox_cmd) {                      
+>                                .opcode = opcode,                               
+>                                .size_in = struct_size(response, extent_list,   
+>                                                       pl_index),               
+>                                .payload_in = response,                         
+>                        };                                                      
+>                                                                                
+>                        response->flags = 0;                                    
+>                        if (pl_index < cnt)                                     
+>                                response->flags &= CXL_DCD_EVENT_MORE;          
+>                                                                                
+>                        rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);        
+>                        if (rc)                                                 
+>                                return rc;                                      
+>                        cnt -= pl_index;                                        
+>                        pl_index = 0;                                          
+>                }                                                               
+>        }                                                                       
+>                                                                                
+>        if (!pl_index)                                                          
+>                return 0;                                                       
+>                                                                                
+> send_zero_accepted:                                                            
+>        mbox_cmd = (struct cxl_mbox_cmd) {                                      
+>                .opcode = opcode,                                               
+>                .size_in = struct_size(response, extent_list,                   
+>                                       pl_index),                               
+>                .payload_in = response,                                         
+>        };                                                                      
+>                                                                                
+>        response->flags = 0;                                                    
+>        return cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);                      
+> }                
 
--       $NDCTL inject-smart "$monitor_dimms" "$1"
-+       $NDCTL inject-smart "$monitor_dimms" $1
 
--       [[ $1 == $notify_dimms ]]
-+       [[ "$1" == "$notify_dimms" ]]
+Alternative form for what you have...
+                                                              
+	if (cnt != 0) { /* Something to send */
+                 xa_for_each(extent_array, index, extent) {
+			response->extent_list[pl_index].dpa_start = extent->start_dpa;
+			response->extent_list[pl_index].length = extent->length;
+			pl_index++;
+			response->extent_list_size = cpu_to_le32(pl_index);                 
+			if (pl_index != max_extents) /* Space for more? */
+				continue;
 
--               [ ! -z "$monitor_dimms" ] && break
-+               [[ "$monitor_dimms" ]] && break
+			/* Send what we have */
+			response->flags = 0; 
+			if (pl_index < cnt)                                     
+				response->flags &= CXL_DCD_EVENT_MORE;
+			
+			mbox_cmd = (struct cxl_mbox_cmd) {                      
+				.opcode = opcode,                               
+				.size_in = struct_size(response, extent_list,   
+						       pl_index),               
+				.payload_in = response,                         
+			};
 
-[1] https://www.shellcheck.net/wiki/SC2086
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-`shellcheck -i SC2086 -f diff test/*.sh | patch -p1` can auto correct some
-remaining SC2086 issues, however we can find it still miss some
-patterns and some changes will break the origial test.
+			rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);        
+			if (rc)                                                 
+				return rc;                                      
+			cnt -= pl_index;                                        
+			pl_index = 0;
+		}
+		if (!pl_index)
+			return 0;
+	}
 
-V3:
-  - Fix SC2086 issues as more as possible # Alison
-  - covert [ ! -z $foo ] to [[  "foo" ]] as Vishal's suggestion.
-V1:
- V1 has a mistake which overts to integer too late.
- Move the conversion forward before the operation
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
- test/monitor.sh | 48 ++++++++++++++++++++++++------------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+	/* Catch left overs + send if zero length */
+	response->flags = 0;
+	mbox_cmd = (struct cxl_mbox_cmd) {                                      
+		.opcode = opcode,                                               
+		.size_in = struct_size(response, extent_list, pl_index),                               
+		.payload_in = response,                                         
+	};                                                                      
+                                                                                                                                    
+	return cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);                      
+}
 
-diff --git a/test/monitor.sh b/test/monitor.sh
-index 7049b36..be8e24d 100755
---- a/test/monitor.sh
-+++ b/test/monitor.sh
-@@ -11,7 +11,7 @@ monitor_regions=""
- monitor_namespace=""
- smart_supported_bus=""
- 
--. $(dirname $0)/common
-+. $(dirname "$0")/common
- 
- monitor_conf="$TEST_PATH/../ndctl"
- 
-@@ -24,51 +24,51 @@ check_min_kver "4.15" || do_skip "kernel $KVER may not support monitor service"
- start_monitor()
- {
- 	logfile=$(mktemp)
--	$NDCTL monitor -c "$monitor_conf" -l $logfile $1 &
-+	$NDCTL monitor -c "$monitor_conf" -l "$logfile" $1 &
- 	monitor_pid=$!
- 	sync; sleep 3
--	truncate --size 0 $logfile #remove startup log
-+	truncate --size 0 "$logfile" #remove startup log
- }
- 
- set_smart_supported_bus()
- {
- 	smart_supported_bus=$NFIT_TEST_BUS0
--	monitor_dimms=$($TEST_PATH/list-smart-dimm -b $smart_supported_bus | jq -r .[0].dev)
--	if [ -z $monitor_dimms ]; then
-+	monitor_dimms=$("$TEST_PATH"/list-smart-dimm -b "$smart_supported_bus" | jq -r .[0].dev)
-+	if [ -z "$monitor_dimms" ]; then
- 		smart_supported_bus=$NFIT_TEST_BUS1
- 	fi
- }
- 
- get_monitor_dimm()
- {
--	jlist=$($TEST_PATH/list-smart-dimm -b $smart_supported_bus $1)
--	monitor_dimms=$(jq '.[]."dev"?, ."dev"?' <<<$jlist | sort | uniq | xargs)
--	echo $monitor_dimms
-+	jlist=$("$TEST_PATH"/list-smart-dimm -b "$smart_supported_bus" $1)
-+	monitor_dimms=$(jq '.[]."dev"?, ."dev"?' <<<"$jlist" | sort | uniq | xargs)
-+	echo "$monitor_dimms"
- }
- 
- call_notify()
- {
--	$TEST_PATH/smart-notify $smart_supported_bus
-+	"$TEST_PATH"/smart-notify "$smart_supported_bus"
- 	sync; sleep 3
- }
- 
- inject_smart()
- {
--	$NDCTL inject-smart $monitor_dimms $1
-+	$NDCTL inject-smart "$monitor_dimms" $1
- 	sync; sleep 3
- }
- 
- check_result()
- {
--	jlog=$(cat $logfile)
--	notify_dimms=$(jq ."dimm"."dev" <<<$jlog | sort | uniq | xargs)
--	[[ $1 == $notify_dimms ]]
-+	jlog=$(cat "$logfile")
-+	notify_dimms=$(jq ."dimm"."dev" <<<"$jlog" | sort | uniq | xargs)
-+	[[ "$1" == "$notify_dimms" ]]
- }
- 
- stop_monitor()
- {
- 	kill $monitor_pid
--	rm $logfile
-+	rm "$logfile"
- }
- 
- test_filter_dimm()
-@@ -91,12 +91,12 @@ test_filter_bus()
- 
- test_filter_region()
- {
--	count=$($NDCTL list -R -b $smart_supported_bus | jq -r .[].dev | wc -l)
-+	count=$($NDCTL list -R -b "$smart_supported_bus" | jq -r .[].dev | wc -l)
- 	i=0
--	while [ $i -lt $count ]; do
--		monitor_region=$($NDCTL list -R -b $smart_supported_bus | jq -r .[$i].dev)
-+	while [ $i -lt "$count" ]; do
-+		monitor_region=$($NDCTL list -R -b "$smart_supported_bus" | jq -r .[$i].dev)
- 		monitor_dimms=$(get_monitor_dimm "-r $monitor_region")
--		[ ! -z $monitor_dimms ] && break
-+		[[ "$monitor_dimms" ]] && break
- 		i=$((i + 1))
- 	done
- 	start_monitor "-r $monitor_region"
-@@ -108,25 +108,25 @@ test_filter_region()
- test_filter_namespace()
- {
- 	reset
--	monitor_namespace=$($NDCTL create-namespace -b $smart_supported_bus | jq -r .dev)
-+	monitor_namespace=$($NDCTL create-namespace -b "$smart_supported_bus" | jq -r .dev)
- 	monitor_dimms=$(get_monitor_dimm "-n $monitor_namespace")
- 	start_monitor "-n $monitor_namespace"
- 	call_notify
- 	check_result "$monitor_dimms"
- 	stop_monitor
--	$NDCTL destroy-namespace $monitor_namespace -f
-+	$NDCTL destroy-namespace "$monitor_namespace" -f
- }
- 
- test_conf_file()
- {
- 	monitor_dimms=$(get_monitor_dimm)
- 	conf_file=$(mktemp)
--	echo -e "[monitor]\ndimm = $monitor_dimms" > $conf_file
-+	echo -e "[monitor]\ndimm = $monitor_dimms" > "$conf_file"
- 	start_monitor "-c $conf_file"
- 	call_notify
- 	check_result "$monitor_dimms"
- 	stop_monitor
--	rm $conf_file
-+	rm "$conf_file"
- }
- 
- test_filter_dimmevent()
-@@ -138,14 +138,14 @@ test_filter_dimmevent()
- 	check_result "$monitor_dimms"
- 	stop_monitor
- 
--	inject_value=$($NDCTL list -H -d $monitor_dimms | jq -r .[]."health"."spares_threshold")
-+	inject_value=$($NDCTL list -H -d "$monitor_dimms" | jq -r .[]."health"."spares_threshold")
- 	inject_value=$((inject_value - 1))
- 	start_monitor "-d $monitor_dimms -D dimm-spares-remaining"
- 	inject_smart "-s $inject_value"
- 	check_result "$monitor_dimms"
- 	stop_monitor
- 
--	inject_value=$($NDCTL list -H -d $monitor_dimms | jq -r .[]."health"."temperature_threshold")
-+	inject_value=$($NDCTL list -H -d "$monitor_dimms" | jq -r .[]."health"."temperature_threshold")
- 	inject_value=${inject_value%.*}
- 	inject_value=$((inject_value + 1))
- 	start_monitor "-d $monitor_dimms -D dimm-media-temperature"
--- 
-2.44.0
+                                                
+
+> 
 
 
