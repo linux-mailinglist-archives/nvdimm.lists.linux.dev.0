@@ -1,178 +1,131 @@
-Return-Path: <nvdimm+bounces-9448-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9451-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87909E3F6D
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Dec 2024 17:15:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 934421605D4
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Dec 2024 16:15:27 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993FE1F8AF3;
-	Wed,  4 Dec 2024 16:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=ming.li@zohomail.com header.b="ANisJxXu"
-X-Original-To: nvdimm@lists.linux.dev
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FBBF9E40F4
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Dec 2024 18:14:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC4B18EA2
-	for <nvdimm@lists.linux.dev>; Wed,  4 Dec 2024 16:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733328926; cv=pass; b=haxw8Pff3mA3ng2xqxQH1EZttLxI56o8/0mf54kPUuV+jsx48zbeexbYqbexbm3nFXc+kmuEYT/Yckk51OUDINdEZu/NZ8BMCP/f6KKqU5PqaW+yCk1FwA/2KeTEXlX8Dm7oAJcxqiEJBo5WKslyl9CBALtL+vY2xyVs7vpJomQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733328926; c=relaxed/simple;
-	bh=OX/V4KlZfSnNLcTlLdUTMS6t1F3r/nPVmwrkxH79iag=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XOheuJwGJLcQrOYrbVbhyyfl8nuvfOcU/QUeu1nre6q8kobHiBUxM1OM0EBaPBd0y93ZMbuqCFSprPNZ9RYYwg+OZCd71+Kd9IYkVftKyBnIRUagPPW/9fT3/Lpk+gMxAGTDHVyLFbVXyDnToHsx4GZW5dDrs9IfT/sbfyS8LwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=ming.li@zohomail.com header.b=ANisJxXu; arc=pass smtp.client-ip=136.143.188.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1733328922; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Rxd2l2cXNQsmBr8me1001Bw3VQyQFEqqye9gStGO0s4rIeQHUa2uM/0qg0+e4DmR8ckdFTvtqK25aD0fBcs6/hZub99cim3OX3C7zsvut0t/iq2QUJe4zrJjTLs/1gb+RAhCRKfn0Mg8lUdLcSVN3HigWdtDcQRjese8M1yioq8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1733328922; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=s962vGgSth/vx7IdJH0sb+PTyuWEB5Gy4WfjWaKSjLw=; 
-	b=m39RSFnUnpNKUOkhu5VXmoALAK4vBD/ZJpA121m5jZ2zU1Q/6rLwrreAeeQkxTo1raz/NTLRWk6PyBl4pme2wyyis/IsxyhFJWkq6DYH/tk/edlH4ZAj1iY5MGCdUCDcyRl7vaUP7t5ctOlAWWcAGignTeU+tnh9Rxh8TBQjH6E=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=ming.li@zohomail.com;
-	dmarc=pass header.from=<ming.li@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733328922;
-	s=zm2022; d=zohomail.com; i=ming.li@zohomail.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Feedback-ID:Reply-To;
-	bh=s962vGgSth/vx7IdJH0sb+PTyuWEB5Gy4WfjWaKSjLw=;
-	b=ANisJxXugQMvji/EykZGSplHxZBMdCwold8jMHOIMsrdo2Kk7QlSGG5HxClAq/AQ
-	lkMbxzeni7AUAX7AAvatYXrSaEw+ZbGJSnu3e88+LG6Q9wSu2bzU+JS/mdam8eysbq+
-	Hf0TCUnrv/KGzwDElsDFFYSOJMzLxs3qUEz48ig8=
-Received: by mx.zohomail.com with SMTPS id 1733328919184892.0434640061868;
-	Wed, 4 Dec 2024 08:15:19 -0800 (PST)
-From: Li Ming <ming.li@zohomail.com>
-To: nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org
-Cc: Li Ming <ming.li@zohomail.com>
-Subject: [ndctl PATCH 1/1] daxctl: Output more information if memblock is unremovable
-Date: Thu,  5 Dec 2024 00:14:56 +0800
-Message-Id: <20241204161457.1113419-1-ming.li@zohomail.com>
-X-Mailer: git-send-email 2.34.1
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AFCB289A00
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Dec 2024 17:14:42 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FE3212B3F;
+	Wed,  4 Dec 2024 17:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2kr6AAk"
+X-Original-To: nvdimm@lists.linux.dev
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17C9212B30;
+	Wed,  4 Dec 2024 17:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733331641; cv=none; b=V1G1fqkFxYWahWB2jGTebDUs8218rn8M1kRuck46oa07BPdWOlFhZwVs7+l3W6nb74AcHF26toaeCYLJs5WWF4eP+iVMrHlxEx7gNvQa4W/c/KnmHm0a2pgRDWVIcb27CsDXMZnpkfUqQXasBwXzg+MyChHkoqEHkRBKYH8nMfg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733331641; c=relaxed/simple;
+	bh=Z7dcg172ZmLMndDiaZ86nq9I4fvX84bySeNXPXbXVGI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JXyNkSfx5ffoTUh5z58QVvrlIiwWt8hE80ExGDaj9XNa9UTQoI8oRXYzIsgwAfaTWCNK8AyvzcECSQWMKGhUGPLdayGONam4od43niur7mmBnoQ486oORVSkrKiE6fjl2stSWCmDSHOikvm9hHQYGtyI/ryni9SUj8JHeGJk9P4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2kr6AAk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28617C4CECD;
+	Wed,  4 Dec 2024 17:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733331641;
+	bh=Z7dcg172ZmLMndDiaZ86nq9I4fvX84bySeNXPXbXVGI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=H2kr6AAkHge6BVbdXD2xaI6OhANF7Ww4qLp+fiyrAVi+7nXsp6Vn2kiQ/9LvHqCY2
+	 T5QFQl1Xv8BYt08r4evk+KovUdTo39tKdoENNJHuXhrTr2+b2h/V+9iFDq1IXwmuVi
+	 UsvoEJww9z9jSHl/aeOTpdGr2R6/s9AzEYjcDJfvgOmAQToCUoooI+U258R5VX73qT
+	 i8Jd/EvKjYQRGFppQk83DKSNTXFEUxq1gdemiwwMc9F/QGMkPBjxhInH1VM2/IO+z4
+	 UqzDpmSbPurHBeTp6QDRpMdf4XASM20f6YjIpagHTrW2u+xhAAVUb3Bw6KeUbk3V0T
+	 d4neJtLmw9PtA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yi Yang <yiyang13@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	dan.j.williams@intel.com,
+	vishal.l.verma@intel.com,
+	nvdimm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.11 29/33] nvdimm: rectify the illogical code within nd_dax_probe()
+Date: Wed,  4 Dec 2024 10:47:42 -0500
+Message-ID: <20241204154817.2212455-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241204154817.2212455-1-sashal@kernel.org>
+References: <20241204154817.2212455-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
-Feedback-ID: rr08011227890bf58059f41c7efb69e6cb0000228972e0e64473f4f5a5039d8f09f8ca762e1bc9bd197f2486:zu08011227538e16bb626ed09b61ed76be00002bb35925f177902e5f8deb78d71ff18188d91c29b8fd6cf97f:rf08011226f6b6b3176d73fa9bc254296600002c9646dd75971544093d59887b1e1d4b2031c3b3a2b8b8df:ZohoMail
-X-ZohoMailClient: External
 
-If CONFIG_MEMORY_HOTREMOVE is disabled by kernel, memblocks will not be
-removed, so 'dax offline-memory all' will output below error logs:
+From: Yi Yang <yiyang13@huawei.com>
 
-  libdaxctl: offline_one_memblock: dax0.0: Failed to offline /sys/devices/system/node/node6/memory371/state: Invalid argument
-  dax0.0: failed to offline memory: Invalid argument
-  error offlining memory: Invalid argument
-  offlined memory for 0 devices
+[ Upstream commit b61352101470f8b68c98af674e187cfaa7c43504 ]
 
-The log does not clearly show why the command failed. So checking if the
-target memblock is removable before offlining it by querying
-'/sys/devices/system/node/nodeX/memoryY/removable', then output specific
-logs if the memblock is unremovable, output will be:
+When nd_dax is NULL, nd_pfn is consequently NULL as well. Nevertheless,
+it is inadvisable to perform pointer arithmetic or address-taking on a
+NULL pointer.
+Introduce the nd_dax_devinit() function to enhance the code's logic and
+improve its readability.
 
-  libdaxctl: offline_one_memblock: dax0.0: memory371 is unremovable
-  dax0.0: failed to offline memory: Operation not supported
-  error offlining memory: Operation not supported
-  offlined memory for 0 devices
-
-Besides, delay to set up string 'path' for offlining memblock operation,
-because string 'path' is stored in 'mem->mem_buf' which is a shared
-buffer, it will be used in memblock_is_removable().
-
-Signed-off-by: Li Ming <ming.li@zohomail.com>
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://patch.msgid.link/20241108085526.527957-1-yiyang13@huawei.com
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- daxctl/lib/libdaxctl.c | 52 ++++++++++++++++++++++++++++++++++++------
- 1 file changed, 45 insertions(+), 7 deletions(-)
+ drivers/nvdimm/dax_devs.c | 4 ++--
+ drivers/nvdimm/nd.h       | 7 +++++++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/daxctl/lib/libdaxctl.c b/daxctl/lib/libdaxctl.c
-index 9fbefe2e8329..b7fa0de0b73d 100644
---- a/daxctl/lib/libdaxctl.c
-+++ b/daxctl/lib/libdaxctl.c
-@@ -1310,6 +1310,37 @@ static int memblock_is_online(struct daxctl_memory *mem, char *memblock)
- 	return 0;
- }
+diff --git a/drivers/nvdimm/dax_devs.c b/drivers/nvdimm/dax_devs.c
+index 6b4922de30477..37b743acbb7ba 100644
+--- a/drivers/nvdimm/dax_devs.c
++++ b/drivers/nvdimm/dax_devs.c
+@@ -106,12 +106,12 @@ int nd_dax_probe(struct device *dev, struct nd_namespace_common *ndns)
  
-+static int memblock_is_removable(struct daxctl_memory *mem, char *memblock)
-+{
-+	struct daxctl_dev *dev = daxctl_memory_get_dev(mem);
-+	const char *devname = daxctl_dev_get_devname(dev);
-+	struct daxctl_ctx *ctx = daxctl_dev_get_ctx(dev);
-+	int len = mem->buf_len, rc;
-+	char buf[SYSFS_ATTR_SIZE];
-+	char *path = mem->mem_buf;
-+	const char *node_path;
-+
-+	node_path = daxctl_memory_get_node_path(mem);
-+	if (!node_path)
-+		return -ENXIO;
-+
-+	rc = snprintf(path, len, "%s/%s/removable", node_path, memblock);
-+	if (rc < 0)
-+		return -ENOMEM;
-+
-+	rc = sysfs_read_attr(ctx, path, buf);
-+	if (rc) {
-+		err(ctx, "%s: Failed to read %s: %s\n",
-+			devname, path, strerror(-rc));
-+		return rc;
-+	}
-+
-+	if (strtoul(buf, NULL, 0) == 0)
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
- static int online_one_memblock(struct daxctl_memory *mem, char *memblock,
- 		enum memory_zones zone, int *status)
- {
-@@ -1362,6 +1393,20 @@ static int offline_one_memblock(struct daxctl_memory *mem, char *memblock)
- 	char *path = mem->mem_buf;
- 	const char *node_path;
- 
-+	/* if already offline, there is nothing to do */
-+	rc = memblock_is_online(mem, memblock);
-+	if (rc < 0)
-+		return rc;
-+	if (!rc)
-+		return 1;
-+
-+	rc = memblock_is_removable(mem, memblock);
-+	if (rc) {
-+		if (rc == -EOPNOTSUPP)
-+			err(ctx, "%s: %s is unremovable\n", devname, memblock);
-+		return rc;
-+	}
-+
- 	node_path = daxctl_memory_get_node_path(mem);
- 	if (!node_path)
- 		return -ENXIO;
-@@ -1370,13 +1415,6 @@ static int offline_one_memblock(struct daxctl_memory *mem, char *memblock)
- 	if (rc < 0)
+ 	nvdimm_bus_lock(&ndns->dev);
+ 	nd_dax = nd_dax_alloc(nd_region);
+-	nd_pfn = &nd_dax->nd_pfn;
+-	dax_dev = nd_pfn_devinit(nd_pfn, ndns);
++	dax_dev = nd_dax_devinit(nd_dax, ndns);
+ 	nvdimm_bus_unlock(&ndns->dev);
+ 	if (!dax_dev)
  		return -ENOMEM;
- 
--	/* if already offline, there is nothing to do */
--	rc = memblock_is_online(mem, memblock);
--	if (rc < 0)
--		return rc;
--	if (!rc)
--		return 1;
--
- 	rc = sysfs_write_attr_quiet(ctx, path, mode);
- 	if (rc) {
- 		/* check if something raced us to offline (unlikely) */
+ 	pfn_sb = devm_kmalloc(dev, sizeof(*pfn_sb), GFP_KERNEL);
++	nd_pfn = &nd_dax->nd_pfn;
+ 	nd_pfn->pfn_sb = pfn_sb;
+ 	rc = nd_pfn_validate(nd_pfn, DAX_SIG);
+ 	dev_dbg(dev, "dax: %s\n", rc == 0 ? dev_name(dax_dev) : "<none>");
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index 2dbb1dca17b53..5ca06e9a2d292 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -600,6 +600,13 @@ struct nd_dax *to_nd_dax(struct device *dev);
+ int nd_dax_probe(struct device *dev, struct nd_namespace_common *ndns);
+ bool is_nd_dax(const struct device *dev);
+ struct device *nd_dax_create(struct nd_region *nd_region);
++static inline struct device *nd_dax_devinit(struct nd_dax *nd_dax,
++					    struct nd_namespace_common *ndns)
++{
++	if (!nd_dax)
++		return NULL;
++	return nd_pfn_devinit(&nd_dax->nd_pfn, ndns);
++}
+ #else
+ static inline int nd_dax_probe(struct device *dev,
+ 		struct nd_namespace_common *ndns)
 -- 
-2.34.1
+2.43.0
 
 
