@@ -1,100 +1,102 @@
-Return-Path: <nvdimm+bounces-9922-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9924-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5527A3C544
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Feb 2025 17:42:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E69F0A3C6FC
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Feb 2025 19:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640631764AD
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Feb 2025 16:40:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C17593A9B36
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Feb 2025 18:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144C21FCCFD;
-	Wed, 19 Feb 2025 16:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C502214221;
+	Wed, 19 Feb 2025 18:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QWzo0qDP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jmF2++hn"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133431FBEB0
-	for <nvdimm@lists.linux.dev>; Wed, 19 Feb 2025 16:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BCF1C173F
+	for <nvdimm@lists.linux.dev>; Wed, 19 Feb 2025 18:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739983257; cv=none; b=J8HGTfRZIpaT0Jr0NNR8xR2pvMWLCYNpVz3xX9osc+Oi3WG+NCtJoaaXALnAm72/a+fd67JnZgUuRlpbS4jOSIl/kRraf1xSwm3onGrKNbWpVeS1AUib+TkdJV+nPLm+snLLUn3JCDeRWCf3D/l89uArP9iejMdFY6gS49XCQfY=
+	t=1739988308; cv=none; b=Hm3zvoIHJa3cUZcgqMDIoDndUWBS4Zj9XLL51ZntT0ncaoXp4Gj25aPhuqBRjVeUbId15yLvxOav+9Ib5mYec5JsRaSz3Ul8aQ9WyyVqSw0v3M3JI59dm6trlaUYliW0rQnjMfkuChkyIOfiMqvufdNSBbgu08EQMH3FGRos+rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739983257; c=relaxed/simple;
-	bh=JEiXYyZewYdZ/29ICidTlcyS7ChrkiDlmDmScjZNzKU=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=kda8GBRhsowq2u9PSpCjGSk17eJiIXXK+H/kXajBlAdfMRfHFFbNGJlnYkHXPd6TTVxq7/mBm7GF0T9HcYhDi7dpEa3rY2YajTgXynWP0agIgPwLVmnRMZ//kPDIBFxPYbxcMYDGcqlm+5qsjyOwo+S+UeiRKS3BgJKigDPCF7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QWzo0qDP; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739983254;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DQDREIFxnc5HDXCuGfoZp5kxakhT8GCTFWXZKOmaSXw=;
-	b=QWzo0qDP2imzFCIUx+1PuiMh/sjpZCv3Z+a4DZ+iGv0deZMi/KcUj/ofhKK6Snz+f8sbvW
-	RLr1tp2nUeexnOC9MSgfXJLBALmYVF20nrep0QWaMx69XJfLMMLSO1GEBdaftvKIsJ8y+M
-	NxT+CMAZKS3ODctXoB207uWFG/UGMlg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-274-ThzB33ccPcCmZcgY1IOmQg-1; Wed,
- 19 Feb 2025 11:40:50 -0500
-X-MC-Unique: ThzB33ccPcCmZcgY1IOmQg-1
-X-Mimecast-MFC-AGG-ID: ThzB33ccPcCmZcgY1IOmQg_1739983249
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BCFC2190FF83;
-	Wed, 19 Feb 2025 16:40:48 +0000 (UTC)
-Received: from segfault.usersys.redhat.com (unknown [10.22.82.8])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E0910190C54C;
-	Wed, 19 Feb 2025 16:40:46 +0000 (UTC)
-From: Jeff Moyer <jmoyer@redhat.com>
+	s=arc-20240116; t=1739988308; c=relaxed/simple;
+	bh=xN+VCr9m1HikHO+6traRWpEGsIK9XHZqGyxMy7j+XPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dXYsOqb2m3YIXfMeqtKs2mokhkBS01tewmKEoWaB23I6SBvbThNGg/Ml7QHTfNkixQ74XQrY6GO3y1pANzn+SwunKBQAfGjCtqkdzEMWRwPuQp51YVnQx4cKIWNSbWi20P61x3AC1SyJFp9ylCVeS+tPcyJSgMu1f0Gg+nFC6L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jmF2++hn; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739988308; x=1771524308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xN+VCr9m1HikHO+6traRWpEGsIK9XHZqGyxMy7j+XPQ=;
+  b=jmF2++hnYjHkrisWHHP6scwI101HN43F/6jSQrejnb+Nf8hvoAeqJavj
+   Zeu/wEP3zgOAtF45gygO9lvOff1VlbxDBO+EtRDZSMbItAYGMhGPWIcED
+   PGGVQ/LxEzFRxcenRkCG1yonrWLAnG9sL+3l6iPUqfpwTFbvYbi2xIGIT
+   TmcxEs/53qGfrKpQwp/sAOCJRSijibaW93nrSf6P4ESqOkYe7RiUjuiNa
+   FSoH2TM/MiINhgIQTneCwaFMm+1PXWmVtGp8x2XpG2FOvW/rpQeH+5Mb1
+   6Chj6kMmVc7ZXCUJKgL6ekce0dSHQ8T4rfVbOdWIJZk/EgnBYbaKfDnu7
+   w==;
+X-CSE-ConnectionGUID: GX6VrR3OQQK/6uMj4Yqksw==
+X-CSE-MsgGUID: TvZUz+ILTLucxp23r9rM5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="50954985"
+X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
+   d="scan'208";a="50954985"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 10:05:07 -0800
+X-CSE-ConnectionGUID: fDyEaJUmTja90HVjyAc/MQ==
+X-CSE-MsgGUID: zIJyB5m9SIOivYQZ7nbuug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119411261"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2.lan) ([10.125.110.15])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 09:10:59 -0800
+Date: Wed, 19 Feb 2025 09:10:53 -0800
+From: Alison Schofield <alison.schofield@intel.com>
 To: Donet Tom <donettom@linux.ibm.com>
-Cc: Alison Schofield <alison.schofield@intel.com>,  nvdimm@lists.linux.dev,
-  linux-cxl@vger.kernel.org,  Ritesh Harjani <ritesh.list@gmail.com>,  Li
- Zhijian <lizhijian@fujitsu.com>
+Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
+	Ritesh Harjani <ritesh.list@gmail.com>,
+	Li Zhijian <lizhijian@fujitsu.com>, Jeff Moyer <jmoyer@redhat.com>
 Subject: Re: [PATCH] ndctl: json: Region capabilities are not displayed if
  any of the BTT, PFN, or DAX are not present
+Message-ID: <Z7YQnXuIMcw-wPMg@aschofie-mobl2.lan>
 References: <20250219094049.5156-1-donettom@linux.ibm.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date: Wed, 19 Feb 2025 11:40:44 -0500
-In-Reply-To: <20250219094049.5156-1-donettom@linux.ibm.com> (Donet Tom's
-	message of "Wed, 19 Feb 2025 03:40:49 -0600")
-Message-ID: <x494j0pj3ar.fsf@segfault.usersys.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: C-nxOv3bi3o2BIf0ixIx0k0SwrBicDaooonQLQ5gvjo_1739983249
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250219094049.5156-1-donettom@linux.ibm.com>
 
-Donet Tom <donettom@linux.ibm.com> writes:
+On Wed, Feb 19, 2025 at 03:40:49AM -0600, Donet Tom wrote:
+
+
+Thanks Tom!
+
+Please v2 with patch prefix and commit msg of:
+[ndctl PATCH v2] ndctl/list: display region caps for any of BTT, PFN, DAX
+
 
 > If any one of BTT, PFN, or DAX is not present, but the other two
 > are, then the region capabilities are not displayed in the
 > ndctl list -R -C command.
->
+> 
 > This is because util_region_capabilities_to_json() returns NULL
 > if any one of BTT, PFN, or DAX is not present.
->
+> 
 > In this patch, we have changed the logic to display all the region
 > capabilities that are present.
->
+> 
 > Test Results with CONFIG_BTT disabled
 > =====================================
 > Without this patch
@@ -111,7 +113,7 @@ Donet Tom <donettom@linux.ibm.com> writes:
 >     "iset_id":11510624209454722969,
 >     "persistence_domain":"memory_controller"
 >   },
->
+> 
 > With this patch
 > ---------------
 >  # ./build/ndctl/ndctl  list -R -C
@@ -142,12 +144,19 @@ Donet Tom <donettom@linux.ibm.com> writes:
 >     ],
 >     "persistence_domain":"memory_controller"
 >   },
->
+> 
+
+Please add a formatted fixes tag.
+Double check, but I believe this was introduced with commit 965fa02e372f,
+util: Distribute 'filter' and 'json' helpers to per-tool objects
+It seems we broke it in ndctl release v73.
+
+
 > Signed-off-by: Donet Tom <donettom@linux.ibm.com>
 > ---
 >  ndctl/json.c | 6 ++----
 >  1 file changed, 2 insertions(+), 4 deletions(-)
->
+> 
 > diff --git a/ndctl/json.c b/ndctl/json.c
 > index 23bad7f..3df3bc4 100644
 > --- a/ndctl/json.c
@@ -160,15 +169,11 @@ Donet Tom <donettom@linux.ibm.com> writes:
 > -		return NULL;
 > -
 
-I think this was meant to be:
+How about a one line change that avoids getting the jcaps array
+needlessly:
 
 	if (!btt && !pfn && !dax)
 		return NULL;
-
-I think that would be the more appropriate fix.
-
-Cheers,
-Jeff
 
 >  	jcaps = json_object_new_array();
 >  	if (!jcaps)
@@ -183,5 +188,7 @@ Jeff
 >  err:
 >  	json_object_put(jcaps);
 >  	return NULL;
-
+> -- 
+> 2.43.5
+> 
 
