@@ -1,124 +1,182 @@
-Return-Path: <nvdimm+bounces-9955-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9957-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68349A3EFB0
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 10:13:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A612A3F13D
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 11:01:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C84C1883CAE
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 09:13:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E39917A7C9C
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 10:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8231B200B99;
-	Fri, 21 Feb 2025 09:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1D720101D;
+	Fri, 21 Feb 2025 10:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=t12smtp-sign004.email header.i=@t12smtp-sign004.email header.b="g482ex5v"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mail72.out.titan.email (mail72.out.titan.email [209.209.25.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792E333EA
-	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 09:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052B11922E7
+	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 10:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.209.25.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740129175; cv=none; b=pG/qIFx/3J4NF+3rYrzfRn7nWjKjdqwvminCKgNmgOwqMT46zPc5Fra6D+7WFUavnOERGv7b47m1XTOyF7OXsmYXfRvMPGbBrpro6pkq/N5+dLR8s1y6G1FZlHiAz28nYqigw29mNUnLpTpBC84l8WwdcuVka3alTfqVHfwqSPU=
+	t=1740132058; cv=none; b=RzM+0/YP9EgdDMRWcSLwmEHLSZQSBRs8T/nw/rJ1JDBSNG4R50OXDYF5ib5h65T7R+KTEwuKHnLAaXU75E6tPOD8koe1fQb1qCg7t9NJ7AM+MX4z2ywotyCFod11fHQ4MLEXPY8VsC4E6n+somRU7ICXqkU/23sdF+V43h928J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740129175; c=relaxed/simple;
-	bh=qBNDGok0ZLX8c5yCRbGm5cdISBhSDit295ASxo2LD70=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=W8R/OWgy3WIdw65pC0ABQu4EbiJ7mAbOmBIYJjyeMR94P2TR/NBBp7Efp8d6AAywhOkxoqvkQ2dwPbl/r0CThOgcMX++LxXuiSG6cUZ2O2EX4S4xEkhmn6vkeOtZvmf970f/ckLrlEgp8+j42ssMxwhVP1Kp9/armRnjXgehpaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Yzkt96d6gz4f3jqP
-	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 17:12:33 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 485671A06DD
-	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 17:12:50 +0800 (CST)
-Received: from [10.174.179.143] (unknown [10.174.179.143])
-	by APP4 (Coremail) with SMTP id gCh0CgBXul6PQ7hnsz_iEQ--.4076S3;
-	Fri, 21 Feb 2025 17:12:50 +0800 (CST)
-Subject: Re: [PATCH 03/12] badblocks: attempt to merge adjacent badblocks
- during ack_all_badblocks
-To: Zheng Qixing <zhengqixing@huaweicloud.com>, axboe@kernel.dk,
- song@kernel.org, colyli@kernel.org, dan.j.williams@intel.com,
- vishal.l.verma@intel.com, dave.jiang@intel.com, ira.weiny@intel.com,
- dlemoal@kernel.org, yanjun.zhu@linux.dev, kch@nvidia.com, hare@suse.de,
- zhengqixing@huawei.com, john.g.garry@oracle.com, geliang@kernel.org,
- xni@redhat.com, colyli@suse.de
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-raid@vger.kernel.org, nvdimm@lists.linux.dev, yi.zhang@huawei.com,
- yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+	s=arc-20240116; t=1740132058; c=relaxed/simple;
+	bh=liz61iMC2dN+NGZ2MuvcUbLugzJeLLt6ts5YA7v4yfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YqNaykIdrw9pN8CtsGXSyEUwOaz5/Z8JbwRyJ2Am5Mhcwe2N87s7P4ADLpq/xHU1j2E2/ksPXshjHVF6RWD/BlF2o6UUmziuIo8h7LA1Adc2FZ9nGRjHP/laZhvTvOHx1zrtIy3nz1SL9BBcNwyldIDIh5CWyRDOEk//ibMt/KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coly.li; spf=pass smtp.mailfrom=coly.li; dkim=pass (1024-bit key) header.d=t12smtp-sign004.email header.i=@t12smtp-sign004.email header.b=g482ex5v; arc=none smtp.client-ip=209.209.25.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coly.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coly.li
+DKIM-Signature: a=rsa-sha256; bh=NJF/4Q5i/hO0u3nwWRv/Ok82S5dpU6jme2vhYIxvsto=;
+	c=relaxed/relaxed; d=t12smtp-sign004.email;
+	h=mime-version:subject:references:to:message-id:in-reply-to:date:from:cc:from:to:cc:subject:date:message-id:in-reply-to:references:reply-to;
+	q=dns/txt; s=titan1; t=1740131535; v=1;
+	b=g482ex5vnAdoSbH9pyNapbsiini2QP+277DSiMoYx65/+O86FCpgXdSI6GgmNvPMd3fPzJ5s
+	CYSX69rkl4j5YlLV5f95lxM7mCeFjAGCFBPgToVHLUhdgqr1o8ZjMaxN/sNULmRocT2lTnIlmln
+	HII4VrcIvGtPZ/GI+2koJu4A=
+Received: from studio.local (unknown [141.11.218.23])
+	by smtp-out.flockmail.com (Postfix) with ESMTPA id E3D87100156;
+	Fri, 21 Feb 2025 09:52:07 +0000 (UTC)
+Date: Fri, 21 Feb 2025 17:52:05 +0800
+Feedback-ID: :i@coly.li:coly.li:flockmailId
+From: Coly Li <i@coly.li>
+To: Zheng Qixing <zhengqixing@huaweicloud.com>
+Cc: axboe@kernel.dk, song@kernel.org, colyli@kernel.org, 
+	yukuai3@huawei.com, dan.j.williams@intel.com, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, ira.weiny@intel.com, dlemoal@kernel.org, yanjun.zhu@linux.dev, 
+	kch@nvidia.com, hare@suse.de, zhengqixing@huawei.com, john.g.garry@oracle.com, 
+	geliang@kernel.org, xni@redhat.com, colyli@suse.de, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, nvdimm@lists.linux.dev, 
+	yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH 05/12] badblocks: return error if any badblock set fails
+Message-ID: <4qo5qliidycbjmauq22tqgv6nbw2dus2xlhg2qvfss7nawdr27@arztxmrwdhzb>
 References: <20250221081109.734170-1-zhengqixing@huaweicloud.com>
- <20250221081109.734170-4-zhengqixing@huaweicloud.com>
-From: Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <95d0bd33-6142-5b89-bf29-317137db9882@huaweicloud.com>
-Date: Fri, 21 Feb 2025 17:12:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <20250221081109.734170-6-zhengqixing@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250221081109.734170-4-zhengqixing@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBXul6PQ7hnsz_iEQ--.4076S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFyDZw4kXF4xWrWUWr1kGrg_yoWkCFc_Z3
-	92yFyxJr95AF1fCr1Syr18Jr4SgFn8Cr4xGryUJF1rZ3W7tFZ7JwsYyFn8Wrs8GFyDuwnx
-	Ar95Xr1a9ryIvjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbaAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJr
-	UvcSsGvfC2KfnxnUUI43ZEXa7IU07PEDUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+In-Reply-To: <20250221081109.734170-6-zhengqixing@huaweicloud.com>
+X-F-Verdict: SPFVALID
+X-Titan-Src-Out: 1740131535703117256.29396.5359946764536724318@prod-use1-smtp-out1002.
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.4 cv=bq22BFai c=1 sm=1 tr=0 ts=67b84ccf
+	a=USBFZE4A2Ag4MGBBroF6Xg==:117 a=USBFZE4A2Ag4MGBBroF6Xg==:17
+	a=IkcTkHD0fZMA:10 a=CEWIc4RMnpUA:10 a=i0EeH86SAAAA:8
+	a=7AGAggHtapFrYZIn-HwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 
-在 2025/02/21 16:11, Zheng Qixing 写道:
+On Fri, Feb 21, 2025 at 04:11:02PM +0800, Zheng Qixing wrote:
 > From: Li Nan <linan122@huawei.com>
 > 
-> If ack and unack badblocks are adjacent, they will not be merged and will
-> remain as two separate badblocks. Even after the bad blocks are written
-> to disk and both become ack, they will still remain as two independent
-> bad blocks. This is not ideal as it wastes the limited space for
-> badblocks. Therefore, during ack_all_badblocks(), attempt to merge
-> badblocks if they are adjacent.
+> _badblocks_set() returns success if at least one badblock is set
+> successfully, even if others fail. This can lead to data inconsistencies
+> in raid, where a failed badblock set should trigger the disk to be kicked
+> out to prevent future reads from failed write areas.
+> 
+> _badblocks_set() should return error if any badblock set fails. Instead
+> of relying on 'rv', directly returning 'sectors' for clearer logic. If all
+> badblocks are successfully set, 'sectors' will be 0, otherwise it
+> indicates the number of badblocks that have not been set yet, thus
+> signaling failure.
+> 
+> By the way, it can also fix an issue: when a newly set unack badblock is
+> included in an existing ack badblock, the setting will return an error.
+> 路路路
+>   echo "0 100" /sys/block/md0/md/dev-loop1/bad_blocks
+>   echo "0 100" /sys/block/md0/md/dev-loop1/unacknowledged_bad_blocks
+>   -bash: echo: write error: No space left on device
+> ```
+> After fix, it will return success.
 > 
 > Fixes: aa511ff8218b ("badblocks: switch to the improved badblock handling code")
 > Signed-off-by: Li Nan <linan122@huawei.com>
 > ---
->   block/badblocks.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-LGTM
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+>  block/badblocks.c | 16 ++++------------
+>  1 file changed, 4 insertions(+), 12 deletions(-)
+>
 
+NACK.   Such modification will break current API.
+
+Current API doesn鈥檛 handle partial success/fail condition, if any bad block range is set it should return true.
+
+It is not about correct or wrong, just current fragile design. A new API is necessary to handle such thing. This is why I leave the return value as int other than bool.
+
+Thanks.
+
+Coly Li
+
+
+ 
 > diff --git a/block/badblocks.c b/block/badblocks.c
-> index f069c93e986d..ad8652fbe1c8 100644
+> index 1c8b8f65f6df..a953d2e9417f 100644
 > --- a/block/badblocks.c
 > +++ b/block/badblocks.c
-> @@ -1491,6 +1491,11 @@ void ack_all_badblocks(struct badblocks *bb)
->   				p[i] = BB_MAKE(start, len, 1);
->   			}
->   		}
-> +
-> +		for (i = 0; i < bb->count ; i++)
-> +			while (try_adjacent_combine(bb, i))
-> +				;
-> +
->   		bb->unacked_exist = 0;
->   	}
->   	write_sequnlock_irq(&bb->lock);
+> @@ -843,7 +843,6 @@ static int _badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  	struct badblocks_context bad;
+>  	int prev = -1, hint = -1;
+>  	unsigned long flags;
+> -	int rv = 0;
+>  	u64 *p;
+>  
+>  	if (bb->shift < 0)
+> @@ -873,10 +872,8 @@ static int _badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  	bad.len = sectors;
+>  	len = 0;
+>  
+> -	if (badblocks_full(bb)) {
+> -		rv = 1;
+> +	if (badblocks_full(bb))
+>  		goto out;
+> -	}
+>  
+>  	if (badblocks_empty(bb)) {
+>  		len = insert_at(bb, 0, &bad);
+> @@ -916,10 +913,8 @@ static int _badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  			int extra = 0;
+>  
+>  			if (!can_front_overwrite(bb, prev, &bad, &extra)) {
+> -				if (extra > 0) {
+> -					rv = 1;
+> +				if (extra > 0)
+>  					goto out;
+> -				}
+>  
+>  				len = min_t(sector_t,
+>  					    BB_END(p[prev]) - s, sectors);
+> @@ -986,10 +981,7 @@ static int _badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  
+>  	write_sequnlock_irqrestore(&bb->lock, flags);
+>  
+> -	if (!added)
+> -		rv = 1;
+> -
+> -	return rv;
+> +	return sectors;
+>  }
+>  
+>  /*
+> @@ -1353,7 +1345,7 @@ EXPORT_SYMBOL_GPL(badblocks_check);
+>   *
+>   * Return:
+>   *  0: success
+> - *  1: failed to set badblocks (out of space)
+> + *  other: failed to set badblocks (out of space)
+>   */
+>  int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  			int acknowledged)
+> -- 
+> 2.39.2
 > 
 
+-- 
+Coly Li
 
