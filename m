@@ -1,114 +1,138 @@
-Return-Path: <nvdimm+bounces-9938-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9940-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76712A3EC70
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 07:01:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7840BA3EE14
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 09:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 909027A5951
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 06:00:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E0A716D984
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 08:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414A51FAC23;
-	Fri, 21 Feb 2025 06:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OCOHGOcg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A30C200B98;
+	Fri, 21 Feb 2025 08:15:00 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E6E1917E3;
-	Fri, 21 Feb 2025 06:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5D01FFC60
+	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 08:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740117688; cv=none; b=KNFUsUMvPSpSZDZTsAh/m862VCf5vUaOR/vQn4yj6+idwGpK4/1V9TjnyEAlZgdaMpVbe9Ea4qCB7wK6UEGe/6Lek75v4HqjmiM6z2SWd9Fg30FAZjEXDEKh+t3KVNKQm0x0R/O+UwrFU+JT9ICrtAe3EtXE4Y955PsqXuk1b4k=
+	t=1740125700; cv=none; b=X+3JWIfsIPGICgmuXz8o8NHKkUWuBsY7Y37EXFr4j6R3vWnX+Kbhi0YP1Gi0tqdKk+TH4441OGo+fJFxoZDl9gw7PCsFsgC5cR+XFnAc9KPqyl9BxkDrVBimn8Gqw5AVwVOUoODqNtQE6sluHA0EDrcHIq0fV+B6jkCkzg7biPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740117688; c=relaxed/simple;
-	bh=fCzc/nNMh2KfoFPRA/XbYY9gHWRIDSlx5rH678Vgm/o=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=eepA6u3yw835P4DAVVrJvwKv6egTMhiPGQplRzrnXRifZYs6ITwmStHXWuFKSaeItpo3Om95BSXrEoazOpjXjPeW06FYhj3idLngUKzDfpZVMpev6ALAQBOMtb7HvkomkFOP1uM+k1n/lcChdZJ7VLyIt0MnGTsxd9DtwNWMsOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OCOHGOcg; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5P45s003571;
-	Fri, 21 Feb 2025 06:01:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=d4FmSe
-	9M3mZq4yCy32/8QHZt9cN5EPgh9r7qE2bLzdc=; b=OCOHGOcgdKmfZCTNoj9LQX
-	ajTY+gxx8a9BeumZM6wrDYOwTU/L6t0GLLRDZXRlg6waNOcvr7Tp8hv+FSHsPydZ
-	gHJsiRVTQP77+RcAi5KbQeJno0Q30BiDnEtU8W5T9+nSerJusRF1xVXQZU++ufyb
-	eobpb4tEPRbxaMe4CduxaezUTymQEshiTvwveiJNjnHJV76TPc3ZHCgQ7G1lO7qT
-	6VTjoGTJMkycbNX03ic4PlcVNKj0zNZ8KGijjTUGdhjC09AVQv5XXBUG11bDaETF
-	T1TBZXmSyKrIp+AUmA3t3zbkB6lAp8i4B+z6clOTDUfMw2vXdMS6XFatS9UjiHqQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44xka8g4bn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 06:01:26 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5CtZa027050;
-	Fri, 21 Feb 2025 06:01:25 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w025e86v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 06:01:25 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51L61ODj28902054
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Feb 2025 06:01:24 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5514458062;
-	Fri, 21 Feb 2025 06:01:24 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9BAA55805A;
-	Fri, 21 Feb 2025 06:01:20 +0000 (GMT)
-Received: from [9.109.211.178] (unknown [9.109.211.178])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 21 Feb 2025 06:01:20 +0000 (GMT)
-Message-ID: <21af17ce-e125-4c6c-8826-f6cf6b2448d3@linux.ibm.com>
-Date: Fri, 21 Feb 2025 11:31:19 +0530
+	s=arc-20240116; t=1740125700; c=relaxed/simple;
+	bh=aZvFVXJtQbwkBTrVIgiI1mzewIXSi85/1iciqx+9iIk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=QIIOgwcWByzm4Us/7PqUp1edyyfKRIJqxZLtpVTlYHxX7agyn5YwliE5XViuiLa7NiP1Olzbb+gW6rgN/wWWRsD2o6ymXo9Qw16dbODcpuOjFDSTV3G3PbHaSP6xf6PjiseRTWtiX5vyzsdB1kGqcq9EMot+J4YmoWmF2Jk0fZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YzjbC06Tjz4f3lCf
+	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 16:14:31 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 1B0DB1A10EB
+	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 16:14:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+	by APP4 (Coremail) with SMTP id gCh0CgC3Gl_8NbhnHF3eEQ--.3944S4;
+	Fri, 21 Feb 2025 16:14:53 +0800 (CST)
+From: Zheng Qixing <zhengqixing@huaweicloud.com>
+To: axboe@kernel.dk,
+	song@kernel.org,
+	colyli@kernel.org,
+	yukuai3@huawei.com,
+	dan.j.williams@intel.com,
+	vishal.l.verma@intel.com,
+	dave.jiang@intel.com,
+	ira.weiny@intel.com,
+	dlemoal@kernel.org,
+	yanjun.zhu@linux.dev,
+	kch@nvidia.com,
+	hare@suse.de,
+	zhengqixing@huawei.com,
+	john.g.garry@oracle.com,
+	geliang@kernel.org,
+	xni@redhat.com,
+	colyli@suse.de
+Cc: linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	nvdimm@lists.linux.dev,
+	yi.zhang@huawei.com,
+	yangerkun@huawei.com
+Subject: [PATCH 00/12] badblocks: bugfix and cleanup for badblocks
+Date: Fri, 21 Feb 2025 16:10:57 +0800
+Message-Id: <20250221081109.734170-1-zhengqixing@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Change in reported values of some block integrity sysfs
- attributes
-From: M Nikhil <nikh1092@linux.ibm.com>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-        linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-scsi@vger.kernel.org, hare@suse.de, hch@lst.de,
-        steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Nihar Panda <niharp@linux.ibm.com>
-References: <f6130475-3ccd-45d2-abde-3ccceada0f0a@linux.ibm.com>
- <yq18qsjdz0r.fsf@ca-mkp.ca.oracle.com>
- <a39d25d3-e6ac-4166-a75e-58a258da4101@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <a39d25d3-e6ac-4166-a75e-58a258da4101@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ntn5dI55lF0o7GPFgeztaTKLqIk3V94R
-X-Proofpoint-ORIG-GUID: ntn5dI55lF0o7GPFgeztaTKLqIk3V94R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-21_01,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=807 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502210044
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgC3Gl_8NbhnHF3eEQ--.3944S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw1kGFW8uw1kXryxWF47XFb_yoW8Xr15pF
+	nxK343Zr10grW7X3WkZw4UKr1F93WxGFWUK3y7Jas5WFyUAa4xJr1kXF10qryqqry3JrnF
+	vF1YgFyUWFy8Cw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU07PEDUUUUU==
+X-CM-SenderInfo: x2kh0wptl0x03j6k3tpzhluzxrxghudrp/
 
-gentle ping!!!
+From: Zheng Qixing <zhengqixing@huawei.com>
 
-Hopefully I haven't missed anything. I was wondering if you could find 
-out something and if I can provide more information.
+During RAID feature implementation testing, we found several bugs
+in badblocks.
+
+This series contains bugfixes and cleanups for MD RAID badblocks
+handling code.
+
+Li Nan (8):
+  badblocks: Fix error shitf ops
+  badblocks: factor out a helper try_adjacent_combine
+  badblocks: attempt to merge adjacent badblocks during
+    ack_all_badblocks
+  badblocks: return error directly when setting badblocks exceeds 512
+  badblocks: return error if any badblock set fails
+  badblocks: fix the using of MAX_BADBLOCKS
+  badblocks: try can_merge_front before overlap_front
+  badblocks: fix merge issue when new badblocks align with pre+1
+
+Zheng Qixing (4):
+  badblocks: fix missing bad blocks on retry in _badblocks_check()
+  badblocks: return boolen from badblocks_set() and badblocks_clear()
+  md: improve return types of badblocks handling functions
+  badblocks: use sector_t instead of int to avoid truncation of
+    badblocks length
+
+ block/badblocks.c             | 317 +++++++++++++---------------------
+ drivers/block/null_blk/main.c |  19 +-
+ drivers/md/md.c               |  47 +++--
+ drivers/md/md.h               |  14 +-
+ drivers/md/raid1-10.c         |   2 +-
+ drivers/md/raid1.c            |  10 +-
+ drivers/md/raid10.c           |  14 +-
+ drivers/nvdimm/badrange.c     |   2 +-
+ drivers/nvdimm/nd.h           |   2 +-
+ drivers/nvdimm/pfn_devs.c     |   7 +-
+ drivers/nvdimm/pmem.c         |   2 +-
+ include/linux/badblocks.h     |  10 +-
+ 12 files changed, 181 insertions(+), 265 deletions(-)
+
+-- 
+2.39.2
 
 
