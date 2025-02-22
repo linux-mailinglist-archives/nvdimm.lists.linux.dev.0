@@ -1,210 +1,102 @@
-Return-Path: <nvdimm+bounces-9970-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-9972-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B71BA3F3FE
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 13:17:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B28EA40491
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 22 Feb 2025 02:13:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABAA917A93F
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 21 Feb 2025 12:17:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F4153BA60C
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 22 Feb 2025 01:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F9C320D516;
-	Fri, 21 Feb 2025 12:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="JQr9xBzj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7535A15DBBA;
+	Sat, 22 Feb 2025 01:13:00 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E9020B7FD
-	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 12:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFA915853B
+	for <nvdimm@lists.linux.dev>; Sat, 22 Feb 2025 01:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740140220; cv=none; b=XJ/iF2zqkwsLR5qtQi3jnoChjVrgx78eLk2+zcsa5QbGUAQKwbHh8+1gRKr5cWx8HoOzbLkTM4o/hqKVr2ftk/aHfMP+lk17kXoOCfbaHS0tP2oIW3J83t3xS6lEM6iuTQ4UHGw2oy9sE0e5yxoWvJ9JqhSoxCYst6acPXc/5AI=
+	t=1740186780; cv=none; b=XsFeaHHahmCgBJ/ztBkI1kD2MnFcmOR8bS9H5TETesgDxd9hY167BnQebZ8I1CZ0D/weQTZjm4sKo1BdbciXuNf+D1woYkxgtE8CL6bjtXA7zz+HDjTVUpCBj8uVmtM6ueBjep0yxlbl9OPBuw3CKGpzw3BGltSTxJKJGnAf18E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740140220; c=relaxed/simple;
-	bh=AytNe/HlUvovzNVPebv72028JhoBKwW3ZkXVgYp23rE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=EuziG35xtcuXGfe0locDn8Rjh/RjjPFTOOampHrtPNb68M1SzloeGPuQQf++E03NrkmDvx171QRjlbdBYAXliY6i7xrjOL5ntGKxU5gyhcTv2NSWXbIe95ERLalYNRtvlJQkGcYmUXTOZyEu0nPzGiB4/hGOhMSVkkxnp3Ju348=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=JQr9xBzj; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250221121654epoutp039fe965697ef5245b812fe80cee85550f~mOE4vOcWV2991429914epoutp03X
-	for <nvdimm@lists.linux.dev>; Fri, 21 Feb 2025 12:16:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250221121654epoutp039fe965697ef5245b812fe80cee85550f~mOE4vOcWV2991429914epoutp03X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1740140214;
-	bh=vHEeLZ2yQAJD7Zb6AS+MprdQT+oGOwFu1priVptQrqg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JQr9xBzjPiR4AoCTEwmDsP/nssLrYemKMooWpgxhoF1vnNGZg/8/LUU9G1fxO6MsS
-	 TP+YC+3WpPyAoFDKq8O3VhZMr3WUKOOVOlvp+ODlQubVXmmfUVPQ792ZGU07a+TSI6
-	 M6qYuM0ehvmM5amS4VAMgxUGPjBuviLVXwg/j3j4=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20250221121653epcas5p2c61096e52a754bbbd806a89cca6c083d~mOE4QPd1o0224102241epcas5p2J;
-	Fri, 21 Feb 2025 12:16:53 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.174]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4Yzpyq6sj9z4x9Ps; Fri, 21 Feb
-	2025 12:16:51 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	1F.C5.19710.3BE68B76; Fri, 21 Feb 2025 21:16:51 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250221121541epcas5p163deb1f82a4775da19f3a57eb0bee55f~mOD1GC7XC1966519665epcas5p13;
-	Fri, 21 Feb 2025 12:15:41 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250221121541epsmtrp2b427fbb704630cc61b96c670b176b1d0~mOD1AIUkK1401914019epsmtrp26;
-	Fri, 21 Feb 2025 12:15:41 +0000 (GMT)
-X-AuditID: b6c32a44-363dc70000004cfe-2b-67b86eb36ea3
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A3.1C.33707.D6E68B76; Fri, 21 Feb 2025 21:15:41 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250221121539epsmtip22f2d2c43dd807a3d03f7ec968dab5328~mODzLy2gf0040200402epsmtip2U;
-	Fri, 21 Feb 2025 12:15:39 +0000 (GMT)
-Date: Fri, 21 Feb 2025 17:37:29 +0530
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: Anuj gupta <anuj1072538@gmail.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, Christoph Hellwig
-	<hch@lst.de>, M Nikhil <nikh1092@linux.ibm.com>,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-scsi@vger.kernel.org, hare@suse.de, steffen Maier
-	<maier@linux.ibm.com>, Benjamin Block <bblock@linux.ibm.com>, Nihar Panda
-	<niharp@linux.ibm.com>
-Subject: Re: Change in reported values of some block integrity sysfs
- attributes
-Message-ID: <20250221120729.GA5233@green245>
+	s=arc-20240116; t=1740186780; c=relaxed/simple;
+	bh=O6DZi57Va/gDUy3dLLvOK2ckmPoBCLLeuimpP9n8whU=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=D8cQ4h+/ei59gNDYJBCQseBtB54on3dSV3B+yq7JlnaiSadQolClS6HWa9qjgool+p4u+VMnTVzBjR8aFmp6k/+z+CC1fcBk3TfAfTMWf3oNdOhyPkosnppeXJKb3OQVz9F5VpHr68iHRahK8cyPDqQWP8/2s1YCrkPjy5e2U/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Z089y4vqFz4f3jt4
+	for <nvdimm@lists.linux.dev>; Sat, 22 Feb 2025 09:12:38 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 12D331A1676
+	for <nvdimm@lists.linux.dev>; Sat, 22 Feb 2025 09:12:55 +0800 (CST)
+Received: from [10.174.179.143] (unknown [10.174.179.143])
+	by APP4 (Coremail) with SMTP id gCh0CgB321+VJLlnFggiEg--.19789S3;
+	Sat, 22 Feb 2025 09:12:54 +0800 (CST)
+Subject: Re: [PATCH 05/12] badblocks: return error if any badblock set fails
+To: Coly Li <i@coly.li>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc: Zheng Qixing <zhengqixing@huaweicloud.com>, axboe@kernel.dk,
+ song@kernel.org, colyli@kernel.org, dan.j.williams@intel.com,
+ vishal.l.verma@intel.com, dave.jiang@intel.com, ira.weiny@intel.com,
+ dlemoal@kernel.org, yanjun.zhu@linux.dev, kch@nvidia.com,
+ Hannes Reinecke <hare@suse.de>, zhengqixing@huawei.com,
+ john.g.garry@oracle.com, geliang@kernel.org, xni@redhat.com, colyli@suse.de,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-raid@vger.kernel.org, nvdimm@lists.linux.dev, yi.zhang@huawei.com,
+ yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20250221081109.734170-1-zhengqixing@huaweicloud.com>
+ <20250221081109.734170-6-zhengqixing@huaweicloud.com>
+ <4qo5qliidycbjmauq22tqgv6nbw2dus2xlhg2qvfss7nawdr27@arztxmrwdhzb>
+ <272e37ea-886c-8a44-fd6b-96940a268906@huaweicloud.com>
+ <70D2392E-4F75-43C6-8C34-498AACC78E0C@coly.li>
+From: Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <a3c74c7c-44b6-c4c0-872d-0de7e29214c0@huaweicloud.com>
+Date: Sat, 22 Feb 2025 09:12:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CACzX3AvbM4qG+ZOWJoCTNMMgSz8gMjoRcQ10_HJbMyi0Nv9qvQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMJsWRmVeSWpSXmKPExsWy7bCmuu7mvB3pBp1zTC0+fv3NYnFp3QVm
-	iwWL5rJY7Fk0icli5eqjTBZ7b2lbtM/fxWjRfX0Hm8XF3q/MFsuP/2Oy+Nbxkd3i7sWnzBYr
-	f/xhdeD12DnrLrvHhEUHGD1ebJ7J6LH7ZgObx8ent1g8Np+u9vi8SS6APSrbJiM1MSW1SCE1
-	Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoWCWFssScUqBQQGJxsZK+
-	nU1RfmlJqkJGfnGJrVJqQUpOgUmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsb9rTOYCppFK1Yf
-	fsvSwDhHsIuRk0NCwERi7a9FLF2MXBxCArsZJWa1bWGFcD4xSrTOXofgnDi+lxmm5dLFBnaI
-	xE5GiZOHXrJBOM8YJXbO+cIGUsUioCrxZfEedhCbTUBd4sjzVkYQW0RATeLptu1gDcwCncwS
-	0zqngDUICwRKfN3wG6yIV0BHYmPzSnYIW1Di5MwnLCA2J1DNl+/NYGeICihLHNh2nAlkkITA
-	Wg6J87+OMkHc5yKxc8ZVNghbWOLV8S3sELaUxOd3e6Hi6RI/Lj+Fqi+QaD62jxHCtpdoPdUP
-	toBZIEPi98d9UD/LSkw9tY4JIs4n0fv7CVQvr8SOeTC2kkT7yjlQtoTE3nMNULaHxJfdF8Hm
-	CAm0MEk0XWeawCg/C8lvs5Csg7B1JBbs/sQ2i5EDyJaWWP6PA8LUlFi/S38BI+sqRsnUguLc
-	9NRk0wLDvNRyeJQn5+duYgSnZi2XHYw35v/TO8TIxMF4iFGCg1lJhLetfku6EG9KYmVValF+
-	fFFpTmrxIUZTYGRNZJYSTc4HZoe8knhDE0sDEzMzMxNLYzNDJXHe5p0t6UIC6YklqdmpqQWp
-	RTB9TBycUg1MevssYmZ9O7Jk3ZHED2WzZGZNjOq03xp6oJFbpVHebcNhrZ8Hr7Mt2vb6SG62
-	lNQNhnTTWQULTn9R6fjEdTLNYa6/ybLjUy+lpgWtmptQVeUtZCmZw37DmS3gyHxXvlXeB3R0
-	3V6esZ1rVj8t5a0syyIJ2x1nZ8p6rZ256vrSSDujCXveMHyaVyLwuGH/1suWD9LrBBpWPJTp
-	vXJ+75Q4b+XbE9QW5XHtNstceGtmI+dmW67s2C8e8UWuRx4ebYq+fvzNoaCK0Ng/JvNnblyS
-	mDdX6ea3B9FLunlDNsxbzXqlUGLVWeG5f/Js0np4f256dPzTFYUEfsbjZc2JslpqKp5b87U6
-	51wUOGaXw/ZsvhJLcUaioRZzUXEiAM9HXrVWBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJXjc3b0e6QWOXqsXHr79ZLC6tu8Bs
-	sWDRXBaLPYsmMVmsXH2UyWLvLW2L9vm7GC26r+9gs7jY+5XZYvnxf0wW3zo+slvcvfiU2WLl
-	jz+sDrweO2fdZfeYsOgAo8eLzTMZPXbfbGDz+Pj0FovH5tPVHp83yQWwR3HZpKTmZJalFunb
-	JXBlNF5+ylJwWKji7ZtpLA2MX/m6GDk5JARMJC5dbGDvYuTiEBLYzihx+cd8RoiEhMSpl8ug
-	bGGJlf+eQxU9YZTYdbCBBSTBIqAq8WXxHnYQm01AXeLI81awBhEBNYmn27azgTQwC3QzSyzd
-	vB+sQVggUOLrht9gRbwCOhIbm1dCTW1hkti+6QYrREJQ4uTMJ2ANzAJaEjf+vWTqYuQAsqUl
-	lv/jAAlzAs358r2ZGcQWFVCWOLDtONMERsFZSLpnIemehdC9gJF5FaNoakFxbnpucoGhXnFi
-	bnFpXrpecn7uJkZwLGkF7WBctv6v3iFGJg7GQ4wSHMxKIrxt9VvShXhTEiurUovy44tKc1KL
-	DzFKc7AoifMq53SmCAmkJ5akZqemFqQWwWSZODilGpjMVyt0WmzlOlQoEOAx513p7Evvo5VV
-	+Tdef8qz59AS/obVCgJXnTWVZebvmWz+MV3zv97sFJUA40vr9pxYPTvkuepCscB5HPUp3yTL
-	9izXPnfOW7D354oTH0P3F5o/1fT5+OtB9Ex2sxz2hj7jSSf5NE8IHt1cdqB3o665gdeeF6o+
-	RuzRk2WWaa9Qapz0Z8KBKdnblnCq3zt7tL+oT+7Vg5p5C5uOXJxy8MGbmqTS8DjPaqMO78hz
-	kx1cZGMj15xctUvRPezPgk/cZ0UfS4kf3LZhStLu/qnTGJWbbivo7Pm0780l8dV7UmTF5fcE
-	2qhNXt3P9mFqufJKhvd1fB82rFOMnsS1Kl1G6UaAmdUSJZbijERDLeai4kQAfQSPIBQDAAA=
-X-CMS-MailID: 20250221121541epcas5p163deb1f82a4775da19f3a57eb0bee55f
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----BPpCInZN70AS5XN_6T9hoGDuzhCf8U2LGtknTi7-jKSoGEoM=_74df3_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250221103836epcas5p2158071e3449f10b80b44b43595d18704
-References: <f6130475-3ccd-45d2-abde-3ccceada0f0a@linux.ibm.com>
-	<yq18qsjdz0r.fsf@ca-mkp.ca.oracle.com>
-	<CGME20250221103836epcas5p2158071e3449f10b80b44b43595d18704@epcas5p2.samsung.com>
-	<CACzX3AvbM4qG+ZOWJoCTNMMgSz8gMjoRcQ10_HJbMyi0Nv9qvQ@mail.gmail.com>
+In-Reply-To: <70D2392E-4F75-43C6-8C34-498AACC78E0C@coly.li>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgB321+VJLlnFggiEg--.19789S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYK7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E
+	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+	cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+	Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+	6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72
+	CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+	rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+	1l4c8EcI0Ec7CjxVAaw2AFwI0_GFv_Wryl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
+	WUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU
+	FfHUDUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 
-------BPpCInZN70AS5XN_6T9hoGDuzhCf8U2LGtknTi7-jKSoGEoM=_74df3_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+Hi,
 
-On Fri, Feb 21, 2025 at 04:07:55PM +0530, Anuj gupta wrote:
-> > I don't see any change in what's reported with block/for-next in a
-> > regular SCSI HBA/disk setup. Will have to look at whether there is a
-> > stacking issue wrt. multipathing.
+在 2025/02/21 18:12, Coly Li 写道:
+> So we don’t need to add a negative return value for partial success/failure?
 > 
-> Hi Martin, Christoph,
-> 
-> It seems this change in behaviour is not limited to SCSI only. As Nikhil
-> mentioned an earlier commit
-> [9f4aa46f2a74 ("block: invert the BLK_INTEGRITY_{GENERATE,VERIFY} flags")]
-> causes this change in behaviour. On my setup with a NVMe drive not formatted
-> with PI, I see that:
-> 
-> Without this commit:
-> Value reported by read_verify and write_generate sysfs entries is 0.
-> 
-> With this commit:
-> Value reported by read_verify and write_generate sysfs entries is 1.
-> 
-> Diving a bit deeper, both these flags got inverted due to this commit.
-> But during init (in nvme_init_integrity) these values get initialized to 0,
-> inturn setting the sysfs entries to 1. In order to fix this, the driver has to
-> initialize both these flags to 1 in nvme_init_integrity if PI is not supported.
-> That way, the value in sysfs for these entries would become 0 again. Tried this
-> approach in my setup, and I am able to see the right values now. Then something
-> like this would also need to be done for SCSI too.
-> 
+> Coly Li.
 
-I tried to make it work for SCSI too. However my testing is limited as I
-don't have a SCSI device. With scsi_debug I see this currently:
+Yes, I think so. No one really use this value, and patch 10 clean this
+up by changing return type to bool.
 
-# modprobe scsi_debug dev_size_mb=128 dix=0 dif=0
-# cat /sys/block/sda/integrity/write_generate
-1
-# cat /sys/block/sda/integrity/read_verify
-1
-# cat /sys/class/scsi_host/host0/prot_capabilities
-0
+Thanks,
+Kuai
 
-To fix this, I added this. Nikhil can you try below patch? Martin, can
-you please take a look as well.
-
-After this patch, with the same scsi_debug device, I see sysfs entries
-populated as 0.
-
-diff --git a/drivers/scsi/sd_dif.c b/drivers/scsi/sd_dif.c
-index ae6ce6f5d622..be2cd06f500b 100644
---- a/drivers/scsi/sd_dif.c
-+++ b/drivers/scsi/sd_dif.c
-@@ -40,8 +40,10 @@ void sd_dif_config_host(struct scsi_disk *sdkp, struct queue_limits *lim)
- 		dif = 0; dix = 1;
- 	}
- 
--	if (!dix)
-+	if (!dix) {
-+		bi->flags |= BLK_INTEGRITY_NOGENERATE | BLK_INTEGRITY_NOVERIFY;
- 		return;
-+	}
- 
- 	/* Enable DMA of protection information */
- 	if (scsi_host_get_guard(sdkp->device->host) & SHOST_DIX_GUARD_IP)
-
-------BPpCInZN70AS5XN_6T9hoGDuzhCf8U2LGtknTi7-jKSoGEoM=_74df3_
-Content-Type: text/plain; charset="utf-8"
-
-
-------BPpCInZN70AS5XN_6T9hoGDuzhCf8U2LGtknTi7-jKSoGEoM=_74df3_--
 
