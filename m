@@ -1,69 +1,69 @@
-Return-Path: <nvdimm+bounces-10040-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-10042-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41480A4D052
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  4 Mar 2025 01:45:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C265CA4D046
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  4 Mar 2025 01:43:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B88091771A9
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  4 Mar 2025 00:42:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B3803ABE38
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  4 Mar 2025 00:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156FC143C5D;
-	Tue,  4 Mar 2025 00:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E8BC14830C;
+	Tue,  4 Mar 2025 00:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HK4kKwu+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acIRut8X"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913A0139566
-	for <nvdimm@lists.linux.dev>; Tue,  4 Mar 2025 00:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528D073176
+	for <nvdimm@lists.linux.dev>; Tue,  4 Mar 2025 00:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741048644; cv=none; b=prxA69D7GzBlPLipH9BX93jNycWMsapeNZtZpIYZBf2CPdKHIZK6RgEBC545SgkFv2YIuFzNiTCnot/jzg7nHkxzl7LkNGuNDWt26jIJMXdknb4nam06N8F5mnCZghDZcH3fQOI11zGo7ohg7ApSc68JmmWj8+DBEUSYjtKeIfc=
+	t=1741048645; cv=none; b=GGXN2XeNprUwKcgwj2Qtr2+wZ+m0VMAuiXrWIqN6YSmHn5xfZFg4q6D0aNkoq3NYUTP0PDKnhq1wfro0a3zUHFE9YDOz0EC7xDM8UAJ00kO7Tews8Y0PNGp6ZmDer4r9lgsgILhdlQ6Mchd3chh0Vz0RT1zsR+IzOqTS/t9Wl6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741048644; c=relaxed/simple;
-	bh=XKQZM1BVeY1A7e2GNG/fabJUyRi3qzw+5EVyRi2EZbM=;
+	s=arc-20240116; t=1741048645; c=relaxed/simple;
+	bh=pHe4G+oE8dVwZr8Tod68ruVXvcAns/sY/G7UWPRgZ2U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=taam9aB6StN57OusKbbbhqQOZEaSEPPLYC0YFxQd/p4SXRjskR7RTskb0brhWRoXE9IWibM6fxN6DflYCEEJ4w05CTFD+fS8aJpQJwdByISuLMgc57wsAEHoyfmcG0Cn3AXcCxg5VClY57NHuAhOwzy5a11bt75MiXITRSpex+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HK4kKwu+; arc=none smtp.client-ip=198.175.65.17
+	 MIME-Version; b=ivgonqY/lhHfXLWD1MN/LovSdWmsmONWs3N+LUOmOtuI6E1SKd4IS/w4BPqBiBg2EPl5IpT3wuLuQGHUSficJ5O1QWsHWViuINBuTtgm1aqG9YqN0lEfgD4IBgBqrkdgc6w8o3KLRClQUEdjygNdtP41z1wM7vkG/tC+RDw8Bz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=acIRut8X; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741048643; x=1772584643;
+  t=1741048645; x=1772584645;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XKQZM1BVeY1A7e2GNG/fabJUyRi3qzw+5EVyRi2EZbM=;
-  b=HK4kKwu+7cc8+0EZyrjG0Nokimgr5e1bwKnZhQdavbTqty5UrEYF+yBu
-   ux2/3O/Q/wiWUrFJSxIqvnkFyze0DG/EAR7X5KqxinqvTGLz4y2e3IMVi
-   94wzm8ErDytbARsRrEV8Ycz5On4hjmIWCfAaHeFIgprqSasqSYCBfOk9v
-   k7LM5Trvq0amtsKMIME/UUTG3F0+Q99nCA/xz5CcYL00NbeelkK8RN+HX
-   me+CpBJyOLfzES5080paAGH7tywaXmpIaUFBq0vZK40ef4hvFB/GVL4Nk
-   Hg3tNpE0j3C/A3+SoyVjVgmQb9hnvOQPmcNxcZGht2TMoz5tWrhBXY80J
-   Q==;
-X-CSE-ConnectionGUID: yxhw/gKBQxqqPnrclEtMAA==
-X-CSE-MsgGUID: GT7RGR91T8uWzjZaM2e+aA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="41975319"
+  bh=pHe4G+oE8dVwZr8Tod68ruVXvcAns/sY/G7UWPRgZ2U=;
+  b=acIRut8X7SI0dHW4bEzqUy+FgeR3aHhOezt2fKNnIet9Lcyc4Fs4QDjG
+   j63VHvuXCsqG6H72HhL5gJ1bObB/hVlWThhei4/PrPpyFN7bXG5pUOqwq
+   PwQBaHcOXSxVgg8g96vI4l9XKUfr/TqmhRU+zNUj73S3F45bdZfoMvQD5
+   BglyGruFqpj1CWaljfWzEKob/JRGNxabjjHKKaZ6evGCMXKsjGcPuDmAe
+   BrOL2KASSbjkMANvalhqvf7wzIOEJMerYN1AJ58ubsAx/glAYrrInunVl
+   d74UceljXNTJmDUAo13kcIecxdAAX5PNElOrvSVczfAFfyO9pyJwKsp4g
+   w==;
+X-CSE-ConnectionGUID: 4nfNRx4oQoK/bePJjR0sDw==
+X-CSE-MsgGUID: b/2EgaVBS8iWb266hEMShg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="41975320"
 X-IronPort-AV: E=Sophos;i="6.13,331,1732608000"; 
-   d="scan'208";a="41975319"
+   d="scan'208";a="41975320"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 16:37:21 -0800
-X-CSE-ConnectionGUID: s3AeArtzTwangCunbV9g2w==
-X-CSE-MsgGUID: aOZcVb5zTUKZxzlNmJsHVA==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 16:37:22 -0800
+X-CSE-ConnectionGUID: ciCiPPTcTROd6EnXMQ2e3Q==
+X-CSE-MsgGUID: KG1avHpyRbqjdmTaaLRVIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,331,1732608000"; 
-   d="scan'208";a="141427142"
+   d="scan'208";a="141427148"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.125.109.46])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 16:37:20 -0800
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 16:37:21 -0800
 From: alison.schofield@intel.com
 To: nvdimm@lists.linux.dev
 Cc: Alison Schofield <alison.schofield@intel.com>
-Subject: [ndctl PATCH 2/5] ndctl/namespace: close file descriptor in do_xaction_namespace()
-Date: Mon,  3 Mar 2025 16:37:08 -0800
-Message-ID: <60a9535a8ff1f14b9a251ebdbbd8f57265128260.1741047738.git.alison.schofield@intel.com>
+Subject: [ndctl PATCH 3/5] ndctl/dimm: do not increment a ULLONG_MAX slot value
+Date: Mon,  3 Mar 2025 16:37:09 -0800
+Message-ID: <6f3f15b368b1d2708f93f00325e009747425cef0.1741047738.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1741047738.git.alison.schofield@intel.com>
 References: <cover.1741047738.git.alison.schofield@intel.com>
@@ -77,74 +77,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-A coverity scan highlighted a resource leak caused by not freeing
-the open file descriptor upon exit of do_xaction_namespace().
+A coverity scan higlighted an overflow issue when the slot variable,
+an unsigned integer that is initialized to -1, is incremented and
+overflows.
 
-Move the fclose() to a 'goto out_close' and route all returns through
-that path.
+Initialize slot to 0 and move the increment statement to after slot
+is evaluated. That keeps the comparison to a u32 as is and avoids
+overflow.
 
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- ndctl/namespace.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ ndctl/dimm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/ndctl/namespace.c b/ndctl/namespace.c
-index bb0c2f2e28c7..5eb9e1e98e11 100644
---- a/ndctl/namespace.c
-+++ b/ndctl/namespace.c
-@@ -2133,7 +2133,7 @@ static int do_xaction_namespace(const char *namespace,
- 				util_display_json_array(ri_ctx.f_out, ri_ctx.jblocks, 0);
- 			if (rc >= 0)
- 				(*processed)++;
--			return rc;
-+			goto out_close;
- 		}
- 	}
+diff --git a/ndctl/dimm.c b/ndctl/dimm.c
+index 889b620355fc..c39c69bfa336 100644
+--- a/ndctl/dimm.c
++++ b/ndctl/dimm.c
+@@ -97,7 +97,7 @@ static struct json_object *dump_label_json(struct ndctl_dimm *dimm,
+ 	struct json_object *jlabel = NULL;
+ 	struct namespace_label nslabel;
+ 	unsigned int nsindex_size;
+-	unsigned int slot = -1;
++	unsigned int slot = 0;
+ 	ssize_t offset;
  
-@@ -2144,11 +2144,11 @@ static int do_xaction_namespace(const char *namespace,
- 		rc = file_write_infoblock(param.outfile);
- 		if (rc >= 0)
- 			(*processed)++;
--		return rc;
-+		goto out_close;
- 	}
+ 	if (!jarray)
+@@ -115,7 +115,6 @@ static struct json_object *dump_label_json(struct ndctl_dimm *dimm,
+ 		struct json_object *jobj;
+ 		char uuid[40];
  
- 	if (!namespace && action != ACTION_CREATE)
--		return rc;
-+		goto out_close;
+-		slot++;
+ 		jlabel = json_object_new_object();
+ 		if (!jlabel)
+ 			break;
+@@ -127,8 +126,11 @@ static struct json_object *dump_label_json(struct ndctl_dimm *dimm,
+ 		if (len < 0)
+ 			break;
  
- 	if (namespace && (strcmp(namespace, "all") == 0))
- 		rc = 0;
-@@ -2207,7 +2207,7 @@ static int do_xaction_namespace(const char *namespace,
- 						saved_rc = rc;
- 						continue;
- 				}
--				return rc;
-+				goto out_close;
- 			}
- 			ndctl_namespace_foreach_safe(region, ndns, _n) {
- 				ndns_name = ndctl_namespace_get_devname(ndns);
-@@ -2286,9 +2286,6 @@ static int do_xaction_namespace(const char *namespace,
- 	if (ri_ctx.jblocks)
- 		util_display_json_array(ri_ctx.f_out, ri_ctx.jblocks, 0);
+-		if (le32_to_cpu(nslabel.slot) != slot)
++		if (le32_to_cpu(nslabel.slot) != slot) {
++			slot++;
+ 			continue;
++		}
++		slot++;
  
--	if (ri_ctx.f_out && ri_ctx.f_out != stdout)
--		fclose(ri_ctx.f_out);
--
- 	if (action == ACTION_CREATE && rc == -EAGAIN) {
- 		/*
- 		 * Namespace creation searched through all candidate
-@@ -2303,6 +2300,10 @@ static int do_xaction_namespace(const char *namespace,
- 		else
- 			rc = -ENOSPC;
- 	}
-+
-+out_close:
-+	if (ri_ctx.f_out && ri_ctx.f_out != stdout)
-+		fclose(ri_ctx.f_out);
- 	if (saved_rc)
- 		rc = saved_rc;
- 
+ 		uuid_unparse((void *) nslabel.uuid, uuid);
+ 		jobj = json_object_new_string(uuid);
 -- 
 2.37.3
 
