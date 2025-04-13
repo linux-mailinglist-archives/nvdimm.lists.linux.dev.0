@@ -1,82 +1,82 @@
-Return-Path: <nvdimm+bounces-10195-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-10200-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5E3A874BC
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 14 Apr 2025 00:54:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D84A874CC
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 14 Apr 2025 00:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2B51704A0
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 13 Apr 2025 22:54:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBFDB1893086
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 13 Apr 2025 22:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A02200B9B;
-	Sun, 13 Apr 2025 22:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E17214210;
+	Sun, 13 Apr 2025 22:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGPcYGN1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZXPAOmXy"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864CD1E3761
-	for <nvdimm@lists.linux.dev>; Sun, 13 Apr 2025 22:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D1F20F081
+	for <nvdimm@lists.linux.dev>; Sun, 13 Apr 2025 22:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744584745; cv=fail; b=nUT3sI2zIQ5w0aTqB+4zFloFsZATGtzNKdkw+0kVp+itpfX5WgBtkYDIQI+/VjrZoMIAo9PktoklP8tU4Ggx53YVHIzoXMO9qtfE2un3KM+ldJ47gA6IdHM+8mzpPajtd/lZp+WJ0TdUg/g8llVJRXH5X6Y00Fq8A09AGedPrEA=
+	t=1744584759; cv=fail; b=b7XZt5knskk3AY0z8xS5icob4ig39P4FHQURQ426WMjT6sJmlEam/t3OeZnm25s7egxIE+do4chE+AYS//AL17rGeCHhOsqDRQ0EaWURvCWGgo9Ebk3GCVEdyaxGCqdkYXUmFoEr6V09nPOThszsvi7GpinkEV4ab//CJtAjm3g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744584745; c=relaxed/simple;
-	bh=aPQ2lOD5FZgte//V4Fn7ZiP0+wnZl/4oLYzAK/mFmrY=;
+	s=arc-20240116; t=1744584759; c=relaxed/simple;
+	bh=hIzly7Huia2oFq0h25HsM1O8AIHB+uENrUA+sLPFMr8=;
 	h=From:Date:Subject:Content-Type:Message-ID:References:In-Reply-To:
-	 To:CC:MIME-Version; b=KxEi5AoIWmhvWfB8KM8x/MdqJ6P2uBRdtE3Er3l9gf+S7tfgGqqbRj55o8ZZ6Tiqas5n2/mLWJW9f56Ud4IKYOSYHr1r7CuDlGsmpoXFxzOmE412GWUjp+eeDxfQ1+/t/OUT/KlZsIe4syOrugdOBOQSR0ZZeApAh814g7kHV1A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGPcYGN1; arc=fail smtp.client-ip=192.198.163.7
+	 To:CC:MIME-Version; b=m9OVFa2F6gk5/vB68+5sY25C992Ojac18u9Fa2IMTjw+xed3+Xe6Ib+x3U+N7W/Dz7ysEhHDDs0yZC/+Md3HKENkNfRhl9oxL5JyR3AjK6ygSfxLdRPBCHJ6iL/guBl9B9SqoNZT6RNfNBTzRhtt32b7H3pUm/RNGi1ForLAIQ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZXPAOmXy; arc=fail smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744584743; x=1776120743;
+  t=1744584758; x=1776120758;
   h=from:date:subject:content-transfer-encoding:message-id:
    references:in-reply-to:to:cc:mime-version;
-  bh=aPQ2lOD5FZgte//V4Fn7ZiP0+wnZl/4oLYzAK/mFmrY=;
-  b=OGPcYGN1ZfX43HBqsj0kV4l5G8fvY8MrQ3fDWrFJcPIDQqjJjj4vcA6n
-   VkUkn+4flZaYS54fdytrKVwDrt9LgQWk2iRYN9/WnaZsFJJUjGYgrs13T
-   Xo53VsWEI1ak38U74NHs8QikeVg0BEK0c3UpQl/wRuOJBU+HZ+62SFcaE
-   ayv7eTeZhhr0v5BYYCTyKp+bMxjAKvRQ0kqo91no1OqDffoPRbg0NpPOb
-   GsU//aEsfhhb1v+8MzU+9KgZlZCpNuSsU5DTMXmDjTw2zCuBXtUdJFdVt
-   5HeuPaQNP5yiFh8tjIWfJdXsY2EXPmxqMzx2FnDNcl9Df62eZEmNTdqbS
+  bh=hIzly7Huia2oFq0h25HsM1O8AIHB+uENrUA+sLPFMr8=;
+  b=ZXPAOmXyBkcz01K3A0ywjHp/w40fyERRFn0UaTUCu5sCnW8SYKEyFoWq
+   yeyStHYSWYvPY1PexYWej5SRtemydUmlq8KAmjHY4A0azOIzMmQlcjO6a
+   Zfmkvgv5YMmxqL0jXWR7SKiYGAdEYuWRUls+sc/Ns6b3akq8gNJTmZSxj
+   I5yEiRiLwI1rlXCglBkoEU/d4gHGDYonKX1velyLXGzSh19Si4VP+YNS6
+   Bm+rCXgN/LwB3goA5+1v3C1RC+b+A/bz4ggb+piCkCWX9ehci0tYp5gqR
+   L+22CSOxpT4JH+nmQNpgqlAv26aRGH9wX4BRC0xShaucH7aRmHXZyTtcy
    Q==;
-X-CSE-ConnectionGUID: WqJPtTuaSTi4NISi8TF3bQ==
-X-CSE-MsgGUID: X22zmqQeSXSYwPOYtOO/Sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="71431143"
+X-CSE-ConnectionGUID: mM3HhavFSjCqnBbcWIijrQ==
+X-CSE-MsgGUID: 9HF1OwZ5RPa6tjipgfH2/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="45280971"
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="71431143"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:21 -0700
-X-CSE-ConnectionGUID: c9bybS/FR/+oSZj1Jn00Cg==
-X-CSE-MsgGUID: blq2GIj7Tvu9Lxji5nAteQ==
+   d="scan'208";a="45280971"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:37 -0700
+X-CSE-ConnectionGUID: 3NXhHjWVT9ykHcVjpKcyBw==
+X-CSE-MsgGUID: OF3/jx1rT7+eL1hkcNEzkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="134405572"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:21 -0700
+   d="scan'208";a="129657636"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:37 -0700
 Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Sun, 13 Apr 2025 15:52:36 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
  ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Sun, 13 Apr 2025 15:52:20 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.2.1544.14 via Frontend Transport; Sun, 13 Apr 2025 15:52:36 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Sun, 13 Apr 2025 15:52:20 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Sun, 13 Apr 2025 15:52:20 -0700
+ 15.1.2507.44; Sun, 13 Apr 2025 15:52:35 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nwMAU3Zff3b9XMbFxV9gmsB/9QZqvSLb6+/cVEVEHXNY48TLL4FPq7Vl7kHW/MqnTJ9VIaAjAqPcN+54++FxwdudZrOuhsGNF4xiq4hUXC8N1ENJ7FtpJ8df7rbZQGeJaXWmxDYiuwqjUXdo+bqSpcG34hZHoXqZWROMDmOk1PthNb0XfLwGDok7vS3nM6K3G6TazD4drkfyfKf2GdPwhWO2oSBWD+E6fE7PwvSlGqgtk34Mbl6WyuRkaJ8uczdDay1lAqo6V0/cPzg6weFIJ+IwnEUgVSi5LWFSkCfkhYZSZO2J7QwN0N5irkuguG5HgUT7DzYMH4mmFgg03RWx2Q==
+ b=MK+u93b3Rji4AgMikp6ENX6Au4cRzs3ZzoVuZbP8cdyMd5kPaw7ux27GmoTe/NdQABOBRUZlYMnIesaADb9RsKfPH8+d/LQd7qx74dfANbwdE3eKF9268z32cxdQ2Yxngi7oV6V7LCaAi6R5/NfuBHXqL52aLr8nY+ep7JpaxlhC4eY3IorUiTQMcsTg5nIfEF7cVBfNPCUO1gZS9ezkrTkrtIBgiH2SsqITY76p+Djmr/i3JjMImHFm2ufIN/ThTrL5/5ef67d22Y1MiTZTpXoYX4hYqKeDavA1VSWCPx/0NscOAKInO4cpHap3dGdBQeN9DDicNNsMLozSr2b2RQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KFSfKXdaijHdUR2EX8XUxITwaBLjdOOX4vtm8g6BPfA=;
- b=mI3Z47dOseu8TcHkGqt/6zxoMq4AlhCfMKtva4VMXc4VuPkplkwYeXOXwiMYY9+AleGNkz0dXIY6KJBBfDEOWBbt/PEhqrnXy2DepwhnXvt/UvotvFN764jLBVOCM/YbC8uuy4nK2o+RaPw6EGawLZQPICQmO1JHtwhMYExDqKvEADWSkXPTNxJKUc8BJ6vYxzbrL6y+Zorj9kPGuasJ2H7q3k+k4AuRiNkpgCqTt9R5yjpaKFfIHaRLW9G3OoS015NWWFzv6FBZq8kkyc2Xkr/GCa/bHaUnRlvVlJniNRZA5kfRWUDnTGYy1xD5NnKZeVxdzZ1m1r6v/ZAB0u4ZRQ==
+ bh=zNDIWhxO6Oq0+ekZCjsNilh5/+781UpnrG4oEYvajM4=;
+ b=oVx0pn2Eh9pCCR4Ds47ykeCaWews/GHIgqlzXnE7CxFf/I8i0X1b3wI2uXSP9w/7p4QT3Gl16KyTA2DKyjTH9Z6aV2o3z3Dv8ILeNl8HLywlxpzUaMAvB3Hp+MhIIk9y2dmdtZQ3SHQgmpgnMdHca77bEsE4uj4QZQh+BNvOUZpNXTtM6GIKuGwtHRwsThVakpmNcDLJSh+p7InUVM7C8wljlqknCUThwigpdQKyONzxP9xX/ue17VxkIKr1kMnTuHmD1Q47qEvBez4y9eRRX54mQzKrPj3m8rRYyAWqwI4Eed7l2WtjYx7uhdXliqpTqc/e1IWOIwLUvxDY2vakig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -86,17 +86,17 @@ Received: from MW4PR11MB6739.namprd11.prod.outlook.com (2603:10b6:303:20b::19)
  by PH7PR11MB7003.namprd11.prod.outlook.com (2603:10b6:510:20a::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.33; Sun, 13 Apr
- 2025 22:52:10 +0000
+ 2025 22:52:12 +0000
 Received: from MW4PR11MB6739.namprd11.prod.outlook.com
  ([fe80::a7ad:a6e8:fced:3f24]) by MW4PR11MB6739.namprd11.prod.outlook.com
  ([fe80::a7ad:a6e8:fced:3f24%4]) with mapi id 15.20.8606.033; Sun, 13 Apr 2025
- 22:52:10 +0000
+ 22:52:12 +0000
 From: Ira Weiny <ira.weiny@intel.com>
-Date: Sun, 13 Apr 2025 17:52:25 -0500
-Subject: [PATCH v9 17/19] cxl/mem: Trace Dynamic capacity Event Record
+Date: Sun, 13 Apr 2025 17:52:26 -0500
+Subject: [PATCH v9 18/19] tools/testing/cxl: Make event logs dynamic
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250413-dcd-type2-upstream-v9-17-1d4911a0b365@intel.com>
+Message-ID: <20250413-dcd-type2-upstream-v9-18-1d4911a0b365@intel.com>
 References: <20250413-dcd-type2-upstream-v9-0-1d4911a0b365@intel.com>
 In-Reply-To: <20250413-dcd-type2-upstream-v9-0-1d4911a0b365@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>, Fan Ni <fan.ni@samsung.com>, "Jonathan
@@ -107,11 +107,11 @@ CC: Dan Williams <dan.j.williams@intel.com>, Davidlohr Bueso
 	<linux-cxl@vger.kernel.org>, <nvdimm@lists.linux.dev>,
 	<linux-kernel@vger.kernel.org>
 X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744584735; l=3493;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744584735; l=15739;
  i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=aPQ2lOD5FZgte//V4Fn7ZiP0+wnZl/4oLYzAK/mFmrY=;
- b=k8Fdmu2rZNvNMh7qXVZD4E1W4tdqS8wxeoYskhYO5Th92GdtLTQFn2XPde1mfzC8hCpOtvPp2
- dQ//+GOxzbPDtNEqeP1qRDNxewxFwkDEJKt5QDpqPhDWSYOs9UnQhM/
+ bh=hIzly7Huia2oFq0h25HsM1O8AIHB+uENrUA+sLPFMr8=;
+ b=qpQkHpLuBE/2dAlhrUlSTLqrdxOrBEnFofzVUxY1p4gvHMRQH8V5CQTE1T7WkoNyRwDkIGx5k
+ 8k2ldon1HX8B8v5vWbPzhgPiHnVFeWtN5qX1ArR8P9Xe++yTahE/EA1
 X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
  pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
 X-ClientProxiedBy: MW4PR03CA0227.namprd03.prod.outlook.com
@@ -125,205 +125,529 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MW4PR11MB6739:EE_|PH7PR11MB7003:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4449e40-e3a4-4dbb-a319-08dd7addd321
+X-MS-Office365-Filtering-Correlation-Id: 0a124e87-aaa0-43df-a72d-08dd7addd42b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?M0FDZmF4cHk3STdEaXpPSkxsVGxyaUZlczRBOFQvUThhSjRrd2Izcko5YWln?=
- =?utf-8?B?R0UxZm1pNExEWVBaMjRmemg1RUZCbnp4M1l3dUxMdlJZUFVZUFJBSGtjVTJS?=
- =?utf-8?B?Yk9XMW9qU3EySUxhaDhFeDcrTTNMWjd6dEJKczdmTmUvM1gvSVdwOFBpU1NQ?=
- =?utf-8?B?cWxCOXRHekphSElSSkxiOW1vSS8rbGk3dmxhY2VnZzZHb0NlcnhrTlZHZXVV?=
- =?utf-8?B?YXZOWVBMSHNkTUN4akZoOWpybVEzSlZhQkc3QkE1VDIySDUrOUNRWHlScHFj?=
- =?utf-8?B?andva2szZkFwN0NZcm1vdTFjblNXMElLLzAxbUtBcUN2cyt5aEs5R0JlM1dl?=
- =?utf-8?B?L0FvWlVIOTE3YkZpUDgwTkFSaGF6aWp3dHNTanJNTHloWVhEK3dWVG55b3J2?=
- =?utf-8?B?YVd1UDlWcEg2dXc0blFJR1VaOUs4dVBNSzFxNUxIdno1SHNpaURNRUNnUWdD?=
- =?utf-8?B?SjM3ckdMWWl5NkZDUmdnN0ErdStNNUVmQXgwWnd1Znh6WUx3dHNCK2JkM0ty?=
- =?utf-8?B?NVZqMXZUd25LTzQ5ZHVFSVVwQUVoNXRoU3cyRHJJVXJsRk1EbEplbVBUK2Iz?=
- =?utf-8?B?dWRMM2NLVE9QaFQxRG1zeTRYZEgrRndTN1JZcHhCaXBldEptRWhiak12eUd0?=
- =?utf-8?B?M3BOWWtDQW1QbmlJTkIwdEhKU01wdTZhK2ZCblN0cVAxZGpqUDdhd053SXBQ?=
- =?utf-8?B?TEYxM0pOVWhubXJtQnNZQXVTSG9HcnhFSXFzMWtuOEdpMU1rYnF0R1oyNDJo?=
- =?utf-8?B?NW96dk56cENSNHVYYkNBNThiKytXWmdNeW9jaTNnb0w4ZG1VUTQwd0FPZWt5?=
- =?utf-8?B?Rjd4ZEY1NkFsL3FlcjVYdzFIRk1MSVUwWVhBc2V3Q0ppazVTNVlnUHJaOU01?=
- =?utf-8?B?ZHliSjJKMExZekhJbW5YK0V4dUFhNlByVkNIOVJZM3J5cnhhR3JWcDdmTWRr?=
- =?utf-8?B?QlJFZDFrZ0xtZUZpYldvaUNsaVBaTDc3OWFvdi9iMGlXejU5SGVpL0JFaEZB?=
- =?utf-8?B?U2MwSk96dkZENFlzY1FyekV2UnM3OW1VSW0rYWk3S3NVOUtVK3JLVFB1YjJn?=
- =?utf-8?B?MGhGamdxRmFJWTJjVXJaa1MvanR3eFVVelBnUjNzKzRMdVl4RXRmRnFXcFEw?=
- =?utf-8?B?VVBaY054bG9scHJoeW1SUGhia1ZrdEphVDVLUENQejNIRm5BaUJwMklJQmJS?=
- =?utf-8?B?WjFIVlU5bkROQWlaTlh1alRZQ1JEWUphNWNIb1JaTG1kalZqQ3BYdDBBa0th?=
- =?utf-8?B?RmVWSURrcnFIbSsrcXQvWWYzeG1GRXVhcjQ3QWljdVh6eW5wWmh3c0tvQklz?=
- =?utf-8?B?UEo4clN6b21QMkVvVGhJS0pqcTFNS0dOeU9id1NhVjJ0aCtpY1U4eG4vSEhh?=
- =?utf-8?B?R3p1VmQ0eWhCTmRQLzdpU3pwNGZJa1Y4RStKalBEMDZEc0UwMUUvYkxJOUdi?=
- =?utf-8?B?TGF1NlB4MG9tdjJieXZtTUF1Q2xRUk84N1JoUE1MS1I1em9laXlRZHRwYjUw?=
- =?utf-8?B?LzF0WHkvVE1CRnB0MHNaZUdKb29BY1pYMzUyMVpZUElQM1BZbEVuVDUrRHEr?=
- =?utf-8?B?Z2pQb0dSSW8zcGxqVTZwNXdYaWVJTFNNREJPdERKdUVpUm5NSGx2T2lzSlE0?=
- =?utf-8?B?dTJWd1RvVjJ4cUkwUTBWL2tNSFN1K3dVQ2wvMW8ydFB2ZEpXM3FGZUtueEZO?=
- =?utf-8?B?ck4wbTlrMkxiOEdvNEU3VU5zSWdVQXhaOTgvS2laVlZhc2N2VzR4Vnh2M1VZ?=
- =?utf-8?B?M1VUUUpGNlVxWjQ3aDU2YmRuYmI5em9pQ2xVNElJVGsvNC9JcEozK3JYZ0xZ?=
- =?utf-8?B?K3RDVzMzWEhDdDhSZ3NPY1lkRXhWcm45YlVnbUs0QzlROFJsTHdpRGMxZGpx?=
- =?utf-8?B?SGxkakxpVmxPZDN3Skh1aDAyQTczOGt4NEoyUXU5eFpHdG96RkJGUnJRdHcr?=
- =?utf-8?Q?tPJjRp4DXhk=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB6739.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?dlBMbjloUGVPNCtZdXdIblE1STh2RG54RE4vNFNtZTlDNHQrRlZSbVFzeDJK?=
+ =?utf-8?B?WjR0ekJBeDExYVNjTjE1aldONVN4cWZtVUV0dzh1amlqV1J2M0lnS3h6M0NT?=
+ =?utf-8?B?dnM5akNtaXdyNmkvWmNPWVBtT2l4endTYTRNYWRUcEFUNHNLaHNSeXBPcUFa?=
+ =?utf-8?B?Q0YyYllnMXI0TzBMdi8yZEhaa2V3Y3BoL1hJNVpjbWV2ckxoNThrZExzT2hU?=
+ =?utf-8?B?cGZDVEF5UXpuYkFRTlk0MEVMMDB3dHFRd0l4ci9NcWt6dmFxUWNBUXBuR2dE?=
+ =?utf-8?B?NStkTlpQTEJjbXMrTGN2MTM2SmxiMDBvSm5TMEptRDZodUVVbXV3QnNpVW5u?=
+ =?utf-8?B?RFRRcmJjMm9ObFJDU1RGekJwc000SEFwaFlLZVJ6WnRNZGJqbmZOYVUreWdC?=
+ =?utf-8?B?dWx3enNZbzlkR05xbHovanpja0luMjR3U0llWHRBcGxoYkg3WFFwVFdxL09P?=
+ =?utf-8?B?YVFubmpaZ25QRTJWYjF2SUlvSENpeGtJaFVQUzVlZ3BQU3RwRmp6a04yUXEy?=
+ =?utf-8?B?TlhTU25kV0JmSXVzMy9BUXlWQmYxTGZsem9jQitEMXVlMmFqVTg2dkxlMDg5?=
+ =?utf-8?B?ZzlPUHFwN2VVajV3Q1hDWDQ1cUR0akdSb05vVEZVYi9FakxqTDdEc0dQcWlH?=
+ =?utf-8?B?UWNSRk1zQllZK1FyTXZDKzhKbjVDNXpFR3RhQlYzeCtUdUhvdzJ1THhqczYv?=
+ =?utf-8?B?TG5CNlRsV0RoYnlwN0xHMTFOeTd3SFRRbE56dVVCNFp5dVV2c3VObXpHN1h4?=
+ =?utf-8?B?aXlsR2JJNTEwa1FxeDJ4Q2oxWE5kYWJjSnBjaWxPZ2NIeFdacVhpRU5kZEJ0?=
+ =?utf-8?B?NG90L21MRnBkL0lKcEY2VzdOSTErbVg4UWVkMDJHbGZzUko1N0dTK2p2Vzlw?=
+ =?utf-8?B?MmVWdXBBWmljSUlRS243cnRmZytwZG5CQjZvb1N2QjYya3RnU0U5ekVsRWxa?=
+ =?utf-8?B?UGZMcXpaaFFrSE9XSDZWOEdHSEN1cDNUekVZMWlzQWg5ak1QV0YzUFh1QSs0?=
+ =?utf-8?B?KzRzdWdXekVNaXErTEJqNHJjWnhaNTBBTmpUY0NlVi9IazhYQnNTM1FLM2dl?=
+ =?utf-8?B?L1FBMGlJUHp1dEpaMDRUNUdWTU1hMmpWU3BVNkc3ZlVuZlorVTY1ZVdGYWVq?=
+ =?utf-8?B?ZWcxRFZCaU85TjJxZ3BuanJYNmJCTjhPOHpYZzMzT3JEVGNISkREMEhWNHlM?=
+ =?utf-8?B?SW5ONGhkcmUxanVHeVRzc0hwTmpTVDd6dlRkK25vYmNVMlYxV0VZWHVOUTRu?=
+ =?utf-8?B?M3MwZ3lpYWtMYVBnTWlTUUJ3cmJJUVhlR3QvV3B3ZmZZVlpKWWt1V0NkZjZP?=
+ =?utf-8?B?UUVFYU4wQ0tYZEMyQ2VGTVA3eDR2VjBIUG0yZzY5NUY3R3gydFNBYmQvdWZi?=
+ =?utf-8?B?Z0lwaXB2RitnU1IyZjZpa1ZzR21qSlg3VkpsRk1Na2FBZVN3a0hyaVJBMnJn?=
+ =?utf-8?B?MG81Y0h1VEh4azBSWkhPakFWMG92THhGaVdnUXFNek1HSTFRa1V3UTR0Z25D?=
+ =?utf-8?B?cERzVDIxbUR5NU1sMWJlY1VoOFNXaGg2ZDZHMmJUUWF3dkY0dFRIdVBJRk40?=
+ =?utf-8?B?dkg1RERpckFCWTQwQmtzdDJyMTZZa0ZFajljS1dYWTlsbGoyWm9yMUNLeXFO?=
+ =?utf-8?B?dERXeFU2R1pHMzR2VkJnbC9ITEFGb0FxVEQ5aGhGVnk2Q3JoQzRJSUxlNGRs?=
+ =?utf-8?B?OFVuSG5qYjAxUUNwR0FUN0w5dldhUkU1STVLcFZVa1drd0R4Y3NPRGZXc3dk?=
+ =?utf-8?B?K0p2cFAzSTZKa3dUa2hybC9venNvbExiZW43a2NFVTc1K0YzZlIvcXJqQTFJ?=
+ =?utf-8?B?eSthQzV0S04wN0tMOE5HQWhRSnZSZWwvdGNqQll0ZW1vRzRSVGhSMWxqdmlo?=
+ =?utf-8?B?Nk1Bb3hGSWppY1BWck9jSk1Nb0lMRE00TnZ4MExwYU9ING1sWFB3VHNkUnBI?=
+ =?utf-8?Q?LwF76e4GgaU=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB6739.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1NNTmdFcVphZWhYN3ZXNDB6clZsOC9PeWpEZ3F4Zm9QSUZlZDFqaGFuSGVT?=
- =?utf-8?B?RGM4Y3NDVHZ0TEY4dFEzeDQ0TUs4ZUR2SW5sT1F6MVcrTFY5RUp4UEU4dFRt?=
- =?utf-8?B?YlRXTkI4QzJTb3BpdDVXVDcvR2FBYlhtVUF3ZEQ5c0tYdlJCMytQZ1dkaVps?=
- =?utf-8?B?MnlhMDV5bmJJNDBUdTl0eW1xZzV2K1RFNG50VHVUZVhZWFBubE1yWm9hUEMz?=
- =?utf-8?B?QXp1MUFUVUdjbzA2Zm1OT1FjeFVTZ0ZycStRMUExWnp1dGZEakhmNktjSXFw?=
- =?utf-8?B?bTBUTElQcnFhUTNhc1VGbFlPVk5nYW14blU3M3U3dFEvTGd6SVovRFZjclM1?=
- =?utf-8?B?VXFTYXlGK1NGb1JOL2VLQm0rZnBqZlNJb0wvOU5nNC9ZM0FsL3ZiaUVyUk1Z?=
- =?utf-8?B?cFhRcXhvVnVXN3BXWkVmUGdPVFA5VldPT3V2N2h0clZjczBpdlJIbHJiNVNv?=
- =?utf-8?B?Q2R2VTdGZk5ObG5kRU1WYkJ0NTk5Tm5HZHh3dkJvOUN4UEhldTNWZ2ovU3Zy?=
- =?utf-8?B?Z2o1Ti9BNDRlT0RIV2pEZUNDcW4zcjg4dHJTQjFXTHVwdmplN2hrSVBvYWpN?=
- =?utf-8?B?VEw4cDdmUzhGc1ZNcHlnMkRtZXU2VjRraXZCSndQK0praHFyc1ZubUJpNkhR?=
- =?utf-8?B?ZW8wakJGWjBiZ0hpMnlCdG4rR3JEQ0xBTUZnWUR2V28xUDNrUTE0QUR5WkpD?=
- =?utf-8?B?bEJvc3dHQTNaNC9CRTZwZ3c0ZDIxNlgzTk9FdGV3R0F6aUgvTWpvWFRRQkJ4?=
- =?utf-8?B?VXMzMkhYTXFFbko0M2lDclRGSENUZDN0cjhiR1FVWFl2T0NzaiswWUxoZFdG?=
- =?utf-8?B?SFpCR28zbk1uTnB2c0xJWkxza2hWdEFBTldLOUVkZ1RReHd4V1diSW0rZmZ1?=
- =?utf-8?B?Z1FPTUFkNXJtZDJpYkV6a0haM1BDOVFOOUEyL3dMeWl2cGpUVTgwcnpXTGlH?=
- =?utf-8?B?d1hFZU8wWlhFaUFLL2p3MTJKZG5wKzg4LzVIanJRbzBtbTVEVllJdldpSGQ0?=
- =?utf-8?B?ZEJWM3Fjdk5kdmhlR2M1eU9rYkF6OXYyTHB5bUtkc2QyN3UzcXRJeTlIZDlT?=
- =?utf-8?B?Rko3akhPNEpmQlRuVzlVeWN6WVlPMlVOdVdnTmdyTnBpUTRHZzdBWG9oK3Fs?=
- =?utf-8?B?bWUvLzhSVi9LMGlQSmdwcjVUQXZGeW5WWU1OYit3eUFCZHRpMHZyUnNKM01z?=
- =?utf-8?B?MVZRU0dvczVVVlBDVnRIR2NiUzZuVWN1VXVSNDNQR3VxSEh3SHByMDUwcy9q?=
- =?utf-8?B?ZWg0dllWRGVwajIxbng5aGp1akVUaWp6ZTVsVjNYNkJXY2tGdE8yYTBYSEtY?=
- =?utf-8?B?dk50TVJLLzBxU2JTTUpraGZrdXl1bjVvZ0JFaC9PRlI2T0VVVk4yZStOWkNz?=
- =?utf-8?B?NHNQdWgyTGF4NnVmRDZvN3ZieWZUUUI1WFlpSUxPd1lab1FNZzdhNmNHaXJU?=
- =?utf-8?B?dW90MmlXdGtSdXRjNW1KeUU5MlY5b1IzYkJKeGZBRXZkS0h1bzB4N1pXa0ti?=
- =?utf-8?B?eHREUERXNWJQSlo4ZHpmaHE5UnZmTjlOU2tOSTY2REE0L0Rmc1dLNjcrMWpl?=
- =?utf-8?B?U1pjcEJ2SHJNYlhVM0p3azZ1eklmQmVRd2txOG5yWmpXU0NLalNlcTBOVGNQ?=
- =?utf-8?B?V0NqTmtnd3VKNVlCak52anNzZUc0Z1ZjZWVNb0VLZ2xPc3o5dU4wZUtyblRl?=
- =?utf-8?B?ODMrUjZ1QTF5OFU1UDR4SGpEM2VBY0hrQlZLVHY5bzJHbkZoWVl3YWNhaTVN?=
- =?utf-8?B?NmVqcWNmZ294Nm1XSm9xMWdJcThDUzJXQU9COE5mUmVPR0xLQ25vOENwV0dx?=
- =?utf-8?B?UlNKaTQzOGpPcTBLV2YwU1hWbnh2Q1JMK3pxVHRoME00NU8rNllUSllheGlm?=
- =?utf-8?B?TjQvM29HYUkyUzVHVDc2WlNQYmVDaEVYdkVSbDlkV29ST1lBb1JTS2JrZlBa?=
- =?utf-8?B?OVBXVFE3bVY5Q2RoM3hwM1Zud29veTVqQzRKSjY0V2xGRTNqd3ZsOFRSamhK?=
- =?utf-8?B?TkFWSXpmZHZPeVp5YVRaVlhMZXhIL1JwL1ZxL2FMZ0dVdEQ1YWN2ZEl1QmE3?=
- =?utf-8?B?ZGFVY2F5bkJBZUVKblRkTmtRd1FqQjVPbjhwT2pDSVRFREpZeEZHSUtJdGQy?=
- =?utf-8?Q?ypu8Nv3yRas5gTdb0F2e5HE9E?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4449e40-e3a4-4dbb-a319-08dd7addd321
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aDdUS2hPU3VTUWJ2c3Z3VlMxMTB2QllPZmVXczJqUXFjNkVhazZsYUhvNFJY?=
+ =?utf-8?B?dXN1THMvakZ0TzhrbHIwTW5EeCtQejdLQVdLWU5aMWJtcmx0TEppUlVsTUl6?=
+ =?utf-8?B?ZzV6UWI1dDFoeWRyOURCb0NNd3IvVEhZQStuYjlJODBLN0dyT2MxZlRlVlhJ?=
+ =?utf-8?B?UHRHYVVCMXhZSXY4d1Ewc0pKMjNwSDlwdXNqNE5DWU10T1Vlcm1NNDA2R0Rk?=
+ =?utf-8?B?NkY3QXJNMTJiK0NQZk95SjZvdWxHQjI4TnNYNFBjM05YQjRDVkVldklPWEFU?=
+ =?utf-8?B?L2d6ekQrdExySzNrejMxTDNTbFNuRG8ycFByTDBibnNCZGZkT3MrdTE5RFND?=
+ =?utf-8?B?QzR1bmExazd5Z3BINTdxdWxHRnJrM0dDZFRoOGNNZ1ViQi9vd0JnMXp3cHJw?=
+ =?utf-8?B?U3JsR2t5SXZmTkFEcEMvR0JHT0lwS2lxKzRMNFNvRGIwQ0Vib1JIYXlaQklE?=
+ =?utf-8?B?V3JXREEwNTFBU3BlQXgxdzBQWnJxRkVVbngvdTdQWm9jM3Q4dlRaNHBOeExS?=
+ =?utf-8?B?eVZKSWdGcEt1QnhCSDBzODAzY081UTV1YnFack9mRU1lLzdEZTN1cWtsRDh3?=
+ =?utf-8?B?dHFJbjBvbzhzM0k1N2g3bGF6RTZUUkppL3NQUlFrQ1E2eWNQUGZVdzUxeUlk?=
+ =?utf-8?B?VVY3dnZrUXg3cWhnZjIzUWQyM2R1Z202S1hoZ2pweEZrd2hscHMxQlRkayt4?=
+ =?utf-8?B?TnpBakgxTlVoMnpPZnFKN2JNaGJQdTZ5SHd3TzlIbi83VDNkK2syQm5wV0tD?=
+ =?utf-8?B?Q0lyTUMwemZSMWhDTE5Fakx1alRad1ZTeXU5SDBidVc4TUN3M1NFVEhNVHFO?=
+ =?utf-8?B?ZkVzNWFBcjBpRVF0Sy9kUHAvUmRNQzl1anovVGlEcGtiRWJsRmpnMHRzOGV1?=
+ =?utf-8?B?bGUvaGlUV0xVdGwwRkwzRTJSenJzOUIyM3FJM2Z1c3QyNTZnNUJvUW9Zc2o5?=
+ =?utf-8?B?Q2JjanZmVkFjbnR4TTlmY1Y2c1BkUmh5a09GaEdRZVN0VkhzS09ISG11MGhL?=
+ =?utf-8?B?TlJTVTlBV1d2Y2VFb1YrWmtZcUJRR0RXSW1rOVZSbWMrTDUrUW9CWDJBVG1q?=
+ =?utf-8?B?eFVabGd4L3VNdS9kUTBNak9uTHpLOC9JaVR3UVRzVkZYK0VDZm1CNDFKQ3Q2?=
+ =?utf-8?B?dHByY3VEa2tPQUdzYmgzd0VJSkdOdFJYckFYc1dBdmJiOWtXcTZBK0c3dmtq?=
+ =?utf-8?B?TUFWWDFMZExUbVNXbmNvU21naTdXTENZQjlJVWpMMEVWOUQzczBQOHIvQytN?=
+ =?utf-8?B?REZOU29CeUhpVEhDcmN4NzgzMmpFVHJ6eHVyVVFjVlh5ZHdSLzZ0cUtBYnJB?=
+ =?utf-8?B?VGJ3bTFpUXZoVnViMUVsN1lDa3JPeXBuSU55ZUxzTVFDdXMyWXI0UnRvSndo?=
+ =?utf-8?B?MlF2ZUpWOVJZOG5VbzJwdzBNSDhEcElYTWhqWkZKaklkekNjenFyVDE5a0Rs?=
+ =?utf-8?B?QmdxUldJVmE5MVlKNldzU2pkc1NYQ3FNZzVUbXA4dWdGSWN0cytOeEpBS1Z2?=
+ =?utf-8?B?amNsaGh0TG42L0pQQ1BublVSSXgzc000a2VQd1o2WW5lM0Z3NVFqSW1OU0xZ?=
+ =?utf-8?B?QlJhM2xzSHdvYzllSkhpM1QwalZUeXppdXltbllYUzdOcXBJamw3MmdZR1RC?=
+ =?utf-8?B?NVRaNWsxeXFSY3JRUnZ0eTJ6d05yMzFKN0JHUkxZN0VTK3I0TElPMGo0dXNx?=
+ =?utf-8?B?bnE4Qi9ldU15T2YvS0tTS2tMZk5FT1Q0eVNiaFBMNkhnRlFDVEJHVE5SZFRz?=
+ =?utf-8?B?WkRaWmprNE9qWDArV0Z0anhzT2ZVK05IWElxZXVaT0tFQUsxcFFrOE5zWFRa?=
+ =?utf-8?B?dHFEM2pTMVgvRDhCVmYyWUh4TUkzK2sxTzNnaVZrWHV4TVMwZEliTkgzNUpT?=
+ =?utf-8?B?UU1xd1hyTVN0MDJzRTNOWnNQUnp1aGtZaFo3ekNua3JBaC95b0VGbkNQYTdq?=
+ =?utf-8?B?Sy9uTjQ0NTVLUVRnTTJJbENRYUlDV3JUSDFSMDRnS0t0QmFSaDE0L3hGNTU4?=
+ =?utf-8?B?ZjBDY0JXc29tbWw3REhUS0hSTjJCeHVoRWJzZDByNlltV1FLUnFzL1A5NnM0?=
+ =?utf-8?B?cjZHTFh5L3R2UWRCUUZmbno0S3Q4RFpOYm9WQ1RWVk1Na0g2RjhFd3JHa3Jk?=
+ =?utf-8?Q?VqFQHYJgF30XRCl5FWVZzh848?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a124e87-aaa0-43df-a72d-08dd7addd42b
 X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB6739.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2025 22:52:10.7614
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2025 22:52:12.5974
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qYTw3yC1BBPZV9xkSDLOy1gc62cTbg0L5P/i9KJA+gQn7KVhGaW6Au9Cud8zJQSwsqkRKl0m61LU+um7OauvJg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1EIAslxKlp+yIFy6Tr0DqWm1oYAjhht0I2aJq7x15uGrKvUiJA/CltdeAaDzaG+3CoRJDOvZV8yPMyzPWbs1Eg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7003
 X-OriginatorOrg: intel.com
 
-CXL rev 3.1 section 8.2.9.2.1 adds the Dynamic Capacity Event Records.
-User space can use trace events for debugging of DC capacity changes.
+The event logs test was created as static arrays as an easy way to mock
+events.  Dynamic Capacity Device (DCD) test support requires events be
+generated dynamically when extents are created or destroyed.
 
-Add DC trace points to the trace log.
+The current event log test has specific checks for the number of events
+seen including log overflow.
 
-Based on an original patch by Navneet Singh.
+Modify mock event logs to be dynamically allocated.  Adjust array size
+and mock event entry data to match the output expected by the existing
+event test.
+
+Use the static event data to create the dynamic events in the new logs
+without inventing complex event injection for the previous tests.
+
+Simplify log processing by using the event log array index as the
+handle.  Add a lock to manage concurrency required when user space is
+allowed to control DCD extents
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: Fan Ni <fan.ni@samsung.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes:
-[djbw: s/region/partition/]
-[iweiny: s/tag/uuid/]
+[iweiny: rebase to 6.15-rc1]
 ---
- drivers/cxl/core/mbox.c  |  4 +++
- drivers/cxl/core/trace.h | 65 ++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+ tools/testing/cxl/test/mem.c | 268 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 162 insertions(+), 106 deletions(-)
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index 8af3a4173b99..891a213ce7be 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -1043,6 +1043,10 @@ static void __cxl_event_trace_record(const struct cxl_memdev *cxlmd,
- 		ev_type = CXL_CPER_EVENT_DRAM;
- 	else if (uuid_equal(uuid, &CXL_EVENT_MEM_MODULE_UUID))
- 		ev_type = CXL_CPER_EVENT_MEM_MODULE;
-+	else if (uuid_equal(uuid, &CXL_EVENT_DC_EVENT_UUID)) {
-+		trace_cxl_dynamic_capacity(cxlmd, type, &record->event.dcd);
-+		return;
-+	}
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index f2957a3e36fe..a71a72966de1 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -142,18 +142,26 @@ static struct {
  
- 	cxl_event_trace_record(cxlmd, type, ev_type, uuid, &record->event);
- }
-diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-index 25ebfbc1616c..384017259970 100644
---- a/drivers/cxl/core/trace.h
-+++ b/drivers/cxl/core/trace.h
-@@ -978,6 +978,71 @@ TRACE_EVENT(cxl_poison,
- 	)
- );
+ #define PASS_TRY_LIMIT 3
+ 
+-#define CXL_TEST_EVENT_CNT_MAX 15
++#define CXL_TEST_EVENT_CNT_MAX 16
++/* 1 extra slot to accommodate that handles can't be 0 */
++#define CXL_TEST_EVENT_ARRAY_SIZE (CXL_TEST_EVENT_CNT_MAX + 1)
+ 
+ /* Set a number of events to return at a time for simulation.  */
+ #define CXL_TEST_EVENT_RET_MAX 4
  
 +/*
-+ * Dynamic Capacity Event Record - DER
-+ *
-+ * CXL rev 3.1 section 8.2.9.2.1.6 Table 8-50
++ * @last_handle: last handle (index) to have an entry stored
++ * @current_handle: current handle (index) to be returned to the user on get_event
++ * @nr_overflow: number of events added past the log size
++ * @lock: protect these state variables
++ * @events: array of pending events to be returned.
 + */
-+
-+#define CXL_DC_ADD_CAPACITY			0x00
-+#define CXL_DC_REL_CAPACITY			0x01
-+#define CXL_DC_FORCED_REL_CAPACITY		0x02
-+#define CXL_DC_REG_CONF_UPDATED			0x03
-+#define show_dc_evt_type(type)	__print_symbolic(type,		\
-+	{ CXL_DC_ADD_CAPACITY,	"Add capacity"},		\
-+	{ CXL_DC_REL_CAPACITY,	"Release capacity"},		\
-+	{ CXL_DC_FORCED_REL_CAPACITY,	"Forced capacity release"},	\
-+	{ CXL_DC_REG_CONF_UPDATED,	"Region Configuration Updated"	} \
-+)
-+
-+TRACE_EVENT(cxl_dynamic_capacity,
-+
-+	TP_PROTO(const struct cxl_memdev *cxlmd, enum cxl_event_log_type log,
-+		 struct cxl_event_dcd *rec),
-+
-+	TP_ARGS(cxlmd, log, rec),
-+
-+	TP_STRUCT__entry(
-+		CXL_EVT_TP_entry
-+
-+		/* Dynamic capacity Event */
-+		__field(u8, event_type)
-+		__field(u16, hostid)
-+		__field(u8, partition_id)
-+		__field(u64, dpa_start)
-+		__field(u64, length)
-+		__array(u8, uuid, UUID_SIZE)
-+		__field(u16, sh_extent_seq)
-+	),
-+
-+	TP_fast_assign(
-+		CXL_EVT_TP_fast_assign(cxlmd, log, rec->hdr);
-+
-+		/* Dynamic_capacity Event */
-+		__entry->event_type = rec->event_type;
-+
-+		/* DCD event record data */
-+		__entry->hostid = le16_to_cpu(rec->host_id);
-+		__entry->partition_id = rec->partition_index;
-+		__entry->dpa_start = le64_to_cpu(rec->extent.start_dpa);
-+		__entry->length = le64_to_cpu(rec->extent.length);
-+		memcpy(__entry->uuid, &rec->extent.uuid, UUID_SIZE);
-+		__entry->sh_extent_seq = le16_to_cpu(rec->extent.shared_extn_seq);
-+	),
-+
-+	CXL_EVT_TP_printk("event_type='%s' host_id='%d' partition_id='%d' " \
-+		"starting_dpa=%llx length=%llx tag=%pU " \
-+		"shared_extent_sequence=%d",
-+		show_dc_evt_type(__entry->event_type),
-+		__entry->hostid,
-+		__entry->partition_id,
-+		__entry->dpa_start,
-+		__entry->length,
-+		__entry->uuid,
-+		__entry->sh_extent_seq
-+	)
-+);
-+
- #endif /* _CXL_EVENTS_H */
+ struct mock_event_log {
+-	u16 clear_idx;
+-	u16 cur_idx;
+-	u16 nr_events;
++	u16 last_handle;
++	u16 current_handle;
+ 	u16 nr_overflow;
+-	u16 overflow_reset;
+-	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
++	rwlock_t lock;
++	struct cxl_event_record_raw *events[CXL_TEST_EVENT_ARRAY_SIZE];
+ };
  
- #define TRACE_INCLUDE_FILE trace
+ struct mock_event_store {
+@@ -194,56 +202,65 @@ static struct mock_event_log *event_find_log(struct device *dev, int log_type)
+ 	return &mdata->mes.mock_logs[log_type];
+ }
+ 
+-static struct cxl_event_record_raw *event_get_current(struct mock_event_log *log)
+-{
+-	return log->events[log->cur_idx];
+-}
+-
+-static void event_reset_log(struct mock_event_log *log)
+-{
+-	log->cur_idx = 0;
+-	log->clear_idx = 0;
+-	log->nr_overflow = log->overflow_reset;
+-}
+-
+ /* Handle can never be 0 use 1 based indexing for handle */
+-static u16 event_get_clear_handle(struct mock_event_log *log)
++static u16 event_inc_handle(u16 handle)
+ {
+-	return log->clear_idx + 1;
++	handle = (handle + 1) % CXL_TEST_EVENT_ARRAY_SIZE;
++	if (handle == 0)
++		handle = 1;
++	return handle;
+ }
+ 
+-/* Handle can never be 0 use 1 based indexing for handle */
+-static __le16 event_get_cur_event_handle(struct mock_event_log *log)
+-{
+-	u16 cur_handle = log->cur_idx + 1;
+-
+-	return cpu_to_le16(cur_handle);
+-}
+-
+-static bool event_log_empty(struct mock_event_log *log)
+-{
+-	return log->cur_idx == log->nr_events;
+-}
+-
+-static void mes_add_event(struct mock_event_store *mes,
++/* Add the event or free it on overflow */
++static void mes_add_event(struct cxl_mockmem_data *mdata,
+ 			  enum cxl_event_log_type log_type,
+ 			  struct cxl_event_record_raw *event)
+ {
++	struct device *dev = mdata->mds->cxlds.dev;
+ 	struct mock_event_log *log;
+ 
+ 	if (WARN_ON(log_type >= CXL_EVENT_TYPE_MAX))
+ 		return;
+ 
+-	log = &mes->mock_logs[log_type];
++	log = &mdata->mes.mock_logs[log_type];
++
++	guard(write_lock)(&log->lock);
+ 
+-	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
++	dev_dbg(dev, "Add log %d cur %d last %d\n",
++		log_type, log->current_handle, log->last_handle);
++
++	/* Check next buffer */
++	if (event_inc_handle(log->last_handle) == log->current_handle) {
+ 		log->nr_overflow++;
+-		log->overflow_reset = log->nr_overflow;
++		dev_dbg(dev, "Overflowing log %d nr %d\n",
++			log_type, log->nr_overflow);
++		devm_kfree(dev, event);
+ 		return;
+ 	}
+ 
+-	log->events[log->nr_events] = event;
+-	log->nr_events++;
++	dev_dbg(dev, "Log %d; handle %u\n", log_type, log->last_handle);
++	event->event.generic.hdr.handle = cpu_to_le16(log->last_handle);
++	log->events[log->last_handle] = event;
++	log->last_handle = event_inc_handle(log->last_handle);
++}
++
++static void mes_del_event(struct device *dev,
++			  struct mock_event_log *log,
++			  u16 handle)
++{
++	struct cxl_event_record_raw *record;
++
++	lockdep_assert(lockdep_is_held(&log->lock));
++
++	dev_dbg(dev, "Clearing event %u; record %u\n",
++		handle, log->current_handle);
++	record = log->events[handle];
++	if (!record)
++		dev_err(dev, "Mock event index %u empty?\n", handle);
++
++	log->events[handle] = NULL;
++	log->current_handle = event_inc_handle(log->current_handle);
++	devm_kfree(dev, record);
+ }
+ 
+ /*
+@@ -256,7 +273,7 @@ static int mock_get_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ {
+ 	struct cxl_get_event_payload *pl;
+ 	struct mock_event_log *log;
+-	u16 nr_overflow;
++	u16 handle;
+ 	u8 log_type;
+ 	int i;
+ 
+@@ -277,29 +294,38 @@ static int mock_get_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ 	memset(cmd->payload_out, 0, struct_size(pl, records, 0));
+ 
+ 	log = event_find_log(dev, log_type);
+-	if (!log || event_log_empty(log))
++	if (!log)
+ 		return 0;
+ 
+ 	pl = cmd->payload_out;
+ 
+-	for (i = 0; i < ret_limit && !event_log_empty(log); i++) {
+-		memcpy(&pl->records[i], event_get_current(log),
+-		       sizeof(pl->records[i]));
+-		pl->records[i].event.generic.hdr.handle =
+-				event_get_cur_event_handle(log);
+-		log->cur_idx++;
++	guard(read_lock)(&log->lock);
++
++	handle = log->current_handle;
++	dev_dbg(dev, "Get log %d handle %u last %u\n",
++		log_type, handle, log->last_handle);
++	for (i = 0; i < ret_limit && handle != log->last_handle;
++	     i++, handle = event_inc_handle(handle)) {
++		struct cxl_event_record_raw *cur;
++
++		cur = log->events[handle];
++		dev_dbg(dev, "Sending event log %d handle %d idx %u\n",
++			log_type, le16_to_cpu(cur->event.generic.hdr.handle),
++			handle);
++		memcpy(&pl->records[i], cur, sizeof(pl->records[i]));
++		pl->records[i].event.generic.hdr.handle = cpu_to_le16(handle);
+ 	}
+ 
+ 	cmd->size_out = struct_size(pl, records, i);
+ 	pl->record_count = cpu_to_le16(i);
+-	if (!event_log_empty(log))
++	if (handle != log->last_handle)
+ 		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+ 
+ 	if (log->nr_overflow) {
+ 		u64 ns;
+ 
+ 		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
+-		pl->overflow_err_count = cpu_to_le16(nr_overflow);
++		pl->overflow_err_count = cpu_to_le16(log->nr_overflow);
+ 		ns = ktime_get_real_ns();
+ 		ns -= 5000000000; /* 5s ago */
+ 		pl->first_overflow_timestamp = cpu_to_le64(ns);
+@@ -314,8 +340,8 @@ static int mock_get_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ static int mock_clear_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ {
+ 	struct cxl_mbox_clear_event_payload *pl = cmd->payload_in;
+-	struct mock_event_log *log;
+ 	u8 log_type = pl->event_log;
++	struct mock_event_log *log;
+ 	u16 handle;
+ 	int nr;
+ 
+@@ -326,23 +352,20 @@ static int mock_clear_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ 	if (!log)
+ 		return 0; /* No mock data in this log */
+ 
+-	/*
+-	 * This check is technically not invalid per the specification AFAICS.
+-	 * (The host could 'guess' handles and clear them in order).
+-	 * However, this is not good behavior for the host so test it.
+-	 */
+-	if (log->clear_idx + pl->nr_recs > log->cur_idx) {
+-		dev_err(dev,
+-			"Attempting to clear more events than returned!\n");
+-		return -EINVAL;
+-	}
++	guard(write_lock)(&log->lock);
+ 
+ 	/* Check handle order prior to clearing events */
+-	for (nr = 0, handle = event_get_clear_handle(log);
+-	     nr < pl->nr_recs;
+-	     nr++, handle++) {
++	handle = log->current_handle;
++	for (nr = 0; nr < pl->nr_recs && handle != log->last_handle;
++	     nr++, handle = event_inc_handle(handle)) {
++
++		dev_dbg(dev, "Checking clear of %d handle %u plhandle %u\n",
++			log_type, handle,
++			le16_to_cpu(pl->handles[nr]));
++
+ 		if (handle != le16_to_cpu(pl->handles[nr])) {
+-			dev_err(dev, "Clearing events out of order\n");
++			dev_err(dev, "Clearing events out of order %u %u\n",
++				handle, le16_to_cpu(pl->handles[nr]));
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -351,25 +374,12 @@ static int mock_clear_event(struct device *dev, struct cxl_mbox_cmd *cmd)
+ 		log->nr_overflow = 0;
+ 
+ 	/* Clear events */
+-	log->clear_idx += pl->nr_recs;
+-	return 0;
+-}
+-
+-static void cxl_mock_event_trigger(struct device *dev)
+-{
+-	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+-	struct mock_event_store *mes = &mdata->mes;
+-	int i;
++	for (nr = 0; nr < pl->nr_recs; nr++)
++		mes_del_event(dev, log, le16_to_cpu(pl->handles[nr]));
++	dev_dbg(dev, "Delete log %d cur %d last %d\n",
++		log_type, log->current_handle, log->last_handle);
+ 
+-	for (i = CXL_EVENT_TYPE_INFO; i < CXL_EVENT_TYPE_MAX; i++) {
+-		struct mock_event_log *log;
+-
+-		log = event_find_log(dev, i);
+-		if (log)
+-			event_reset_log(log);
+-	}
+-
+-	cxl_mem_get_event_records(mdata->mds, mes->ev_status);
++	return 0;
+ }
+ 
+ struct cxl_event_record_raw maint_needed = {
+@@ -510,8 +520,27 @@ static int mock_set_timestamp(struct cxl_dev_state *cxlds,
+ 	return 0;
+ }
+ 
+-static void cxl_mock_add_event_logs(struct mock_event_store *mes)
++/* Create a dynamically allocated event out of a statically defined event. */
++static void add_event_from_static(struct cxl_mockmem_data *mdata,
++				  enum cxl_event_log_type log_type,
++				  struct cxl_event_record_raw *raw)
++{
++	struct device *dev = mdata->mds->cxlds.dev;
++	struct cxl_event_record_raw *rec;
++
++	rec = devm_kmemdup(dev, raw, sizeof(*rec), GFP_KERNEL);
++	if (!rec) {
++		dev_err(dev, "Failed to alloc event for log\n");
++		return;
++	}
++	mes_add_event(mdata, log_type, rec);
++}
++
++static void cxl_mock_add_event_logs(struct cxl_mockmem_data *mdata)
+ {
++	struct mock_event_store *mes = &mdata->mes;
++	struct device *dev = mdata->mds->cxlds.dev;
++
+ 	put_unaligned_le16(CXL_GMER_VALID_CHANNEL | CXL_GMER_VALID_RANK |
+ 			   CXL_GMER_VALID_COMPONENT | CXL_GMER_VALID_COMPONENT_ID_FORMAT,
+ 			   &gen_media.rec.media_hdr.validity_flags);
+@@ -524,43 +553,60 @@ static void cxl_mock_add_event_logs(struct mock_event_store *mes)
+ 	put_unaligned_le16(CXL_MMER_VALID_COMPONENT | CXL_MMER_VALID_COMPONENT_ID_FORMAT,
+ 			   &mem_module.rec.validity_flags);
+ 
+-	mes_add_event(mes, CXL_EVENT_TYPE_INFO, &maint_needed);
+-	mes_add_event(mes, CXL_EVENT_TYPE_INFO,
++	dev_dbg(dev, "Generating fake event logs %d\n",
++		CXL_EVENT_TYPE_INFO);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_INFO, &maint_needed);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_INFO,
+ 		      (struct cxl_event_record_raw *)&gen_media);
+-	mes_add_event(mes, CXL_EVENT_TYPE_INFO,
++	add_event_from_static(mdata, CXL_EVENT_TYPE_INFO,
+ 		      (struct cxl_event_record_raw *)&mem_module);
+ 	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
+ 
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
++	dev_dbg(dev, "Generating fake event logs %d\n",
++		CXL_EVENT_TYPE_FAIL);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &maint_needed);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL,
++		      (struct cxl_event_record_raw *)&mem_module);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL,
+ 		      (struct cxl_event_record_raw *)&dram);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL,
+ 		      (struct cxl_event_record_raw *)&gen_media);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL,
+ 		      (struct cxl_event_record_raw *)&mem_module);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL,
+ 		      (struct cxl_event_record_raw *)&dram);
+ 	/* Overflow this log */
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+ 	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
+ 
+-	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
+-	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
++	dev_dbg(dev, "Generating fake event logs %d\n",
++		CXL_EVENT_TYPE_FATAL);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FATAL, &hardware_replace);
++	add_event_from_static(mdata, CXL_EVENT_TYPE_FATAL,
+ 		      (struct cxl_event_record_raw *)&dram);
+ 	mes->ev_status |= CXLDEV_EVENT_STATUS_FATAL;
+ }
+ 
++static void cxl_mock_event_trigger(struct device *dev)
++{
++	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
++	struct mock_event_store *mes = &mdata->mes;
++
++	cxl_mock_add_event_logs(mdata);
++	cxl_mem_get_event_records(mdata->mds, mes->ev_status);
++}
++
+ static int mock_gsl(struct cxl_mbox_cmd *cmd)
+ {
+ 	if (cmd->size_out < sizeof(mock_gsl_payload))
+@@ -1685,6 +1731,14 @@ static void cxl_mock_test_feat_init(struct cxl_mockmem_data *mdata)
+ 	mdata->test_feat.data = cpu_to_le32(0xdeadbeef);
+ }
+ 
++static void init_event_log(struct mock_event_log *log)
++{
++	rwlock_init(&log->lock);
++	/* Handle can never be 0 use 1 based indexing for handle */
++	log->current_handle = 1;
++	log->last_handle = 1;
++}
++
+ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -1766,7 +1820,9 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		dev_dbg(dev, "No CXL Features discovered\n");
+ 
+-	cxl_mock_add_event_logs(&mdata->mes);
++	for (int i = 0; i < CXL_EVENT_TYPE_MAX; i++)
++		init_event_log(&mdata->mes.mock_logs[i]);
++	cxl_mock_add_event_logs(mdata);
+ 
+ 	cxlmd = devm_cxl_add_memdev(&pdev->dev, cxlds);
+ 	if (IS_ERR(cxlmd))
 
 -- 
 2.49.0
