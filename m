@@ -1,82 +1,82 @@
-Return-Path: <nvdimm+bounces-10198-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-10191-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B75A874D3
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 14 Apr 2025 00:57:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4337DA874B7
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 14 Apr 2025 00:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15AD63B581A
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 13 Apr 2025 22:55:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35201170019
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 13 Apr 2025 22:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9972C20FAA9;
-	Sun, 13 Apr 2025 22:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F291E0DB3;
+	Sun, 13 Apr 2025 22:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gzCWUHOo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mJwfMipa"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7B51F3FEB
-	for <nvdimm@lists.linux.dev>; Sun, 13 Apr 2025 22:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C3518EFD4
+	for <nvdimm@lists.linux.dev>; Sun, 13 Apr 2025 22:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744584757; cv=fail; b=EiwpNkwmz5eH/ITVhWLW5ihsmofNb2bNxqEp364LvyxZeiG3tWFGWYRZ7We7G0CgGlTN2i2c+hyVR7MbT7jRPTowmhyX3iL9xySvvtGfPZtLnoadJadgPXUJpbXW6dWBP9lmrI7OUF+pCJ0DqAwjBQUyYOtDKQFZEwwAM1b4qRQ=
+	t=1744584742; cv=fail; b=B+H8JxjM3phy0cRjFku7RXEHBXovY+zpkwodTs3YNYDufXOr5xk7QtARJ1a4RcRzgtsPG7oIZHKUyJ0a5fTFTWKyUx+Wiqke6tfyu9XtweP10Vsf5o3v54ywvSe+4XWyNac6Yx1ZdqSFFIzPMnROeyJbN517u0IxVf6qLZl+G1M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744584757; c=relaxed/simple;
-	bh=4QxktrWxnejqz2TUfcmWO6HRceAt1/3c56ZBgEUdUaI=;
+	s=arc-20240116; t=1744584742; c=relaxed/simple;
+	bh=I3WlmoctCRsRu608KNgUHS/YZw7T8Cy+O3uuocH4P6Q=;
 	h=From:Date:Subject:Content-Type:Message-ID:References:In-Reply-To:
-	 To:CC:MIME-Version; b=DmVYoSBFlnqtZNJhjhrBs4sHz8g254EuFgW+3X1J40VPDgbB9UV3fknu6wp/SBrt+2EqhfwHlaL69jCedxRiltrjw35FQo3w0HAI8sp5+s8NN17cWJC22+0C4N/matvg/D7NuRCsdZ1U7E7i1ux4tQadILkn1Rr6d/6nwGgp63E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gzCWUHOo; arc=fail smtp.client-ip=192.198.163.18
+	 To:CC:MIME-Version; b=NnqQuJ7ydOisBTGU1qKl68ZPb8JsFJMn0w7wnjplyf9DaxIiJUhxRNfZRqln1yjnFVXcDH7kb5GGOVfZA7Q5hUl+cghA99dJRgrsAa4wIXAf1kmQGzZixcjaOfoGaTPqFrUlIPCOX/1CQrw+4xjbZFMGp/m4WVgkkRXmQDDi80o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mJwfMipa; arc=fail smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744584756; x=1776120756;
+  t=1744584740; x=1776120740;
   h=from:date:subject:content-transfer-encoding:message-id:
    references:in-reply-to:to:cc:mime-version;
-  bh=4QxktrWxnejqz2TUfcmWO6HRceAt1/3c56ZBgEUdUaI=;
-  b=gzCWUHOo9wYeIXeBMvuOMzBpZ7lv6UWdJTZHKxZ0oWz8KgeXA3bcMxnr
-   5hOUslJJn4Oc1MLHNKrlsAaBbC3xB2z5MwWlTsZ2wMF7WHHKiEViu9uso
-   RMGHoDSZfTry6mkeYnoNBVGL9IDGKbZhtAqVSA/Y0TymZoAzvu9BLtAcq
-   4K9eM1PkkorPEs6LSzprdbav5Nl0PFuIHhRskettpd/5yJ4wczaDPdgbA
-   lveI8q4h+aeBtoyoB3vlV3xJe+Mhi0PEVZ+94Cid60RZdxTH+x+kDFWdT
-   xy3HRFhZf39a2CMxPmtCr8vAwcuRtekLKX53z8TXkfv1tsGXsSiyu4zvj
+  bh=I3WlmoctCRsRu608KNgUHS/YZw7T8Cy+O3uuocH4P6Q=;
+  b=mJwfMipa3q7jw13GcS53teSkrfjrMzG1PLBEmWJiexMlcvwsPtSXIS4J
+   eRGDZYOv9VkmWV899WikAyP5cEqH/gJUWJSPddflPDQ4J1xNuvVkekXUa
+   yChvGwjuTzx8JXITaj+56XsJlgfETq/9Y6FLeUaQN96VHXuFOmOZULwVu
+   eQsArnFrP/djPP9MPyU5j9OciGXPFrVYyOHw/1mUV2NKKGEOZQJE0zmPS
+   AhwbYCPQwKxvdhyXRih/GHd0CrU5cO5ppcM0MJvp5yaIYgkxFOB314wKF
+   6WTdnuoQp6L4lxsb9KQBLA3UTuIaOG71BHLev2iFSDo+VD1wbsg0ScBNz
    A==;
-X-CSE-ConnectionGUID: 8g+T8kqoRHCDx9cnBQjkng==
-X-CSE-MsgGUID: RAM0OeLTRPi9k9SfW59zoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="45280960"
+X-CSE-ConnectionGUID: HNaoJMSyQ0OjufisRobgdg==
+X-CSE-MsgGUID: O5cGHQPYTtOnarSPN7EYHA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="71431128"
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="45280960"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:35 -0700
-X-CSE-ConnectionGUID: hucgneI/QBy8+4zmjQaRCw==
-X-CSE-MsgGUID: 42k62g37RrK55hw3QiNPzA==
+   d="scan'208";a="71431128"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:19 -0700
+X-CSE-ConnectionGUID: cJFQ5mnFREyj02i9NpsGVQ==
+X-CSE-MsgGUID: AGMRhiOMTUe88Ic8DWwUOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="129657634"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:35 -0700
+   d="scan'208";a="134405567"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 15:52:19 -0700
 Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Sun, 13 Apr 2025 15:52:34 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
  ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Sun, 13 Apr 2025 15:52:34 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.2.1544.14; Sun, 13 Apr 2025 15:52:18 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Sun, 13 Apr 2025 15:52:33 -0700
+ 15.2.1544.14 via Frontend Transport; Sun, 13 Apr 2025 15:52:18 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Sun, 13 Apr 2025 15:52:18 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pa2G21XfKcJlz/lYAe7jXxcoEBrGy+x6wRpJ2eTHZZHWkYb8ftLIkj8QaYFC9wQQHUb+TAK9fUtGm+UZ8nyNo+0KIbYpBm4bLF2Wa2eeWEeSrBAdesR9DjQ2Gg4+MLVVbJh84qLXEshow+iOTfXTE1U0MwJSN1xhXea5iI9KDfiI2lts4e+iApiTMG6cJh50pj4IVEooiydw/XVG8hSC7DSc1L+rrqTe+sqY4HM/fGmiFiXPSmn49+JC3QsQRJdrV/6lsT59F6g1rDfyKUFqPmnQEX+KpnCCyX/dE2lCd+jos3gcTglMkUNV9bbuy3Akn1RM18DehMZFsyeQAG4KEg==
+ b=fpxlzGU5IcG9PLvzOTvNoBqP1EJwYuxViYM5NXhZ2xvTKM+Kujfp5DOoP2Wt/vvIdSYjWSemoBM1xvkU3y5oAsTgxaikjanDp7UQkq2wjNoZauGNgK0xh8jr4royjaHBcaUPCj7aZUjlfOPFyKeTOvIFiZcGbVhpiU156VPLH58tjvi9jVST6i8uwLP4sJKKNeeI2zmBnMjjJ9ACaEt6FHf2mj4qNC+SwMdn9rfLUwLq9kJXfJSwjcRR2vUANnvX9DvM60Rz6F8ItM+iXsn9vB1SG901312qUX+a6b+D3hlULQfi2ryrqgSQzy/fEuw65Ud/xfsNX4h1jr1/TAHJ5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MvYgRMhAktNXF4t/3pfUAOXXg8C+qZBgHgfffXR6mRU=;
- b=oLGmzMkDhxuJRsxN22dijTAcd+1BV5bSF97qISlJRnmAezbYOFYl9eQ25HSr+htClXSKh+XB6ZxLp17oGErknFK8a1zL7nscXUDlAjsRpuaR5TMulwA2TfRCGDiI7jNLDoP6K4CzDiXuTE0p1TWgKPskUZqX9/c3BmWo1vYuaOtIbzW/xZxYJynuY1X5PVb8vkDqYB8choKDnCTfgzHiZsDTYpW5X6w2eddFRhhqRoFdYHsuuSCdXxcfRy7neiDoGzlGzGHX+t5lv2uQPJS7jh4/qbgqD6M3afnl1YjHPK/5z5jNJqsp+FFipT9efqoDfdAqdcUz5oOE9UzpB9rMog==
+ bh=jyAR64KNiC3ycVI/tr64P83Q9uWSXaiB1fBj4L9rC4k=;
+ b=rfxKIEBQeDGGtNpslYzRX8FEuC1Ukp8QvG1wsYyzRidfqn6SBImBGvc2zMdzeDg6wcXxMLrvpcZV+Nf7EYXcXweoh7EAaeGqjd7TbDczey/cdaL30020JZgdysj7dcwhbbIDoR1DxkYC2pVgDP/AqMfedhRU/BiT67kdZ3d6rRU2zcgCGuTCTlniVSZzbgkXk8ch3YcdB05I1of04xw2avXSYsON3o2m632wDh/GgmcnmtmSKCJVW/wIBo1X3l2bRL168wKcnWagHuwK2eXt3+g+J1OLmJH7Hh+M8s8TzhzzZ4T2d/m04yyfEd1sreXH10ndQuOGpO8oYLlRs1BOEg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -86,18 +86,17 @@ Received: from MW4PR11MB6739.namprd11.prod.outlook.com (2603:10b6:303:20b::19)
  by PH7PR11MB7003.namprd11.prod.outlook.com (2603:10b6:510:20a::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.33; Sun, 13 Apr
- 2025 22:52:04 +0000
+ 2025 22:52:05 +0000
 Received: from MW4PR11MB6739.namprd11.prod.outlook.com
  ([fe80::a7ad:a6e8:fced:3f24]) by MW4PR11MB6739.namprd11.prod.outlook.com
  ([fe80::a7ad:a6e8:fced:3f24%4]) with mapi id 15.20.8606.033; Sun, 13 Apr 2025
- 22:52:04 +0000
+ 22:52:05 +0000
 From: Ira Weiny <ira.weiny@intel.com>
-Date: Sun, 13 Apr 2025 17:52:21 -0500
-Subject: [PATCH v9 13/19] cxl/region/extent: Expose region extent
- information in sysfs
+Date: Sun, 13 Apr 2025 17:52:22 -0500
+Subject: [PATCH v9 14/19] dax/bus: Factor out dev dax resize logic
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250413-dcd-type2-upstream-v9-13-1d4911a0b365@intel.com>
+Message-ID: <20250413-dcd-type2-upstream-v9-14-1d4911a0b365@intel.com>
 References: <20250413-dcd-type2-upstream-v9-0-1d4911a0b365@intel.com>
 In-Reply-To: <20250413-dcd-type2-upstream-v9-0-1d4911a0b365@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>, Fan Ni <fan.ni@samsung.com>, "Jonathan
@@ -108,11 +107,11 @@ CC: Dan Williams <dan.j.williams@intel.com>, Davidlohr Bueso
 	<linux-cxl@vger.kernel.org>, <nvdimm@lists.linux.dev>,
 	<linux-kernel@vger.kernel.org>
 X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744584735; l=4964;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744584735; l=8758;
  i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=4QxktrWxnejqz2TUfcmWO6HRceAt1/3c56ZBgEUdUaI=;
- b=KXsGvbveT4s3jlccnLfPtcpIne+PH6RDv1qMtHp9JjK0/d5oC6VwfYnbnUeflSx+a8NH3ma80
- 338X1M1ZU7mCB8fIijUF6yGiBMv2LLb6V6KkQqxWnWE7f7mHaSathc1
+ bh=I3WlmoctCRsRu608KNgUHS/YZw7T8Cy+O3uuocH4P6Q=;
+ b=SZlCPR6IP2f3V11QT1z1FurtF22u7DLngSx2eSok0vdhz6XAvsfvGjBYrZJyn92y5KcIVMN9C
+ nOQz0m2c+e8CivFJGOP3HPXBytKHHFfFZFUrKgMA+bdddXtBILVoFNJ
 X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
  pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
 X-ClientProxiedBy: MW4PR03CA0227.namprd03.prod.outlook.com
@@ -126,241 +125,336 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MW4PR11MB6739:EE_|PH7PR11MB7003:EE_
-X-MS-Office365-Filtering-Correlation-Id: 434ae3cb-3d29-4c63-ebd5-08dd7addcf28
+X-MS-Office365-Filtering-Correlation-Id: b7297b40-7696-4093-ef03-08dd7addd014
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?WGw2elVjY3M4c1VrbUZ1YWJBTVRDODJtT1ZHZVFYQjVpaU9ENFFYZlZYZUVO?=
- =?utf-8?B?WTVlbTdhRER4dTA3T1NNVW9OUnZ2Ti9GTVRlV0lULzBoZW9RbC9ucnIxOEpa?=
- =?utf-8?B?YXNCaks2YmhIcjkxaE5JdTlINVJWZmIzeElIUWZ0TGlPdEpZakgxTVZmTTlh?=
- =?utf-8?B?ajF0a0NxTUNmSjFNKzNRNGFpUmNjUjhnemE2WXJBcUJGNVgxb052RVN6ejhW?=
- =?utf-8?B?TmdQRExhalFrVkFVUVFFeFdwWGpFTmIvSnl3MUtPUVRMZC9XS2pLdFhjNGFu?=
- =?utf-8?B?WWRTUlMwZVl4ZldrYXFJY2J0bXdiakVBSitSMjBDNzRRcTVBb0VBOE9UTDBx?=
- =?utf-8?B?d3ZneGpHM1o1dUVyNXVEZ0lQT3Mrd1hqREhNWCtkRGhoSnpxS1kyQ0Fjb1c1?=
- =?utf-8?B?akxwY0NyMFBuTC8wOWtqRU9NU3NWa3BoTkxxVzZha0I1ZzJIc2ZZaGlQcUdB?=
- =?utf-8?B?dFhLYm0vNFUvcWFYejQ4VWZxR3VtWnZQc3hpZ1lWUlo3Wm9IR2RlMXlvQUM1?=
- =?utf-8?B?REt6V251Ukd1TjB1aFBFdTFDTmp0L3NUKzVqaThucE4yVElwMUQvSE9aRnlL?=
- =?utf-8?B?YU94NnRIZFRVejY3YzBlYjE0REo1NWxBNkVVSk9MK1FIWkFFaHM4QWdrY0Yv?=
- =?utf-8?B?UE5kZHg5UkE2NCtBRnU1eDR0eXYzT2lZWjlGSUR1cUN0N1pRNUdwcVplcWZt?=
- =?utf-8?B?UkJKWm1zbjVBcmFKUlFSUHFEL3ZMUUNYaHRZaExscCtEU1Y0c3VVMFNock9M?=
- =?utf-8?B?UTM1eEFuK3RCZ0F2c1BIbFZzRXVOVDRyaG9TbWczM3FXSkU3WkMzNG0rVWVZ?=
- =?utf-8?B?TGxEMVdYVTBXRzJkZk5xVm9KY0UzYzZIV3JjVnVsd3psQ05GT2JMeXlVVG1R?=
- =?utf-8?B?dWZRL21SN2tMRjM0L1ZFb2toZzhobStOR1Zad3RkWHNUSjZMLzlYUnhDQlBT?=
- =?utf-8?B?TE5YaWNjRGZUMlNYSW1GTkxXUEFEODhWM0sra01sUXpvV0VWVUw4ZlJINkY4?=
- =?utf-8?B?NjZOSG9WOXNKWlNNakhQaElTS244K2lsMUVBT2JRY283QTgvL2RoenhrWUZU?=
- =?utf-8?B?ajR3N1ZqaW9NYitBWFpFUEZ2eEtNWE9NSDI0THVlNkJVeWJpcFB2OXd1clcr?=
- =?utf-8?B?Y3dXWVltOTQvNlB6TndwdXNHSkh5MUhYTlBIRjM2S2l3SVlnbjFQVVMzc1R2?=
- =?utf-8?B?eis1TGhGNEdCNU1GTFY5aTFnZTU2aFpWZXY3VVdoSGx5Ni83bzk1KzlWYTVF?=
- =?utf-8?B?MjFPYTVjSWhhaWdmWmtoR2IxUTZ0c3RYeXE0eFpqaDBSRGZndXhaQVN5aEJI?=
- =?utf-8?B?eWgvSnlLbG5UcDZhWVMvdVZrTzR4ZVZkV2kzWnNXUGl6cTNyaEx1ejRDQ0No?=
- =?utf-8?B?ZzUwK1pmN1hNWVd1NGw3QnJCcUF3SnI1RnNQdGw1SHBYZC9Bc3ErOE5HSktz?=
- =?utf-8?B?ajZlRENuRy9zeEc5dUp4RzFTcWZhaXpOb2xFcmZYS05aQVFidFNjNm5WUnEy?=
- =?utf-8?B?dVBtbEt5Q0hOamNhbjduY2QwSEVZUXNXN2J6eGdTRkJFUFFzYjgrWmhpcUd0?=
- =?utf-8?B?c3krUGhzSGppV1BFcDBXNXpYQ05QeDBRVUQwemNaVmtjWXNFZDRaM2pHWjg4?=
- =?utf-8?B?MEhJSGRkWmQ3K2tLMmRvSzVqaVdmNVM3bUxON0Z2Vis2VzNkVnpJSUdsSExt?=
- =?utf-8?B?OEk0ckdIOUtYL2ZNZkdGZ0RaYUkrVVdXZURCcmhOTXhWSWd5UmZvOTV5MWJZ?=
- =?utf-8?B?TzlhSXh1SmJHT2UySmVZWEJESGxuOWJkQ3ZUOHRGemtqNk1HMzl0VlNGUkta?=
- =?utf-8?B?ZjJFRHA3Wml3eUxHa0o2eG42RUdrRUhQbkY1TVB5VnRZaWVkNDVseHA3cFkw?=
- =?utf-8?B?VTNzcXBUYkpSSTVybVFkMkhiZmpZeDhoQWFpTU0wTlpEbGFndTU3TUN6T3FX?=
- =?utf-8?Q?ZtaG0xIk2ZQ=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB6739.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?VDc2amRVNG16Yk00bUw5Ynp0MGhWdTFCbDFpR1h6ZitKQzVoMUlydTE2U2xH?=
+ =?utf-8?B?ZE9qa0NXM1dxN1hCV3UrclJUYVBia2NHRXhyMFpGWXB6Z0RNSUljcGtxL2Na?=
+ =?utf-8?B?ak5oUGMzQVVwenVwT1I0MWVIdXN3aFZheWZpQXlyc0FTTENHQytFWFFDbWsv?=
+ =?utf-8?B?cEI5S3JnVkE1SEZRRWhVTUZoNk9iMnJqRlMvQUNhOGEvMHJzeVptaVJ5WXJB?=
+ =?utf-8?B?eFByUzF5MXhQR2tLRlhiWTlFT3cvclJmeXRTQnpkdklmVVEwOVlEYUUyeGRQ?=
+ =?utf-8?B?SlYyaGdDVnZvcHZWdXBxeGgzYzNZQytRZTJNa1dXdjRTSjdwc2RvTVBjRE0y?=
+ =?utf-8?B?bnIzVmE2SUFaMmdhWExCREZlQXlxWXY4MjE1SHNjdEEwbmtCQkpBTFY0UTdo?=
+ =?utf-8?B?dTNmdHRSSnFOVjI3emN3Mmx6S1NhQXNQTHk1MEdaMDNFemxjQ2RVZDdvZlpH?=
+ =?utf-8?B?YjBNSVNlVVRHenBnOVlLTUVHRkhBU3duZjZ4NEFQelVhSVR0MXZQS3lTYjc1?=
+ =?utf-8?B?WnczcnA3RUdoN0ExNzFhUy9OVW51U3FHbWdldmJRWkZXOWozK2lTMHlxb0N5?=
+ =?utf-8?B?YjdpbTFWT1diSlFYOVBobVlkNkdiMjVBSkdqNDFVd2FkR3BtSXRwUjhvRnZk?=
+ =?utf-8?B?MmRVNzMrblAzTStsdFhGNXA1Nm1YQ0YvNGJqRlRFZnhzR0xEcG40SmVkdGl5?=
+ =?utf-8?B?RnB4WHlTRHd6UnN4MkU0dGdpUlhnUHNyYlNwRXNiT3VVemFtVUhDZnJWNHlv?=
+ =?utf-8?B?R3AybUoyZUpZNldYM3VKRVpjQVRtRWJxRDkzVzZDQmNOZnVZMzBYZmFkanlt?=
+ =?utf-8?B?UGtzaVR1RUtXRDlwQ2FWQi9Ia3JHU0QreDFiWGhTbS9aeUt0a0tub2lqRTdr?=
+ =?utf-8?B?WDcvcTB1YnVwdk9yNzFkZTY5dW9xb3VYcXd6VEdiRHg1amdmSERiYUJBUk5l?=
+ =?utf-8?B?N3NJZWI1RDZYeU5TZ3BHMFFOckJsVkpPWlFEQk9tSjFRdDRFOGhlQXNqb1V6?=
+ =?utf-8?B?b3VyeVlnZFJPckM0azRqODRmSktsM3k4Zk5Ub25nVUpDZ3p3T2ZwNE9SNjVt?=
+ =?utf-8?B?Qi9OVnFRbU9SS1dXa3pIMll2RUJGeG5JRWtGZkUzUDZzT2JFUVJMOTU3L243?=
+ =?utf-8?B?MkI5ZjlKZGh1bnd4RzFEZUhDZG5BbWU2NFZheGM5N0lGYTF1aGh3RXV4RlZ5?=
+ =?utf-8?B?cWRNVGRlWnpJaUYzb2JjVjlVTlhQMlNmQ2tjcGdDSFRTeXNCc2drb1NWeTNr?=
+ =?utf-8?B?L3dKUCtOUTFZWC85d09TaXUzQXE3a3UzakFLdXo1Nk0vSTRnVnFjZndURXVZ?=
+ =?utf-8?B?S1I1alB1NkgzNzVBL010c0p0SGhFZ1Nod24wWjErRDRTNkZRcDREcjB5Y25P?=
+ =?utf-8?B?UXpJNmY1RDZOV0JBanBoNTJ2VGFxamNhVjN1bVFHbkVta1JNa3NkU0NUNGxx?=
+ =?utf-8?B?TnExMWxDQWRyTVZWYWRhUkZHa3p3R1JvQ1huMTFqR2tVTDZWVlZWV2pMWStZ?=
+ =?utf-8?B?K1lTekdvZzE2bWIvcW1FL0N3YVluRUpSTnU2WXhTZGljR2tLUnZJUTgzeHVq?=
+ =?utf-8?B?SFJFc3pZeHdycmUyWXo1d0NxbTF5QU5CcUtnVFBxMW9QVmdTMnQzelhJd3Mv?=
+ =?utf-8?B?TUVPKzFHd1dNcGo3NjZYWWx0Y09CbHlvazJUOFJJTnk3Ty9HQ0syWnVHeUc3?=
+ =?utf-8?B?bUpqT0JESElYbTUzaDNPZ1pCVFA2Q0IwNm9ZbW90VVJYZHlWNmVoRUxmZG1M?=
+ =?utf-8?B?UWZ3MUNMdVJSbVdyS2hEOTllMDBlT05RcmlyWXkreDFVb2NLU0JVTkl6ei9G?=
+ =?utf-8?B?bUVXb2NOc0hrdzV2U0NyWkxsZUxCN25Qc1lTbFZHKzh0NUUvbkdTTENkVUlN?=
+ =?utf-8?B?YlVqSTNKOEIxeFM3bDJLS2JvNEZNRlVnSFBmZmdwS2tYOGx0ZGZ1bXJ6eXpZ?=
+ =?utf-8?Q?wYWXY1moiiY=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB6739.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TEtVbW1NaUg5Z2U1VDh4Tmc3UnR0OFpKR2M0czhnWlV3dzlGYTdLQ3I1WHNL?=
- =?utf-8?B?RTFCc0tCbENNb255WVZVSUM4a3JSNDFhdjRSeWhrM2krRVh0Kzc0OERGb2py?=
- =?utf-8?B?Qk1td1J5Y21RYWFNdXVkZU9vOEU5Q2dOM2JIakRsQUh3dk4xVGhVMFk3QlE4?=
- =?utf-8?B?NzUvM0kvZ0lLblU5eitXYjdZaW9EZ0x0ODByTHk3L0Z1dmNFazMraXVWRFJa?=
- =?utf-8?B?VHJiN0x6RzhwOEQ2UUJKZk5nR1FPaU1tUktMS1pwZkJyNCtKRlQwZU1MWlox?=
- =?utf-8?B?WHNzUnJLL3RiMkZUMzRUMzcwWXdhYmV3c2dNcWpSTWo5bTRMRWNJeEZQaTJE?=
- =?utf-8?B?RHFObnQ4dVFxWjhPeEtPNkFsQUMwN3p0NWRIbkcvQzJMblNsUFgzdC9uUzdP?=
- =?utf-8?B?c3FJVVNaZmFsMzR5OVNXK2NiM2Zka1lMc0xTRzVVVGttWDBWMk84S1owS2hO?=
- =?utf-8?B?ZGxVc3lRVTBSTTFqbnVNMU4zNGlGeHVwUE5UbjhIK25CaC9iNmFvVGZSbkpV?=
- =?utf-8?B?RzhINlpEV2trTzh6YnVjRWwxeDUxTnROWnhPWmVJNWwzOHhOQTgxdDR5cExW?=
- =?utf-8?B?ZXBnWVBzTnFEcGNiWkRHSjJmUnNZOGpUZjZDb2NqU1htWTBaMlVvcEdlOVhN?=
- =?utf-8?B?TXoya1FZYUlTelg4Kyt5clJhVWFsMjFqUWI0dmxkQ25qU1Y2bFBHMzg5T0Vr?=
- =?utf-8?B?YmYrN25wemdYaW83SkxERGFwekhLSm5Qc3ZDVjROZURNVDFVMVNRdGk5V09v?=
- =?utf-8?B?RFNDZnBLa2IwbTdHdmhXb1p3elYxNzJ1ZkdUdGFyaWgxU3I4dUV5TGYzbVMw?=
- =?utf-8?B?a08rYTh5V1VmSkp6bXh3QUpXdDI4SGRoemxjSGRoSFdsRTJyNnlaV3p5S3NH?=
- =?utf-8?B?VDZqdmdFazRtOHdtM0ViMWJhYlMzK3dDekJ5eGpzbEQ4QTlSVGlNeVR4TjY3?=
- =?utf-8?B?T294M1Z1aWpubG0wbXpvR0pkOThnQ2pnWEcwcldRaVJSN2hTbExlUHBQUE1R?=
- =?utf-8?B?dFFScTlUR1IvQTd3U1NvSDhiaXVBaTYzK2wzeTlKWVo5S1BpU244NDFpd0da?=
- =?utf-8?B?WVNrMVZDaE5uZ0dnNWRUU3pBa2dmZ2RyQmFrdURycE0wV2FTV1puS3dNWGw1?=
- =?utf-8?B?eVVFMWxLYTZFbWd3M2dQWmlvaTBIRDBvRDR3SFovczdwR2FGS0wyYkpLblZx?=
- =?utf-8?B?czkyQWFNcElwMk1XV3dSdXRsRXFVaU11UzBJbHJpWjluYmFmanhjK09wcUph?=
- =?utf-8?B?TGdMdkRFZnZMTjJSeDVDOFdQWjhvM3gvRUlmRlVDMEdJQW9tV2taVWJSZ1lh?=
- =?utf-8?B?OGlucEJqS3laWk1hekV5bC9aMnpLTWNwdnZDcy93N0VlQTlxVlo2K0FhZW53?=
- =?utf-8?B?cWM2cWJ2VlZTU0NXNHVQdFBTU1Bvd0dXcmRha3lPNTRjL014aElhL3g2UmNY?=
- =?utf-8?B?cWN5Ri9UbEtGSXNEWlJTNFJuZ0tXL0Nubk5zbVIyVXN6NEZSbTJZTGNJYW52?=
- =?utf-8?B?L29idFpYVWN1NmxYWmJkVEozQ2diU05telhqYmtJc1E2NlpKbDJOSmYra3I3?=
- =?utf-8?B?NkhNYUNkYjZnM1JseGhVUVR2SmpLNWg4SXZZNk41V2E1Qkd4ZEJzZVVWcjUy?=
- =?utf-8?B?Z1h4emZ2dk5nemNhMExxZ0gzZ1BqN1J0VnIvaUZ4YzhTVitJS2I0OC9ka3dv?=
- =?utf-8?B?ZC92SmxqVnZBNW1XNzdZeFJ6R0RXcHFwSXR4Nlp2VEtBbnk0V3BDWkFJTzEx?=
- =?utf-8?B?cm1kUWprV3dvN3lvTnYwWTdOSVJFWWduS1VkVjQ2dkhrdkNLaWxFQ2p1OFpu?=
- =?utf-8?B?RWZTSExvY1FRTzFEcWlHdHUraVV2b2Q4MzUvOTdBQU9LVm1TYUZrRmFiVUg5?=
- =?utf-8?B?K1g1ekR4dEIzam5aeFdQcXN4MitBNzRBQ3RRWG1hYUNXbkY2dlMyZDdQa25K?=
- =?utf-8?B?cUNpTVdlNXpnRFNrNzBudCsxUGxzb2s5UWF2WTZDc1lMRXI0cXlzY3FKdXQx?=
- =?utf-8?B?WmZtNjF0VzlTMDkvd1NSNGthaTZhMEZoNElJQVFySWFwdS81eEl5T2szSzNR?=
- =?utf-8?B?K3BtYTljRjJyVThiblRwK3hKMFdvZis5S2IycUZVVndtZXZyVEU1QitReVY5?=
- =?utf-8?Q?8awORSq61wSnwAN+0VXOF8v+h?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 434ae3cb-3d29-4c63-ebd5-08dd7addcf28
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVRWb3FJbUw0R1Awa3d2SG5VLzcrcU0rMWplc1FOTkUrWldXamxVUFlUQSsr?=
+ =?utf-8?B?TjdiVXdNUlpaQ1grZlpFTzlDVGxRRVV1WnR2YkFnT1VUSlpUMisyVHQ5Znls?=
+ =?utf-8?B?TUJaZWRZTHoxcmNJZExTM3NoTjhCTE00bTRSMUxkUXVpTlNHYllsaERGQ2ps?=
+ =?utf-8?B?b3h2cjFKSmdaZnU1amxPVjZZWDRFTzRjS3dGdjZUUnl0TEt6ZmRKS0w1TVFu?=
+ =?utf-8?B?dzJ5dUFvWkNmQ2VhOCtrVEdhc3hYSC8vK0cyc0xMRnZWa0NkendkT3dDcjhN?=
+ =?utf-8?B?K3haRWUzQ3Q1TWVQZXpyUjV2K1NOcUkyOWloenBFRWxkZUxDR2Vmck9ESk5J?=
+ =?utf-8?B?N1ArNS92MzV6SlkzYzNOVzNqZ0xrenhZYTBJeDIzRzRmL1RabXdCNGRJNVh0?=
+ =?utf-8?B?WXR0RmVuODYzQm1HSC94OTg0RUl3b2VWaGNUMjRNNkE3OExiK3BJOWxCWWlD?=
+ =?utf-8?B?NFE5MFVvNWhHVGVBYktDYU9YMFZqSXBZb3N6MmVtSUNtNEo2NWt2MkZGYWFH?=
+ =?utf-8?B?OW5OaU5YTVB6TS9BaVVXNkdsWnJWcnBDcEFPZFZSTmx4aVNIdDVGQVJObDBO?=
+ =?utf-8?B?RXkwQ01iQ1ZRT3NoVHkvQi9JL2MvVll4Z05vc2NTcGhTa2o0RGFScndJSml4?=
+ =?utf-8?B?SEhMV0ZLc1lvVzgxQkdXYXdJUnlSQ2hzb2M5cVVwZ2w0K1FwYW5ISzc1cmE1?=
+ =?utf-8?B?UWtYa2hvSHFVT0xSM3o0T2N1VXM4Vlc0YXc2c0U0MisreGRPc05JVmxURUUx?=
+ =?utf-8?B?cTdGVUVEL0VNNEhUTXZCdU5IUm9FTnMxazZKMVZKWVFSME5DYlBUQUdYWVBN?=
+ =?utf-8?B?dStoSFRvdjdLYlZwa2dWb1N5NWZBbkRNcmY1ZDJnTmx2UUwyYTlYRXhRalhR?=
+ =?utf-8?B?Zm5yZERNTEVDNXhaTkhSKzlkN0U4OFBIT2tFRVBoWllhNm9hMDd6dEU2RHpO?=
+ =?utf-8?B?WUxVZzBCc0NCenl5OG5zaXNmRXdsSzBONTl3WldLTnNlQzRKbWlGZ3p1cUxw?=
+ =?utf-8?B?QytGdDZtdzlrSHZFaVRTZXFiUk9TcjZvQkpDdnduY3NBcFBwYTZ1SjcrblYv?=
+ =?utf-8?B?TzNpTEE2cjFUeUJNdmxYaEtyMFRQMVNUdzRWU2tvM1ZHOC9QRjVUS0RZZUEr?=
+ =?utf-8?B?RTVtNnZ6SWVDQ09aRFUyYUJEbXVHUkFwZC90Q2R3eVF3Tm16L0oyeU8vYnV2?=
+ =?utf-8?B?MEJGZS94UnZLQktzeG1vNWsrTXA2dEp0SHRaOWNDaE14NDNxYXB6cWVVbGZu?=
+ =?utf-8?B?YktnaTFkSmd2R0d3ZUhwM1pOUHd4Ty9iQVJ3dGkrbm9wVVlrTzRCa0tmQlFV?=
+ =?utf-8?B?cG1mbWdNYlVyWG4xWFZMMXM5dXVEcUh5ZlQ3MHJRUXlWS045Y3FCUjRuQzF3?=
+ =?utf-8?B?M2FVTmZmSUx6SDVOc1oxRWFPd0Qrc1NURnF0cVRqMGJIdG5RUEZRTWpzNXYv?=
+ =?utf-8?B?ay83Q3lUM2FxOHZzdFBrM0ZNcnBTM0FLYjZZWjN4NHlrTjRJQ0lqY0MrakJF?=
+ =?utf-8?B?ZEs3bW96ZXg4N1E3TUhPeGxaaTU5QTdEazhNS2RWVDJxUkkyR1FqSzlycUhT?=
+ =?utf-8?B?WWVpbCtBZVRtRnRrZDFlaVhQOVNhbzZHdHpnVTVYZ0drNWR4TGFhY3NxZXhU?=
+ =?utf-8?B?WkRKMjc3NFdYdzBscFFWdGhtYlFqajg4NGNiNHlhTVhKSWlLZU9XK0RLU2NG?=
+ =?utf-8?B?cHFFTTZEQmFWbGFFZ2VRaEp5YlQrMXJSa2pBcjY4UEdSNVA0eXlEMVVkTnJ6?=
+ =?utf-8?B?Y04rWno3Z3R5NzFjNFQ4U2VBR1dHbzg2a21NYUlwWlh5RzlCWHFUWVRXWlRr?=
+ =?utf-8?B?SXNIL0x6dHJTMVMySWlZQkFMWkozK0N3bHZJUFRBSDZrakUyTXp0NlNGWnRH?=
+ =?utf-8?B?eGQyUFZ2ZmZsUkJweWRUcmFpSGgwTTJ1R3h6WVlQa2dhZGNyb0NQRnV1MU9C?=
+ =?utf-8?B?N1E2bS9lNXc1ZDVMSDZLSWNQUFd4clNiSitVVVBpY1BKbFlDTmp0TW5hLzlO?=
+ =?utf-8?B?OFJmdS9wMTVjbHdpd2h2MWdPMkhuMG5TNTh2WG4zc1Q5Vk9sYlUxeVJpS3pH?=
+ =?utf-8?B?UkRLaThvUGpTSFZpTVk0NjZqdUdwOEk0bWdaZWVLcURxTW9EWEtLaWxJcVdz?=
+ =?utf-8?Q?/Tic0GqFiH7bPrC9ZbPbeKT2X?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7297b40-7696-4093-ef03-08dd7addd014
 X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB6739.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2025 22:52:04.0304
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2025 22:52:05.6382
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0rCIlEwUDPezvvAkC8bcyapHq1+fOHAk+9iBIzRE0fxCZQm16TwgyxPcNeJdfsG1v1Z3DYniFRHO6sZ4B+bZtg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: C0L1WF7ygDjoN7/gEPVm5cu6/8fIlUS5s8umbZDKjdGk/SLNbMjaYuHtMIviomwCEnSR59SKuTI3IhGTIHJeog==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7003
 X-OriginatorOrg: intel.com
 
-Extent information can be helpful to the user to coordinate memory usage
-with the external orchestrator and FM.
+Dynamic Capacity regions must limit dev dax resources to those areas
+which have extents backing real memory.  Such DAX regions are dubbed
+'sparse' regions.  In order to manage where memory is available four
+alternatives were considered:
 
-Expose the details of region extents by creating the following
-sysfs entries.
+1) Create a single region resource child on region creation which
+   reserves the entire region.  Then as extents are added punch holes in
+   this reservation.  This requires new resource manipulation to punch
+   the holes and still requires an additional iteration over the extent
+   areas which may already have existing dev dax resources used.
 
-        /sys/bus/cxl/devices/dax_regionX/extentX.Y
-        /sys/bus/cxl/devices/dax_regionX/extentX.Y/offset
-        /sys/bus/cxl/devices/dax_regionX/extentX.Y/length
-        /sys/bus/cxl/devices/dax_regionX/extentX.Y/tag
+2) Maintain an ordered xarray of extents which can be queried while
+   processing the resize logic.  The issue is that existing region->res
+   children may artificially limit the allocation size sent to
+   alloc_dev_dax_range().  IE the resource children can't be directly
+   used in the resize logic to find where space in the region is.  This
+   also poses a problem of managing the available size in 2 places.
 
-Based on an original patch by Navneet Singh.
+3) Maintain a separate resource tree with extents.  This option is the
+   same as 2) but with the different data structure.  Most ideally there
+   should be a unified representation of the resource tree not two places
+   to look for space.
+
+4) Create region resource children for each extent.  Manage the dax dev
+   resize logic in the same way as before but use a region child
+   (extent) resource as the parents to find space within each extent.
+
+Option 4 can leverage the existing resize algorithm to find space within
+the extents.  It manages the available space in a singular resource tree
+which is less complicated for finding space.
+
+In preparation for this change, factor out the dev_dax_resize logic.
+For static regions use dax_region->res as the parent to find space for
+the dax ranges.  Future patches will use the same algorithm with
+individual extent resources as the parent.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Fan Ni <fan.ni@samsung.com>
-Tested-by: Fan Ni <fan.ni@samsung.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
 ---
-Changes:
-[iweiny: rebase]
-[iweiny: s/tag/uuid/ throughout the code]
-[iweiny: update sysfs docs to 2025]
----
- Documentation/ABI/testing/sysfs-bus-cxl | 36 ++++++++++++++++++++
- drivers/cxl/core/extent.c               | 58 +++++++++++++++++++++++++++++++++
- 2 files changed, 94 insertions(+)
+ drivers/dax/bus.c | 130 +++++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 80 insertions(+), 50 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-index 2e26d95ac66f..6e9d60baf546 100644
---- a/Documentation/ABI/testing/sysfs-bus-cxl
-+++ b/Documentation/ABI/testing/sysfs-bus-cxl
-@@ -639,3 +639,39 @@ Description:
- 		The count is persistent across power loss and wraps back to 0
- 		upon overflow. If this file is not present, the device does not
- 		have the necessary support for dirty tracking.
-+
-+
-+What:		/sys/bus/cxl/devices/dax_regionX/extentX.Y/offset
-+Date:		May, 2025
-+KernelVersion:	v6.16
-+Contact:	linux-cxl@vger.kernel.org
-+Description:
-+		(RO) [For Dynamic Capacity regions only] Users can use the
-+		extent information to create DAX devices on specific extents.
-+		This is done by creating and destroying DAX devices in specific
-+		sequences and looking at the mappings created.  Extent offset
-+		within the region.
-+
-+
-+What:		/sys/bus/cxl/devices/dax_regionX/extentX.Y/length
-+Date:		May, 2025
-+KernelVersion:	v6.16
-+Contact:	linux-cxl@vger.kernel.org
-+Description:
-+		(RO) [For Dynamic Capacity regions only] Users can use the
-+		extent information to create DAX devices on specific extents.
-+		This is done by creating and destroying DAX devices in specific
-+		sequences and looking at the mappings created.  Extent length
-+		within the region.
-+
-+
-+What:		/sys/bus/cxl/devices/dax_regionX/extentX.Y/uuid
-+Date:		May, 2025
-+KernelVersion:	v6.16
-+Contact:	linux-cxl@vger.kernel.org
-+Description:
-+		(RO) [For Dynamic Capacity regions only] Users can use the
-+		extent information to create DAX devices on specific extents.
-+		This is done by creating and destroying DAX devices in specific
-+		sequences and looking at the mappings created.  UUID of this
-+		extent.
-diff --git a/drivers/cxl/core/extent.c b/drivers/cxl/core/extent.c
-index 6df277caf974..3fb20cd7afc8 100644
---- a/drivers/cxl/core/extent.c
-+++ b/drivers/cxl/core/extent.c
-@@ -6,6 +6,63 @@
+diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+index d8cb5195a227..c25942a3d125 100644
+--- a/drivers/dax/bus.c
++++ b/drivers/dax/bus.c
+@@ -844,11 +844,9 @@ static int devm_register_dax_mapping(struct dev_dax *dev_dax, int range_id)
+ 	return 0;
+ }
  
- #include "core.h"
- 
-+static ssize_t offset_show(struct device *dev, struct device_attribute *attr,
-+			   char *buf)
-+{
-+	struct region_extent *region_extent = to_region_extent(dev);
-+
-+	return sysfs_emit(buf, "%#llx\n", region_extent->hpa_range.start);
-+}
-+static DEVICE_ATTR_RO(offset);
-+
-+static ssize_t length_show(struct device *dev, struct device_attribute *attr,
-+			   char *buf)
-+{
-+	struct region_extent *region_extent = to_region_extent(dev);
-+	u64 length = range_len(&region_extent->hpa_range);
-+
-+	return sysfs_emit(buf, "%#llx\n", length);
-+}
-+static DEVICE_ATTR_RO(length);
-+
-+static ssize_t uuid_show(struct device *dev, struct device_attribute *attr,
-+			 char *buf)
-+{
-+	struct region_extent *region_extent = to_region_extent(dev);
-+
-+	return sysfs_emit(buf, "%pUb\n", &region_extent->uuid);
-+}
-+static DEVICE_ATTR_RO(uuid);
-+
-+static struct attribute *region_extent_attrs[] = {
-+	&dev_attr_offset.attr,
-+	&dev_attr_length.attr,
-+	&dev_attr_uuid.attr,
-+	NULL
-+};
-+
-+static uuid_t empty_uuid = { 0 };
-+
-+static umode_t region_extent_visible(struct kobject *kobj,
-+				     struct attribute *a, int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct region_extent *region_extent = to_region_extent(dev);
-+
-+	if (a == &dev_attr_uuid.attr &&
-+	    uuid_equal(&region_extent->uuid, &empty_uuid))
-+		return 0;
-+
-+	return a->mode;
-+}
-+
-+static const struct attribute_group region_extent_attribute_group = {
-+	.attrs = region_extent_attrs,
-+	.is_visible = region_extent_visible,
-+};
-+
-+__ATTRIBUTE_GROUPS(region_extent_attribute);
-+
- static void cxled_release_extent(struct cxl_endpoint_decoder *cxled,
- 				 struct cxled_extent *ed_extent)
+-static int alloc_dev_dax_range(struct dev_dax *dev_dax, u64 start,
+-		resource_size_t size)
++static int alloc_dev_dax_range(struct resource *parent, struct dev_dax *dev_dax,
++			       u64 start, resource_size_t size)
  {
-@@ -44,6 +101,7 @@ static void region_extent_release(struct device *dev)
- static const struct device_type region_extent_type = {
- 	.name = "extent",
- 	.release = region_extent_release,
-+	.groups = region_extent_attribute_groups,
- };
+-	struct dax_region *dax_region = dev_dax->region;
+-	struct resource *res = &dax_region->res;
+ 	struct device *dev = &dev_dax->dev;
+ 	struct dev_dax_range *ranges;
+ 	unsigned long pgoff = 0;
+@@ -866,14 +864,14 @@ static int alloc_dev_dax_range(struct dev_dax *dev_dax, u64 start,
+ 		return 0;
+ 	}
  
- bool is_region_extent(struct device *dev)
+-	alloc = __request_region(res, start, size, dev_name(dev), 0);
++	alloc = __request_region(parent, start, size, dev_name(dev), 0);
+ 	if (!alloc)
+ 		return -ENOMEM;
+ 
+ 	ranges = krealloc(dev_dax->ranges, sizeof(*ranges)
+ 			* (dev_dax->nr_range + 1), GFP_KERNEL);
+ 	if (!ranges) {
+-		__release_region(res, alloc->start, resource_size(alloc));
++		__release_region(parent, alloc->start, resource_size(alloc));
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -1026,50 +1024,45 @@ static bool adjust_ok(struct dev_dax *dev_dax, struct resource *res)
+ 	return true;
+ }
+ 
+-static ssize_t dev_dax_resize(struct dax_region *dax_region,
+-		struct dev_dax *dev_dax, resource_size_t size)
++/**
++ * dev_dax_resize_static - Expand the device into the unused portion of the
++ * region. This may involve adjusting the end of an existing resource, or
++ * allocating a new resource.
++ *
++ * @parent: parent resource to allocate this range in
++ * @dev_dax: DAX device to be expanded
++ * @to_alloc: amount of space to alloc; must be <= space available in @parent
++ *
++ * Return the amount of space allocated or -ERRNO on failure
++ */
++static ssize_t dev_dax_resize_static(struct resource *parent,
++				     struct dev_dax *dev_dax,
++				     resource_size_t to_alloc)
+ {
+-	resource_size_t avail = dax_region_avail_size(dax_region), to_alloc;
+-	resource_size_t dev_size = dev_dax_size(dev_dax);
+-	struct resource *region_res = &dax_region->res;
+-	struct device *dev = &dev_dax->dev;
+ 	struct resource *res, *first;
+-	resource_size_t alloc = 0;
+ 	int rc;
+ 
+-	if (dev->driver)
+-		return -EBUSY;
+-	if (size == dev_size)
+-		return 0;
+-	if (size > dev_size && size - dev_size > avail)
+-		return -ENOSPC;
+-	if (size < dev_size)
+-		return dev_dax_shrink(dev_dax, size);
+-
+-	to_alloc = size - dev_size;
+-	if (dev_WARN_ONCE(dev, !alloc_is_aligned(dev_dax, to_alloc),
+-			"resize of %pa misaligned\n", &to_alloc))
+-		return -ENXIO;
+-
+-	/*
+-	 * Expand the device into the unused portion of the region. This
+-	 * may involve adjusting the end of an existing resource, or
+-	 * allocating a new resource.
+-	 */
+-retry:
+-	first = region_res->child;
+-	if (!first)
+-		return alloc_dev_dax_range(dev_dax, dax_region->res.start, to_alloc);
++	first = parent->child;
++	if (!first) {
++		rc = alloc_dev_dax_range(parent, dev_dax,
++					   parent->start, to_alloc);
++		if (rc)
++			return rc;
++		return to_alloc;
++	}
+ 
+-	rc = -ENOSPC;
+ 	for (res = first; res; res = res->sibling) {
+ 		struct resource *next = res->sibling;
++		resource_size_t alloc;
+ 
+ 		/* space at the beginning of the region */
+-		if (res == first && res->start > dax_region->res.start) {
+-			alloc = min(res->start - dax_region->res.start, to_alloc);
+-			rc = alloc_dev_dax_range(dev_dax, dax_region->res.start, alloc);
+-			break;
++		if (res == first && res->start > parent->start) {
++			alloc = min(res->start - parent->start, to_alloc);
++			rc = alloc_dev_dax_range(parent, dev_dax,
++						 parent->start, alloc);
++			if (rc)
++				return rc;
++			return alloc;
+ 		}
+ 
+ 		alloc = 0;
+@@ -1078,21 +1071,56 @@ static ssize_t dev_dax_resize(struct dax_region *dax_region,
+ 			alloc = min(next->start - (res->end + 1), to_alloc);
+ 
+ 		/* space at the end of the region */
+-		if (!alloc && !next && res->end < region_res->end)
+-			alloc = min(region_res->end - res->end, to_alloc);
++		if (!alloc && !next && res->end < parent->end)
++			alloc = min(parent->end - res->end, to_alloc);
+ 
+ 		if (!alloc)
+ 			continue;
+ 
+ 		if (adjust_ok(dev_dax, res)) {
+ 			rc = adjust_dev_dax_range(dev_dax, res, resource_size(res) + alloc);
+-			break;
++			if (rc)
++				return rc;
++			return alloc;
+ 		}
+-		rc = alloc_dev_dax_range(dev_dax, res->end + 1, alloc);
+-		break;
++		rc = alloc_dev_dax_range(parent, dev_dax, res->end + 1, alloc);
++		if (rc)
++			return rc;
++		return alloc;
+ 	}
+-	if (rc)
+-		return rc;
++
++	/* available was already calculated and should never be an issue */
++	dev_WARN_ONCE(&dev_dax->dev, 1, "space not found?");
++	return 0;
++}
++
++static ssize_t dev_dax_resize(struct dax_region *dax_region,
++		struct dev_dax *dev_dax, resource_size_t size)
++{
++	resource_size_t avail = dax_region_avail_size(dax_region);
++	resource_size_t dev_size = dev_dax_size(dev_dax);
++	struct device *dev = &dev_dax->dev;
++	resource_size_t to_alloc;
++	resource_size_t alloc;
++
++	if (dev->driver)
++		return -EBUSY;
++	if (size == dev_size)
++		return 0;
++	if (size > dev_size && size - dev_size > avail)
++		return -ENOSPC;
++	if (size < dev_size)
++		return dev_dax_shrink(dev_dax, size);
++
++	to_alloc = size - dev_size;
++	if (dev_WARN_ONCE(dev, !alloc_is_aligned(dev_dax, to_alloc),
++			"resize of %pa misaligned\n", &to_alloc))
++		return -ENXIO;
++
++retry:
++	alloc = dev_dax_resize_static(&dax_region->res, dev_dax, to_alloc);
++	if (alloc <= 0)
++		return alloc;
+ 	to_alloc -= alloc;
+ 	if (to_alloc)
+ 		goto retry;
+@@ -1198,7 +1226,8 @@ static ssize_t mapping_store(struct device *dev, struct device_attribute *attr,
+ 
+ 	to_alloc = range_len(&r);
+ 	if (alloc_is_aligned(dev_dax, to_alloc))
+-		rc = alloc_dev_dax_range(dev_dax, r.start, to_alloc);
++		rc = alloc_dev_dax_range(&dax_region->res, dev_dax, r.start,
++					 to_alloc);
+ 	up_write(&dax_dev_rwsem);
+ 	up_write(&dax_region_rwsem);
+ 
+@@ -1466,7 +1495,8 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
+ 	device_initialize(dev);
+ 	dev_set_name(dev, "dax%d.%d", dax_region->id, dev_dax->id);
+ 
+-	rc = alloc_dev_dax_range(dev_dax, dax_region->res.start, data->size);
++	rc = alloc_dev_dax_range(&dax_region->res, dev_dax, dax_region->res.start,
++				 data->size);
+ 	if (rc)
+ 		goto err_range;
+ 
 
 -- 
 2.49.0
