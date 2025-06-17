@@ -1,62 +1,62 @@
-Return-Path: <nvdimm+bounces-10759-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-10761-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 201BDADCC8A
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Jun 2025 15:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F96FADCC8D
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Jun 2025 15:10:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E820817C289
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Jun 2025 13:06:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C127717DA68
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 17 Jun 2025 13:06:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C412E2F18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE652EA471;
 	Tue, 17 Jun 2025 13:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="kwOm1azn"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="r9M+huVM"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAF5199947
-	for <nvdimm@lists.linux.dev>; Tue, 17 Jun 2025 13:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9F22E92B2
+	for <nvdimm@lists.linux.dev>; Tue, 17 Jun 2025 13:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750165385; cv=none; b=KQ4IFbRVrhi9FNv6YMai35HkIySs4aQv7emTGD73pj1n6luGv6SXl4kAlf7YyDWR7X39U8jZfNa3GrDo7CZyVJR5H1Ej6YW5pP3kkiYd0FOrdw0ZkkBIT0ZCz1fVFI99AgV/tveTOyO4GALxVAu82g60md0653dxDtrz/jojIo8=
+	t=1750165387; cv=none; b=QMNupNUwhDHCA0RHdpO491wtrc4zuFHHdve3i9epnM4L1hwdmpZgozuJVjyg6KgFMSI0O8Ujb/40CcZwiragwnAOQsZeokA2xK4mS4xm+1OzJAY/sf42b+VjxEtiVi8qmbLfZ/h9VJQ83A2/Tem7qCD52aZR51aSSBNOfB5TJV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750165385; c=relaxed/simple;
-	bh=QlXSwNKK08xmJmbJKsSJdjUq1otE++eQi2O18jgIVVc=;
+	s=arc-20240116; t=1750165387; c=relaxed/simple;
+	bh=IJ2BGsq5yFYOXnRVvmbfvQkQ1RhwJtdF2mw0jLyfseU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=O4Tpsy538rlmjIGfcB4o3trAVT1gUuGAbDmwxF9DIdwzBNunYQNRDGbP9iBCc5G5HVQvmH2oilUIRNOA6vMSWwJVbJUboA8dTl+cBkM+XpsUg4845PrJXrs7A22SkkCSOYOBJoY9RfkQi5NaFV9dq9x3GhhpykJs9u6bpiCppos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=kwOm1azn; arc=none smtp.client-ip=203.254.224.34
+	 Content-Type:References; b=HLztK7zJL2RKGxqapFW/c7ISEd0daw1OHoi+hKHMHH1NSxAWwXVg/1um+BCTdWwV/rP9EiZLHOZLQlwwJ+JEy9Wad5P4IdsIZ5BNYdt8fSwPPPzlVpWLzosg7BVTIjwCMlpQ7oIuOYcb8T1xny86gwLbUaFZd2pedbIsU7HXx9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=r9M+huVM; arc=none smtp.client-ip=203.254.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250617130302epoutp044b2e316f1078761d5b4be0cc5c641248~J1iR9_BTM2639726397epoutp04W
-	for <nvdimm@lists.linux.dev>; Tue, 17 Jun 2025 13:03:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250617130302epoutp044b2e316f1078761d5b4be0cc5c641248~J1iR9_BTM2639726397epoutp04W
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250617130303epoutp04073f3a25a97ee0e93a988a40af04a8f0~J1iS3hhQ92709227092epoutp04C
+	for <nvdimm@lists.linux.dev>; Tue, 17 Jun 2025 13:03:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250617130303epoutp04073f3a25a97ee0e93a988a40af04a8f0~J1iS3hhQ92709227092epoutp04C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1750165382;
-	bh=AUkScCfP+dPARUHxdCDWVovECz1k/Y3SmiSq/nmHrz8=;
+	s=mail20170921; t=1750165383;
+	bh=uK2NdU+m2E8iJyLxKvykmCqaOSyrYJ8SD6NKcrnVOwE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kwOm1aznuWuuoUx312HOBUeF9uBuytBZGFN8KF8PZFdVagTQjnSgNoRVvu8ofbDB4
-	 vRYS0MkN14TuRBRf7elyg18DnbmCtt/TvFEHkjFyPooNvUVPMmPkOoz3/N1d4nQzni
-	 Ny9E1rUNf8AT4kvL48/MjY9bFAiPQ790AkONK/6c=
+	b=r9M+huVM7J5Ntyl2IKsiwmUs5zHSxDY/wxTky+maA1G5sLMqpRrCaMfPz8Frv1tfZ
+	 cSyQeNLd0YzQYF5JtdbR/WESg9DO4jwVq3PGYREHXXx0H2upB35IxRkEO5nChEIQ/W
+	 Dcc6sU1jMc0aPNnQLkyKCdkFpx0PWQWyUDBanqIo=
 Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
 	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250617130301epcas5p1c19d3a1ccf2ebc19a1e3c9aae64b04fc~J1iRWfUWR2026620266epcas5p1r;
-	Tue, 17 Jun 2025 13:03:01 +0000 (GMT)
+	20250617130302epcas5p10a2ed38d22f5a05fdec97a8940173f1e~J1iR3CSmH2236322363epcas5p1x;
+	Tue, 17 Jun 2025 13:03:02 +0000 (GMT)
 Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4bM6VY59J5z6B9mB; Tue, 17 Jun
-	2025 13:03:01 +0000 (GMT)
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4bM6VZ1zs2z6B9m6; Tue, 17 Jun
+	2025 13:03:02 +0000 (GMT)
 Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250617124052epcas5p24aace8321ed09af8bdd1e8c30c20cd84~J1O7O-EtA0675106751epcas5p27;
-	Tue, 17 Jun 2025 12:40:52 +0000 (GMT)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250617124055epcas5p4978a3c139128bf5873c60ca0a10f5199~J1O_OAVZL0803508035epcas5p4J;
+	Tue, 17 Jun 2025 12:40:55 +0000 (GMT)
 Received: from test-PowerEdge-R740xd.samsungds.net (unknown [107.99.41.79])
 	by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250617124049epsmtip2a2768a01124f4f18381a9da429110c7c~J1O4vZIJO2488624886epsmtip2Z;
-	Tue, 17 Jun 2025 12:40:49 +0000 (GMT)
+	20250617124052epsmtip2386dad618f1e9b576b69bc4f26e03508~J1O7em-Mj2558225582epsmtip2J;
+	Tue, 17 Jun 2025 12:40:52 +0000 (GMT)
 From: Neeraj Kumar <s.neeraj@samsung.com>
 To: dan.j.williams@intel.com, dave@stgolabs.net,
 	jonathan.cameron@huawei.com, dave.jiang@intel.com,
@@ -66,10 +66,9 @@ Cc: a.manzanares@samsung.com, nifan.cxl@gmail.com, anisa.su@samsung.com,
 	alok.rathore@samsung.com, s.neeraj@samsung.com, neeraj.kernel@gmail.com,
 	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
 	nvdimm@lists.linux.dev, gost.dev@samsung.com, cpgs@samsung.com
-Subject: [RFC PATCH 16/20] cxl/mem: Preserve cxl root decoder during mem
- probe
-Date: Tue, 17 Jun 2025 18:09:40 +0530
-Message-Id: <1891546521.01750165381712.JavaMail.epsvc@epcpadp2new>
+Subject: [RFC PATCH 17/20] cxl/pmem: Preserve region information into nd_set
+Date: Tue, 17 Jun 2025 18:09:41 +0530
+Message-Id: <1147258851.41750165382275.JavaMail.epsvc@epcpadp2new>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250617123944.78345-1-s.neeraj@samsung.com>
 Precedence: bulk
@@ -79,50 +78,57 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250617124052epcas5p24aace8321ed09af8bdd1e8c30c20cd84
+X-CMS-MailID: 20250617124055epcas5p4978a3c139128bf5873c60ca0a10f5199
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20250617124052epcas5p24aace8321ed09af8bdd1e8c30c20cd84
+X-CMS-RootMailID: 20250617124055epcas5p4978a3c139128bf5873c60ca0a10f5199
 References: <20250617123944.78345-1-s.neeraj@samsung.com>
-	<CGME20250617124052epcas5p24aace8321ed09af8bdd1e8c30c20cd84@epcas5p2.samsung.com>
+	<CGME20250617124055epcas5p4978a3c139128bf5873c60ca0a10f5199@epcas5p4.samsung.com>
 
-Saved root decoder info is required for cxl region persistency
+Save region information stored in cxlr to nd_set during
+cxl_pmem_region_probe in nd_set. This saved region information is being
+stored into LSA, which will be used for cxl region persistence
 
 Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
 ---
- drivers/cxl/cxlmem.h | 1 +
- drivers/cxl/mem.c    | 2 ++
- 2 files changed, 3 insertions(+)
+ drivers/cxl/pmem.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 2a25d1957ddb..a14e82d4c9aa 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -54,6 +54,7 @@ struct cxl_memdev {
- 	struct cxl_nvdimm_bridge *cxl_nvb;
- 	struct cxl_nvdimm *cxl_nvd;
- 	struct cxl_port *endpoint;
-+	struct cxl_root_decoder *cxlrd;
- 	int id;
- 	int depth;
- };
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index aaea4eb178ef..c2e5d0e6b96b 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -152,6 +152,8 @@ static int cxl_mem_probe(struct device *dev)
- 		return -ENXIO;
- 	}
+diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
+index f9c95996e937..ffcebb8d382f 100644
+--- a/drivers/cxl/pmem.c
++++ b/drivers/cxl/pmem.c
+@@ -308,6 +308,7 @@ static int cxl_pmem_region_probe(struct device *dev)
+ 	struct nd_mapping_desc mappings[CXL_DECODER_MAX_INTERLEAVE];
+ 	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
+ 	struct cxl_region *cxlr = cxlr_pmem->cxlr;
++	struct cxl_region_params *p = &cxlr->params;
+ 	struct cxl_nvdimm_bridge *cxl_nvb = cxlr->cxl_nvb;
+ 	struct cxl_pmem_region_info *info = NULL;
+ 	struct nd_interleave_set *nd_set;
+@@ -388,12 +389,12 @@ static int cxl_pmem_region_probe(struct device *dev)
+ 	ndr_desc.num_mappings = cxlr_pmem->nr_mappings;
+ 	ndr_desc.mapping = mappings;
  
-+	cxlmd->cxlrd = cxl_find_root_decoder(parent_port);
+-	/*
+-	 * TODO enable CXL labels which skip the need for 'interleave-set cookie'
+-	 */
+-	nd_set->cookie1 =
+-		nd_fletcher64(info, sizeof(*info) * cxlr_pmem->nr_mappings, 0);
+-	nd_set->cookie2 = nd_set->cookie1;
++	nd_set->uuid = p->uuid;
++	nd_set->interleave_ways = p->interleave_ways;
++	nd_set->interleave_granularity = p->interleave_granularity;
++	nd_set->res = p->res;
++	nd_set->nr_targets =  p->nr_targets;
 +
- 	if (dport->rch)
- 		endpoint_parent = parent_port->uport_dev;
- 	else
+ 	ndr_desc.nd_set = nd_set;
+ 
+ 	cxlr_pmem->nd_region =
 -- 
 2.34.1
 
