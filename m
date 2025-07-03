@@ -1,136 +1,158 @@
-Return-Path: <nvdimm+bounces-11033-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11004-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CE8AF8622
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  4 Jul 2025 05:58:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65FF0AF7444
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Jul 2025 14:35:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FB7D487714
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  4 Jul 2025 03:57:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4A684E02CB
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  3 Jul 2025 12:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B631EA7EC;
-	Fri,  4 Jul 2025 03:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5786F2E49B0;
+	Thu,  3 Jul 2025 12:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Sy5ykVVv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPmmvoE0"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072F51EEE6
-	for <nvdimm@lists.linux.dev>; Fri,  4 Jul 2025 03:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE182E03F4
+	for <nvdimm@lists.linux.dev>; Thu,  3 Jul 2025 12:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751601495; cv=none; b=iWpM1f7/cYh8GFbW++pAQ8Sa13TNKCjz3j0K6jA+ZuQHV+meTah/Q3+fhFulzeSKq3yyW19obw7+rguH51jB3Q1iSaJnAK5qMDV1T6J9/v9bR0KKClgscg3UjcKDNijbSC7+lRMCWQIYLn4g7/yG/lXZbKe7oF+hjON8uQyARxw=
+	t=1751546068; cv=none; b=o4Lg8Jt5IkZdLhCAqA3+9JODSrIj0Aom2oFeYw+qawJAybrMNT4FdrLqJaAzE/IIw7D87okY954n/fSIlhW05jArc9lsNTOkosEOf1ks3L95DloAAiI2mU0yjRdUIu7YiDw9yrNBrgOm0SEWqKSD2+sKTKgYtvICvOZfRiNuLeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751601495; c=relaxed/simple;
-	bh=CwsW/v3kGTUgLenN3mCNVgbHpSdDlpbvzUgi56ChsA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=txk0iuaEPdF2n8M+bxMsx/Dk8FqfucP7JPrPiMv4NnSlfNFBJxVNK9UqRz51SVC9ug12iDHylAqAnn38dDOZseHZypYaMrRN1ZnUT0HFfVTL6WkqAFnaQKZPg6iwwFllHCG9RW7azn3SPKQZRf67LWtonnWwudo4GHjTV9eg/8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Sy5ykVVv; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250704035806epoutp01f8514954d9786c2ec55137b91bcea09c~O8EV6u6Qy2769427694epoutp01g
-	for <nvdimm@lists.linux.dev>; Fri,  4 Jul 2025 03:58:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250704035806epoutp01f8514954d9786c2ec55137b91bcea09c~O8EV6u6Qy2769427694epoutp01g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751601486;
-	bh=x/8gj71UJV86nP6lspRD9k7s8nGbai8aJQjsGNNfkWs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Sy5ykVVv9igqpbrP5eTn+ACaqNixyqCQJqmIqarv/c9xCb+XH518N4F8tsGuN6meQ
-	 wLMHXZFJBXmVuGd56oPNBUItOsjxPfYYpWTsJNPvjw6GK21ZZFZfTZ+F5jWxKGOdyt
-	 zmIDWub3p70R5y6CFiKvCITYFA7C0LqlI6nfY/QY=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250704035805epcas5p320c4465b7969403a662650d43de3d573~O8EVMpvZo0399503995epcas5p3J;
-	Fri,  4 Jul 2025 03:58:05 +0000 (GMT)
-Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4bYKbx3SWkz6B9m6; Fri,  4 Jul
-	2025 03:58:05 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250703100429epcas5p1dd84b9da7f710c941e856857e212f64a~Ota9A8bTr0702407024epcas5p1G;
-	Thu,  3 Jul 2025 10:04:29 +0000 (GMT)
-Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250703100426epsmtip1b6479f8c372de8f2814a0faefe0c5332~Ota6ltdXZ2058220582epsmtip1u;
-	Thu,  3 Jul 2025 10:04:26 +0000 (GMT)
-Date: Thu, 3 Jul 2025 15:34:21 +0530
-From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	a.manzanares@samsung.com, nifan.cxl@gmail.com, anisa.su@samsung.com,
-	vishak.g@samsung.com, krish.reddy@samsung.com, arun.george@samsung.com,
-	alok.rathore@samsung.com, neeraj.kernel@gmail.com,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	nvdimm@lists.linux.dev, gost.dev@samsung.com, cpgs@samsung.com
-Subject: Re: [RFC PATCH 02/20] nvdimm/label: Prep patch to accommodate cxl
- lsa 2.1 support
-Message-ID: <158453976.61751601485478.JavaMail.epsvc@epcpadp2new>
+	s=arc-20240116; t=1751546068; c=relaxed/simple;
+	bh=Pj8Cdq0sivdNx0WCtdyO0zBAKWGSVYHVKqj2V5LSI/g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n4KmnmCrT+LCX5grvm9aSTmHe/pTrJp4ogk5DBidW2Sn7soDG8JXiKsjYIPnIL0hC+SYv3DDDdTyJ8iZr7AId81lNe5g3Z6umVJYjp5QJQB6doUHkXpiyeB1P/nfV1U2Mw84otBV5tUmZgzZNU2tjwV3uJW8vLGKkeJ4Uewdzpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPmmvoE0; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6f8aa9e6ffdso88935346d6.3
+        for <nvdimm@lists.linux.dev>; Thu, 03 Jul 2025 05:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751546065; x=1752150865; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pj8Cdq0sivdNx0WCtdyO0zBAKWGSVYHVKqj2V5LSI/g=;
+        b=jPmmvoE0EBWSf/JKwTNpP9gg97cHEzUl9uP852vQ76MbWfCWRV41Rjb78Q5ifla0sj
+         vtYD05YbCQ7Rijnmv5dj/R18Mo67MqA1waqt5tIAeTLhJCSRyHCfprHDQQ5GLdaO9UHQ
+         o/Tzgjs7E8uwFnL7vdwsGWumjVcqfLGmz5arHPjRyjt1jzkw9KHoCB01qIIPZ6i60bTc
+         NB19K1N1fb0m8dmT+xhZT1GbbDl3wnODppsWbO1XX2eABjuIXQzv6RoPtGBxGLgxieda
+         UDONqcmopgvkki7XJRl30udCQSi94u0B6HI6Jjb+j94ZdQmusi3nFMRB+YGATGeTAzlR
+         aaUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751546065; x=1752150865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pj8Cdq0sivdNx0WCtdyO0zBAKWGSVYHVKqj2V5LSI/g=;
+        b=mQgEIU70XS21P5ax6EI283oo4A1y+fZ4r7H4kTTXTuPSnAL+UBS5psZiyeIrTj5uQY
+         +rUzsil/P6OpS/7OsB7fz+MEulvy3nj9WtD5RW7s/bfVHivF/AuJeHVLXOUjUCJSCF5u
+         yN2HK7W+kpqnEjPnNevLMd5x215cTEHyHOeilVE70/QsyiYJkURsCU7qIAbW469ntXuU
+         +p9rn68ZA6Jwyigxb0XIg1CmLrdXniZtjg0lSGYlBrUpSnhLlPG1PMGoldywH3b1D01q
+         IgvOXgqj65KuNQAX3ghtUID66xihV8g+cfD9OF1HAFmGlfASzSzcl4OFGx4Ijn3zP75P
+         M5Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCWlMP4wKmET0xZb3++ifUGUnad6q7IdD/1n4x9ROtWCBMk0xvUmzQ6Ael+gccv4/G9mfRv/oMc=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzepLh6zxqX43FWtGaF/OJMkrMxKFDhE6CMSNcX3/fzLDerpLqK
+	j7iZmpsynLDJzpSyXvqtp4avWwMoEgJLnRQTtzUuOV/lVNS0w70SHODPTpTcslEm0krPZvuwvbS
+	rcBIyRDEHUBR+71p7LxPmRetCmCC/jYo=
+X-Gm-Gg: ASbGncvjM8hpXKNkso5ZUHvmydiEaVozW0rgE9rz1RLhB+oMC0o5HmULZNhM2VMT5Ce
+	kdaV45n7fQGlnf0vcvhsJnrIKY/WjxY1Bbn4l3ZGxg7l1qKCJW1NGsYziqO3P7JGRIyJFhVqzqJ
+	9CnCEos7Md5gK7yxbGG1JZkEeqk5d/rqF4ToN2ssXsg/NrKmPW9kngBeFMhw==
+X-Google-Smtp-Source: AGHT+IGbPYrN54dYrzHXjzvtPMziKIP2dK+ZFdrAB9bFhOzkRz3Vofn+4fvXYD/kf1p6asLy/7oo4AMZVhDjgjTRKGE=
+X-Received: by 2002:ad4:5cc9:0:b0:700:bc46:5355 with SMTP id
+ 6a1803df08f44-702bcc507bdmr58755466d6.28.1751546065169; Thu, 03 Jul 2025
+ 05:34:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <6865728b489a7_30f2b72947b@iweiny-mobl.notmuch>
-X-CMS-MailID: 20250703100429epcas5p1dd84b9da7f710c941e856857e212f64a
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----h0bZ1fOXZXBKxlzn_9r8J_wZFA-mIVa_VlXZDLVzFug9RPyR=_ebefa_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20250617124011epcas5p2264e30ec58977907f80d311083265641
-References: <20250617123944.78345-1-s.neeraj@samsung.com>
-	<CGME20250617124011epcas5p2264e30ec58977907f80d311083265641@epcas5p2.samsung.com>
-	<700072760.81750165203833.JavaMail.epsvc@epcpadp1new>
-	<6865728b489a7_30f2b72947b@iweiny-mobl.notmuch>
+References: <20250617154345.2494405-1-david@redhat.com> <20250617154345.2494405-2-david@redhat.com>
+ <aFVZCvOpIpBGAf9w@localhost.localdomain> <c88c29d2-d887-4c5a-8b4e-0cf30e71d596@redhat.com>
+In-Reply-To: <c88c29d2-d887-4c5a-8b4e-0cf30e71d596@redhat.com>
+From: Lance Yang <ioworker0@gmail.com>
+Date: Thu, 3 Jul 2025 20:34:11 +0800
+X-Gm-Features: Ac12FXwlisPZPIPS0YTxEVYIGMNVB3un9rKexLCpMfXXShG5J5pRHWps4sQZYSw
+Message-ID: <CABzRoyZtxBgJUZK4p0V1sPAqbNr=6S-aE1S68u8tKo=cZ2ELSw@mail.gmail.com>
+Subject: Re: [PATCH RFC 01/14] mm/memory: drop highest_memmap_pfn sanity check
+ in vm_normal_page()
+To: David Hildenbrand <david@redhat.com>
+Cc: Oscar Salvador <osalvador@suse.de>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, nvdimm@lists.linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, 
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Alistair Popple <apopple@nvidia.com>, Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-------h0bZ1fOXZXBKxlzn_9r8J_wZFA-mIVa_VlXZDLVzFug9RPyR=_ebefa_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
-
-On 02/07/25 12:55PM, Ira Weiny wrote:
->Neeraj Kumar wrote:
->> In order to accommodate cxl lsa 2.1 format region label, renamed
->> nd_namespace_label to nd_lsa_label.
+On Mon, Jun 23, 2025 at 10:04=E2=80=AFPM David Hildenbrand <david@redhat.co=
+m> wrote:
 >
->This does not really make it clear why a name change is required.
+> On 20.06.25 14:50, Oscar Salvador wrote:
+> > On Tue, Jun 17, 2025 at 05:43:32PM +0200, David Hildenbrand wrote:
+> >> In 2009, we converted a VM_BUG_ON(!pfn_valid(pfn)) to the current
+> >> highest_memmap_pfn sanity check in commit 22b31eec63e5 ("badpage:
+> >> vm_normal_page use print_bad_pte"), because highest_memmap_pfn was
+> >> readily available.
+> >>
+> >> Nowadays, this is the last remaining highest_memmap_pfn user, and this
+> >> sanity check is not really triggering ... frequently.
+> >>
+> >> Let's convert it to VM_WARN_ON_ONCE(!pfn_valid(pfn)), so we can
+> >> simplify and get rid of highest_memmap_pfn. Checking for
+> >> pfn_to_online_page() might be even better, but it would not handle
+> >> ZONE_DEVICE properly.
+> >>
+> >> Do the same in vm_normal_page_pmd(), where we don't even report a
+> >> problem at all ...
+> >>
+> >> What might be better in the future is having a runtime option like
+> >> page-table-check to enable such checks dynamically on-demand. Somethin=
+g
+> >> for the future.
+> >>
+> >> Signed-off-by: David Hildenbrand <david@redhat.com>
+> >
 >
->Could you elaborate here?
+> Hi Oscar,
+>
+> > I'm confused, I'm missing something here.
+> > Before this change we would return NULL if e.g: pfn > highest_memmap_pf=
+n, but
+> > now we just print the warning and call pfn_to_page() anyway.
+> > AFAIK, pfn_to_page() doesn't return NULL?
+>
+> You're missing that vm_normal_page_pmd() was created as a copy from
+> vm_normal_page() [history of the sanity check above], but as we don't
+> have (and shouldn't have ...) print_bad_pmd(), we made the code look
+> like this would be something that can just happen.
+>
+> "
+> Do the same in vm_normal_page_pmd(), where we don't even report a
+> problem at all ...
+> "
+>
+> So we made something that should never happen a runtime sanity check
+> without ever reporting a problem ...
 
-Hi Ira,
-
-LSA 2.1 format introduces region label, which can also reside into LSA
-along with only namespace label as per v1.1 and v1.2
-
-As both namespace and region labels are of same size, i.e, 256 bytes.
-Therefore I have introduced nd_lsa_label as following
-
-   struct nd_lsa_label {
-	union {
-		struct nd_namespace_label ns_label;
-		struct cxl_region_label rg_label;
-	};
-   };
-
-Sure, I will update commit message with above information in next
-patch-set.
-
+IIUC, the reasoning is that because this case should never happen, we can
+change the behavior from returning NULL to a "warn and continue" model?
 
 Thanks,
-Neeraj
-
-------h0bZ1fOXZXBKxlzn_9r8J_wZFA-mIVa_VlXZDLVzFug9RPyR=_ebefa_
-Content-Type: text/plain; charset="utf-8"
-
-
-------h0bZ1fOXZXBKxlzn_9r8J_wZFA-mIVa_VlXZDLVzFug9RPyR=_ebefa_--
-
+Lance
 
