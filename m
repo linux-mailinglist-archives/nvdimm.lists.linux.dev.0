@@ -1,134 +1,143 @@
-Return-Path: <nvdimm+bounces-11065-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11067-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C619AFABD3
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Jul 2025 08:24:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9DDAFABDC
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Jul 2025 08:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A65D63AA556
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Jul 2025 06:24:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE4E27A953A
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  7 Jul 2025 06:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A05481CD;
-	Mon,  7 Jul 2025 06:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB192798FE;
+	Mon,  7 Jul 2025 06:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R7VbQ8k2"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V48NXUfD"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7669277013
-	for <nvdimm@lists.linux.dev>; Mon,  7 Jul 2025 06:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEAD278E63
+	for <nvdimm@lists.linux.dev>; Mon,  7 Jul 2025 06:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751869494; cv=none; b=FScmaIibV9QIsgCpoAcSv4ARwzLba7D4+VVKFLsAU4xmXd5qObk2SS2wf45tMbo0U9zIroZb6TvhWs1HLVVaPfHUJBOzINIXq0yweMaHH0fDuGYq89ry0vDOkpEX82tPgDlCMR6F0VagAwWuvR0W9aRnF2AutP8cSn1fA8wY23k=
+	t=1751869515; cv=none; b=HCp4cN6pDYq+LyNiVgRTJTCgzavxF3FGdvLlyebeWdqSHqg83U6DYUP9MvzlAjHH6DuhF0gbLGJtoImtW5T4xFmIqHh4rShNMPBYHCfUE2R7GjfBsnvuu5XggIptS+rjmPRqZQ29utS8s0l+nSYADXTdIwdVBOnY1D9ZHZabo1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751869494; c=relaxed/simple;
-	bh=L9MOZhKG6b8EYegJSPVDZQYaJGvT/up6iHdbhWzRvSs=;
+	s=arc-20240116; t=1751869515; c=relaxed/simple;
+	bh=L1OJFZePJC7bm+TGpqgXhtHPxDrMC7hzgIqvLtOGIeE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UeLD4YZQFNEOuoZvfxXM0cbXnrxVIyt+lpNZl9oW+w5kKmJujQqGdkvhyfrTroKKitB3IUfqrZ/ZAH7MWWRKNqOIMJRCmknnUONpDsVZdryXTRX8iijVU9YJAPapJxz5PdXG5JzPGZFWIIIcbEoq2+V6Tx8JTEx1Yc4noIN/XNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R7VbQ8k2; arc=none smtp.client-ip=95.215.58.174
+	 In-Reply-To:Content-Type; b=tUVTy6UtAm3El6OWILBt0yZPV4Mw3BKQweNmSrTUsg8ktN8HSENa7awJzVx1g7nLIXog21p3J5W0F+aa4P8sKIZrc0o8sF5l7VjEBfFGUsVnmcX3kiVbj0WPyPGCBshsuxnOIHXDjculuzAWH1Y06P2+CMdtL4Z+YTqiLuVF1co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V48NXUfD; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <6134aafc-d91d-46d8-ac6d-ef10ef459929@linux.dev>
+Message-ID: <e9386b67-9c4c-415e-91d8-511ac8d0ded5@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1751869491;
+	t=1751869512;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mCKKvbNBmu93XBKYP00Xkr5d+vwBwYFx9i2TAoKmHLs=;
-	b=R7VbQ8k22nVEIPnOosPpVwWQ80dsUvoJsouKmHewWIR5bPrZkGJYRtHgdUJ9gEwilq0sNo
-	xBMHfEtHwtf3K5Mw7oDPFeGRzjjiaRN4KLW4EXxtP7nf4q7mjFnm5IHg4XhTMglcnAJUHU
-	f4k/kJnzE4Vku2Q1n1uWmBXt8WLLXY0=
-Date: Mon, 7 Jul 2025 14:24:42 +0800
+	bh=vMXBEkTsI7ndCSL5SBx4dyxJbRzHSLL2t1hoBK/+038=;
+	b=V48NXUfDPPkP9rAIAXNmboO99SKyX46T3QjGrGoD26aoCtb56O84XZ5u2CUocciZ5cZgKX
+	zYi4I92NJiUt4flXdDJyO6ANnjhIZ26H0hh0waeLkBTHIX46PKCmqaWcj1jZFi8WOVgWBB
+	lTbQeUoOwYdcBQ+/XGCIGJrnT4gVUfQ=
+Date: Mon, 7 Jul 2025 14:25:06 +0800
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 04/11] dm-pcache: add segment layer
+Subject: Re: [PATCH v1 02/11] dm-pcache: add backing device management
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: mpatocka@redhat.com, agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk,
  hch@lst.de, dan.j.williams@intel.com, linux-block@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
  nvdimm@lists.linux.dev, dm-devel@lists.linux.dev
 References: <20250624073359.2041340-1-dongsheng.yang@linux.dev>
- <20250624073359.2041340-5-dongsheng.yang@linux.dev>
- <20250701154659.000067f9@huawei.com>
+ <20250624073359.2041340-3-dongsheng.yang@linux.dev>
+ <20250701145650.00004e72@huawei.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Dongsheng Yang <dongsheng.yang@linux.dev>
-In-Reply-To: <20250701154659.000067f9@huawei.com>
+In-Reply-To: <20250701145650.00004e72@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
-在 7/1/2025 10:46 PM, Jonathan Cameron 写道:
-> On Tue, 24 Jun 2025 07:33:51 +0000
+在 7/1/2025 9:56 PM, Jonathan Cameron 写道:
+> On Tue, 24 Jun 2025 07:33:49 +0000
 > Dongsheng Yang <dongsheng.yang@linux.dev> wrote:
 >
->> Introduce segment.{c,h}, an internal abstraction that encapsulates
->> everything related to a single pcache *segment* (the fixed-size
->> allocation unit stored on the cache-device).
+>> This patch introduces *backing_dev.{c,h}*, a self-contained layer that
+>> handles all interaction with the *backing block device* where cache
+>> write-back and cache-miss reads are serviced.  Isolating this logic
+>> keeps the core dm-pcache code free of low-level bio plumbing.
 >>
->> * On-disk metadata (`struct pcache_segment_info`)
->>    - Embedded `struct pcache_meta_header` for CRC/sequence handling.
->>    - `flags` field encodes a “has-next” bit and a 4-bit *type* class
->>      (`CACHE_DATA` added as the first type).
+>> * Device setup / teardown
+>>    - Opens the target with `dm_get_device()`, stores `bdev`, file and
+>>      size, and initialises a dedicated `bioset`.
+>>    - Gracefully releases resources via `backing_dev_stop()`.
 >>
->> * Initialisation
->>    - `pcache_segment_init()` populates the in-memory
->>      `struct pcache_segment` from a given segment id, data offset and
->>      metadata pointer, computing the usable `data_size` and virtual
->>      address within the DAX mapping.
+>> * Request object (`struct pcache_backing_dev_req`)
+>>    - Two request flavours:
+>>      - REQ-type – cloned from an upper `struct bio` issued to
+>>        dm-pcache; trimmed and re-targeted to the backing LBA.
+>>      - KMEM-type – maps an arbitrary kernel memory buffer
+>>        into a freshly built.
+>>    - Private completion callback (`end_req`) propagates status to the
+>>      upper layer and handles resource recycling.
 >>
->> * IO helpers
->>    - `segment_copy_to_bio()` / `segment_copy_from_bio()` move data
->>      between pmem and a bio, using `_copy_mc_to_iter()` and
->>      `_copy_from_iter_flushcache()` to tolerate hw memory errors and
->>      ensure durability.
->>    - `segment_pos_advance()` advances an internal offset while staying
->>      inside the segment’s data area.
+>> * Submission & completion path
+>>    - Lock-protected submit queue + worker (`req_submit_work`) let pcache
+>>      push many requests asynchronously, at the same time, allow caller
+>>      to submit backing_dev_req in atomic context.
+>>    - End-io handler moves finished requests to a completion list processed
+>>      by `req_complete_work`, ensuring callbacks run in process context.
+>>    - Direct-submit option for non-atomic context.
 >>
->> These helpers allow upper layers (cache key management, write-back
->> logic, GC, etc.) to treat a segment as a contiguous byte array without
->> knowing about DAX mappings or persistence details.
+>> * Flush
+>>    - `backing_dev_flush()` issues a flush to persist backing-device data.
 >>
 >> Signed-off-by: Dongsheng Yang <dongsheng.yang@linux.dev>
-> Hi
+>> ---
+>>   drivers/md/dm-pcache/backing_dev.c | 292 +++++++++++++++++++++++++++++
+>>   drivers/md/dm-pcache/backing_dev.h |  88 +++++++++
+>>   2 files changed, 380 insertions(+)
+>>   create mode 100644 drivers/md/dm-pcache/backing_dev.c
+>>   create mode 100644 drivers/md/dm-pcache/backing_dev.h
+>> +
+>> +struct pcache_backing_dev_req *backing_dev_req_create(struct pcache_backing_dev *backing_dev,
+>> +						struct pcache_backing_dev_req_opts *opts)
+>> +{
+>> +	if (opts->type == BACKING_DEV_REQ_TYPE_REQ)
+>> +		return req_type_req_create(backing_dev, opts);
+>> +	else if (opts->type == BACKING_DEV_REQ_TYPE_KMEM)
+>>
+> returned in earlier branch so go with simpler
 >
-> Just one trivial comment.
->
->> diff --git a/drivers/md/dm-pcache/segment.h b/drivers/md/dm-pcache/segment.h
->> new file mode 100644
->> index 000000000000..9675951ffaf8
->> --- /dev/null
->> +++ b/drivers/md/dm-pcache/segment.h
->> @@ -0,0 +1,73 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->> +#ifndef _PCACHE_SEGMENT_H
->> +#define _PCACHE_SEGMENT_H
->> +
->> +#include <linux/bio.h>
->> +
->> +#include "pcache_internal.h"
->> +
->> +struct pcache_segment_info {
->> +	struct pcache_meta_header	header;	/* Metadata header for the segment */
-> The comment is fairly obvious given the type of the field. I'd drop the comment.
+> 	if (opts->type..)
 
 Hi Jonathan,
 
-Sounds not bad, will change it.
+This looks good, I am willing to do this change.
+
 
 Thanx
 
+Dongsheng
+
+> Or use a switch statement if you expect to get more entries in this over time.
 >
->> +	__u32			flags;
->> +	__u32			next_seg;
->> +};
+>> +		return kmem_type_req_create(backing_dev, opts);
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>> +void backing_dev_flush(struct pcache_backing_dev *backing_dev)
+>> +{
+>> +	blkdev_issue_flush(backing_dev->dm_dev->bdev);
+>> +}
 >
 
