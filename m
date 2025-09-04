@@ -1,101 +1,100 @@
-Return-Path: <nvdimm+bounces-11445-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11465-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 420EBB43E08
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 16:07:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21916B44E9D
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 09:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5CE5188B774
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 14:07:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 647A93B5AE0
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 07:03:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D5E0163;
-	Thu,  4 Sep 2025 14:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2ADC2D978A;
+	Fri,  5 Sep 2025 07:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="BjTqFkaH"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NZ53kPw2"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3232F0C43
-	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 14:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61CC2D372E
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756994815; cv=none; b=B6hXfq7kCDTtNBSjgJibzw0tWFNotDdryb8+Kblz7jnbapiLuhOukkDUI3tPrUR/panOLr+CJufkoOzuJijtX9uKo66kk83JyOF2i4wvsuBmPmtG0LMjbZdrhdrPDHkEIaHWlpDU3mF9iP0PUi0I4dcWgUkx1zGRgswz4FJNaZE=
+	t=1757055789; cv=none; b=OnZPah/ApehxOAY9KXQyK7Trojy3fFWz1A1AuldjLxoovBGV3xRFoBg57umQfSnBcFaGbn+DmK6vDNJDs0iWwbRBe+wH1uM6qAFy2UhEGq3CrY76xX83+N6oyfkPeSdyRScnuGJKTEE9t3KOKq4RDetnleCUbg+1/sY5rG6N+Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756994815; c=relaxed/simple;
-	bh=LN4trsiwqoatuevDhzEjiLUvZjNbhPE4QwBE1fJYgCg=;
+	s=arc-20240116; t=1757055789; c=relaxed/simple;
+	bh=+fq3Erfz06JRPTfmgjoWB9Cuhs9eyh91027A/nDT/qQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=pNqBp6Rj6AOtEYoAUPISChoi7CaQckPtl2UHXcdlp6/LQzt9p1UshgZQdOjq4+th/wqvJLdi/KkOL2XH5cGyECwzFCDbb7IMsVAAIwZFZkUJHLJ7rnC2OF2Ti0+383mM6g9cXeOVBOPrt4ktrxV7trTH0okptb7V3XRCx635RuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=BjTqFkaH; arc=none smtp.client-ip=203.254.224.25
+	 Content-Type:References; b=pxc4HpPrNdtr9Y3C646ZCb1u8A/QUjS8OqwiQgoB7zv0YpLi5qmtd4bmLcCIiQ/UFHEZOeuVXTw0vzk0TQc4Gt68/Kpp6WigWZhQ/KJSn3aCQJkouQHbp4DA55+01KtZhPkeoux9PCiimiRbdZ9p+IkLe5Ccd5WcLLFscLLa/0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NZ53kPw2; arc=none smtp.client-ip=203.254.224.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250904140640epoutp0295f2881e64c810b5c9457c57468687d2~iGXY2Zmuc3255332553epoutp02Z
-	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 14:06:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250904140640epoutp0295f2881e64c810b5c9457c57468687d2~iGXY2Zmuc3255332553epoutp02Z
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250905070303epoutp019143feb5d5a5a21f9c63eca6796d43ea~iUO0QDiFj0784007840epoutp01T
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250905070303epoutp019143feb5d5a5a21f9c63eca6796d43ea~iUO0QDiFj0784007840epoutp01T
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1756994800;
-	bh=QpNFk0B54CNxrWdHDWbagQbykXx8/dneb8A2T1Ez0II=;
+	s=mail20170921; t=1757055783;
+	bh=HlzlzRPZH83wC/RKTuXoHYOpt7ekgr2+Fd1wmfGvj54=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BjTqFkaHe5+jxDyukPgA1cr4TeZhdCXIoaGcblqMlwWt+gjCHO2KDz7ayJM/yG8/X
-	 mLTNXCdDElWzRwFMGxtBFqss1FgEp2h1tAfKP9NfA9b8gPweqG18sia8YjJ1bUnW0F
-	 AEvXtUyRssycfxb2MsH41JYpEJVt06cwfmycg4DA=
+	b=NZ53kPw2AaGgwo8e9T7NBpbcHWR6EPeDKxpJ3W1BZaebIiUlTorqwyN0u0vEtomQr
+	 4mdWhwsWs1j135f92plOsPiAXPRxEu/ALoMVEKCHLePK7kJeLv2JdVWOlTO6bMruyW
+	 0ZMBuHjpEa31VRystnQ/rmFi0W9b+dzW373qGS1s=
 Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250904140639epcas5p1a63069d5f87812190ec42e111cb1deb9~iGXYiEyHz0163401634epcas5p1t;
-	Thu,  4 Sep 2025 14:06:39 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.95]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4cHh9V62x4z6B9m4; Thu,  4 Sep
-	2025 14:06:38 +0000 (GMT)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20250905070303epcas5p456269f75097d9509ef75a8eab2836829~iUOz0etkp1157611576epcas5p4K;
+	Fri,  5 Sep 2025 07:03:03 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4cJ6kH1hm5z6B9mJ; Fri,  5 Sep
+	2025 07:03:03 +0000 (GMT)
 Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
 	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250904140638epcas5p192ce129faa78534b83c3807a9a03ad24~iGXXQrfSO3106931069epcas5p1X;
-	Thu,  4 Sep 2025 14:06:38 +0000 (GMT)
+	20250904141238epcas5p1a72030f918fd6fe376f97e8f626486f7~iGcmtiV-y0242202422epcas5p1O;
+	Thu,  4 Sep 2025 14:12:38 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250904140637epsmtip1520d3794f03cc6cd959d7d3c5b0b0f31~iGXWHREpO2360223602epsmtip1x;
-	Thu,  4 Sep 2025 14:06:37 +0000 (GMT)
-Date: Thu, 4 Sep 2025 19:36:31 +0530
+	20250904141237epsmtip183c64ff5b9abc065cfe732871b6a01af~iGclkqbI12518725187epsmtip1c;
+	Thu,  4 Sep 2025 14:12:37 +0000 (GMT)
+Date: Thu, 4 Sep 2025 19:42:31 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
 Subject: Re: [PATCH V2 05/20] nvdimm/region_label: Add region label updation
  routine
-Message-ID: <20250904140631.gxhaxwjjmexexj4t@test-PowerEdge-R740xd>
+Message-ID: <158453976.61757055783236.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250813154811.00000257@huawei.com>
-X-CMS-MailID: 20250904140638epcas5p192ce129faa78534b83c3807a9a03ad24
+In-Reply-To: <534936cc-4ecc-46e5-8196-bc3992e086ab@intel.com>
+X-CMS-MailID: 20250904141238epcas5p1a72030f918fd6fe376f97e8f626486f7
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----NUum2bl.CiaUPDLBlJLeOFPEqthXJjtuaYQe8aeKsoDg0nUl=_e261b_"
+	boundary="----AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_ead75_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
+X-Hop-Count: 3
 X-CMS-RootMailID: 20250730121228epcas5p411e5cc6d29fb9417178dbd07a1d8f02d
 References: <20250730121209.303202-1-s.neeraj@samsung.com>
 	<CGME20250730121228epcas5p411e5cc6d29fb9417178dbd07a1d8f02d@epcas5p4.samsung.com>
 	<20250730121209.303202-6-s.neeraj@samsung.com>
-	<20250813154811.00000257@huawei.com>
+	<534936cc-4ecc-46e5-8196-bc3992e086ab@intel.com>
 
-------NUum2bl.CiaUPDLBlJLeOFPEqthXJjtuaYQe8aeKsoDg0nUl=_e261b_
+------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_ead75_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
 
-On 13/08/25 03:48PM, Jonathan Cameron wrote:
->On Wed, 30 Jul 2025 17:41:54 +0530
->Neeraj Kumar <s.neeraj@samsung.com> wrote:
+On 15/08/25 02:55PM, Dave Jiang wrote:
 >
+>
+>On 7/30/25 5:11 AM, Neeraj Kumar wrote:
 >> Added __pmem_region_label_update region label update routine to update
 >> region label.
 >>
@@ -104,13 +103,46 @@ On 13/08/25 03:48PM, Jonathan Cameron wrote:
 >>
 >> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
 >
->A few comments inline,
+>Subject, s/updation/update/ ?
+
+Thanks Dave, Sure. Will fix it in next patch-set
+
 >
->Thanks,
+>> ---
+>>  drivers/nvdimm/label.c          | 171 +++++++++++++++++++++++++++++---
+>>  drivers/nvdimm/label.h          |   2 +
+>>  drivers/nvdimm/namespace_devs.c |  12 +++
+>>  drivers/nvdimm/nd.h             |  20 ++++
+>>  include/linux/libnvdimm.h       |   8 ++
+>>  5 files changed, 198 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
+>> index 3f8a6bdb77c7..94f2d0ba7aca 100644
+>> --- a/drivers/nvdimm/label.c
+>> +++ b/drivers/nvdimm/label.c
+>> @@ -381,6 +381,16 @@ static void nsl_calculate_checksum(struct nvdimm_drvdata *ndd,
+>>  	nsl_set_checksum(ndd, nd_label, sum);
+>>  }
+>>
+>> +static void rgl_calculate_checksum(struct nvdimm_drvdata *ndd,
 >
->Jonathan
+>region_label_checksum()? rgl/rg is just a bit jarring to read even though I get nvdimm already has nd and nsl etc.
 >
+>> +				   struct cxl_region_label *rg_label)
 >
+>Prefer just spell out region_label
+
+Sure Dave, I will fix it wherever its rgl/rg to region_label
+
+>
+>> +{
+>> +	u64 sum;
+>> +
+>> +	rgl_set_checksum(rg_label, 0);
+>> +	sum = nd_fletcher64(rg_label, sizeof_namespace_label(ndd), 1);
+>> +	rgl_set_checksum(rg_label, sum);
+>> +}
+>> +
 >>  static bool slot_valid(struct nvdimm_drvdata *ndd,
 >>  		struct nd_lsa_label *lsa_label, u32 slot)
 >>  {
@@ -150,19 +182,31 @@ On 13/08/25 03:48PM, Jonathan Cameron wrote:
 >> +			lsa_label = NULL;
 >> +			break;
 >> +		}
->> +	dev_WARN_ONCE(&nspm->nsio.common.dev, lsa_label,
->> +			"failed to track label: %d\n",
+>
+>Would've preferred the original code to look like:
+>
+>list_for_each_entry(label_ent, &nd_mapping->labels, list) {
+>	if (label_ent->label)
+>		continue;
+>
+>	label_ent->label = lsa_label;
+>	lsa_label = NULL;
+>	break;
+>}
+>
+>But ah well....
+
+Thanks, I will fix it here
+
+>
+>> +	dev_WARN_ONCE(&nspm->nsio.common.dev, lsa_label,> +			"failed to track label: %d\n",
 >> +			to_slot(ndd, lsa_label));
 >> +	if (lsa_label)
 >> +		rc = -ENXIO;
->	if (lsa_label)
->		return -ENXIO;
 >
->	return 0;
->
->is a little clearer.
+>Just return here as Jonathan already mentioned. guard() helps with cleaning that up.
 
-Sure, I will fix it in next patch-set
+Sure, Will fix it in next patch-set
 
 >
 >>
@@ -179,13 +223,20 @@ Sure, I will fix it in next patch-set
 >> +	struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
 >> +	struct nd_lsa_label *nd_label;
 >> +	struct cxl_region_label *rg_label;
->> +	struct nd_namespace_index *nsindex;
->> +	struct nd_label_ent *label_ent;
+>> +	struct nd_namespace_index *nsindex;> +	struct nd_label_ent *label_ent;
 >> +	unsigned long *free;
 >> +	u32 nslot, slot;
 >> +	size_t offset;
 >> +	int rc;
 >> +	uuid_t tmp;
+>
+>uuid instead of tmp would make the variable clearer to read
+>
+>Also please arrange variable ordering in reverse xmas tree.
+
+Sure Dave, I will fix it in next patch-set
+
+>
 >> +
 >> +	if (!preamble_next(ndd, &nsindex, &free, &nslot))
 >> +		return -ENXIO;
@@ -204,22 +255,9 @@ Sure, I will fix it in next patch-set
 >> +	/* Set Region Label Format identification UUID */
 >> +	uuid_parse(CXL_REGION_UUID, &tmp);
 >> +	export_uuid(nd_label->rg_label.type, &tmp);
->
->	export_uuid(rg_label->type, &tmp);
-
-Thanks Jonathan, I will fix it in next patch-set
-
->
 >> +
 >> +	/* Set Current Region Label UUID */
 >> +	export_uuid(nd_label->rg_label.uuid, &nd_set->uuid);
->
->	export_uuid(rg_label->uuid, &nd_set->uuid);
-
-Sure, I will fix it in next patch-set
-
->
->
 >> +
 >> +	rg_label->flags = __cpu_to_le32(flags);
 >> +	rg_label->nlabel = __cpu_to_le16(nd_region->ndr_mappings);
@@ -230,12 +268,6 @@ Sure, I will fix it in next patch-set
 >> +	rg_label->slot = __cpu_to_le32(slot);
 >> +	rg_label->ig = __cpu_to_le32(nd_set->interleave_granularity);
 >> +	rg_label->align = __cpu_to_le16(0);
->
->As the bot complained... It's le32
-
-Yes, I will fix it in next patch-set
-
->
 >> +
 >> +	/* Update fletcher64 Checksum */
 >> +	rgl_calculate_checksum(ndd, rg_label);
@@ -275,18 +307,12 @@ Yes, I will fix it in next patch-set
 >> +			to_slot(ndd, nd_label));
 >> +	if (nd_label)
 >> +		rc = -ENXIO;
->
->		return -ENXIO;
+>just return here
+
+Sure, Will fix it
+
 >
 >> +
->
->	return 0;
->
->is clearer.
-
-Sure, I will fix it in next patch-set
-
->
 >> +	return rc;
 >> +}
 >> +
@@ -301,29 +327,24 @@ Sure, I will fix it in next patch-set
 >> +		/* No need to update region label for non cxl format */
 >> +		if (!ndd->cxl)
 >> +			continue;
+>
+>Would there be a mix of different nd mappings? I wonder if you can just 'return 0' if you find ndd->cxl on the first one and just skip everything.
+
+When we create cxl region with two mem device, then we will have two separate
+nd_mapping for both mem devices. But Yes, I don't see difference in both device
+nd_mapping characters. So instead of "continue", I will just "return 0".
+
+>
 >> +
 >> +		/* Init labels to include region label */
 >> +		rc = init_labels(nd_mapping, 1);
 >> +
->
->No blank line here - keep the error check closely associated with the
->thing that it is checking.
-
-Sure, I will fix it in next patch-set
-
->
 >> +		if (rc < 0)
 >> +			return rc;
 >> +
 >> +		rc = __pmem_region_label_update(nd_region, nd_mapping, i,
 >> +					NSLABEL_FLAG_UPDATING);
 >> +
->
->Same here.
-
-Sure, I will fix it in next patch-set
-
->
 >> +		if (rc)
 >> +			return rc;
 >> +	}
@@ -336,15 +357,8 @@ Sure, I will fix it in next patch-set
 >> +		/* No need to update region label for non cxl format */
 >> +		if (!ndd->cxl)
 >> +			continue;
+>> +> +		rc = __pmem_region_label_update(nd_region, nd_mapping, i, 0);
 >> +
->> +		rc = __pmem_region_label_update(nd_region, nd_mapping, i, 0);
->> +
->
->and here.
-
-Sure, I will fix it in next patch-set
-
->
 >> +		if (rc)
 >> +			return rc;
 >> +	}
@@ -361,28 +375,85 @@ Sure, I will fix it in next patch-set
 >> +++ b/drivers/nvdimm/label.h
 >> @@ -190,6 +190,7 @@ struct nd_namespace_label {
 >>  struct nd_lsa_label {
->
->Would be better to have this explicitly as a union
->unless later patches add more elements.  That way it'll
->be obvious at all sites where it is used that it can be one
->of several things.
->
 >>  	union {
 >>  		struct nd_namespace_label ns_label;
 >> +		struct cxl_region_label rg_label;
 >>  	};
 >>  };
+>>
+>> @@ -233,4 +234,5 @@ struct nd_region;
+>>  struct nd_namespace_pmem;
+>>  int nd_pmem_namespace_label_update(struct nd_region *nd_region,
+>>  		struct nd_namespace_pmem *nspm, resource_size_t size);
+>> +int nd_pmem_region_label_update(struct nd_region *nd_region);
+>>  #endif /* __LABEL_H__ */
+>> diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+>> index 5b73119dc8fd..02ae8162566c 100644
+>> --- a/drivers/nvdimm/namespace_devs.c
+>> +++ b/drivers/nvdimm/namespace_devs.c
+>> @@ -232,6 +232,18 @@ static ssize_t __alt_name_store(struct device *dev, const char *buf,
+>>  	return rc;
+>>  }
+>>
+>> +int nd_region_label_update(struct nd_region *nd_region)
+>> +{
+>> +	int rc;
+>> +
+>> +	nvdimm_bus_lock(&nd_region->dev);
+>> +	rc = nd_pmem_region_label_update(nd_region);
+>> +	nvdimm_bus_unlock(&nd_region->dev);
+>> +
+>> +	return rc;
+>> +}
+>> +EXPORT_SYMBOL_GPL(nd_region_label_update);
+>> +
+>>  static int nd_namespace_label_update(struct nd_region *nd_region,
+>>  		struct device *dev)
+>>  {
+>> diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+>> index 651847f1bbf9..15d94e3937f0 100644
+>> --- a/drivers/nvdimm/nd.h
+>> +++ b/drivers/nvdimm/nd.h
+>> @@ -322,6 +322,26 @@ static inline void nsl_set_region_uuid(struct nvdimm_drvdata *ndd,
+>>  		export_uuid(ns_label->cxl.region_uuid, uuid);
+>>  }
+>>
+>> +static inline bool rgl_uuid_equal(struct cxl_region_label *rg_label,
+>> +				  const uuid_t *uuid)
+>
+>region_label_uuid_equal() and region_label
+>
+>> +{
+>> +	uuid_t tmp;
+>
+>tmp_uuid
+>
+>> +
+>> +	import_uuid(&tmp, rg_label->uuid);
+>> +	return uuid_equal(&tmp, uuid);
+>> +}
+>> +
+>> +static inline u64 rgl_get_checksum(struct cxl_region_label *rg_label)
+>
+>region_label_get_checksum()
+>
+>> +{
+>> +	return __le64_to_cpu(rg_label->checksum);
+>> +}
+>> +
+>> +static inline void rgl_set_checksum(struct cxl_region_label *rg_label,
+>region_label_set_checksum()
 
-Thanks Jonathan for your suggestion. I will revisit this change and try
-using region label handling separately instead of using union.
+Sure, I will fix them in next patch-set
 
 
 Regards,
 Neeraj
 
-------NUum2bl.CiaUPDLBlJLeOFPEqthXJjtuaYQe8aeKsoDg0nUl=_e261b_
+------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_ead75_
 Content-Type: text/plain; charset="utf-8"
 
 
-------NUum2bl.CiaUPDLBlJLeOFPEqthXJjtuaYQe8aeKsoDg0nUl=_e261b_--
+------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_ead75_--
+
 
