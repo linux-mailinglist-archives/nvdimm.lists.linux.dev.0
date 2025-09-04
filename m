@@ -1,119 +1,137 @@
-Return-Path: <nvdimm+bounces-11444-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11462-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C4B6B43DD9
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 15:56:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C93CB44E96
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 09:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A7F73A4184
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 13:55:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2462D18945FB
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 07:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F87E307482;
-	Thu,  4 Sep 2025 13:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467CD2D5C89;
+	Fri,  5 Sep 2025 07:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LD0Y8KMg"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LanMLjyt"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D439306D54
-	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 13:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221451D90DF
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756994109; cv=none; b=Oa8zvpdxtvJarTN0dTyrYGoAXaKVaJZRmGU1lHfL3mpWSVbVR0rEc+74FaF4sgegzZB99uMZcPBedD4SEJlEFbnY86Bl2eheIFwoufviqYbZUGHFhLjLKFSL25GR/Fu0zVVRNhhrN3/WdXDEwzhWJ0zMNR0rgoUmmC97c/Mx3cE=
+	t=1757055787; cv=none; b=YPCs5cicrZkfJDUUazNZcVL8k9R2VUozwPCdgA/rGcKSX23Xg2DoRfoD9BQLrD9oP/i77CEPUs/wKdCyCef34Az3L0dDAqJrRsZIG8wESE0tI+xrjbRd82JU26cJWUyHidE1/7hc8UNusoTIh2ohlCSWSe2p0I6dHsy7PlzK0Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756994109; c=relaxed/simple;
-	bh=5AuHor2gjdBQMSXf29j05gf0MvYmzK8kAiB5uy6SZCM=;
+	s=arc-20240116; t=1757055787; c=relaxed/simple;
+	bh=M0kgVMJ5M8ah0syzCnzrBsACqouPGlm+i84IeJsH2nk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=fZCP74rYE/nprOsoA0bhp4q5LGXec1ZkvghYPDYqR6aJ4gBtcw2qjrux/JrwFQMXI8O9gvf85BDqhc9MbwsBOGayZy6X/RvytiRwrzmp+SoZy9Hj+9AroSHqR29HYvw7x8YMqRDoTN++zE7s0eViU/CRdkMxalrFUz+wtj11gso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LD0Y8KMg; arc=none smtp.client-ip=203.254.224.33
+	 Content-Type:References; b=SL/VV9dzGS1vYqnympqMoWSjMFCdn7etIWa/BRzf+4O1t1vrbZsVFHAYciMJ5aog1Q7ZlktM7hE/lgFHiVu/Nf6N+q6ghZ0BKDCsnjmdU1xG9EXUqqhO7BjiVHzWU+VxyAqy9w5tJBCR1viKJwAGTolfTn96UyJpakp5KLBf6yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LanMLjyt; arc=none smtp.client-ip=203.254.224.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250904135505epoutp03c6c782b4090a211569d74c48eb0059f9~iGNRmptpo3125531255epoutp03H
-	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 13:55:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250904135505epoutp03c6c782b4090a211569d74c48eb0059f9~iGNRmptpo3125531255epoutp03H
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250905070303epoutp0163ef90f9427996069286e86e23b16ec8~iUOz2nCzR0784007840epoutp01Q
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250905070303epoutp0163ef90f9427996069286e86e23b16ec8~iUOz2nCzR0784007840epoutp01Q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1756994105;
-	bh=5AuHor2gjdBQMSXf29j05gf0MvYmzK8kAiB5uy6SZCM=;
+	s=mail20170921; t=1757055783;
+	bh=OAAOXwu6dxhlhz8ZeLKplpuPuUMZ/fENswb8u8XzY4I=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LD0Y8KMgyO20yOAnIERcfDeETGHFzzwUp5BfcRKox4NtcwDsNb7fJPhZAXte7/V+e
-	 aDDRuzpjrQ1guZEnjm4E6acEYumUaglKLc0gpZLIZgIgDkhoVZ3qwCpkLcZ1M9kM6A
-	 vtRdahKnKxzqcO/XttgG0OILM0Z8WK3tMN6lDP/s=
+	b=LanMLjyt7o+oqdO1YVm5iowAelwUR7ZEg4s5w/ENmE+JzJw1FO1z8YOM99c4FxoZw
+	 sbF98vqYRC2QvK9yLq9B+4Ux3Z+7ztB6CSDAIkq3tPhIMLzOeCVF+PBQsSOWx8gkgm
+	 vhrelRdRJQIWQ9OLlPNh/+xWU58Hv89MAjRurqlU=
 Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250904135504epcas5p1c4da8380378cf269976e47fcda76b024~iGNRGXL4z1524715247epcas5p1b;
-	Thu,  4 Sep 2025 13:55:04 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.91]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4cHgw74hfFz2SSKZ; Thu,  4 Sep
-	2025 13:55:03 +0000 (GMT)
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250905070302epcas5p3cd95bb191c8188ebc06bfbcda0f61cc9~iUOzd2o0F1224012240epcas5p3F;
+	Fri,  5 Sep 2025 07:03:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4cJ6kG66FGz2SSKd; Fri,  5 Sep
+	2025 07:03:02 +0000 (GMT)
 Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250904135502epcas5p28479f68a04427e46e862eba17069900e~iGNPZRlbO2098820988epcas5p2Z;
-	Thu,  4 Sep 2025 13:55:02 +0000 (GMT)
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250904140124epcas5p35f8c2e657d953b841f10dab10c8c8b30~iGSzTRCj62082920829epcas5p3P;
+	Thu,  4 Sep 2025 14:01:24 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250904135501epsmtip106bef041e084fa4f3ee6b5c04265dfc7~iGNOQGiDw1697616976epsmtip1f;
-	Thu,  4 Sep 2025 13:55:01 +0000 (GMT)
-Date: Thu, 4 Sep 2025 19:24:56 +0530
+	20250904140123epsmtip1b8caab67b020ff0c5c6315fb4a4fa10f~iGSyEvKf22159221592epsmtip1N;
+	Thu,  4 Sep 2025 14:01:23 +0000 (GMT)
+Date: Thu, 4 Sep 2025 19:31:18 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
 Subject: Re: [PATCH V2 04/20] nvdimm/label: CXL labels skip the need for
  'interleave-set cookie'
-Message-ID: <20250904135456.aqt2yndnmfdeowux@test-PowerEdge-R740xd>
+Message-ID: <1296674576.21757055782845.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250813144401.00004fee@huawei.com>
-X-CMS-MailID: 20250904135502epcas5p28479f68a04427e46e862eba17069900e
+In-Reply-To: <a05bbfe7-dec6-4858-8f9f-9f80deda48ae@intel.com>
+X-CMS-MailID: 20250904140124epcas5p35f8c2e657d953b841f10dab10c8c8b30
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_"
+	boundary="----6Bw0j5KOoRaxZeQKOp2dAcC2OKT3No9WZFWhMG37wfGsvvbi=_ea9e8_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
+X-Hop-Count: 3
 X-CMS-RootMailID: 20250730121227epcas5p4675fdb3130de49cd99351c5efd09e29e
 References: <20250730121209.303202-1-s.neeraj@samsung.com>
 	<CGME20250730121227epcas5p4675fdb3130de49cd99351c5efd09e29e@epcas5p4.samsung.com>
 	<20250730121209.303202-5-s.neeraj@samsung.com>
-	<20250813144401.00004fee@huawei.com>
+	<a05bbfe7-dec6-4858-8f9f-9f80deda48ae@intel.com>
 
-------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_
+------6Bw0j5KOoRaxZeQKOp2dAcC2OKT3No9WZFWhMG37wfGsvvbi=_ea9e8_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
 
-On 13/08/25 02:44PM, Jonathan Cameron wrote:
->On Wed, 30 Jul 2025 17:41:53 +0530
->Neeraj Kumar <s.neeraj@samsung.com> wrote:
+On 15/08/25 02:02PM, Dave Jiang wrote:
 >
+>
+>On 7/30/25 5:11 AM, Neeraj Kumar wrote:
 >> CXL LSA v2.1 utilizes the region labels stored in the LSA for interleave
 >> set configuration instead of interleave-set cookie used in previous LSA
 >> versions. As interleave-set cookie is not required for CXL LSA v2.1 format
 >> so skip its usage for CXL LSA 2.1 format
 >>
 >> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
+>> ---
+>>  drivers/nvdimm/namespace_devs.c | 3 ++-
+>>  drivers/nvdimm/region_devs.c    | 5 +++++
+>>  2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+>> index bdf1ed6f23d8..5b73119dc8fd 100644
+>> --- a/drivers/nvdimm/namespace_devs.c
+>> +++ b/drivers/nvdimm/namespace_devs.c
+>> @@ -1692,7 +1692,8 @@ static struct device *create_namespace_pmem(struct nd_region *nd_region,
+>>  	int rc = 0;
+>>  	u16 i;
+>>
+>> -	if (cookie == 0) {
+>> +	/* CXL labels skip the need for 'interleave-set cookie' */
 >
->Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+>This comment doesn't make sense to me. If it's a CXL label, we continue to execute. There's no skipping. Or are you trying to say if it's CXL label, then checking of cookie value is unnecessary? But the cookie value still is being used later on. Maybe a bit more comments on what's going on here would be helpful.
+>
+>DJ
 
-Thanks Jonathan for review and your RB tag
+Yes Dave, For CXL label cookie value is not required. Its being used for
+non CXL labels only. Sure, I will elaborate the comments in next patch-set.
 
 
 Regards,
 Neeraj
 
-------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_
+------6Bw0j5KOoRaxZeQKOp2dAcC2OKT3No9WZFWhMG37wfGsvvbi=_ea9e8_
 Content-Type: text/plain; charset="utf-8"
 
 
-------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_--
+------6Bw0j5KOoRaxZeQKOp2dAcC2OKT3No9WZFWhMG37wfGsvvbi=_ea9e8_--
+
 
