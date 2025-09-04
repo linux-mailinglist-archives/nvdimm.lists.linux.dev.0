@@ -1,275 +1,119 @@
-Return-Path: <nvdimm+bounces-11463-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11444-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46F5AB44E97
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 09:03:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C4B6B43DD9
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 15:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 620547AABC3
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 07:01:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A7F73A4184
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  4 Sep 2025 13:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC022D6E67;
-	Fri,  5 Sep 2025 07:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F87E307482;
+	Thu,  4 Sep 2025 13:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="OuPE5FxJ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LD0Y8KMg"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB32932F76C
-	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D439306D54
+	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 13:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757055787; cv=none; b=LBYA34yUzi3asAfA3Y6nVXPMDWyPmsjwrebrckq7y/PyxnapfzIEu5gQuLH35N7XW8ihpCn8PJW1eDBmqP/hcbqSXN9LL9xZ1pzQu3allwJS54uxh1ti6/OHlCKxKfpLLGrurTnHO03qwwoK1cEDqppjzYi4lOvCPZYD7pG/cKk=
+	t=1756994109; cv=none; b=Oa8zvpdxtvJarTN0dTyrYGoAXaKVaJZRmGU1lHfL3mpWSVbVR0rEc+74FaF4sgegzZB99uMZcPBedD4SEJlEFbnY86Bl2eheIFwoufviqYbZUGHFhLjLKFSL25GR/Fu0zVVRNhhrN3/WdXDEwzhWJ0zMNR0rgoUmmC97c/Mx3cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757055787; c=relaxed/simple;
-	bh=ySAcZ1O/HhEcGZRIBV0cJ92Y3epxlMYYFyZcNDCI64w=;
+	s=arc-20240116; t=1756994109; c=relaxed/simple;
+	bh=5AuHor2gjdBQMSXf29j05gf0MvYmzK8kAiB5uy6SZCM=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=CIPPRuWHz4ModVVm5MKvhIu0vEMRKGF7zd27h1IU/UlPcNjT12JQ5L9qfHptBfCHCuw+PQHDkwCiAKeiemoNc6N0EYWqXB18oFohpGUEWQSfbbKsJeiTG+EbEdPsZ3+YIUOc8YxSCQlu7xT539FcJCpaIVPZ9ks4bqmG97vcDQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=OuPE5FxJ; arc=none smtp.client-ip=203.254.224.34
+	 Content-Type:References; b=fZCP74rYE/nprOsoA0bhp4q5LGXec1ZkvghYPDYqR6aJ4gBtcw2qjrux/JrwFQMXI8O9gvf85BDqhc9MbwsBOGayZy6X/RvytiRwrzmp+SoZy9Hj+9AroSHqR29HYvw7x8YMqRDoTN++zE7s0eViU/CRdkMxalrFUz+wtj11gso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LD0Y8KMg; arc=none smtp.client-ip=203.254.224.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250905070303epoutp044fc539ebe198c963cb1c3c219698ef10~iUOzrZgTe2251422514epoutp04b
-	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250905070303epoutp044fc539ebe198c963cb1c3c219698ef10~iUOzrZgTe2251422514epoutp04b
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250904135505epoutp03c6c782b4090a211569d74c48eb0059f9~iGNRmptpo3125531255epoutp03H
+	for <nvdimm@lists.linux.dev>; Thu,  4 Sep 2025 13:55:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250904135505epoutp03c6c782b4090a211569d74c48eb0059f9~iGNRmptpo3125531255epoutp03H
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1757055783;
-	bh=m5ajDjZHfTK0j0ELw07lpV62uDlapjh3L7Yy9igxN/M=;
+	s=mail20170921; t=1756994105;
+	bh=5AuHor2gjdBQMSXf29j05gf0MvYmzK8kAiB5uy6SZCM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OuPE5FxJ6YqR/WIPsWHyGLqQ7VNetr60VJeIWd+h7PA8pd/dGVIV1eAuK/AbErRge
-	 QsVmHxuocsuJhD7iCAXLN+i9OzWeKv7K8NYeiDiaizYXPw1d3vZde14LEywQLT+5cM
-	 0G4Uh0VANRnrAXTW3R9OSp3T0AxgA72O1TKT+1rE=
+	b=LD0Y8KMgyO20yOAnIERcfDeETGHFzzwUp5BfcRKox4NtcwDsNb7fJPhZAXte7/V+e
+	 aDDRuzpjrQ1guZEnjm4E6acEYumUaglKLc0gpZLIZgIgDkhoVZ3qwCpkLcZ1M9kM6A
+	 vtRdahKnKxzqcO/XttgG0OILM0Z8WK3tMN6lDP/s=
 Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250905070302epcas5p4817339b46a5fcfddcd437067d15f36c4~iUOzQUoq30936809368epcas5p4D;
-	Fri,  5 Sep 2025 07:03:02 +0000 (GMT)
-Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4cJ6kG4VFvz2SSKn; Fri,  5 Sep
-	2025 07:03:02 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250904135504epcas5p1c4da8380378cf269976e47fcda76b024~iGNRGXL4z1524715247epcas5p1b;
+	Thu,  4 Sep 2025 13:55:04 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.91]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4cHgw74hfFz2SSKZ; Thu,  4 Sep
+	2025 13:55:03 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
 	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250904135119epcas5p22c5d58686c2548fdb3b73f7c2ef4c7c3~iGJ-k9W611055510555epcas5p24;
-	Thu,  4 Sep 2025 13:51:19 +0000 (GMT)
+	20250904135502epcas5p28479f68a04427e46e862eba17069900e~iGNPZRlbO2098820988epcas5p2Z;
+	Thu,  4 Sep 2025 13:55:02 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250904135118epsmtip2e516b66588de5af08905596e6b730f79~iGJ_VppIy2271922719epsmtip2V;
-	Thu,  4 Sep 2025 13:51:18 +0000 (GMT)
-Date: Thu, 4 Sep 2025 19:21:13 +0530
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250904135501epsmtip106bef041e084fa4f3ee6b5c04265dfc7~iGNOQGiDw1697616976epsmtip1f;
+	Thu,  4 Sep 2025 13:55:01 +0000 (GMT)
+Date: Thu, 4 Sep 2025 19:24:56 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Ira Weiny <ira.weiny@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
-Subject: Re: [PATCH V2 03/20] nvdimm/namespace_label: Add namespace label
- changes as per CXL LSA v2.1
-Message-ID: <1983025922.01757055782611.JavaMail.epsvc@epcpadp2new>
+Subject: Re: [PATCH V2 04/20] nvdimm/label: CXL labels skip the need for
+ 'interleave-set cookie'
+Message-ID: <20250904135456.aqt2yndnmfdeowux@test-PowerEdge-R740xd>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <68a49f05796ef_27db95294cf@iweiny-mobl.notmuch>
-X-CMS-MailID: 20250904135119epcas5p22c5d58686c2548fdb3b73f7c2ef4c7c3
+In-Reply-To: <20250813144401.00004fee@huawei.com>
+X-CMS-MailID: 20250904135502epcas5p28479f68a04427e46e862eba17069900e
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----OUxkrUiS_5tNAtfPKy2OQMQtEkPPDXVoOsIej.5k6A4J0mxM=_eabc3_"
+	boundary="----At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20250730121225epcas5p2742d108bd0c52c8d7d46b655892c5c19
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250730121227epcas5p4675fdb3130de49cd99351c5efd09e29e
 References: <20250730121209.303202-1-s.neeraj@samsung.com>
-	<CGME20250730121225epcas5p2742d108bd0c52c8d7d46b655892c5c19@epcas5p2.samsung.com>
-	<20250730121209.303202-4-s.neeraj@samsung.com>
-	<68a49f05796ef_27db95294cf@iweiny-mobl.notmuch>
+	<CGME20250730121227epcas5p4675fdb3130de49cd99351c5efd09e29e@epcas5p4.samsung.com>
+	<20250730121209.303202-5-s.neeraj@samsung.com>
+	<20250813144401.00004fee@huawei.com>
 
-------OUxkrUiS_5tNAtfPKy2OQMQtEkPPDXVoOsIej.5k6A4J0mxM=_eabc3_
+------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: 8bit
 Content-Disposition: inline
 
-On 19/08/25 10:57AM, Ira Weiny wrote:
->Neeraj Kumar wrote:
->> CXL 3.2 Spec mentions CXL LSA 2.1 Namespace Labels at section 9.13.2.5
->> Modified __pmem_label_update function using setter functions to update
->> namespace label as per CXL LSA 2.1
+On 13/08/25 02:44PM, Jonathan Cameron wrote:
+>On Wed, 30 Jul 2025 17:41:53 +0530
+>Neeraj Kumar <s.neeraj@samsung.com> wrote:
 >
->But why?  And didn't we just remove nd_namespace_label in patch 2?
->
->Why are we now defining accessor functions for it?
->
-
-Hi Ira,
-
-No we haven't removed nd_namespace_label in patch 2. In patch 2, we have
-introduced
-lsa_label which contains nd_namespace_label as well as cxl_region_label
-under union.
-
-Actually, LSA 2.1 spec introduced new region label along with existing
-(v1.1 & v1.2) namespace label
-But in v2.1 namespace label members are also modified compared to v1.1 &
-v1.2.
-
-New members introduced in namespace label are following
-
-	struct nvdimm_cxl_label {
-		u8 type[NSLABEL_UUID_LEN];	--> Filling it with nsl_set_type()
-		u8 uuid[NSLABEL_UUID_LEN];
-		u8 name[NSLABEL_NAME_LEN];
-		__le32 flags;
-		__le16 nrange;
-		__le16 position;
-		__le64 dpa;
-		__le64 rawsize;
-		__le32 slot;
-		__le32 align;			--> Filling it with
-		nsl_set_alignment()
-		u8 region_uuid[16];		--> Filling it with
-		nsl_set_region_uuid()
-		u8 abstraction_uuid[16];
-		__le16 lbasize;
-		u8 reserved[0x56];
-		__le64 checksum;
-	};
-
-Therefore this patch-set address this modification in namespace label as per v2.1
-
+>> CXL LSA v2.1 utilizes the region labels stored in the LSA for interleave
+>> set configuration instead of interleave-set cookie used in previous LSA
+>> versions. As interleave-set cookie is not required for CXL LSA v2.1 format
+>> so skip its usage for CXL LSA 2.1 format
 >>
 >> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
->> ---
->>  drivers/nvdimm/label.c |  3 +++
->>  drivers/nvdimm/nd.h    | 27 +++++++++++++++++++++++++++
->>  2 files changed, 30 insertions(+)
->>
->> diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
->> index 75bc11da4c11..3f8a6bdb77c7 100644
->> --- a/drivers/nvdimm/label.c
->> +++ b/drivers/nvdimm/label.c
->> @@ -933,6 +933,7 @@ static int __pmem_label_update(struct nd_region *nd_region,
->>  	memset(lsa_label, 0, sizeof_namespace_label(ndd));
->>
->>  	nd_label = &lsa_label->ns_label;
->> +	nsl_set_type(ndd, nd_label);
->>  	nsl_set_uuid(ndd, nd_label, nspm->uuid);
->>  	nsl_set_name(ndd, nd_label, nspm->alt_name);
->>  	nsl_set_flags(ndd, nd_label, flags);
->> @@ -944,7 +945,9 @@ static int __pmem_label_update(struct nd_region *nd_region,
->>  	nsl_set_lbasize(ndd, nd_label, nspm->lbasize);
->>  	nsl_set_dpa(ndd, nd_label, res->start);
->>  	nsl_set_slot(ndd, nd_label, slot);
->> +	nsl_set_alignment(ndd, nd_label, 0);
->>  	nsl_set_type_guid(ndd, nd_label, &nd_set->type_guid);
->> +	nsl_set_region_uuid(ndd, nd_label, NULL);
->>  	nsl_set_claim_class(ndd, nd_label, ndns->claim_class);
->>  	nsl_calculate_checksum(ndd, nd_label);
->>  	nd_dbg_dpa(nd_region, ndd, res, "\n");
->> diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
->> index 61348dee687d..651847f1bbf9 100644
->> --- a/drivers/nvdimm/nd.h
->> +++ b/drivers/nvdimm/nd.h
->> @@ -295,6 +295,33 @@ static inline const u8 *nsl_uuid_raw(struct nvdimm_drvdata *ndd,
->>  	return nd_label->efi.uuid;
->>  }
->>
->> +static inline void nsl_set_type(struct nvdimm_drvdata *ndd,
->> +				struct nd_namespace_label *ns_label)
 >
->Set type to what?
->
+>Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-LSA 2.1 spec mentions seperate UUID for namespace label and region
-label.
-
-#define CXL_REGION_UUID "529d7c61-da07-47c4-a93f-ecdf2c06f444"
-#define CXL_NAMESPACE_UUID "68bb2c0a-5a77-4937-9f85-3caf41a0f93c"
-Here we are setting label->type with CXL_NAMESPACE_UUID
-
-In following patch, accordingly we are setting region label->type with
-CXL_REGION_UUID
-
-May be I will rename it to nsl_set_type_uuid() in next patch-set.
-
->Why is driver data passed here?
-
-ndd->cxl is used to segregate between EFI labels (v1.1 & v1.2) and CXL
-Labels (v2.1). It was introduced in 5af96835e4daf
-
->
->This reads as an accessor function for some sort of label class but seems
->to do some back checking into ndd to set the uuid of the label?
->
->At a minimum this should be *_set_uuid(..., uuid_t uuid)  But I'm not
->following this chunk of changes so don't just change it without more
->explaination.
-
-I have created setter function taking inspiration from other members
-setter helpers introduced in 8176f14789125
-
->
->> +{
->> +	uuid_t tmp;
->> +
->> +	if (ndd->cxl) {
->> +		uuid_parse(CXL_NAMESPACE_UUID, &tmp);
->> +		export_uuid(ns_label->cxl.type, &tmp);
->> +	}
->> +}
->> +
->> +static inline void nsl_set_alignment(struct nvdimm_drvdata *ndd,
->> +				     struct nd_namespace_label *ns_label,
->> +				     u32 align)
->
->Why is this needed?
-
-As per CXL spec 3.2 Table - 9-11. Namespace Label Layout
-The desired region alignment in multiples of 256 MB:
-• 0 = No desired alignment
-• 1 = 256-MB desired alignment
-• 2 = 512-MB desired alignment
-• etc.
-
-In this patch-set we are using 0.
-
->
->> +{
->> +	if (ndd->cxl)
->> +		ns_label->cxl.align = __cpu_to_le16(align);
->> +}
->> +
->> +static inline void nsl_set_region_uuid(struct nvdimm_drvdata *ndd,
->> +				       struct nd_namespace_label *ns_label,
->> +				       const uuid_t *uuid)
->
->Again why?
-
-This field is used to track namespace label associated with perticular
-region label. It stores the region label's UUID
-
->
->> +{
->> +	if (ndd->cxl)
->> +		export_uuid(ns_label->cxl.region_uuid, uuid);
->
->export does a memcpy() and you are passing it NULL.  Is that safe?
->
->Ira
-
-Thanks Ira for pointing this, Yes it will not be safe with NULL.
-Sure I will fix this in next patch-set.
+Thanks Jonathan for review and your RB tag
 
 
 Regards,
 Neeraj
 
-------OUxkrUiS_5tNAtfPKy2OQMQtEkPPDXVoOsIej.5k6A4J0mxM=_eabc3_
+------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_
 Content-Type: text/plain; charset="utf-8"
 
 
-------OUxkrUiS_5tNAtfPKy2OQMQtEkPPDXVoOsIej.5k6A4J0mxM=_eabc3_--
-
+------At96h8_oYHqdM-HzD.Qv-z6Hqrsj5DpI3AOnKMLFsbTdazMP=_eac47_--
 
