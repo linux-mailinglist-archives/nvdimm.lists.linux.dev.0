@@ -1,151 +1,463 @@
-Return-Path: <nvdimm+bounces-11469-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11471-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8633B44EA2
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 09:03:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DDE0B44EA5
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 09:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22C0A3B919F
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 07:03:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98B455A3F22
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Sep 2025 07:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341E22DAFB9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF1A2DF718;
 	Fri,  5 Sep 2025 07:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eDgvczZg"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="B/4N1nWd"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFBA2D46B4
-	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9F92D481D
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757055789; cv=none; b=ARQWcZ/bA0uKPg5xoOlBbekeAd1eFKBMDt251DHDSpyWcEdsIeCkcOLdwCXassyr4wX/J0HYC3W35cgz8qVH8lBOViyZQK0xF2aPyYqO3jWXVRcnde8BaRM0eD8ylXvuqOC466KNMsHP+7wqA8f0LHCPDxMj+HtSj4uuNCaP+Xo=
+	t=1757055790; cv=none; b=HPGfu61DLEyPnU3BuBF2N1bOQU+EXSNOEmvJ6IJ/vZa05ONp4uOZPVx6kROa6O0SDpwzarc7SlHO0BriqPF34WiE7aO41fV2+4DuDw/9BZ+FbJre6MQHHSWcapY2vPhepyeAeRRVmdWk+Js3RCtPf84cZG0QS8lgl+hTd8meZwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757055789; c=relaxed/simple;
-	bh=XMJVFVxRmh3peicYbuF2su+FZK1Muiig8ssiRVbYBOs=;
+	s=arc-20240116; t=1757055790; c=relaxed/simple;
+	bh=M6nuY/WcaCI3oh3Gzs0vDb936kps5Vh/NStz3zKwobU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=VPiTaIhbDHzTUicHOGITzkcspn87dEfC+/dgdAcP+cluqWJ2RywUxD/86ULgDnk9v5sEEKwbu6D7oSnMKq9kPVoAA8Pa5R8OmtqMMfKHMMSbUd9h9LIVwTorULwxrItvQdLkmAJnSn9KpwE/BUikBU5N515plglnvELZGNXxqHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eDgvczZg; arc=none smtp.client-ip=203.254.224.34
+	 Content-Type:References; b=V6w/LbmuoIicnuHcN4GExnuNvd37uIxMucI7VMJzIhdxLLK1yqs8j2z/wU/2SPZPEuOPc1nPi8nafh2HmSX2BP0E5BlxmRRpK3R9HqEh6aFOMEhkVObDr30nEj83mFREl/6VMh5tboeVc5hZorEdCJsZF2ij9UyKuZGkWiKJaqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=B/4N1nWd; arc=none smtp.client-ip=203.254.224.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250905070304epoutp04a6cc41d191c5f7d9dd5b88e64e9f9a3a~iUO1Ujhfc2251722517epoutp04a
-	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250905070304epoutp04a6cc41d191c5f7d9dd5b88e64e9f9a3a~iUO1Ujhfc2251722517epoutp04a
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250905070305epoutp021add59a7a550613218056e3fa644b482~iUO1cjvsC0184801848epoutp024
+	for <nvdimm@lists.linux.dev>; Fri,  5 Sep 2025 07:03:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250905070305epoutp021add59a7a550613218056e3fa644b482~iUO1cjvsC0184801848epoutp024
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1757055784;
-	bh=DAf7IFgHBvJDfZgahFooC6ZDHHY5mojc5Pt4LAfJBqI=;
+	s=mail20170921; t=1757055785;
+	bh=S49l/pXCpRHJzfcOGW9tRWJJWT7z47WyvFxIk0G8/Fk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eDgvczZgIORsWJwp3BltKDN6mX593KLO3a4NUZlRR5+HO7pLzp2/mdben03Edh3rc
-	 ego4yKyv4GJ36XkIzjNYoORvfwJ2T7KSFm5FOkFS+a6q8KpDilB/guio5ssZBtBblc
-	 NZfN/0LRSN6qc1aKBD2dYQ3Coa5JaBlQzs/aAktE=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	b=B/4N1nWdUjTJfefD0jEqq/v3vaOKxPVIA0t4v76soz9XBIxu63BCKVfDMJRRg7UkK
+	 Q7VI8txEafh53F+8Gl39C3wBew/M2dBGe5C6HKKiV08pmwWrp4woQK9vBBDE6EEGVG
+	 +qKI6M30vbKEJy6ccGnR/8zMO4P7jLxm/xwaDVQ8=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
 	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250905070304epcas5p39c0032908b488c386cbe535766d8e214~iUO03IwUR3104231042epcas5p3E;
+	20250905070304epcas5p370c98a3235bd4c0a577df78cff53c418~iUO1BApl-3104231042epcas5p3G;
 	Fri,  5 Sep 2025 07:03:04 +0000 (GMT)
 Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4cJ6kJ2XsWz2SSKv; Fri,  5 Sep
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4cJ6kJ3htvz3hhTB; Fri,  5 Sep
 	2025 07:03:04 +0000 (GMT)
 Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20250904143941epcas5p3bf2c74895a2fc6b54606dcd189bc9fc5~iG0N0S1192088120881epcas5p3Q;
-	Thu,  4 Sep 2025 14:39:41 +0000 (GMT)
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250904145526epcas5p25642ef881f7c608a1d093e3e78d3f660~iHB_S_1sd0980409804epcas5p2u;
+	Thu,  4 Sep 2025 14:55:26 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250904143939epsmtip15e39fdf391bd9e426d283533cfe902f9~iG0Mr1S470742607426epsmtip1z;
-	Thu,  4 Sep 2025 14:39:39 +0000 (GMT)
-Date: Thu, 4 Sep 2025 20:09:33 +0530
+	20250904145525epsmtip16361a1be448841943f3927c9bc64768a~iHB9J03pi2016120161epsmtip1Z;
+	Thu,  4 Sep 2025 14:55:25 +0000 (GMT)
+Date: Thu, 4 Sep 2025 20:25:20 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
-Subject: Re: [PATCH V2 13/20] cxl/mem: Refactor cxl pmem region
- auto-assembling
-Message-ID: <1256440269.161757055784348.JavaMail.epsvc@epcpadp2new>
+Subject: Re: [PATCH V2 14/20] cxl/region: Add devm_cxl_pmem_add_region() for
+ pmem region creation
+Message-ID: <148912029.181757055784505.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <c22affa9-1dad-4a66-8db8-8e268806e0a1@intel.com>
-X-CMS-MailID: 20250904143941epcas5p3bf2c74895a2fc6b54606dcd189bc9fc5
+In-Reply-To: <54012143-0925-4e76-a1e9-0092e10b8c84@intel.com>
+X-CMS-MailID: 20250904145526epcas5p25642ef881f7c608a1d093e3e78d3f660
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_eadef_"
+	boundary="----kMDsK0IEhKoUUkzyxABlnve5J-Otg2bCPR2yRM97vA1oUAWq=_ea8fe_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20250730121239epcas5p37956b2999f61e17e8dbfbde7972cef35
+X-CMS-RootMailID: 20250730121241epcas5p3e5708a89d764d1de9322fd759f921de0
 References: <20250730121209.303202-1-s.neeraj@samsung.com>
-	<CGME20250730121239epcas5p37956b2999f61e17e8dbfbde7972cef35@epcas5p3.samsung.com>
-	<20250730121209.303202-14-s.neeraj@samsung.com>
-	<c22affa9-1dad-4a66-8db8-8e268806e0a1@intel.com>
+	<CGME20250730121241epcas5p3e5708a89d764d1de9322fd759f921de0@epcas5p3.samsung.com>
+	<20250730121209.303202-15-s.neeraj@samsung.com>
+	<54012143-0925-4e76-a1e9-0092e10b8c84@intel.com>
 
-------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_eadef_
+------kMDsK0IEhKoUUkzyxABlnve5J-Otg2bCPR2yRM97vA1oUAWq=_ea8fe_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
 
-On 20/08/25 09:41AM, Dave Jiang wrote:
+On 19/08/25 05:30PM, Dave Jiang wrote:
 >
 >
 >On 7/30/25 5:12 AM, Neeraj Kumar wrote:
->> In 84ec985944ef3, devm_cxl_add_nvdimm() sequence was changed and called
->> before devm_cxl_add_endpoint(). It's because cxl pmem region auto-assembly
->> used to get called at last in cxl_endpoint_port_probe(), which requires
->> cxl_nvd presence.
+>> devm_cxl_pmem_add_region() is used to create cxl region based on region
+>> information scanned from LSA.
 >>
->> For cxl region persistency, region creation happens during nvdimm_probe
->> which need the completion of endpoint probe.
+>> devm_cxl_add_region() is used to just allocate cxlr and its fields are
+>> filled later by userspace tool using device attributes (*_store()).
 >>
->> In order to accommodate both cxl pmem region auto-assembly and cxl region
->> persistency, refactored following
+>> Inspiration for devm_cxl_pmem_add_region() is taken from these device
+>> attributes (_store*) calls. It allocates cxlr and fills information
+>> parsed from LSA and calls device_add(&cxlr->dev) to initiate further
+>> region creation porbes
 >>
->> 1. Re-Sequence devm_cxl_add_nvdimm() after devm_cxl_add_endpoint(). This
->>    will be called only after successful completion of endpoint probe.
+>> Renamed __create_region() to cxl_create_region() and make it an exported
+>> routine. This will be used in later patch to create cxl region after
+>> fetching region information from LSA.
 >>
->> 2. Moved cxl pmem region auto-assembly from cxl_endpoint_port_probe() to
->>    cxl_mem_probe() after devm_cxl_add_nvdimm(). It gurantees both the
->>    completion of endpoint probe and cxl_nvd presence before its call.
+>> Also created some helper routines and refactored dpa_size_store(),
+>> commit_store() to avoid duplicate code usage in devm_cxl_pmem_add_region()
 >
->So there are a few issues with doing this. If cxl_endpoint_port_probe() fails, you won't know that while running in cxl_mem_probe(). So you may need to do something similar to here [1] in order to make the probe synchronous with the add endpoint and make sure that the port driver attached successfully.
-
-Hi Dave,
-devm_cxl_add_endpoint() makes sure cxl_endpoint_port_probe() has
-completed successfully, as per below check in devm_cxl_add_endpoint()
-
-	if (!endpoint->dev.driver) {
-		dev_err(&cxlmd->dev, "%s failed probe\n", dev_name(&endpoint->dev));
-		return -ENXIO;
-	}
-
-Above check confirms synchronous probe completion of cxl_endpoint_port_probe() and port
-driver attachment.
-
-> Specifically see changes to devm_cxl_add_memdev().
+>"Some helper routines are created to...."
 >
->Also, in endpoint port probe you are holding the device lock and therefore is protected from port removals (endpoint and parents) while you are trying to scan for regions. That is not the case on the memdev probe side if you aren't holding that port lock.
->
->[1]: https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?h=for-6.18/cxl-probe-order&id=88aec5ea7a24da00dc92c7778df4851fe4fd3ec6
->
->DJ
+>I would drop the "Also"
 
-Sure, I will go through [1] and its devm_cxl_add_memdev() implementation.
-And see if any changes required as per your suggestion.
+Sure Dave, I will drop it in next patch-set
+
+>
+>
+>>
+>> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
+>> ---
+>>  drivers/cxl/core/core.h   |   1 +
+>>  drivers/cxl/core/port.c   |  29 ++++++----
+>>  drivers/cxl/core/region.c | 118 +++++++++++++++++++++++++++++++++-----
+>>  drivers/cxl/cxl.h         |  12 ++++
+>>  4 files changed, 134 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+>> index 2669f251d677..80c83e0117c6 100644
+>> --- a/drivers/cxl/core/core.h
+>> +++ b/drivers/cxl/core/core.h
+>> @@ -94,6 +94,7 @@ int cxl_dpa_free(struct cxl_endpoint_decoder *cxled);
+>>  resource_size_t cxl_dpa_size(struct cxl_endpoint_decoder *cxled);
+>>  resource_size_t cxl_dpa_resource_start(struct cxl_endpoint_decoder *cxled);
+>>  bool cxl_resource_contains_addr(const struct resource *res, const resource_size_t addr);
+>> +ssize_t resize_or_free_dpa(struct cxl_endpoint_decoder *cxled, u64 size);
+>>
+>>  enum cxl_rcrb {
+>>  	CXL_RCRB_DOWNSTREAM,
+>> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+>> index 29197376b18e..ba743e31f721 100644
+>> --- a/drivers/cxl/core/port.c
+>> +++ b/drivers/cxl/core/port.c
+>> @@ -243,16 +243,9 @@ static ssize_t dpa_size_show(struct device *dev, struct device_attribute *attr,
+>>  	return sysfs_emit(buf, "%pa\n", &size);
+>>  }
+>>
+>> -static ssize_t dpa_size_store(struct device *dev, struct device_attribute *attr,
+>> -			      const char *buf, size_t len)
+>> +ssize_t resize_or_free_dpa(struct cxl_endpoint_decoder *cxled, u64 size)
+>
+>Maybe it should be called cxl_realloc_dpa()? More comments later on...
+
+Sure Dave, I will rename it to cxl_realloc_dpa().
+
+>
+>>  {
+>> -	struct cxl_endpoint_decoder *cxled = to_cxl_endpoint_decoder(dev);
+>> -	unsigned long long size;
+>> -	ssize_t rc;
+>> -
+>> -	rc = kstrtoull(buf, 0, &size);
+>> -	if (rc)
+>> -		return rc;
+>> +	int rc;
+>>
+>>  	if (!IS_ALIGNED(size, SZ_256M))
+>>  		return -EINVAL;
+>> @@ -262,9 +255,23 @@ static ssize_t dpa_size_store(struct device *dev, struct device_attribute *attr,
+>>  		return rc;
+>>
+>>  	if (size == 0)
+>> -		return len;
+>> +		return 0;
+>> +
+>> +	return cxl_dpa_alloc(cxled, size);
+>> +}
+>> +
+>> +static ssize_t dpa_size_store(struct device *dev, struct device_attribute *attr,
+>> +			      const char *buf, size_t len)
+>> +{
+>> +	struct cxl_endpoint_decoder *cxled = to_cxl_endpoint_decoder(dev);
+>> +	unsigned long long size;
+>> +	ssize_t rc;
+>> +
+>> +	rc = kstrtoull(buf, 0, &size);
+>> +	if (rc)
+>> +		return rc;
+>>
+>> -	rc = cxl_dpa_alloc(cxled, size);
+>> +	rc = resize_or_free_dpa(cxled, size);
+>>  	if (rc)
+>>  		return rc;
+>>
+>> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+>> index eef501f3384c..8578e046aa78 100644
+>> --- a/drivers/cxl/core/region.c
+>> +++ b/drivers/cxl/core/region.c
+>> @@ -703,6 +703,23 @@ static int free_hpa(struct cxl_region *cxlr)
+>>  	return 0;
+>>  }
+>>
+>> +static ssize_t resize_or_free_region_hpa(struct cxl_region *cxlr, u64 size)
+>> +{
+>> +	int rc;
+>> +
+>> +	ACQUIRE(rwsem_write_kill, rwsem)(&cxl_rwsem.region);
+>> +	rc = ACQUIRE_ERR(rwsem_write_kill, &rwsem);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	if (size)
+>> +		rc = alloc_hpa(cxlr, size);
+>> +	else
+>> +		rc = free_hpa(cxlr);
+>> +
+>> +	return rc;
+>> +}
+>
+>I think it's better to have 2 helper functions rather a single ambiguous one here. alloc_region_hpa() and free_region_hpa(). More on why later.
+
+Sure, I will handle it accordingly.
+
+>
+>> +
+>>  static ssize_t size_store(struct device *dev, struct device_attribute *attr,
+>>  			  const char *buf, size_t len)
+>>  {
+>> @@ -714,15 +731,7 @@ static ssize_t size_store(struct device *dev, struct device_attribute *attr,
+>>  	if (rc)
+>>  		return rc;
+>>
+>> -	ACQUIRE(rwsem_write_kill, rwsem)(&cxl_rwsem.region);
+>> -	if ((rc = ACQUIRE_ERR(rwsem_write_kill, &rwsem)))
+>> -		return rc;
+>> -
+>> -	if (val)
+>> -		rc = alloc_hpa(cxlr, val);
+>> -	else
+>> -		rc = free_hpa(cxlr);
+>> -
+>> +	rc = resize_or_free_region_hpa(cxlr, val);
+>>  	if (rc)
+>>  		return rc;
+>>
+>> @@ -2569,6 +2578,76 @@ static struct cxl_region *devm_cxl_add_region(struct cxl_root_decoder *cxlrd,
+>>  	return ERR_PTR(rc);
+>>  }
+>>
+>> +static struct cxl_region *
+>> +devm_cxl_pmem_add_region(struct cxl_root_decoder *cxlrd,
+>> +			 int id,
+>> +			 enum cxl_partition_mode mode,
+>> +			 enum cxl_decoder_type type,
+>> +			 struct cxl_pmem_region_params *params,
+>> +			 struct cxl_decoder *cxld)
+>> +{
+>> +	struct cxl_port *root_port;
+>> +	struct cxl_region *cxlr;
+>> +	struct cxl_endpoint_decoder *cxled;
+>> +	struct cxl_region_params *p;
+>> +	struct device *dev;
+>> +	int rc;
+>> +
+>> +	cxlr = cxl_region_alloc(cxlrd, id);
+>I think you can use __free() here to drop all the gotos.
+>
+>struct cxl_region *cxlr __free(put_cxl_region) = cxl_region_alloc(cxlrd, id);
+>
+>Just make sure to 'return no_free_ptr(cxlr)' at the successful end.
+
+Sure Dave, Thanks for your suggestion. I will handle it accordingly in
+next patch-set.
+
+>
+>
+>> +	if (IS_ERR(cxlr))
+>> +		return cxlr;
+>> +	cxlr->mode = mode;
+>> +	cxlr->type = type;
+>> +
+>> +	dev = &cxlr->dev;
+>> +	rc = dev_set_name(dev, "region%d", id);
+>> +	if (rc)
+>> +		goto err;
+>> +
+>> +	p = &cxlr->params;
+>> +	p->uuid = params->uuid;
+>> +	p->interleave_ways = params->nlabel;
+>> +	p->interleave_granularity = params->ig;
+>> +
+>> +	if (resize_or_free_region_hpa(cxlr, params->rawsize))
+>> +		goto err;
+>
+>Given this is _add_region(), it really should only be calling alloc_region_hpa() and not have to deal with free. Maybe a check before this and make sure params->rawsize is not 0 is needed.
+
+Sure, Let me re-look at it.
+
+>
+>> +
+>> +	cxled = to_cxl_endpoint_decoder(&cxld->dev);
+>> +	if (resize_or_free_dpa(cxled, 0))
+>Given that resize_or_free_dpa() always frees, is this call necessary here?
+
+Yes, Its required here as in first call to resize_or_free_dpa(), we are
+just freeing dpa and returning as its size is 0. But anyway, Let me
+double check it here.
+
+>
+>> +		goto err;
+>> +
+>> +	if (cxl_dpa_set_part(cxled, CXL_PARTMODE_PMEM))
+>> +		goto err;
+>> +
+>> +	if (resize_or_free_dpa(cxled, params->rawsize))
+>
+>Seems like it can be called once here instead and it'll just free and then re-allocate whatever size in params->rawsize.
+
+Sure, I will re-look at it
+
+>
+>> +		goto err;
+>> +
+>> +	/* Attaching only one target due to interleave_way == 1 */
+>Is it missing a check of interleave_ways here? Also maybe additional comments on why support iw==1 only?
+
+Sure, I will look at this and update the comments properly.
+
+>
+>> +	if (attach_target(cxlr, cxled, params->position, TASK_INTERRUPTIBLE))
+>> +		goto err;
+>> +
+>> +	if (__commit(cxlr))
+>> +		goto err;
+>> +
+>> +	rc = device_add(dev);
+>> +	if (rc)
+>> +		goto err;
+>> +
+>> +	root_port = to_cxl_port(cxlrd->cxlsd.cxld.dev.parent);
+>> +	rc = devm_add_action_or_reset(root_port->uport_dev,
+>> +			unregister_region, cxlr);
+>> +	if (rc)
+>> +		return ERR_PTR(rc);
+>> +
+>> +	dev_dbg(root_port->uport_dev, "%s: created %s\n",
+>> +		dev_name(&cxlrd->cxlsd.cxld.dev), dev_name(dev));
+>> +	return cxlr;
+>> +
+>> +err:
+>> +	put_device(dev);
+>> +	return ERR_PTR(rc);
+>> +}
+>> +
+>>  static ssize_t __create_region_show(struct cxl_root_decoder *cxlrd, char *buf)
+>>  {
+>>  	return sysfs_emit(buf, "region%u\n", atomic_read(&cxlrd->region_id));
+>> @@ -2586,8 +2665,10 @@ static ssize_t create_ram_region_show(struct device *dev,
+>>  	return __create_region_show(to_cxl_root_decoder(dev), buf);
+>>  }
+>>
+>> -static struct cxl_region *__create_region(struct cxl_root_decoder *cxlrd,
+>> -					  enum cxl_partition_mode mode, int id)
+>> +struct cxl_region *cxl_create_region(struct cxl_root_decoder *cxlrd,
+>> +				     enum cxl_partition_mode mode, int id,
+>> +				     struct cxl_pmem_region_params *params,
+>
+>Maybe name it pmem_params to avoid confusion with cxl region params.
+>
+>> +				     struct cxl_decoder *cxld)
+>>  {
+>>  	int rc;
+>>
+>> @@ -2609,8 +2690,14 @@ static struct cxl_region *__create_region(struct cxl_root_decoder *cxlrd,
+>>  		return ERR_PTR(-EBUSY);
+>>  	}
+>>
+>> -	return devm_cxl_add_region(cxlrd, id, mode, CXL_DECODER_HOSTONLYMEM);
+>> +	if (params)
+>> +		return devm_cxl_pmem_add_region(cxlrd, id, mode,
+>> +				CXL_DECODER_HOSTONLYMEM, params, cxld);
+>> +	else
+>
+>'else' not needed here. Just directly return.
+
+Thanks Dave, I will fix it in next patch-set.
+
+>
+>> +		return devm_cxl_add_region(cxlrd, id, mode,
+>> +				CXL_DECODER_HOSTONLYMEM);
+>>  }
+>> +EXPORT_SYMBOL_NS_GPL(cxl_create_region, "CXL");
+>>
+>>  static ssize_t create_region_store(struct device *dev, const char *buf,
+>>  				   size_t len, enum cxl_partition_mode mode)
+>> @@ -2623,7 +2710,7 @@ static ssize_t create_region_store(struct device *dev, const char *buf,
+>>  	if (rc != 1)
+>>  		return -EINVAL;
+>>
+>> -	cxlr = __create_region(cxlrd, mode, id);
+>> +	cxlr = cxl_create_region(cxlrd, mode, id, NULL, NULL);
+>>  	if (IS_ERR(cxlr))
+>>  		return PTR_ERR(cxlr);
+>>
+>> @@ -3414,8 +3501,9 @@ static struct cxl_region *construct_region(struct cxl_root_decoder *cxlrd,
+>>  	struct cxl_region *cxlr;
+>>
+>>  	do {
+>> -		cxlr = __create_region(cxlrd, cxlds->part[part].mode,
+>> -				       atomic_read(&cxlrd->region_id));
+>> +		cxlr = cxl_create_region(cxlrd, cxlds->part[part].mode,
+>> +					 atomic_read(&cxlrd->region_id),
+>> +					 NULL, NULL);
+>>  	} while (IS_ERR(cxlr) && PTR_ERR(cxlr) == -EBUSY);
+>>
+>>  	if (IS_ERR(cxlr)) {
+>> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+>> index 6edcec95e9ba..129db2e49aa7 100644
+>> --- a/drivers/cxl/cxl.h
+>> +++ b/drivers/cxl/cxl.h
+>> @@ -865,6 +865,10 @@ int cxl_add_to_region(struct cxl_endpoint_decoder *cxled);
+>>  struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
+>>  u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
+>>  void cxl_region_discovery(struct cxl_port *port);
+>> +struct cxl_region *cxl_create_region(struct cxl_root_decoder *cxlrd,
+>> +				     enum cxl_partition_mode mode, int id,
+>> +				     struct cxl_pmem_region_params *params,
+>> +				     struct cxl_decoder *cxld);
+>>  #else
+>>  static inline bool is_cxl_pmem_region(struct device *dev)
+>>  {
+>> @@ -890,6 +894,14 @@ static inline u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint,
+>>  static inline void cxl_region_discovery(struct cxl_port *port)
+>>  {
+>>  }
+>> +static inline struct cxl_region *
+>> +cxl_create_region(struct cxl_root_decoder *cxlrd,
+>> +		  enum cxl_partition_mode mode, int id,
+>> +		  struct cxl_pmem_region_params *params,
+>> +		  struct cxl_decoder *cxld)
+>> +{
+>> +	return NULL;
+>
+>return ERR_PTR(-EOPNOTSUPP);
+
+Sure Dave, I will fix it
 
 
 Regards,
 Neeraj
 
-------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_eadef_
+------kMDsK0IEhKoUUkzyxABlnve5J-Otg2bCPR2yRM97vA1oUAWq=_ea8fe_
 Content-Type: text/plain; charset="utf-8"
 
 
-------AO5Z5CA5q82FpJQJAbIGDvoW6m12ppu.cCYhbwpEEtg295OJ=_eadef_--
+------kMDsK0IEhKoUUkzyxABlnve5J-Otg2bCPR2yRM97vA1oUAWq=_ea8fe_--
 
 
