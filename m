@@ -1,206 +1,153 @@
-Return-Path: <nvdimm+bounces-11879-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-11875-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1E8BBD11F
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 06 Oct 2025 06:56:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF6ECBBD113
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 06 Oct 2025 06:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E891893A5C
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  6 Oct 2025 04:56:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B13214E4844
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  6 Oct 2025 04:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24A8257437;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC662566F7;
 	Mon,  6 Oct 2025 04:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bmprNYUc"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="WGpr1B3q"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD0724728F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB6C246BD2
 	for <nvdimm@lists.linux.dev>; Mon,  6 Oct 2025 04:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759726510; cv=none; b=pOrBmjQkBa99YzM2Jzfwq96tqAW+fj5wGGQ74H1+beRVZ/ik7RGpEalkOT+48Bab82Mvz5vSSB8IKGbG+nGXOdsPYtrugzIPpnHjbvXgXs+GzyniKV9w5B6UsAL8ix+2ydVLmtuWs0XAxxUnOsyAUVipzz/qMwU+slPAoay5Xx0=
+	t=1759726510; cv=none; b=Fme/aHNxqiiksHDOSZhnORBpjdwaRHX+6XxnWyi5HCu0OduA+qlnnd8TchY2uuyWnxAPbJmDzi+ZPGPcSJDmuTbiOW9N//LzXSfYHgJC3zv2Fl5gFc1OhEkTbp6BY1OQ+4Lccl3qPOu9fZVXYV6az8ROQ9vF5a1R8+ojyZYcPSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759726510; c=relaxed/simple;
-	bh=ht/uvgPLPswP8wfkhMpSdAb8BnFOMhm4KRwpfjCzXl8=;
+	bh=59NiRBpV+xpAIzQh2Ndy4MnoltJdoNHSSIbWGPXzIa0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=CMBXVOV4eW3DF+wfinzHeC/RuLmEAQF3jGUUAsXZwWZFsnxxs8NVl9JR2Cd/sI7EnazHdcRODcP8CqMrQapWdqEzRl1QftDMsoawnUmppLRb7n5RREGe4wr7OgfiNBzG9nxG0CrCGcuM0Mo0F0snuvjfU9of9QbU70jkIxvd1as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bmprNYUc; arc=none smtp.client-ip=203.254.224.34
+	 Content-Type:References; b=heSJgwVmG939t8HuHJix/XkQmCQvWDr5x836Q2vVsC/Tws93cT04JS3PPAsq/fWBr22cBI1s76CaTiar+Zr08mU+eFK6Mxw/MonaHFgDRHk2MBIHH1YPIj+1jhKPF1lGOTWpIYotPVKLJU2CxEe99FpRaXTavi4WLmXfkNeKFho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=WGpr1B3q; arc=none smtp.client-ip=203.254.224.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20251006045504epoutp0458d9da3143c4985e36b53111a12a0255~rze7IvWVG0575205752epoutp04Z
-	for <nvdimm@lists.linux.dev>; Mon,  6 Oct 2025 04:55:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20251006045504epoutp0458d9da3143c4985e36b53111a12a0255~rze7IvWVG0575205752epoutp04Z
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251006045505epoutp03d234c35e89a1847bdc04626c3d5a053e~rze7QuAid1934019340epoutp03e
+	for <nvdimm@lists.linux.dev>; Mon,  6 Oct 2025 04:55:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251006045505epoutp03d234c35e89a1847bdc04626c3d5a053e~rze7QuAid1934019340epoutp03e
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1759726504;
-	bh=VeUpxL6s70se1NIT0/5kFQloqu8hf10UstyeCcyAsOc=;
+	s=mail20170921; t=1759726505;
+	bh=y6FJyrcXjgckQdV3QCYfUXSLOftY8ZH6P9MXHgu/6EY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bmprNYUcVAPDf1NqSNw51n1ehXFJz+9eKWaAquMt34NWDmrG/tE0bpfV4CIdF+Uv9
-	 mIZ9NAfsjKpYr2RXIzecLEhen38F9RNKcyHn4IkMscPHp8+pbsrR8m1YlKi/2ES/+Q
-	 71CQyj6r3RHC97+eEwfWadHufdeHugHZD/oDJFFg=
+	b=WGpr1B3q+sazbejkR/txWGXJ/D1IGmA2SOBOEFmBPAjijv4JNBKs109L2zLNDRpXY
+	 c7WPlxD1pYLmpzq2WXD0X14QsJF0rSqfxnjhWJQ7KAR/Usr+Z+t/kAN0t2/lkSs4dZ
+	 /XXKEJpoPqqurExs3AyVCWaCgKKxZm778l0D5tu4=
 Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20251006045504epcas5p47d50392b5705f634c0c0fd32bdcc753a~rze616YY42409424094epcas5p4C;
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20251006045504epcas5p32e075bc2d63a1f63cd9ebe6a23e44bf7~rze69yGu42860328603epcas5p3E;
 	Mon,  6 Oct 2025 04:55:04 +0000 (GMT)
 Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4cg6QJ3kWxz6B9m9; Mon,  6 Oct
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4cg6QJ4gcWz6B9m6; Mon,  6 Oct
 	2025 04:55:04 +0000 (GMT)
 Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250929140029epcas5p1368952f3e4bab601c6be3a6dfa30430f~pxaIau5Ac2435724357epcas5p1h;
-	Mon, 29 Sep 2025 14:00:29 +0000 (GMT)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250929140231epcas5p44c37719e556027dacacc0a6d30a083f6~pxb54tjHD1687316873epcas5p4e;
+	Mon, 29 Sep 2025 14:02:31 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250929140027epsmtip2d2a18f5d5ac482dabab238e68b2eec9e~pxaG89UsW1219212192epsmtip2L;
-	Mon, 29 Sep 2025 14:00:27 +0000 (GMT)
-Date: Mon, 29 Sep 2025 19:30:24 +0530
+	20250929140229epsmtip2e7d848d595a6c6f7be80cdd949505956~pxb4l636B1114111141epsmtip2c;
+	Mon, 29 Sep 2025 14:02:29 +0000 (GMT)
+Date: Mon, 29 Sep 2025 19:32:25 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
-Subject: Re: [PATCH V3 19/20] cxl/pmem_region: Add sysfs attribute cxl
- region label updation/deletion
-Message-ID: <1690859824.141759726504518.JavaMail.epsvc@epcpadp1new>
+Subject: Re: [PATCH V3 20/20] cxl/pmem: Add CXL LSA 2.1 support in cxl pmem
+Message-ID: <1256440269.161759726504643.JavaMail.epsvc@epcpadp1new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <6734182c-579e-439c-906c-f3c053025ef0@intel.com>
-X-CMS-MailID: 20250929140029epcas5p1368952f3e4bab601c6be3a6dfa30430f
+In-Reply-To: <28d78d2b-c17d-4910-9f28-67af1fbb10ee@intel.com>
+X-CMS-MailID: 20250929140231epcas5p44c37719e556027dacacc0a6d30a083f6
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----u9L2QgHoAwvmxKKc9G9JEwVzlbmkcdkJo4LdlrEXZ6gvS-I0=_751f_"
+	boundary="----mxO_4HALYOJvr1vdRg0el_y50LUdjfkHM5FQPcyM.heriKG9=_74d4_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20250917134211epcas5p17cf5e4052df126a67b27be971be82fe1
+X-CMS-RootMailID: 20250917134213epcas5p139ba10deb2f4361f9bbab8e8490c4720
 References: <20250917134116.1623730-1-s.neeraj@samsung.com>
-	<CGME20250917134211epcas5p17cf5e4052df126a67b27be971be82fe1@epcas5p1.samsung.com>
-	<20250917134116.1623730-20-s.neeraj@samsung.com>
-	<6734182c-579e-439c-906c-f3c053025ef0@intel.com>
+	<CGME20250917134213epcas5p139ba10deb2f4361f9bbab8e8490c4720@epcas5p1.samsung.com>
+	<20250917134116.1623730-21-s.neeraj@samsung.com>
+	<28d78d2b-c17d-4910-9f28-67af1fbb10ee@intel.com>
 
-------u9L2QgHoAwvmxKKc9G9JEwVzlbmkcdkJo4LdlrEXZ6gvS-I0=_751f_
+------mxO_4HALYOJvr1vdRg0el_y50LUdjfkHM5FQPcyM.heriKG9=_74d4_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
 
-On 24/09/25 01:25PM, Dave Jiang wrote:
+On 24/09/25 01:47PM, Dave Jiang wrote:
 >
->
-
-<snip>
-
->On 9/17/25 6:41 AM, Neeraj Kumar wrote:
->> Using these attributes region label is added/deleted into LSA. These
->> attributes are called from userspace (ndctl) after region creation.
->> +static ssize_t region_label_update_store(struct device *dev,
->> +					 struct device_attribute *attr,
->> +					 const char *buf, size_t len)
+>> +++ b/drivers/cxl/core/pmem_region.c
+>> @@ -290,3 +290,56 @@ int devm_cxl_add_pmem_region(struct cxl_region *cxlr)
+>>  	return rc;
+>>  }
+>>  EXPORT_SYMBOL_NS_GPL(devm_cxl_add_pmem_region, "CXL");
+>> +
+>> +static int match_free_ep_decoder(struct device *dev, const void *data)
 >> +{
->> +	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
->> +	struct cxl_region *cxlr = cxlr_pmem->cxlr;
->> +	ssize_t rc;
->> +	bool update;
->> +
->> +	rc = kstrtobool(buf, &update);
->> +	if (rc)
->> +		return rc;
->> +
->> +	ACQUIRE(rwsem_write_kill, rwsem)(&cxl_rwsem.region);
->> +	rc = ACQUIRE_ERR(rwsem_write_kill, &rwsem);
->> +	if (rc)
->> +		return rc;
->> +
->> +	/* Region not yet committed */
->> +	if (update && cxlr && cxlr->params.state != CXL_CONFIG_COMMIT) {
->> +		dev_dbg(dev, "region not committed, can't update into LSA\n");
->> +		return -ENXIO;
->> +	}
->> +
->> +	if (cxlr && cxlr->cxlr_pmem && cxlr->cxlr_pmem->nd_region) {
->> +		rc = nd_region_label_update(cxlr->cxlr_pmem->nd_region);
->> +		if (!rc)
->> +			cxlr->params.region_label_state = 1;
->> +	}
->> +
->> +	if (rc)
->> +		return rc;
+>> +	struct cxl_decoder *cxld = to_cxl_decoder(dev);
 >
->Feels like this segment should look like
+>I think this is needed if the function is match_free_ep_decoder().
 >
->if (!cxlr || !cxlr->cxlr_pmem || ! cxlr->cxlr_pmem->nd_region)
+>if (!is_endpoint_decoder(dev))
 >	return 0;
 >
->rc = nd_region_label_update(..);
->if (rc)
->	return rc;
->
->cxlr->params.region_label_state = 1;
->
+
+Yes this check is required, I will add this.
+
 >> +
->> +	return len;
+>> +	return !cxld->region;
 >> +}
+>
+>May want to borrow some code from match_free_decoder() in core/region.c. I think the decoder commit order matters?
+>
+
+Yes Dave, Looking at [1], seems commit order matters. Sure I will look
+at match_free_decoder() in core/region.c
+[1] https://lore.kernel.org/all/172964783668.81806.14962699553881333486.stgit@dwillia2-xfh.jf.intel.com/
+
+
 >> +
-
-<snip>
-
->> +static ssize_t region_label_delete_store(struct device *dev,
->> +					 struct device_attribute *attr,
->> +					 const char *buf, size_t len)
+>> +static struct cxl_decoder *cxl_find_free_ep_decoder(struct cxl_port *port)
 >> +{
->> +	struct cxl_pmem_region *cxlr_pmem = to_cxl_pmem_region(dev);
->> +	struct cxl_region *cxlr = cxlr_pmem->cxlr;
->> +	ssize_t rc;
+>> +	struct device *dev;
 >> +
->> +	ACQUIRE(rwsem_write_kill, rwsem)(&cxl_rwsem.region);
->> +	rc = ACQUIRE_ERR(rwsem_write_kill, &rwsem);
->> +	if (rc)
->> +		return rc;
+>> +	dev = device_find_child(&port->dev, NULL, match_free_ep_decoder);
+>> +	if (!dev)
+>> +		return NULL;
 >> +
->> +	if (cxlr && cxlr->cxlr_pmem && cxlr->cxlr_pmem->nd_region) {
->> +		rc = nd_region_label_delete(cxlr->cxlr_pmem->nd_region);
->> +		if (rc)
->> +			return rc;
->> +		cxlr->params.region_label_state = 0;
->> +	}
+>> +	/* Release device ref taken via device_find_child() */
+>> +	put_device(dev);
 >
->Similar to above. You can exit early and not have to indent.
->
->> +
->> +	return len;
->> +}
+>Should have the caller put the device.
 
-<snip>
-
->> --- a/drivers/cxl/cxl.h
->> +++ b/drivers/cxl/cxl.h
->> @@ -484,6 +484,7 @@ enum cxl_config_state {
->>   */
->>  struct cxl_region_params {
->>  	enum cxl_config_state state;
->> +	int region_label_state;
->
->Maybe a enum?
->
-
-Thanks for you suggestion Dave, I will fix it accrodingly.
+Its like taking device ref temporarly and releasing it then and there
+after finding proper root decoder. I believe, releasing device ref
+from caller would make it look little out of context.
 
 
 Regards,
 Neeraj
 
-
-------u9L2QgHoAwvmxKKc9G9JEwVzlbmkcdkJo4LdlrEXZ6gvS-I0=_751f_
+------mxO_4HALYOJvr1vdRg0el_y50LUdjfkHM5FQPcyM.heriKG9=_74d4_
 Content-Type: text/plain; charset="utf-8"
 
 
-------u9L2QgHoAwvmxKKc9G9JEwVzlbmkcdkJo4LdlrEXZ6gvS-I0=_751f_--
+------mxO_4HALYOJvr1vdRg0el_y50LUdjfkHM5FQPcyM.heriKG9=_74d4_--
 
 
