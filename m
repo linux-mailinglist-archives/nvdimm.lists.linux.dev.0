@@ -1,128 +1,157 @@
-Return-Path: <nvdimm+bounces-12075-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12077-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074E4C54AB9
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Nov 2025 23:00:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE0C6C561C7
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Nov 2025 08:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11D0E3B0774
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 12 Nov 2025 22:00:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7F0624E318C
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Nov 2025 07:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6EB2E7BDF;
-	Wed, 12 Nov 2025 22:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C682F32ED5F;
+	Thu, 13 Nov 2025 07:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9zIBYgk"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="A9l14zFZ"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4112BE7B6
-	for <nvdimm@lists.linux.dev>; Wed, 12 Nov 2025 22:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B1532F763
+	for <nvdimm@lists.linux.dev>; Thu, 13 Nov 2025 07:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762984830; cv=none; b=dCLiSdAQIhJeP0JcsF/aWYxfbO5k2ichY2YEmObZ8lajY+TZJpLr6OQz8ytrCobuKhPP1LaCfxV/9HdeHowUQPsszjeKFBty5iJ6VAQBv+H2OIn//KgeiHifCEW7VXr1RNaaqkvFmDNFv/dkgNFXfUaSglrY8bGczFVHlE4e5Pk=
+	t=1763020210; cv=none; b=YwWjwMru0wZEmgHepkm7WzEQju2kLr+qUwnAzTBk3amPrDTfYa0lDtGRVKxh3nj7ULrOZ/pm9Vh6sn0VNCMJagE7hVcaSc4aMJkq9hPzARg8p7naBLcAI6Kp2/9KeUCrQCDW3lvHUsLCmUz+wFDHE27VeBxPyftkrnZcyIHPxwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762984830; c=relaxed/simple;
-	bh=8einiIsxxf5fs/897eHpXlG7SJuYV//MoIz2CoI8zJU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lPaG1KJ+0wKVYV3bPWYNeJuBVBHWC/z9keo3vJoFJrTijSW7pdFazaKKZLeA7WXHoRnNGYYqfhwsm/5MwPpYCsjZAbUDz1Fsc2gxRNoMSy6CopLwH5v7y7e3m4P3ea0pStY7b9Inilk3vzLddKaN46raQbuu85JNdkvlJcCIxLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9zIBYgk; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762984828; x=1794520828;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=8einiIsxxf5fs/897eHpXlG7SJuYV//MoIz2CoI8zJU=;
-  b=l9zIBYgkv2O/hF3rR2dXdibBnQo1jDU5xpPVw5otEYteqDe5PhVdutXR
-   qVMlsNi2n5YYX5ispM9jDr222/l71YKyI+qvOlU1CxwQw3yB2H6IT6K4Y
-   yzWfyJ2CXDTWwL9thlApT6t28a7CJNbA5c4yXa2EXTRoaAINotw8eYFqq
-   uVGLC5i/6Uo96SKp5y9nQpcwmveWe7kpeTqrXBiMD+88gHzzBc9MTI/LK
-   W1y8EZPCfLOn8P2Ikkju6AvSPAvbDbtwykPaBVQmE2fpApoSvjDvvOdwC
-   n43GF1CrlhnqqkKp+tCPkpDGnOd/p60MfXgO5lpMDSVeR3U/gVg9N1b3I
-   A==;
-X-CSE-ConnectionGUID: 46UXsXEWQx+z1eWGNfw10w==
-X-CSE-MsgGUID: 7WNy8Sp9TjictNv6gavbww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="90531633"
-X-IronPort-AV: E=Sophos;i="6.19,300,1754982000"; 
-   d="scan'208";a="90531633"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 14:00:27 -0800
-X-CSE-ConnectionGUID: 1QCUs/zCQK+XlTSS1RIXGQ==
-X-CSE-MsgGUID: KYiiAINDSq+BzGWhFk8I1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,300,1754982000"; 
-   d="scan'208";a="219985121"
-Received: from spandruv-mobl4.amr.corp.intel.com (HELO [10.125.108.30]) ([10.125.108.30])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 14:00:27 -0800
-Message-ID: <74468bd1-4eed-4a4a-ac8c-ab01cac90f06@intel.com>
-Date: Wed, 12 Nov 2025 15:00:26 -0700
+	s=arc-20240116; t=1763020210; c=relaxed/simple;
+	bh=rPpv0YpI1s5IrHKxhIrzkZ9tfhot0vKl5EEgO7jMoXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=K4GeU6kKYsxUrCCTIWbbq+RZI7f1NQ5AIab/i5ZKZ6ErHmnDQ2/DZE8CTrGQir676uFveNei2L3x1ZEXMzSIRL52zH0jU70djelG3Fybgimj6uLeMD+1tIG86iGWSLwxnUVjL7BbRuVCEaESQxCpDp4CLsOzj02a0noAuNbvADI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=A9l14zFZ; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251113075002epoutp03ed3f9f753f1d130adfec881624a36c6f~3gYiBfUbt1120511205epoutp03D
+	for <nvdimm@lists.linux.dev>; Thu, 13 Nov 2025 07:50:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251113075002epoutp03ed3f9f753f1d130adfec881624a36c6f~3gYiBfUbt1120511205epoutp03D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1763020202;
+	bh=rPpv0YpI1s5IrHKxhIrzkZ9tfhot0vKl5EEgO7jMoXw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=A9l14zFZuSkh+OidejInaqgr+qLiNd+IwX/OebIx1AoomckDymuGsivNFVyzMEwEE
+	 JSpmaW/oWo78pYwbzW5R0ws3qAspDdoj3sXsTWRSHOx+ipaBSxoHOIkeVTrc3C01kf
+	 ItnqK9I6WqBjgC2a/DoCJ+mazpcyG9U01k/sEP2M=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20251113075002epcas5p2223c3bb7ed92c0b3dd1494dc7113ef43~3gYhvQe4-2564525645epcas5p2O;
+	Thu, 13 Nov 2025 07:50:02 +0000 (GMT)
+Received: from epcpadp1new (unknown [182.195.40.141]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4d6XVf0cddz6B9m6; Thu, 13 Nov
+	2025 07:50:02 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251113072717epcas5p22ac6aa251df5c33fadfe2c100ab833b1~3gEqdwnW62353123531epcas5p2U;
+	Thu, 13 Nov 2025 07:27:17 +0000 (GMT)
+Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20251113072715epsmtip1f93902a24349817692a96ba43c340c6c~3gEpFe0zQ2815128151epsmtip1S;
+	Thu, 13 Nov 2025 07:27:15 +0000 (GMT)
+Date: Thu, 13 Nov 2025 12:57:09 +0530
+From: Neeraj Kumar <s.neeraj@samsung.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
+	cpgs@samsung.com
+Subject: Re: [PATCH V3 13/20] cxl/mem: Refactor cxl pmem region
+ auto-assembling
+Message-ID: <1983025922.01763020202072.JavaMail.epsvc@epcpadp1new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v4 1/2] acpi/hmat: Return when generic target is
- updated
-From: Dave Jiang <dave.jiang@intel.com>
-To: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
- linux-acpi@vger.kernel.org
-Cc: dan.j.williams@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com,
- rafael@kernel.org, Jonathan Cameron <jonathan.cameron@huawei.com>
-References: <20251105235115.85062-1-dave.jiang@intel.com>
- <20251105235115.85062-2-dave.jiang@intel.com>
-Content-Language: en-US
-In-Reply-To: <20251105235115.85062-2-dave.jiang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <a204bc0e-1111-4ff9-a8d2-eeb8b7b9fe8d@intel.com>
+X-CMS-MailID: 20251113072717epcas5p22ac6aa251df5c33fadfe2c100ab833b1
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----DpLuDkH5jVwtRmV_no6S5rPRFid5ecuUEflgz2nUXUkLddKC=_bc0e0_"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20250917134157epcas5p1b30306bc8596b7b50548ddf3683c3b97
+References: <20250917134116.1623730-1-s.neeraj@samsung.com>
+	<CGME20250917134157epcas5p1b30306bc8596b7b50548ddf3683c3b97@epcas5p1.samsung.com>
+	<20250917134116.1623730-14-s.neeraj@samsung.com>
+	<c7b41eb6-b946-4ac0-9ddd-e75ba4ceb636@intel.com>
+	<1296674576.21759726502325.JavaMail.epsvc@epcpadp1new>
+	<361d0e84-9362-4389-a909-37878910b90f@intel.com>
+	<1983025922.01762749301758.JavaMail.epsvc@epcpadp1new>
+	<a204bc0e-1111-4ff9-a8d2-eeb8b7b9fe8d@intel.com>
+
+------DpLuDkH5jVwtRmV_no6S5rPRFid5ecuUEflgz2nUXUkLddKC=_bc0e0_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+
+On 12/11/25 08:55AM, Dave Jiang wrote:
+>
+>
+
+<snip>
+
+>> During cxl_pci_probe() we call devm_cxl_add_memdev(struct cxl_memdev_ops *ops)
+>> where function pointer as ops gets registered which gets called in cxl_mem_probe()
+>> using cxlmd->ops->probe()
+>>
+>> The probe callback runs after the port topology is successfully attached for
+>> the given memdev.
+>>
+>> So to use this infra we have to pass cxl_region_discovery() as ops parameter
+>> of devm_cxl_add_memdev() getting called from cxl_pci_probe().
+>>  
+>> In this patch-set cxl_region_discovery() signature is different from cxlmd->ops->probe()
+>>
+>>    {{{
+>>     void cxl_region_discovery(struct cxl_port *port)
+>>     {
+>>             device_for_each_child(&port->dev, NULL, discover_region);
+>>     }
+>>
+>>     struct cxl_memdev_ops {
+>>             int (*probe)(struct cxl_memdev *cxlmd);
+>>     };
+>>    }}}
+>>
+>> Even after changing the signature of cxl_region_discovery() as per cxlmd->ops->probe()
+>> may create problem as when the ops->probe() fails, then it will halts the probe sequence
+>> of cxl_pci_probe()
+>>
+>> It is because discover_region() may fail if two memdevs are participating into one region
+>
+>While discover_region() may fail, the return value is ignored. The current code disregards failures from device_for_each_child(). And also above, cxl_region_discovery() returns void. So I don't follow how ops->probe() would fail if we ignore errors from discover_region().
+>
+>DJ
+
+Hi Dave,
+
+Yes, you are correct. We can just change signature of cxl_region_discovery() as per
+cxlmd->ops->probe(), anyway we are ignoring errors from discover_region().
+With this change we can directly register cxl_region_discovery() with
+devm_cxl_add_memdev(struct cxl_memdev_ops *ops) during pci_probe() using Dan's Infra.
+
+I will use this new infra for region auto-assembling and share the v4 series shortly.
 
 
+Regards,
+Neeraj
 
-On 11/5/25 4:51 PM, Dave Jiang wrote:
-> With the current code flow, once the generic target is updated
-> target->registered is set and the remaining code is skipped.
-> So return immediately instead of going through the checks and
-> then skip.
-> 
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+------DpLuDkH5jVwtRmV_no6S5rPRFid5ecuUEflgz2nUXUkLddKC=_bc0e0_
+Content-Type: text/plain; charset="utf-8"
 
-Applied to cxl/next
-15e14267889bde30b7b82bc03432483222b4b42c
 
-> ---
-> no changes
-> ---
->  drivers/acpi/numa/hmat.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
-> index 5a36d57289b4..1dc73d20d989 100644
-> --- a/drivers/acpi/numa/hmat.c
-> +++ b/drivers/acpi/numa/hmat.c
-> @@ -888,12 +888,13 @@ static void hmat_register_target(struct memory_target *target)
->  	 * Register generic port perf numbers. The nid may not be
->  	 * initialized and is still NUMA_NO_NODE.
->  	 */
-> -	mutex_lock(&target_lock);
-> -	if (*(u16 *)target->gen_port_device_handle) {
-> -		hmat_update_generic_target(target);
-> -		target->registered = true;
-> +	scoped_guard(mutex, &target_lock) {
-> +		if (*(u16 *)target->gen_port_device_handle) {
-> +			hmat_update_generic_target(target);
-> +			target->registered = true;
-> +			return;
-> +		}
->  	}
-> -	mutex_unlock(&target_lock);
->  
->  	/*
->  	 * Skip offline nodes. This can happen when memory
+------DpLuDkH5jVwtRmV_no6S5rPRFid5ecuUEflgz2nUXUkLddKC=_bc0e0_--
 
 
