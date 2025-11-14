@@ -1,137 +1,124 @@
-Return-Path: <nvdimm+bounces-12076-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12078-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F14AC561C4
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Nov 2025 08:50:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF5EBC5D188
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 14 Nov 2025 13:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 326A3343752
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 13 Nov 2025 07:50:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEAA43B7F9B
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 14 Nov 2025 12:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F3E33030A;
-	Thu, 13 Nov 2025 07:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21A014B950;
+	Fri, 14 Nov 2025 12:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="WO4ou/E7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ba/pQdDU"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739B632F74B
-	for <nvdimm@lists.linux.dev>; Thu, 13 Nov 2025 07:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B65F145A1F
+	for <nvdimm@lists.linux.dev>; Fri, 14 Nov 2025 12:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763020207; cv=none; b=r9VmasD6axb5XXthggF53sfbD1PhmhWs8kXM5Ai5fijyroVsqRnt/XF62eo6HQ30ab6XMZEhlZb/meJlqC9x4hWXSBYqORyHr6wdJMg64rIOResQ2ZgMhSxOjndk5RxIPehkN2hVso0VsInVA3gm72lmtGqvGYEGpoJnw8gXB8w=
+	t=1763123104; cv=none; b=icMS8VhzVAIDQ2hZ4X1/y3+3Yw39BjEyr/z1R5p6SwiMCKxzJH2caMOkXkp8CWHC69PPUN8jO1J1sxzee7Utmn7FNGhdAZ0TU86vnBMAkIPNtO8R4JODkRL1/wB09pLVXIC6enfKbkf+EQdI3kea3Q0tmW0jpbis7XKqpOYjv4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763020207; c=relaxed/simple;
-	bh=Tivo3GFoS1phCSWYDeFF9DTpbwFBRvC/+ODFjHKNmMg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=GcZtS11llMso7h724jduriL8pkmAlln6vDVwsPNXHN1aI7JEl3c/QoQzzDP5Jk04R9S8/H+E/BGUfa6Q2Pt+MaQgSz4Jfo47cipxid5B1pMKwanMzCwq65BG8f4ybWn/WnU8XzNoBdI5t97I895qYlNPwseouSYw652uADFu55w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=WO4ou/E7; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20251113075003epoutp0107a833fb9ed76b17d37e145d2d75d6d7~3gYjBQtBB2267122671epoutp01i
-	for <nvdimm@lists.linux.dev>; Thu, 13 Nov 2025 07:50:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20251113075003epoutp0107a833fb9ed76b17d37e145d2d75d6d7~3gYjBQtBB2267122671epoutp01i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1763020203;
-	bh=PrAqxrRuWP1UVQFq/hrOFrgLMn50SDu0myTwZAkgdZI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WO4ou/E77rffoLa78AnZDACnmFJhzfBQy4ehPdp13sv/7/pFDdZhU0zGPs2HjgMNC
-	 juHU2D5cmG9lDg21yK+lsymvvJ9hPkUjn3yblbmpHBuF+hqEUs8Ieo4DWAmyvBlbQY
-	 7nvphZMHGVOJyn51CiKz2I244Rmm85GAtHjuqssE=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20251113075003epcas5p169a8bfdf20f110a1a12a42123b741e19~3gYitkL9g2606826068epcas5p1f;
-	Thu, 13 Nov 2025 07:50:03 +0000 (GMT)
-Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4d6XVg0xcKz2SSKf; Thu, 13 Nov
-	2025 07:50:03 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20251113072918epcas5p3995164aced1a029b71ba5807705531f9~3gGbV46ey2448624486epcas5p3o;
-	Thu, 13 Nov 2025 07:29:18 +0000 (GMT)
-Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20251113072913epsmtip1b466bafcc451ab1ad11391ed310e73cd~3gGXHnJBP2873728737epsmtip16;
-	Thu, 13 Nov 2025 07:29:13 +0000 (GMT)
-Date: Thu, 13 Nov 2025 12:59:07 +0530
-From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
-	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
-	cpgs@samsung.com
-Subject: Re: [PATCH V3 18/20] cxl/pmem_region: Prep patch to accommodate
- pmem_region attributes
-Message-ID: <1931444790.41763020203119.JavaMail.epsvc@epcpadp1new>
+	s=arc-20240116; t=1763123104; c=relaxed/simple;
+	bh=D7DC5uL4Z2X8dZSOZq44ppvBWzR1P9VrOwHfckJIB74=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t+rKFmZNUKBRNZICu/TjKCP4384nlxdKxCzsPMbdzWk+w4CBJx+DVLG6mZgBkMEa3gUuGZ2VPAqMfmvqvh1Zh5dOmOvZJ/tyyiUgg2GuGOTELeyfOo2rOKT84NikuMo/8k02N1gQkAw+UaBzNNY/5JKhSelzbwl6z2oG9RVRNtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ba/pQdDU; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-643165976dcso6995a12.1
+        for <nvdimm@lists.linux.dev>; Fri, 14 Nov 2025 04:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763123101; x=1763727901; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnqGkWyuyOdPpbsRCorGUws6JHDjFj9s2aEZUULAgcI=;
+        b=ba/pQdDUOoPbLRo5p3cU73jY5caqZhPm5TBmnax+awVXtSlGPTbO4wBh5PpDECD8xZ
+         LCJJk26rly2b4jcluiyQnXC9r+fscohxGKTJxCLZS2pY5NqM2+XRv8Kn34RlW3P5xa0o
+         TNayQ7VyYP9dkMRfibyRUfbKr/O75aiSLmV+na8fydoyh3e90fGVhUoLnhuwHoYqkyR4
+         WfajalHd8gX4Psv+P41CPW9gz2eky6HOYbxUUsnin9G8w2Zj/mnyfAcc0d2EOZoytOwE
+         MwDRWvnZb93RwxSQ9SjQvImO9sla0babITsAcTr14VS0WJgMUEstViyqrw25FZ5S36pG
+         yRCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763123101; x=1763727901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CnqGkWyuyOdPpbsRCorGUws6JHDjFj9s2aEZUULAgcI=;
+        b=f5vyA0LJBWo7Px44TzkAu7rFkxtbVGdr9+vje7gw+fS/mX0P/y6TUNE4XF3wKv5Lx8
+         0W54CZhixxpVaq0itfQJgFZj6MwjWh+nbnaY0jH5PHGtGUttEkb/8RItn99SGVszqbtb
+         FnK+keW9sUFy367Lgc+HS1p7g+on5YR4UWXsJWiIi17tUOEXYtIejLc85AFLyXIzOJAN
+         8ZRsZklu4b3U0NZZuxiwBT4SFKnhR4gSpFwYjAx5DWRjUBFRmCoG1ASjfRL0FocIbA0j
+         cveO6s/eJZfKvjDZsM7kOdLG0Twg5bRiqsYCAF1olQJhV6dvepw6Sl5bQQXFbhy4Li3s
+         cS9g==
+X-Forwarded-Encrypted: i=1; AJvYcCX5/lDKG3IBcAknVS9iZe2KkeWLZfnnxn/uUdexfLJNuaC9BTJoHakRgEwzZFHydriFHCIEDaU=@lists.linux.dev
+X-Gm-Message-State: AOJu0YycJ6VExLn0iDbDo+MPj1f+XWWLQs95DS/ktLOK5JVOGWREF+dv
+	hK3Sse5J8CkUz77n/FNPHMizuZN0KjnHKEkUcO4gNve0mug5MyJZYj3Ld6wItuxcYcFlYiQSJ4n
+	YdHuG772GPmpipOft2rfFum+Z3oJXx/oXLmNZhafS
+X-Gm-Gg: ASbGncs7GCNyglAlFhEruBva9LJfBflAxzsfLpGPosxZ+Sy87dh1ttr9zSmLXrQRRpM
+	hT7+7bpU/OVhhCkrLS1OeuRctuJp+2TzSTI3o/PbDF3Pe8VbgmwHbL51Umb/DVCoB9FIA2rRDOd
+	cYgo3VbEvXGK1Qtf2VZa3N5yAKAquNd+1Fey9Pl38neJXs9qNASq8v0slXZubAVqgGl+t7b3gY7
+	rFadvxn29X/DnM6jbPrtXFMiltSXKt+VX5CaBtDmDO/BIWW+gd+SyC9XzDYKOYejqhTQwiTFC/a
+	cdHBDOnd7mBgED0dNZLMsfac2duTk2HmTaOn
+X-Google-Smtp-Source: AGHT+IH5irDABmMGZpAhpnUvlVYenFsVwXZ6X2xmt7hHD2N3QUeeQ21yBa4LfJ9O3U3wPXL+fECXsccLV9IYfniWJJI=
+X-Received: by 2002:aa7:c4d1:0:b0:624:45d0:4b33 with SMTP id
+ 4fb4d7f45d1cf-64355121feamr44767a12.7.1763123100641; Fri, 14 Nov 2025
+ 04:25:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <2aca7703-fae6-46bb-bef1-ee29e822b4c8@intel.com>
-X-CMS-MailID: 20251113072918epcas5p3995164aced1a029b71ba5807705531f9
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----xsJXu.fD5V5xDhddWNWtQINaZQo.kzBR_hLvg.7oVeVxw7Lp=_bb9c1_"
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20250917134209epcas5p1b7f861dbd8299ec874ae44cbf63ce87c
-References: <20250917134116.1623730-1-s.neeraj@samsung.com>
-	<CGME20250917134209epcas5p1b7f861dbd8299ec874ae44cbf63ce87c@epcas5p1.samsung.com>
-	<20250917134116.1623730-19-s.neeraj@samsung.com>
-	<147c4f1a-b8f6-4a99-8469-382b897f326d@intel.com>
-	<1279309678.121759726504330.JavaMail.epsvc@epcpadp1new>
-	<6e893bd1-467a-4e9a-91ca-536afa6e4767@intel.com>
-	<1296674576.21762749302024.JavaMail.epsvc@epcpadp1new>
-	<2aca7703-fae6-46bb-bef1-ee29e822b4c8@intel.com>
+References: <20251024210518.2126504-1-mclapinski@google.com>
+In-Reply-To: <20251024210518.2126504-1-mclapinski@google.com>
+From: =?UTF-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
+Date: Fri, 14 Nov 2025 13:24:49 +0100
+X-Gm-Features: AWmQ_bl8jW_docsBVraFMSwYLTTq5hk31EtHqWGFvt8QiGs4Z3vqGdZ08ivlenU
+Message-ID: <CAAi7L5dWCNiD2WOfowdaca09_i6Z2-8xFqatOpjPjA335puuVQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] dax: add PROBE_PREFER_ASYNCHRONOUS to all the dax drivers
+To: Dan Williams <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org, 
+	Ira Weiny <ira.weiny@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-------xsJXu.fD5V5xDhddWNWtQINaZQo.kzBR_hLvg.7oVeVxw7Lp=_bb9c1_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
-
-On 12/11/25 08:40AM, Dave Jiang wrote:
+On Fri, Oct 24, 2025 at 11:05=E2=80=AFPM Michal Clapinski <mclapinski@googl=
+e.com> wrote:
+>
+> Comments in linux/device/driver.h say that the goal is to do async
+> probing on all devices. The current behavior unnecessarily slows down
+> the boot by synchronously probing dax devices, so let's change that.
+>
+> For thousands of devices, this change saves >1s of boot time.
+>
+> Michal Clapinski (5):
+>   dax: add PROBE_PREFER_ASYNCHRONOUS to the pmem driver
+>   dax: add PROBE_PREFER_ASYNCHRONOUS to the kmem driver
+>   dax: add PROBE_PREFER_ASYNCHRONOUS to the cxl driver
+>   dax: add PROBE_PREFER_ASYNCHRONOUS to the hmem drivers
+>   dax: add PROBE_PREFER_ASYNCHRONOUS to the dax device driver
+>
+>  drivers/dax/cxl.c       | 1 +
+>  drivers/dax/device.c    | 3 +++
+>  drivers/dax/hmem/hmem.c | 2 ++
+>  drivers/dax/kmem.c      | 3 +++
+>  drivers/dax/pmem.c      | 1 +
+>  5 files changed, 10 insertions(+)
+>
+> --
+> 2.51.1.821.gb6fe4d2222-goog
 >
 
-<snip>
++Ira (you're not listed as a maintainer of drivers/dax/ in the MAINTAINERS =
+file)
 
->> Keeping these functions in core/region.c (CONFIG_REGION)) and manually enabling CONFIG_LIBNVDIMM=y
->> will make it pass.
->>
->> Even if we can put these functions in core/region.c and forcefully make
->> libnvdimm (CONFIG_LIBNVDIMM) dependent using Kconfig. But I find it little improper as
->> this new dependency is not for all type of cxl devices (vmem and pmem) but only for cxl pmem
->> device region.
->>
->> Therefore I have seperated it out in core/pmem_region.c under Kconfig control
->> making libnvdimm forcefully enable if CONFIG_CXL_PMEM_REGION == y
->>
->> So, I believe this prep patch is required for this LSA 2.1 support.
->
->I think you misunderstood what I said. What I was trying to say is if possible to move all the diff changes of moving the existing code to a different place to a different patch. That way this patch is not full of those diff changes and make it easier to review.
->
->DJ
-
-Hi Dave, Thanks for the clarification. Yes now I am able to get your point clear.
-
-I should split this patch into two patches
-1. First prep patch with no functionality change (Just code movement from core/region.c to newly core/pmem_region.c)
-2. Second patch which calls the libnvdimm exported routines
-	- region_label_update_show/store()
-	- region_label_delete_store()
-
-Regards,
-Neeraj
-
-------xsJXu.fD5V5xDhddWNWtQINaZQo.kzBR_hLvg.7oVeVxw7Lp=_bb9c1_
-Content-Type: text/plain; charset="utf-8"
-
-
-------xsJXu.fD5V5xDhddWNWtQINaZQo.kzBR_hLvg.7oVeVxw7Lp=_bb9c1_--
-
+Is there anything else required from my side or can this be merged?
 
