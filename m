@@ -1,223 +1,546 @@
-Return-Path: <nvdimm+bounces-12089-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12091-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B87CAC6BC0D
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Nov 2025 22:46:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0444FC6D3E0
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Nov 2025 08:53:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 6F6C02A32E
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 18 Nov 2025 21:46:08 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 321DD29F54
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 19 Nov 2025 07:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3371230FC04;
-	Tue, 18 Nov 2025 21:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62FD8325496;
+	Wed, 19 Nov 2025 07:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ODuyHLCT"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NHveG0Gp"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F06930F535
-	for <nvdimm@lists.linux.dev>; Tue, 18 Nov 2025 21:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763502367; cv=fail; b=aqM9XsP3bufLEP1zzaS5qvDlM6jNYDjkGZylMbVC5TxID80RVMVoe02LUALkc74s1Piq1zrCbZdaGEARpyA6XPL+ES8bwGkl24rvMroyNAapFv/zVmqvYEgapLetbRBiUzcYo1tIRug9tQk0DV2ULotvKaOQj/FzuUNqJWbnZo4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763502367; c=relaxed/simple;
-	bh=u4uLNKTBxByM0S5SNZvvn3YtzVj2Radif+WUwREBN4Q=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=jIq3S/HY0l92zklEVtoEdakffs3G4hNE5WhYU6QQNBufX5YKjD5UPAYE0MKgJa8lEAsjjI6DuJYKTLzAN1OOQHTq6TzbgvW7lvTvKNIKfwQlnrcV5UjCW7TaymnmuXpjvS1OK1x6ukU1o/UFvu/1e7glFOPjCIiwoHRH7Jug0j4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ODuyHLCT; arc=fail smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763502366; x=1795038366;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=u4uLNKTBxByM0S5SNZvvn3YtzVj2Radif+WUwREBN4Q=;
-  b=ODuyHLCT3wpmu4oIkelgx8E6dVLsBalUkoX8aFbz+kDPgJfNCf+PgoGH
-   ZQUjfNgbYXFa42DnwUG0huWsEd9h4Eu9Cn0MyJn9spkwuhq+4NCWWQue5
-   eiT02RY9lQzIF9Q7qYVSnSztPuEtoZjMOnDQQpjrsO7A7+2nO3Bg4D79e
-   KuIBFppE5m0TR3yx9hfm03LpL3aBhg7Y23Ukv4RjADRqkhxCesAkSiygf
-   OHDYnyKgK+l3y9qoGOPkvUern6FENW/+prFPfFk6h6MdwSBot53oU32kJ
-   8F6UIw0UeQn70qSE5E33ujjIf5BJIivNNn4tabtomkK49j+gfZ226FN2c
-   A==;
-X-CSE-ConnectionGUID: w66UafHYTLebsKyixiEKeA==
-X-CSE-MsgGUID: U8OO8xshQtioHhzUry6HZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="53109528"
-X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="53109528"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 13:46:05 -0800
-X-CSE-ConnectionGUID: tZwhqt0kQM+fOtW5dVemuQ==
-X-CSE-MsgGUID: MQn1OtmZRcemFHsPduzEoQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="195336276"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 13:46:06 -0800
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Tue, 18 Nov 2025 13:46:04 -0800
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Tue, 18 Nov 2025 13:46:04 -0800
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.23)
- by edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Tue, 18 Nov 2025 13:46:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XWFHFRNPgFX1Ad0UakD424NJZa9iOrr0GnV6oOQlh9iNY+qhNYYNY8N7hmb2eSH4Ai9SqhhHHWAgOy6G05DZsFxa3G8vhJZKCq2K8aDZ2nbskWbJTmwD7Yj7kcQiRfdZaArk5CZaJQ4P/aoUr360kHG/gD+SqXxOuErizioPhmDW7jYm0xQBUB3Hnm22WxVh7nOGeRLeXeW3wot2R0gwlPY1HsP2dlvagWLrIZyKfnuSgnlmdDM7v03H6MGbdF1OPVU7VQrAUHK+mzZ2pHJ0gTcxIWN3hLAwuwvuhMXPwePZebzZ6q07bUXkBlFSacFjDOtBhp0SUHjL8Jh/cxKy9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9byK+qkhl//aW6M1v4hzs3ZmQt03y9xVhEOtiryvR4I=;
- b=QkW+tMLwe9zBrehRTuXMlKab2Bx3AgWovs6MajmkzrOqyf6dW8m0rncsE2gIxSgPwgH1stMoSL/+a0AJV7H7rcP0G0SG6Z7bphyoozk1ggDGibu2LJnCanzAbWdhsChWOvvtflCmjLW669IgR8kk2a0BPAqu1NcszL2IddIz0Nv9d2r6tB1tjvZbTwNS6JLG9HyaHJAMSm83Eb/VdNnGuUpn5SPEpm32ZAoUo65u2OYfwaT8bsKFdCv+DVx8nXzN1kNXKXus41AlotkB5rnUdbwvGtMtXVdjat3ognStzF2AKSOUmV8vR6qgApGsIBb5X+DZ/+fkhGW77hy9gzbBtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
- (2603:10b6:518:1::d3c) by SJ5PPF3A51834D3.namprd11.prod.outlook.com
- (2603:10b6:a0f:fc02::821) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.19; Tue, 18 Nov
- 2025 21:46:03 +0000
-Received: from PH3PPF9E162731D.namprd11.prod.outlook.com
- ([fe80::8289:cecc:ea5b:f0c]) by PH3PPF9E162731D.namprd11.prod.outlook.com
- ([fe80::8289:cecc:ea5b:f0c%8]) with mapi id 15.20.9320.021; Tue, 18 Nov 2025
- 21:46:02 +0000
-Date: Tue, 18 Nov 2025 15:48:28 -0600
-From: Ira Weiny <ira.weiny@intel.com>
-To: Michal Clapinski <mclapinski@google.com>, Dan Williams
-	<dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, "Dave
- Jiang" <dave.jiang@intel.com>, <nvdimm@lists.linux.dev>,
-	<linux-cxl@vger.kernel.org>
-CC: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	<linux-kernel@vger.kernel.org>, Michal Clapinski <mclapinski@google.com>
-Subject: Re: [PATCH v3 5/5] dax: add PROBE_PREFER_ASYNCHRONOUS to the dax
- device driver
-Message-ID: <691ce9acae44c_7a9a10020@iweiny-mobl.notmuch>
-References: <20251024210518.2126504-1-mclapinski@google.com>
- <20251024210518.2126504-6-mclapinski@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251024210518.2126504-6-mclapinski@google.com>
-X-ClientProxiedBy: SJ0PR03CA0276.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::11) To PH3PPF9E162731D.namprd11.prod.outlook.com
- (2603:10b6:518:1::d3c)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233D92E0927
+	for <nvdimm@lists.linux.dev>; Wed, 19 Nov 2025 07:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763538800; cv=none; b=I75RqXvaNROwzg8/41WfEpLWNmIL6UFTiO2cEkxz50T5wXPGyY4J6gaJDWnBKTEvL8xrchTpCAszB+veS56Tmky4vVCiiF6GPk7xw2yBR4RF7f574rVtWtHqzNb+u9eczHKOkwjN9M0mR6KF8PE4eCN1xz7sCR+6DU7qGVQji24=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763538800; c=relaxed/simple;
+	bh=OoCL1vidC1ntP9kYRf1m8AIPcicVLQBDHrkJGLprSns=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=d+V0uvc9iRuhUnFvRDLbbl8YC7sqt+85Gz7vOh29KOoiaWcfbD5FxKSmw0jAuEK9Wls3wK481Soz1Sq7CWNUIUjADAvmx8HwIg1rhKE7DKaLWCpTdubSym2DAvhGdIl/zi214Mr7YUwb3Vu5XgkzB0WWN6OiYfKzFVXa9NiBlTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NHveG0Gp; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20251119075309epoutp0128e8051b4a980fbf77906ea6bca7c2d9~5WS9ay6dR0084400844epoutp01G
+	for <nvdimm@lists.linux.dev>; Wed, 19 Nov 2025 07:53:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20251119075309epoutp0128e8051b4a980fbf77906ea6bca7c2d9~5WS9ay6dR0084400844epoutp01G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1763538789;
+	bh=uuYvamklocyJ1nt6pfnCiZclsSZY1+fnIhhnYcUECwE=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=NHveG0GpTjnytAzQ0GeNt7Uo/sbb8yrKinrpGxBhMErNwYe04svIc2nn+MiTvifIo
+	 hQJNQqXbfD34tDFSIxucVlFDtq6/gDQWnArBCU0QwsbhoxW2kmysg/uS8RZvSx1S8G
+	 HeD81eI1IU6V8110gLah+s86OEnXphHLh40JEJms=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20251119075308epcas5p1363d19d3781b21ec66dc9207f0bfaffb~5WS9G1Gin3162631626epcas5p1A;
+	Wed, 19 Nov 2025 07:53:08 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.38.95]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4dBDHR2bQDz6B9mN; Wed, 19 Nov
+	2025 07:53:07 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251119075306epcas5p22a87515de65a3c668275b394cdea83b0~5WS65--3F0870808708epcas5p2t;
+	Wed, 19 Nov 2025 07:53:06 +0000 (GMT)
+Received: from test-PowerEdge-R740xd.samsungds.net (unknown [107.99.41.79])
+	by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20251119075305epsmtip15da946aa7a10f362be19e9dbf13ae1f5~5WS5xQKv92565625656epsmtip1_;
+	Wed, 19 Nov 2025 07:53:04 +0000 (GMT)
+From: Neeraj Kumar <s.neeraj@samsung.com>
+To: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, gost.dev@samsung.com
+Cc: a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
+	Neeraj Kumar <s.neeraj@samsung.com>
+Subject: [PATCH V4 00/17] Add CXL LSA 2.1 format support in nvdimm and cxl
+ pmem
+Date: Wed, 19 Nov 2025 13:22:38 +0530
+Message-Id: <20251119075255.2637388-1-s.neeraj@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH3PPF9E162731D:EE_|SJ5PPF3A51834D3:EE_
-X-MS-Office365-Filtering-Correlation-Id: d715af15-d201-41e9-76f7-08de26ebde7e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?vTt5SCwVNHBFzI3KCk9ai5YWFEm2r0KCSgNuwbfAvvwkREWx8azlDF14fz6/?=
- =?us-ascii?Q?hgYe1VCWPk7SUdp9F2AtdPZ8AFskPOLB5zc+yAxl0j5bf6Lg2KKTYyVWGzu/?=
- =?us-ascii?Q?y8i1V6FuzqS51Vz2LDanK3QDPv2Uk/bZErdtwvAYEBUsNCQwrgXW6VzTJvlY?=
- =?us-ascii?Q?n9h3gZXb0EURAa9L/CzTOZudH397mElU++mZ41ITh8XAH26jHAS9XKiS2Xnb?=
- =?us-ascii?Q?bX6YNuZFq0t5KS0oAqUzhVLWooq1Tcht3bAMg08mxk/LGwpsokymdlX5ERRk?=
- =?us-ascii?Q?nQMGjBV4S2jie/eVnSzXcvw3D1p6gQZ7ZAHQdaKXTXzLqmkSToG1jBhwtDCz?=
- =?us-ascii?Q?JpxUucHJ3lshR1lqBRyYNx21GLR1ZJN6pY26O/sF4DY7MdWurgwiLHq+Dc67?=
- =?us-ascii?Q?qaZua77AMjcZkMo3S2w/p5NBWUwChrpCkklRyvs7EIdnU55/kigqLLcrCsuq?=
- =?us-ascii?Q?ldXG4LxBkHKRABQ3INoIkd6546+sEDZOYz8cYcjfB19AvdFgq039nH5iCvQ5?=
- =?us-ascii?Q?leAxOAblAitIFCzfrC6vhpL8TpMdLlZGqdJ4I/OPAmP5I1yjnh+pB3aADyQZ?=
- =?us-ascii?Q?Fiq0ZOPsrBC6hlhebcdLWgBn5k7IJwJQZip8+Tze9h/EMKUJ8qyRF9Se4iW2?=
- =?us-ascii?Q?zTAdDNh2q7G/ujyCgCL86x7NpXhoT5b/O9eSLMtCzoliQvU32wg4BEXe/7c4?=
- =?us-ascii?Q?N3DoWpOXY7LWsiMPR8c782cO07sRgbVw2vFaaIuuIupkSYdcHlXLhd+astzh?=
- =?us-ascii?Q?Qaw/xi8FhDnVI8kcMYs9cnNLmq4DEB7/vVFk4bhfykl9NE7K6nMrdzzlZ3pH?=
- =?us-ascii?Q?wIs+ldIS772YA2UucTiPDHqNqfInM1t9gMlsMslRQqFeWCaB8zo7OeLxj9Fa?=
- =?us-ascii?Q?G34u1LefYPZ2RYfO975jlyu0NuRakzRIavMiCQAidM6Babn64uU+V2ayXDar?=
- =?us-ascii?Q?kY75QOFB4x52bNRK8AfL4Ku9bNi/CZKBnsuRLR4ZPjiDJ2oQwM8OZV5f3/V0?=
- =?us-ascii?Q?6rv5P4f2u8snxxMkZtQYi43yZQnvEVC3Dj0uaf7EYK8mJV1bzobGG+E+79H3?=
- =?us-ascii?Q?6a9frVeaovMkp5FP8eNm3QxxVONlLq3K2mhS5FILjiDi/U8k7NbXo4Z7Zk5v?=
- =?us-ascii?Q?gMYMvpHzWI2FgZwiL8tBUSVWKse9vH/sZWW/KFIQ7RvCoRunDKeQPeIN0q1f?=
- =?us-ascii?Q?5exUN/656z+d0grQ2WEr24J8FCJeJmy3F/Og+Kps5oCbt3tkldk58Ge5D/fe?=
- =?us-ascii?Q?7e7sdftOJdtogygelvH/n3+f3kbNpQ9S82iGmqyWorG4bXVJ+DRqX0AfV1az?=
- =?us-ascii?Q?8CDn/5n06M+YESSuoC9H2K2YoJg+eWHNGoxr6rDKO8kQaBk8+YdbvANeSzGD?=
- =?us-ascii?Q?ZgGq3QyAEM2QbNa1nREF7u0st08KdiRQbMckht1wRAxzEE4kRz33LUAqoojx?=
- =?us-ascii?Q?FYkEjfb0VCUFVF0Bo7t7urDk2S/Svnvg?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPF9E162731D.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0j6nhD+6o5gzMz1ZUZQwxnOGeyYFU0qPiKWC2c4Wsv+hV5s6tMVbN8cdbTi3?=
- =?us-ascii?Q?dnDOjGiKE2CX8tiEDmb7yQliBOQudAFyUBHNe4H6jU9NGUfu381iHhpNAcXo?=
- =?us-ascii?Q?DoF1Fjr55S8x8Ux5EIPca+Qts3rrhSzwQUp/ZPwuEp2y5jofXQGIhkE1lp0N?=
- =?us-ascii?Q?RDTRdT85bdpMlf3uMrtf+1o94nHQrJP4UX1dbZhulWtotsJqlXfn1Vsgps3R?=
- =?us-ascii?Q?tiKsfnYQ0tQfkfD5ZUk+QU1vVP8NwtbFidpLjJ4I9oJawW1WNkM+R/wrgJgS?=
- =?us-ascii?Q?KpsPpxGQmRAEOWmhG+a1EfewBKTh9c19qWHbFt3/+MuUUa9F7V9XUPAkB1IM?=
- =?us-ascii?Q?Gr/fAb3gsUE0yOxm8LUC3iCKY9j8R1+gEo+rt5bgmiQbsxRrrjy1eTIbeIpM?=
- =?us-ascii?Q?TD5xoKDykji9Rf1rdQx+GQpsoNqnr2WMePEqSroKjLXqOTfgQtFdPIN3Jw0y?=
- =?us-ascii?Q?fy7eOQd8rW5zr5fIPMFsDACd8A1ENVPpFgfh4/2sFZOHX16BuU1eKHUzHnGZ?=
- =?us-ascii?Q?5d1FrI/FOewBO5cTyAD9D6yWxeuoRKBZ+H1YoK0BY3f+i9mjvbun2wroDfJI?=
- =?us-ascii?Q?6LOWUOvpvspme29JPkrurBjIyknunl3V3f4OeB0RG3TuENEAc+AcK5XCMcDy?=
- =?us-ascii?Q?eY6NQNwFshhqJWtRfFSEhhghoADMws/vcsCOScT39n+c+FlBrDwiBp1qzAid?=
- =?us-ascii?Q?pv9b9iG0xYgT9RdtbNej4sEk570V3sg6zSKXi3Yt46GwEd+ei50MXCfRJ5X6?=
- =?us-ascii?Q?WlXxduo7aIq/NxQadQ20AtnNjaoWMQNUrVd0LXe2UkMe5ncAwaluZ/ND1tsT?=
- =?us-ascii?Q?ageeO2EW5kEvJR0Z6t13S5pA3uwBHE/oCcei+JRvKxjpqPjbSoVCuv5wkbT5?=
- =?us-ascii?Q?awfW+esfius1Jycud6xC+vXsoyGhxG0gOyKeCHAxu599LDBojTpqImyJiZ5y?=
- =?us-ascii?Q?mccq8p0/ya9nxOI9PgCWvEHBYIY+o54WXaCM3RZvB7ZHN5Ci9Us5nrBQuMv0?=
- =?us-ascii?Q?v8RunnXYpM15n8Vmw8kH9GnHNtTWDkwS60cCplA8pHBTasuO4hvzzyO83BJ0?=
- =?us-ascii?Q?W6iez02VnqYg1t6ve/326wm6IiAUwe7+Cd6hP/Ar/511GQ2drQks0MMKr5cQ?=
- =?us-ascii?Q?x91oYer+2u8Kmy00HQhUqLVXCWcdmCokFiBV81DeZ2pUwwbvdX/9a9joPuPE?=
- =?us-ascii?Q?g95ut+lqzZRuKIsxrOWXxbgfwD0fTQD+OxoIKU2YhImVi7kcbtlIqV39E4fw?=
- =?us-ascii?Q?Ob9jikwjZpY3M2MnYdXucNCcv2nwKgD0xSNfY0HRjZFS03FTVUD5lMwM2qC+?=
- =?us-ascii?Q?1R9f7XWt1noocLLOSauB4QQ2E1C95azfoq3hxPJSpSy9HeaJKpLAvHQdknlX?=
- =?us-ascii?Q?8YiGRdjs5G3i4KmnwiQnH8082Ee/e1zZJexET/fZV/3SGEm4lhwFssEMYujk?=
- =?us-ascii?Q?iHQNZMLqGHsoc6XdpYAP4jTrFlWsC/jcoY1/NN/dteHMuvQI6CpHbNftHYPT?=
- =?us-ascii?Q?2a0fNdIUtZUOBqU4Bl+1dCqqQovFTYBv82yiHtKnlsaMC0LXJ3x5Jqy2PuyA?=
- =?us-ascii?Q?RXOdCYUeKRN7xxPy5GAruTbVUQyr1B29xtk4Wazw?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d715af15-d201-41e9-76f7-08de26ebde7e
-X-MS-Exchange-CrossTenant-AuthSource: PH3PPF9E162731D.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 21:46:02.8424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rn9AExvK+5lqLIMhS26bZaOyQMuFpit0yUYzxE+ahl3Iu8MUOu4LeTo1VRz8qRM2T7uZAdyG9pmTOcl+XTkRPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF3A51834D3
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251119075306epcas5p22a87515de65a3c668275b394cdea83b0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251119075306epcas5p22a87515de65a3c668275b394cdea83b0
+References: <CGME20251119075306epcas5p22a87515de65a3c668275b394cdea83b0@epcas5p2.samsung.com>
 
-Michal Clapinski wrote:
-> Signed-off-by: Michal Clapinski <mclapinski@google.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Introduction:
+=============
+CXL Persistent Memory (Pmem) devices region, namespace and content must be
+persistent across system reboot. In order to achieve this persistency, it
+uses Label Storage Area (LSA) to store respective metadata. During system
+reboot, stored metadata in LSA is used to bring back the region, namespace
+and content of CXL device in its previous state.
+CXL specification provides Get_LSA (4102h) and Set_LSA (4103h) mailbox
+commands to access the LSA area. nvdimm driver is using same commands to
+get/set LSA data.
 
-Sorry for the delay.  I picked up this series but I find that this breaks
-the device-dax and daxctl-create.sh.
+There are three types of LSA format and these are part of following
+specifications: 
+ - v1.1: https://pmem.io/documents/NVDIMM_Namespace_Spec.pdf
+ - v1.2: https://uefi.org/sites/default/files/resources/UEFI_Spec_2_7.pdf
+ - v2.1: https://computeexpresslink.org/wp-content/uploads/2024/02/CXL-2.0-Specification.pdf
 
-I was able to fix device-dax with a sleep, see below.
+Basic differences between these LSA formats:
+ - v1.1: Support Namespace persistency. Size of Namespace Label is 128 bytes
+ - v1.2: Support Namespace persistency. Size of Namespace Label is 256 bytes
+ - v2.1: Support Namespace and Region persistency. Size of Namespace and
+   Region Label is 256 bytes.
 
-I'm not 100% sure what to do about this.
+Linux nvdimm driver supports only v1.1 and v1.2 LSA format. CXL pmem device
+require support of LSA v2.1 format for region and namespace persistency.
+Initial support of LSA 2.1 was add in [1].
 
-I don't want to sprinkle sleeps around the tests.  daxctl-create.sh also
-randomly fail due to the races introduced.  So not sure exactly where to
-sprinkle them without more work.
+This patchset adds support of LSA 2.1 in nvdimm and cxl pmem driver.
 
-Could dropping just this patch and landing the others achieve most of what
-you need?
+Patch 1:     Introduce NDD_CXL_LABEL flag and Update cxl label index as per v2.1
+Patch 2:     Skip the need for 'interleave-set cookie' for LSA 2.1 support
+Patch 3-9:   Introduce region label and update namespace label as per LSA 2.1
+Patch 10:    Refactor cxl pmem region auto assembly using Dan's Infra [2]
+Patch 11-12: Save cxl region info in LSA and region recreation during reboot
+Patch 13:14: Segregate out cxl pmem region code from region.c to pmem_region.c
+Patch 15:    Introduce cxl region addition/deletion attributes
+Patch 16-17: Add support of cxl pmem region re-creation from CXL as per LSA 2.1
 
-Ira
+Pre-requisite:
+==============
+This patch series has dependency on Dan's Infra [2]
 
-diff --git a/test/device-dax.c b/test/device-dax.c
-index 49c9bc8b1748..817c76b0a88b 100644
---- a/test/device-dax.c
-+++ b/test/device-dax.c
-@@ -246,6 +246,7 @@ static int __test_device_dax(unsigned long align, int loglevel,
-                goto out;
-        }
+Testing:
+========
+In order to test this patchset, I also added the support of LSA v2.1 format
+in ndctl. ndctl changes are available at [3]. After review, I’ll push in
+ndctl repo for community review.
 
-+sleep(1);
-        sprintf(path, "/dev/%s", daxctl_dev_get_devname(dev));
-        fd = open(path, O_RDONLY);
-        if (fd < 0) {
+1. Used Qemu using following CXL topology
+   M2="-object memory-backend-file,id=cxl-mem1,share=on,mem-path=$TMP_DIR/cxltest.raw,size=512M \
+       -object memory-backend-file,id=cxl-lsa1,share=on,mem-path=$TMP_DIR/lsa.raw,size=1M \
+       -object memory-backend-file,id=cxl-mem2,share=on,mem-path=$TMP_DIR/cxltest2.raw,size=512M \
+       -object memory-backend-file,id=cxl-lsa2,share=on,mem-path=$TMP_DIR/lsa2.raw,size=1M \
+       -device pxb-cxl,bus_nr=10,bus=pcie.0,id=cxl.1 \
+       -device cxl-rp,port=1,bus=cxl.1,id=root_port11,chassis=0,slot=1 \
+       -device cxl-type3,bus=root_port11,memdev=cxl-mem1,lsa=cxl-lsa1,id=cxl-pmem1,sn=1 \
+       -device cxl-rp,port=2,bus=cxl.1,id=root_port12,chassis=0,slot=2 \
+       -device cxl-type3,bus=root_port12,memdev=cxl-mem2,lsa=cxl-lsa2,id=cxl-pmem2,sn=2 \
+       -M cxl-fmw.0.targets.0=cxl.1,cxl-fmw.0.size=4G,cxl-fmw.0.interleave-granularity=8k"
+
+2. Create cxl region on both devices
+	cxl create-region -d decoder0.0 -m mem0
+	cxl create-region -d decoder0.0 -m mem1
+
+	root@QEMUCXL6060pmem:~# cxl list
+	[
+	  {
+	    "memdevs":[
+	      {
+	        "memdev":"mem0",
+	        "pmem_size":536870912,
+	        "serial":2,
+	        "host":"0000:0c:00.0",
+	        "firmware_version":"BWFW VERSION 00"
+	      },
+	      {
+	        "memdev":"mem1",
+	        "pmem_size":536870912,
+	        "serial":1,
+	        "host":"0000:0b:00.0",
+	        "firmware_version":"BWFW VERSION 00"
+	      }
+	    ]
+	  },
+	  {
+	    "regions":[
+	      {
+	        "region":"region0",
+	        "resource":45365592064,
+	        "size":536870912,
+	        "type":"pmem",
+	        "interleave_ways":1,
+	        "interleave_granularity":256,
+	        "decode_state":"commit",
+	        "qos_class_mismatch":true
+	      },
+	      {
+	        "region":"region1",
+	        "resource":45902462976,
+	        "size":536870912,
+	        "type":"pmem",
+	        "interleave_ways":1,
+	        "interleave_granularity":256,
+	        "decode_state":"commit",
+	        "qos_class_mismatch":true
+	      }
+	    ]
+	  }
+	]
+
+3. Re-Start Qemu and we could see cxl region persistency using "cxl list"
+
+4. Create namespace for both regions
+	root@QEMUCXL6060pmem:~# time ndctl create-namespace --mode=fsdax --region=region0 --size=128M
+	{
+	  "dev":"namespace0.0",
+	  "mode":"fsdax",
+	  "map":"dev",
+	  "size":"124.00 MiB (130.02 MB)",
+	  "uuid":"8a125dcb-f992-406d-b3ad-be82fc518f05",
+	  "sector_size":512,
+	  "align":2097152,
+	  "blockdev":"pmem0"
+	}
+	
+	real    0m31.866s
+	user    0m0.183s
+	sys     0m14.855s
+
+	root@QEMUCXL6060pmem:~# time ndctl create-namespace --mode=fsdax --region=region1 --size=256M
+	{
+	  "dev":"namespace1.0",
+	  "mode":"fsdax",
+	  "map":"dev",
+	  "size":"250.00 MiB (262.14 MB)",
+	  "uuid":"8e16d950-c11d-4253-94a0-5b2928926433",
+	  "sector_size":512,
+	  "align":2097152,
+	  "blockdev":"pmem1"
+	}
+	
+	real    0m44.359s
+	user    0m0.196s
+	sys     0m26.768s
+
+	root@QEMUCXL6060pmem:~# time ndctl create-namespace --mode=fsdax --region=region0 --size=256M
+	{
+	  "dev":"namespace0.1",
+	  "mode":"fsdax",
+	  "map":"dev",
+	  "size":"250.00 MiB (262.14 MB)",
+	  "uuid":"f3170bfe-548a-4ce4-ae00-145a24e70426",
+	  "sector_size":512,
+	  "align":2097152,
+	  "blockdev":"pmem0.1"
+	}
+	
+	real    0m44.004s
+	user    0m0.220s
+	sys     0m25.711s
+
+	root@QEMUCXL6060pmem:~# time ndctl create-namespace --mode=fsdax --region=region1 --size=128M
+	{
+	  "dev":"namespace1.1",
+	  "mode":"fsdax",
+	  "map":"dev",
+	  "size":"124.00 MiB (130.02 MB)",
+	  "uuid":"6318d2d9-bc78-4896-84f9-6c18c3a8f58c",
+	  "sector_size":512,
+	  "align":2097152,
+	  "blockdev":"pmem1.1"
+	}
+	
+	real    0m36.612s
+	user    0m0.225s
+	sys     0m16.457s
+
+	root@QEMUCXL6060pmem:~# ndctl list
+	[
+	  {
+	    "dev":"namespace1.0",
+	    "mode":"fsdax",
+	    "map":"dev",
+	    "size":262144000,
+	    "uuid":"e07564eb-6653-4d67-ab07-434c22474001",
+	    "sector_size":512,
+	    "align":2097152,
+	    "blockdev":"pmem1"
+	  },
+	  {
+	    "dev":"namespace1.1",
+	    "mode":"fsdax",
+	    "map":"dev",
+	    "size":130023424,
+	    "uuid":"27dfd65a-c428-426a-8316-f340a59e0671",
+	    "sector_size":512,
+	    "align":2097152,
+	    "blockdev":"pmem1.1"
+	  },
+	  {
+	    "dev":"namespace0.1",
+	    "mode":"fsdax",
+	    "map":"dev",
+	    "size":130023424,
+	    "uuid":"689b4135-668d-4885-b138-b86f27d7602f",
+	    "sector_size":512,
+	    "align":2097152,
+	    "blockdev":"pmem0.1"
+	  },
+	  {
+	    "dev":"namespace0.0",
+	    "mode":"fsdax",
+	    "map":"dev",
+	    "size":262144000,
+	    "uuid":"ed15c67a-842d-4d5d-8996-be3aa24985e4",
+	    "sector_size":512,
+	    "align":2097152,
+	    "blockdev":"pmem0"
+	  }
+	]
+
+5. Re-Start Qemu and we could see
+	- Region persistency using "cxl list"
+	- Namespace persistency using "ndctl list" and cat /proc/iomem
+
+	root@QEMUCXL6060pmem:~# cat /proc/iomem
+	
+	a90000000-b8fffffff : CXL Window 0
+	  a90000000-aafffffff : Persistent Memory
+	    a90000000-aafffffff : region0
+	      a90000000-a97ffffff : namespace0.0
+	      a98000000-aa7ffffff : namespace0.1
+	  ab0000000-acfffffff : Persistent Memory
+	    ab0000000-acfffffff : region1
+	      ab0000000-abfffffff : namespace1.0
+	      ac0000000-ac7ffffff : namespace1.1
+	
+
+	- NOTE: We can see some lag in restart. Look at Observesation below
+
+6. Also verify LSA version using "ndctl read-labels -j nmem0"
+	root@QEMUCXL6060pmem:~# ndctl read-labels -j nmem0
+	{
+	  "dev":"nmem0",
+	  "index":[
+	    {
+	      "signature":"NAMESPACE_INDEX",
+	      "major":2,
+	      "minor":1,
+	      "labelsize":256,
+	      "seq":2,
+	      "nslot":4090
+	    },
+	    {
+	      "signature":"NAMESPACE_INDEX",
+	      "major":2,
+	      "minor":1,
+	      "labelsize":256,
+	      "seq":1,
+	      "nslot":4090
+	    }
+	  ],
+	  "label":[
+	    {
+	      "type":"68bb2c0a-5a77-4937-9f85-3caf41a0f93c",
+	      "uuid":"cbb3fe1e-9345-4ae7-95ca-2638db27ee7d",
+	      "name":"",
+	      "flags":8,
+	      "nrange":1,
+	      "position":0,
+	      "dpa":134217728,
+	      "rawsize":268435456,
+	      "slot":0,
+	      "align":0,
+	      "region_uuid":"50d806c8-fd11-49eb-b19e-77fc67f6364b",
+	      "abstraction_uuid":"266400ba-fb9f-4677-bcb0-968f11d0d225",
+	      "lbasize":512
+	    },
+	    {
+	      "type":"529d7c61-da07-47c4-a93f-ecdf2c06f444",
+	      "uuid":"50d806c8-fd11-49eb-b19e-77fc67f6364b",
+	      "flags":0,
+	      "nlabel":1,
+	      "position":0,
+	      "dpa":0,
+	      "rawsize":536870912,
+	      "hpa":45365592064,
+	      "slot":1,
+	      "interleave granularity":256,
+	      "align":0
+	    },
+	    {
+	      "type":"68bb2c0a-5a77-4937-9f85-3caf41a0f93c",
+	      "uuid":"d9ef8d35-ef84-4111-b302-bce53c94a2ad",
+	      "name":"",
+	      "flags":0,
+	      "nrange":1,
+	      "position":0,
+	      "dpa":0,
+	      "rawsize":134217728,
+	      "slot":2,
+	      "align":0,
+	      "region_uuid":"50d806c8-fd11-49eb-b19e-77fc67f6364b",
+	      "abstraction_uuid":"266400ba-fb9f-4677-bcb0-968f11d0d225",
+	      "lbasize":512
+	    },
+	    {
+	      "type":"68bb2c0a-5a77-4937-9f85-3caf41a0f93c",
+	      "uuid":"cbb3fe1e-9345-4ae7-95ca-2638db27ee7d",
+	      "name":"",
+	      "flags":0,
+	      "nrange":1,
+	      "position":0,
+	      "dpa":134217728,
+	      "rawsize":268435456,
+	      "slot":3,
+	      "align":0,
+	      "region_uuid":"50d806c8-fd11-49eb-b19e-77fc67f6364b",
+	      "abstraction_uuid":"266400ba-fb9f-4677-bcb0-968f11d0d225",
+	      "lbasize":512
+	    }
+	  ]
+	}
+	read 1 nmem
+
+	- NOTE: We have following UUID types as per CXL Spec
+		"type":"529d7c61-da07-47c4-a93f-ecdf2c06f444" is region label
+		"type":"68bb2c0a-5a77-4937-9f85-3caf41a0f93c" is namespace label
+
+
+Limitation (WIP):
+================
+Current changes only support interleave way == 1
+
+
+Observation:
+============
+First time namespace creation using ndctl takes around 10 to 20 second time
+while executing "devm_memremap_pages" at [4]
+
+As using this patchset, after auto region creation, namespace creation is
+happening in boot sequence (if nvdimm and cxl drivers are static), It is
+therefore boot sequence is increased by around 10 to 20 sec.
+
+Changes:
+========
+Changes in v3->v4
+-----------------
+[MISC Changes]
+- Reduce Patch Series Commits from 20 to 17
+- Re-arranged few commits
+[PATCH 01/17]
+- Rename nvdimm_region_label_supported() [Dave]
+- Add Jonathan RB tag
+- Add Dave RB tag
+[PATCH 02/17]
+- Add Dave RB tag
+[PATCH 03/17]
+- Merge v3 patch 05-06/20 in v4 patch 03/17
+- Use pre-parsed namespace and region labels uuids - [Dave]
+- Remove dubious typecasting [Jonathan]
+- Add 'uuid_t label_uuid' member in ' struct nd_label_ent' [Dave]
+- Introduce to_lsa_label() along with to_label()
+[PATCH 04/17]
+- Re-arrange v3 patch 08/20 in v4 patch 04/17
+- Create static string table enumerated by 'enum label_type' [Dave]
+- Elaborate commit message [Alison]
+- Replace use of to_label() with new to_lsa_label()
+[PATCH 07/17]
+- Immediate return -EBUSY in region label deletion [Dave]
+[PATCH 09/17]
+- Return error early and return the success case last [Dave]
+[PATCH 10/17]
+- Call region discovery via the ops->probe() callback using [2] [Dave]
+[PATCH 11/17]
+- Conform to existing style in the subsystem [Dave]
+- Remove mode from devm_cxl_pmem_add_region() [Dave]
+- Fix error return from EINVAL to EOPNOTSUPP [Dave]
+[PATCH 13/17]
+- Prep patch with just code movement from region.c to pmem_region.c [Dave]
+[PATCH 13/17]
+- Introduce CONFIG_CXL_PMEM_REGION for core/pmem_region.c [Dave]
+[PATCH 15/17]
+- Return error early and return the success case last [Dave]
+- Change region_label_state as enum in struct cxl_region_params [Dave]
+[PATCH 16/17]
+- Caller release the device reference [Dave]
+- Add is_endpoint_decoder() check in match_free_ep_decoder [Dave]
+- Use dev_dbg() instead of dev_info() in create_pmem_region() [Dave]
+- Use dev_warn() instead of dev_info() in create_pmem_region() [Dave] 
+
+Previous Series:
+----------------
+- Find v3 link at [5]
+- Find v2 link at [6]
+- v1 patch-set was broken. Find the v1 links at [7] and [8]
+
+
+[1]: https://lore.kernel.org/all/163116432405.2460985.5547867384570123403.stgit@dwillia2-desk3.amr.corp.intel.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/patch/?id=ab70c6227ee6165a562c215d9dcb4a1c55620d5d
+[3]: https://github.com/neerajoss/ndctl/commits/linux-cxl/V1_CXL_LSA_2.1_Support/
+[4]: https://elixir.bootlin.com/linux/v6.13.7/source/drivers/nvdimm/pmem.c#L520
+[5]: https://lore.kernel.org/linux-cxl/20250917134116.1623730-1-s.neeraj@samsung.com/ 
+[6]: https://lore.kernel.org/linux-cxl/20250730121209.303202-1-s.neeraj@samsung.com/ 
+[7] v1 Cover Letter: https://lore.kernel.org/linux-cxl/1931444790.41750165203442.JavaMail.epsvc@epcpadp1new/
+[8] v1 Rest Thread: https://lore.kernel.org/linux-cxl/158453976.61750165203630.JavaMail.epsvc@epcpadp1new/
+
+
+Neeraj Kumar (17):
+  nvdimm/label: Introduce NDD_REGION_LABELING flag to set region label
+  nvdimm/label: CXL labels skip the need for 'interleave-set cookie'
+  nvdimm/label: Add namespace/region label support as per LSA 2.1
+  nvdimm/label: Include region label in slot validation
+  nvdimm/label: Skip region label during ns label DPA reservation
+  nvdimm/label: Preserve region label during namespace creation
+  nvdimm/label: Add region label delete support
+  nvdimm/label: Preserve cxl region information from region label
+  nvdimm/label: Export routine to fetch region information
+  cxl/mem: Refactor cxl pmem region auto-assembling
+  cxl/region: Add devm_cxl_pmem_add_region() for pmem region creation
+  cxl/pmem: Preserve region information into nd_set
+  cxl/pmem_region: Prep patch to accommodate pmem_region attributes
+  cxl/pmem_region: Introduce CONFIG_CXL_PMEM_REGION for core/pmem_region.c
+  cxl/pmem_region: Add sysfs attribute cxl region label updation/deletion
+  cxl/pmem_region: Create pmem region using information parsed from LSA
+  cxl/pmem: Add CXL LSA 2.1 support in cxl pmem
+
+ Documentation/ABI/testing/sysfs-bus-cxl |  22 +
+ drivers/cxl/Kconfig                     |  15 +
+ drivers/cxl/core/Makefile               |   1 +
+ drivers/cxl/core/core.h                 |  35 +-
+ drivers/cxl/core/pmem_region.c          | 390 ++++++++++++++++
+ drivers/cxl/core/region.c               | 364 +++++++--------
+ drivers/cxl/cxl.h                       |  41 +-
+ drivers/cxl/mem.c                       |  18 +-
+ drivers/cxl/pci.c                       |   4 +-
+ drivers/cxl/pmem.c                      |  15 +-
+ drivers/cxl/port.c                      |  39 +-
+ drivers/nvdimm/dimm.c                   |   5 +
+ drivers/nvdimm/dimm_devs.c              |  25 +
+ drivers/nvdimm/label.c                  | 579 ++++++++++++++++++++----
+ drivers/nvdimm/label.h                  |  18 +-
+ drivers/nvdimm/namespace_devs.c         |  92 +++-
+ drivers/nvdimm/nd-core.h                |   2 +
+ drivers/nvdimm/nd.h                     |  79 ++++
+ drivers/nvdimm/region_devs.c            |  10 +
+ include/linux/libnvdimm.h               |  28 ++
+ tools/testing/cxl/Kbuild                |   1 +
+ 21 files changed, 1413 insertions(+), 370 deletions(-)
+ create mode 100644 drivers/cxl/core/pmem_region.c
+
+
+base-commit: ea5514e300568cbe8f19431c3e424d4791db8291
+prerequisite-patch-id: f6e07504b17ccf39d9486352b6f7305a03897863
+prerequisite-patch-id: cd6bad0c8b993bb59369941905f418f3b799c89d
+prerequisite-patch-id: 08ebdae0888c0a2631c3b26990679a0261f34f14
+prerequisite-patch-id: 42c75ec8c08c7c8518024f46d31eb114f95a1bac
+-- 
+2.34.1
+
 
