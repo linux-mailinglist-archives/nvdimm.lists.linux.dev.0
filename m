@@ -1,153 +1,165 @@
-Return-Path: <nvdimm+bounces-12432-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12441-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566B6D08036
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 09 Jan 2026 09:56:48 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FEFAD09DCA
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 09 Jan 2026 13:42:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C706F300F8BE
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  9 Jan 2026 08:56:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 50AD63046800
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  9 Jan 2026 12:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF9D35581B;
-	Fri,  9 Jan 2026 08:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mSHOQ+Ut"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6CAB35B157;
+	Fri,  9 Jan 2026 12:30:37 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CA7355058
-	for <nvdimm@lists.linux.dev>; Fri,  9 Jan 2026 08:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A535B133
+	for <nvdimm@lists.linux.dev>; Fri,  9 Jan 2026 12:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767949004; cv=none; b=k1K0plgDXNq4hWWY6badRNj6xoQ6GPIBuny1Kk/MX5V7ioEUbF9atZrDIslBFmB5Uxflu4fNtCt919NUwYxffp/ea6Y86hsUO1Og34Ve78KiP/yNeeiZl9XYkX6R1JrnbGmwDQS96j4uR1k4Ri/LmBdPlNMoOfGuYmbqE07Qx2c=
+	t=1767961837; cv=none; b=AZeaxwdyWKr8hPymKbYONZ3oAnXdRu++YbaN70IUWspAA5c+rYuDod252fwiSKpzMayU5K7NWUWkZliPOdh/w7oyttNFkW/TXNV7ltQ8cbI0u2j8Cmj8cuXKGGTrOVQlLuKyH0xrsZizaj9OwkHiVEEFHHjuha1402Z6dw1waYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767949004; c=relaxed/simple;
-	bh=C/wgMdLsD2tb2QyXAAXoSur5L4DO3Kxja0XkyIF7z5I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aE6L5RvxWKss35zgmvGGJ2iBTHWAvocQPyzkJqM08b/B4MCriHpK3bUM0ghxOD+pUCrdZgu2qxO89WRSAwRiqg3OsO9ajLGeu/dKUSywkHZJ3h1WSGbe31Hy7cYL1B5qJoKqNyuphkKBKvc3Aj1HfcIfU1Q5p5xe1nfQ5t21Sdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mSHOQ+Ut; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767949001; x=1799485001;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=C/wgMdLsD2tb2QyXAAXoSur5L4DO3Kxja0XkyIF7z5I=;
-  b=mSHOQ+UtK9Mq12WIb1u5m3jluSYK4xPEhycGOnEHfohr0YZH96sjtAHL
-   K5FSoJui0sBEZAoFi+0pc5dXGAC6nONGFbAQvB0dS+dyTtYjp3FC3rQS/
-   pjVbPpJWG1iOh2AmXKZYeQPUkfLJgXE7pLhfO/BUbBQ2KxPycPC/hQT9f
-   9ZjseyUV4gtVg/re4SLI9ruO7WLQIzU9SpTelZbZyDp+VVh/5osIhfB67
-   Bn4+59ksnziMQUW2Lv5P77qbQoRBwD0JUqUoKETRcjtdB+27ao0vwsovC
-   +aA1CaRGlgoLXDAIjExN8pr6kh/9hpOdxxtn2c2kCvz5zNM9cDpBSI2c6
-   Q==;
-X-CSE-ConnectionGUID: z7VKgRCFQ8SgvRIHHv5OIQ==
-X-CSE-MsgGUID: QaiCpuWGSfC9qHi97i3qmA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="79625986"
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="79625986"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 00:56:37 -0800
-X-CSE-ConnectionGUID: 8PUErSNTSXWuxfOhJ4T+jw==
-X-CSE-MsgGUID: Y+RkkjyNTbKjIVGeE7szXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="202538604"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO fdugast-desk.intel.com) ([10.245.244.83])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 00:56:34 -0800
-From: Francois Dugast <francois.dugast@intel.com>
-To: intel-xe@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org,
-	Matthew Brost <matthew.brost@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alistair Popple <apopple@nvidia.com>,
-	Francois Dugast <francois.dugast@intel.com>
-Subject: [PATCH v3 2/7] fs/dax: Use folio_split_unref helper
-Date: Fri,  9 Jan 2026 09:54:22 +0100
-Message-ID: <20260109085605.443316-3-francois.dugast@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260109085605.443316-1-francois.dugast@intel.com>
-References: <20260109085605.443316-1-francois.dugast@intel.com>
+	s=arc-20240116; t=1767961837; c=relaxed/simple;
+	bh=in5JvqRmDAdB6dX8FGI0EEgnQhCtsywKD5TDJBxjJjU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=THk3uiH6nZbwfNkiT+RwBAQgWgCyRsTt36w9hbtFVupkiOuwILAsyNH3264mJP9dsTi8xK3fZv0cBgiHYuLlIZRZNRTX8lTVobtU3PMx6yFUtdExCPMg3kSycubDl3JDox8GmD2zxpIsjTUZlvm4Aop0yO7vqdfN9913bdq0/kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dnh1h1cXTzHnH7w;
+	Fri,  9 Jan 2026 20:30:16 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 48D4440572;
+	Fri,  9 Jan 2026 20:30:26 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Fri, 9 Jan
+ 2026 12:30:24 +0000
+Date: Thu, 8 Jan 2026 16:10:13 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: John Groves <John@groves.net>
+CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
+	<dan.j.williams@intel.com>, Bernd Schubert <bschubert@ddn.com>, "Alison
+ Schofield" <alison.schofield@intel.com>, John Groves <jgroves@micron.com>,
+	Jonathan Corbet <corbet@lwn.net>, Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, Jan
+ Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>, "David
+ Hildenbrand" <david@kernel.org>, Christian Brauner <brauner@kernel.org>,
+	"Darrick J . Wong" <djwong@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+	Jeff Layton <jlayton@kernel.org>, Amir Goldstein <amir73il@gmail.com>, Stefan
+ Hajnoczi <shajnocz@redhat.com>, Joanne Koong <joannelkoong@gmail.com>, Josef
+ Bacik <josef@toxicpanda.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Chen
+ Linxuan <chenlinxuan@uniontech.com>, "James Morse" <james.morse@arm.com>,
+	Fuad Tabba <tabba@google.com>, "Sean Christopherson" <seanjc@google.com>,
+	Shivank Garg <shivankg@amd.com>, Ackerley Tng <ackerleytng@google.com>,
+	Gregory Price <gourry@gourry.net>, Aravind Ramesh <arramesh@micron.com>, Ajay
+ Joshi <ajayjoshi@micron.com>, <venkataravis@micron.com>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH V3 04/21] dax: Add dax_operations for use by fs-dax on
+ fsdev dax
+Message-ID: <20260108161013.00001916@huawei.com>
+In-Reply-To: <gqwlb6ept22edcuiwwzxkboeioin6l4afemn3lenbduuwbb357@tnkceo5764vf>
+References: <20260107153244.64703-1-john@groves.net>
+	<20260107153332.64727-1-john@groves.net>
+	<20260107153332.64727-5-john@groves.net>
+	<20260108115037.00003295@huawei.com>
+	<gqwlb6ept22edcuiwwzxkboeioin6l4afemn3lenbduuwbb357@tnkceo5764vf>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-From: Matthew Brost <matthew.brost@intel.com>
+On Thu, 8 Jan 2026 09:59:08 -0600
+John Groves <John@groves.net> wrote:
 
-Use folio_split_unref helper to split a folio into individual upon final
-put of a fsdax page.
+> On 26/01/08 11:50AM, Jonathan Cameron wrote:
+> > On Wed,  7 Jan 2026 09:33:13 -0600
+> > John Groves <John@Groves.net> wrote:
+> >   
+> > > From: John Groves <John@Groves.net>
+> > >   
+> > Hi John
+> > 
+> > The description should generally make sense without the title.
+> > Sometimes that means more or less repeating the title.
+> > 
+> > A few other things inline.  
+> 
+> Will do
+> 
+> >   
+> > > * These methods are based on pmem_dax_ops from drivers/nvdimm/pmem.c
+> > > * fsdev_dax_direct_access() returns the hpa, pfn and kva. The kva was
+> > >   newly stored as dev_dax->virt_addr by dev_dax_probe().
+> > > * The hpa/pfn are used for mmap (dax_iomap_fault()), and the kva is used
+> > >   for read/write (dax_iomap_rw())
+> > > * fsdev_dax_recovery_write() and dev_dax_zero_page_range() have not been
+> > >   tested yet. I'm looking for suggestions as to how to test those.
+> > > * dax-private.h: add dev_dax->cached_size, which fsdev needs to
+> > >   remember. The dev_dax size cannot change while a driver is bound
+> > >   (dev_dax_resize returns -EBUSY if dev->driver is set). Caching the size
+> > >   at probe time allows fsdev's direct_access path can use it without
+> > >   acquiring dax_dev_rwsem (which isn't exported anyway).
+> > > 
+> > > Signed-off-by: John Groves <john@groves.net>  
+> >   
+> > > diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
+> > > index c5c660b193e5..9e2f83aa2584 100644
+> > > --- a/drivers/dax/fsdev.c
+> > > +++ b/drivers/dax/fsdev.c
+> > > @@ -27,6 +27,81 @@
+> > >   * - No mmap support - all access is through fs-dax/iomap
+> > >   */
+> > >  
+> > > +static void fsdev_write_dax(void *pmem_addr, struct page *page,
+> > > +		unsigned int off, unsigned int len)
+> > > +{
+> > > +	while (len) {
+> > > +		void *mem = kmap_local_page(page);  
+> > 
+> > I guess it's pretty simple, but do we care about HIGHMEM for this
+> > new feature?  Maybe it's just easier to support it than argue about it however ;)  
+> 
+> I think this compiles to zero overhead, and is an established pattern -
+> but I'm ok following a consensus elsewhere...
 
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: nvdimm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Suggested-by: Alistair Popple <apopple@nvidia.com>
-Signed-off-by: Matthew Brost <matthew.brost@intel.com>
-Signed-off-by: Francois Dugast <francois.dugast@intel.com>
----
- fs/dax.c | 25 +------------------------
- 1 file changed, 1 insertion(+), 24 deletions(-)
+That's fair, probably just keep it.
 
-diff --git a/fs/dax.c b/fs/dax.c
-index 289e6254aa30..90ec68785f40 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -381,7 +381,6 @@ static void dax_folio_make_shared(struct folio *folio)
- static inline unsigned long dax_folio_put(struct folio *folio)
- {
- 	unsigned long ref;
--	int order, i;
- 
- 	if (!dax_folio_is_shared(folio))
- 		ref = 0;
-@@ -391,29 +390,7 @@ static inline unsigned long dax_folio_put(struct folio *folio)
- 	if (ref)
- 		return ref;
- 
--	folio->mapping = NULL;
--	order = folio_order(folio);
--	if (!order)
--		return 0;
--	folio_reset_order(folio);
--
--	for (i = 0; i < (1UL << order); i++) {
--		struct dev_pagemap *pgmap = page_pgmap(&folio->page);
--		struct page *page = folio_page(folio, i);
--		struct folio *new_folio = (struct folio *)page;
--
--		ClearPageHead(page);
--		clear_compound_head(page);
--
--		new_folio->mapping = NULL;
--		/*
--		 * Reset pgmap which was over-written by
--		 * prep_compound_page().
--		 */
--		new_folio->pgmap = pgmap;
--		new_folio->share = 0;
--		WARN_ON_ONCE(folio_ref_count(new_folio));
--	}
-+	folio_split_unref(folio);
- 
- 	return ref;
- }
--- 
-2.43.0
+> > > +static long __fsdev_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
+> > > +			long nr_pages, enum dax_access_mode mode, void **kaddr,
+> > > +			unsigned long *pfn)
+> > > +{
+> > > +	struct dev_dax *dev_dax = dax_get_private(dax_dev);
+> > > +	size_t size = nr_pages << PAGE_SHIFT;
+> > > +	size_t offset = pgoff << PAGE_SHIFT;
+> > > +	void *virt_addr = dev_dax->virt_addr + offset;
+> > > +	phys_addr_t phys;
+> > > +	unsigned long local_pfn;
+> > > +
+> > > +	WARN_ON(!dev_dax->virt_addr);
+> > > +
+> > > +	phys = dax_pgoff_to_phys(dev_dax, pgoff, nr_pages << PAGE_SHIFT);  
+> > 
+> > Use size given you already computed it.  
+> 
+> Not sure I follow. nr_pages is the size of the access or fault, not the size
+> of the device. 
+
+Just above:
+
+size_t size = nr_pages << PAGE_SHIFT;
+
+Jonathan
 
 
