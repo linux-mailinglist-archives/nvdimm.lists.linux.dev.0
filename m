@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-12408-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12410-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E276D03296
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 08 Jan 2026 14:51:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D08D02F65
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 08 Jan 2026 14:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9EFB23000950
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jan 2026 13:51:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ED0D0322CB6C
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jan 2026 12:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4E44F4C6A;
-	Thu,  8 Jan 2026 12:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1CC396B79;
+	Thu,  8 Jan 2026 12:50:07 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB2E4F3AC2
-	for <nvdimm@lists.linux.dev>; Thu,  8 Jan 2026 12:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6291EB5CE
+	for <nvdimm@lists.linux.dev>; Thu,  8 Jan 2026 12:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767875698; cv=none; b=XakUHbf8w30bJJj+CbLMjU9NIyFX7rQ08mj5h+toMMXZdrTQvn0rpWWBX7h44+ykBjY9zDQpSXUQqqbI2n3z+JAIOU/xRw+vU1+CciDqlLHIDFpr6K40YJxe8nfg1a0oVZZ8+HbWzQmCLpuFRvMDLG0SvdjUAte6/1O1INxTFAE=
+	t=1767876607; cv=none; b=nRRF5OWLUZ9a4MqaizpJs5YdMIcxfRwkB0ps0+wO7X5o71cYV8/IFSxOpAGheIdOHAPaN2jeTHqDgYjL1c7CRB4cBWWVz8o5cgudNnKBeaHJPTdEaDTsSC+pRDFLA9uQAJDgW1IJdqNcNUWLHqq+y4bJltFazgo44S1q8UQTQ58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767875698; c=relaxed/simple;
-	bh=sOXOyLTiP/6AAkX4P6ptZI8GTCLwE7Rurc3N6kkkQWE=;
+	s=arc-20240116; t=1767876607; c=relaxed/simple;
+	bh=oRZ2lPl+gZkTUwx0MnubUkgPpy5MkPPj96/wtI4UW/Q=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oqsO3dsFH8w5yDzKbNHc67XaTm6TtgVyKot2TrAej8BBGt2LglOTLcKTxP452ZPAgc++qqGJ1RHQYDzBE4j/QOk2q9q/kccTRbWgQ4Gb/R9LVSNX/1dQEGTsWiBThrT6s8HTbgTL/AyQucUIyqCBeoJWi6hrGTpL7AhGCXdwDw8=
+	 MIME-Version:Content-Type; b=BtwyFSIC+ZqpNSvlUeO36gozhd3zFlN+fDqSVrXU+E2mYgjEEx0BOmvoEc6haIVNOZltB81HobkpJOYqhBnwkcKbl20lBC4EzKzQvjqmeVvlcNUlk5uBFIWAM17ZsD7hK6WzTes9fOH0ujxGdfiYUVzI9JTKiPAqJ+VOVFWw5fM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dn49N3W0LzJ468s;
-	Thu,  8 Jan 2026 20:34:48 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dn4Vp3QDBzJ469G;
+	Thu,  8 Jan 2026 20:49:54 +0800 (CST)
 Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5014640539;
-	Thu,  8 Jan 2026 20:34:53 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 4FF994056A;
+	Thu,  8 Jan 2026 20:49:59 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
  (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 8 Jan
- 2026 12:34:51 +0000
-Date: Thu, 8 Jan 2026 12:34:50 +0000
+ 2026 12:49:57 +0000
+Date: Thu, 8 Jan 2026 12:49:56 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: John Groves <John@Groves.net>
 CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
@@ -59,13 +59,13 @@ CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
 	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
 	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V3 07/21] dax: prevent driver unbind while filesystem
- holds device
-Message-ID: <20260108123450.00004eac@huawei.com>
-In-Reply-To: <20260107153332.64727-8-john@groves.net>
+Subject: Re: [PATCH V3 14/21] famfs_fuse: Plumb the GET_FMAP
+ message/response
+Message-ID: <20260108124956.00000e0e@huawei.com>
+In-Reply-To: <20260107153332.64727-15-john@groves.net>
 References: <20260107153244.64703-1-john@groves.net>
 	<20260107153332.64727-1-john@groves.net>
-	<20260107153332.64727-8-john@groves.net>
+	<20260107153332.64727-15-john@groves.net>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -75,134 +75,151 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
  dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Wed,  7 Jan 2026 09:33:16 -0600
+On Wed,  7 Jan 2026 09:33:23 -0600
 John Groves <John@Groves.net> wrote:
 
-> From: John Groves <John@Groves.net>
-> 
-> Add custom bind/unbind sysfs attributes for the dax bus that check
-> whether a filesystem has registered as a holder (via fs_dax_get())
-> before allowing driver unbind.
-> 
-> When a filesystem like famfs mounts on a dax device, it registers
-> itself as the holder via dax_holder_ops. Previously, there was no
-> mechanism to prevent driver unbind while the filesystem was mounted,
-> which could cause some havoc.
-> 
-> The new unbind_store() checks dax_holder() and returns -EBUSY if
-> a holder is registered, giving userspace proper feedback that the
-> device is in use.
-> 
-> To use our custom bind/unbind handlers instead of the default ones,
-> set suppress_bind_attrs=true on all dax drivers during registration.
-
-Whilst I appreciate that it is painful, so are many other driver unbinds
-where services are provided to another driver.  Is there any precedence
-for doing something like this? If not, I'd like to see a review on this
-from one of the driver core folk. Maybe Greg KH.
-
-Might just be a case of calling it something else to avoid userspace
-tooling getting a surprise.
-
+> Upon completion of an OPEN, if we're in famfs-mode we do a GET_FMAP to
+> retrieve and cache up the file-to-dax map in the kernel. If this
+> succeeds, read/write/mmap are resolved direct-to-dax with no upcalls.
 > 
 > Signed-off-by: John Groves <john@groves.net>
-> ---
->  drivers/dax/bus.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-> index 6e0e28116edc..ed453442739d 100644
-> --- a/drivers/dax/bus.c
-> +++ b/drivers/dax/bus.c
-> @@ -151,9 +151,61 @@ static ssize_t remove_id_store(struct device_driver *drv, const char *buf,
->  }
->  static DRIVER_ATTR_WO(remove_id);
->  
-> +static const struct bus_type dax_bus_type;
-> +
+A few things inline.
+
+J
+
+> diff --git a/fs/fuse/famfs.c b/fs/fuse/famfs.c
+> new file mode 100644
+> index 000000000000..0f7e3f00e1e7
+> --- /dev/null
+> +++ b/fs/fuse/famfs.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Custom bind/unbind handlers for dax bus.
-> + * The unbind handler checks if a filesystem holds the dax device and
-> + * returns -EBUSY if so, preventing driver unbind while in use.
+> + * famfs - dax file system for shared fabric-attached memory
+> + *
+> + * Copyright 2023-2025 Micron Technology, Inc.
+> + *
+> + * This file system, originally based on ramfs the dax support from xfs,
+> + * is intended to allow multiple host systems to mount a common file system
+> + * view of dax files that map to shared memory.
 > + */
-> +static ssize_t unbind_store(struct device_driver *drv, const char *buf,
-> +		size_t count)
+> +
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/dax.h>
+> +#include <linux/iomap.h>
+> +#include <linux/path.h>
+> +#include <linux/namei.h>
+> +#include <linux/string.h>
+> +
+> +#include "fuse_i.h"
+> +
+> +
+> +#define FMAP_BUFSIZE PAGE_SIZE
+> +
+> +int
+> +fuse_get_fmap(struct fuse_mount *fm, struct inode *inode)
 > +{
-> +	struct device *dev;
-> +	int rc = -ENODEV;
+> +	struct fuse_inode *fi = get_fuse_inode(inode);
+> +	size_t fmap_bufsize = FMAP_BUFSIZE;
+> +	u64 nodeid = get_node_id(inode);
+> +	ssize_t fmap_size;
+> +	void *fmap_buf;
+> +	int rc;
 > +
-> +	dev = bus_find_device_by_name(&dax_bus_type, NULL, buf);
-
-	struct device *dev __free(put_device) = bus_find_device_by_name()...
-
-and you can just return on error.
-
-> +	if (dev && dev->driver == drv) {
-With the __free I'd flip this
-	if (!dev || !dev->driver == drv)
-		return -ENODEV;
-
-	...
-
-> +		struct dev_dax *dev_dax = to_dev_dax(dev);
+> +	FUSE_ARGS(args);
 > +
-> +		if (dax_holder(dev_dax->dax_dev)) {
-> +			dev_dbg(dev,
-> +				"%s: blocking unbind due to active holder\n",
-> +				__func__);
-> +			rc = -EBUSY;
-> +			goto out;
-> +		}
-> +		device_release_driver(dev);
-> +		rc = count;
+> +	/* Don't retrieve if we already have the famfs metadata */
+> +	if (fi->famfs_meta)
+> +		return 0;
+> +
+> +	fmap_buf = kcalloc(1, FMAP_BUFSIZE, GFP_KERNEL);
+
+If there is only ever 1, does kcalloc() make sense over kzalloc()?
+
+> +	if (!fmap_buf)
+> +		return -EIO;
+> +
+> +	args.opcode = FUSE_GET_FMAP;
+> +	args.nodeid = nodeid;
+> +
+> +	/* Variable-sized output buffer
+> +	 * this causes fuse_simple_request() to return the size of the
+> +	 * output payload
+> +	 */
+> +	args.out_argvar = true;
+> +	args.out_numargs = 1;
+> +	args.out_args[0].size = fmap_bufsize;
+> +	args.out_args[0].value = fmap_buf;
+> +
+> +	/* Send GET_FMAP command */
+> +	rc = fuse_simple_request(fm, &args);
+> +	if (rc < 0) {
+> +		pr_err("%s: err=%d from fuse_simple_request()\n",
+> +		       __func__, rc);
+
+Leaks the fmap_buf?  Maybe use a __free() so no need to keep track of htat.
+
+
+> +		return rc;
 > +	}
-> +out:
-> +	put_device(dev);
-> +	return rc;
+> +	fmap_size = rc;
+> +
+> +	/* We retrieved the "fmap" (the file's map to memory), but
+> +	 * we haven't used it yet. A call to famfs_file_init_dax() will be added
+> +	 * here in a subsequent patch, when we add the ability to attach
+> +	 * fmaps to files.
+> +	 */
+> +
+> +	kfree(fmap_buf);
+> +	return 0;
 > +}
-> +static DRIVER_ATTR_WO(unbind);
-> +
-> +static ssize_t bind_store(struct device_driver *drv, const char *buf,
-> +		size_t count)
-> +{
-> +	struct device *dev;
-> +	int rc = -ENODEV;
-> +
-> +	dev = bus_find_device_by_name(&dax_bus_type, NULL, buf);
-Use __free magic here as well..
-> +	if (dev) {
-> +		rc = device_driver_attach(drv, dev);
-> +		if (!rc)
-> +			rc = count;
-then this can be
-		if (rc)
-			return rc;
-		return count;
 
-> +	}
-> +	put_device(dev);
-> +	return rc;
-> +}
-> +static DRIVER_ATTR_WO(bind);
-> +
->  static struct attribute *dax_drv_attrs[] = {
->  	&driver_attr_new_id.attr,
->  	&driver_attr_remove_id.attr,
-> +	&driver_attr_bind.attr,
-> +	&driver_attr_unbind.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(dax_drv);
-> @@ -1591,6 +1643,7 @@ int __dax_driver_register(struct dax_device_driver *dax_drv,
->  	drv->name = mod_name;
->  	drv->mod_name = mod_name;
->  	drv->bus = &dax_bus_type;
-> +	drv->suppress_bind_attrs = true;
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index 84d0ee2a501d..691c7850cf4e 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -223,6 +223,14 @@ struct fuse_inode {
+
 >  
->  	return driver_register(drv);
->  }
+> +static inline struct fuse_backing *famfs_meta_set(struct fuse_inode *fi,
+> +						       void *meta)
+> +{
+> +#if IS_ENABLED(CONFIG_FUSE_FAMFS_DAX)
+> +	return xchg(&fi->famfs_meta, meta);
+> +#else
+> +	return NULL;
+> +#endif
+> +}
+> +
+> +static inline void famfs_meta_free(struct fuse_inode *fi)
+> +{
+> +	/* Stub wil be connected in a subsequent commit */
+> +}
+> +
+> +static inline int fuse_file_famfs(struct fuse_inode *fi)
+> +{
+> +#if IS_ENABLED(CONFIG_FUSE_FAMFS_DAX)
+> +	return (READ_ONCE(fi->famfs_meta) != NULL);
+> +#else
+> +	return 0;
+> +#endif
+> +}
+> +
+> +#if IS_ENABLED(CONFIG_FUSE_FAMFS_DAX)
+> +int fuse_get_fmap(struct fuse_mount *fm, struct inode *inode);
+> +#else
+> +static inline int
+> +fuse_get_fmap(struct fuse_mount *fm, struct inode *inode)
+> +{
+> +	return 0;
+> +}
+> +#endif
+I'd do a single block under one if IS_ENABLED() and then use an else
+for the stubs.   Should end up more readable.
 
+Jonathan
 
