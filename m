@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-12407-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12409-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D94D02AA7
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 08 Jan 2026 13:37:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6703D02B61
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 08 Jan 2026 13:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 955C130256A0
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jan 2026 12:37:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 09C79301D0DD
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  8 Jan 2026 12:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699A643D4F1;
-	Thu,  8 Jan 2026 12:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C6D4F7988;
+	Thu,  8 Jan 2026 12:36:47 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA212436356
-	for <nvdimm@lists.linux.dev>; Thu,  8 Jan 2026 12:27:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005544F7977
+	for <nvdimm@lists.linux.dev>; Thu,  8 Jan 2026 12:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767875241; cv=none; b=AD6Med3ym0rnwzDqVNpHjsV5XeBAD9udhLUQnAYlOQNL+JkqN7PjkcWTKDaI7kNRYPvxF+D8cTBnCi41RtD1oEU3Ii5JXOFDJbUf+mUiQ6LX9FtTuK3M6Va6wFY/qUgZM0JPRiGtinxyKrGL0JGIppcOr71WY9urYQAaE3nEUls=
+	t=1767875806; cv=none; b=nkCHHfStTrSMS282aWpRja25+5p9Be+9AOz6XF7kjXG0c7+nCV4XrryJZY53xf0XAt/grZamzGvZceZGHXDUX7KIAagdEmxxYM+VoKYnOR1yTP6IJ6mkM3NWpW970POfhrczNWh4ugy9zUwszzCl9CAPEE0pKqEQOcoHoi3hmuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767875241; c=relaxed/simple;
-	bh=41316vyJ8zu+32cFRFgmU0a/by8Q0n1PdBcpVfQlya8=;
+	s=arc-20240116; t=1767875806; c=relaxed/simple;
+	bh=z6+q860qTZZ4J4xm1/w1OkocGu91imgffXA3+CygH8c=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A0NWdfrKOOveXdiJVjYwpcsFIzERizX3adAaXvFvlBVnfT2yh6Yg0WV5FNW5T5dsB6D4Btyy4+RlzQLN/U46N8pglNoQHBI0QaBxml2zmCa4WZEBJJyB1jDhnkNfYIHnCdraqQxZvP8Q/FE4RKQvZgRKcTpMXAjUiZGxMaFtAE4=
+	 MIME-Version:Content-Type; b=CURtnB+ftkc/sOQ+7hQSozMZ3cv5L7xRrY+2ZU4vCVYG3x346Z23qBuvhQzoXLldwV3yE3huAYO5DqtzW2EGc4hIzlNFmrj+5+oNTmJJxXlQ7js2UAZ6gFBPpjPS6tksMdkJzqOuVN0E/+FFAH1f86pjyJPwQ1D8f8sV+7EWWTs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dn40c088NzJ46BR;
-	Thu,  8 Jan 2026 20:27:12 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.107])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dn4CP55przHnGhV;
+	Thu,  8 Jan 2026 20:36:33 +0800 (CST)
 Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id CDB3B40569;
-	Thu,  8 Jan 2026 20:27:16 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id C991440571;
+	Thu,  8 Jan 2026 20:36:41 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
  (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 8 Jan
- 2026 12:27:15 +0000
-Date: Thu, 8 Jan 2026 12:27:13 +0000
+ 2026 12:36:40 +0000
+Date: Thu, 8 Jan 2026 12:36:38 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: John Groves <John@Groves.net>
 CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
@@ -59,13 +59,12 @@ CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
 	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
 	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V3 06/21] dax: Add fs_dax_get() func to prepare dax for
- fs-dax usage
-Message-ID: <20260108122713.00007e54@huawei.com>
-In-Reply-To: <20260107153332.64727-7-john@groves.net>
+Subject: Re: [PATCH V3 10/21] famfs_fuse: Kconfig
+Message-ID: <20260108123638.0000442e@huawei.com>
+In-Reply-To: <20260107153332.64727-11-john@groves.net>
 References: <20260107153244.64703-1-john@groves.net>
 	<20260107153332.64727-1-john@groves.net>
-	<20260107153332.64727-7-john@groves.net>
+	<20260107153332.64727-11-john@groves.net>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -78,132 +77,44 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
  dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Wed,  7 Jan 2026 09:33:15 -0600
+On Wed,  7 Jan 2026 09:33:19 -0600
 John Groves <John@Groves.net> wrote:
 
-> The fs_dax_get() function should be called by fs-dax file systems after
-> opening a fsdev dax device. This adds holder_operations, which provides
-> a memory failure callback path and effects exclusivity between callers
-> of fs_dax_get().
-> 
-> fs_dax_get() is specific to fsdev_dax, so it checks the driver type
-> (which required touching bus.[ch]). fs_dax_get() fails if fsdev_dax is
-> not bound to the memory.
-> 
-> This function serves the same role as fs_dax_get_by_bdev(), which dax
-> file systems call after opening the pmem block device.
-> 
-> This can't be located in fsdev.c because struct dax_device is opaque
-> there.
-> 
-> This will be called by fs/fuse/famfs.c in a subsequent commit.
+> Add FUSE_FAMFS_DAX config parameter, to control compilation of famfs
+> within fuse.
 > 
 > Signed-off-by: John Groves <john@groves.net>
-Hi John,
 
-A few passing comments on this one.
+A separate commit for this doesn't obviously add anything over combining
+it with first place the CONFIG_xxx is used.
 
-Jonathan
+Maybe it's a convention for fs/fuse though. If it is ignore me.
 
 > ---
-
->  #define dax_driver_register(driver) \
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index ba0b4cd18a77..68c45b918cff 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -14,6 +14,7 @@
->  #include <linux/fs.h>
->  #include <linux/cacheinfo.h>
->  #include "dax-private.h"
-> +#include "bus.h"
+>  fs/fuse/Kconfig | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/fs/fuse/Kconfig b/fs/fuse/Kconfig
+> index 3a4ae632c94a..3b6d3121fe40 100644
+> --- a/fs/fuse/Kconfig
+> +++ b/fs/fuse/Kconfig
+> @@ -76,3 +76,17 @@ config FUSE_IO_URING
 >  
->  /**
->   * struct dax_device - anchor object for dax services
-> @@ -121,6 +122,59 @@ void fs_put_dax(struct dax_device *dax_dev, void *holder)
->  EXPORT_SYMBOL_GPL(fs_put_dax);
->  #endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
->  
-> +#if IS_ENABLED(CONFIG_DEV_DAX_FS)
-> +/**
-> + * fs_dax_get() - get ownership of a devdax via holder/holder_ops
-> + *
-> + * fs-dax file systems call this function to prepare to use a devdax device for
-> + * fsdax. This is like fs_dax_get_by_bdev(), but the caller already has struct
-> + * dev_dax (and there is no bdev). The holder makes this exclusive.
-> + *
-> + * @dax_dev: dev to be prepared for fs-dax usage
-> + * @holder: filesystem or mapped device inside the dax_device
-> + * @hops: operations for the inner holder
-> + *
-> + * Returns: 0 on success, <0 on failure
-> + */
-> +int fs_dax_get(struct dax_device *dax_dev, void *holder,
-> +	const struct dax_holder_operations *hops)
-> +{
-> +	struct dev_dax *dev_dax;
-> +	struct dax_device_driver *dax_drv;
-> +	int id;
+>  	  If you want to allow fuse server/client communication through io-uring,
+>  	  answer Y
 > +
-> +	id = dax_read_lock();
-
-Given this is an srcu_read_lock under the hood you could do similar
-to the DEFINE_LOCK_GUARD_1 for the srcu (srcu.h) (though here it's a
-DEFINE_LOCK_GUARD_0 given the lock itself isn't a parameter and then
-use scoped_guard() here.  Might not be worth the hassle and would need
-a wrapper macro to poke &dax_srcu in which means exposing that at least
-a little in a header.
-
-DEFINE_LOCK_GUARD_0(_T->idx = dax_read_lock, dax_read_lock(_T->idx), idx);
-Based loosely on the irqflags.h irqsave one. 
-
-> +	if (!dax_dev || !dax_alive(dax_dev) || !igrab(&dax_dev->inode)) {
-> +		dax_read_unlock(id);
-> +		return -ENODEV;
-> +	}
-> +	dax_read_unlock(id);
+> +config FUSE_FAMFS_DAX
+> +	bool "FUSE support for fs-dax filesystems backed by devdax"
+> +	depends on FUSE_FS
+> +	depends on DEV_DAX
+> +	default FUSE_FS
+> +	select DEV_DAX_FS
+> +	help
+> +	  This enables the fabric-attached memory file system (famfs),
+> +	  which enables formatting devdax memory as a file system. Famfs
+> +	  is primarily intended for scale-out shared access to
+> +	  disaggregated memory.
 > +
-> +	/* Verify the device is bound to fsdev_dax driver */
-> +	dev_dax = dax_get_private(dax_dev);
-> +	if (!dev_dax || !dev_dax->dev.driver) {
-> +		iput(&dax_dev->inode);
-> +		return -ENODEV;
-> +	}
-> +
-> +	dax_drv = to_dax_drv(dev_dax->dev.driver);
-> +	if (dax_drv->type != DAXDRV_FSDEV_TYPE) {
-> +		iput(&dax_dev->inode);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (cmpxchg(&dax_dev->holder_data, NULL, holder)) {
-> +		iput(&dax_dev->inode);
-> +		return -EBUSY;
-> +	}
-> +
-> +	dax_dev->holder_ops = hops;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(fs_dax_get);
-> +#endif /* DEV_DAX_FS */
-> +
->  enum dax_device_flags {
->  	/* !alive + rcu grace period == no new operations / mappings */
->  	DAXDEV_ALIVE,
-> diff --git a/include/linux/dax.h b/include/linux/dax.h
-> index 3fcd8562b72b..76f2a75f3144 100644
-> --- a/include/linux/dax.h
-> +++ b/include/linux/dax.h
-> @@ -53,6 +53,7 @@ struct dax_holder_operations {
->  struct dax_device *alloc_dax(void *private, const struct dax_operations *ops);
->  
->  #if IS_ENABLED(CONFIG_DEV_DAX_FS)
-> +int fs_dax_get(struct dax_device *dax_dev, void *holder, const struct dax_holder_operations *hops);
-I'd wrap this.  It's rather long and there isn't a huge readability benefit in keeping
-it on one line.
->  struct dax_device *inode_dax(struct inode *inode);
->  #endif
->  void *dax_holder(struct dax_device *dax_dev);
+> +	  To enable famfs or other fuse/fs-dax file systems, answer Y
 
 
