@@ -1,139 +1,118 @@
-Return-Path: <nvdimm+bounces-12489-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12492-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C3D7D0F490
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 11 Jan 2026 16:25:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A260AD0F4B8
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 11 Jan 2026 16:28:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5664430519F7
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 11 Jan 2026 15:25:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 55CEA306A92F
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 11 Jan 2026 15:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978CE34BA4E;
-	Sun, 11 Jan 2026 15:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125DC34CFAD;
+	Sun, 11 Jan 2026 15:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NQuKFh9G"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TUt9++Nb"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A657E3093CD
-	for <nvdimm@lists.linux.dev>; Sun, 11 Jan 2026 15:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A2A34BA46
+	for <nvdimm@lists.linux.dev>; Sun, 11 Jan 2026 15:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768145113; cv=none; b=ff9UCp61od5w/5g63aOCdbYVLxzmh/WJEAzl9ct0znoQ9a/Uk3pF/MUeRpiM2Ehs8ht3ekWCVNW30BXfLWc1nNteSfrYbjmPFBiIdVXLZnDGvv/bO/ahamznvN1u64IJegaBcmcHKhhH+rFU/7O6gWdzbpGhcr2PLkkbuuHZdAg=
+	t=1768145287; cv=none; b=BCehNFt4UKoWdr41Ovnimfr1ft7rAkyGXJWIrc+6cIxnRHRJ1urHizzMeNRUOFzniQqIwUAI6QpmaOZ3wAmWYxDHeUJ/mfF+u2ZoWbe6h4mcf0haJaIJzIHVCy9yg6pckl5JikUZ9XF3vlcwwwyQuWJuhukdTUuf8Dpt6tnkijg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768145113; c=relaxed/simple;
-	bh=9j/8kdLGpil/VIB+d2Yn82mNnf/7PeoplPI99zTTrAo=;
+	s=arc-20240116; t=1768145287; c=relaxed/simple;
+	bh=er/XHv/UxzTnDZeFO/hTKeu0UtTrtvITjK87Z7hOtz0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=I2pv6uh66v7wNknz6H4atEXG0F/wQ+53sPsTSBtA9rz7tUuxSEaAfqDlkaZrtQeeplh8uHgvlb1hRugPhyKv/yt32ViHBbMP/Ubeh5OknZd61/zW7PEHeLmB1by5QSulPhIAaAgUrNPdj6Kp/5BcQIQS0G/da8MOOPH0R4uNWW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NQuKFh9G; arc=none smtp.client-ip=203.254.224.33
+	 Content-Type:References; b=fkQqIywl9jhAiAvV/YWLznnarZdvcld65fE5Nu1qWEu/0w+h7dVYymxroJf/lyCA0hb6vp+dqdp85HxNwwfb+0A81U9WIYGTAE6iwh25LceKaEZbckhe/8++8IZnIJ2NzqYQ23acpKJ9H9thEY/ncS4qyp+SY/GzYnGNmIGeR+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TUt9++Nb; arc=none smtp.client-ip=203.254.224.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260111152503epoutp031991c074f992d9f6bc65e5013e5159df~JtpqB-iyv3063130631epoutp03S
-	for <nvdimm@lists.linux.dev>; Sun, 11 Jan 2026 15:25:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260111152503epoutp031991c074f992d9f6bc65e5013e5159df~JtpqB-iyv3063130631epoutp03S
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260111152803epoutp01155ea55ad8e430e2b75a9952c8c90a7e~JtsRSHosK0553105531epoutp01N
+	for <nvdimm@lists.linux.dev>; Sun, 11 Jan 2026 15:28:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260111152803epoutp01155ea55ad8e430e2b75a9952c8c90a7e~JtsRSHosK0553105531epoutp01N
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1768145103;
-	bh=MHVDd4pa1j4KDmNX9wkuTMLEU+gEEFa+A5Ya+Xln8IY=;
+	s=mail20170921; t=1768145283;
+	bh=er/XHv/UxzTnDZeFO/hTKeu0UtTrtvITjK87Z7hOtz0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NQuKFh9GWm4LQq49bQIDhTyHPQtsM7BMxan+F8Br2Q3SRcO7RgEpUDrjg2SZrDsVh
-	 ozosN0AaRa/uTsMQqIylQ/UH9LNJJGc2fadNCf/sWw/A8xXdfzn/DL1hxAW+n8azPr
-	 G8iFYVpkq1oGhwUjn59cS/T913275mfMlRI5bwKA=
+	b=TUt9++NbDvxYHlAP+7bE70O0szyc3DpGc9iv8kcCU69qi8IZD1505SgziD3MLUNuf
+	 DIsrMBygN43X8710C0itcas2L5dmpI7zPVr/mJkFIpQGsaw7ZYhSSu2k1rMAZDy0b5
+	 0vFiWck5ZpnlYzoP9a4/oIXmFrDD3Qe2R02cCiko=
 Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260111152502epcas5p11365dd5ca332d72b953a83a94b49da1a~JtppWYdBg1468814688epcas5p17;
-	Sun, 11 Jan 2026 15:25:02 +0000 (GMT)
-Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4dpzpQ4q1Tz2SSKX; Sun, 11 Jan
-	2026 15:25:02 +0000 (GMT)
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20260111152802epcas5p271cb58809713b04a304c151ad6f3617d~JtsRB_FFF0973309733epcas5p2x;
+	Sun, 11 Jan 2026 15:28:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4dpzst57vpz2SSKX; Sun, 11 Jan
+	2026 15:28:02 +0000 (GMT)
 Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260109115641epcas5p24f39a149c8e2a50396fb2248d91bf199~JDhJ-DV2f1667016670epcas5p2M;
-	Fri,  9 Jan 2026 11:56:41 +0000 (GMT)
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260109120309epcas5p1c7ff1efa664229af7fa28dcc52bef559~JDmz6yjfa0990909909epcas5p19;
+	Fri,  9 Jan 2026 12:03:09 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260109115640epsmtip16955f99afb0febcad3f347b124b3660c~JDhIxLOis1138711387epsmtip1V;
-	Fri,  9 Jan 2026 11:56:39 +0000 (GMT)
-Date: Fri, 9 Jan 2026 17:26:33 +0530
+	20260109120307epsmtip16b84737e05ddabbebb501138e3e332d8~JDmxdziOF1701617016epsmtip1d;
+	Fri,  9 Jan 2026 12:03:07 +0000 (GMT)
+Date: Fri, 9 Jan 2026 17:33:02 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
-Subject: Re: [PATCH V4 07/17] nvdimm/label: Add region label delete support
-Message-ID: <1296674576.21768145102661.JavaMail.epsvc@epcpadp1new>
+Subject: Re: [PATCH V4 08/17] nvdimm/label: Preserve cxl region information
+ from region label
+Message-ID: <1983025922.01768145282705.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <0df5e529-e9bf-4fd5-ac54-4d9853f8e79a@intel.com>
-X-CMS-MailID: 20260109115641epcas5p24f39a149c8e2a50396fb2248d91bf199
+In-Reply-To: <f161f011-e4f3-47f4-aa09-6266da1cd423@intel.com>
+X-CMS-MailID: 20260109120309epcas5p1c7ff1efa664229af7fa28dcc52bef559
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e5890_"
+	boundary="----uUAw3F.Lk_UAUO08rJsbYBgyLSlm5c8z3L48n3TH2NgWyj3Z=_e5510_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20251119075319epcas5p2374c721a42a68cfb6f2b17b17c51c0ea
+X-CMS-RootMailID: 20251119075321epcas5p19665a54028ce13d8c1af3f00c0834fc7
 References: <20251119075255.2637388-1-s.neeraj@samsung.com>
-	<CGME20251119075319epcas5p2374c721a42a68cfb6f2b17b17c51c0ea@epcas5p2.samsung.com>
-	<20251119075255.2637388-8-s.neeraj@samsung.com>
-	<0df5e529-e9bf-4fd5-ac54-4d9853f8e79a@intel.com>
+	<CGME20251119075321epcas5p19665a54028ce13d8c1af3f00c0834fc7@epcas5p1.samsung.com>
+	<20251119075255.2637388-9-s.neeraj@samsung.com>
+	<f161f011-e4f3-47f4-aa09-6266da1cd423@intel.com>
 
-------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e5890_
+------uUAw3F.Lk_UAUO08rJsbYBgyLSlm5c8z3L48n3TH2NgWyj3Z=_e5510_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
 
-On 19/11/25 12:50PM, Dave Jiang wrote:
+On 19/11/25 01:13PM, Dave Jiang wrote:
 >
 >
 >On 11/19/25 12:52 AM, Neeraj Kumar wrote:
->> Create export routine nd_region_label_delete() used for deleting
->> region label from LSA. It will be used later from CXL subsystem
+>> Preserve region information from region label during nvdimm_probe. This
+>> preserved region information is used for creating cxl region to achieve
+>> region persistency across reboot.
 >>
 >> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
 >
->Just one small thing below, otherwise
 >Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 >
->> ---
->>  drivers/nvdimm/label.c          | 76 ++++++++++++++++++++++++++++++---
->>  drivers/nvdimm/label.h          |  1 +
->>  drivers/nvdimm/namespace_devs.c | 12 ++++++
->>  drivers/nvdimm/nd.h             |  6 +++
->>  include/linux/libnvdimm.h       |  1 +
->>  5 files changed, 90 insertions(+), 6 deletions(-)
->>
+>Assume there's a plan to add >1 region labels preservation in the next step?
 
-<snip>
-
->>
->> +int nd_region_label_delete(struct nd_region *nd_region)
->> +{
->> +	int rc;
->> +
->> +	nvdimm_bus_lock(&nd_region->dev);
->
->You can use the new nvdimm_bus guard() now.
->
->guard(nvdimm_bus)(&nd_region->dev);
->
->DJ
-
-Hi Dave, Thanks for RB tag, I have fixed it in V5.
+Thanks Dave for RB tag. Yes, I will prepare in next patch series.
 
 
 Regards,
 Neeraj
 
-------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e5890_
+------uUAw3F.Lk_UAUO08rJsbYBgyLSlm5c8z3L48n3TH2NgWyj3Z=_e5510_
 Content-Type: text/plain; charset="utf-8"
 
 
-------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e5890_--
+------uUAw3F.Lk_UAUO08rJsbYBgyLSlm5c8z3L48n3TH2NgWyj3Z=_e5510_--
 
 
