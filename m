@@ -1,165 +1,352 @@
-Return-Path: <nvdimm+bounces-12441-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12433-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Delivered-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEFAD09DCA
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 09 Jan 2026 13:42:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1C01D0935C
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 09 Jan 2026 13:03:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 50AD63046800
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  9 Jan 2026 12:30:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2303430FC2D2
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  9 Jan 2026 11:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6CAB35B157;
-	Fri,  9 Jan 2026 12:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0884633B97F;
+	Fri,  9 Jan 2026 11:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="pykTwgv2"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A535B133
-	for <nvdimm@lists.linux.dev>; Fri,  9 Jan 2026 12:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ED532BF21
+	for <nvdimm@lists.linux.dev>; Fri,  9 Jan 2026 11:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767961837; cv=none; b=AZeaxwdyWKr8hPymKbYONZ3oAnXdRu++YbaN70IUWspAA5c+rYuDod252fwiSKpzMayU5K7NWUWkZliPOdh/w7oyttNFkW/TXNV7ltQ8cbI0u2j8Cmj8cuXKGGTrOVQlLuKyH0xrsZizaj9OwkHiVEEFHHjuha1402Z6dw1waYo=
+	t=1767959889; cv=none; b=o62KDOPNapUR/eLCJM0Lpj26NbfwwEovN4l+a4iuQjPqGyGoXo/u0b/61qBpmxsJRh41IzqylcSZFWh6BK8REQEwDtuJlpsDVPywWssgn04ktpGE5F7omKCxilfcDLjSOaFjqX/EuiyfNimhjVq2ofOkhQSqRIHikjctb+owxIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767961837; c=relaxed/simple;
-	bh=in5JvqRmDAdB6dX8FGI0EEgnQhCtsywKD5TDJBxjJjU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=THk3uiH6nZbwfNkiT+RwBAQgWgCyRsTt36w9hbtFVupkiOuwILAsyNH3264mJP9dsTi8xK3fZv0cBgiHYuLlIZRZNRTX8lTVobtU3PMx6yFUtdExCPMg3kSycubDl3JDox8GmD2zxpIsjTUZlvm4Aop0yO7vqdfN9913bdq0/kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dnh1h1cXTzHnH7w;
-	Fri,  9 Jan 2026 20:30:16 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 48D4440572;
-	Fri,  9 Jan 2026 20:30:26 +0800 (CST)
-Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
- (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Fri, 9 Jan
- 2026 12:30:24 +0000
-Date: Thu, 8 Jan 2026 16:10:13 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: John Groves <John@groves.net>
-CC: Miklos Szeredi <miklos@szeredi.hu>, Dan Williams
-	<dan.j.williams@intel.com>, Bernd Schubert <bschubert@ddn.com>, "Alison
- Schofield" <alison.schofield@intel.com>, John Groves <jgroves@micron.com>,
-	Jonathan Corbet <corbet@lwn.net>, Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, Jan
- Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>, "David
- Hildenbrand" <david@kernel.org>, Christian Brauner <brauner@kernel.org>,
-	"Darrick J . Wong" <djwong@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-	Jeff Layton <jlayton@kernel.org>, Amir Goldstein <amir73il@gmail.com>, Stefan
- Hajnoczi <shajnocz@redhat.com>, Joanne Koong <joannelkoong@gmail.com>, Josef
- Bacik <josef@toxicpanda.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Chen
- Linxuan <chenlinxuan@uniontech.com>, "James Morse" <james.morse@arm.com>,
-	Fuad Tabba <tabba@google.com>, "Sean Christopherson" <seanjc@google.com>,
-	Shivank Garg <shivankg@amd.com>, Ackerley Tng <ackerleytng@google.com>,
-	Gregory Price <gourry@gourry.net>, Aravind Ramesh <arramesh@micron.com>, Ajay
- Joshi <ajayjoshi@micron.com>, <venkataravis@micron.com>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V3 04/21] dax: Add dax_operations for use by fs-dax on
- fsdev dax
-Message-ID: <20260108161013.00001916@huawei.com>
-In-Reply-To: <gqwlb6ept22edcuiwwzxkboeioin6l4afemn3lenbduuwbb357@tnkceo5764vf>
-References: <20260107153244.64703-1-john@groves.net>
-	<20260107153332.64727-1-john@groves.net>
-	<20260107153332.64727-5-john@groves.net>
-	<20260108115037.00003295@huawei.com>
-	<gqwlb6ept22edcuiwwzxkboeioin6l4afemn3lenbduuwbb357@tnkceo5764vf>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1767959889; c=relaxed/simple;
+	bh=Rnar/ArkqK5EjDJjADbYoTJfOQhrovDfFUmvtgrwlT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=iKVehBu+XiHyk4T66iAmotmonz/kpzqbouVgkh+9sW4jJT715avFpziyxxMJ/Hy7BIAG7mQYHKLY/E6vGgcCloiOk+Mva+7kr+uEhA8EEHUas4AlLxlYHvsNFzusvo+5sRD42+k0fU2k3M7V+O8HJIEZs+b5xDCn3v5ZuoiPz7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=pykTwgv2; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260109115142epoutp01ecb08edbde2295c8d70792ef5aa2169f~JDczeE0G32863528635epoutp01Y
+	for <nvdimm@lists.linux.dev>; Fri,  9 Jan 2026 11:51:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260109115142epoutp01ecb08edbde2295c8d70792ef5aa2169f~JDczeE0G32863528635epoutp01Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1767959502;
+	bh=VTRkzQCUA0Hf7+12lfUcuxF6wocsSSxGk+fpxOh9HMI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pykTwgv2mms1ESS4rro1MtnZDqLzJ2fStgJ4ViNWQUgwYXlZKAVa1Vte0y51GX5hx
+	 tW+rs0EEZUsE113/n4oQoOf6f+slZySkMHQtt86CUavEu0Dw1lqlZ8KRj5pkUf3Nql
+	 N+WbfDdLUJWAaViYuGp+yTFtfiGEJOk7Vmeurkko=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20260109115141epcas5p3e6bb67f7559c4727c4b5d77ae61afe71~JDcy2teuO0218102181epcas5p3E;
+	Fri,  9 Jan 2026 11:51:41 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.92]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4dng984kltz6B9m4; Fri,  9 Jan
+	2026 11:51:40 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260109115140epcas5p4ab2dbba60ea90dde5ab279f17d77a8ba~JDcxnMg2t1197711977epcas5p48;
+	Fri,  9 Jan 2026 11:51:40 +0000 (GMT)
+Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260109115135epsmtip2df8171a7ec1d0f426a4e367361fd217e~JDctV_Yjv1550815508epsmtip21;
+	Fri,  9 Jan 2026 11:51:35 +0000 (GMT)
+Date: Fri, 9 Jan 2026 17:21:28 +0530
+From: Neeraj Kumar <s.neeraj@samsung.com>
+To: Jonathan Cameron <jonathan.cameron@huawei.com>
+Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
+	cpgs@samsung.com
+Subject: Re: [PATCH V4 03/17] nvdimm/label: Add namespace/region label
+ support as per LSA 2.1
+Message-ID: <20260109115128.sgu2x2537jno7tug@test-PowerEdge-R740xd>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+In-Reply-To: <20251217143133.00003109@huawei.com>
+X-CMS-MailID: 20260109115140epcas5p4ab2dbba60ea90dde5ab279f17d77a8ba
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e57f3_"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251119075311epcas5p1af6f86ca65fd4a8452979e861b87a841
+References: <20251119075255.2637388-1-s.neeraj@samsung.com>
+	<CGME20251119075311epcas5p1af6f86ca65fd4a8452979e861b87a841@epcas5p1.samsung.com>
+	<20251119075255.2637388-4-s.neeraj@samsung.com>
+	<20251217143133.00003109@huawei.com>
 
-On Thu, 8 Jan 2026 09:59:08 -0600
-John Groves <John@groves.net> wrote:
+------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e57f3_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-> On 26/01/08 11:50AM, Jonathan Cameron wrote:
-> > On Wed,  7 Jan 2026 09:33:13 -0600
-> > John Groves <John@Groves.net> wrote:
-> >   
-> > > From: John Groves <John@Groves.net>
-> > >   
-> > Hi John
-> > 
-> > The description should generally make sense without the title.
-> > Sometimes that means more or less repeating the title.
-> > 
-> > A few other things inline.  
-> 
-> Will do
-> 
-> >   
-> > > * These methods are based on pmem_dax_ops from drivers/nvdimm/pmem.c
-> > > * fsdev_dax_direct_access() returns the hpa, pfn and kva. The kva was
-> > >   newly stored as dev_dax->virt_addr by dev_dax_probe().
-> > > * The hpa/pfn are used for mmap (dax_iomap_fault()), and the kva is used
-> > >   for read/write (dax_iomap_rw())
-> > > * fsdev_dax_recovery_write() and dev_dax_zero_page_range() have not been
-> > >   tested yet. I'm looking for suggestions as to how to test those.
-> > > * dax-private.h: add dev_dax->cached_size, which fsdev needs to
-> > >   remember. The dev_dax size cannot change while a driver is bound
-> > >   (dev_dax_resize returns -EBUSY if dev->driver is set). Caching the size
-> > >   at probe time allows fsdev's direct_access path can use it without
-> > >   acquiring dax_dev_rwsem (which isn't exported anyway).
-> > > 
-> > > Signed-off-by: John Groves <john@groves.net>  
-> >   
-> > > diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
-> > > index c5c660b193e5..9e2f83aa2584 100644
-> > > --- a/drivers/dax/fsdev.c
-> > > +++ b/drivers/dax/fsdev.c
-> > > @@ -27,6 +27,81 @@
-> > >   * - No mmap support - all access is through fs-dax/iomap
-> > >   */
-> > >  
-> > > +static void fsdev_write_dax(void *pmem_addr, struct page *page,
-> > > +		unsigned int off, unsigned int len)
-> > > +{
-> > > +	while (len) {
-> > > +		void *mem = kmap_local_page(page);  
-> > 
-> > I guess it's pretty simple, but do we care about HIGHMEM for this
-> > new feature?  Maybe it's just easier to support it than argue about it however ;)  
-> 
-> I think this compiles to zero overhead, and is an established pattern -
-> but I'm ok following a consensus elsewhere...
+On 17/12/25 02:31PM, Jonathan Cameron wrote:
+>On Wed, 19 Nov 2025 13:22:41 +0530
+>Neeraj Kumar <s.neeraj@samsung.com> wrote:
+>
+>> Modify __pmem_label_update() to update region labels into LSA
+>>
+>> CXL 3.2 Spec mentions CXL LSA 2.1 Namespace Labels at section 9.13.2.5
+>> Modified __pmem_label_update() using setter functions to update
+>> namespace label as per CXL LSA 2.1
+>>
+>> Create export routine nd_region_label_update() used for creating
+>> region label into LSA. It will be used later from CXL subsystem
+>>
+>> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
+>Hi Neeraj,
+>
+>A few things inline from a fresh read.
+>
+>Thanks,
+>
+>Jonathan
+>
+>> ---
+>>  drivers/nvdimm/label.c          | 360 ++++++++++++++++++++++++++------
+>>  drivers/nvdimm/label.h          |  17 +-
+>>  drivers/nvdimm/namespace_devs.c |  25 ++-
+>>  drivers/nvdimm/nd.h             |  66 ++++++
+>>  include/linux/libnvdimm.h       |   8 +
+>>  5 files changed, 406 insertions(+), 70 deletions(-)
+>>
+>> diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
+>> index 0a9b6c5cb2c3..0d587a5b9f7e 100644
+>> --- a/drivers/nvdimm/label.c
+>> +++ b/drivers/nvdimm/label.c
+>
+>
+>
+>
+>> @@ -978,7 +1132,8 @@ static int __pmem_label_update(struct nd_region *nd_region,
+>>  	return rc;
+>>  }
+>
+>>  int nd_pmem_namespace_label_update(struct nd_region *nd_region,
+>>  		struct nd_namespace_pmem *nspm, resource_size_t size)
+>>  {
+>> @@ -1075,6 +1253,7 @@ int nd_pmem_namespace_label_update(struct nd_region *nd_region,
+>>  	for (i = 0; i < nd_region->ndr_mappings; i++) {
+>>  		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
+>>  		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
+>> +		int region_label_cnt = 0;
+>
+>Always initialized anyway before use I think. So no need to do it here.
 
-That's fair, probably just keep it.
+Fixed it in V5
 
-> > > +static long __fsdev_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
-> > > +			long nr_pages, enum dax_access_mode mode, void **kaddr,
-> > > +			unsigned long *pfn)
-> > > +{
-> > > +	struct dev_dax *dev_dax = dax_get_private(dax_dev);
-> > > +	size_t size = nr_pages << PAGE_SHIFT;
-> > > +	size_t offset = pgoff << PAGE_SHIFT;
-> > > +	void *virt_addr = dev_dax->virt_addr + offset;
-> > > +	phys_addr_t phys;
-> > > +	unsigned long local_pfn;
-> > > +
-> > > +	WARN_ON(!dev_dax->virt_addr);
-> > > +
-> > > +	phys = dax_pgoff_to_phys(dev_dax, pgoff, nr_pages << PAGE_SHIFT);  
-> > 
-> > Use size given you already computed it.  
-> 
-> Not sure I follow. nr_pages is the size of the access or fault, not the size
-> of the device. 
+>
+>>  		struct resource *res;
+>>  		int count = 0;
+>>
+>> @@ -1090,12 +1269,20 @@ int nd_pmem_namespace_label_update(struct nd_region *nd_region,
+>>  				count++;
+>>  		WARN_ON_ONCE(!count);
+>>
+>> -		rc = init_labels(nd_mapping, count);
+>> +		region_label_cnt = find_region_label_count(nd_mapping);
+>> +		/*
+>> +		 * init_labels() scan labels and allocate new label based
+>> +		 * on its second parameter (num_labels). Therefore to
+>> +		 * allocate new namespace label also include previously
+>> +		 * added region label
+>> +		 */
+>> +		rc = init_labels(nd_mapping, count + region_label_cnt,
+>> +				 NS_LABEL_TYPE);
+>>  		if (rc < 0)
+>>  			return rc;
+>>
+>>  		rc = __pmem_label_update(nd_region, nd_mapping, nspm, i,
+>> -				NSLABEL_FLAG_UPDATING);
+>> +				NSLABEL_FLAG_UPDATING, NS_LABEL_TYPE);
+>>  		if (rc)
+>>  			return rc;
+>>  	}
+>
+>> +int nd_pmem_region_label_update(struct nd_region *nd_region)
+>> +{
+>> +	int i, rc;
+>> +
+>> +	for (i = 0; i < nd_region->ndr_mappings; i++) {
+>> +		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
+>> +		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
+>> +		int region_label_cnt = 0;
+>
+>Seems to always be initialized before use anyway so no need to do it here.
 
-Just above:
+Fixed it in V5
 
-size_t size = nr_pages << PAGE_SHIFT;
+>
+>> +
+>> +		/* No need to update region label for non cxl format */
+>> +		if (!ndd->cxl)
+>> +			return 0;
+>> +
+>> +		region_label_cnt = find_region_label_count(nd_mapping);
+>> +		rc = init_labels(nd_mapping, region_label_cnt + 1,
+>> +				 RG_LABEL_TYPE);
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		rc = __pmem_label_update(nd_region, nd_mapping, NULL, i,
+>> +				NSLABEL_FLAG_UPDATING, RG_LABEL_TYPE);
+>> +		if (rc)
+>> +			return rc;
+>> +	}
+>> +
+>> +	/* Clear the UPDATING flag per UEFI 2.7 expectations */
+>> +	for (i = 0; i < nd_region->ndr_mappings; i++) {
+>> +		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
+>> +		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
+>> +
+>> +		WARN_ON_ONCE(!ndd->cxl);
+>> +		rc = __pmem_label_update(nd_region, nd_mapping, NULL, i, 0,
+>> +				RG_LABEL_TYPE);
+>>  		if (rc)
+>>  			return rc;
+>>  	}
+>
+>> diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+>> index 43fdb806532e..b1abbe602a5e 100644
+>> --- a/drivers/nvdimm/namespace_devs.c
+>> +++ b/drivers/nvdimm/namespace_devs.c
+>> @@ -232,6 +232,18 @@ static ssize_t __alt_name_store(struct device *dev, const char *buf,
+>>  	return rc;
+>>  }
+>>
+>> +int nd_region_label_update(struct nd_region *nd_region)
+>> +{
+>> +	int rc;
+>> +
+>> +	nvdimm_bus_lock(&nd_region->dev);
+>> +	rc = nd_pmem_region_label_update(nd_region);
+>> +	nvdimm_bus_unlock(&nd_region->dev);
+>
+>In line with much of the nvdimm stuff I'd use guard and save a couple of lines.
+>
+>	guard(nvdimm_bus)(&nd_region->dev);
+>	return nd_pmem_region_label_update(nd_region);
+>
 
-Jonathan
+Fixed it in V5
 
+>> +
+>> +	return rc;
+>> +}
+>> +EXPORT_SYMBOL_GPL(nd_region_label_update);
+>
+>> diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+>> index f631bd84d6f0..5fd69c28ffe7 100644
+>> --- a/drivers/nvdimm/nd.h
+>> +++ b/drivers/nvdimm/nd.h
+>> @@ -14,6 +14,9 @@
+>>  #include <linux/nd.h>
+>>  #include "label.h"
+>>
+>> +extern uuid_t cxl_namespace_uuid;
+>> +extern uuid_t cxl_region_uuid;
+>> +
+>>  enum {
+>>  	/*
+>>  	 * Limits the maximum number of block apertures a dimm can
+>> @@ -295,6 +298,67 @@ static inline const u8 *nsl_uuid_raw(struct nvdimm_drvdata *ndd,
+>>  	return nd_label->efi.uuid;
+>>  }
+>>
+>> +static inline void nsl_set_type(struct nvdimm_drvdata *ndd,
+>> +				struct nd_namespace_label *ns_label)
+>> +{
+>> +	if (!(ndd->cxl && ns_label))
+>> +		return;
+>> +
+>> +	uuid_copy((uuid_t *)ns_label->cxl.type, &cxl_namespace_uuid);
+>
+>uuid_import() perhaps more appropriate given it is coming(I think)
+>from a __u8 &.
+>
+
+Yes we can avoid extra typecasting in uuid_copy using uuid_export().
+Actually cxl_namespace_uuid is of type uuid_t and ns_label->cxl.type is of type __u8
+So export_uuid() is appropriate here than uuid_inport()
+I have fixed it in V5
+
+>> +}
+>> +
+>
+>
+>> +
+>> +static inline bool is_region_label(struct nvdimm_drvdata *ndd,
+>> +				   union nd_lsa_label *lsa_label)
+>> +{
+>> +	uuid_t *region_type;
+>> +
+>> +	if (!ndd->cxl)
+>> +		return false;
+>> +
+>> +	region_type = (uuid_t *) lsa_label->region_label.type;
+>> +	return uuid_equal(&cxl_region_uuid, region_type)
+>
+>I'd match style of next function and not have the local variable.
+>
+>	return uuid_equal(&cxl_region_uuid,
+>			  (uuid_t *)lsa_label->region_label.type);
+
+Fixed it in V5
+
+>> +}
+>> +
+>> +static inline bool
+>> +region_label_uuid_equal(struct cxl_region_label *region_label,
+>> +			const uuid_t *uuid)
+>> +{
+>> +	return uuid_equal((uuid_t *) region_label->uuid, uuid);
+>
+>Dave pointed out that there shouldn't be a space after the cast.
+>Make sure you catch all of these.
+>
+
+Fixed it in V5
+
+>> +}
+>> +
+>> +static inline u64
+>> +region_label_get_checksum(struct cxl_region_label *region_label)
+>> +{
+>> +	return __le64_to_cpu(region_label->checksum);
+>> +}
+>> +
+>> +static inline void
+>> +region_label_set_checksum(struct cxl_region_label *region_label,
+>> +			  u64 checksum)
+>> +{
+>> +	region_label->checksum = __cpu_to_le64(checksum);
+>> +}
+>
+>Perhaps add a little justification to the patch description on why these
+>get/set are helpful? Seems like just setting them directly would perhaps
+>be fine as all call sites can see the structure definition anyway?
+>
+
+Thanks Jonathan, I have used them directly instead of extra setter function in V5
+
+
+
+Regards,
+Neeraj
+
+------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e57f3_
+Content-Type: text/plain; charset="utf-8"
+
+
+------bVwHse4Nykw-L2c5iRRXKf-G.8k0lxUwrpcTFjGaDb9lfltx=_e57f3_--
 
