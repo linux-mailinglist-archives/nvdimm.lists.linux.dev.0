@@ -1,291 +1,161 @@
-Return-Path: <nvdimm+bounces-12698-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12708-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id RQqGB/NXcWlVGAAAu9opvQ
-	(envelope-from <nvdimm+bounces-12698-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jan 2026 23:49:23 +0100
+	id qOGnLQHfb2n8RwAAu9opvQ
+	(envelope-from <nvdimm+bounces-12708-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Jan 2026 21:01:05 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBB645F0B9
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 21 Jan 2026 23:49:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BF754AEDA
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Jan 2026 21:01:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D4D173CC518
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Jan 2026 13:39:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9696FA2AD24
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 20 Jan 2026 17:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E0042B75B;
-	Tue, 20 Jan 2026 13:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B521034D934;
+	Tue, 20 Jan 2026 17:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OmdL07S2"
+	dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b="DwwvT/Ca";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="AqTheCf1"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010070.outbound.protection.outlook.com [52.101.56.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a11-174.smtp-out.amazonses.com (a11-174.smtp-out.amazonses.com [54.240.11.174])
+	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931961A256B;
-	Tue, 20 Jan 2026 13:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768916187; cv=fail; b=aTuKw3vhpPQVvvDtqILnrMxDhjTQXTWtY7vWPY56Z0N5tBKvQ+lLZRRMnL6w/j5sNMQnSbW5F9YoFeyQCEcH3hFQVSRloorF/KTCb7NI+lckbcS6BSOkieCLmmCu3w3aGj0d3BlttRxplHzpXKmX6YMkbDtrJqV3VEvu1werd/Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768916187; c=relaxed/simple;
-	bh=XvwzMZkGe/n0UL1aaJ3ZdJSxXFpiKJtQnlfvndIjmG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=fC0sCyq2IAuSNIl3kYASR7uTZpkaHKiVgODl3mnZy5XoiRVuAfsmlbA+tPO0YzyGQbi/hsJQSucmoCEEJyI0UWd/gkEkR1yVkhwueazdKC5wtbpmeVk6foFj1nVWVJigCIOlg305VoP4NZVYOs46i/6vaQI/9hzHOutTfL+/taA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OmdL07S2; arc=fail smtp.client-ip=52.101.56.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ydu/8Oyl4Iy3uOpiod1zyRzc4y65SMkJTH8JfiaaLl7OkWHEhlg5vVZL6Is7THiOS8GGmv0c+R5DEJPK6mrXrvzMlxEefZGPS7QwBNkXs7acInCC47WZGRcuwsbnJOvUT+BsOPzRe1SgT052DGJkIP0cnaf5vLLlpBYevobDF+VgEfpCIMS45hnWSEpqscZE7cnxXoUqld0qJpXhSe4A1ftuK3eRL05Jvc9njkspdvdRkr3JAqZz2Qs16x6Jvt/OBY3NLZ3DJt7PnnHivd5CA4l/qfYLiKFgP7fPjqDvQtN2M9AdGLT00GJBZikDtrPey3Lmp3CkI9nepjNdJt+hAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y8bhZ2TY5MB2RIJ6VVn8JzCqH6a45q423RYsFqJFb6o=;
- b=Cxu8eYnESzVuDjVs7FFRlwlkw3KEPEwgETl6yvyWmn0o6Y9VyH09+CW6fXPRS/whorhydjOSpyPO8UnrZ40qY6BcJaZfsoj+JM1FPL920l0M5WNyiM7jPnxY+72C+6x3hIDyoDep1aGcs1TNNp+PjRIzSwp83J1Jih+3ExboNDXMrrbidQu9PiSPYjmfAGFCweks8AJCk48JVAepwX3hQrm4TGqElZ8LlpDO6wAkl6cfBIm1nrWYS/CIrhDkGp0mU3es1GNVgmgQrEQlBCmZqT3Iu8059zFSSHRea7VO5t0qqrzTBu97DAw8ci7INuGmYexJYmKZye+BkkKusG5DpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y8bhZ2TY5MB2RIJ6VVn8JzCqH6a45q423RYsFqJFb6o=;
- b=OmdL07S2LoYka+3cSRZDRtQEx87Jr+Jui5GuRDKB9IGbQq2coWU9vV61i6kRCqYJ8l2GzeF3c9Wvb2XiD5GDC6pLsGGx2DCCZpQqI2IkV24/cSu0a6lwIiRpM/Gg4wNGPvz3oQGAjotk8htrfEPwq5JdyXYaV45avaGwdnyYrwqFe311VoinxLQnzg934whXEcCkxFhExg3KO9s8MFLeQYiObVFC9KRq8HLRaCFvMh3njuWbWioiT4LaKos1A317voBPRPuM5GxAcrcraOIzLjZLiQYo0ji2vTbC6hJZIb5K88AjclhYyxNRdqipWwgLJ/nSvv3TsW23qjZkwpBBsQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by IA0PR12MB8325.namprd12.prod.outlook.com (2603:10b6:208:407::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.6; Tue, 20 Jan
- 2026 13:36:21 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9542.008; Tue, 20 Jan 2026
- 13:36:20 +0000
-Date: Tue, 20 Jan 2026 09:36:19 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Christian Koenig <christian.koenig@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Benjamin LaHaise <bcrl@kvack.org>, Gao Xiang <xiang@kernel.org>,
-	Chao Yu <chao@kernel.org>, Yue Hu <zbestahu@gmail.com>,
-	Jeffle Xu <jefflexu@linux.alibaba.com>,
-	Sandeep Dhavale <dhavale@google.com>,
-	Hongbo Li <lihongbo22@huawei.com>,
-	Chunhai Guo <guochunhai@vivo.com>, Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Mike Marshall <hubcap@omnibond.com>,
-	Martin Brandenburg <martin@omnibond.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Dave Martin <Dave.Martin@arm.com>,
-	James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
-	Carlos Maiolino <cem@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Johannes Thumshirn <jth@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Zi Yan <ziy@nvidia.com>, Nico Pache <npache@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-	linux-mm@kvack.org, ntfs3@lists.linux.dev, devel@lists.orangefs.org,
-	linux-xfs@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH RESEND 09/12] mm: make vm_area_desc utilise vma_flags_t
- only
-Message-ID: <20260120133619.GZ1134360@nvidia.com>
-References: <cover.1768857200.git.lorenzo.stoakes@oracle.com>
- <baac396f309264c6b3ff30465dba0fbd63f8479c.1768857200.git.lorenzo.stoakes@oracle.com>
- <20260119231403.GS1134360@nvidia.com>
- <36abc616-471b-4c7b-82f5-db87f324d708@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36abc616-471b-4c7b-82f5-db87f324d708@lucifer.local>
-X-ClientProxiedBy: BLAPR03CA0176.namprd03.prod.outlook.com
- (2603:10b6:208:32f::26) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A965234D4C9
+	for <nvdimm@lists.linux.dev>; Tue, 20 Jan 2026 17:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.11.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768928741; cv=none; b=Jn4NUJ7TBWYKZlhXZQF7nQnYq4VfBbqLaEnb9X/VTwA/uLYXhnG4M0Q6eLOy3qbji0qAqbz3GJOwHb5yGocW/jbv4N6pQcLdiqCS0QRZVEXeio5Es13m9UuHMP23zaHFfAREHA5zBAzPqcWZIwsRuwzGXCc6oS5gEZZqlRLly5A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768928741; c=relaxed/simple;
+	bh=IMQm6fDafW7KCFXpTWzI1T1mVxi+bppakZwCsXXVpN0=;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:In-Reply-To:
+	 References:Message-ID; b=OsXDQP6BLekwRV0oR5Fg5AnHxKCOFvwoeYXCQNVEJ+9f7ETaQq78oakUEV++sf+qOARLpk39BOVmSle+JY0URjbrYR74GpxeEMg9KoJJQHpI/6NpJnhBdNSqapYiZhV5GN6WwspeyXZ7S/McBQhQBS31A+sF/OnF94RvqazhRIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=DwwvT/Ca; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=AqTheCf1; arc=none smtp.client-ip=54.240.11.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1768928738;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id;
+	bh=IMQm6fDafW7KCFXpTWzI1T1mVxi+bppakZwCsXXVpN0=;
+	b=DwwvT/CaYNuc7K7TdH9FsPGRrWinrPHVAaeiwpLarvY8rjJrXr+ktepNJwcLjbWj
+	IdkKiVyhCez9NFtH0D2ikhBZyXbWVIP3/gAPGU9buF1+swiDqwIcmHt8KkYw4+eFDwC
+	1ujydogbkB0WSDT3oQjVEjMjDi4Gd4OF1fFTCfbU=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1768928738;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id:Feedback-ID;
+	bh=IMQm6fDafW7KCFXpTWzI1T1mVxi+bppakZwCsXXVpN0=;
+	b=AqTheCf1cAVTYTfY0RSVgNQe5o6AA+AjkFT1z86y2GS+SR2RRuERd/nEBVVSo4+O
+	OTsbT6vFhj27Plbnoy7GR2cQxWQCMpovP0V/+BQF+IjVytSwOnsviUSlGUAn+90kLue
+	nibBJFQFeEZ2R5WXFZrJJFKR6IFSmZW8nrpNYMR4=
+Subject: Re: [PATCH V4 0/2] ndctl: Add daxctl support for the new "famfs"
+ mode of devdax
+From: =?UTF-8?Q?John_Groves?= <john@jagalactic.com>
+To: =?UTF-8?Q?Alireza_Sanaee?= <alireza.sanaee@huawei.com>
+Cc: =?UTF-8?Q?John_Groves?= <John@groves.net>, 
+	=?UTF-8?Q?Miklos_Szeredi?= <miklos@szeredi.hu>, 
+	=?UTF-8?Q?Dan_Williams?= <dan.j.williams@intel.com>, 
+	=?UTF-8?Q?Bernd_Schubert?= <bschubert@ddn.com>, 
+	=?UTF-8?Q?Alison_Schofiel?= =?UTF-8?Q?d?= <alison.schofield@intel.com>, 
+	=?UTF-8?Q?John_Groves?= <jgroves@micron.com>, 
+	=?UTF-8?Q?John_Groves?= <jgroves@fastmail.com>, 
+	=?UTF-8?Q?Jonathan_Corbet?= <corbet@lwn.net>, 
+	=?UTF-8?Q?Vishal_Verma?= <vishal.l.verma@intel.com>, 
+	=?UTF-8?Q?Dave_Jiang?= <dave.jiang@intel.com>, 
+	=?UTF-8?Q?Matthew_Wilcox?= <willy@infradead.org>, 
+	=?UTF-8?Q?Jan_Kara?= <jack@suse.cz>, 
+	=?UTF-8?Q?Alexander_Viro?= <viro@zeniv.linux.org.uk>, 
+	=?UTF-8?Q?David_Hildenbrand?= <david@kernel.org>, 
+	=?UTF-8?Q?Christian_Bra?= =?UTF-8?Q?uner?= <brauner@kernel.org>, 
+	=?UTF-8?Q?Darrick_J_=2E_Wong?= <djwong@kernel.org>, 
+	=?UTF-8?Q?Randy_Dunlap?= <rdunlap@infradead.org>, 
+	=?UTF-8?Q?Jeff_Layton?= <jlayton@kernel.org>, 
+	=?UTF-8?Q?Amir_Goldstein?= <amir73il@gmail.com>, 
+	=?UTF-8?Q?Jonathan_Cameron?= <Jonathan.Cameron@huawei.com>, 
+	=?UTF-8?Q?Stefan_Hajnoczi?= <shajnocz@redhat.com>, 
+	=?UTF-8?Q?Joanne_Koong?= <joannelkoong@gmail.com>, 
+	=?UTF-8?Q?Josef_Bacik?= <josef@toxicpanda.com>, 
+	=?UTF-8?Q?Bagas_Sanjaya?= <bagasdotme@gmail.com>, 
+	=?UTF-8?Q?James_Morse?= <james.morse@arm.com>, 
+	=?UTF-8?Q?Fuad_Tabba?= <tabba@google.com>, 
+	=?UTF-8?Q?Sean_Christopherson?= <seanjc@google.com>, 
+	=?UTF-8?Q?Shivank_Garg?= <shivankg@amd.com>, 
+	=?UTF-8?Q?Ackerley_Tng?= <ackerleytng@google.com>, 
+	=?UTF-8?Q?Gregory_Pric?= =?UTF-8?Q?e?= <gourry@gourry.net>, 
+	=?UTF-8?Q?Aravind_Ramesh?= <arramesh@micron.com>, 
+	=?UTF-8?Q?Ajay_Joshi?= <ajayjoshi@micron.com>, 
+	=?UTF-8?Q?venkataravis=40micron=2Ecom?= <venkataravis@micron.com>, 
+	=?UTF-8?Q?linux-doc=40vger=2Ekernel=2Eorg?= <linux-doc@vger.kernel.org>, 
+	=?UTF-8?Q?linux-kernel=40vger=2Ekernel=2Eorg?= <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?nvdimm=40lists=2Elinux=2Edev?= <nvdimm@lists.linux.dev>, 
+	=?UTF-8?Q?linux-cxl=40vger=2Ekernel=2Eorg?= <linux-cxl@vger.kernel.org>, 
+	=?UTF-8?Q?linux-fsdevel=40vger=2Ekernel=2Eorg?= <linux-fsdevel@vger.kernel.org>
+Date: Tue, 20 Jan 2026 17:05:38 +0000
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|IA0PR12MB8325:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d561cbc-87a7-4e6a-629c-08de5828e547
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tR00MSgEePWhswZdJ6toMpEhZniVQXHhtdWm78ydLOqeQGwQvonxXp2AcMSV?=
- =?us-ascii?Q?H/t1vewyvMQK9+yJUi605OIneO3DBi3wLz8lFO6EpdRd1TxXari29yvwIbML?=
- =?us-ascii?Q?NFpVRBfrrnK3h1PbNmJZ+bJ2E9Fw9a5Zy6PNswOsDIU4OJq/7OXpj0T6kRo0?=
- =?us-ascii?Q?n+0bQM7lMdqJ7SszZKJ1nbHX+xmrinouykK8OLFSeTog8hY0sZll2ndh2f4/?=
- =?us-ascii?Q?jI3RrO4ASavEHe1dE5w1052wJnBj+d1GvtLFv58njWu8VzldY9DQeCG4v0sE?=
- =?us-ascii?Q?WO33tT5D/5mn6KI/ee2OibhkEpP1wkFWrAS0YHCA75xW9wdkuO+n64AUVsOf?=
- =?us-ascii?Q?t63BOajl5pfbFUJnT/3QfBF6rZpv6DS9e33CFrJDFwtZuWgwF5UCrDZWdaJj?=
- =?us-ascii?Q?bI96MH7aC6AMhm2/C/9KZ0uEWIjW8X3KuZHahg4DiCzpzBtJZw0a2xphMX2W?=
- =?us-ascii?Q?fh5GmROc5e1GYoDof3kltBGHDoFhNy2QsACxahH0u5d9wgkI4vud584nkP5N?=
- =?us-ascii?Q?oldIHo+yNp8FwdsoQhEVTN63Adm66MtjfoK83apPVUR0HlqTd6tQN0ou07dn?=
- =?us-ascii?Q?tReysDRxkFxah/H6RNjgJ6m4eTkEA6hn1NsvW5ZAsKDbpZLTO2+nK3kWMWlR?=
- =?us-ascii?Q?CErsfl887+5i5x9yqOzRNV219ytZ2iEx8t719wkUKYdeh1pp5t5kWMDq6qt4?=
- =?us-ascii?Q?NLsxLR8+H8Nhh1SPWQ4kLYeh6JkWJqgRCExWqbXh0bQzxgGT+jZFbLlNt4Cs?=
- =?us-ascii?Q?RHXsvPq5TtxPnvpaBOGD8/HN4r5rygEQKYBU84G8082L6TCBfbWQCfyI/4uh?=
- =?us-ascii?Q?tOxAYs4QIlVAjjmMDqNnDDbvwZrrO+HbkV0VFumQ0RmRhdCT2pbjaYIPWw7Y?=
- =?us-ascii?Q?aI5nFsKxVVQX7I/kCkXSx4J/fzU6fUicZpuKIod51yXLxwYj0H2SRlPHwWu9?=
- =?us-ascii?Q?e2tLT6gMgQQhSRkv7MpxfIOUxjTATjRLkA+0dY2JrIUb9nZ2UUxYQgEap0q2?=
- =?us-ascii?Q?b31ky2l31z14UZ6TaIG1aN57UXoKamXzjZ1ErlqL4pRRv15ZgneyCnkgywRf?=
- =?us-ascii?Q?nhyH7Q9y9Z94QgqrPCcYfH+G1GoFejwUqlsPs6SBAO6uXjynTSlqaUyQpC9I?=
- =?us-ascii?Q?csu1s75Wog3zM8Mv5cWOjcFGCHS0zuKgoXc3LKBNmDjyKl1x7SQ0dS67YOWa?=
- =?us-ascii?Q?Qs4cqpH1rfe0dlSD+OOES2U7mtWej/9NAHh5XtOzvENq4hJPMSx2UNJEZG7K?=
- =?us-ascii?Q?35KTLNNpxyUio/JJpCT5oFd9pbS0ZLYZ/mrczkDwu5sbJDmLo7GCanNFuHlL?=
- =?us-ascii?Q?FueV+le3TIMmlrkDfXy3A8P5VTvCvd/LRReIWoGx9QnI9uy6GDVcahzviCqF?=
- =?us-ascii?Q?IWJGv+MGt7uCwVVyQ/jEGj5PB72i2f/CpLdQgcc3oQweTep9iZK/B6YJcLaQ?=
- =?us-ascii?Q?4c1+qLZ/s8IiL8HzYsfwi5fvRdLEB6UQcYdIrR0brQ3ppm5HMMh2fy2YBi83?=
- =?us-ascii?Q?nR7hYZ56ajUZSXhUFdjcCYfD5ijfo+C+nS1/WfyLOIoZdQq32L+2RndUGU4U?=
- =?us-ascii?Q?oXhaoorce781IwgHuNc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?F7eARISiupqxZHbfFU25XMkL/EuKaE+t8qCsY+xUmbHqiZKtH4gYOqxPR5NW?=
- =?us-ascii?Q?cO56OFsoX6pICHljPjA4BW/cSoOTs64iD2ibwA5azB96BcGBRgeJS6syAXGu?=
- =?us-ascii?Q?jb18Ym3TtUKqdJNmbfpvaPvyDNEI48nGfjK11dUg53iNnFEpDWPYVF13gs19?=
- =?us-ascii?Q?x59S3WoyT4Jjho3+XGvrT42SUl8luIbFXxgB/3RruxUqj4WHv+qW2gLeLibX?=
- =?us-ascii?Q?tVaRIofhK1CvXCAJX2Pr2t/70vfUkMgr7+jli+Dg/bX3vKJi4RUnN4/P2DNG?=
- =?us-ascii?Q?bz1OgelWsAAMscXKALOXWRjqqheDOtF80MWXiZCIywudJnA8RTWZMbH2o5hi?=
- =?us-ascii?Q?DXRnv+qcNiLvZhcdH1sQ3h+HOivds1fBrDUPoAL569/huAnXie2NbdTjeW16?=
- =?us-ascii?Q?P32JtHNzlUxZzvi1x5RIl76UySAaO4Q7/kV00ghErBol7B2SFigBDRFftLeJ?=
- =?us-ascii?Q?uoJ0tRLXJJ5kQQP3LMokWk6hVym5kznGtycIgxEUs5O4cbrAtEDivyroKm5y?=
- =?us-ascii?Q?PnSV5qAVXPXzvDJSr1BpX2ImgM9nCMVHxisJ0jk5x8tk8FYL0e9NUVE/A1le?=
- =?us-ascii?Q?g9QjWU+XmUgRo1MA1k+2fs6CiWZdD51znnU6n9qURUypVufyVImOANDdk7rD?=
- =?us-ascii?Q?rkQaqH8RmnkQlRAuis/3zcMRBwxKEoQiu+Wy2orOD8Ta2Lwac4sSMjG1naFU?=
- =?us-ascii?Q?6wx9DQ3U/IutJIAmj4XzxUE6iODjErh1Rd52cZHswThcb3BKVsw/5bXRlJKO?=
- =?us-ascii?Q?171MEBhO2ih1WCnNuYueQ46IRdxCb1Oq0vlTW9fyNoLdscQp4R199ocP+ZBx?=
- =?us-ascii?Q?aEJ7nCPc2hy4HUFqk/ai/g75JxZjh9uKW1m+sIFNDvQpv3PR9rUorzlo7JSm?=
- =?us-ascii?Q?my3oued9QzxV5g5CtEVBxS/905F/kbQfbtZyeXAyIggy9mAql72d4O7iGVy/?=
- =?us-ascii?Q?/JPTqXCoE13Rcv4+YACwkEhpxUVqJ+jedzL/B7+jQmrSDyaWtx5Xbe+WNlo0?=
- =?us-ascii?Q?yqul1FB0Nu8XB6W0h4yeWskYqP3BOyH6rUD1xMKC3k4IG5CUe/P6AXPOlfIW?=
- =?us-ascii?Q?YJ2J/9a1yJmkr1UpPfyda9/YS5lvbsEyEMA2LVoRXmfb6o8wxXngFGrh5W+H?=
- =?us-ascii?Q?7awE10ch2CGz3Y5R5oBPAYN3STWtjD7tSD4wSulDILh2iynb8/L9pWHuSclN?=
- =?us-ascii?Q?WUuQpqW5qkhjUryiE5cI8WNpLIHitq7Eclo1YpxZ6UUfDDj+ic+DtX/2zDA1?=
- =?us-ascii?Q?cfGhNnmIRCCTUulKupGckYCcv7o0FzSGBdqt59YwIFFB/yV0G06LZlpgrQqB?=
- =?us-ascii?Q?1Wr6Frgr6ltKXviui7BrKVvuBPBxDZrRWEu4xuAP9rFxaytI/bQBm65XaAhB?=
- =?us-ascii?Q?LQh7QA6PyxN9zzB3ANKsI8jqLhURmWOa/uG9MGpxam5CVrYMeGqyy0Jsc2/X?=
- =?us-ascii?Q?G08Wcdb+e/JDW1IQ6yQ5N2LNadKANgOax3Fq5k2Nf454VVQ2CnAA0JL1pIgb?=
- =?us-ascii?Q?aKd507RgJTe8xIFa7/lRDQocuydhqACQ+pF8phxPJJQE0vlVtRT+LnZ0nSM1?=
- =?us-ascii?Q?VfoJN0nsEohlfr8K800Ns+DUWGSn2w95TEcFNCyjFWPYCQaS6dplEJ7Z4THK?=
- =?us-ascii?Q?kXRlO+lcyLkXsawV4WNQX/jqhcAY8hjS+1GOVkqw+4cfFh3XkxjflqJdfh4p?=
- =?us-ascii?Q?7/RT4EZQRW3MQjqzbkfviZkdbLI72izNJYSymcKq8y8pjQzYQj+qk+n0MPHl?=
- =?us-ascii?Q?fVG3yOsKPA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d561cbc-87a7-4e6a-629c-08de5828e547
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 13:36:20.5906
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kZDJVJy7rE5qJjX7RsXV5oPHAhLc3o2RL/L2RSxJLf61h5Anj7OnsP0QpJNPWadl
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8325
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	DATE_IN_PAST(1.00)[33];
-	ARC_REJECT(1.00)[cv is fail on i=2];
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260120170135.00003523.alireza.sanaee@huawei.com>
+References: 
+ <0100019bd33a16b4-6da11a99-d883-4cfc-b561-97973253bc4a-000000@email.amazonses.com> 
+ <20260118223548.92823-1-john@jagalactic.com> 
+ <0100019bd34040d9-0b6e9e4c-ecd4-464d-ab9d-88a251215442-000000@email.amazonses.com> 
+ <20260120170135.00003523.alireza.sanaee@huawei.com> 
+ <aW-1cgruSVTsgV_7@groves.net>
+X-Mailer: Amazon WorkMail
+Thread-Index: AQHciMnhcFkpAz6WTSKstYDfyF/cJQAAPD1qAFklqVYAWUcuiQ==
+Thread-Topic: [PATCH V4 0/2] ndctl: Add daxctl support for the new "famfs"
+ mode of devdax
+X-Wm-Sent-Timestamp: 1768928735
+Message-ID: <0100019bdc5e7afc-e41beaa8-85aa-4572-9512-5a44440993e5-000000@email.amazonses.com>
+Feedback-ID: ::1.us-east-1.LF00NED762KFuBsfzrtoqw+Brn/qlF9OYdxWukAhsl8=:AmazonSES
+X-SES-Outgoing: 2026.01.20-54.240.11.174
+X-Spamd-Result: default: False [0.95 / 15.00];
+	TO_EXCESS_QP(1.20)[];
+	CC_EXCESS_QP(1.20)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[jagalactic.com:s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq,amazonses.com:s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[nvidia.com,reject];
-	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,linux.intel.com,redhat.com,alien8.de,zytor.com,arndb.de,linuxfoundation.org,intel.com,suse.de,gmail.com,ffwll.ch,ursulin.net,amd.com,zeniv.linux.org.uk,suse.cz,kvack.org,linux.alibaba.com,google.com,huawei.com,vivo.com,mit.edu,dilger.ca,linux.dev,paragon-software.com,omnibond.com,arm.com,wdc.com,infradead.org,oracle.com,suse.com,nvidia.com,paul-moore.com,namei.org,hallyn.com,rasmusvillemoes.dk,vger.kernel.org,lists.linux.dev,lists.freedesktop.org,lists.ozlabs.org,lists.orangefs.org];
-	TAGGED_FROM(0.00)[bounces-12698-lists,linux-nvdimm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-12708-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[groves.net,szeredi.hu,intel.com,ddn.com,micron.com,fastmail.com,lwn.net,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[jagalactic.com,quarantine];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[Nvidia.com:+];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jgg@nvidia.com,nvdimm@lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[93];
+	R_SPF_SOFTFAIL(0.00)[~all];
+	FROM_NEQ_ENVFROM(0.00)[john@jagalactic.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[jagalactic.com:+,amazonses.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_EXCESS_QP(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns,Nvidia.com:dkim,nvidia.com:mid]
-X-Rspamd-Queue-Id: BBB645F0B9
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,amazonses.com:dkim,email.amazonses.com:mid]
+X-Rspamd-Queue-Id: 1BF754AEDA
 X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-On Tue, Jan 20, 2026 at 09:46:05AM +0000, Lorenzo Stoakes wrote:
-> On Mon, Jan 19, 2026 at 07:14:03PM -0400, Jason Gunthorpe wrote:
-> > On Mon, Jan 19, 2026 at 09:19:11PM +0000, Lorenzo Stoakes wrote:
-> > > +static inline bool is_shared_maywrite(vma_flags_t flags)
-> > > +{
-> >
-> > I'm not sure it is ideal to pass this array by value? Seems like it
-> > might invite some negative optimizations since now the compiler has to
-> > optimze away a copy too.
-> 
-> I really don't think so? This is inlined and thus collapses to a totally
-> standard vma_flags_test_all() which passes by value anyway.
-
-> Do you have specific examples or evidence the compiler will optimise poorly here
-> on that basis as compared to pass by reference? And pass by reference would
-> necessitate:
-
-I've recently seen enough cases of older compilers and other arches
-making weird choices to be a little concerened. In the above case
-there is no reason not to use a const pointer (and indeed that would
-be the expected idomatic kernel style), so why take chances is my
-thinking.
-
-Jason
+On 26/01/20 05:01PM, Alireza Sanaee wrote:=0D=0A> On Sun, 18 Jan 2026 22:=
+36:02 +0000=0D=0A> John Groves <john@jagalactic.com> wrote:=0D=0A>=20=0D=0A=
+> Hi John,=0D=0A>=20=0D=0A> What's the base commit for this set=3F I seem=
+ not be able to apply on ndctl master. Maybe I am missing something.=0D=0A=
+=0D=0AThis series is based on the v83 tag, which is sha 4f7a1c6.=0D=0A=0D=
+=0AJohn=0D=0A=0D=0A
 
