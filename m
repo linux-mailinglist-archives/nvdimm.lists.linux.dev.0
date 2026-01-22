@@ -1,447 +1,178 @@
-Return-Path: <nvdimm+bounces-12787-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12791-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YMksBKuKcmkPmAAAu9opvQ
-	(envelope-from <nvdimm+bounces-12787-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 21:38:03 +0100
+	id WKTNHPqncmnaoQAAu9opvQ
+	(envelope-from <nvdimm+bounces-12791-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 23:43:06 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 963676D772
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 21:38:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD7176E413
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 23:43:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 44F85301494E
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 20:38:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DBF6A301DAE9
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 22 Jan 2026 22:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6CB3A5C13;
-	Thu, 22 Jan 2026 20:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D223A3D7D8D;
+	Thu, 22 Jan 2026 22:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uMcJXjdp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JV+htoEF"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011012.outbound.protection.outlook.com [40.107.208.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622B73A4AD4
-	for <nvdimm@lists.linux.dev>; Thu, 22 Jan 2026 20:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769114275; cv=fail; b=LyYmwjuGG/NfEV759wdFOfGK/hR70eDOi9/5gKYKZlSs/MptOEtbd9xl4c33ixxGzemF2iBv4pPnQwH44Qa5u84AOSEhM7cKQWwxAlrOz2dSpzROMBXnO0gS13J4wrV4b2RQq9VhhD6igGyqnqm96S2sPgcCbYvrG3v/wnXKcTs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769114275; c=relaxed/simple;
-	bh=HGT32yVdVcsyvZo1G+/Q8D87MnkXavA5ooUi6bB3ZNc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H2n6jDswVd1Y7nL0aeVhdDv21K6xx4FW7rI7AiySqmww7gcAkuLFJirku1CivsTIh9hcwAcKZ0aImj9C0W0Ctve9wpgcU03zJSpbkj3Iwo4CavRuTWU7Yw4FgWSFMe7Ly32FQ1VCNipW9cQpaR6hZWkN5yk4v+RUHyLBiYBSayQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uMcJXjdp; arc=fail smtp.client-ip=40.107.208.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DlmE7H001V06/8v8+Zfw2YtRicBsq73wDlTPQsFAo5bkVZEytZg81wmS9xmkZGFJgCun1zVWMjZ7rDleecrBgacToa+4pB8+3frNV3NzqrhJuqnffrNuO7kRuMW0c+uE0qSZHnfCsf5YcdlC5YQ9MhC8SWh8SRnx0AD2IVCTLiVbFWQGdczFzyV9daEPO0jWPiUZmWFIrHbHHFnav6VIK+YA1qltZ81MSEnGcCjkQPcvugnS0SecX2MPfXI0Q7OpZqrzh6h2gZw5pcVysLzSnSDYIwOnRzKEOmfWAGZWVGQrRFbaR6G4vTjLUIdsP5auwjj7Pm8cMfvcMmOlpcp/FA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4jUpNt/pMbmyiEsHG5qvcDUFiPqVs/eZ2NnrRENK8RE=;
- b=aFcGgF0j6m2sbyHUL2sczv3f0RbJa6zLm4zCiMOPPWNxPqq2RPfYnFhXpjNRpXd7S4JWUwaWQE8WNiHCdaKzh3V9Ur+a10Vp2KPqRUFDCgk6QRluaeHzHOKU7CfEx3GusX+RC/TTb61B5uboOD+UAAWOBn5zVAU5qcCnXZkQofWTjJ0T0ycUrJPwObN2rNxCYLbHz8EO2IIMeuYIESVR6OfAnvGJo0L6K1bEI3ijtXMwrXZq1E08DvdxV3NCVi0oMj0VV057SLW8mGE7x9igR7v1QpJgMWnOnM62b12JqeYHT1PUR/pvFZwFloeKSk+6Unk+JAkUpg/YETmlH6t1mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4jUpNt/pMbmyiEsHG5qvcDUFiPqVs/eZ2NnrRENK8RE=;
- b=uMcJXjdpUqr1hKKvWqZwFfiQJDoGKMXtUwYTjSixwR4EC3ii2fsHGn6qJIm+uPXRQeErznlci19aN0PNp1EEbL+gLdAq/X6fZG5D235YI51pZTKTipuKZ5bak7s84IVYpOWobO2eEeUwPc6IxU6zQL7svPpfBLxo0ezNcKdIjUg=
-Received: from SA9PR13CA0046.namprd13.prod.outlook.com (2603:10b6:806:22::21)
- by DS0PR12MB8528.namprd12.prod.outlook.com (2603:10b6:8:160::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Thu, 22 Jan
- 2026 20:37:39 +0000
-Received: from SA2PEPF00001505.namprd04.prod.outlook.com
- (2603:10b6:806:22:cafe::60) by SA9PR13CA0046.outlook.office365.com
- (2603:10b6:806:22::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.3 via Frontend Transport; Thu,
- 22 Jan 2026 20:37:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SA2PEPF00001505.mail.protection.outlook.com (10.167.242.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9564.3 via Frontend Transport; Thu, 22 Jan 2026 20:37:39 +0000
-Received: from ausbcheatha02.amd.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 22 Jan
- 2026 14:37:38 -0600
-From: Ben Cheatham <Benjamin.Cheatham@amd.com>
-To: <nvdimm@lists.linux.dev>, <alison.schofield@intel.com>,
-	<dave.jiang@intel.com>
-CC: <linux-cxl@vger.kernel.org>, <benjamin.cheatham@amd.com>
-Subject: [PATCH 7/7] Documentation: Add docs for inject/clear-error commands
-Date: Thu, 22 Jan 2026 14:37:28 -0600
-Message-ID: <20260122203728.622-8-Benjamin.Cheatham@amd.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260122203728.622-1-Benjamin.Cheatham@amd.com>
-References: <20260122203728.622-1-Benjamin.Cheatham@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654A13563D9;
+	Thu, 22 Jan 2026 22:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769121692; cv=none; b=dzYujC4XDjqyHbAiN2i59B9jJiiONWbQnRHhVzrwnWgxZTijsxJrVWsWQcb0Hx8kN7x7qGySMZWl+CccGZNJGKHkvmFUeicWtGUZMZFQoZ2a2dTeJf8VTqLOiaWgbhxNYHWHPa8R+i6NX54J4HIb2k2kpbQA9XAy2Uiv/9QHCBI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769121692; c=relaxed/simple;
+	bh=ltunTCCxLClZAqNMOmXb49EoyZfyf/+7jYjno2nXdHY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kg4RuOqj2Mv15U3M8jz6+yMBQn5ZAh507tVIhLYBQh3MrqPQgyskzlvh6jrB3lTkiIgOa89DsqxMqTGajLm1Jf51SiZIFGTaRFrqJIDCG893gu3/8i1sgf4TZmuV3+Pr2Eap3maolfvTspZ6t1Idf+KIvBbToD9pmnuw0SaZmaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JV+htoEF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F92C116C6;
+	Thu, 22 Jan 2026 22:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769121691;
+	bh=ltunTCCxLClZAqNMOmXb49EoyZfyf/+7jYjno2nXdHY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JV+htoEFB0wO2aziMKYdhq0dvY+C5OmmZw5YpFsknRRVCpqmW6JvCjDnS0gz6zY6P
+	 5jDdjxYGB8V53GIu/3zWtFjDab+zbJlKJqlz5i/SvnKwVlkf8JgSx3In4EhCND6ZAT
+	 c4fwD8NFjUU9GSl8yL+3w4mCYGD3ACM0+L2CP2Yp1VU1eXg/w74xV6tEn6mRJK5EB1
+	 0dZvMnKaKQxwYrMzV4yt7tVJ8TYXOk94DCBbHmF6KJalI2T7VYiL2OQzF/3RLMnayW
+	 5k8sy46SJ2opItsi+qX9h+imOmMqpPVf3plrJBwb/Mx/OHG0gk/xJd0C5epIwvl5Wl
+	 rDC/A/c+btr1w==
+Message-ID: <4520e7b0-8218-404d-8ede-e62d95c50825@kernel.org>
+Date: Thu, 22 Jan 2026 23:41:24 +0100
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00001505:EE_|DS0PR12MB8528:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a45d332-64dd-4bc5-d0c7-08de59f615c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TJEN8zWSeeeK2w9AIAXda4iINSj9PtIGLJcJuzU/aXmYVx8ssR+PRlwkU+OC?=
- =?us-ascii?Q?hKICOShDl8eZzmcTVh1r7pkuz9vixjr+/4NmmBufaUU+6Z5+kgj4KEEbLlSV?=
- =?us-ascii?Q?LBBQuC9sIu0ho6SecujSc8l/fqCVH/tR0XqT8kdM2+beHoU1ium/SBWfYDKi?=
- =?us-ascii?Q?mPyRqBOtGptxom9pdpwqmSP7Pkht8wQGj5gp7nld3P8XfVgnM3es/gzjPJDS?=
- =?us-ascii?Q?8bsS+1k68VUrLru2jTPXZimsYRjmuhv12Mki4zGvcO+N3MLxdxMuUAXuDkWZ?=
- =?us-ascii?Q?dxfiI3IkB6e2LjZlHypmU9/dE5/gGarimzSoa+n7EzbbmNgZGqEDvZa0UrBC?=
- =?us-ascii?Q?v3dyTF9URF4obrW094RSly9bcCTBJdmByNn2e2UYJ4HqZBSFamA4tycCxK8S?=
- =?us-ascii?Q?Tev5q94mZ2KasifMzOF2pZN5P3D31s6KVKS/YDbaemb88GJ94iVw8Jtb2jCW?=
- =?us-ascii?Q?ICo5mglF/V7ni2gBi/rddbbL43cv4mqViEWxwDrYBXLsdVabvQ6WMMo/+zxp?=
- =?us-ascii?Q?DNFQqHLou70/SiAzUJAZsUOOJVFtQ5t55xcFd1RRWhGY57i24/NpobJmt2zY?=
- =?us-ascii?Q?rFD/4fNkfquSf6lO0QC5vu95p6hsoI0VxvMLMEaXmB5NsDoYYyfHTIz/lGwD?=
- =?us-ascii?Q?sRvCLtNvFMmVwZRFS0PfIY6K+w6CakzWVA1xS7c+NFN2hKHbRgXvQf6uWwj3?=
- =?us-ascii?Q?/bGX5zUZ5lZF4+UBln/R40B699P4W7cpK8WUf3OJzEWsVxd5GUdiEnhdZS8H?=
- =?us-ascii?Q?iJlOpD8s0GYZ64xj00/O4WpevjUpcZOYDm5pAoAU5FP5mw4Mlqc9xP8QyUzK?=
- =?us-ascii?Q?XnLcwploqxkIfzeFHalbE+/za1bqISEdeVI3KMYbMw0UNogprdCPQ5TQcP9c?=
- =?us-ascii?Q?+ssIYBqAr4bs5n/Z6+I+pGtzyzM3MjqrBNPx+k3Ki7XoKJPXxYFtjFcqQgnR?=
- =?us-ascii?Q?QcFygqdyCk2At8HQj6vc5Olai7AAAB5trNVgCD2S9ZiK2YCjbqfk6MNO2hUB?=
- =?us-ascii?Q?JsT4AHRLQLGYTG0tYx2gcL488e+2zsPQzjSxKzGg/E2OGxWmyNCgrmUuHeQ2?=
- =?us-ascii?Q?YkrKKQLvO8g5w+7xBaicfr/mFdjwsqTGs2QbheSXgHqlpjmL9eUH9cZMkHJT?=
- =?us-ascii?Q?zGXhx6nK5uG798PL+FgFnlucouI+J8oz5NspU2jVDtYLBJ+8r77Kq+mST/e9?=
- =?us-ascii?Q?8VGZE4jJYx6OnfERv6LkABuvjrJqvzHnGR7wK5GP3MnvixMSStMikwa8mM3B?=
- =?us-ascii?Q?vkYQERRJ2m2ur7WjZ9T36eYPwWUPbuq/Bvuo1RT+RmUxBZNKhSt7heH2GQGf?=
- =?us-ascii?Q?EoCqnajmNwswtNAQvDd2YOf2UcFiXd9R3UWqOuHGraBpnQXcrk07b2Z85ROz?=
- =?us-ascii?Q?pvmv2uG+IUV3xSBTZki7kl4dfMPdieJJGuFp88b9Q4/0TWlTdtg9r0a/tTaK?=
- =?us-ascii?Q?wmazQMB52bbb2XbysYVhFTuHQqkStBV7FXZMQIphn/VZEZYeA6tfDLgapUPZ?=
- =?us-ascii?Q?LLPzj8eZfkvLsroRDXlB9q5TBplqX6OXp3bPBiP/QeRJcX4/Yb2Lk9uHRVMB?=
- =?us-ascii?Q?IBhT2m5u4AHcohrUJkg+nnMLRKnsdwrAtRRYexxIQKoVNnzxfLCqxDc5yRZm?=
- =?us-ascii?Q?BRDbUgCPF0fcjJDCjcRWo5Q=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 20:37:39.4650
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a45d332-64dd-4bc5-d0c7-08de59f615c5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00001505.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8528
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/8] mm/memory_hotplug: add APIs for explicit online type
+ control
+To: Gregory Price <gourry@gourry.net>
+Cc: linux-mm@kvack.org, linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ kernel-team@meta.com, dan.j.williams@intel.com, vishal.l.verma@intel.com,
+ dave.jiang@intel.com, mst@redhat.com, jasowang@redhat.com,
+ xuanzhuo@linux.alibaba.com, eperezma@redhat.com, osalvador@suse.de,
+ akpm@linux-foundation.org
+References: <20260114085201.3222597-1-gourry@gourry.net>
+ <20260114085201.3222597-4-gourry@gourry.net>
+ <b3d435d2-643f-4dad-9928-bc7fb5080181@kernel.org>
+ <aWfR86RIKEvyZsh6@gourry-fedora-PF4VCD3F>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+In-Reply-To: <aWfR86RIKEvyZsh6@gourry-fedora-PF4VCD3F>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-12787-lists,linux-nvdimm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[amd.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Benjamin.Cheatham@amd.com,nvdimm@lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-12791-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:email,amd.com:dkim,amd.com:mid];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 963676D772
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CD7176E413
 X-Rspamd-Action: no action
 
-Add man pages for the 'cxl-inject-error' and 'cxl-clear-error' commands.
-These man pages show usage and examples for each of their use cases.
+>> For dax we know that user space will define the policy.
+>>
+> 
+> Actually this may not always be true.  A driver spawning a dax on probe
+> might also end up selecting the policy... eventually... maybe... I might
+> be planning to add that glue between CXL and DAX so I can add some
+> config similar to the system-default policy to avoid systems with
+> multiple memory-devices being forced into the same policy
+> 
+> (e.g. CXL memory device can online auto in ZONE_MOVABLE, but the other
+>   device can have its own policy).
+> 
+> There's a weird corner case for CXL auto-regions (BIOS configured
+> everything but left the memory EFI_MEMORY_SP - so comes up as DAX).
+> I'm trying to keep those systems working the same as they have been
+> while the userland policy stuff catches up.  Early CXL patterns are :[
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Ben Cheatham <Benjamin.Cheatham@amd.com>
----
- Documentation/cxl/cxl-clear-error.txt  |  69 +++++++++++
- Documentation/cxl/cxl-inject-error.txt | 161 +++++++++++++++++++++++++
- Documentation/cxl/meson.build          |   2 +
- 3 files changed, 232 insertions(+)
- create mode 100644 Documentation/cxl/cxl-clear-error.txt
- create mode 100644 Documentation/cxl/cxl-inject-error.txt
+Right, but I don't want any other OOT kernel module to be able to make 
+use of add_memory_driver_managed() to do arbitrary things, because we 
+don't know if it's really user space setting the policy for that memory 
+then.
 
-diff --git a/Documentation/cxl/cxl-clear-error.txt b/Documentation/cxl/cxl-clear-error.txt
-new file mode 100644
-index 0000000..9d77855
---- /dev/null
-+++ b/Documentation/cxl/cxl-clear-error.txt
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+cxl-clear-error(1)
-+==================
-+
-+NAME
-+----
-+cxl-clear-error - Clear CXL errors from CXL devices
-+
-+SYNOPSIS
-+--------
-+[verse]
-+'cxl clear-error' <device name> [<options>]
-+
-+Clear an error from a CXL device. The types of devices supported are:
-+
-+"memdevs":: A CXL memory device. Memory devices are specified by device
-+name ("mem0"), device id ("0") and/or host device name ("0000:35:00.0").
-+
-+Only device poison (viewable using the '-L'/'--media-errors' option of
-+'cxl-list') can be cleared from a device using this command. For example:
-+
-+----
-+
-+# cxl list -m mem0 -L -u
-+{
-+  "memdev":"mem0",
-+  "ram_size":"1024.00 MiB (1073.74 MB)",
-+  "ram_qos_class":42,
-+  "serial":"0x0",
-+  "numa_node:1,
-+  "host":"0000:35:00.0",
-+  "media_errors":[
-+    {
-+	  "offset":"0x1000",
-+	  "length":64,
-+	  "source":"Injected"
-+	}
-+  ]
-+}
-+
-+# cxl clear-error mem0 -a 0x1000
-+poison cleared at mem0:0x1000
-+
-+# cxl list -m mem0 -L -u
-+{
-+  "memdev":"mem0",
-+  "ram_size":"1024.00 MiB (1073.74 MB)",
-+  "ram_qos_class":42,
-+  "serial":"0x0",
-+  "numa_node:1,
-+  "host":"0000:35:00.0",
-+  "media_errors":[
-+  ]
-+}
-+
-+----
-+
-+This command depends on the kernel debug filesystem (debugfs) to clear device poison.
-+
-+OPTIONS
-+-------
-+-a::
-+--address::
-+	Device physical address (DPA) to clear poison from. Address can be specified
-+	in hex or decimal. Required for clearing poison.
-+
-+--debug::
-+	Enable debug output
-diff --git a/Documentation/cxl/cxl-inject-error.txt b/Documentation/cxl/cxl-inject-error.txt
-new file mode 100644
-index 0000000..80d03be
---- /dev/null
-+++ b/Documentation/cxl/cxl-inject-error.txt
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+cxl-inject-error(1)
-+===================
-+
-+NAME
-+----
-+cxl-inject-error - Inject CXL errors into CXL devices
-+
-+SYNOPSIS
-+--------
-+[verse]
-+'cxl inject-error' <device name> [<options>]
-+
-+WARNING: Error injection can cause system instability and should only be used
-+for debugging hardware and software error recovery flows. Use at your own risk!
-+
-+Inject an error into a CXL device. The type of errors supported depend on the
-+device specified. The types of devices supported are:
-+
-+"Downstream Ports":: A CXL RCH downstream port (dport) or a CXL VH root port.
-+Eligible ports will have their 'protocol_injectable' attribute in 'cxl-list'
-+set to true. Dports are specified by host name ("0000:0e:01.1").
-+"memdevs":: A CXL memory device. Memory devices are specified by device name
-+("mem0"), device id ("0"), and/or host device name ("0000:35:00.0").
-+
-+There are two types of errors which can be injected: CXL protocol errors
-+and device poison.
-+
-+CXL protocol errors can only be used with downstream ports (as defined above).
-+Protocol errors follow the format of "<protocol>-<severity>". For example,
-+a "mem-fatal" error is a CXL.mem fatal protocol error. Protocol errors can be
-+found in the "injectable_protocol_errors" list under a CXL bus object. This
-+list is only available when the CXL debugfs is accessible (normally mounted
-+at "/sys/kernel/debug/cxl"). For example:
-+
-+----
-+
-+# cxl list -B
-+[
-+  {
-+	"bus":"root0",
-+	"provider":"ACPI.CXL",
-+	"injectable_protocol_errors":[
-+	  "mem-correctable",
-+	  "mem-fatal",
-+	]
-+  }
-+]
-+
-+----
-+
-+CXL protocol (CXL.cache/mem) error injection requires the platform to support
-+ACPI v6.5+ error injection (EINJ). In addition to platform support, the
-+CONFIG_ACPI_APEI_EINJ and CONFIG_ACPI_APEI_EINJ_CXL kernel configuration options
-+will need to be enabled. For more information, view the Linux kernel documentation
-+on EINJ. Example using the bus output above:
-+
-+----
-+
-+# cxl list -TP
-+ [
-+  {
-+    "port":"port1",
-+    "host":"pci0000:e0",
-+    "depth":1,
-+    "decoders_committed":1,
-+    "nr_dports":1,
-+    "dports":[
-+      {
-+        "dport":"0000:e0:01.1",
-+        "alias":"device:02",
-+        "id":0,
-+        "protocol_injectable":true
-+      }
-+    ]
-+  }
-+]
-+
-+# cxl inject-error "0000:e0:01.1" -t mem-correctable
-+cxl inject-error: inject_proto_err: injected mem-correctable protocol error.
-+
-+----
-+
-+Device poison can only by used with CXL memory devices. A device physical address
-+(DPA) is required to do poison injection. DPAs range from 0 to the size of
-+device's memory, which can be found using 'cxl-list'. An example injection:
-+
-+----
-+
-+# cxl inject-error mem0 -t poison -a 0x1000
-+poison injected at mem0:0x1000
-+# cxl list -m mem0 -u --media-errors
-+{
-+  "memdev":"mem0",
-+  "ram_size":"256.00 MiB (268.44 MB)",
-+  "serial":"0",
-+  "host":"0000:0d:00.0",
-+  "firmware_version":"BWFW VERSION 00",
-+  "media_errors":[
-+    {
-+      "offset":"0x1000",
-+      "length":64,
-+      "source":"Injected"
-+    }
-+  ]
-+}
-+
-+----
-+
-+Not all memory devices support poison injection. To see if a device supports
-+poison injection through debugfs, use 'cxl-list' look for the "poison-injectable"
-+attribute under the device. This attribute is only available when the CXL debugfs
-+is accessible. Example:
-+
-+----
-+
-+# cxl list -u -m mem0
-+{
-+  "memdev":"mem0",
-+  "ram_size":"256.00 MiB (268.44 MB)",
-+  "serial":"0",
-+  "host":"0000:0d:00.0",
-+  "firmware_version":"BWFW VERSION 00",
-+  "poison_injectable":true
-+}
-+
-+----
-+
-+This command depends on the kernel debug filesystem (debugfs) to do CXL protocol
-+error and device poison injection.
-+
-+OPTIONS
-+-------
-+-a::
-+--address::
-+	Device physical address (DPA) to use for poison injection. Address can
-+	be specified in hex or decimal. Required for poison injection.
-+
-+-t::
-+--type::
-+	Type of error to inject into <device name>. The type of error is restricted
-+	by device type. The following shows the possible types under their associated
-+	device type(s):
-+----
-+
-+Downstream Ports: ::
-+	cache-correctable, cache-uncorrectable, cache-fatal, mem-correctable,
-+	mem-uncorrectable, mem-fatal
-+
-+Memdevs: ::
-+	poison
-+
-+----
-+
-+--debug::
-+	Enable debug output
-+
-+SEE ALSO
-+--------
-+linkcxl:cxl-list[1]
-diff --git a/Documentation/cxl/meson.build b/Documentation/cxl/meson.build
-index 8085c1c..0b75eed 100644
---- a/Documentation/cxl/meson.build
-+++ b/Documentation/cxl/meson.build
-@@ -50,6 +50,8 @@ cxl_manpages = [
-   'cxl-update-firmware.txt',
-   'cxl-set-alert-config.txt',
-   'cxl-wait-sanitize.txt',
-+  'cxl-inject-error.txt',
-+  'cxl-clear-error.txt',
- ]
- 
- foreach man : cxl_manpages
+So either restrict add_memory_driver_managed() to kmem+virtio_mem 
+completely, or add another variant that will be kmem-only (or however 
+that dax/cxl module is called).
+
+
 -- 
-2.52.0
+Cheers
 
+David
 
