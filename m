@@ -1,68 +1,67 @@
-Return-Path: <nvdimm+bounces-12870-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12871-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CGjvHdSmd2lrjwEAu9opvQ
-	(envelope-from <nvdimm+bounces-12870-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 18:39:32 +0100
+	id 0CynM3Ssd2kZkAEAu9opvQ
+	(envelope-from <nvdimm+bounces-12871-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 19:03:32 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C5CA8B942
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 18:39:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C4918BE14
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 19:03:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A142A3013ED8
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 17:39:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 115DE30480FB
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 26 Jan 2026 18:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB97234A790;
-	Mon, 26 Jan 2026 17:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B8834D4F3;
+	Mon, 26 Jan 2026 18:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GUm28pzD"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eavK9guM"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434762D73A0
-	for <nvdimm@lists.linux.dev>; Mon, 26 Jan 2026 17:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515D4335543
+	for <nvdimm@lists.linux.dev>; Mon, 26 Jan 2026 18:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769449166; cv=none; b=AIGmwY1NiyrNeWM8LpUHNcJ3ZO1wqv0Mjmh+ZeGFDvtjjEVp7bLIPEypEP3JtKNzU5gIJe2gfQZyfHWK5BQkbBNi2xDX72BZNQA8V6D3adb/+PbgTnSGt2zi0fdlGkQnKNrZXRfOFwSX51gPmDOvUqF5uxHPhTsnTY2DuItadds=
+	t=1769450598; cv=none; b=J+SXA2NJzxn5ME64z2jQNfynNi3gvcet+s4dAyZcg9I12kt4N7M9VEPZiB/edoDwxqmELhXvnZXPilKVPIFWlx8bgNclzrUl/n+bh7nJTEoRG10+fPElDTLbRCXt+hOXhR9jvK0n8ocFcy/KSpZ6wmBJyigXi5w/pyAB+OPm+7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769449166; c=relaxed/simple;
-	bh=GdnZo3Rj1E274mSOr6kQT1Mo74Gj5afcrFjTg2gwmPc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W/4pTA7lFmEDRiGlc7qV4yNoCg8vMOv85U+ab8nlWd5KCOm7HiDJkxLxYp00MuIGJLsVRwnbinK2iinsezAwuRDy9eZVdO/0hPLVMH5zwUAa6JtHhWVDW9TfDZnW7j1ngl5O6CyNiV0ciVMKe1khlUjKVSsildN9luqJl1MUq+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GUm28pzD; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769449164; x=1800985164;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GdnZo3Rj1E274mSOr6kQT1Mo74Gj5afcrFjTg2gwmPc=;
-  b=GUm28pzDGtv3APIan4RNMSvR6OAniIVnZJoE2q2ZjcsK/6lJVkyyKjTA
-   lxCnDdvpDt9Vd7EW//+LTYJBMnH/u3yvbo5sE052+SmxQiaQ1qf294qpJ
-   w6iIx6ahsoIFZVTtA6ZvAaJn5W6kDiAbrqoi0Fi41u2FZegG2v6bzVGDl
-   yZGk81udNJQvquSWPcjlorq2Gt/ovGO3CfqNPz9XTsb58R+0Qvk5VFGG9
-   Fh4VnifDtumbe9u2ry3qdve6eHB1qDYg5Za5C6evrmCknXiWy4eaS9iJT
-   8JdZvQ/+FQEW5/cs+yLrakNJzYablb6X4eWkGlrPK2J453HT3e8I4CigH
-   A==;
-X-CSE-ConnectionGUID: F93fX4k4Tx2FZJ+HJL6o/A==
-X-CSE-MsgGUID: X0UkzarRT4Ony7Cf97964Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="69829952"
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="69829952"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 09:39:23 -0800
-X-CSE-ConnectionGUID: UF1mO/ErSi+y/4yV8T4R3A==
-X-CSE-MsgGUID: 8I44nzNlRe6Tc4p4KxnfXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="211839338"
-Received: from cjhill-mobl.amr.corp.intel.com (HELO [10.125.109.74]) ([10.125.109.74])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 09:39:22 -0800
-Message-ID: <c198f1fa-5a42-42d9-a5f0-713ffbabd4ee@intel.com>
-Date: Mon, 26 Jan 2026 10:39:21 -0700
+	s=arc-20240116; t=1769450598; c=relaxed/simple;
+	bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=d6kJXGyqRrAiIdD7igNAg7ElXhmZPLwSUilpA7Q2Axmgzt1xDOqbx98wA21kJ7l42RP+fpdKqiNKdPo6vlTRM7OpHX8CqD+3qRHngcBkWpNr57UOMLlfY480idwd6hYzpm6mZN5nfMg6zDtvZS9GKIGjxw8BnGLTIIRih8FSgTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eavK9guM; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260126180313epoutp04bf7c588b1483804ff7c55f18b007316b~OWfCIv3va0912809128epoutp04j
+	for <nvdimm@lists.linux.dev>; Mon, 26 Jan 2026 18:03:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260126180313epoutp04bf7c588b1483804ff7c55f18b007316b~OWfCIv3va0912809128epoutp04j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1769450593;
+	bh=MPy2dmqKlCsrw5okIZFwkiGzwVi0bWXg1j0NfWvMFRQ=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=eavK9guME8J5LIadxOdM42c8eQg+ZLV2yd5A2r92RCAui6FQaWJcqvO/aFI1QYEXM
+	 LE8I5rK+PWk6svAJmmv1aBeTUdCUIPeoRNaFqrja3RwRHUlo/UrSwNB/rWKkJxaWd/
+	 RV4+f80nf9np5rtb2ofv6BF6eI1Lg23ArNfe91So=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20260126180312epcas5p4671e4f372b35f3f122d0bf96d3e698ff~OWfB5XLct2909929099epcas5p4o;
+	Mon, 26 Jan 2026 18:03:12 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.86]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4f0Gc01wy7z6B9m5; Mon, 26 Jan
+	2026 18:03:12 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260126180311epcas5p4a19d73b6fc8b7abc57c3efb8feca8f4a~OWfAj4lK10116001160epcas5p4a;
+	Mon, 26 Jan 2026 18:03:11 +0000 (GMT)
+Received: from [107.122.11.51] (unknown [107.122.11.51]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260126180309epsmtip17ecf8e8264e0645442d441305040008d~OWe-EUJ6e0279302793epsmtip14;
+	Mon, 26 Jan 2026 18:03:09 +0000 (GMT)
+Message-ID: <d5b8c029-d290-409c-a888-e36bb2e639f0@samsung.com>
+Date: Mon, 26 Jan 2026 23:33:08 +0530
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,103 +69,57 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nvdimm: Add check for devm_kmalloc() and fix NULL pointer
- dereference in nd_pfn_probe() and nd_dax_probe()
-To: Zhaoyang Yu <2426767509@qq.com>, dan.j.williams@intel.com
-Cc: vishal.l.verma@intel.com, ira.weiny@intel.com, nvdimm@lists.linux.dev,
- linux-kernel@vger.kernel.org, gszhai@bjtu.edu.cn
-References: <tencent_A06C2B14D0B5B3FEF2379914F5EF8AD61D07@qq.com>
+Subject: Re: [PATCH 03/15] block: add a bdev_has_integrity_csum helper
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, Christian
+	Brauner <brauner@kernel.org>
+Cc: "Darrick J. Wong" <djwong@kernel.org>, Carlos Maiolino <cem@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Anuj Gupta
+	<anuj20.g@samsung.com>, linux-block@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org
 Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <tencent_A06C2B14D0B5B3FEF2379914F5EF8AD61D07@qq.com>
-Content-Type: text/plain; charset=UTF-8
+From: Kanchan Joshi <joshi.k@samsung.com>
+In-Reply-To: <20260121064339.206019-4-hch@lst.de>
 Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20260126180311epcas5p4a19d73b6fc8b7abc57c3efb8feca8f4a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260121064403epcas5p3dae5541f5ae17a7ab8db6dc650a5b6e5
+References: <20260121064339.206019-1-hch@lst.de>
+	<CGME20260121064403epcas5p3dae5541f5ae17a7ab8db6dc650a5b6e5@epcas5p3.samsung.com>
+	<20260121064339.206019-4-hch@lst.de>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[samsung.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-12870-lists,linux-nvdimm=lfdr.de];
-	FREEMAIL_TO(0.00)[qq.com,intel.com];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-12871-lists,linux-nvdimm=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,samsung.com:email,samsung.com:dkim,samsung.com:mid];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[joshi.k@samsung.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	MID_RHS_MATCH_FROM(0.00)[];
+	SINGLE_SHORT_PART(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qq.com:email,intel.com:email,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: 9C5CA8B942
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 1C4918BE14
 X-Rspamd-Action: no action
 
-
-
-On 1/26/26 6:04 AM, Zhaoyang Yu wrote:
-> The devm_kmalloc() function may return NULL when memory allocation fails.
-> In nd_pfn_probe() and nd_dax_probe(), the return values of devm_kmalloc()
-> are not checked. If pfn_sb is NULL, it will cause a NULL pointer
-> dereference in the subsequent calls to nd_pfn_validate().
-> 
-> Additionally, if the allocation fails, the devices initialized by
-> nd_pfn_devinit() or nd_dax_devinit() are not properly released, leading
-> to memory leaks.
-> 
-> Fix this by checking the return value of devm_kmalloc() in both functions.
-> If the allocation fails, use put_device() to release the initialized device
-> and return -ENOMEM.
-> 
-> Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
-
-Please provide a Fixes tag. Otherwise LGTM.
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-> ---
->  drivers/nvdimm/dax_devs.c | 4 ++++
->  drivers/nvdimm/pfn_devs.c | 4 ++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/drivers/nvdimm/dax_devs.c b/drivers/nvdimm/dax_devs.c
-> index ba4c409ede65..aa51a9022d12 100644
-> --- a/drivers/nvdimm/dax_devs.c
-> +++ b/drivers/nvdimm/dax_devs.c
-> @@ -111,6 +111,10 @@ int nd_dax_probe(struct device *dev, struct nd_namespace_common *ndns)
->  			return -ENOMEM;
->  	}
->  	pfn_sb = devm_kmalloc(dev, sizeof(*pfn_sb), GFP_KERNEL);
-> +	if (!pfn_sb) {
-> +		put_device(dax_dev);
-> +		return -ENOMEM;
-> +	}
->  	nd_pfn = &nd_dax->nd_pfn;
->  	nd_pfn->pfn_sb = pfn_sb;
->  	rc = nd_pfn_validate(nd_pfn, DAX_SIG);
-> diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> index 42b172fc5576..6a69d8bfeb7c 100644
-> --- a/drivers/nvdimm/pfn_devs.c
-> +++ b/drivers/nvdimm/pfn_devs.c
-> @@ -635,6 +635,10 @@ int nd_pfn_probe(struct device *dev, struct nd_namespace_common *ndns)
->  	if (!pfn_dev)
->  		return -ENOMEM;
->  	pfn_sb = devm_kmalloc(dev, sizeof(*pfn_sb), GFP_KERNEL);
-> +	if (!pfn_sb) {
-> +		put_device(pfn_dev);
-> +		return -ENOMEM;
-> +	}
->  	nd_pfn = to_nd_pfn(pfn_dev);
->  	nd_pfn->pfn_sb = pfn_sb;
->  	rc = nd_pfn_validate(nd_pfn, PFN_SIG);
-
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
