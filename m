@@ -1,148 +1,114 @@
-Return-Path: <nvdimm+bounces-12902-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-12904-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8I/kCZ7YeGmftgEAu9opvQ
-	(envelope-from <nvdimm+bounces-12902-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 16:24:14 +0100
+	id EKFEFArbeGmwtgEAu9opvQ
+	(envelope-from <nvdimm+bounces-12904-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 16:34:34 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC23969EB
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 16:24:13 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C2996CE9
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 16:34:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BA4EE307E1B8
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 14:58:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AD91D30538E6
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 27 Jan 2026 15:18:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D165B35CBAA;
-	Tue, 27 Jan 2026 14:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dTsim6LT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3EC735D606;
+	Tue, 27 Jan 2026 15:16:15 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3563235C188
-	for <nvdimm@lists.linux.dev>; Tue, 27 Jan 2026 14:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769525888; cv=pass; b=HEVpFxcCAGdgeLuVqk6yWwrLxhJbZBL9Pv+dFIKcBKqrL5et4m4HtMHGukKIKdqIVmoY2MvFfdPks3zZExMh4e/sM+WyDQEKzHKYR/cTpPIz0oIpVCoUABwktfOv/vVvWmsnNJjhgmAHkYRdDfnroED71Xw4Fljv+n5rLsBESfw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769525888; c=relaxed/simple;
-	bh=gm1y3HjSbfjetP2qj6SkQ/PvAerOiP935sq/jHQIUpg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WjdRpv0m9QLI7xCkgkM1IWPcvomhMOdP6b3eazr1zQacFPSySpkT9eJ6r/98jK5KMPSuNrkvsYdJVNt3D8mIYpgWN2J1OuyrXWvsA56mo7cN5OstW+ccqB/5KlU77fySwqK5Kjauf/gJQC5rbqS3k1jM7sYf7fL98vZxXmAYSWg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dTsim6LT; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65808bb859cso9370397a12.2
-        for <nvdimm@lists.linux.dev>; Tue, 27 Jan 2026 06:58:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769525885; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jk4aZhWO6DYGlU/GpJUOhLGMVERrW8ALCDsAZRMv6OBH85sEdgpqjm4ID+uHN3sC6v
-         KnnfWnJJbu4qn3jveApAy/OQYc22OrKPPzQQFfBEmiYxFF9MmYcy5jAkP+ndq+APaF/U
-         Q+6n0SFXSYBBUd7KFmcYg9wOm+U/ca63GDSSn+f8xg8qlRtw/vrQeCixHpKTmYpEdUMq
-         HfSQ+0enIiJs4gWcz0w1JY0iSVjmh62/NR3YhK7Q3qmjcgIijyRRwq1CXCiG/x4GHpX6
-         cq7xwXYz1SinxlkLQ9km3thy94qkdvg0Fpykavg8jBb0qlAVAx/0leDohkRDuMXL/Loc
-         zy1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=gm1y3HjSbfjetP2qj6SkQ/PvAerOiP935sq/jHQIUpg=;
-        fh=CmvGJNlNZ+VETQVaH1NgAT3aL7BBqrq8eJjPbgW0A3s=;
-        b=OfoEfGW8SXr+sG11dNNLH4iYi0jdBrxJauwJ5dP45mrGKtqlxig67JdyKjUuHsZmcY
-         40ShuUFHxFbQrtH2Q9FEsqHyz0Bd7WXln/P+0JLd9P6sIAKo5SwQ07QfWBo3WZX3uzME
-         G+WCiH4ovZHlBqyYeRE6EkSKKwVr/5CoyY/SgunJMS0O5uaXkiBOEUFURq7aCZZKICbS
-         1/lp+Hn+9fwtzZg31spiPzVNGhYE3tZJV06xKzLGzuwNH9CNoI2YSEGfs/ciWXdCExU0
-         Ja4tN43xeJmyHBoAHcFT7dAu69dzvNTNEHv4hXEjUqGdfMJnOgcaCgapbDLTj8pHTkep
-         vvdw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769525885; x=1770130685; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gm1y3HjSbfjetP2qj6SkQ/PvAerOiP935sq/jHQIUpg=;
-        b=dTsim6LTS+M846b0EfkY0QPZeuyNwGAchqvHmRBCmpecgXbT4Y5slBPMdYOZdCcw7R
-         y3ezFxho7Y/TSgXDQgWnYlhZBOUai2wfIrrx4/Jd8803imOiCDtmPWNFU3MZeRiIRwoD
-         pfr+x/Fz9HDdKzIjsxLhk416ms7KflmgveobVuP0FHsPKl431djZPpV0t4H2Osnbpbhy
-         lJS0q6hWkFrH8W9nOfV3CSyiUNUkHAJmm7bxEsAhrCRy6yKTStA4ECn2rhXMEvSIbswj
-         X2R13mkeThO4M11WF7vcjfADCk0BEw3iedAWX0RDPtmVHt7+qnxXEXYUhiJMX8Si7zW4
-         eyIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769525885; x=1770130685;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gm1y3HjSbfjetP2qj6SkQ/PvAerOiP935sq/jHQIUpg=;
-        b=HZYHE+SqhyzvuYJnqgUDx+S2eHCz9p/ofyhW+DcZxXIqXWI2zPyBYoodx+tlyNpryC
-         J9Bnoqfh5FbSUolqM8K4b1NHpUOVCsU7tUAPQ/0kYaiR/84Z19/kTKbHPWyfYtu8+l+L
-         xl3iottMJ4NjHSDY/pM69wCX/FAi8TFTBYJPVMsA6NebM8E6I3BKqHw3tyaSKrplJ1Jn
-         QpkxrnwU6ZPYtuOjfnJEanKG68wiqqp79CqES9F+WAh52WWWEfioJHQ+NRwU6ok5cKHd
-         dtgu6Hxjxt2SiDsIz4X0PGc31I89tn71nwlmbsW8LNCF78LFr/Wgszft408uT7FYOBAG
-         xOzg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzBy3xf1kcgFslg5vhPLIwioYKaCaRgtia276VzUEK5iGn7gqvUfhHHEN4YQE7lWafFV8YGhY=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyZM3j+nfgyUweik6AHJonhgrTzC1c49IotPrxNCccLmuQ/LqDv
-	EBGOX9/HFqgx0nJqlC8vuJsprCUxgp3EWblhiTXmN8jZNX+7boyWFQstAPBLdE0O6dyETx7yJBx
-	+JCZ5Q+mumnAGxyYFlnasQK+iYtJULA==
-X-Gm-Gg: AZuq6aKntS6MF8reGzbRT3bvwA5OaRneSuHAETv6ZNXefFDeRlJSlgbIWnY9DJWPCfV
-	W2vbr5XIYAxH6vmcztxKLaK3mB+QTz1JBEUE1KK4X86Rzf8ijtaRgVsEWtq6fNBzeDDbHFRVb/z
-	kpPtv14VGoVlEWAdaZCnZ6oOU8w/oFw3GfX44QrGxlGJdWPGs3BSs8zkqL5O7No6v6Aqyb+jS9o
-	3cn3R8D98fvBTd9c4GB62su/pd8+04u/nA3Hm2EU7UBhooHllF2JYVEUr2+X3XODEhet9vekepy
-	ajXAEHQbFPWqRu5JWDrLXkX+lYWZdHX2bQTyZqSqCewuxzByHUZ3shJo7Q==
-X-Received: by 2002:a05:6402:3990:b0:658:1b1b:15a2 with SMTP id
- 4fb4d7f45d1cf-658a6015a38mr1102233a12.7.1769525885403; Tue, 27 Jan 2026
- 06:58:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CE335CBCB
+	for <nvdimm@lists.linux.dev>; Tue, 27 Jan 2026 15:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769526975; cv=none; b=GjW4Vw/bzZeelH0J3ZS4BbLpwHg9UQ3xHpKGCKBbOsa9F87uOw5eCX6TsLrPDFll+QzKyhnlHwAPrV3vKwIQtlUUdF+ODfUxtqdB0StsizWauHSmvGUVuP2FHMY0gCH+x9ymVRcodcNa6Z2hYjuC871Iecmr7fJ/on4gcREwwgw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769526975; c=relaxed/simple;
+	bh=pmEU1/GjeEWtU5JBXeKFHL6rzRm4Dv+qk3Ok9xl6wR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mGBPzxlk+L2iHelif/LyBWxVGTVp0bpkgI+IlufhBeK8vxX840NTf05KVnUxe8oFGqGpLo3nwZsYpDXRoCsNmZftH3dq4HrZ/ltXihmZpkC1Nqrdo6lYoa0lX+OWsWmIMX+mILb6Oejsw7jKNFooz6El/MF5t5alkKBh2a+aZAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 3EEDB227AAA; Tue, 27 Jan 2026 16:16:10 +0100 (CET)
+Date: Tue, 27 Jan 2026 16:16:09 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Anuj gupta <anuj1072538@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	Christian Brauner <brauner@kernel.org>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Carlos Maiolino <cem@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>, linux-block@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-xfs@vger.kernel.org
+Subject: Re: support file system generated / verified integrity information
+Message-ID: <20260127151609.GA1883@lst.de>
+References: <20260121064339.206019-1-hch@lst.de> <CACzX3AuDkwEw3v0bNmYLk8updk1ghVJa-T9o=EHXor9FA7badw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260121064339.206019-1-hch@lst.de> <20260121064339.206019-8-hch@lst.de>
-In-Reply-To: <20260121064339.206019-8-hch@lst.de>
-From: Anuj gupta <anuj1072538@gmail.com>
-Date: Tue, 27 Jan 2026 20:27:27 +0530
-X-Gm-Features: AZwV_QiLLibbUg0iWqpfZ42-4rmvFtl9Ak5eBKgkKHdzZSGOKr8Fr4xqlZcQZ0A
-Message-ID: <CACzX3AuFkVucGMbP=YQTB9AH8J2iBzzhPW98JSizDNChzV2HuA@mail.gmail.com>
-Subject: Re: [PATCH 07/15] block: pass a maxlen argument to bio_iov_iter_bounce
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>, 
-	"Darrick J. Wong" <djwong@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Anuj Gupta <anuj20.g@samsung.com>, 
-	Kanchan Joshi <joshi.k@samsung.com>, linux-block@vger.kernel.org, nvdimm@lists.linux.dev, 
-	linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACzX3AuDkwEw3v0bNmYLk8updk1ghVJa-T9o=EHXor9FA7badw@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+X-Spamd-Result: default: False [-1.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[lst.de : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-12902-lists,linux-nvdimm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[anuj1072538@gmail.com,nvdimm@lists.linux.dev];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-12904-lists,linux-nvdimm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	SINGLE_SHORT_PART(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hch@lst.de,nvdimm@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,samsung.com:email]
-X-Rspamd-Queue-Id: 4CC23969EB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,lst.de:mid]
+X-Rspamd-Queue-Id: E1C2996CE9
 X-Rspamd-Action: no action
 
-Reviewed-by: Anuj Gupta <anuj20.g@samsung.com>
+On Tue, Jan 27, 2026 at 08:24:28PM +0530, Anuj gupta wrote:
+> Hi Christoph,
+> 
+> Here are the QD1 latency numbers (in usec)
+
+Thanks a lot!
+
+Adding in the baseline numbers, as I wanted to compare those:
+
+> Intel Optane:
+> 
+> Sequential read
+>   | size | baseline | xfs-bounce |  xfs-pi  |
+>   +------+----------+-----------+-----------+
+>   |   4k |    7.18  |    13.62   |     7.20 |
+>   |  64K |   36.40  |    99.66   |    34.16 |
+>   |   1M |  206.38  |   258.88   |   306.23 |
+>   +------+----------+------------+----------+
+
+So for 4k and 64k reads we basically get back to the baseline.
+The 1M numbers are puzzling, though.  I wonder if we need to
+add WQ_CPU_INTENSIVE or do some other tweaks to the XFS I/O
+completion workqueue so that we don't overload the scheduler.
 
