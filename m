@@ -1,147 +1,156 @@
-Return-Path: <nvdimm+bounces-13024-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13025-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 3Dr3BWzkg2mFvQMAu9opvQ
-	(envelope-from <nvdimm+bounces-13024-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 05 Feb 2026 01:29:32 +0100
+	id aEu5FX8bhGmyywMAu9opvQ
+	(envelope-from <nvdimm+bounces-13025-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 05 Feb 2026 05:24:31 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 661A2ED6EF
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 05 Feb 2026 01:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EABAAEE852
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 05 Feb 2026 05:24:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC2143010B87
-	for <lists+linux-nvdimm@lfdr.de>; Thu,  5 Feb 2026 00:29:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F11F530265AF
+	for <lists+linux-nvdimm@lfdr.de>; Thu,  5 Feb 2026 04:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B341D5CFB;
-	Thu,  5 Feb 2026 00:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB9F2E9EB9;
+	Thu,  5 Feb 2026 04:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="sJTPuNRQ"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B47315B971;
-	Thu,  5 Feb 2026 00:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA60D2E8B9B
+	for <nvdimm@lists.linux.dev>; Thu,  5 Feb 2026 04:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770251366; cv=none; b=Of0YhAR9qw9Pmacz1oK48tL53ORFsLuhByGd7x5mPk2u48K4IIsaYGHbKXZAPKGyO3SatWCeWLsN2lqZtpAanUDZHGJ5lCms/w9O+BmXH1/bgu2DtnRoi9rY8JBROoY3Pc8Zl5AFzjrXkCMrGqHyRuCs7uGW55ewKUQxPiQLB+8=
+	t=1770265424; cv=none; b=fLl2K5ewz8ol34BcMLOIUdh2crjYoSg5XhnKhas5u5obTdpz5nDz5lFlpZxyc8ntmcnkIdlLYuI3NmnVgvu4sTDwgk4jI+ymHmXklMjUphknhXLfvGkZKO2uqtvme2Lcpkm26KPLBew5I01OGg2kHrxYIbd7h7ptXJU2vw2budI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770251366; c=relaxed/simple;
-	bh=UDX6EEi/qrHbX7RN/OrmQnxI0r4DgGOvtltmqIAvk7k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q1B54GkvKU+0oRM0lCNTfciNVuo2ti5QYvvyDNmsmqUCSJ7yX+1lKGzD0QI9v949ynu3P/4D56OQ7uRehJlFRNRJJv7yr2SFMpXo+O7+Ch4Y9DnNNiwcwvisJOt7ClKCS3iReGS9eIwnbhbgmoNkONTZuctqiAYXyXNF3p8p+I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3C7C4CEF7;
-	Thu,  5 Feb 2026 00:29:25 +0000 (UTC)
-From: Dave Jiang <dave.jiang@intel.com>
-To: linux-cxl@vger.kernel.org,
-	nvdimm@lists.linux.dev
-Cc: alison.schofield@intel.com
-Subject: [NDCTL PATCH] cxl: Add support for updated CXL provider name
-Date: Wed,  4 Feb 2026 17:29:24 -0700
-Message-ID: <20260205002924.1831038-1-dave.jiang@intel.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1770265424; c=relaxed/simple;
+	bh=L03384jtDexDfzkRHHtzPIVJ4BKFBQWzJGNmJuCR4wU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j/DQ87ZEdqGY/2/bderNZBzf6JT2n9IcEmHTd2DjUUYiNML33VOn5N0ARbs67Si9xZx2cFGqV70OpLpAQNMFBFYbdzPqFpXLECYyLoPDfIU1JMRx/6aKZW0CZMUvBH9LaTaSMWqb80WalJtrPpMHd5oxN9Q7bSxbwowbHrwp+ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=sJTPuNRQ; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c52f15c5b3so42452585a.3
+        for <nvdimm@lists.linux.dev>; Wed, 04 Feb 2026 20:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1770265423; x=1770870223; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qW0+moZctApASOdwQkaNncsGOVFnNExxcEZS6yJkS4M=;
+        b=sJTPuNRQze7+DOn5EWaYQP4o2fwSi+QTfOL+yynMIK3396vJmC8tYR0wIRMBuJVp1r
+         MW9kEyFJPup+o2930hfZrHlHT5/hfrBHaP7sQbzedR7N3vSTQ/JmaLaGQCsggEKYxcTW
+         bzOQkZr5v2JJ8ZRA9sgFw6shOcZ9PkGEXM0ZRgOwi4giqMM/vUKows0VX6oFD46xImYA
+         NJU/uEQX0GjqUkDCHDA1+AxC97AsjnmqLD8MMTGKYHNaqsoSONao24Ek8vxs2+MZzRbc
+         TTtHlvQhOTSvNFFmumjFzO2LnDbBv7bzaIlQFI3W5C5It4TsAgVnTe4ditkegiu9u7Wc
+         hl9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770265423; x=1770870223;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qW0+moZctApASOdwQkaNncsGOVFnNExxcEZS6yJkS4M=;
+        b=meFZyiiP95uUiRTvE8sbb+Ql8dc8jORWz12RjmUsHkzLaCUZ+74GYz2/3FQJxAML+j
+         4wBEQFzcrdBubGWOW7/ygRiiuaLn6dajhjFRPJHd0oZZT0b+QEmYCNAIV9tWyL42PR6b
+         fzt6VFuPDr74LXcKbl0/9sqQIXpKjxubi5Kz6NMfu/jpRRWsI7ew+zBnlwZcpwnMPfQd
+         439njyeNKrQItBqJS9sgXfufhFK5YlM8JQFQVq/ZD3uzvEB3UgT/n8Ye5Be7LkKbyHBh
+         t7Z2pyxqXSWPDgFsoLrxgbtSLY6PRRT9xKxB8lzagfXkckq5Gb4xWy3/AaA4+ZDs6LfJ
+         YCuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUdQVkM2bGSuXViNeBqzSetyCbWbfexc91zNzhHgccTKemc3+Lb6AZ0xmiL876b8Howkg3/+G0=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxTkGueYVuMwKkOQIWpWuH+dswOoIWup6ruYoRxf7ou9CjkjOYe
+	gBXXBDzrwFZuet/MOYKz5ApA0N1j9+Log7gEzTWNeagbP7JgzelOjnIyD0vtA62etm0=
+X-Gm-Gg: AZuq6aLn1sdH25TIeWgNwHzEGDOmBc5C4KsjdZMR71oCorLV0pmE01b4ms4t5huEU8u
+	su1I7eRPNwgP9fpEMet0FBucxSsnj0jHQZ1fARckwj5qNns6v/q987c2T0MQRdPlj/NMMD1p1FW
+	04UKLF5JCtEjr06PRHFlvy7mNkef4bQexX/p/PxjPO6ex7mhWsE0rvAH1Q5tqrVPDlXIsCNIC/4
+	cPhwGbe09nn/ewCmsIxGDykIQc6EjUW3d+O08fqaen702PwAYgXluOF1P49rtEg7bG9EBySEX48
+	QLmInyUCDQ/F4efLfJMkFXTLiThdFxH2qjJG6xSY1hGRIjJhdBDiOj30SQ06TpeWtmwHCdTs7B9
+	aLesbJuCXKc19vraQ071RATaMPTtew3YbdrvCrQdVl5NOgFLBjasHRem0JYnAkbjUMky6m39UOs
+	+WHQENyg8ZD826qWzrXmEVDef4CJcymVCFODs6xHqbIVd9d3RcRyiQYsHQjrns/N2f3e3rxA==
+X-Received: by 2002:a05:620a:c4d:b0:8c6:f74f:9b69 with SMTP id af79cd13be357-8ca2fa5e50cmr701545185a.83.1770265422854;
+        Wed, 04 Feb 2026 20:23:42 -0800 (PST)
+Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89521cf8619sm34240906d6.32.2026.02.04.20.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 20:23:42 -0800 (PST)
+Date: Wed, 4 Feb 2026 23:23:40 -0500
+From: Gregory Price <gourry@gourry.net>
+To: "David Hildenbrand (arm)" <david@kernel.org>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>, linux-mm@kvack.org,
+	linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, kernel-team@meta.com, dave@stgolabs.net,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+	terry.bowman@amd.com, john@jagalactic.com,
+	Oscar Salvador <osalvador@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 2/9] mm/memory_hotplug: add __add_memory_driver_managed()
+ with online_type arg
+Message-ID: <aYQbTFLTRHiAnrKr@gourry-fedora-PF4VCD3F>
+References: <20260129210442.3951412-1-gourry@gourry.net>
+ <20260129210442.3951412-3-gourry@gourry.net>
+ <20260202172524.00000c6d@huawei.com>
+ <aYDmor_ruasxaZ-7@gourry-fedora-PF4VCD3F>
+ <20260202184609.00004a02@huawei.com>
+ <aYEZAUJMLWvaug50@gourry-fedora-PF4VCD3F>
+ <3424eba7-523b-4351-abd0-3a888a3e5e61@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3424eba7-523b-4351-abd0-3a888a3e5e61@kernel.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.14 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[intel.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-13024-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[gourry.net];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13025-lists,linux-nvdimm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gourry.net:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:email]
-X-Rspamd-Queue-Id: 661A2ED6EF
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gourry.net:dkim]
+X-Rspamd-Queue-Id: EABAAEE852
 X-Rspamd-Action: no action
 
-With a 7.1 kernel, the CXL provider name is changed due to removal of the
-nvdimm_bus_register() wrapper function in cxl_test. This impacts the
-security unit tests. Update to address the change.
+On Wed, Feb 04, 2026 at 10:08:45PM +0100, David Hildenbrand (arm) wrote:
+> > 
+> > David do you have thoughts here?
+> 
+> I guess we should clean that all up where easily possible, but I don't
+> expect you to do that.
+> 
+> For online_types I used it, obviously, to save memory. So I'd expect it to
+> stay at least there, but cast it to the proper type once we take it out the
+> array.
+> 
 
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
----
- test/common       | 6 ++++++
- test/cxl-security | 6 +++---
- test/security.sh  | 2 +-
- 3 files changed, 10 insertions(+), 4 deletions(-)
+I can do it pretty easily and pull it out ahead.
 
-diff --git a/test/common b/test/common
-index 2d076402ef7c..f9d180ac5bd3 100644
---- a/test/common
-+++ b/test/common
-@@ -156,3 +156,9 @@ check_dmesg()
- 
- # CXL COMMON
- CXL_TEST_QOS_CLASS=42
-+
-+if check_min_kver "7.1"; then
-+	CXL_TEST_PROVIDER="cxl_acpi.0"
-+else
-+	CXL_TEST_PROVIDER="cxl_test"
-+fi
-diff --git a/test/cxl-security b/test/cxl-security
-index 9a28ffd82b0b..11301fbc5f1b 100644
---- a/test/cxl-security
-+++ b/test/cxl-security
-@@ -3,9 +3,9 @@
- 
- detect()
- {
--	dev="$($NDCTL list -b "$CXL_TEST_BUS" -D | jq -r 'sort_by(.id) | .[0].dev')"
-+	dev="$($NDCTL list -b "$CXL_TEST_PROVIDER" -D | jq -r 'sort_by(.id) | .[0].dev')"
- 	[ -n "$dev" ] || err "$LINENO"
--	id="$($NDCTL list -b "$CXL_TEST_BUS" -D | jq -r 'sort_by(.id) | .[0].id')"
-+	id="$($NDCTL list -b "$CXL_TEST_PROVIDER" -D | jq -r 'sort_by(.id) | .[0].id')"
- 	[ -n "$id" ] || err "$LINENO"
- }
- 
-@@ -20,7 +20,7 @@ lock_dimm()
- 	test -e "$bus_provider_path" || err "$LINENO"
- 	bus_provider=$(cat ${bus_provider_path})
- 
--	[[ "$bus_provider" == "$CXL_TEST_BUS" ]] || err "$LINENO"
-+	[[ "$bus_provider" == "$CXL_TEST_PROVIDER" ]] || err "$LINENO"
- 	bus="cxl"
- 	nmem_provider_path="/sys/bus/nd/devices/${dev}/${bus}/provider"
- 	nmem_provider=$(cat ${nmem_provider_path})
-diff --git a/test/security.sh b/test/security.sh
-index d3a840c23276..ee27df215edd 100755
---- a/test/security.sh
-+++ b/test/security.sh
-@@ -212,7 +212,7 @@ if [ "$1" = "nfit" ]; then
- 	KMOD_TEST="nfit_test"
- elif [ "$1" = "cxl" ]; then
- 	. $(dirname $0)/cxl-security
--	TEST_BUS="$CXL_TEST_BUS"
-+	TEST_BUS="$CXL_TEST_PROVIDER"
- 	check_min_kver "6.2" || do_skip "may lack security handling"
- 	KMOD_TEST="cxl_test"
- else
-
-base-commit: 39085f76b6a9d3ac349c3c5dab1cb820c86a293d
--- 
-2.52.0
-
+~Gregory
 
