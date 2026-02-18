@@ -1,66 +1,68 @@
-Return-Path: <nvdimm+bounces-13132-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13133-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WH9qMXpFlmmYdAIAu9opvQ
-	(envelope-from <nvdimm+bounces-13132-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Feb 2026 00:04:26 +0100
+	id ED1HOWRMlmlUdgIAu9opvQ
+	(envelope-from <nvdimm+bounces-13133-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Feb 2026 00:33:56 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5086615AC64
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Feb 2026 00:04:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E9315AF0D
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Feb 2026 00:33:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DC62E30263FC
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 18 Feb 2026 23:04:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0E7FF3037D42
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 18 Feb 2026 23:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8FA33A708;
-	Wed, 18 Feb 2026 23:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F3F33B6E3;
+	Wed, 18 Feb 2026 23:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtQldDVZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNphvBe6"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185EC2773E4
-	for <nvdimm@lists.linux.dev>; Wed, 18 Feb 2026 23:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA3B2F49EB
+	for <nvdimm@lists.linux.dev>; Wed, 18 Feb 2026 23:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771455851; cv=none; b=UR/1hOizEVXvCwxrqW9hDSfT1pmzJam4uv7/NuUTeOE6bXK5RtDp45+UkvntqhhYYrQJN4vIVVZrP3xPQuPxAVFDr8XKnejTVQON/WiEeSoDnt57N1Xq++0gdti2urGlT29EXPlHTrSiINjzZmgRukZhhLaqkWnTT1givYj+l/4=
+	t=1771457622; cv=none; b=r1H4xOLq/E2hUD5pvmKTbQUyj1/fof8JY7cFus0e7gOcpw2qyGJOTxVuUMdxLI7Bw4BbDzWUMNE/zAaCkjga4nxtZ4BxtkOCHfYDIO2LGCJzmVXdMQTfLhDPBUUzR/qtbr6z8mWyL04Ui7tzzyioX0GSo5iZH9bXODxl1D0Duxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771455851; c=relaxed/simple;
-	bh=A4KpUH5qdtKiwpwNNT4LeI8gpC2In9JPJXbVJxd4NxM=;
+	s=arc-20240116; t=1771457622; c=relaxed/simple;
+	bh=D5BbzAcUzisA/eO9fnBpFALrBThvwHCcKR72kn6oMtU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EJ9hGEhbPXObwo9bkk3M11nkSRHy+D4TzpKl1g+tmZx+Mhsg7pwXG7aL1bMCkcMxt5yCSS0kEGZZnGKdoBOsg+99PsZWgP1Nk5Dut/Au9MZQbmKOySa8I5yqBAS7Y5wM0bnWhoECf7jEgMKxIIkc3OaegFZ9LSCoUhfr5PI/sXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MtQldDVZ; arc=none smtp.client-ip=198.175.65.19
+	 In-Reply-To:Content-Type; b=CxiV2ddFLtLhZeNFV5WZmCke8YDkbQM1ruopHiWPQqfEfblB0lanXRap6ZDGLr87hu9B5mSiulOWYoBJ71PBnfAq70MGW1sdIeYAeIhNeprjthBMb9Aqww2IOn7f3HouIN3oiISn2wGXYaFOmVfjfwjY3i81lpgE577Ily0syfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNphvBe6; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771455850; x=1802991850;
+  t=1771457621; x=1802993621;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=A4KpUH5qdtKiwpwNNT4LeI8gpC2In9JPJXbVJxd4NxM=;
-  b=MtQldDVZG9rMWGiTPkETJAFEz9w2xuTTNDgWswwnPfJisbqLGorM83u/
-   WIM3QBi0TmXRLdhdz8RPBG16Csps86D1ceDJkeWs8N26QnvM1bLlg9Q6b
-   Ya0e2wLO9ChGlExC2OXbV6DKNmNl/XFoh1igbd2oH1cEuzRHg/5VEtnEH
-   m8oK16iuWkunlbrGqQXOY7zVK4dXhcYODU+qudgbIrBKmh0Oa6erE7LH1
-   Wv1ROf5OPkImXO5m+XrC5nx4HyUXQQSZQED47qidZJfxbQUL2FF2TVa9f
-   0BOGt7MbMkuM0+BUzUhkypxQzwAvB67Q5FIK9TnhO+J4irnErWjQrxSiO
+  bh=D5BbzAcUzisA/eO9fnBpFALrBThvwHCcKR72kn6oMtU=;
+  b=GNphvBe6TLvClFZiOF1iLAcZIPIkMpXCL1n/fLl9mwpFmjgvZ/bk+bym
+   VtH6ybu1E6B3dxOGWeobX/oxnFVRXSceQDaJNWGGveCUy9KGcxTC6oXGR
+   3pdR415hXLybug/J1eR0jwNZ/2VYSQ0Gq6xKDY1ihTFzOJWBbgOxk1NIp
+   qGcmXyb0udU5Rc2vi84SziL/h3UZE8ioJocGe3hJ3bh/eyE3hjwI8W7mk
+   II8jJ1jgBasfUU44QZcCJr2B0D63toQNbTtZe3E8rmq0iyrfNK1p0ug5E
+   HfaW9/jOE6cAviKtZiLRudw9CkK+bRH0ZrpNuIWjpYbrKfxIwxY1t6S5F
    w==;
-X-CSE-ConnectionGUID: vCcuiO4pRLiOO56znUYUUw==
-X-CSE-MsgGUID: iEIFdKq8QAu8A97B2q7SiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="72444519"
+X-CSE-ConnectionGUID: IoTi28ytRZGeKU3tHcWHBg==
+X-CSE-MsgGUID: Q+xluJryTneYZLSqu+hRpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="98004802"
 X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
-   d="scan'208";a="72444519"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 15:04:10 -0800
-X-CSE-ConnectionGUID: RMYH7IUsQuuIdijNW4dt0w==
-X-CSE-MsgGUID: j73tmhmcSbmAKux9ulhJMw==
+   d="scan'208";a="98004802"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 15:33:40 -0800
+X-CSE-ConnectionGUID: HkCANN//T+2NNQk2+gCxtw==
+X-CSE-MsgGUID: cEuOHjX9Qom/uXF1mOq38g==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="214352687"
 Received: from aduenasd-mobl5.amr.corp.intel.com (HELO [10.125.109.212]) ([10.125.109.212])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 15:04:07 -0800
-Message-ID: <27ba8b1f-5674-4ccd-877a-a47b7e815cf6@intel.com>
-Date: Wed, 18 Feb 2026 16:04:05 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 15:33:37 -0800
+Message-ID: <89c2f617-23c7-4767-8712-cfe32260bfdf@intel.com>
+Date: Wed, 18 Feb 2026 16:33:36 -0700
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -68,7 +70,7 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 02/19] dax: Factor out dax_folio_reset_order() helper
+Subject: Re: [PATCH V7 04/19] dax: Save the kva from memremap
 To: John Groves <john@jagalactic.com>, John Groves <John@Groves.net>,
  Miklos Szeredi <miklos@szeredi.hu>, Dan Williams <dan.j.williams@intel.com>,
  Bernd Schubert <bschubert@ddn.com>,
@@ -96,11 +98,11 @@ Cc: John Groves <jgroves@micron.com>, John Groves <jgroves@fastmail.com>,
  "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
 References: <0100019bd33b1f66-b835e86a-e8ae-443f-a474-02db88f7e6db-000000@email.amazonses.com>
- <20260118223110.92320-1-john@jagalactic.com>
- <0100019bd33bf5cc-3ab17b9e-cd67-4f0b-885e-55658a1207f0-000000@email.amazonses.com>
+ <20260118223138.92368-1-john@jagalactic.com>
+ <0100019bd33c54b5-81c8e4b0-2692-47bb-b555-2657a7f297ba-000000@email.amazonses.com>
 Content-Language: en-US
 From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <0100019bd33bf5cc-3ab17b9e-cd67-4f0b-885e-55658a1207f0-000000@email.amazonses.com>
+In-Reply-To: <0100019bd33c54b5-81c8e4b0-2692-47bb-b555-2657a7f297ba-000000@email.amazonses.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -108,7 +110,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -117,133 +119,72 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	DKIM_TRACE(0.00)[intel.com:+];
 	FREEMAIL_CC(0.00)[micron.com,fastmail.com,lwn.net,intel.com,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13132-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13133-lists,linux-nvdimm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[38];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 5086615AC64
+X-Rspamd-Queue-Id: 57E9315AF0D
 X-Rspamd-Action: no action
 
 
 
 On 1/18/26 3:31 PM, John Groves wrote:
-> From: John Groves <John@Groves.net>
+> From: John Groves <john@groves.net>
 > 
-> Both fs/dax.c:dax_folio_put() and drivers/dax/fsdev.c:
-> fsdev_clear_folio_state() (the latter coming in the next commit after this
-> one) contain nearly identical code to reset a compound DAX folio back to
-> order-0 pages. Factor this out into a shared helper function.
+> Save the kva from memremap because we need it for iomap rw support.
 > 
-> The new dax_folio_reset_order() function:
-> - Clears the folio's mapping and share count
-> - Resets compound folio state via folio_reset_order()
-> - Clears PageHead and compound_head for each sub-page
-> - Restores the pgmap pointer for each resulting order-0 folio
-> - Returns the original folio order (for callers that need to advance by
->   that many pages)
+> Prior to famfs, there were no iomap users of /dev/dax - so the virtual
+> address from memremap was not needed.
 > 
-> This simplifies fsdev_clear_folio_state() from ~50 lines to ~15 lines while
-> maintaining the same functionality in both call sites.
-> 
-> Suggested-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 > Signed-off-by: John Groves <john@groves.net>
 
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
->  fs/dax.c | 60 +++++++++++++++++++++++++++++++++++++++-----------------
->  1 file changed, 42 insertions(+), 18 deletions(-)
+>  drivers/dax/dax-private.h | 2 ++
+>  drivers/dax/fsdev.c       | 1 +
+>  2 files changed, 3 insertions(+)
 > 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 289e6254aa30..7d7bbfb32c41 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -378,6 +378,45 @@ static void dax_folio_make_shared(struct folio *folio)
->  	folio->share = 1;
->  }
->  
-> +/**
-> + * dax_folio_reset_order - Reset a compound DAX folio to order-0 pages
-> + * @folio: The folio to reset
-> + *
-> + * Splits a compound folio back into individual order-0 pages,
-> + * clearing compound state and restoring pgmap pointers.
-> + *
-> + * Returns: the original folio order (0 if already order-0)
-> + */
-> +int dax_folio_reset_order(struct folio *folio)
-> +{
-> +	struct dev_pagemap *pgmap = page_pgmap(&folio->page);
-> +	int order = folio_order(folio);
-> +	int i;
-> +
-> +	folio->mapping = NULL;
-> +	folio->share = 0;
-> +
-> +	if (!order) {
-> +		folio->pgmap = pgmap;
-> +		return 0;
-> +	}
-> +
-> +	folio_reset_order(folio);
-> +
-> +	for (i = 0; i < (1UL << order); i++) {
-> +		struct page *page = folio_page(folio, i);
-> +		struct folio *f = (struct folio *)page;
-> +
-> +		ClearPageHead(page);
-> +		clear_compound_head(page);
-> +		f->mapping = NULL;
-> +		f->share = 0;
-> +		f->pgmap = pgmap;
-> +	}
-> +
-> +	return order;
-> +}
-> +
->  static inline unsigned long dax_folio_put(struct folio *folio)
->  {
->  	unsigned long ref;
-> @@ -391,28 +430,13 @@ static inline unsigned long dax_folio_put(struct folio *folio)
->  	if (ref)
->  		return ref;
->  
-> -	folio->mapping = NULL;
-> -	order = folio_order(folio);
-> -	if (!order)
-> -		return 0;
-> -	folio_reset_order(folio);
-> +	order = dax_folio_reset_order(folio);
->  
-> +	/* Debug check: verify refcounts are zero for all sub-folios */
->  	for (i = 0; i < (1UL << order); i++) {
-> -		struct dev_pagemap *pgmap = page_pgmap(&folio->page);
->  		struct page *page = folio_page(folio, i);
-> -		struct folio *new_folio = (struct folio *)page;
->  
-> -		ClearPageHead(page);
-> -		clear_compound_head(page);
-> -
-> -		new_folio->mapping = NULL;
-> -		/*
-> -		 * Reset pgmap which was over-written by
-> -		 * prep_compound_page().
-> -		 */
-> -		new_folio->pgmap = pgmap;
-> -		new_folio->share = 0;
-> -		WARN_ON_ONCE(folio_ref_count(new_folio));
-> +		WARN_ON_ONCE(folio_ref_count((struct folio *)page));
+> diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
+> index 0867115aeef2..4ae4d829d3ee 100644
+> --- a/drivers/dax/dax-private.h
+> +++ b/drivers/dax/dax-private.h
+> @@ -69,6 +69,7 @@ struct dev_dax_range {
+>   * data while the device is activated in the driver.
+>   * @region - parent region
+>   * @dax_dev - core dax functionality
+> + * @virt_addr: kva from memremap; used by fsdev_dax
+>   * @target_node: effective numa node if dev_dax memory range is onlined
+>   * @dyn_id: is this a dynamic or statically created instance
+>   * @id: ida allocated id when the dax_region is not static
+> @@ -81,6 +82,7 @@ struct dev_dax_range {
+>  struct dev_dax {
+>  	struct dax_region *region;
+>  	struct dax_device *dax_dev;
+> +	void *virt_addr;
+>  	unsigned int align;
+>  	int target_node;
+>  	bool dyn_id;
+> diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
+> index 29b7345f65b1..72f78f606e06 100644
+> --- a/drivers/dax/fsdev.c
+> +++ b/drivers/dax/fsdev.c
+> @@ -201,6 +201,7 @@ static int fsdev_dax_probe(struct dev_dax *dev_dax)
+>  		pr_debug("%s: offset detected phys=%llx pgmap_phys=%llx offset=%llx\n",
+>  		       __func__, phys, pgmap_phys, data_offset);
 >  	}
+> +	dev_dax->virt_addr = addr + data_offset;
 >  
->  	return ref;
+>  	inode = dax_inode(dax_dev);
+>  	cdev = inode->i_cdev;
 
 
