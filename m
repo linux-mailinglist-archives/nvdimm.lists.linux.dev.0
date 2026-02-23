@@ -1,65 +1,51 @@
-Return-Path: <nvdimm+bounces-13183-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13184-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0PyLJFDMnGlHKQQAu9opvQ
-	(envelope-from <nvdimm+bounces-13183-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:53:20 +0100
+	id ON+EE8TOnGllKQQAu9opvQ
+	(envelope-from <nvdimm+bounces-13184-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 23:03:48 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFB617DCCF
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:53:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D36C117DF25
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 23:03:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EEB61306CDF6
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 21:52:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 180ED30A65DC
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE4E37AA64;
-	Mon, 23 Feb 2026 21:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5523378D7E;
+	Mon, 23 Feb 2026 22:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="hN03osf8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L4nn0tqK"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E439B37A4B7
-	for <nvdimm@lists.linux.dev>; Mon, 23 Feb 2026 21:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C5F366828
+	for <nvdimm@lists.linux.dev>; Mon, 23 Feb 2026 22:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771883516; cv=none; b=iKJysQHK6HKOvFOXNLGuMxo2yzXAM/Y7F51B5iPlSVFh5kOWJAiE2EdO21tBqP/kjZ12kKK7bvTPdesy7A341DrKKRBRm/7uCSkd2wgqWd5kEm3t+d39DbpjD5ub31w8xzPWyaY9N//gTPs11j0SIz7VYAXmtJItLoup5ULvQ0g=
+	t=1771884090; cv=none; b=THzQKOgbiVv5puJQaNiKLoVjLCl0h9/E7XqlleynmbB1fkfZSR5c7sCA1t60uTxncsLZ2YxFAvkuBe8GblnoY9e5O/N8Mrs4fPMHOiPd0l4oITdN9QWPqHu2C52sTDpfQC55QopdK2wYc6Z/F3UcSMhuKYnidGHHEBkKMWEqV9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771883516; c=relaxed/simple;
-	bh=tsu5t58A+hMh/4asnfpFiFvLKn8I7QPQPIJMQz5jv9c=;
+	s=arc-20240116; t=1771884090; c=relaxed/simple;
+	bh=et4A89mJqfVdQvmY84nIwmJpvLyzoFSg4L2NjpABKEA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zzq3kf+IbOuHXj0vG9BD5g3lQe55hCJqidr1mFR/lTgDkBI7j6rzs9ZfGMPTtj2gRppdpXgc5vw4gOzBcVklqJz2/hffqdw8LXar/43a496KGuG869OKr2Fcho27Qxb+3Cp0QtPmuLd/b4MFjowB0h9abuqkWsC6W0xA4+/o1JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=hN03osf8; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fKZLy3NJDzlh1Wj;
-	Mon, 23 Feb 2026 21:51:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1771883511; x=1774475512; bh=Ajgnl
-	lR+MAKnHgOp9bP7UiL+cgWY3NepNSM8pwLzBp0=; b=hN03osf84O8qS2LO/wrES
-	VjQyx7447Bx6I6QMZc0tRxfxX3fPCwunK/1sY4e2YsJpmvQzskc9SafjBAUJ8zsi
-	E7pPYQg8z11cvhOLUqc6OKqRthSetQ+0RDAkMDdy4im+elqOVWCUtG8XolzO6amD
-	ysrUCmmQcEgNUMg7yCNCReuqFS7vNeYWw7f7u6OkabMmfua7ApDdAOZTges5/rgn
-	fKqvp4SuW6WVLKULtmqjn0lgr1bRgrV/pTYQuWAqz5/zhsJP2L+gFSMSlFvUkCYA
-	5604sEojcdlI00YZOa9ZuZrsONAzB9PluMm4L4dReS+783H46ZJkwDdE8m8bZXVn
-	g==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id SAN_puEll8YD; Mon, 23 Feb 2026 21:51:51 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fKZLp26NGzlfl6N;
-	Mon, 23 Feb 2026 21:51:46 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
+	 MIME-Version; b=QlRTYznZcwMUJA3owgV5mSwLxZHyq2ZCZ9EoRiDQVjxmK2KouP+71Xp4my919C2H7SawMdiTNtu70n/7CL6W+yD/I425q9EvaoIKoZYePFCbU04ClurK8KOI7KfKJ2uhbKjdLSFTsvL/kk630CifQWkDOyBJRQgIflT8F+9aLZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L4nn0tqK; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771884087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ihR1R6qtYFotNkG8urg8ayZDiQkcIjBq1yald6oMYsA=;
+	b=L4nn0tqKIs33QjZ7YmRyDR18t9hv+a7VrN9T+Q1UHKlVRJw5JBx+MvqAeOhxG9yIJy3aNi
+	xfwWuPiHGI+NhUvXsuwTXqqG7e8/ux/je9xw4upJRoeztst57tkhd26IzF9fZImoYdQI7a
+	5zgRgmO2MS/P00vUbDj3QVt0rydhjZE=
+From: Bart Van Assche <bart.vanassche@linux.dev>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Ingo Molnar <mingo@redhat.com>,
 	Will Deacon <will@kernel.org>,
@@ -81,49 +67,50 @@ Cc: Ingo Molnar <mingo@redhat.com>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org
 Subject: [PATCH 04/62] dax/bus.c: Fix a locking bug
-Date: Mon, 23 Feb 2026 13:50:19 -0800
-Message-ID: <20260223215118.2154194-5-bvanassche@acm.org>
-X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
-In-Reply-To: <20260223215118.2154194-1-bvanassche@acm.org>
-References: <20260223215118.2154194-1-bvanassche@acm.org>
+Date: Mon, 23 Feb 2026 14:00:04 -0800
+Message-ID: <20260223220102.2158611-5-bart.vanassche@linux.dev>
+In-Reply-To: <20260223220102.2158611-1-bart.vanassche@linux.dev>
+References: <20260223220102.2158611-1-bart.vanassche@linux.dev>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TAGGED_FROM(0.00)[bounces-13183-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,nvdimm@lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13184-lists,linux-nvdimm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	RCVD_COUNT_THREE(0.00)[3];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bart.vanassche@linux.dev,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acm.org:mid,acm.org:dkim,acm.org:email]
-X-Rspamd-Queue-Id: 0CFB617DCCF
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,linux.dev:mid,linux.dev:dkim,linux.dev:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acm.org:email]
+X-Rspamd-Queue-Id: D36C117DF25
 X-Rspamd-Action: no action
+
+From: Bart Van Assche <bvanassche@acm.org>
 
 Only unlock dax_dev_rwsem if it has been locked. This locking bug was
 detected by the Clang thread-safety analyzer.
@@ -134,8 +121,7 @@ Cc: Dave Jiang <dave.jiang@intel.com>
 Cc: Alison Schofield <alison.schofield@intel.com>
 Cc: nvdimm@lists.linux.dev
 Cc: linux-cxl@vger.kernel.org
-Fixes: c05ae9d85b47 ("dax/bus.c: replace driver-core lock usage by a loca=
-l rwsem")
+Fixes: c05ae9d85b47 ("dax/bus.c: replace driver-core lock usage by a local rwsem")
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
  drivers/dax/bus.c | 3 +--
@@ -145,16 +131,15 @@ diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
 index c94c09622516..ebd3806c34e5 100644
 --- a/drivers/dax/bus.c
 +++ b/drivers/dax/bus.c
-@@ -1117,11 +1117,10 @@ static ssize_t size_store(struct device *dev, str=
-uct device_attribute *attr,
+@@ -1117,11 +1117,10 @@ static ssize_t size_store(struct device *dev, struct device_attribute *attr,
  	}
- 	rc =3D down_write_killable(&dax_dev_rwsem);
+ 	rc = down_write_killable(&dax_dev_rwsem);
  	if (rc)
 -		goto err_dev;
 +		goto err_region;
-=20
- 	rc =3D dev_dax_resize(dax_region, dev_dax, val);
-=20
+ 
+ 	rc = dev_dax_resize(dax_region, dev_dax, val);
+ 
 -err_dev:
  	up_write(&dax_dev_rwsem);
  err_region:
