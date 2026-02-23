@@ -1,67 +1,79 @@
-Return-Path: <nvdimm+bounces-13182-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13183-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WPfPCJ3LnGlHKQQAu9opvQ
-	(envelope-from <nvdimm+bounces-13182-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:50:21 +0100
+	id 0PyLJFDMnGlHKQQAu9opvQ
+	(envelope-from <nvdimm+bounces-13183-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:53:20 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F80617DBBF
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:50:20 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFB617DCCF
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 22:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4E64B303A4BF
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 21:50:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EEB61306CDF6
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 23 Feb 2026 21:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6A73793B1;
-	Mon, 23 Feb 2026 21:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE4E37AA64;
+	Mon, 23 Feb 2026 21:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Kurw2Jxz"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="hN03osf8"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F043793AA
-	for <nvdimm@lists.linux.dev>; Mon, 23 Feb 2026 21:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E439B37A4B7
+	for <nvdimm@lists.linux.dev>; Mon, 23 Feb 2026 21:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771883409; cv=none; b=ZwHoF8NtQLvv9GrmyfcW1dxLy7wYVpxKP8c3kel6n4z2Da44UU5LiBKB/xCOd4KOijHZpCQHFBHlxR9z4esuWYy3zHGDURP8FhOe/o1+G54hoLuQdxhpy/ghI+d9y5k5xS0I4BEO9fuOD/BgYKCIaCo77fLBtpKTTJTMDE690zc=
+	t=1771883516; cv=none; b=iKJysQHK6HKOvFOXNLGuMxo2yzXAM/Y7F51B5iPlSVFh5kOWJAiE2EdO21tBqP/kjZ12kKK7bvTPdesy7A341DrKKRBRm/7uCSkd2wgqWd5kEm3t+d39DbpjD5ub31w8xzPWyaY9N//gTPs11j0SIz7VYAXmtJItLoup5ULvQ0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771883409; c=relaxed/simple;
+	s=arc-20240116; t=1771883516; c=relaxed/simple;
 	bh=tsu5t58A+hMh/4asnfpFiFvLKn8I7QPQPIJMQz5jv9c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CevHH6AesfjNfZ26w0IO0RRSOPdflrbyIop6mf7cf+PJ55CdPCczfXILogWTXpojHDrPGUnvjf3gTH8/RAa4iR1mEd2Ouyxaw+dK/f3WhbW8I+qtvjAGNe4lZzJlfYyfS+MWzPZaE3jc1Zx+bNAKM70y9weONlSLQKm88mNdn5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Kurw2Jxz; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=Zzq3kf+IbOuHXj0vG9BD5g3lQe55hCJqidr1mFR/lTgDkBI7j6rzs9ZfGMPTtj2gRppdpXgc5vw4gOzBcVklqJz2/hffqdw8LXar/43a496KGuG869OKr2Fcho27Qxb+3Cp0QtPmuLd/b4MFjowB0h9abuqkWsC6W0xA4+/o1JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=hN03osf8; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fKZJv6q7Tzlfl6N;
-	Mon, 23 Feb 2026 21:50:07 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fKZLy3NJDzlh1Wj;
+	Mon, 23 Feb 2026 21:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1771883406; x=1774475407; bh=Ajgnl
-	lR+MAKnHgOp9bP7UiL+cgWY3NepNSM8pwLzBp0=; b=Kurw2JxzNNvFvsaQnxoQv
-	ndq7r/pFT1QNwmUymxnn4h4O8+20MWvZ4ZW689a2tKBzQFQYEsxm0BzdhuTZsn85
-	hyDf2PP/c992NF7iwcQrVWJ6cnHVNQL6Uq+HMbpVw88MCnoc+WTyZCO8rQH2jNEc
-	crK92575kPaCvmWFfupnQqwPZGh60FmaoZNcbLWNReOOuu9y/JCVKjyQr+9pA7Y3
-	oMnof+JnkutmbHgLfOgibw1EYL+hylqY/IpaOremlff9+orylpEBWXJmA1psohQ+
-	oQ3WOXsjLV7Jpm2S77B+oEYL+jY7tWKxN363qeUrC7ejeHGJJn8JXfaR4r/KCwCe
-	A==
+	:received:received; s=mr01; t=1771883511; x=1774475512; bh=Ajgnl
+	lR+MAKnHgOp9bP7UiL+cgWY3NepNSM8pwLzBp0=; b=hN03osf84O8qS2LO/wrES
+	VjQyx7447Bx6I6QMZc0tRxfxX3fPCwunK/1sY4e2YsJpmvQzskc9SafjBAUJ8zsi
+	E7pPYQg8z11cvhOLUqc6OKqRthSetQ+0RDAkMDdy4im+elqOVWCUtG8XolzO6amD
+	ysrUCmmQcEgNUMg7yCNCReuqFS7vNeYWw7f7u6OkabMmfua7ApDdAOZTges5/rgn
+	fKqvp4SuW6WVLKULtmqjn0lgr1bRgrV/pTYQuWAqz5/zhsJP2L+gFSMSlFvUkCYA
+	5604sEojcdlI00YZOa9ZuZrsONAzB9PluMm4L4dReS+783H46ZJkwDdE8m8bZXVn
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id Ei2wJ7_prsfs; Mon, 23 Feb 2026 21:50:06 +0000 (UTC)
+ id SAN_puEll8YD; Mon, 23 Feb 2026 21:51:51 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fKZJr2q3Vzlfl5l;
-	Mon, 23 Feb 2026 21:50:04 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fKZLp26NGzlfl6N;
+	Mon, 23 Feb 2026 21:51:46 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Bart Van Assche <bvanassche@acm.org>,
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Marco Elver <elver@google.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Bart Van Assche <bvanassche@acm.org>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>,
 	Dave Jiang <dave.jiang@intel.com>,
@@ -69,11 +81,11 @@ Cc: Bart Van Assche <bvanassche@acm.org>,
 	nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org
 Subject: [PATCH 04/62] dax/bus.c: Fix a locking bug
-Date: Mon, 23 Feb 2026 13:48:52 -0800
-Message-ID: <20260223214950.2153735-5-bvanassche@acm.org>
+Date: Mon, 23 Feb 2026 13:50:19 -0800
+Message-ID: <20260223215118.2154194-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
-In-Reply-To: <20260223214950.2153735-1-bvanassche@acm.org>
-References: <20260223214950.2153735-1-bvanassche@acm.org>
+In-Reply-To: <20260223215118.2154194-1-bvanassche@acm.org>
+References: <20260223215118.2154194-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -85,32 +97,32 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13182-lists,linux-nvdimm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,nvdimm@lists.linux.dev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	TAGGED_FROM(0.00)[bounces-13183-lists,linux-nvdimm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:email]
-X-Rspamd-Queue-Id: 8F80617DBBF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acm.org:mid,acm.org:dkim,acm.org:email]
+X-Rspamd-Queue-Id: 0CFB617DCCF
 X-Rspamd-Action: no action
 
 Only unlock dax_dev_rwsem if it has been locked. This locking bug was
