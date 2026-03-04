@@ -1,189 +1,131 @@
-Return-Path: <nvdimm+bounces-13504-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13505-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eELNEzL8p2mlnAAAu9opvQ
-	(envelope-from <nvdimm+bounces-13504-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 04 Mar 2026 10:32:34 +0100
+	id IPFYE78CqGkRnQAAu9opvQ
+	(envelope-from <nvdimm+bounces-13505-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 04 Mar 2026 11:00:31 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A580D1FDA25
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 04 Mar 2026 10:32:33 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28CCD1FE04F
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 04 Mar 2026 11:00:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7A181310FADF
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Mar 2026 09:30:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0833D301CA9B
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  4 Mar 2026 09:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161113988E4;
-	Wed,  4 Mar 2026 09:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C15139FCAF;
+	Wed,  4 Mar 2026 09:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXBfZ85W"
+	dkim=pass (1024-bit key) header.d=paragon-software.com header.i=@paragon-software.com header.b="L/5hpOlo"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030CA3988F7
-	for <nvdimm@lists.linux.dev>; Wed,  4 Mar 2026 09:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DBE37418E;
+	Wed,  4 Mar 2026 09:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.157.23.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772616641; cv=none; b=uE+mxMl9bZrjRWz9GjQL7nkVS01UesfGOzZvbyM7/YoNyyGeP+Eq5veUBzAHvqZoKWZq6YfpvPnS7GMtFlxYITQiQXqZDZxju/gSRGUPbnC5anwZPvQzPRqBgbMYBWuw8N0ILMMKdEET8mzOoO3V7rZAYC/u0WRgeexwwCzHvCo=
+	t=1772618287; cv=none; b=r5wHRtbUbpvyk40DbV60NJ2S//6JqmV70J1x3F9VNb9cjg1JKTKySkBvxb5vzReEvA6aHzKiUJW9u32OJqgI92rqMB7Y2RL9QkBMB8QUoRi2XjIvqQQJgXQU7jDuGfrSf5FUKKo6HJVNQi1/NVhL4+uRLllxGbP9VZaB4m8tLtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772616641; c=relaxed/simple;
-	bh=qyvL/iXE6+TakoKVVxVCaopqm1BpX+f7Q05dx5gBHDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HDPr1OfTBfEcrwDuczZC8CdfD0X5RNhHccT7x0TQK26K1nH92n70iWFqAbUtQ/XNwi1eBgSHHxpSGlmraDPEj8jygOCOGtB4txkkqXediCY6VOEx22t1lVZ337M+v47H2gLV4YQ+QwVPaUYociOSoH9tazQe+WVe62CEQ6s+elQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXBfZ85W; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48371119eacso80386695e9.2
-        for <nvdimm@lists.linux.dev>; Wed, 04 Mar 2026 01:30:37 -0800 (PST)
+	s=arc-20240116; t=1772618287; c=relaxed/simple;
+	bh=fI+vexsTPJVCqZpKkMJGR83uuJfFm+zjxRoLgV/4HRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dAveup5w0P3C2luG7gwGwot8nbua4wSfQDiBFEIzAGWmJ9GaGmcPy4/p/beFaGOs0wNIrffSOzRL2zO2Y0qcGyA3NxTGdMNunpB9prBlKinz6ydVT33Vlt44NV6cqWRaWCjSJpNcUgZiqAHSryfzPs6NSCNzHFoMxc1LJ2VBL3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=paragon-software.com; spf=pass smtp.mailfrom=paragon-software.com; dkim=pass (1024-bit key) header.d=paragon-software.com header.i=@paragon-software.com header.b=L/5hpOlo; arc=none smtp.client-ip=35.157.23.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=paragon-software.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paragon-software.com
+Received: from relayfre-01.paragon-software.com (unknown [176.12.100.13])
+	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 1E8BA1D40;
+	Wed,  4 Mar 2026 09:56:24 +0000 (UTC)
+Authentication-Results: relayaws-01.paragon-software.com;
+	dkim=pass (1024-bit key; unprotected) header.d=paragon-software.com header.i=@paragon-software.com header.b=L/5hpOlo;
+	dkim-atps=neutral
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 11067455;
+	Wed,  4 Mar 2026 09:58:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772616636; x=1773221436; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BUzQoESoh9/PqMSFbMpuw4Pmh5IPXiGP/qvOjxX4wwo=;
-        b=VXBfZ85WCNnS1YA4riE7WlgmBU7lDNyYyUkse0B+ZqjOYf4uij3TO0G0VIVlItsoyQ
-         zAisFncEc0hzAiz4WVTGvlxd7IlvTOo6yMyx5qxCLP66yZzaTWPAyJdNuH1ivv4Bjtph
-         hWFMcdVn3En92NYldPlrnVGr70YURQO569q9dc9Mnt68sMQBldt9RLTXIQyR37Rg4oze
-         GdeM6Es1wjdG5iCUgXW5efpFfJApVOOw9ZFt7aTzcxg7OoXctaJXnzHzyA6zs59BdHgJ
-         5tx48GMwBIkyqIWAJ4dlLGO+IKeKjfX749jXPLP1dr4XWtMiVmSdXK1+slJu3yWNQHtU
-         pb8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772616636; x=1773221436;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BUzQoESoh9/PqMSFbMpuw4Pmh5IPXiGP/qvOjxX4wwo=;
-        b=c1SNT2+dcPKVOCQZxEJIL3R7sG+OX741VTNzT4kdCiz5pJNxgL2gQsFH68DFCNOojH
-         JJqg7eytiAAggxvNWZ6M7zcw28JuzfQCwFf62LPOXh98kNnIyKKN6lcgYM4uCIKDbysu
-         pGosZgK9hi6+ryEER1AjOTGY7Tbp855OYfXkw5xUwXBhmxq68MvfbAO1AZ+7RbF6nOLJ
-         3rEduNLoe8mA2LICjl9N/UP0S30Bk/x5J8MVRfIddWgNu5kBKFy5TFfwBg5iDzGdcrxm
-         q70ARLpde/fbKgwbNEyoE0fJQ0kTrbo2fVb+Q3l4DWsKiQ+mCo3qukm3CG0TjN1CbAah
-         8fGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYh9hBJ4XsGx8QFRYhuaxXP5fbhU2gqdiMpumUXDtKGi2ebYwAnAv6rEskfihoboZftmKwLeo=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw1NkslBQaxhsOVKbc+I7Y0e27bbR/MRgDuPFZsgi5Zr3uN9uKn
-	j2RD3tHIO8Wpt4QgWMc9BFrBXYzcEJG0TFCem9IsuAStsh+3SiCFrj7T
-X-Gm-Gg: ATEYQzz4p0TBUqB/nmmvnyy6UIiEhb3dUXWBnddKLTKokpZa5AThIC2ock/gZp5iYfv
-	ExUYN946YciRYOcmDRCNNF6EA0cJyUj9Lz3XN77DsB4a/CwSQVLspeCzJbCI95NfM7aGwChcS2k
-	ZCJ2xYo7BwlZQKFL/DW1U4BEkOhm5ngRzcLNb0LNLF8fd5vX1MJtAW7LzW6m5BEExx4yAG00F2y
-	ZNy8grj/EU8wOp50ZkwuJraRzbAw2eLYY4VdbBf+QU30VliAdsfCcfAxox10jtS94Xhr4O6f35V
-	shLnlJSobtAuo1qfFXXYk3YTt4WxdWAxQ7vHxlSlK+dE4EwmdzcmPdCb7NtNzRwt1tu89OKmLAE
-	ekv4tbs4Q34YICVgvjgEkPwrTaMrQJO2ARO0ttFo834wpMkLSCRskfwt641rygdsYQN53O1rUjp
-	FBz3hFHiqSdZk9N3yQEtw09srvbvNtM1Gi8yiQhKT9tM59RapqM1e8L8dYtTnGBkCn
-X-Received: by 2002:a05:600c:8b53:b0:483:498f:7963 with SMTP id 5b1f17b1804b1-4851989024emr19550785e9.26.1772616636117;
-        Wed, 04 Mar 2026 01:30:36 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851884225asm38972555e9.6.2026.03.04.01.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 01:30:35 -0800 (PST)
-Date: Wed, 4 Mar 2026 09:30:33 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: NeilBrown <neilb@ownmail.net>
-Cc: "Jeff Layton" <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, fsverity@lists.linux.dev, linux-mm@kvack.org,
- netfs@lists.linux.dev, linux-ext4@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-nfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev,
- linux-afs@lists.infradead.org, autofs@vger.kernel.org,
- ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
- ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
- jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
- linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
- linux-x25@vger.kernel.org, audit@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
- linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 000/110] vfs: change inode->i_ino from unsigned long
- to u64
-Message-ID: <20260304092559.554ac9a9@pumpkin>
-In-Reply-To: <177260561903.7472.14075475865748618717@noble.neil.brown.name>
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
-	<1787281.1772535332@warthog.procyon.org.uk>
-	<1c28e34c7167acf4e20c3e201476504135aa44e8.camel@kernel.org>
-	<177260561903.7472.14075475865748618717@noble.neil.brown.name>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	d=paragon-software.com; s=mail; t=1772618283;
+	bh=rLSjnmY/cT6MyNJrkorgVkW/EiWZZxD40n/yPLgNYgA=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=L/5hpOlo2ThTyN5JgtP+XTVcc/qsumK9z6Pi3+yyFWzq2fvgmTcJnyfSjI8HS/ecR
+	 8oIsYSLE+dU3kwYhKA90eNkcp8/rhILO0FzNH8jT2z27+F/WcZe6LRWs+iPgy/q6sW
+	 086dqkk8pB162t3OmbwM353L7I0Tpm3D3bPyadUo=
+Received: from [192.168.95.128] (172.30.20.150) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 4 Mar 2026 12:58:01 +0300
+Message-ID: <c70472ec-02b8-4c56-9806-1a9ef7e65d3d@paragon-software.com>
+Date: Wed, 4 Mar 2026 10:57:59 +0100
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 12/16] ntfs3: remove copy and pasted iomap code
+To: Christoph Hellwig <hch@lst.de>
+CC: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>,
+	"Darrick J. Wong" <djwong@kernel.org>, Carlos Maiolino <cem@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Anuj Gupta
+	<anuj20.g@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
+	<ntfs3@lists.linux.dev>, <linux-block@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>
+References: <20260223132021.292832-1-hch@lst.de>
+ <20260223132021.292832-13-hch@lst.de>
+ <449fd474-0b61-42ff-afbe-56b728d69262@paragon-software.com>
+ <20260303152141.GB5281@lst.de>
+Content-Language: en-US
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20260303152141.GB5281@lst.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A580D1FDA25
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Rspamd-Queue-Id: 28CCD1FE04F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	DMARC_POLICY_ALLOW(-0.50)[paragon-software.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[paragon-software.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13504-lists,linux-nvdimm=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_TO(0.00)[ownmail.net];
-	RCPT_COUNT_TWELVE(0.00)[46];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-13505-lists,linux-nvdimm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[paragon-software.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[almaz.alexandrovich@paragon-software.com,nvdimm@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ownmail.net:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[paragon-software.com:dkim,paragon-software.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, 04 Mar 2026 17:26:59 +1100
-NeilBrown <neilb@ownmail.net> wrote:
+On 3/3/26 16:21, Christoph Hellwig wrote:
 
-> On Tue, 03 Mar 2026, Jeff Layton wrote:
-> > On Tue, 2026-03-03 at 10:55 +0000, David Howells wrote:  
-> > > Jeff Layton <jlayton@kernel.org> wrote:
-> > >   
-> > > > This version splits the change up to be more bisectable. It first adds a
-> > > > new kino_t typedef and a new "PRIino" macro to hold the width specifier
-> > > > for format strings. The conversion is done, and then everything is
-> > > > changed to remove the new macro and typedef.  
-> > > 
-> > > Why remove the typedef?  It might be better to keep it.
-> > >   
-> > 
-> > Why? After this change, internel kernel inodes will be u64's -- full
-> > stop. I don't see what the macro or typedef will buy us at that point.  
-> 
-> Implicit documentation?
-> ktime_t is (now) always s64, but we still keep the typedef;
-> 
-> It would be cool if we could teach vsprintf to understand some new
-> specifier to mean "kinode_t" or "ktime_t" etc.  But that would trigger
-> gcc warnings.
+> On Fri, Feb 27, 2026 at 02:46:08PM +0100, Konstantin Komarov wrote:
+>> Thanks for the note. The iomap helper was copied because
+>> `iomap_bio_read_folio_range` is defined `static` in iomap/bio.c and thus
+>> not available for reuse; that prevented using the exported helpers in this
+>> tree.
+> Please talk to maintainers and authors before copy and pasting their
+> code.  There's usually a better way.
+>
+Understood. In future I will contact the authors and maintainers before
+copying code.
 
-A more interesting one would be something that made gcc re-write the
-format with the correct 'length modifier' for the parameter.
-
-That would save a lot of effort!
-
-	David
-
-> 
-> NeilBrown
-> 
+Regards,
+Konstantin
 
 
