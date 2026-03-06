@@ -1,94 +1,94 @@
-Return-Path: <nvdimm+bounces-13561-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13560-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGU5Omn7rGlfwwEAu9opvQ
-	(envelope-from <nvdimm+bounces-13561-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:33 +0100
+	id pD8qGVv7rGlfwwEAu9opvQ
+	(envelope-from <nvdimm+bounces-13560-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:19 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65E4722E7AA
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B13F022E79B
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB4033033A80
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  8 Mar 2026 04:30:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2CD103018294
+	for <lists+linux-nvdimm@lfdr.de>; Sun,  8 Mar 2026 04:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DB930E84E;
-	Sun,  8 Mar 2026 04:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6003B27B34C;
+	Sun,  8 Mar 2026 04:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FMXcsjln"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="oVWOlX8g"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A7A3101B6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AA426F291
 	for <nvdimm@lists.linux.dev>; Sun,  8 Mar 2026 04:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772944213; cv=none; b=Bm+35UiW17aBqSsTZIsDs4sh7OPhrh6STW+HQHjU3hhwy/Ts5d5WKpu3C3maKhZLDsqSzAAfEvXBt3cWb9jY0awxAlp9RiqkFpjUPsYctPrj6wtcB/h3nPjO29U88a037sGWpaOR5aEFJ7lbZEGwffEGApaUoETKL4VGJGfm658=
+	t=1772944213; cv=none; b=EYKuizwAG002GMrZw8HFMGe98ZqBfDRknGfQ7w5n01QR9G/xBP3BZKxhKNMauJK6oDizzGYFQZX4Dl+NG03ncE3o0Qu/9JP0ycQjl8+uKfNAqwllysOYsgwsJ33QTrOZayIt1LgDIFCQ1FvAfkSPvlJ62oHec3LOiVAiGO949zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772944213; c=relaxed/simple;
-	bh=0qgP1SzBYD+UBYHM7QR056M5D5ActHvOI5e8wnBlFYo=;
+	bh=/s3d8a7+gjncW1qLGaaofIMKDVUL0/tVG6Pn12FLLgA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=EiWzFg0WEpUGCwO7qdNpSs6Ij/jEt0BNCQkG1fOvL8j9EzTRkGXPT/AvgsLiHUjeONeHbpX57T/qmRBEL57loAcwS3t4RUF6fDtye0YOoRq/EdPHqM3YliV/aNWqlc6k6h0Dp2vSWEkKKiKkC834tjEhvsVhEvQtwObv2r6+AH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=FMXcsjln; arc=none smtp.client-ip=203.254.224.24
+	 Content-Type:References; b=Oz2Rvhz/aAjwcxZlbPTcm5MilpW74X8bAnvJf4SHKvK/WRlaUS3l3Nh4Mfz2C9W9pse4XflDQWTxQM851m3BAlTt39HOwoPCD92ZrHQU3VZuKZte2EC0BD3KlTSYqRT3PYjCo/caCQDRtdjAM1cWXhnKgkoMueM52r8iekK7QQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=oVWOlX8g; arc=none smtp.client-ip=203.254.224.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260308043002epoutp0168d88ab65e71ca3fd92ef9ae131c9314~aw1vA_Rf41195111951epoutp01P
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260308043002epoutp0312ff08b0edbf89622065b2fb25df03e8~aw1vL0lvK1784317843epoutp03E
 	for <nvdimm@lists.linux.dev>; Sun,  8 Mar 2026 04:30:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260308043002epoutp0168d88ab65e71ca3fd92ef9ae131c9314~aw1vA_Rf41195111951epoutp01P
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260308043002epoutp0312ff08b0edbf89622065b2fb25df03e8~aw1vL0lvK1784317843epoutp03E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
 	s=mail20170921; t=1772944202;
-	bh=N1fuOX8nls70mXuE38bUprfyJ1x0tNIUNCbRv9tyeHs=;
+	bh=/s3d8a7+gjncW1qLGaaofIMKDVUL0/tVG6Pn12FLLgA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FMXcsjlncXWuQULEYskrN23Yx4ZsI/+uatDGJBFH8iyWTKpW3qh2myeVzjkTG6lkM
-	 pj5wLRhA+28g/Oy02lDSMi3CxWoPFduawY8cbZl7FrxmfX1yz40rmrcCzMl5sO4HG6
-	 4WFdTTeR7RfioU4snCeCV1YOwOQNj+69bOHdg22Y=
+	b=oVWOlX8grc4p+2R/ur66rBxqLV9YyMOesIRehfJvkDYUsBw34h/JbRtzwQS+HLTtb
+	 BnK1c6kwngxreUiL2de2jCVorvnlNYLdrCeYcoSjzT0K7z3jaGoUmUjsxN7KeAZ8ZR
+	 dNyjfCcP+k/p80cncrjGCoI6i3aNSIXvs2zfCqAc=
 Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20260308043001epcas5p254afd7af8b38ab4a9b894d3da24bb460~aw1ujENVN2746927469epcas5p2N;
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20260308043001epcas5p3632372647d98ca38a3150abac37a04c4~aw1uy6lCu1848318483epcas5p3O;
 	Sun,  8 Mar 2026 04:30:01 +0000 (GMT)
 Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4fT6cn4W4kz2SSKZ; Sun,  8 Mar
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4fT6cn6JRHz2SSKZ; Sun,  8 Mar
 	2026 04:30:01 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
 	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102615epcas5p3d75eee2880f9c2e52d3a7eb29c1b1e1b~aOaL_LdTd0510005100epcas5p3e;
-	Fri,  6 Mar 2026 10:26:15 +0000 (GMT)
+	20260306102730epcas5p308774b7b9f51e5a6c963a8b8599ab357~aObRtAise1284812848epcas5p3d;
+	Fri,  6 Mar 2026 10:27:30 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102614epsmtip1394ce8285158e3a6411ec2f143f759b1~aOaKuVztH1949319493epsmtip1a;
-	Fri,  6 Mar 2026 10:26:14 +0000 (GMT)
-Date: Fri, 6 Mar 2026 15:56:09 +0530
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260306102726epsmtip24a49a52c28cb736735db95b08c67bcf7~aObN6RQTD2983129831epsmtip2A;
+	Fri,  6 Mar 2026 10:27:26 +0000 (GMT)
+Date: Fri, 6 Mar 2026 15:57:19 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Dave Jiang <dave.jiang@intel.com>
+To: Alison Schofield <alison.schofield@intel.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
 Subject: Re: [PATCH V6 00/18] Add CXL LSA 2.1 format support in nvdimm and
  cxl pmem
-Message-ID: <1983025922.01772944201612.JavaMail.epsvc@epcpadp1new>
+Message-ID: <1296674576.21772944201878.JavaMail.epsvc@epcpadp1new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <46584975-f4c5-4f3a-80b2-2ef5a0e4dd6b@intel.com>
-X-CMS-MailID: 20260306102615epcas5p3d75eee2880f9c2e52d3a7eb29c1b1e1b
+In-Reply-To: <aXPlGrs12BdwgGkG@aschofie-mobl2.lan>
+X-CMS-MailID: 20260306102730epcas5p308774b7b9f51e5a6c963a8b8599ab357
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----Z2c.vZYTqadSC4aRsepS5iQJaG.Uxsawwox_nsRND3Ee9O4E=_73e4c_"
+	boundary="----3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
 X-CMS-RootMailID: 20260123113121epcas5p125bc64b4714525d7bbd489cd9be9ba91
 References: <CGME20260123113121epcas5p125bc64b4714525d7bbd489cd9be9ba91@epcas5p1.samsung.com>
 	<20260123113112.3488381-1-s.neeraj@samsung.com>
-	<46584975-f4c5-4f3a-80b2-2ef5a0e4dd6b@intel.com>
-X-Rspamd-Queue-Id: 65E4722E7AA
+	<aXPlGrs12BdwgGkG@aschofie-mobl2.lan>
+X-Rspamd-Queue-Id: B13F022E79B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -97,7 +97,7 @@ X-Spamd-Result: default: False [1.84 / 15.00];
 	CTYPE_MIXED_BOGUS(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
@@ -106,7 +106,7 @@ X-Spamd-Result: default: False [1.84 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,samsung.com:dkim];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13561-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13560-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	DKIM_TRACE(0.00)[samsung.com:+];
 	MISSING_XM_UA(0.00)[];
@@ -115,7 +115,7 @@ X-Spamd-Result: default: False [1.84 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[s.neeraj@samsung.com,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
+	NEURAL_HAM(-0.00)[-0.995];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
@@ -123,58 +123,38 @@ X-Spamd-Result: default: False [1.84 / 15.00];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Action: no action
 
-------Z2c.vZYTqadSC4aRsepS5iQJaG.Uxsawwox_nsRND3Ee9O4E=_73e4c_
+------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: 8bit
 Content-Disposition: inline
 
-On 23/01/26 10:52AM, Dave Jiang wrote:
+On 23/01/26 01:16PM, Alison Schofield wrote:
+>On Fri, Jan 23, 2026 at 05:00:54PM +0530, Neeraj Kumar wrote:
 >
+>snip
 >
->On 1/23/26 4:30 AM, Neeraj Kumar wrote:
->> Introduction:
->> =============
->> CXL Persistent Memory (Pmem) devices region, namespace and content must be
->> persistent across system reboot. In order to achieve this persistency, it
->> uses Label Storage Area (LSA) to store respective metadata. During system
->> reboot, stored metadata in LSA is used to bring back the region, namespace
->> and content of CXL device in its previous state.
->> CXL specification provides Get_LSA (4102h) and Set_LSA (4103h) mailbox
->> commands to access the LSA area. nvdimm driver is using same commands to
->> get/set LSA data.
+>>
+>> Testing:
+>> ========
+>> In order to test this patchset, I also added the support of LSA v2.1 format
+>> in ndctl. ndctl changes are available at [2]. After review, I’ll push in
+>> ndctl repo for community review.
 >
->Hi Neeraj,
->I'm attempting to vet the series before applying to cxl/next. But it seems to be failing multiple unit regression tests in cxl_test. We need to figure out why before the series can be merged. Most likely the changes in this series also require cxl_test updates. Can you please take a look? I will also take a look and try to help you address the issues. Thanks
->
->Ok:                 10
->Expected Fail:      0
->Fail:               4
->Unexpected Pass:    0
->Skipped:            1
->Timeout:            0
->
->The script below [1] can get you up and running with a qemu environment where you can run cxl_test.
->
->.../run_qemu/run_qemu.sh --cxl --cxl-test --cxl-debug --hmat -r wipe
->
->cd ndctl
->meson test -C build --suite=cxl
->
->[1] https://github.com/pmem/run_qemu
->
->DJ
+>Please post the ndctl changes for review. Thanks!
 
-Sure Dave,
+Sure Alison,
 
-I am able to reproduce the same, I will analyze and fix them in next patch series.
+I am working on multi interleave support, So it may require some change in ndctl also.
+I will post ndctl changes along with next series.
 
 
 Regards,
 Neeraj
 
-------Z2c.vZYTqadSC4aRsepS5iQJaG.Uxsawwox_nsRND3Ee9O4E=_73e4c_
+------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_
 Content-Type: text/plain; charset="utf-8"
 
 
-------Z2c.vZYTqadSC4aRsepS5iQJaG.Uxsawwox_nsRND3Ee9O4E=_73e4c_--
+------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_--
 
 
