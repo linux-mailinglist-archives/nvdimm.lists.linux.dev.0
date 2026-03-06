@@ -1,326 +1,238 @@
-Return-Path: <nvdimm+bounces-13546-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13548-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +KtvHsqbqmnPUQEAu9opvQ
-	(envelope-from <nvdimm+bounces-13546-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 10:18:02 +0100
+	id uwCdMxmrqmkYVQEAu9opvQ
+	(envelope-from <nvdimm+bounces-13548-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:23:21 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3136821DC55
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 10:18:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F2621EA01
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:23:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5E0BC305E3B9
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 09:15:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1AFD5303049D
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 10:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EF153446A3;
-	Fri,  6 Mar 2026 09:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7A537C0F0;
+	Fri,  6 Mar 2026 10:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyR366hp"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZgsLYEXt"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD9A33B6CB;
-	Fri,  6 Mar 2026 09:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09CB37BE62
+	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772788508; cv=none; b=e+8vKnSn84cLNLd4ZqnhbpZQ8kIURZi7XqPNUAdVTGF1vkwY96Wprk7pcQZqALiso2xj+M5ginnmVgyAJ/eu6l2y/nFH+GVemtYGsUX4wnV8uZpVUki+WoGqVbpm++w6Mtq9LozfiSAAp/feMTT1fvNbOojpBxMNczzpuS6lCwI=
+	t=1772792589; cv=none; b=cNyKW0RdBkU/2Zcd8T9hAWip7G8n822+ILg7uyPMKqJekccMqWeGAbovkMuxfsJAmq7qf3sHrGtFfGaGEFwSxiYh9X/znQLVCHNgsnsZiyhlYU1Rjlhn1NuaFk7dHF60BF3ihJNPN10J8ze/eb2Nplhw3auF/a0axp0Fsy8NYy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772788508; c=relaxed/simple;
-	bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MhkrUNew/kVjjDX00OOp2HBs5hVrUxZeQ+VO91IGOaVaGPyrv/7spRARgvL4zQSEQEm5Soq62lHODY+P8EFU2BSfjsBxus5wxEs6wP6knTO423TDZzAZK0kJ8WCPPK06gaQ5BB7kgguVlb6DEYYVM5ZKe5J9x4Q4fnwuwp8KipI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyR366hp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C425BC4CEF7;
-	Fri,  6 Mar 2026 09:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772788507;
-	bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TyR366hpH5SBgvb3stJOO+3+JgB4eyp8Ub6SIcEY5Wv5+DIXq3qwQ1akUuyGzm4GI
-	 oVWqv0SYGKFQk/aIJcLbDc3SkZdh03GwnjPJPfc8DHBxnnTk3pTwokbH2aquirHejB
-	 nz1gJxpKMhkWSd0cvlbIm12Yo0dUUSzlaMGnA70lo5LCfYmGHYkoB3BEoaWxEw9skO
-	 0XSBCv8+kTn/Gf5HrA+24udlPqxoLhC1731SEC00PUdG+t6hKArOjAPEtT/hHxR1LY
-	 s+VuE2scXcViJMBvNGcnMzw7bfK0RAeQxP1RLAMHfxMD+S62KQ5DOUo/0QF6h57vkJ
-	 rf8R3FiiVNktg==
-From: Christian Brauner <brauner@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	fsverity@lists.linux.dev,
-	linux-mm@kvack.org,
-	netfs@lists.linux.dev,
-	linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-nilfs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-afs@lists.infradead.org,
-	autofs@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	codalist@coda.cs.cmu.edu,
-	ecryptfs@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	jfs-discussion@lists.sourceforge.net,
-	ntfs3@lists.linux.dev,
-	ocfs2-devel@lists.linux.dev,
-	devel@lists.orangefs.org,
-	linux-unionfs@vger.kernel.org,
-	apparmor@lists.ubuntu.com,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	netdev@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-fscrypt@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	linux-hams@vger.kernel.org,
-	linux-x25@vger.kernel.org,
-	audit@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	linux-sctp@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Paulo Alcantara <pc@manguebit.org>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jan Kara <jack@suse.com>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	Chao Yu <chao@kernel.org>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Steve French <sfrench@samba.org>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Viacheslav Dubeyko <slava@dubeyko.com>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	David Sterba <dsterba@suse.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Ian Kent <raven@themaw.net>,
-	Luis de Bethencourt <luisbg@kernel.org>,
-	Salah Triki <salah.triki@gmail.com>,
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-	Ilya Dryomov <idryomov@gmail.com>,
-	Alex Markuze <amarkuze@redhat.com>,
-	Jan Harkes <jaharkes@cs.cmu.edu>,
-	coda@cs.cmu.edu,
-	Nicolas Pitre <nico@fluxnic.net>,
-	Tyler Hicks <code@tyhicks.com>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Yangtao Li <frank.li@vivo.com>,
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Dave Kleikamp <shaggy@kernel.org>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Mark Fasheh <mark@fasheh.com>,
-	Joel Becker <jlbec@evilplan.org>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Mike Marshall <hubcap@omnibond.com>,
-	Martin Brandenburg <martin@omnibond.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Anders Larsen <al@alarsen.net>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Johannes Thumshirn <jth@kernel.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Fan Wu <wufan@kernel.org>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Martin Schiller <ms@dev.tdt.de>,
-	Eric Paris <eparis@redhat.com>,
-	Joerg Reuter <jreuter@yaina.de>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH v3 00/12] vfs: change inode->i_ino from unsigned long to u64
-Date: Fri,  6 Mar 2026 10:09:33 +0100
-Message-ID: <20260306-kennen-zubrot-2605fcfd6950@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
-References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
+	s=arc-20240116; t=1772792589; c=relaxed/simple;
+	bh=llKCHXdw7HaWtRkgToTXwvibYuBCCnUG18z8l59omFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=D0p3ZCTkJDQ4OPoHrm3nuqeu4gYLqfcBb9Zngu3oaRoxIN28H8qFP7JDIHj/Ey1mJuaOOw+oJOW71qYUNe/x+MI0vNnHO8wA9Ye/YZbcxZb6Q6UEVpD6VHPGKU9/n54WsuZ3xbM7XvqNY8lNeIo0E0EjAFZc0SC6Vgp2q8EIoTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ZgsLYEXt; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260306102303epoutp02cc11f582554d3239cff8ef28c5e92736~aOXY80-sz0509005090epoutp02F
+	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:23:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260306102303epoutp02cc11f582554d3239cff8ef28c5e92736~aOXY80-sz0509005090epoutp02F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1772792583;
+	bh=zPFwpblfkVVYchR/5zAU82Z+Hg+HnHJvXX+N+JoETqc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZgsLYEXt9EtMObwF2D9huxVHC1YC/M757e6/DWAD6LRRtbk+47wTiGFeyNtKhu6l7
+	 Pad5ekYrBvuuoP5nK8AoHhDoJxrtjqtY7wgPBsDW/WyXWM3z2vFckdcWK0oCMske9O
+	 PgM6Zhg1b6v7cmC8hBk4v5azNxMKVEfO1UJYl5xE=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20260306102302epcas5p202b4142953e01d7cb9f57fad9e5d208f~aOXYjzMZp1476614766epcas5p2U;
+	Fri,  6 Mar 2026 10:23:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4fS2Y2671fz6B9m8; Fri,  6 Mar
+	2026 10:23:02 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20260306101951epcas5p29466c309320d35847315faa2b75d1a11~aOUmssgyi1646816468epcas5p2-;
+	Fri,  6 Mar 2026 10:19:51 +0000 (GMT)
+Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260306101950epsmtip112cefdff155070621be11d6f488cc520~aOUlTKDpm1549215492epsmtip1r;
+	Fri,  6 Mar 2026 10:19:50 +0000 (GMT)
+Date: Fri, 6 Mar 2026 15:48:55 +0530
+From: Neeraj Kumar <s.neeraj@samsung.com>
+To: dan.j.williams@intel.com
+Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
+	cpgs@samsung.com
+Subject: Re: [PATCH V6 10/18] cxl/mem: Refactor cxl pmem region
+ auto-assembling
+Message-ID: <1931444790.41772792582852.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2708; i=brauner@kernel.org; h=from:subject:message-id; bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSumvWu2uNxbBFXikaZQKrMtl0PLj1c+kZGWOrvZiHz/ W/CTGOed5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzk4A5GhimT869vPnNH4Vqj t6Tr0fqPLXs3v0g/qbXpwf6o52L5D7YyMnxU+idovG+O5JQe0WVOK45/sI9bw9AjJfah78/izrQ aXg4A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 3136821DC55
+In-Reply-To: <6979522dc1916_1d331009@dwillia2-mobl4.notmuch>
+X-CMS-MailID: 20260306101951epcas5p29466c309320d35847315faa2b75d1a11
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73b96_"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20260123113138epcas5p4bc54ae41192dbc9c958c43ad8a80b5c6
+References: <20260123113112.3488381-1-s.neeraj@samsung.com>
+	<CGME20260123113138epcas5p4bc54ae41192dbc9c958c43ad8a80b5c6@epcas5p4.samsung.com>
+	<20260123113112.3488381-11-s.neeraj@samsung.com>
+	<6979522dc1916_1d331009@dwillia2-mobl4.notmuch>
+X-Rspamd-Queue-Id: 40F2621EA01
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	CTYPE_MIXED_BOGUS(1.00)[];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13546-lists,linux-nvdimm=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,lists.linux.dev,kvack.org,lists.sourceforge.net,lists.samba.org,lists.infradead.org,coda.cs.cmu.edu,lists.orangefs.org,lists.ubuntu.com,lists.freedesktop.org,lists.linaro.org,zeniv.linux.org.uk,suse.cz,goodmis.org,efficios.com,intel.com,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,infradead.org,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,yaina.de,holtmann.org,hartkopp.net,pengutronix.de,secunet.com,gondor.apana.org.au,fomichev.me,iogearbox.ne
- t];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[samsung.com:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_FROM(0.00)[bounces-13548-lists,linux-nvdimm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,samsung.com,gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[171];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[s.neeraj@samsung.com,nvdimm@lists.linux.dev];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Action: no action
 
-On Wed, 04 Mar 2026 10:32:30 -0500, Jeff Layton wrote:
-> Christian said [1] to "just do it" when I proposed this, so here we are!
-> 
-> For historical reasons, the inode->i_ino field is an unsigned long,
-> which means that it's 32 bits on 32 bit architectures. This has caused a
-> number of filesystems to implement hacks to hash a 64-bit identifier
-> into a 32-bit field, and deprives us of a universal identifier field for
-> an inode.
-> 
-> [...]
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73b96_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-This series makes me happy. We've been talking about this conversion for
-a while and I'm thankful that you did this work. Without the automation
-available this probably wouldn't have happened as quickly as it did now.
-Let's see what bits and pieces it missed.
+On 27/01/26 04:02PM, dan.j.williams@intel.com wrote:
+>Neeraj Kumar wrote:
+>> In 84ec985944ef3, devm_cxl_add_nvdimm() sequence was changed and called
+>> before devm_cxl_add_endpoint(). It's because cxl pmem region auto-assembly
+>> used to get called at last in cxl_endpoint_port_probe(), which requires
+>> cxl_nvd presence.
+>
+>What?
+
+Hi Dan,
+
+Auto-region assembly was added by a32320b71f085 [1] and during that time
+devm_cxl_add_nvdimm() was called after devm_cxl_add_endpoint().
+
+Later Li Ming found issue (kernel panic) in pmem region auto-assembly
+and fixed it using 84ec985944ef3 [2]. During this fix devm_cxl_add_nvdimm()
+sequence was changed and called before devm_cxl_add_endpoint()
+
+In this patch-set I have tried to bring back the original sequence in order
+to create pmem region (single interleave) based of parsed information from
+LSA during nvdimm_probe()
+
+[1] https://lore.kernel.org/r/167601999958.1924368.9366954455835735048.stgit@dwillia2-xfh.jf.intel.com
+[2] https://lore.kernel.org/all/20240612064423.2567625-1-ming4.li@intel.com
+
+>
+>> For cxl region persistency, region creation happens during nvdimm_probe
+>> which need the completion of endpoint probe.
+>>
+>> In order to accommodate both cxl pmem region auto-assembly and cxl region
+>> persistency, refactored following
+>>
+>> 1. Re-Sequence devm_cxl_add_nvdimm() after devm_cxl_add_endpoint(). This
+>>    will be called only after successful completion of endpoint probe.
+>>
+>> 2. Create cxl_region_discovery() which performs pmem region
+>>    auto-assembly and remove cxl pmem region auto-assembly from
+>>    cxl_endpoint_port_probe()
+>>
+>> 3. Register cxl_region_discovery() with devm_cxl_add_memdev() which gets
+>>    called during cxl_pci_probe() in context of cxl_mem_probe()
+>>
+>> 4. As cxlmd->attach->probe() calls registered cxl_region_discovery(), so
+>>    move devm_cxl_add_nvdimm() before cxlmd->attach->probe(). It guarantees
+>>    both the completion of endpoint probe and cxl_nvd presence before
+>>    calling cxlmd->attach->probe().
+>
+>This does not make sense. The whole point of having
+>devm_cxl_add_nvdimm() before devm_cxl_add_endpoint() is so that the
+>typical region discovery path can consider pre-existing decoder settings
+>*or* nvdimm labels in its assembly decisions.
+>
+>I would be surprised if this passes existing region assembly and
+>ordering tests.
+
+Actually using following change (as Dave has also checked) with the
+current patch-set is making existing region assembly ordering test pass.
+But still some other testcase in cxl_test cxl-topology.sh is failing.
+
+---
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index cb87e8c0e63c..03af15edd988 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -1686,6 +1686,7 @@ static void cxl_mock_test_feat_init(struct cxl_mockmem_data *mdata)
+
+  static int cxl_mock_mem_probe(struct platform_device *pdev)
+  {
++       struct cxl_memdev_attach memdev_attach = { 0 };
+         struct device *dev = &pdev->dev;
+         struct cxl_memdev *cxlmd;
+         struct cxl_memdev_state *mds;
+@@ -1767,7 +1768,8 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+
+         cxl_mock_add_event_logs(&mdata->mes);
+
+-       cxlmd = devm_cxl_add_memdev(cxlds, NULL);
++       memdev_attach.probe = cxl_region_discovery;
++       cxlmd = devm_cxl_add_memdev(cxlds, &memdev_attach);
+         if (IS_ERR(cxlmd))
+                 return PTR_ERR(cxlmd);
 
 ---
 
-Applied to the vfs-7.1.kino branch of the vfs/vfs.git tree.
-Patches in the vfs-7.1.kino branch should appear in linux-next soon.
+>
+>This reads like "do not understand current ordering, change it for thin
+>reasons".
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Yes I got your concern that we should reuse the existing infra of region auto
+assembly instead of doing this refactoring and creating new infra for region
+creation based on information parsed from LSA.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Even the same is discussed in last CXL Collab Sync [1].
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+I will fix this refactoring along with multi interleave support using existing
+auto region assembly infra in next series.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.1.kino
+[1] https://pmem.io/ndctl/collab/#:~:text=LSA%202.1%20support,with%20first%20merge%3F
 
-[01/12] vfs: widen inode hash/lookup functions to u64
-        https://git.kernel.org/vfs/vfs/c/2412a9fa518a
-[02/12] audit: widen ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/a5e863be4d02
-[03/12] net: change sock.sk_ino and sock_i_ino() to u64
-        https://git.kernel.org/vfs/vfs/c/c21144a0a33f
-[04/12] vfs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/5e5c380870b2
-[05/12] cachefiles: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/25291f67aad7
-[06/12] ext2: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/797d04a355e3
-[07/12] hugetlbfs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/3c976fb36a9a
-[08/12] zonefs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/988f68c01b3a
-[09/12] ext4: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/1c1427c79bc2
-[10/12] f2fs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/6e62bf74bd8a
-[11/12] nilfs2: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/6ce73711525a
-[12/12] treewide: change inode->i_ino from unsigned long to u64
-        https://git.kernel.org/vfs/vfs/c/af82d143e869
+
+Regards,
+Neeraj
+
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73b96_
+Content-Type: text/plain; charset="utf-8"
+
+
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73b96_--
+
 
