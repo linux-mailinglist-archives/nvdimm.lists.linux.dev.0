@@ -1,96 +1,96 @@
-Return-Path: <nvdimm+bounces-13547-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13549-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cNgADBGrqmnjVAEAu9opvQ
-	(envelope-from <nvdimm+bounces-13547-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:23:13 +0100
+	id GApWFIWrqmkYVQEAu9opvQ
+	(envelope-from <nvdimm+bounces-13549-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:25:09 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BE7721E9F3
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:23:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE1EF21EA48
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 11:25:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 93E623021D2A
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 10:23:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3665F30254E9
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 10:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F67C3603DD;
-	Fri,  6 Mar 2026 10:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE0837C924;
+	Fri,  6 Mar 2026 10:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lg24+BCr"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NoUPubwD"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C9837B3EC
-	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79E737B3EC
+	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772792588; cv=none; b=Hh+SGlJPkNbWD778MgJEGlDOdtFLHHcBGRVX6dcw8H8Go0Fll/Qhtas2xOEt7a1D3f5PCez6RFx+SfZDI+neeGvDWdKV0ZCBWhUwHnocvNgUME+iYVoex0L1W+HNPHk6fzk700HZkeaFWsVltKXu4bZNLHfdZhWAqWNBDbUetlw=
+	t=1772792701; cv=none; b=gnHDCPWx9f6tZ6ZvJz7H98z8StW++hwCl7CahP+biwX16U8sZPjKTZbDbpG+A0pFNkNiBC/cYSWN5fZNCU6qNdfdW7g5BMxZkKvzkmi5l7uQui3ZPMRSY4cYHdvRpec56wH8ggCWWVHV5Rp4sU+4fqPYXUC6Js24/iiha61aM7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772792588; c=relaxed/simple;
-	bh=V2U4y78pnVdswONpocjUIQMSDnANqHWTkbe7TvA63rw=;
+	s=arc-20240116; t=1772792701; c=relaxed/simple;
+	bh=VwPDBc52y+ByONznQ17CVbyI/CYVHCtb7xpnbb3VR4U=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=gb9Q7Xrl/wHyBBWLKxnyhUXd9z9hVD91C+Zidege9W6lNr4yPknnv5CU6pgnVT0qrlnZ7QywxctA+RyIS1zgP9jpnVosRPv6bfU8UnenfbfXFit0tWtBKp4Eu0GPdSdRHDfEetZurInhC/Eijio02muE89MRDOxSD7Hly7MD+kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lg24+BCr; arc=none smtp.client-ip=203.254.224.33
+	 Content-Type:References; b=p+qYcA94bsS0cbAU6GMMb72wjVC0ev95b+4eMDoFIWLl2/sVjXabVG5bVYXSXnQKT+26iiTGf2W+b+kW0JZ6SJ8nChKZFHouWLFbCkHgSMFl0al4q5Nvsl7LRlXoleJwwQhw7tbWHi0rlMzE2Po3ZmoW6BCA3qIGrWNw3FjgC84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NoUPubwD; arc=none smtp.client-ip=203.254.224.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260306102303epoutp03c22d9e4e1da39e584d30b0706506ae71~aOXZAoZNW2328223282epoutp03h
-	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:23:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260306102303epoutp03c22d9e4e1da39e584d30b0706506ae71~aOXZAoZNW2328223282epoutp03h
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260306102456epoutp02646e37b2299fec83e47f5a7e2a378dff~aOZCg3wAw0871608716epoutp02L
+	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 10:24:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260306102456epoutp02646e37b2299fec83e47f5a7e2a378dff~aOZCg3wAw0871608716epoutp02L
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1772792583;
-	bh=x6n4TB9SALV9vPu04bQI6+D9lMWrud9GB2IyZMDwa9k=;
+	s=mail20170921; t=1772792696;
+	bh=mkBvaLFfnKnjCBnDHYqAtzkGsBKFeIIQ9usUlK7H3kY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lg24+BCrRRmoX1dm8ElOe37YSPr6prbUKN38GbDmbU7kMNS2mFwRHrFJoKitFwY1P
-	 av7NBPJMljA62q96BjHjbjigKCItaHxvY+KXa95ik5bOcidIR5v+EGw9bB1wUn1k8U
-	 HZr6/N7LTP6sXzQeDVZSxCZEdXjngXxBO/6cUfFM=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20260306102303epcas5p2477cd8981374ef7534f8ac88d8c74148~aOXYtz9hZ1186111861epcas5p25;
-	Fri,  6 Mar 2026 10:23:03 +0000 (GMT)
-Received: from epcpadp2new (unknown [182.195.40.142]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4fS2Y30CMdz6B9m6; Fri,  6 Mar
-	2026 10:23:03 +0000 (GMT)
+	b=NoUPubwDCgZ59QwtmvHoLFnRNGQfkodocRt57Hqg9mwH1rXxjlbomdYunsGQH206h
+	 e4a1zChy1INCN2vcB3NPRtwDEbzCoX65ZYK5ByNwoir+qtfAtu2gQw8RmiJLfGu1DU
+	 Aj4541yPcK+E1YlnIwdyiyThjZsrLFIARaKD+7M0=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20260306102455epcas5p4790db72dd69e9cdf1ffac2731dd054d9~aOZBw1JUx1250412504epcas5p4u;
+	Fri,  6 Mar 2026 10:24:55 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.95]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4fS2bC1Cykz2SSKY; Fri,  6 Mar
+	2026 10:24:55 +0000 (GMT)
 Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102207epcas5p1b799e7ce78ee07d71c3c638c3412d28a~aOWk_nmPI1322513225epcas5p1A;
-	Fri,  6 Mar 2026 10:22:07 +0000 (GMT)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260306102454epcas5p4d2e1b37f366756d71853584d6c8246c7~aOZAdHMuU0525205252epcas5p4K;
+	Fri,  6 Mar 2026 10:24:54 +0000 (GMT)
 Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
 	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102205epsmtip2d4819a6e14d38418e215918023d45973~aOWjjLT902731127311epsmtip2X;
-	Fri,  6 Mar 2026 10:22:05 +0000 (GMT)
-Date: Fri, 6 Mar 2026 15:52:00 +0530
+	20260306102452epsmtip2518d8ac470e57ec2e1d49cd96838a2d3~aOY_wF1DG2865228652epsmtip2v;
+	Fri,  6 Mar 2026 10:24:52 +0000 (GMT)
+Date: Fri, 6 Mar 2026 15:54:44 +0530
 From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Dave Jiang <dave.jiang@intel.com>
+To: Alejandro Lucero Palau <alucerop@amd.com>
 Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
 	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
 	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
 	cpgs@samsung.com
-Subject: Re: [PATCH V6 10/18] cxl/mem: Refactor cxl pmem region
- auto-assembling
-Message-ID: <158453976.61772792583024.JavaMail.epsvc@epcpadp2new>
+Subject: Re: [PATCH V6 12/18] cxl/region: Add devm_cxl_pmem_add_region() for
+ pmem region creation
+Message-ID: <20260306102444.fkoqhyavd7cgorxy@test-PowerEdge-R740xd>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <1b67c345-1594-4221-b699-e26a00d17bfc@intel.com>
-X-CMS-MailID: 20260306102207epcas5p1b799e7ce78ee07d71c3c638c3412d28a
+In-Reply-To: <a560c14c-410c-4ea8-9076-deeb9ba28fee@amd.com>
+X-CMS-MailID: 20260306102454epcas5p4d2e1b37f366756d71853584d6c8246c7
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-	boundary="----S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73baa_"
+	boundary="----S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73bc8_"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20260123113138epcas5p4bc54ae41192dbc9c958c43ad8a80b5c6
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260123113141epcas5p49a1eebff4401a7fc98381358162fde2b
 References: <20260123113112.3488381-1-s.neeraj@samsung.com>
-	<CGME20260123113138epcas5p4bc54ae41192dbc9c958c43ad8a80b5c6@epcas5p4.samsung.com>
-	<20260123113112.3488381-11-s.neeraj@samsung.com>
-	<ff946a84-11bb-4956-beba-bf7bfbfecd7a@intel.com>
-	<1b67c345-1594-4221-b699-e26a00d17bfc@intel.com>
-X-Rspamd-Queue-Id: 9BE7721E9F3
+	<CGME20260123113141epcas5p49a1eebff4401a7fc98381358162fde2b@epcas5p4.samsung.com>
+	<20260123113112.3488381-13-s.neeraj@samsung.com>
+	<a560c14c-410c-4ea8-9076-deeb9ba28fee@amd.com>
+X-Rspamd-Queue-Id: AE1EF21EA48
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -98,7 +98,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
@@ -107,7 +107,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13547-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13549-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+,1:+,2:+];
 	DKIM_TRACE(0.00)[samsung.com:+];
 	MISSING_XM_UA(0.00)[];
@@ -119,105 +119,143 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Action: no action
 
-------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73baa_
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73bc8_
 Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: 8bit
 Content-Disposition: inline
 
-On 27/01/26 04:45PM, Dave Jiang wrote:
+On 24/02/26 06:13PM, Alejandro Lucero Palau wrote:
+>Hi Neeraj,
 >
 >
->On 1/26/26 3:48 PM, Dave Jiang wrote:
->>
->>
->> On 1/23/26 4:31 AM, Neeraj Kumar wrote:
->>> In 84ec985944ef3, devm_cxl_add_nvdimm() sequence was changed and called
->>> before devm_cxl_add_endpoint(). It's because cxl pmem region auto-assembly
->>> used to get called at last in cxl_endpoint_port_probe(), which requires
->>> cxl_nvd presence.
->>>
->>> For cxl region persistency, region creation happens during nvdimm_probe
->>> which need the completion of endpoint probe.
->>>
->>> In order to accommodate both cxl pmem region auto-assembly and cxl region
->>> persistency, refactored following
->>>
->>> 1. Re-Sequence devm_cxl_add_nvdimm() after devm_cxl_add_endpoint(). This
->>>    will be called only after successful completion of endpoint probe.
->>>
->>> 2. Create cxl_region_discovery() which performs pmem region
->>>    auto-assembly and remove cxl pmem region auto-assembly from
->>>    cxl_endpoint_port_probe()
->>>
->>> 3. Register cxl_region_discovery() with devm_cxl_add_memdev() which gets
->>>    called during cxl_pci_probe() in context of cxl_mem_probe()
->>>
->>> 4. As cxlmd->attach->probe() calls registered cxl_region_discovery(), so
->>>    move devm_cxl_add_nvdimm() before cxlmd->attach->probe(). It guarantees
->>>    both the completion of endpoint probe and cxl_nvd presence before
->>>    calling cxlmd->attach->probe().
->>>
->>> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
->>> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
->>> Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
->>
->> Hi Neeraj,
->> Just FYI this is the patch that breaks the auto-region assemble in cxl_test.
->
->So it's missing this part in cxl_test. cxl_test auto region is now showing up. But now I'm hitting some lockdep issues.
->
->---
->diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
->index cb87e8c0e63c..03af15edd988 100644
->--- a/tools/testing/cxl/test/mem.c
->+++ b/tools/testing/cxl/test/mem.c
->@@ -1686,6 +1686,7 @@ static void cxl_mock_test_feat_init(struct cxl_mockmem_data *mdata)
->
-> static int cxl_mock_mem_probe(struct platform_device *pdev)
-> {
->+       struct cxl_memdev_attach memdev_attach = { 0 };
->        struct device *dev = &pdev->dev;
->        struct cxl_memdev *cxlmd;
->        struct cxl_memdev_state *mds;
->@@ -1767,7 +1768,8 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
->
->        cxl_mock_add_event_logs(&mdata->mes);
->
->-       cxlmd = devm_cxl_add_memdev(cxlds, NULL);
->+       memdev_attach.probe = cxl_region_discovery;
->+       cxlmd = devm_cxl_add_memdev(cxlds, &memdev_attach);
->        if (IS_ERR(cxlmd))
->                return PTR_ERR(cxlmd);
->
->---
+>I could get some free time for reviewing this series. Dan pointed out 
+>to potential conflicts with my Type2 series, so I'm focused on those 
+>patches modifying the cxl region creation and how it is being used.
 >
 >
->>
->> DJ
+>I do not know if you are aware of the Type2 work, although I dare to 
+>say you are not since some of the functionality is duplicated ... and 
+>in your case skipping some steps.
+>
 
-Hi Dave,
+Hi Alejandro,
 
-Yes using the above snippet auto region failure is getting fixed.
-But still with above fix cxl-topology.sh is failing.
+Thanks for your review.
+Yes I have not looked at Type2 work in detail. I will have a look
+and specially the conflicting part with my changes.
 
-Actually we have a test case in cxl-topology.sh where we disable
-mem device and check its availability after enabling it. And this
-test case is failing in this case.
+>
+>Below my comments.
+>
+>
+>On 1/23/26 11:31, Neeraj Kumar wrote:
+>>devm_cxl_pmem_add_region() is used to create cxl region based on region
+>>information scanned from LSA.
+>>
+>>devm_cxl_add_region() is used to just allocate cxlr and its fields are
+>>filled later by userspace tool using device attributes (*_store()).
+>>
+>>Inspiration for devm_cxl_pmem_add_region() is taken from these device
+>>attributes (_store*) calls. It allocates cxlr and fills information
+>>parsed from LSA and calls device_add(&cxlr->dev) to initiate further
+>>region creation porbes
+>>
+>>Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+>>Signed-off-by: Neeraj Kumar <s.neeraj@samsung.com>
+>>---
+>>  drivers/cxl/core/region.c | 118 ++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 118 insertions(+)
+>>
+>>diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+>>index 2e60e5e72551..e384eacc46ae 100644
+>>--- a/drivers/cxl/core/region.c
+>>+++ b/drivers/cxl/core/region.c
+>>@@ -2621,6 +2621,121 @@ static struct cxl_region *devm_cxl_add_region(struct cxl_root_decoder *cxlrd,
+>>  	return ERR_PTR(rc);
+>>  }
+>>+static ssize_t alloc_region_hpa(struct cxl_region *cxlr, u64 size)
+>>+{
+>>+	int rc;
+>>+
+>>+	if (!size)
+>>+		return -EINVAL;
+>>+
+>>+	ACQUIRE(rwsem_write_kill, rwsem)(&cxl_rwsem.region);
+>>+	if ((rc = ACQUIRE_ERR(rwsem_write_kill, &rwsem)))
+>>+		return rc;
+>>+
+>>+	return alloc_hpa(cxlr, size);
+>>+}
+>
+>
+>Type2 has a more elaborated function preceding the final hpa 
+>allocation.  First of all, the root decoder needs to match the 
+>endpoint type or to have support for it. Then interleave ways taken 
+>into account. I know you are only supporting 1 way, what I guess makes 
+>the initial support easier, but although some check for not supporting 
+>> 1 is fine (I guess this takes a lot of work for matching at least 
+>LSA labels and maybe something harder), the core code should support 
+>that, mainly because there is ongoing work adding it. In my case I did 
+>not need interleaving and it is unlikely other Type2 devices will need 
+>it in the near future, but the support is there:
+>
+>https://lore.kernel.org/linux-cxl/20260201155438.2664640-1-alejandro.lucero-palau@amd.com/T/#m56bf70b58bb995082680bf363fd3f6d6f2b074d2
+>
+>
+>>+
+>>+static ssize_t alloc_region_dpa(struct cxl_endpoint_decoder *cxled, u64 size)
+>>+{
+>>+	if (!size)
+>>+		return -EINVAL;
+>>+
+>>+	if (!IS_ALIGNED(size, SZ_256M))
+>>+		return -EINVAL;
+>>+
+>>+	return cxl_dpa_alloc(cxled, size);
+>>+}
+>
+>
+>I'm not sure if the same applies here as you are passing an endpoint 
+>decoder already, but FWIW:
+>
+>
+>https://lore.kernel.org/linux-cxl/20260201155438.2664640-1-alejandro.lucero-palau@amd.com/T/#m38ff266e931fd9c932bc54d000b7ea72186493be
+>
+>
+>I'm sending type2 individual patches for facilitating the integration, 
+>and I'll focus next on these two referenced ones so you could use them 
+>asap.
+>
+>
+>Thank you,
+>
+>Alejandro
 
-I am working on multi interleave support. I will test this with
-next series and fix it accordingly.
+Actually I have created alloc_region_hpa() and alloc_region_dpa() taking
+inspiration from device attributes (_store*) calls used to create cxl
+region using cxl userspace tool.
+
+I am adding the support of multi interleave, there these routines will
+not be required as I would be re-using the existing auto region assembly infra.
+
+Even though I will re-check any conflicts with Type2 changes.
+
 
 
 Regards,
 Neeraj
 
-------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73baa_
+
+
+
+
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73bc8_
 Content-Type: text/plain; charset="utf-8"
 
 
-------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73baa_--
-
+------S5vMiqbC9D9faF8YPw-GIekSHdZgzpYrwqcOSnq._zgadq5.=_73bc8_--
 
