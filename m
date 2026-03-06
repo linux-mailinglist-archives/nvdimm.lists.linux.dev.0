@@ -1,160 +1,211 @@
-Return-Path: <nvdimm+bounces-13560-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13550-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id pD8qGVv7rGlfwwEAu9opvQ
-	(envelope-from <nvdimm+bounces-13560-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:19 +0100
+	id IKjSGfO9qmlXWQEAu9opvQ
+	(envelope-from <nvdimm+bounces-13550-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 12:43:47 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B13F022E79B
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 08 Mar 2026 05:30:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D854B21FCC5
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 06 Mar 2026 12:43:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2CD103018294
-	for <lists+linux-nvdimm@lfdr.de>; Sun,  8 Mar 2026 04:30:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7198A30B2C92
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 11:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6003B27B34C;
-	Sun,  8 Mar 2026 04:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C71D37D11F;
+	Fri,  6 Mar 2026 11:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="oVWOlX8g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmPUWeBa"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AA426F291
-	for <nvdimm@lists.linux.dev>; Sun,  8 Mar 2026 04:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0CF02DC35C;
+	Fri,  6 Mar 2026 11:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772944213; cv=none; b=EYKuizwAG002GMrZw8HFMGe98ZqBfDRknGfQ7w5n01QR9G/xBP3BZKxhKNMauJK6oDizzGYFQZX4Dl+NG03ncE3o0Qu/9JP0ycQjl8+uKfNAqwllysOYsgwsJ33QTrOZayIt1LgDIFCQ1FvAfkSPvlJ62oHec3LOiVAiGO949zQ=
+	t=1772797343; cv=none; b=I3C+QrI70rJYxMKwH7PaFThTVEg5Eoy2gJhEq+HMAREqAv/2c3xsucRupL59oco5Q7kw+s9NJZtrwtiswt3rT6KwcI1gzakqnKvJlVQJ+IJleZFtNDiLPy1HeOiErcObz/QWfvMSgKPWSlsK0e7WxgLfJ/CQpqQEKFuk0OqePVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772944213; c=relaxed/simple;
-	bh=/s3d8a7+gjncW1qLGaaofIMKDVUL0/tVG6Pn12FLLgA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=Oz2Rvhz/aAjwcxZlbPTcm5MilpW74X8bAnvJf4SHKvK/WRlaUS3l3Nh4Mfz2C9W9pse4XflDQWTxQM851m3BAlTt39HOwoPCD92ZrHQU3VZuKZte2EC0BD3KlTSYqRT3PYjCo/caCQDRtdjAM1cWXhnKgkoMueM52r8iekK7QQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=oVWOlX8g; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260308043002epoutp0312ff08b0edbf89622065b2fb25df03e8~aw1vL0lvK1784317843epoutp03E
-	for <nvdimm@lists.linux.dev>; Sun,  8 Mar 2026 04:30:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260308043002epoutp0312ff08b0edbf89622065b2fb25df03e8~aw1vL0lvK1784317843epoutp03E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1772944202;
-	bh=/s3d8a7+gjncW1qLGaaofIMKDVUL0/tVG6Pn12FLLgA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oVWOlX8grc4p+2R/ur66rBxqLV9YyMOesIRehfJvkDYUsBw34h/JbRtzwQS+HLTtb
-	 BnK1c6kwngxreUiL2de2jCVorvnlNYLdrCeYcoSjzT0K7z3jaGoUmUjsxN7KeAZ8ZR
-	 dNyjfCcP+k/p80cncrjGCoI6i3aNSIXvs2zfCqAc=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20260308043001epcas5p3632372647d98ca38a3150abac37a04c4~aw1uy6lCu1848318483epcas5p3O;
-	Sun,  8 Mar 2026 04:30:01 +0000 (GMT)
-Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4fT6cn6JRHz2SSKZ; Sun,  8 Mar
-	2026 04:30:01 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102730epcas5p308774b7b9f51e5a6c963a8b8599ab357~aObRtAise1284812848epcas5p3d;
-	Fri,  6 Mar 2026 10:27:30 +0000 (GMT)
-Received: from test-PowerEdge-R740xd (unknown [107.99.41.79]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260306102726epsmtip24a49a52c28cb736735db95b08c67bcf7~aObN6RQTD2983129831epsmtip2A;
-	Fri,  6 Mar 2026 10:27:26 +0000 (GMT)
-Date: Fri, 6 Mar 2026 15:57:19 +0530
-From: Neeraj Kumar <s.neeraj@samsung.com>
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
-	a.manzanares@samsung.com, vishak.g@samsung.com, neeraj.kernel@gmail.com,
-	cpgs@samsung.com
-Subject: Re: [PATCH V6 00/18] Add CXL LSA 2.1 format support in nvdimm and
- cxl pmem
-Message-ID: <1296674576.21772944201878.JavaMail.epsvc@epcpadp1new>
+	s=arc-20240116; t=1772797343; c=relaxed/simple;
+	bh=CA2vkPrs+KBRPBb6HWrkcW5f3nw7u13fgvwPYP4Knsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KqiqSnvVyhN9EyJpzMQTN7IFvE7tX0PKB+e6rGlqNaeN7m5tFfRaHJYcWQkrycOh+hOxUMvRusV4pX4I7647mVKeP45FQSQB4B4+wj9JScX0IFWLiTiN++X+lQeZQD4yBr0WpnN2cayAy59YPnHh+F7+A6mjxBN3YyJRrHSL0eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmPUWeBa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4FAC4CEF7;
+	Fri,  6 Mar 2026 11:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772797342;
+	bh=CA2vkPrs+KBRPBb6HWrkcW5f3nw7u13fgvwPYP4Knsw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VmPUWeBaQkwHyNWrIgE+k6VTvF58sgBu9LcG+6SertLT2ce7KXBFZ0We86Id7A25U
+	 Q+HpvLqR5cHvWiwcCko03D2oM0ZKE14Cr+BxZZDDmzCKdHkCFk9RqTfMemJZDDnloC
+	 Ew767ufZJ7CKXy/CG6eJzT3vDrdM6zE9ZYv22SYiUP3CREBCfUFzOy3pucv0xCVXiW
+	 9MsH74masuCdJlZ8BntBknVUwyKbUCdud5oUJoRnrzrGTDqUqCnck040huUBGNP38a
+	 rVd+D+l7txMQlbfz48dBDZDt3rCVTj4/qKf0/Air3/s23aXm7SQiY2Tv5T9Owh5nxk
+	 DlcAdpF9cammw==
+Date: Fri, 6 Mar 2026 11:42:19 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Tal Zussman <tz2294@columbia.edu>
+Cc: David Howells <dhowells@redhat.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Matthew Wilcox <willy@infradead.org>, Dan Williams <dan.j.williams@intel.com>, Jan Kara <jack@suse.cz>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Theodore Ts'o <tytso@mit.edu>, Andreas Dilger <adilger.kernel@dilger.ca>, 
+	Paulo Alcantara <pc@manguebit.org>, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, Steve French <sfrench@samba.org>, 
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam Prasad N <sprasad@microsoft.com>, 
+	Tom Talpey <tom@talpey.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
+	Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Andreas Gruenbacher <agruenba@redhat.com>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>, "Darrick J. Wong" <djwong@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	Brendan Jackman <jackmanb@google.com>, Zi Yan <ziy@nvidia.com>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Qi Zheng <zhengqi.arch@bytedance.com>, linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	nvdimm@lists.linux.dev, linux-ext4@vger.kernel.org, netfs@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nilfs@vger.kernel.org, linux-xfs@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] mm: Remove stray references to struct pagevec
+Message-ID: <3f262490-ebed-49b5-99ff-7a8aaa12cada@lucifer.local>
+References: <20260225-pagevec_cleanup-v2-0-716868cc2d11@columbia.edu>
+ <20260225-pagevec_cleanup-v2-1-716868cc2d11@columbia.edu>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <aXPlGrs12BdwgGkG@aschofie-mobl2.lan>
-X-CMS-MailID: 20260306102730epcas5p308774b7b9f51e5a6c963a8b8599ab357
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_"
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20260123113121epcas5p125bc64b4714525d7bbd489cd9be9ba91
-References: <CGME20260123113121epcas5p125bc64b4714525d7bbd489cd9be9ba91@epcas5p1.samsung.com>
-	<20260123113112.3488381-1-s.neeraj@samsung.com>
-	<aXPlGrs12BdwgGkG@aschofie-mobl2.lan>
-X-Rspamd-Queue-Id: B13F022E79B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225-pagevec_cleanup-v2-1-716868cc2d11@columbia.edu>
+X-Rspamd-Queue-Id: D854B21FCC5
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DATE_IN_PAST(1.00)[42];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,samsung.com,gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,samsung.com:dkim];
+	FREEMAIL_CC(0.00)[redhat.com,auristor.com,kernel.org,linux-foundation.org,oracle.com,google.com,suse.com,tencent.com,huaweicloud.com,gmail.com,infradead.org,intel.com,suse.cz,zeniv.linux.org.uk,mit.edu,dilger.ca,manguebit.org,fasheh.com,evilplan.org,linux.alibaba.com,samba.org,microsoft.com,talpey.com,linux.intel.com,suse.de,ffwll.ch,ursulin.net,fb.com,dubeyko.com,linux.dev,brown.name,ziepe.ca,nvidia.com,cmpxchg.org,bytedance.com,lists.infradead.org,vger.kernel.org,lists.sourceforge.net,kvack.org,lists.linux.dev,lists.samba.org,lists.freedesktop.org];
+	TAGGED_FROM(0.00)[bounces-13550-lists,linux-nvdimm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13560-lists,linux-nvdimm=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:+];
-	DKIM_TRACE(0.00)[samsung.com:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[97];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[s.neeraj@samsung.com,nvdimm@lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.995];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:email,columbia.edu:email,lucifer.local:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: inline
-
-On 23/01/26 01:16PM, Alison Schofield wrote:
->On Fri, Jan 23, 2026 at 05:00:54PM +0530, Neeraj Kumar wrote:
+On Wed, Feb 25, 2026 at 06:44:25PM -0500, Tal Zussman wrote:
+> struct pagevec was removed in commit 1e0877d58b1e ("mm: remove struct
+> pagevec"). Remove remaining forward declarations and change
+> __folio_batch_release()'s declaration to match its definition.
 >
->snip
+> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Acked-by: Chris Li <chrisl@kernel.org>
+> Signed-off-by: Tal Zussman <tz2294@columbia.edu>
+
+LGTM, so:
+
+Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+
+> ---
+>  fs/afs/internal.h       | 1 -
+>  fs/f2fs/f2fs.h          | 2 --
+>  include/linux/pagevec.h | 2 +-
+>  include/linux/swap.h    | 2 --
+>  4 files changed, 1 insertion(+), 6 deletions(-)
 >
->>
->> Testing:
->> ========
->> In order to test this patchset, I also added the support of LSA v2.1 format
->> in ndctl. ndctl changes are available at [2]. After review, I’ll push in
->> ndctl repo for community review.
+> diff --git a/fs/afs/internal.h b/fs/afs/internal.h
+> index 009064b8d661..599353c33337 100644
+> --- a/fs/afs/internal.h
+> +++ b/fs/afs/internal.h
+> @@ -31,7 +31,6 @@
 >
->Please post the ndctl changes for review. Thanks!
-
-Sure Alison,
-
-I am working on multi interleave support, So it may require some change in ndctl also.
-I will post ndctl changes along with next series.
-
-
-Regards,
-Neeraj
-
-------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_
-Content-Type: text/plain; charset="utf-8"
-
-
-------3W3K1-v49fY0BJe7N6_WbqFXaoVLme8r7b8baEfkTbmtWBCI=_73c11_--
-
+>  #define AFS_CELL_MAX_ADDRS 15
+>
+> -struct pagevec;
+>  struct afs_call;
+>  struct afs_vnode;
+>  struct afs_server_probe;
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index bb34e864d0ef..d9e8531a5301 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -28,8 +28,6 @@
+>  #include <linux/fscrypt.h>
+>  #include <linux/fsverity.h>
+>
+> -struct pagevec;
+> -
+>  #ifdef CONFIG_F2FS_CHECK_FS
+>  #define f2fs_bug_on(sbi, condition)	BUG_ON(condition)
+>  #else
+> diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
+> index 63be5a451627..007affabf335 100644
+> --- a/include/linux/pagevec.h
+> +++ b/include/linux/pagevec.h
+> @@ -93,7 +93,7 @@ static inline struct folio *folio_batch_next(struct folio_batch *fbatch)
+>  	return fbatch->folios[fbatch->i++];
+>  }
+>
+> -void __folio_batch_release(struct folio_batch *pvec);
+> +void __folio_batch_release(struct folio_batch *fbatch);
+>
+>  static inline void folio_batch_release(struct folio_batch *fbatch)
+>  {
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 0effe3cc50f5..4b1f13b5bbad 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -20,8 +20,6 @@ struct notifier_block;
+>
+>  struct bio;
+>
+> -struct pagevec;
+> -
+>  #define SWAP_FLAG_PREFER	0x8000	/* set if swap priority specified */
+>  #define SWAP_FLAG_PRIO_MASK	0x7fff
+>  #define SWAP_FLAG_DISCARD	0x10000 /* enable discard for swap */
+>
+> --
+> 2.39.5
+>
 
