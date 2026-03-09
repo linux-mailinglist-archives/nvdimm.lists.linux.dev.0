@@ -1,177 +1,263 @@
-Return-Path: <nvdimm+bounces-13559-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13562-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4JJgCTBeq2mmcQEAu9opvQ
-	(envelope-from <nvdimm+bounces-13559-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 07 Mar 2026 00:07:28 +0100
+	id EEYyHWpormmADwIAu9opvQ
+	(envelope-from <nvdimm+bounces-13562-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 09 Mar 2026 07:27:54 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9793522881B
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 07 Mar 2026 00:07:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E79B2342E2
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 09 Mar 2026 07:27:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EFFB8301C132
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  6 Mar 2026 23:07:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E841C3036D59
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  9 Mar 2026 06:27:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C153659E9;
-	Fri,  6 Mar 2026 23:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CC4359A7B;
+	Mon,  9 Mar 2026 06:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFjX5gS0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LYNxQHSM"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6A735E946
-	for <nvdimm@lists.linux.dev>; Fri,  6 Mar 2026 23:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772838436; cv=none; b=PV4oB0o5H2IVl83ttHS1epSWXvnzpR+8oWxsHdb42F2e2Gt3jEC9sUomsfx6RrT4mx8cWjz9f1JPeMAqleF/cT2qNIJd7l8bPqqzKkT03YhFP/VSBd0mqycIrs1X7zlw+J6bF+rvzBxOaEUAjMANMiewcYvlXTMXYkadLualjC4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772838436; c=relaxed/simple;
-	bh=PdHCUukFlxrWW/nddVc5tlezV0SBl4aeJn3BRRZeIO8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gi0FLDjifE3I6zbO7FxMHd0V5MASfo0gaavcN2mFGIoOLHrDD8FKsHJ8/NQnPYam+MJktBjcY2i4q4nyQm1cueyFHtj875mGShspDezNu95LPuVGD+qHARKnE+bZPIxDVohQ0WlLJ/TsGhg5sjjlkTkb6O+qLTml8lu9fVCQEHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFjX5gS0; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772838435; x=1804374435;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PdHCUukFlxrWW/nddVc5tlezV0SBl4aeJn3BRRZeIO8=;
-  b=FFjX5gS0ImY+t/ym9UvBYPHijnsbKxPbidFWtw5djtuZsEi86fuzAgKJ
-   +q1lbzvt8Yq/qwpfFHgKP6q2UhEsGE1zZXdt2WlLLEj0HXdnq+fYb8kxk
-   EWcRLuRrg9L7MnPCiwc0gYa2cDrwIPQqMaWwWisSaVk/Z2nQjnaErlNor
-   ckFGml8n/0kt9TNEFRHo/BgWrETFFmGvAx5tawPCyrmE4Zi8Gsnz70T8k
-   jdXVrCFQizlizf2Cv9339KBh8GWmL/ljieQLNv7lHxJVsaIORd/1lxdfv
-   Uz27vY+/h10DDI7UuxPPoQ1nEHEB1yEuWpxI7kHVBDx8G2C/OPfyZUbx7
-   A==;
-X-CSE-ConnectionGUID: 7qC4UaaMQsy55PcR8Ra7oA==
-X-CSE-MsgGUID: 1JnSZk2qSyiGT/Uvysjx0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="72978268"
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="72978268"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 15:07:14 -0800
-X-CSE-ConnectionGUID: ZAF4Po+XSGWmH2iE8lpinA==
-X-CSE-MsgGUID: Mrc+AfC2THyIdrmzaO0Brg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="242154765"
-Received: from jdoman-mobl3.amr.corp.intel.com (HELO [10.125.109.87]) ([10.125.109.87])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 15:07:13 -0800
-Message-ID: <18b6665b-2964-423c-8ba2-b7df28b95d62@intel.com>
-Date: Fri, 6 Mar 2026 16:07:11 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858C8229B38
+	for <nvdimm@lists.linux.dev>; Mon,  9 Mar 2026 06:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773037643; cv=pass; b=K2fvnfOGkEihKWGrPrVSlxBLZLKzbECI8Kmqjg+dJJthkeZp1umlfOgHukKaJgYhrwfhqH4LkGIqHGotao+tIp08Df9wcH8msYTPklLlmyV/4D/b7jy7wT1ztHLSAWxKctextU5iNXxC1idBbwJI1oyIEO7GpnPcrP81ACOmMXc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773037643; c=relaxed/simple;
+	bh=tWJ/fX3Ckxq4WEzhukQr0K7T+NWwaaBTCqm8O0qx06M=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a2be9BPEWGSlqPSu58k3JXs+2G8By8V0w2ebcZBhY1JUWcGMTsgPpGK+Mpn7UFve7cXHN7xOKHeg1/mbPpkK+Y/Rr2we1AViQ0Xz7JhXuw9uF4uenERq8s63Q2S/up65RxW1VbgZMdefT6SV0mPgWT380prABE7BdholK5+sMl0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LYNxQHSM; arc=pass smtp.client-ip=209.85.217.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5ffa0b23a60so1895361137.0
+        for <nvdimm@lists.linux.dev>; Sun, 08 Mar 2026 23:27:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773037639; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DcPvZELtWYmybMWDvAFA0GNfvQd3ky55VNRgB3PlyR9K721V7FjUPcusMPTfgvGIkl
+         VuG0EXWjjuPejA1VxSzqB4QEp9Mc0RmpaTWZiTfWSR//pd/7ajKAI/na/ryTW7XMYjiF
+         iWY9OmNWAXHSz70CsfN8ZXVuyOj3xDbyVlpIZXGHCToKlHwiEZuZEvwj+hpDbGMe5XEy
+         PvuHVYnH/vbvAZtcoOuMqnKwDZ9zYoVH5MxB4iFhA/qhPYJ3f8nvFi6oxk3ObM9xiDVG
+         jQHWJ/V4Y2r0HDKEifBR/PV3qOH93glt71zGzYht/1Mg0ntjZ5DE6grbzbnobU8y+9yM
+         YJNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=uthJSqpDGuue4aeWUw9ODMGHbGatL8hg/W+VDtshmKs=;
+        fh=/XQMeSZZ/z07CrViC9OemH/K/1A2L5hZ8VSN2kp3hLA=;
+        b=dxzgS3O/CvIi/sfGIs47Qn7bx4e9JLGlpSdNFzZKatOXZBCKOlWUE0aYaHYbGAdjiK
+         Nv41juPQuFZB4dgNXKZMb3exwIYfPVk3oYOGneHHHGOHRXJD/RfND5mQszS2iHhV14Er
+         nq931D5OHnSQRKgaUnTuU8jp1KL2A4HurLwM7ieWXh3MC7NXPe8yIJf352ubkBNTUpU6
+         RqUCpskuNg3y7NMfwFktyu5jbS7QI87dcc+SiZ7Xdr/KYf2Nrnzs63PkrX77EMxgC3V5
+         A6Vbh5FI9tGCz/Gmx0a+QBhp9Wo2Wn7mdUfyORGYymod1kDdxLKbrdcpNSwBMDSvC/K2
+         N/JA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773037639; x=1773642439; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uthJSqpDGuue4aeWUw9ODMGHbGatL8hg/W+VDtshmKs=;
+        b=LYNxQHSMtDxRc6GfEZoWbEZiPSEfe8yqpaDxhQoVfGcp9Nqa+/AXwIcVLk0x5DdZxq
+         kNoknNBPzS5uEt+8EcxqsfDsKCUcvwz1Z9Ax3fmcORuC8uExkbH8NTRsNVGlhMQ8I/SO
+         rGVgRjfAk2iAAdqwrfgVECrExcUCH+eM+V9IELal2nrYpkngtGqyCCKy9mwiZBz+f1kX
+         XuuaSmXDLBPGqjaVLH9VJnPAzpd7/iJ1ULwTVxYEImii10JoVg3bQP9OJ/aO9YJxsDU/
+         sXDhPbWFMyDIbf7wc2O0+rtqM7uuyRJ7iRo/KdWNqRJkwR8UYBaJSQNlkhfEBsohb3Ci
+         sjSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773037639; x=1773642439;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uthJSqpDGuue4aeWUw9ODMGHbGatL8hg/W+VDtshmKs=;
+        b=tS5glL5up7HX94LWaHpDlF6h4ymK4GpQ0IOEfw4igar8vNvgGWg+NEW38CGCLPPAZs
+         7r/5QKL6lqNWKzcrSAOlJuYi2csy7Xy1gJXS+bZv/F5hDNTzxOWxQXSRgTDxpQS7nt8t
+         tOS8YrrKgKtlhGtGWz5Onsih3qs/0tJXehWyxd+lk0103+qMSs56CiBsrw0vGBVJbaqa
+         u/hWb2OvRex84PR9w6Qk0lLPSIN9r8erOK3dpkTZ8LMt6x8mm1/k4y21wC7ZicVNSRsU
+         SfRiB4pwafMIZM6JSMzIUxPxzi2Ypnnb4idpg49ycp9u/wbF48MKoNfcRlhOWbCKW3JD
+         Sr4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU8GhgmV/YwYTXUqB8EE5XQ34XWPDzQ24CRWHU3Xi+me+JyLsDK5JOCGvFdv/VPXfyd4ULiU14=@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywr2ZFrq+xAXSY+S51s++fMBAzd6zAFfEnWrCQfiw3xLciWGLED
+	8CtP6KMxjxVDuQT7olmDLPLMPetbux9eQbLF+KDh4wFoMhqgLbhFiBkvH3WxGob3N0BYRITkPp1
+	4K6DbSGr1qUnFdfMNK9OfW1B5UtE/eQKAqLly2aNG
+X-Gm-Gg: ATEYQzxpUFhwPwmw1daLTP/3Oc4appLSdPV7+bzlPAn7dlZwavSNQawaHs4QMvGF+0L
+	R9AaZ/RZLUwFwaEcLKQ15/Lp1GQlr1njLkehJmZNAmnS6YK/l8K047bTsB0A5XZiupgszDY7je+
+	ya9rmri1V+indYUwAJsQ5Mp0rfomew1rlTArHyLJQ6I7W0vA3mpasF5gSSs+G5bZLDB4u94+864
+	gNl7US/2UYVEjOLgxDVBlypiUYqo9XGSqJFPeujYZdP+vqjoPjzg4rAfN6Y61XqfZJE2TyFUUW5
+	YPa6rInGH0xzapfh0MOEYpPdWPQYOky88fCy/2SIJ2BpKxoRI9wKgp3GRq8fWt9djudqew==
+X-Received: by 2002:a05:6102:c01:b0:5db:f920:fa9a with SMTP id
+ ada2fe7eead31-5ffe63cdb3fmr2925679137.41.1773037638925; Sun, 08 Mar 2026
+ 23:27:18 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 8 Mar 2026 23:27:18 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 8 Mar 2026 23:27:18 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aaWlxFh-bqUYXgUo@groves.net>
+References: <0100019bd33b1f66-b835e86a-e8ae-443f-a474-02db88f7e6db-000000@email.amazonses.com>
+ <20260118223110.92320-1-john@jagalactic.com> <0100019bd33bf5cc-3ab17b9e-cd67-4f0b-885e-55658a1207f0-000000@email.amazonses.com>
+ <CAEvNRgHmfpx0BXPzt81DenKbyvQ1QwM5rZeJWMnKUO8fB8MeqA@mail.gmail.com> <aaWlxFh-bqUYXgUo@groves.net>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nvdimm/bus: Fix potential use after free in asynchronous
- initialization
-To: Ira Weiny <ira.weiny@intel.com>, nvdimm@lists.linux.dev,
- Dan Williams <dan.j.williams@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>
-Cc: stable@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dingisoul <dingiso.kernel@gmail.com>
-References: <20260306-fix-uaf-async-init-v1-1-a28fd7526723@intel.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260306-fix-uaf-async-init-v1-1-a28fd7526723@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9793522881B
+Date: Sun, 8 Mar 2026 23:27:18 -0700
+X-Gm-Features: AaiRm52XcCdEx1v_REqqEWCzJAbxKWYQSWfQ7emIhDTUFVwrkCx8Utez8oZPcxo
+Message-ID: <CAEvNRgEzb6Ux+iVFT=F6jc_R8V=LTYCigHp+yaHFkdrX82-yvQ@mail.gmail.com>
+Subject: Re: [PATCH V7 02/19] dax: Factor out dax_folio_reset_order() helper
+To: John Groves <John@groves.net>
+Cc: John Groves <john@jagalactic.com>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Dan Williams <dan.j.williams@intel.com>, Bernd Schubert <bschubert@ddn.com>, 
+	Alison Schofield <alison.schofield@intel.com>, John Groves <jgroves@micron.com>, 
+	John Groves <jgroves@fastmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, David Hildenbrand <david@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, "Darrick J . Wong" <djwong@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Jeff Layton <jlayton@kernel.org>, 
+	Amir Goldstein <amir73il@gmail.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	Stefan Hajnoczi <shajnocz@redhat.com>, Joanne Koong <joannelkoong@gmail.com>, 
+	Josef Bacik <josef@toxicpanda.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	James Morse <james.morse@arm.com>, Fuad Tabba <tabba@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Shivank Garg <shivankg@amd.com>, Gregory Price <gourry@gourry.net>, 
+	Aravind Ramesh <arramesh@micron.com>, Ajay Joshi <ajayjoshi@micron.com>, 
+	"venkataravis@micron.com" <venkataravis@micron.com>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>, 
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 0E79B2342E2
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[jagalactic.com,szeredi.hu,intel.com,ddn.com,micron.com,fastmail.com,lwn.net,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-13562-lists,linux-nvdimm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13559-lists,linux-nvdimm=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[google.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.984];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ackerleytng@google.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	NEURAL_HAM(-0.00)[-0.979];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
+John Groves <John@groves.net> writes:
 
+>
+> [...snip...]
+>
+>>
+>> I'm implementing something similar for guest_memfd and was going to
+>> reuse __split_folio_to_order(). Would you consider using the
+>> __split_folio_to_order() function?
+>>
+>> I see that dax_folio_reset_order() needs to set f->share to 0 though,
+>> which is a union with index, and __split_folio_to_order() sets non-0
+>> indices.
+>>
+>> Also, __split_folio_to_order() doesn't handle f->pgmap (or f->lru).
+>>
+>> Could these two steps be added to a separate loop after
+>> __split_folio_to_order()?
+>>
+>> Does dax_folio_reset_order() need to handle any of the folio flags that
+>> __split_folio_to_order() handles?
+>
+> Sorry to reply slowly; this took some thought.
+>
 
-On 3/6/26 11:33 AM, Ira Weiny wrote:
-> Dingisoul with KASAN reports a use after free if device_add() fails in
-> nd_async_device_register().
-> 
-> Commit b6eae0f61db2 ("libnvdimm: Hold reference on parent while
-> scheduling async init") correctly added a reference on the parent device
-> to be held until asynchronous initialization was complete.  However, if
-> device_add() results in an allocation failure the ref count of the
-> device drops to 0 prior to the parent pointer being accessed.  Thus
-> resulting in use after free.
-> 
-> The bug bot AI correctly identified the fix.  Save a reference to the
-> parent pointer to be used to drop the parent reference regardless of the
-> outcome of device_add().
-> 
-> Reported-by: Dingisoul <dingiso.kernel@gmail.com>
-> Closes: http://lore.kernel.org/8855544b-be9e-4153-aa55-0bc328b13733@gmail.com
-> Fixes: b6eae0f61db2 ("libnvdimm: Hold reference on parent while scheduling async init")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+No worries, thanks for your consideration!
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> I'm nervous about sharing folio initialization code between the page cache
+> and dax. Might this be something we could unify after the fact - if it
+> passes muster?
+>
+> Unifying paths like this could be regression-prone (page cache changes
+> breaking dax or vice versa) unless it's really well conceived...
+>
 
-> ---
->  drivers/nvdimm/bus.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
-> index bd9621d3f73c..45b7d756e39a 100644
-> --- a/drivers/nvdimm/bus.c
-> +++ b/drivers/nvdimm/bus.c
-> @@ -486,14 +486,15 @@ EXPORT_SYMBOL_GPL(nd_synchronize);
->  static void nd_async_device_register(void *d, async_cookie_t cookie)
->  {
->  	struct device *dev = d;
-> +	struct device *parent = dev->parent;
->  
->  	if (device_add(dev) != 0) {
->  		dev_err(dev, "%s: failed\n", __func__);
->  		put_device(dev);
->  	}
->  	put_device(dev);
-> -	if (dev->parent)
-> -		put_device(dev->parent);
-> +	if (parent)
-> +		put_device(parent);
->  }
->  
->  static void nd_async_device_unregister(void *d, async_cookie_t cookie)
-> 
-> ---
-> base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
-> change-id: 20260306-fix-uaf-async-init-3697998d8faf
-> 
-> Best regards,
-> --  
-> Ira Weiny <ira.weiny@intel.com>
-> 
+guest_memfd's (future) usage of __split_folio_to_order() is probably
+closer in spirit to the original usage of __split_folio_to_order() that
+dax's, feel free go ahead :)
 
+For guest_memfd, I do want to use __split_folio_to_order() since I do
+want to make sure that any updates to page flags are taken into account
+for guest_memfd as well.
+
+>>
+>> >  static inline unsigned long dax_folio_put(struct folio *folio)
+>> >  {
+>> >  	unsigned long ref;
+>> > @@ -391,28 +430,13 @@ static inline unsigned long dax_folio_put(struct folio *folio)
+>> >  	if (ref)
+>> >  		return ref;
+>> >
+>> > -	folio->mapping = NULL;
+>> > -	order = folio_order(folio);
+>> > -	if (!order)
+>> > -		return 0;
+>> > -	folio_reset_order(folio);
+>> > +	order = dax_folio_reset_order(folio);
+>> >
+>> > +	/* Debug check: verify refcounts are zero for all sub-folios */
+>> >  	for (i = 0; i < (1UL << order); i++) {
+>> > -		struct dev_pagemap *pgmap = page_pgmap(&folio->page);
+>> >  		struct page *page = folio_page(folio, i);
+>> > -		struct folio *new_folio = (struct folio *)page;
+>> >
+>> > -		ClearPageHead(page);
+>> > -		clear_compound_head(page);
+>> > -
+>> > -		new_folio->mapping = NULL;
+>> > -		/*
+>> > -		 * Reset pgmap which was over-written by
+>> > -		 * prep_compound_page().
+>> > -		 */
+>>
+>> Actually, where's the call to prep_compound_page()? Was that in
+>> dax_folio_init()? Is this comment still valid and does pgmap have to be
+>> reset?
+>
+> Yep, in dax_folio_init()...
+>
+
+On another look, prep_compound_tail() in prep_compound_page() is the
+one that overwrites folio->pgmap, by writing to page->compound_head,
+which aliases with pgmap.
+
+No issues here. I was just comparing the before/after of this
+refactoring and saw that the comment was dropped, which led me to look
+more at this part.
+
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
+
+>
+> Thanks,
+> John
+>
+> [snip]
 
