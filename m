@@ -1,42 +1,42 @@
-Return-Path: <nvdimm+bounces-13619-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13620-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8A3/FgNSu2lMigIAu9opvQ
-	(envelope-from <nvdimm+bounces-13619-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 02:31:47 +0100
+	id UHY4HzhTu2lMigIAu9opvQ
+	(envelope-from <nvdimm+bounces-13620-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 02:36:56 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7EA2C4767
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 02:31:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E52682C4896
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 02:36:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 574BF303791D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 01:30:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E66F23169595
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 01:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A97B2DAFBD;
-	Thu, 19 Mar 2026 01:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E872E3AF1;
+	Thu, 19 Mar 2026 01:30:59 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1142DFA2F
-	for <nvdimm@lists.linux.dev>; Thu, 19 Mar 2026 01:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47F62E6CB8
+	for <nvdimm@lists.linux.dev>; Thu, 19 Mar 2026 01:30:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773883842; cv=none; b=l0qO0uPrNfb6/8WLSdKRdCdwbrKbo2jHGokgE8u4KmAVfODEdUshp685EMl8/7AF0QISzmVKRYvMiFldFBrBF740u50gGWI1KAlYQkNb4UV5mL4ukqa/vUr0o8JndEQ+vvLruUrX9r3kFGrR3JNg2twevUuWAyi3zfRK6gDcCck=
+	t=1773883858; cv=none; b=S7bYiPhOuM32pU86tWYHWtwE57w+G12eo5HKKEwn6gYZc/cQZRfmdn+RdserQd2ln0HVuNFdbYHkaxmOZLnqCcxxtZPWGmt8ZgcsCoRIikkYwXcMoW28T/3g8HpCJ6ES/7Ctgz/0r4CYTdzvMQakue2iUvjyhfIJWxCwsX4hL4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773883842; c=relaxed/simple;
-	bh=mu7F6EbKH3FQO2cw+iEfmXw0RIlWeJ7w3ZCalUplYig=;
+	s=arc-20240116; t=1773883858; c=relaxed/simple;
+	bh=sfA+3bZvB69CzyWGHddi43wMVOfaqDDDp4VXMHtxteE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bjimHQlIO93VmhJLvlifcvCJ3PNZYW0wSwnpErceH3LgZ5IDEhbs/Ah2sfcK9U/CXHcZsEtzH5hgeoT0KvLQvhGG6aWn6z+Slqo52U69f+fc2zeqluKisEcHggQmzpD2jxRyU3tTjv0F9qk8xOSOq8mviCHYWvjzmzCzhR4iapI=
+	 MIME-Version; b=rFf4GOdirwrupbOlY4BQo2TeTA7gMVJ+Azzlx6BXgln0jrAehJEaAIyzTnM3E6azFswYHhK+qrneE8lCn7O1Rfwp5ZEM+di4VTnKPAYl+bZG4gVU0lj3DGnWRb0gLqrD2opjKLea5fQFtXLQxeOnIK+qRIRbTVlabeke5vfltBM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=groves.net
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 53E7D1B72E8;
-	Thu, 19 Mar 2026 01:30:34 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf09.hostedemail.com (Postfix) with ESMTPA id EE64E2002A;
-	Thu, 19 Mar 2026 01:30:23 +0000 (UTC)
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id DE9F01C3C9;
+	Thu, 19 Mar 2026 01:30:50 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf17.hostedemail.com (Postfix) with ESMTPA id 4CF5A17;
+	Thu, 19 Mar 2026 01:30:40 +0000 (UTC)
 From: John Groves <john@groves.net>
 To: John Groves <John@Groves.net>,
 	Miklos Szeredi <miklos@szeredi.hu>,
@@ -78,9 +78,9 @@ Cc: John Groves <jgroves@micron.com>,
 	linux-cxl@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	John Groves <john@groves.net>
-Subject: [PATCH V8 7/8] dax: Add fs_dax_get() func to prepare dax for fs-dax usage
-Date: Wed, 18 Mar 2026 20:30:22 -0500
-Message-ID: <20260319013022.4531-1-john@groves.net>
+Subject: [PATCH V8 8/8] dax: export dax_dev_get()
+Date: Wed, 18 Mar 2026 20:30:38 -0500
+Message-ID: <20260319013038.4549-1-john@groves.net>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260318202737.4344.dax@groves.net>
 References: <20260318202737.4344.dax@groves.net>
@@ -91,23 +91,23 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Stat-Signature: gigd84f1a8scdd4pjso1om9e5abp3egz
+X-Stat-Signature: j193qn9epbsx3jmggzmtcj51pzrybqki
 X-Session-Marker: 6A6F686E4067726F7665732E6E6574
-X-Session-ID: U2FsdGVkX18W7ZaX2fgubPZ7Q2KPHmP9OrS/mINysaU=
-X-HE-Tag: 1773883823-871223
-X-HE-Meta: U2FsdGVkX19W1sakYRyevFB0WDJ857L+jtQD1a7ycQIGNV3ki62iK9SuRsfk/96KSoJ+U8xsPYGumJkQ+y+6LYcun+5u/nM1/AUdQqonakPdkJNYYoPr5nlew62r92JjU4mGXj9ka3hLCAzHu5N1X8HLmTIjMXknTgCuEiMDfHoMllNVjpJfg7SyPcJoEk5crffZTqyjwK63Swyuz0aPuk3wqMVnyNP2OlH83joyGT+O4jczRZ+wfDPfVZU2Cfqm93QLzcCNBTIXlyCZ7tH0t/0ombLUIWeO3QDBVt2fktG2VhmLS9q4urfDSMz7LLDCBRCx6kV6pC0=
+X-Session-ID: U2FsdGVkX191OAqzPXQRJKjpTo6o4MsYujJdCFxnfJQ=
+X-HE-Tag: 1773883840-433547
+X-HE-Meta: U2FsdGVkX1+5CnNg1C5ZPYEOZ3Q1aVuXASLCeSLcwrIAfnA8vN/LETLXkZgQ1nTKYAOhT1/3y2pwjY2qLC6UfLMeH30OiVHKZ2BDqs9Hi/h6cw3fm126Rv+3td5TDEYGlqOqTARr/bGHqdaa4fyr3VhusGctg+9X05cv8ImdglvUlN+ecwLMvCtF9EOGeSF29SEP9F3m/aLMDOrO7Jtxf4Ujru7EAatRjqHeCeUnKZjGGp8lRHntGMOzr5ISCwdWq77q1jOEMEUIgGNEtlJ5k4Qe30PA8xMqh5HbVLfpFHOe9kQTmYo0wvInw0NeA7lO3Tbi7kq2Eb0ykgBWc0H8Gz3I8IvnyINl
 X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[40];
 	FREEMAIL_CC(0.00)[micron.com,lwn.net,linuxfoundation.org,intel.com,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,uniontech.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev,groves.net];
-	TAGGED_FROM(0.00)[bounces-13619-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13620-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[groves.net];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -117,202 +117,59 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[john@groves.net,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.378];
+	NEURAL_HAM(-0.00)[-0.412];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,groves.net:email,groves.net:mid]
-X-Rspamd-Queue-Id: CE7EA2C4767
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,groves.net:email,groves.net:mid]
+X-Rspamd-Queue-Id: E52682C4896
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The fs_dax_get() function should be called by fs-dax file systems after
-opening a fsdev dax device. This adds holder_operations, which provides
-a memory failure callback path and effects exclusivity between callers
-of fs_dax_get().
+famfs needs to look up a dax_device by dev_t when resolving fmap
+entries that reference character dax devices.
 
-fs_dax_get() is specific to fsdev_dax, so it checks the driver type
-(which required touching bus.[ch]). fs_dax_get() fails if fsdev_dax is
-not bound to the memory.
-
-This function serves the same role as fs_dax_get_by_bdev(), which dax
-file systems call after opening the pmem block device.
-
-This can't be located in fsdev.c because struct dax_device is opaque
-there.
-
-This will be called by fs/fuse/famfs.c in a subsequent commit.
-
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: John Groves <john@groves.net>
 ---
- drivers/dax/bus.c   |  2 --
- drivers/dax/bus.h   |  2 ++
- drivers/dax/super.c | 66 ++++++++++++++++++++++++++++++++++++++++++++-
- include/linux/dax.h | 16 ++++++++---
- 4 files changed, 79 insertions(+), 7 deletions(-)
+ drivers/dax/super.c | 3 ++-
+ include/linux/dax.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-index 562e2b06f61a..8a8710a8234e 100644
---- a/drivers/dax/bus.c
-+++ b/drivers/dax/bus.c
-@@ -39,8 +39,6 @@ static int dax_bus_uevent(const struct device *dev, struct kobj_uevent_env *env)
- 	return add_uevent_var(env, "MODALIAS=" DAX_DEVICE_MODALIAS_FMT, 0);
- }
- 
--#define to_dax_drv(__drv)	container_of_const(__drv, struct dax_device_driver, drv)
--
- static struct dax_id *__dax_match_id(const struct dax_device_driver *dax_drv,
- 		const char *dev_name)
- {
-diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
-index 880bdf7e72d7..dc6f112ac4a4 100644
---- a/drivers/dax/bus.h
-+++ b/drivers/dax/bus.h
-@@ -42,6 +42,8 @@ struct dax_device_driver {
- 	void (*remove)(struct dev_dax *dev);
- };
- 
-+#define to_dax_drv(__drv) container_of_const(__drv, struct dax_device_driver, drv)
-+
- int __dax_driver_register(struct dax_device_driver *dax_drv,
- 		struct module *module, const char *mod_name);
- #define dax_driver_register(driver) \
 diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index ba0b4cd18a77..d4ab60c406bf 100644
+index d4ab60c406bf..25cf99dd9360 100644
 --- a/drivers/dax/super.c
 +++ b/drivers/dax/super.c
-@@ -14,6 +14,7 @@
- #include <linux/fs.h>
- #include <linux/cacheinfo.h>
- #include "dax-private.h"
-+#include "bus.h"
- 
- /**
-  * struct dax_device - anchor object for dax services
-@@ -111,6 +112,10 @@ struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev, u64 *start_off,
+@@ -521,7 +521,7 @@ static int dax_set(struct inode *inode, void *data)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(fs_dax_get_by_bdev);
  
-+#endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
-+
-+#if IS_ENABLED(CONFIG_FS_DAX)
-+
- void fs_put_dax(struct dax_device *dax_dev, void *holder)
+-static struct dax_device *dax_dev_get(dev_t devt)
++struct dax_device *dax_dev_get(dev_t devt)
  {
- 	if (dax_dev && holder &&
-@@ -119,7 +124,66 @@ void fs_put_dax(struct dax_device *dax_dev, void *holder)
- 	put_dax(dax_dev);
- }
- EXPORT_SYMBOL_GPL(fs_put_dax);
--#endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
-+
-+/**
-+ * fs_dax_get() - get ownership of a devdax via holder/holder_ops
-+ *
-+ * fs-dax file systems call this function to prepare to use a devdax device for
-+ * fsdax. This is like fs_dax_get_by_bdev(), but the caller already has struct
-+ * dev_dax (and there is no bdev). The holder makes this exclusive.
-+ *
-+ * @dax_dev: dev to be prepared for fs-dax usage
-+ * @holder: filesystem or mapped device inside the dax_device
-+ * @hops: operations for the inner holder
-+ *
-+ * Returns: 0 on success, <0 on failure
-+ */
-+int fs_dax_get(struct dax_device *dax_dev, void *holder,
-+	const struct dax_holder_operations *hops)
-+{
-+	struct dev_dax *dev_dax;
-+	struct dax_device_driver *dax_drv;
-+	int id;
-+
-+	id = dax_read_lock();
-+	if (!dax_dev || !dax_alive(dax_dev) || !igrab(&dax_dev->inode)) {
-+		dax_read_unlock(id);
-+		return -ENODEV;
-+	}
-+	dax_read_unlock(id);
-+
-+	/* Verify the device is bound to fsdev_dax driver */
-+	dev_dax = dax_get_private(dax_dev);
-+	if (!dev_dax) {
-+		iput(&dax_dev->inode);
-+		return -ENODEV;
-+	}
-+
-+	device_lock(&dev_dax->dev);
-+	if (!dev_dax->dev.driver) {
-+		device_unlock(&dev_dax->dev);
-+		iput(&dax_dev->inode);
-+		return -ENODEV;
-+	}
-+	dax_drv = to_dax_drv(dev_dax->dev.driver);
-+	if (dax_drv->type != DAXDRV_FSDEV_TYPE) {
-+		device_unlock(&dev_dax->dev);
-+		iput(&dax_dev->inode);
-+		return -EOPNOTSUPP;
-+	}
-+	device_unlock(&dev_dax->dev);
-+
-+	if (cmpxchg(&dax_dev->holder_data, NULL, holder)) {
-+		iput(&dax_dev->inode);
-+		return -EBUSY;
-+	}
-+
-+	dax_dev->holder_ops = hops;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(fs_dax_get);
-+#endif /* CONFIG_FS_DAX */
+ 	struct dax_device *dax_dev;
+ 	struct inode *inode;
+@@ -544,6 +544,7 @@ static struct dax_device *dax_dev_get(dev_t devt)
  
- enum dax_device_flags {
- 	/* !alive + rcu grace period == no new operations / mappings */
+ 	return dax_dev;
+ }
++EXPORT_SYMBOL_GPL(dax_dev_get);
+ 
+ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
+ {
 diff --git a/include/linux/dax.h b/include/linux/dax.h
-index 8d469a23c485..f14fa2147175 100644
+index f14fa2147175..2c7aba26a9ad 100644
 --- a/include/linux/dax.h
 +++ b/include/linux/dax.h
-@@ -131,7 +131,6 @@ int dax_add_host(struct dax_device *dax_dev, struct gendisk *disk);
- void dax_remove_host(struct gendisk *disk);
- struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev, u64 *start_off,
- 		void *holder, const struct dax_holder_operations *ops);
--void fs_put_dax(struct dax_device *dax_dev, void *holder);
- #else
- static inline int dax_add_host(struct dax_device *dax_dev, struct gendisk *disk)
- {
-@@ -146,12 +145,12 @@ static inline struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev,
- {
- 	return NULL;
- }
--static inline void fs_put_dax(struct dax_device *dax_dev, void *holder)
--{
--}
- #endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
- 
- #if IS_ENABLED(CONFIG_FS_DAX)
-+void fs_put_dax(struct dax_device *dax_dev, void *holder);
-+int fs_dax_get(struct dax_device *dax_dev, void *holder,
-+	       const struct dax_holder_operations *hops);
- struct dax_device *inode_dax(struct inode *inode);
- int dax_writeback_mapping_range(struct address_space *mapping,
- 		struct dax_device *dax_dev, struct writeback_control *wbc);
-@@ -166,6 +165,15 @@ dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
- void dax_unlock_mapping_entry(struct address_space *mapping,
- 		unsigned long index, dax_entry_t cookie);
- #else
-+static inline void fs_put_dax(struct dax_device *dax_dev, void *holder)
-+{
-+}
-+
-+static inline int fs_dax_get(struct dax_device *dax_dev, void *holder,
-+			     const struct dax_holder_operations *hops)
-+{
-+	return -EOPNOTSUPP;
-+}
- static inline struct page *dax_layout_busy_page(struct address_space *mapping)
- {
- 	return NULL;
+@@ -55,6 +55,7 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops);
+ void *dax_holder(struct dax_device *dax_dev);
+ void put_dax(struct dax_device *dax_dev);
+ void kill_dax(struct dax_device *dax_dev);
++struct dax_device *dax_dev_get(dev_t devt);
+ void dax_write_cache(struct dax_device *dax_dev, bool wc);
+ bool dax_write_cache_enabled(struct dax_device *dax_dev);
+ bool dax_synchronous(struct dax_device *dax_dev);
 -- 
 2.53.0
 
