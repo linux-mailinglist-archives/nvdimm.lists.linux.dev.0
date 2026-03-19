@@ -1,48 +1,48 @@
-Return-Path: <nvdimm+bounces-13638-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13639-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HsvKhgLvGkArgIAu9opvQ
-	(envelope-from <nvdimm+bounces-13638-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 15:41:28 +0100
+	id GAuTMAULvGkArgIAu9opvQ
+	(envelope-from <nvdimm+bounces-13639-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 15:41:09 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85162CD083
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 15:41:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 472CC2CD071
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 15:41:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 77E19301093D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 14:29:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 427A43070EE7
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 19 Mar 2026 14:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60106374168;
-	Thu, 19 Mar 2026 14:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9BC3D3CE3;
+	Thu, 19 Mar 2026 14:35:58 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AAB36CDEF
-	for <nvdimm@lists.linux.dev>; Thu, 19 Mar 2026 14:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27F93CBE72
+	for <nvdimm@lists.linux.dev>; Thu, 19 Mar 2026 14:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773930560; cv=none; b=eADbLgRAZj9TxRhhTVnD864/HKIY+SsVXiDmdjj5IUHIHTptyl1YC2eKxdhmw3WEj0OBgUIKjOx8H+FhHTDiQOwiBf7ISte0nBcD4x0pNGpAmkH/45PJ5IAR6WRb4995X2BHwDjyuQaeyR1wurvOvlrPBu8idqIaeNU/paymVug=
+	t=1773930957; cv=none; b=jfzG8TMfjmDYrT9PAzJ2A6PMpHgkzXCaWw4d+c/DaDiuoPfVCPai6/y2GB82CrKUZT2oS5znWDyjpMSiBgvfcpRkftuFmIv4gIQqffg8oiBLdga2KGJnahzM4q6RG1W7g7jsgX5AxNhV6uWLNbhlrahGgeoK2t3pB+bq3voJFxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773930560; c=relaxed/simple;
-	bh=HsUflFa/KdBTD4m+DVDNlymj5Z233GZp9biJt1RyHT0=;
+	s=arc-20240116; t=1773930957; c=relaxed/simple;
+	bh=kCFcyI/VQpnscCbjgeBI5ADhG7SSHRdxxGKfbAtuAsA=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qNUyDXT4oEfOdDh8llsxirHfseOi35DS/FG7J9+KBRmNBfMDqdqlFZ4uyfqmlLGTOpiEbte5aSQRHVDLrMgRAWegnOm/oJC9yoPeJn0pix+42y9qrIw7m1TKnHrgBmUL2XmxGwoscviUaIBmlFjn8BnzptxNLJ1z6Nz158jz65g=
+	 MIME-Version:Content-Type; b=hoQ7yrC20fg6Cq8tXLs8ltgOl1B7zYG+DxUOosQKI//4i9nBVRMXNzfKIzToenv/rjFtkooP3q/r69Da0RNvGocnty3wF7494h5+nLs2WyLw449rjmCdmb8rzL+hyDCvGo4ShEyg+NJS0oze0rYPVf/gxnbTGhG2ZdqY1c8gqRA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fc7Nd2wpZzHnGgg;
-	Thu, 19 Mar 2026 22:28:49 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fc7Wd15CCzJ46Zg;
+	Thu, 19 Mar 2026 22:34:53 +0800 (CST)
 Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0BBDE4056E;
-	Thu, 19 Mar 2026 22:29:13 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A01A140569;
+	Thu, 19 Mar 2026 22:35:52 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
  (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 19 Mar
- 2026 14:29:11 +0000
-Date: Thu, 19 Mar 2026 14:29:10 +0000
+ 2026 14:35:51 +0000
+Date: Thu, 19 Mar 2026 14:35:49 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -62,12 +62,12 @@ CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
 	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, Borislav
  Petkov <bp@alien8.de>, Tomasz Wolski <tomasz.wolski@fujitsu.com>
-Subject: Re: [PATCH v7 6/7] dax/hmem, cxl: Defer and resolve Soft Reserved
- ownership
-Message-ID: <20260319142910.0000113d@huawei.com>
-In-Reply-To: <20260319011500.241426-7-Smita.KoralahalliChannabasappa@amd.com>
+Subject: Re: [PATCH v7 7/7] dax/hmem: Reintroduce Soft Reserved ranges back
+ into the iomem tree
+Message-ID: <20260319143549.00005394@huawei.com>
+In-Reply-To: <20260319011500.241426-8-Smita.KoralahalliChannabasappa@amd.com>
 References: <20260319011500.241426-1-Smita.KoralahalliChannabasappa@amd.com>
-	<20260319011500.241426-7-Smita.KoralahalliChannabasappa@amd.com>
+	<20260319011500.241426-8-Smita.KoralahalliChannabasappa@amd.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -83,7 +83,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -92,7 +92,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-13638-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13639-lists,linux-nvdimm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -100,258 +100,109 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.706];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-0.554];
 	MID_RHS_MATCH_FROM(0.00)[];
 	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,amd.com:email,huawei.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A85162CD083
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huawei.com:email,huawei.com:mid,amd.com:email,fujitsu.com:email]
+X-Rspamd-Queue-Id: 472CC2CD071
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 19 Mar 2026 01:14:59 +0000
+On Thu, 19 Mar 2026 01:15:00 +0000
 Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
 
-> The current probe time ownership check for Soft Reserved memory based
-> solely on CXL window intersection is insufficient. dax_hmem probing is not
-> always guaranteed to run after CXL enumeration and region assembly, which
-> can lead to incorrect ownership decisions before the CXL stack has
-> finished publishing windows and assembling committed regions.
+> Reworked from a patch by Alison Schofield <alison.schofield@intel.com>
 > 
-> Introduce deferred ownership handling for Soft Reserved ranges that
-> intersect CXL windows. When such a range is encountered during the
-> initial dax_hmem probe, schedule deferred work to wait for the CXL stack
-> to complete enumeration and region assembly before deciding ownership.
+> Reintroduce Soft Reserved range into the iomem_resource tree for HMEM
+> to consume.
 > 
-> Once the deferred work runs, evaluate each Soft Reserved range
-> individually: if a CXL region fully contains the range, skip it and let
-> dax_cxl bind. Otherwise, register it with dax_hmem. This per-range
-> ownership model avoids the need for CXL region teardown and
-> alloc_dax_region() resource exclusion prevents double claiming.
+> This restores visibility in /proc/iomem for ranges actively in use, while
+> avoiding the early-boot conflicts that occurred when Soft Reserved was
+> published into iomem before CXL window and region discovery.
 > 
-> Introduce a boolean flag dax_hmem_initial_probe to live inside device.c
-> so it survives module reload. Ensure dax_cxl defers driver registration
-> until dax_hmem has completed ownership resolution. dax_cxl calls
-> dax_hmem_flush_work() before cxl_driver_register(), which both waits for
-> the deferred work to complete and creates a module symbol dependency that
-> forces dax_hmem.ko to load before dax_cxl.
-> 
-> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> Link: https://lore.kernel.org/linux-cxl/29312c0765224ae76862d59a17748c8188fb95f1.1692638817.git.alison.schofield@intel.com/
+> Co-developed-by: Alison Schofield <alison.schofield@intel.com>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Co-developed-by: Zhijian Li <lizhijian@fujitsu.com>
+> Signed-off-by: Zhijian Li <lizhijian@fujitsu.com>
 > Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Hi Smita,
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+One minor update needed as kmalloc_obj() has shown up in meantime.
 
-I think this is very likely to be what is causing the bug Alison
-saw in cxl_test.
-
-It looks to be possible to flush work before the work structure has
-been configured.  Even though it's not on a work queue and there is
-nothing to do, there are early sanity checks that fail giving the warning
-Alison reported.
-
-A couple of ways to fix that inline.  I'd be tempted to both initialize
-the function statically and gate against flushing if the whole thing isn't
-set up yet.
+Thanks
 
 Jonathan
-
 > ---
->  drivers/dax/bus.h         |  7 +++++
->  drivers/dax/cxl.c         |  1 +
->  drivers/dax/hmem/device.c |  3 ++
->  drivers/dax/hmem/hmem.c   | 66 +++++++++++++++++++++++++++++++++++++--
->  4 files changed, 75 insertions(+), 2 deletions(-)
+>  drivers/dax/hmem/hmem.c | 32 +++++++++++++++++++++++++++++++-
+>  1 file changed, 31 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
-> index cbbf64443098..ebbfe2d6da14 100644
-> --- a/drivers/dax/bus.h
-> +++ b/drivers/dax/bus.h
-> @@ -49,6 +49,13 @@ void dax_driver_unregister(struct dax_device_driver *dax_drv);
->  void kill_dev_dax(struct dev_dax *dev_dax);
->  bool static_dev_dax(struct dev_dax *dev_dax);
->  
-> +#if IS_ENABLED(CONFIG_DEV_DAX_HMEM)
-> +extern bool dax_hmem_initial_probe;
-> +void dax_hmem_flush_work(void);
-> +#else
-> +static inline void dax_hmem_flush_work(void) { }
-> +#endif
-> +
->  #define MODULE_ALIAS_DAX_DEVICE(type) \
->  	MODULE_ALIAS("dax:t" __stringify(type) "*")
->  #define DAX_DEVICE_MODALIAS_FMT "dax:t%d"
-> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-> index a2136adfa186..3ab39b77843d 100644
-> --- a/drivers/dax/cxl.c
-> +++ b/drivers/dax/cxl.c
-> @@ -44,6 +44,7 @@ static struct cxl_driver cxl_dax_region_driver = {
->  
->  static void cxl_dax_region_driver_register(struct work_struct *work)
->  {
-> +	dax_hmem_flush_work();
->  	cxl_driver_register(&cxl_dax_region_driver);
->  }
->  
-> diff --git a/drivers/dax/hmem/device.c b/drivers/dax/hmem/device.c
-> index 56e3cbd181b5..991a4bf7d969 100644
-> --- a/drivers/dax/hmem/device.c
-> +++ b/drivers/dax/hmem/device.c
-> @@ -8,6 +8,9 @@
->  static bool nohmem;
->  module_param_named(disable, nohmem, bool, 0444);
->  
-> +bool dax_hmem_initial_probe;
-> +EXPORT_SYMBOL_GPL(dax_hmem_initial_probe);
-> +
->  static bool platform_initialized;
->  static DEFINE_MUTEX(hmem_resource_lock);
->  static struct resource hmem_active = {
 > diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-> index 1e3424358490..8c574123bd3b 100644
+> index 8c574123bd3b..15e462589b92 100644
 > --- a/drivers/dax/hmem/hmem.c
 > +++ b/drivers/dax/hmem/hmem.c
-> @@ -3,6 +3,7 @@
->  #include <linux/memregion.h>
->  #include <linux/module.h>
->  #include <linux/dax.h>
-> +#include <cxl/cxl.h>
->  #include "../bus.h"
->  
->  static bool region_idle;
-> @@ -58,6 +59,19 @@ static void release_hmem(void *pdev)
->  	platform_device_unregister(pdev);
+> @@ -72,6 +72,34 @@ void dax_hmem_flush_work(void)
 >  }
+>  EXPORT_SYMBOL_GPL(dax_hmem_flush_work);
 >  
-> +struct dax_defer_work {
-> +	struct platform_device *pdev;
-> +	struct work_struct work;
-> +};
-> +
-> +static struct dax_defer_work dax_hmem_work;
-
-static struct dax_defer_work dax_hmem_work = {
-	.work = __WORK_INITIALIZER(&dax_hmem_work.work,
-				   process_defer_work),
-};
-or something similar.
-
-
-> +
-> +void dax_hmem_flush_work(void)
+> +static void remove_soft_reserved(void *r)
 > +{
-> +	flush_work(&dax_hmem_work.work);
+> +	remove_resource(r);
+> +	kfree(r);
 > +}
-> +EXPORT_SYMBOL_GPL(dax_hmem_flush_work);
+> +
+> +static int add_soft_reserve_into_iomem(struct device *host,
+> +				       const struct resource *res)
+> +{
+> +	int rc;
+> +
+> +	struct resource *soft __free(kfree) =
+> +		kmalloc(sizeof(*res), GFP_KERNEL);
+
+Update to
+
+	struct resource *soft __free(kfree) = kmalloc_obj(*soft);
+
+Got added in 7.0 with lots of call sites updated via scripting.
+
+Not sure why this had sizeof(*res) rather than sizeof(*soft).
+Same type but should have been soft!  If nothing else that would
+probably have broken the scripts looking for where we should
+be using kmalloc_obj().
+
+
+	
+> +	if (!soft)
+> +		return -ENOMEM;
+> +
+> +	*soft = DEFINE_RES_NAMED_DESC(res->start, (res->end - res->start + 1),
+> +				      "Soft Reserved", IORESOURCE_MEM,
+> +				      IORES_DESC_SOFT_RESERVED);
+> +
+> +	rc = insert_resource(&iomem_resource, soft);
+> +	if (rc)
+> +		return rc;
+> +
+> +	return devm_add_action_or_reset(host, remove_soft_reserved,
+> +					no_free_ptr(soft));
+> +}
 > +
 >  static int hmem_register_device(struct device *host, int target_nid,
 >  				const struct resource *res)
 >  {
-> @@ -69,8 +83,11 @@ static int hmem_register_device(struct device *host, int target_nid,
->  	if (IS_ENABLED(CONFIG_DEV_DAX_CXL) &&
->  	    region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
->  			      IORES_DESC_CXL) != REGION_DISJOINT) {
-> -		dev_dbg(host, "deferring range to CXL: %pr\n", res);
-> -		return 0;
-> +		if (!dax_hmem_initial_probe) {
-> +			dev_dbg(host, "deferring range to CXL: %pr\n", res);
-> +			queue_work(system_long_wq, &dax_hmem_work.work);
-> +			return 0;
-> +		}
->  	}
+> @@ -94,7 +122,9 @@ static int hmem_register_device(struct device *host, int target_nid,
+>  	if (rc != REGION_INTERSECTS)
+>  		return 0;
 >  
->  	rc = region_intersects_soft_reserve(res->start, resource_size(res));
-> @@ -123,8 +140,48 @@ static int hmem_register_device(struct device *host, int target_nid,
->  	return rc;
->  }
+> -	/* TODO: Add Soft-Reserved memory back to iomem */
+> +	rc = add_soft_reserve_into_iomem(host, res);
+> +	if (rc)
+> +		return rc;
 >  
-> +static int hmem_register_cxl_device(struct device *host, int target_nid,
-> +				    const struct resource *res)
-> +{
-> +	if (region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
-> +			      IORES_DESC_CXL) == REGION_DISJOINT)
-> +		return 0;
-> +
-> +	if (cxl_region_contains_resource((struct resource *)res)) {
-> +		dev_dbg(host, "CXL claims resource, dropping: %pr\n", res);
-> +		return 0;
-> +	}
-> +
-> +	dev_dbg(host, "CXL did not claim resource, registering: %pr\n", res);
-> +	return hmem_register_device(host, target_nid, res);
-> +}
-> +
-> +static void process_defer_work(struct work_struct *w)
-> +{
-> +	struct dax_defer_work *work = container_of(w, typeof(*work), work);
-> +	struct platform_device *pdev = work->pdev;
-If you do the suggested __INITIALIZE_WORK() then I'd add
-a paranoid
-
-	if (!work->pdev)
-		return;
-We don't actually queue the work before pdev is set, but that might
-be obvious once we spilt up assigning the function and the data
-it uses.
-
-> +
-> +	wait_for_device_probe();
-> +
-> +	guard(device)(&pdev->dev);
-> +	if (!pdev->dev.driver)
-> +		return;
-> +
-> +	dax_hmem_initial_probe = true;
-> +	walk_hmem_resources(&pdev->dev, hmem_register_cxl_device);
-> +}
-> +
->  static int dax_hmem_platform_probe(struct platform_device *pdev)
->  {
-> +	if (work_pending(&dax_hmem_work.work))
-> +		return -EBUSY;
-> +
-> +	if (!dax_hmem_work.pdev) {
-> +		get_device(&pdev->dev);
-> +		dax_hmem_work.pdev = pdev;
-
-Using the pdev rather than dev breaks the pattern of doing a get_device()
-and assigning in one line. This is a bit ugly.
-
-		dax_hmem_work.pdev = to_pci_dev(get_device(&pdev->dev));
-
-but perhaps makes the association tighter than current code.
-
-> +		INIT_WORK(&dax_hmem_work.work, process_defer_work);
-
-See above. I think assigning the work function should be static
-which should resolve the issue Alison was seeing as then it should
-be fine to call flush_work() on the item that isn't on a work queue
-yet but is initialized.
-
-> +	}
-> +
->  	return walk_hmem_resources(&pdev->dev, hmem_register_device);
->  }
->  
-> @@ -162,6 +219,11 @@ static __init int dax_hmem_init(void)
->  
->  static __exit void dax_hmem_exit(void)
->  {
-> +	flush_work(&dax_hmem_work.work);
-
-I think this needs to be under the if (dax_hmem_work.pdev) 
-Not sure there is any guarantee dax_hmem_platform_probe() has run
-before we get here otherwise.  Alternative is to assign
-the work function statically.
-
-
-
-> +
-> +	if (dax_hmem_work.pdev)
-> +		put_device(&dax_hmem_work.pdev->dev);
-> +
->  	platform_driver_unregister(&dax_hmem_driver);
->  	platform_driver_unregister(&dax_hmem_platform_driver);
->  }
+>  	id = memregion_alloc(GFP_KERNEL);
+>  	if (id < 0) {
 
 
