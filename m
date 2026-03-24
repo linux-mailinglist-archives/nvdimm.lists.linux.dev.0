@@ -1,48 +1,48 @@
-Return-Path: <nvdimm+bounces-13720-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13721-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aAEfDvmnwmkyggQAu9opvQ
-	(envelope-from <nvdimm+bounces-13720-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 16:04:25 +0100
+	id sKzCDdGowmmskgQAu9opvQ
+	(envelope-from <nvdimm+bounces-13721-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 16:08:01 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5203E317A58
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 16:04:24 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA1F4317B25
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 16:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3FEA33042390
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 14:54:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 286FF304D3FB
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 24 Mar 2026 15:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C09F40148B;
-	Tue, 24 Mar 2026 14:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D27405AD5;
+	Tue, 24 Mar 2026 15:05:39 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA94401485
-	for <nvdimm@lists.linux.dev>; Tue, 24 Mar 2026 14:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26DE4035DE
+	for <nvdimm@lists.linux.dev>; Tue, 24 Mar 2026 15:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364037; cv=none; b=oTwmWYGATPjXUvVJ7TrWa9D2B+xvVzEtX6v4igATL8FmwkHmC4PhoBRn26W5s6rGg03VRINZPW3x3uISvFSTFhTz76VUd/saY9nu48J9a2HNzsnxLTRjsLbHVCbhIe4hMphf2mqCTe5fTyBDqFEq8G5P9gCMmseUkxPTe3nGYmc=
+	t=1774364738; cv=none; b=hSaoVKLaZfFTRcEJReySGZOLBqxv7Tja71qQI5A3Cx3aoODpn97hJ54rUgUPtf9aV1X+FKhvqukVbYj+Hb5tzapsCxx8Q2kW1N2in9axTFk4YAMR+EME2bcLJPTpyFOs1EX/mVRb/4QtFxlC6rG1oESDdj7+00aRsNfTx0/UmIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364037; c=relaxed/simple;
-	bh=izN5BqXH7ypvzKY+zoIDfa3X5OW6W7M/6WfX2y/Wo+4=;
+	s=arc-20240116; t=1774364738; c=relaxed/simple;
+	bh=m8Hx0ozzwk19ZnIruRTH2dbp9moQA8wQsvvEZaTUXFY=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FIHXsKoBHiMy/azgjyZP30rTZlgpkA11xw2oUxEVGcwoKyuuEm/9/FxBRdwcSOVCfe0tQJD/2F5SgF8os8H6uFwnVYpfM1UJn2su41jRutYf4ow3JY8MDTbpBPgDlhAMQIc8sgjSZQPnp9ta91P45cJh6RSC4eTOO3ZYFjqofYY=
+	 MIME-Version:Content-Type; b=jiNaR7a5CltESsGZyo1w0eDWLgNRVm2aNaSIdf2Ek8kH5PcybWg2be6jUmWW52eq3V/QS9SxwI9W8qLSspCexNhDOP2Xn/fN6+iUHOc0TgMJ2JERJuI74lDmiJJpSk+zHdU7JTFWEHLcEmruVkzOZwdSM/eejc5NEcVqS3k0c7A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.107])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fgChZ6rjszHnGk0;
-	Tue, 24 Mar 2026 22:53:18 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fgCyV34T6zJ46Dy;
+	Tue, 24 Mar 2026 23:05:22 +0800 (CST)
 Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 76B2F4058B;
-	Tue, 24 Mar 2026 22:53:52 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 7263940573;
+	Tue, 24 Mar 2026 23:05:29 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
  (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 24 Mar
- 2026 14:53:50 +0000
-Date: Tue, 24 Mar 2026 14:53:49 +0000
+ 2026 15:05:27 +0000
+Date: Tue, 24 Mar 2026 15:05:26 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: John Groves <john@jagalactic.com>
 CC: John Groves <John@Groves.net>, Miklos Szeredi <miklos@szeredi.hu>, "Dan
@@ -68,13 +68,13 @@ CC: John Groves <John@Groves.net>, Miklos Szeredi <miklos@szeredi.hu>, "Dan
 	<nvdimm@lists.linux.dev>, "linux-cxl@vger.kernel.org"
 	<linux-cxl@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
 	<linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V9 6/8] dax: Add dax_set_ops() for setting
- dax_operations at bind time
-Message-ID: <20260324145349.00002317@huawei.com>
-In-Reply-To: <0100019d1d4814db-1e36cd9c-09c3-4e60-b48f-2b5c3cb9e406-000000@email.amazonses.com>
+Subject: Re: [PATCH V9 7/8] dax: Add fs_dax_get() func to prepare dax for
+ fs-dax usage
+Message-ID: <20260324150526.000047b6@huawei.com>
+In-Reply-To: <0100019d1d484ddc-2487f887-7ecd-49a3-abfe-9dabec28873f-000000@email.amazonses.com>
 References: <0100019d1d463523-617e8165-a084-4d91-aa5e-13778264d5d4-000000@email.amazonses.com>
-	<20260324003906.5083-1-john@jagalactic.com>
-	<0100019d1d4814db-1e36cd9c-09c3-4e60-b48f-2b5c3cb9e406-000000@email.amazonses.com>
+	<20260324003919.5106-1-john@jagalactic.com>
+	<0100019d1d484ddc-2487f887-7ecd-49a3-abfe-9dabec28873f-000000@email.amazonses.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
@@ -89,7 +89,7 @@ X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
 X-Spamd-Result: default: False [0.04 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -97,11 +97,11 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FREEMAIL_CC(0.00)[Groves.net,szeredi.hu,intel.com,ddn.com,micron.com,lwn.net,linuxfoundation.org,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,redhat.com,toxicpanda.com,uniontech.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-13720-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13721-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	PRECEDENCE_BULK(0.00)[];
@@ -112,29 +112,84 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,groves.net:email,huawei.com:email,huawei.com:mid,jagalactic.com:email,intel.com:email]
-X-Rspamd-Queue-Id: 5203E317A58
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,groves.net:email,jagalactic.com:email,huawei.com:email,huawei.com:mid]
+X-Rspamd-Queue-Id: EA1F4317B25
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, 24 Mar 2026 00:39:16 +0000
+On Tue, 24 Mar 2026 00:39:31 +0000
 John Groves <john@jagalactic.com> wrote:
 
-> From: John Groves <John@Groves.net>
+> From: John Groves <john@groves.net>
 > 
-> Add a new dax_set_ops() function that allows drivers to set the
-> dax_operations after the dax_device has been allocated. This is needed
-> for fsdev_dax where the operations need to be set during probe and
-> cleared during unbind.
+> The fs_dax_get() function should be called by fs-dax file systems after
+> opening a fsdev dax device. This adds holder_operations, which provides
+> a memory failure callback path and effects exclusivity between callers
+> of fs_dax_get().
 > 
-> The fsdev driver uses devm_add_action_or_reset() for cleanup consistency,
-> avoiding the complexity of mixing devm-managed resources with manual
-> cleanup in a remove() callback. This ensures cleanup happens automatically
-> in the correct reverse order when the device is unbound.
+> fs_dax_get() is specific to fsdev_dax, so it checks the driver type
+> (which required touching bus.[ch]). fs_dax_get() fails if fsdev_dax is
+> not bound to the memory.
 > 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> This function serves the same role as fs_dax_get_by_bdev(), which dax
+> file systems call after opening the pmem block device.
+> 
+> This can't be located in fsdev.c because struct dax_device is opaque
+> there.
+> 
+> This will be called by fs/fuse/famfs.c in a subsequent commit.
+> 
 > Signed-off-by: John Groves <john@groves.net>
+Hi John,
+
+Looks like a stray header change  - see inline.
+
+With that tidied up.
 Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
+>  #define dax_driver_register(driver) \
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index ba0b4cd18a77..d4ab60c406bf 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+
+> diff --git a/include/linux/dax.h b/include/linux/dax.h
+> index b19bfe0c2fd1..bf37b9a982f3 100644
+> --- a/include/linux/dax.h
+> +++ b/include/linux/dax.h
+
+>  #if IS_ENABLED(CONFIG_FS_DAX)
+> +void fs_put_dax(struct dax_device *dax_dev, void *holder);
+> +int fs_dax_get(struct dax_device *dax_dev, void *holder,
+> +	       const struct dax_holder_operations *hops);
+> +struct dax_device *inode_dax(struct inode *inode);
+
+What's this? Not used in this patch and not stubbed.
+It's in drivers/dax/dax-private.h already and given I assume code builds
+before this patch (and it's not used in patch 8) then presumably it doesn't
+need to be here.
+
+I got suspicious due to the lack of stub rather indicating something differnt
+form the other two.
+
+>  int dax_writeback_mapping_range(struct address_space *mapping,
+>  		struct dax_device *dax_dev, struct writeback_control *wbc);
+>  int dax_folio_reset_order(struct folio *folio);
+> @@ -164,6 +164,15 @@ dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
+>  void dax_unlock_mapping_entry(struct address_space *mapping,
+>  		unsigned long index, dax_entry_t cookie);
+>  #else
+> +static inline void fs_put_dax(struct dax_device *dax_dev, void *holder)
+> +{
+> +}
+> +
+> +static inline int fs_dax_get(struct dax_device *dax_dev, void *holder,
+> +			     const struct dax_holder_operations *hops)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  static inline struct page *dax_layout_busy_page(struct address_space *mapping)
+>  {
+>  	return NULL;
 
 
