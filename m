@@ -1,52 +1,95 @@
-Return-Path: <nvdimm+bounces-13748-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13749-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CHG7G4b7w2k/vQQAu9opvQ
-	(envelope-from <nvdimm+bounces-13748-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 16:13:10 +0100
+	id gH63OkD8w2lXvQQAu9opvQ
+	(envelope-from <nvdimm+bounces-13749-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 16:16:16 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63C193279E1
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 16:13:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A38E327ACB
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 16:16:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E9F833002B7A
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 15:03:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EDD6930B95C4
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 25 Mar 2026 15:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6F73CEBBC;
-	Wed, 25 Mar 2026 14:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82A8244660;
+	Wed, 25 Mar 2026 14:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bvHMKGo7"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="kfjBhpkW";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KxKmaq0G";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eslfnx7h";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="bOKSc2s0"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B2F3BBA05;
-	Wed, 25 Mar 2026 14:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6453E557B
+	for <nvdimm@lists.linux.dev>; Wed, 25 Mar 2026 14:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774450411; cv=none; b=mK07xH2gzQLzz9uUPLiik8MY+V6AwgDbSaLmN4ePkzldlYAXp11H62CPTboekZWEyXJiwFZdjttvAqU3djUIHjeKeVlqE4QvXmvy1+928/CEDjUetAvkrQ2O/hbolW+WXy0Bkh2onjEw5HSdhiZdI0Ouz0zPSvvTfvX0p4iYQ04=
+	t=1774450500; cv=none; b=aAxiV8wwgKxOcGTQS5BJRQIndZE9iMd6juOl52d79fiGNvdQcsC11+bd67qDGqx915y6AVihFmZLfJFDhqfTa2l2lbeh0YNGAkg90hO6Q4ev000F4UoBBAD9jFoPA57J2wH4hAS1+7HwaJ77CQ3luHUzclfuuMYwvppu99aNxpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774450411; c=relaxed/simple;
-	bh=pg9BGRjMnJsXPkM0swwEs/eI5ok+Dj8gFwFH1IOCh5g=;
+	s=arc-20240116; t=1774450500; c=relaxed/simple;
+	bh=MYhZP7KI2acrHYS5z9F6cGMsPpEaHUK5v2b6RSUHD5w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tPvztXY0vqDgUBz1v6Lt/aDsjuZxvDLFsdHjBlc4kRQ06WqHqk32cKt6dfZIo+V9GIipoX9OfzcPF+3kddvJcPWoEF/hpBYQQn+Z1fB4vuBAtYIV8/liiJ4q3Uk97SePLxY9Cd2f8FNjDw6mFpRYA3QHfxPePXMijjDDssIdGp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bvHMKGo7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1631AC4CEF7;
-	Wed, 25 Mar 2026 14:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774450411;
-	bh=pg9BGRjMnJsXPkM0swwEs/eI5ok+Dj8gFwFH1IOCh5g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bvHMKGo7C2FvWUchrPoeFaP+aBjxBO1iDfBDPu1ftOdOR9CZZDLVUFhCz/c7WGA7e
-	 why6Yw24IOjuRI1p2bP95VB6ClN3gKVLzT0jfMnfC6i/nYozQuCobhRSSwOyXF1N3e
-	 byo4/RyWBj3jJuX+8109h+cusNOVoW1YRJJbnkzrjTlLtysvhWEr4e7NJhA0wos2+k
-	 fx1cPkStcPHCC3jsOhMQDS1F6pwJ6xb82zQvvaulOqpwhrnvUJ/5TyvKvTmDP6MVMS
-	 pJz6XV1MltczUwUgLDYNLrOBFtEIandUJarxRBC8UrloEnhtM8rgFwrglv5AFfDkkq
-	 NMz0cLZrxbpPA==
-Date: Wed, 25 Mar 2026 14:53:14 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Pedro Falcato <pfalcato@suse.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AjAn/omvsyco20VDwqckWYb0EXK8PFp8+JsBREdmFI9g6C9Jty52Qb8if/yX4AzIdpnCLxmPgvoR69Rui/tRAK+PNsKzq/rbEJej8cjQTe+JmboaH385GCvmcYXgce8qV+T9y2voWif0tIQiZXMV5sg51mDCO6zr7R3MktiTSrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=kfjBhpkW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KxKmaq0G; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eslfnx7h; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=bOKSc2s0; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E2A964D244;
+	Wed, 25 Mar 2026 14:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1774450495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D/wXjEuEJQTN4k0jag/OQOqiBqUpftxguZi3Bfxxazc=;
+	b=kfjBhpkWS16JY8q2qhzrpMm8Qqcs2ZrtKS4zlJEvRrcKzCGUHSYFoBdcLJsmKv4hjTURyd
+	yd4A/VFS1ynIvUXSdfbN+WxSwj3zLyvx02En3KZUx/jYp4phNK6LAOI8yTXuWVz/Nltv20
+	hyTn2mpZxIoIAv6/6Rvb3UfWqNm23fM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1774450495;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D/wXjEuEJQTN4k0jag/OQOqiBqUpftxguZi3Bfxxazc=;
+	b=KxKmaq0GZ6SbmxU5yVYvT3J98IVPybrqCzJYC2RmzYb9aKP+qaSl9V6BjPBkq9CVdvc8UG
+	MmoaFM8Fl1XcZvBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1774450494; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D/wXjEuEJQTN4k0jag/OQOqiBqUpftxguZi3Bfxxazc=;
+	b=eslfnx7hQIz+CqBMaKTHFfI4A5TaGYs6A9oOjOoC6EAoJqhv9gkRua4SGXrrlzy3kuKdzT
+	bzw+G48vIqIIz5lkBfsEk+Dd6ymbTjzXBQMGW1sbCTIV5CxReOHAtNecLZSpjk1qvgUfR9
+	nmZyWiv2dQf45miza5KfPMuQPZOpR3w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1774450494;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D/wXjEuEJQTN4k0jag/OQOqiBqUpftxguZi3Bfxxazc=;
+	b=bOKSc2s03svO8ZobkiDMrnkLqmSYPCdv3zFSNzJ05OB0u9gYR0s9JtEEpIiTbIKzp6ATVb
+	nBCfqs3dIyX5voCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3F61244462;
+	Wed, 25 Mar 2026 14:54:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id tAkWDDz3w2lQYwAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Wed, 25 Mar 2026 14:54:52 +0000
+Date: Wed, 25 Mar 2026 14:54:50 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Dan Williams <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
@@ -67,11 +110,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
 	linux-erofs@lists.ozlabs.org, linux-mm@kvack.org, ntfs3@lists.linux.dev, 
 	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 1/6] mm: rename VMA flag helpers to be more readable
-Message-ID: <f72132e1-a2a3-4445-80ec-adeb525dcfff@lucifer.local>
+Subject: Re: [PATCH 3/6] mm: always inline __mk_vma_flags() and invoked
+ functions
+Message-ID: <ndtnvnobevdymu5a5tdxdbi4tcsqshs3d6x2vnfgnuclxvgwok@bhbqkzilsets>
 References: <cover.1772704455.git.ljs@kernel.org>
- <0f9cb3c511c478344fac0b3b3b0300bb95be95e9.1772704455.git.ljs@kernel.org>
- <6c6le67q23xsity3tkfq2uazzhwustmqcsqj3talft6qq737hz@dytog6bi4vsa>
+ <241f49c52074d436edbb9c6a6662a8dc142a8f43.1772704455.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -80,81 +123,70 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6c6le67q23xsity3tkfq2uazzhwustmqcsqj3talft6qq737hz@dytog6bi4vsa>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <241f49c52074d436edbb9c6a6662a8dc142a8f43.1772704455.git.ljs@kernel.org>
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13748-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13749-lists,linux-nvdimm=lfdr.de];
 	FREEMAIL_CC(0.00)[linux-foundation.org,arndb.de,linuxfoundation.org,intel.com,kernel.org,gmail.com,linux.alibaba.com,google.com,huawei.com,vivo.com,linux.dev,suse.de,paragon-software.com,arm.com,amd.com,wdc.com,infradead.org,suse.cz,oracle.com,suse.com,ziepe.ca,vger.kernel.org,lists.linux.dev,lists.ozlabs.org,kvack.org];
-	RCPT_COUNT_TWELVE(0.00)[44];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[44];
+	DKIM_TRACE(0.00)[suse.de:+];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pfalcato@suse.de,nvdimm@lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,lucifer.local:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 63C193279E1
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,suse.de:dkim,suse.de:email]
+X-Rspamd-Queue-Id: 0A38E327ACB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 25, 2026 at 02:51:04PM +0000, Pedro Falcato wrote:
-> On Thu, Mar 05, 2026 at 10:50:14AM +0000, Lorenzo Stoakes (Oracle) wrote:
-> > On reflection, it's confusing to have vma_flags_test() and
-> > vma_desc_test_flags() test whether any comma-separated VMA flag bit is set,
-> > while also having vma_flags_test_all() and vma_test_all_flags() separately
-> > test whether all flags are set.
-> >
-> > Firstly, rename vma_flags_test() to vma_flags_test_any() to eliminate this
-> > confusion.
->
-> Hmm. The names are getting longer. We should fix this One Day.
+On Thu, Mar 05, 2026 at 10:50:16AM +0000, Lorenzo Stoakes (Oracle) wrote:
+> Be explicit about __mk_vma_flags() (which is used by the mk_vma_flags()
+> macro) always being inline, as we rely on the compiler converting this
+> function into meaningful.
+		meaningful what?
 
-:) yeha it's a bit of a trade-off still. But for now keeping it (fairly)
-straightforward.
+> 
+> Also update all of the functions __mk_vma_flags() ultimately invokes to be
+> always inline too.
+> 
+> Note that test_bitmap_const_eval() asserts that the relevant bitmap
+> functions result in build time constant values.
+> 
+> Additionally, vma_flag_set() operates on a vma_flags_t type, so it is
+> inconsistently named versus other VMA flags functions.
+> 
+> We only use vma_flag_set() in __mk_vma_flags() so we don't need to worry
+> about its new name being rather cumbersome, so rename it to
+> vma_flags_set_flag() to disambiguate it from vma_flags_set().
+> 
+> Also update the VMA test headers to reflect the changes.
+> 
+> Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 
->
-> >
-> > Secondly, since the VMA descriptor flag functions are becoming rather
-> > cumbersome, prefer vma_desc_test*() to vma_desc_test_flags*(), and also
-> > rename vma_desc_test_flags() to vma_desc_test_any().
->
-> >
-> > Finally, rename vma_test_all_flags() to vma_test_all() to keep the
-> > VMA-specific helper consistent with the VMA descriptor naming convention
-> > and to help avoid confusion vs. vma_flags_test_all().
-> >
-> > While we're here, also update whitespace to be consistent in helper
-> > functions.
->
-> Extremely amazing patch! you were truly inspired!
->
->
-> > Suggested-by: Pedro Falcato <pfalcato@suse.de>
-> > Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
->
-> Reviewed-by: Pedro Falcato <pfalcato@suse.de>
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 
-:) thanks, I don't know who could have suggested such an amazing idea, well I
-won't read the tags to check + spoil the surprise... :>)
+Is there an actual difference in codegen here? On -O2.
 
->
-> --
-> Pedro
-
-Cheers, Lorenzo
+-- 
+Pedro
 
