@@ -1,43 +1,43 @@
-Return-Path: <nvdimm+bounces-13769-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13770-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDPiHyCQxmlLLwUAu9opvQ
-	(envelope-from <nvdimm+bounces-13769-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 15:11:44 +0100
+	id OFLaE5OSxmngMAUAu9opvQ
+	(envelope-from <nvdimm+bounces-13770-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 15:22:11 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06361345D2C
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 15:11:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7413345F92
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 15:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 29EE930E82A4
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 14:07:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3F6E330D1717
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 14:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2501E3F1649;
-	Fri, 27 Mar 2026 14:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F54D3F54CA;
+	Fri, 27 Mar 2026 14:14:54 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836533EB7FC
-	for <nvdimm@lists.linux.dev>; Fri, 27 Mar 2026 14:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFA73F65E8
+	for <nvdimm@lists.linux.dev>; Fri, 27 Mar 2026 14:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774620434; cv=none; b=Oqn7J77BfE1O+SVC/yT+9edUdD2ZkYNMzLariqhbqUD77vH8DK30syWwG08pDe72IDRKFA3qgYbbnQw7nkLxBYHji9FVXewD4OkxXQH8d4JDf1lrpJ+SofHSkrg7qGtYKNbkKus1GYxo4KynpBelO6sW5TN9iJRFY5CeH4WLE0Q=
+	t=1774620894; cv=none; b=NUcwuUf6DyNn+lwUGNfgP5bSLtbrakBox+9DCuISXQu/jt4/SkI9/ssk2jeU2nd0qsqCty2cyE7Z+DQrEqh8Gvz40xyWDEIOdTze2xOpq2ViRWEtoxQTzGv0dUL/dUSFsPJd5+nYy5EliYWJVOuPr9Leu5W1OvatCy9gkEU9uzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774620434; c=relaxed/simple;
-	bh=AggJWbzXgAJW8nJRhQGxWDobjA7ATMqWYFMZpxSl+TA=;
+	s=arc-20240116; t=1774620894; c=relaxed/simple;
+	bh=INKVJIFSQ2mJLOypFSOZweFPtWyfByrCi/uSSs2jZrU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oSCsFpO8O35JJZclvu2h9vxxpcWWhlNsNVmdfgvbQ1a4Exdqhqb+nSdgH4LZh1otbOCfDBZi2T0fYPtyBNpmEIBaLVPimh2of/Mqc0WX0UfJHsBrFc2zTwjpJGwMGiNupYOe2Ft3jq+gEbokABD04gKxJPx5Yp3z3s9YQnxkx8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=K9bM2Q/TAJz/z0x8tadTBDCMdtebKx8WQxBzs1FQfUYXiCQ92ujXC8h6CMZQ92ZJQoDtM0aPDtgA2cy+L7uJzWyozJQYjdwVB2zVIebfjVaJSyccSpncwOcOKNXQ9Q8Zbm8cMNVlriZADIMPE/KOUyPu2L+a9UMcHK7XgDsG4ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=groves.net
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 1FF49E0F30;
-	Fri, 27 Mar 2026 14:07:08 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf06.hostedemail.com (Postfix) with ESMTPA id D41B82000F;
-	Fri, 27 Mar 2026 14:06:55 +0000 (UTC)
-Date: Fri, 27 Mar 2026 09:06:53 -0500
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 9FA765E9F3;
+	Fri, 27 Mar 2026 14:14:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf13.hostedemail.com (Postfix) with ESMTPA id 3816C20021;
+	Fri, 27 Mar 2026 14:14:28 +0000 (UTC)
+Date: Fri, 27 Mar 2026 09:14:26 -0500
 From: John Groves <John@groves.net>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: John Groves <john@jagalactic.com>, Miklos Szeredi <miklos@szeredi.hu>, 
@@ -60,11 +60,11 @@ Cc: John Groves <john@jagalactic.com>, Miklos Szeredi <miklos@szeredi.hu>,
 	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
 Subject: Re: [PATCH V9 5/8] dax: Add dax_operations for use by fs-dax on
  fsdev dax
-Message-ID: <acaOzmCYOZHr_Ia1@groves.net>
+Message-ID: <acaQiBN2vlVwZ5EK@groves.net>
 References: <0100019d1d463523-617e8165-a084-4d91-aa5e-13778264d5d4-000000@email.amazonses.com>
  <20260324003851.5045-1-john@jagalactic.com>
  <0100019d1d47e459-48f2a4e6-edab-4002-bde3-2ba642deccaf-000000@email.amazonses.com>
- <593b2b5c-779b-4e29-8b03-12ce743b10b4@intel.com>
+ <d4461e56-8a4d-4d2c-8de9-23a265dc617f@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -73,29 +73,29 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <593b2b5c-779b-4e29-8b03-12ce743b10b4@intel.com>
-X-Stat-Signature: 7dqy4jynbesstz9697ot4cz4cexh86pu
+In-Reply-To: <d4461e56-8a4d-4d2c-8de9-23a265dc617f@intel.com>
+X-Stat-Signature: a3gmc9z1zgxc6hf8kzmhk83yunuieo3t
 X-Session-Marker: 6A6F686E4067726F7665732E6E6574
-X-Session-ID: U2FsdGVkX19u88rI/RZbOnBIHfsRi86A2mDPG8VKxsA=
-X-HE-Tag: 1774620415-652695
-X-HE-Meta: U2FsdGVkX1+FrBjZnrpIbH0kvez85SGTcc2xxECCcDS+nAaDETophnfrphfd5mO9QQhYEdXOx92QLbEWRoJ9nDerbKGHUDtoN6YOsp7jWLzV7JSuDVRjE9A0MCbpn2Khfo5hWKqQiiTbEVX6AdSqGR2bRTk7OUuaByYUZz87MIOrwNJOhx0cn4b79EikkIiwmb+rJrYWJzPe5qRFV23oiY2dfKw1Anv3CmCHgBuMsQ/u4t5n5dwjt5d6SGNbPQTtnGHdoaSqLW6mO4xqMEAMhO3CFDaqGw3eQWKEQUX4xUcyefn0zqY+lXxLNiuUeL1+MpKiV07znBajEkTfCZ37KHMxl5M/SKjM4wW8yo1/nxVslThUrFIeDiyokY3c/6GG
+X-Session-ID: U2FsdGVkX19D8SBDWcEBvpv9lVq+qSMSLSs9sPxCwdI=
+X-HE-Tag: 1774620868-202939
+X-HE-Meta: U2FsdGVkX19wBee9icGSPWMdcxMlM6lU3SHQCwJTze+pNrOeNshQ1FEASeTwWC1axg6fNWqOtbYVjY+KeasJtos5ku0EYP1vooqjp/Zzm/XNcN2bIFtSnad98mRfgbILCWhLxD6wS07JykPVMKDeKs2UTVQ9AJtcN78kRDHVGbrcd0Kpq3wnjn8QSAUrUK7k1IL3rzDqJWWUATmhGtQuq0N2VjlGdwtZCFxdsJBzABXCVzbJvarLI4QGZ1LahzV6uHIpqqni6/cHQfhV3ZNH87sGUxaPKI374th7CQkiFqdfeYoiYVMPO0/JCLVa9uRQbgdFLNx8V4B6PUGHOfiUpqKHQeVh8Q7NV/hg82h7jR+cwu6OiNpGMx/9BHW93d1E
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[jagalactic.com,szeredi.hu,intel.com,ddn.com,micron.com,lwn.net,linuxfoundation.org,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,uniontech.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13769-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13770-lists,linux-nvdimm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[groves.net];
 	RCPT_COUNT_TWELVE(0.00)[39];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	PRECEDENCE_BULK(0.00)[];
@@ -106,12 +106,12 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,groves.net:email,groves.net:mid]
-X-Rspamd-Queue-Id: 06361345D2C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[groves.net:email,groves.net:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E7413345F92
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26/03/25 02:28PM, Dave Jiang wrote:
+On 26/03/25 03:40PM, Dave Jiang wrote:
 > 
 > 
 > On 3/23/26 5:39 PM, John Groves wrote:
@@ -138,6 +138,12 @@ On 26/03/25 02:28PM, Dave Jiang wrote:
 > >   acquiring dax_dev_rwsem (which isn't exported anyway).
 > > 
 > > Signed-off-by: John Groves <john@groves.net>
+> 
+> Couple nits below while I'm stealing code from you.
+
+:D
+
+> 
 > > ---
 > >  drivers/dax/dax-private.h |  1 +
 > >  drivers/dax/fsdev.c       | 84 +++++++++++++++++++++++++++++++++++++++
@@ -152,12 +158,57 @@ On 26/03/25 02:28PM, Dave Jiang wrote:
 > >  	struct dax_device *dax_dev;
 > >  	void *virt_addr;
 > > +	u64 cached_size;
+> >  	unsigned int align;
+> >  	int target_node;
+> >  	bool dyn_id;
+> > diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
+> > index c75478d3d548..be3d2b0e8418 100644
+> > --- a/drivers/dax/fsdev.c
+> > +++ b/drivers/dax/fsdev.c
+> > @@ -28,6 +28,85 @@
+> >   * - No mmap support - all access is through fs-dax/iomap
+> >   */
+> >  
+> > +static void fsdev_write_dax(void *pmem_addr, struct page *page,
 > 
-> Just caught this. Need a kdoc entry.
+> addr instead of pmem_addr? copy pasta error?
+
+Yep, fixed thanks
+
+> 
+> > +		unsigned int off, unsigned int len)
+> > +{
+> > +	while (len) {
+> > +		void *mem = kmap_local_page(page);
+> > +		unsigned int chunk = min_t(unsigned int, len, PAGE_SIZE - off);
+> > +
+> > +		memcpy_flushcache(pmem_addr, mem + off, chunk);
+> > +		kunmap_local(mem);
+> > +		len -= chunk;
+> > +		off = 0;
+> > +		page++;
+> > +		pmem_addr += chunk;
+> > +	}
+> > +}
+> > +
+> > +static long __fsdev_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
+> > +			long nr_pages, enum dax_access_mode mode, void **kaddr,
+> > +			unsigned long *pfn)
+> > +{
+> > +	struct dev_dax *dev_dax = dax_get_private(dax_dev);
+> > +	size_t size = nr_pages << PAGE_SHIFT;
+> > +	size_t offset = pgoff << PAGE_SHIFT;
+> > +	void *virt_addr = dev_dax->virt_addr + offset;
+> > +	phys_addr_t phys;
+> > +	unsigned long local_pfn;
+> > +
+> > +	phys = dax_pgoff_to_phys(dev_dax, pgoff, nr_pages << PAGE_SHIFT);
+> 
+> you can use 'size' instead here since it's previously computed already.
 > 
 > DJ
 
-Thank you! Added for v10
+Indeed - thanks!
 
 John
 
