@@ -1,56 +1,55 @@
-Return-Path: <nvdimm+bounces-13782-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13783-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gHP6AgHyxmmpQQUAu9opvQ
-	(envelope-from <nvdimm+bounces-13782-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 22:09:21 +0100
+	id AA1UA7nyxmmpQQUAu9opvQ
+	(envelope-from <nvdimm+bounces-13783-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 22:12:25 +0100
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BA4C34B852
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 22:09:20 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE97434B910
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 22:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A4DB5303C4EC
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 21:05:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A25AA301C6EE
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 27 Mar 2026 21:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2849F395D9D;
-	Fri, 27 Mar 2026 21:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BD439B975;
+	Fri, 27 Mar 2026 21:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b="mmWnEB73";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="EV8vX4Sh"
+	dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b="ch2iohT3";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="F7O5nY6m"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from a8-208.smtp-out.amazonses.com (a8-208.smtp-out.amazonses.com [54.240.8.208])
+Received: from a48-184.smtp-out.amazonses.com (a48-184.smtp-out.amazonses.com [54.240.48.184])
 	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FCB393DFD
-	for <nvdimm@lists.linux.dev>; Fri, 27 Mar 2026 21:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A693314D2
+	for <nvdimm@lists.linux.dev>; Fri, 27 Mar 2026 21:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.48.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774645514; cv=none; b=rjSLyZ9OfUpHoEl5ZdGznI64rDKy6gZSrj3RBjAlq+S7TX3/SRlOYzIYn/+uzIPjT5tunEeHFtfQmwi1W1yy00+BASjN4zTgpW1/dmfqq6GyHUp4pCy6y8WMiWBSunpuVgqVJdJNH1v97Xvc99XMt+GrfV5by8v8DSl3tMgYqlY=
+	t=1774645523; cv=none; b=DkhFp9nDdtRA7nRhhA7a3Dz7ZcUiU1/v6LpFrl31rMWDPUO1k4BArLQJ672DTCjj/c5oo7jyz+cwNBFIEFATzw+mr39mhbBHa7mlxo1DeCM0IcGHy+4+zNb5GRAJzBLhlq8YlnyFwY1BKr7yIaxhSlf7KTZ0C2i8LZms30/uWZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774645514; c=relaxed/simple;
-	bh=kSF6X6wcgHhF0iClvWpMC/+1EDQ/d7jxIoBNhWlJfAM=;
+	s=arc-20240116; t=1774645523; c=relaxed/simple;
+	bh=lay3HXuMzLZo2JlHKY5v5zjUVUlqQrpAhrP7puC7AmI=;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:In-Reply-To:
-	 References:Message-ID; b=WK7ydjwITWSuxsDt8P3Fkjdlw5mHeIvaN2LuODNPwUx9evX2FrqZcLvPMbO33lj4ey1sdrNrHqrIwfAGMNeijqVej2djitF965IOyrEqt+N0tU/sAAAEZX/MNV4usYr7j8kkKM2stVcldhBwpZiVvT5JiGi0aFHuDbmJ0LIPY0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=mmWnEB73; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=EV8vX4Sh; arc=none smtp.client-ip=54.240.8.208
+	 References:Message-ID; b=nYiYWud+ZfivwvF+wuyubF1tftUVz/rJQ53NK74nFSeEvznoj359xHx7vuI3PbjLosMIeXPWtzc+0jJQVfsOeqFA8zvWpDbhEU0y/r4Kzm6AT/q7fGaXiGx545qq+Qn22e/vNYPgI0peVYCxBPGnP3c3AovUdslHvrOIjkpxjL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=ch2iohT3; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=F7O5nY6m; arc=none smtp.client-ip=54.240.48.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1774645512;
+	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1774645521;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id;
-	bh=kSF6X6wcgHhF0iClvWpMC/+1EDQ/d7jxIoBNhWlJfAM=;
-	b=mmWnEB73lGE/9aVBLoNesOs3EQ+FwCe6rsO1J0bPmHaRKCRjm8dXDIQJO4vJTo7l
-	FTqjR4kya8A80JYaQZdfkBf9GVADm8qRiNxVhEVxVRCWDwaa+GBb+XrgPgja6DbRVP4
-	qD3l0Wqvm6V6qWgYP/BM/Sj6sD8M5D/UWdeHIyhc=
+	bh=lay3HXuMzLZo2JlHKY5v5zjUVUlqQrpAhrP7puC7AmI=;
+	b=ch2iohT3vXIRoffws8ylD6KyCju03nv7b0M8vHjmquOmsW7lGzIlCYQh6NbsnOd1
+	VfYF5UslOcj9SbJiWKR3OWxh8KzlQudaAx7jk/qEjjwk2yF6SiCDhN2kKQAETDrXaxR
+	cdPndvwKmzjvBTzhyZ6xjMXQRZBQKxLAdm3tS2t4=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1774645512;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1774645521;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id:Feedback-ID;
-	bh=kSF6X6wcgHhF0iClvWpMC/+1EDQ/d7jxIoBNhWlJfAM=;
-	b=EV8vX4ShTSN3E21pI04fvBUmo8Cth44Rpp7NGNFd4VwDTUyJiq+tLeISXrQ317X4
-	UxDIOehqJiTAvixESmHiO98hC5SjNuaXrxmFImDefIfIrzQ+9BrfgFVweafWOfovY3t
-	3+Pr6P1TQ5rWC3CPfguvYIEZBxiCVnHYhMVP15fQ=
-Subject: [PATCH V10 7/8] dax: Add fs_dax_get() func to prepare dax for fs-dax
- usage
+	bh=lay3HXuMzLZo2JlHKY5v5zjUVUlqQrpAhrP7puC7AmI=;
+	b=F7O5nY6muMVU3Y/z2diWlJwwihBTcN2l6DCRcEG7/V2VBUCgy//+gS7lr0U23mQR
+	9Eg58HKwH+3L0y78dTbAfOMFibEAn8rDMaoQR8lXr9Gp+I5fsgFadQuZfiXWEL4I/CD
+	YGgLGt13WhGDUerF5L0FkGBINmdiCqmBIxLc8AJI=
+Subject: [PATCH V10 8/8] dax: export dax_dev_get()
 From: =?UTF-8?Q?John_Groves?= <john@jagalactic.com>
 To: =?UTF-8?Q?John_Groves?= <John@Groves.net>, 
 	=?UTF-8?Q?Miklos_Szeredi?= <miklos@szeredi.hu>, 
@@ -93,7 +92,7 @@ Cc: =?UTF-8?Q?John_Groves?= <jgroves@micron.com>,
 	=?UTF-8?Q?linux-fsdevel=40vger=2Ekernel=2Eorg?= <linux-fsdevel@vger.kernel.org>, 
 	=?UTF-8?Q?John_Groves?= <john@groves.net>, 
 	=?UTF-8?Q?Jonathan_Cameron?= <jonathan.cameron@huawei.com>
-Date: Fri, 27 Mar 2026 21:05:12 +0000
+Date: Fri, 27 Mar 2026 21:05:21 +0000
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -106,16 +105,15 @@ In-Reply-To:
  <0100019d311bed04-dbb67b48-c55d-4e6a-962a-a0f8b714f2e7-000000@email.amazonses.com>
 References: 
  <0100019d311bed04-dbb67b48-c55d-4e6a-962a-a0f8b714f2e7-000000@email.amazonses.com> 
- <20260327210505.79239-1-john@jagalactic.com>
+ <20260327210514.79273-1-john@jagalactic.com>
 X-Mailer: Amazon WorkMail
-Thread-Index: AQHcvi1l2bzusgUORrCY97XNODCliQ==
-Thread-Topic: [PATCH V10 7/8] dax: Add fs_dax_get() func to prepare dax for
- fs-dax usage
-X-Wm-Sent-Timestamp: 1774645510
+Thread-Index: AQHcvi1rHXEBwI8URwWrsgm58k0mMQ==
+Thread-Topic: [PATCH V10 8/8] dax: export dax_dev_get()
+X-Wm-Sent-Timestamp: 1774645519
 X-Original-Mailer: git-send-email 2.52.0
-Message-ID: <0100019d311d8750-75395c22-031b-4d5f-aebe-790dca656b87-000000@email.amazonses.com>
+Message-ID: <0100019d311daab5-bb212f0b-4e05-4668-bf53-d76fab56be68-000000@email.amazonses.com>
 Feedback-ID: ::1.us-east-1.LF00NED762KFuBsfzrtoqw+Brn/qlF9OYdxWukAhsl8=:AmazonSES
-X-SES-Outgoing: 2026.03.27-54.240.8.208
+X-SES-Outgoing: 2026.03.27-54.240.48.184
 X-Spamd-Result: default: False [0.75 / 15.00];
 	TO_EXCESS_QP(1.20)[];
 	CC_EXCESS_QP(1.20)[];
@@ -123,12 +121,12 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[jagalactic.com,quarantine];
 	MV_CASE(0.50)[];
 	R_DKIM_ALLOW(-0.20)[jagalactic.com:s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq,amazonses.com:s=224i4yxa5dv7c2xz3womw6peuasteono];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	XM_UA_NO_VERSION(0.01)[];
-	TAGGED_FROM(0.00)[bounces-13782-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13783-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
@@ -136,7 +134,7 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[41];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[micron.com,lwn.net,linuxfoundation.org,intel.com,infradead.org,suse.cz,zeniv.linux.org.uk,kernel.org,gmail.com,huawei.com,redhat.com,toxicpanda.com,uniontech.com,arm.com,google.com,amd.com,gourry.net,vger.kernel.org,lists.linux.dev,groves.net];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[john@jagalactic.com,nvdimm@lists.linux.dev];
@@ -146,111 +144,35 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	FROM_EXCESS_QP(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[jagalactic.com:dkim,amazonses.com:dkim,email.amazonses.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email,huawei.com:email,groves.net:email]
-X-Rspamd-Queue-Id: 0BA4C34B852
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,email.amazonses.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,groves.net:email,jagalactic.com:dkim,amazonses.com:dkim]
+X-Rspamd-Queue-Id: BE97434B910
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: John Groves <john@groves.net>=0D=0A=0D=0AThe fs_dax_get() function =
-should be called by fs-dax file systems after=0D=0Aopening a fsdev dax de=
-vice. This adds holder_operations, which provides=0D=0Aa memory failure c=
-allback path and effects exclusivity between callers=0D=0Aof fs_dax_get()=
-=2E=0D=0A=0D=0Afs_dax_get() is specific to fsdev_dax, so it checks the dr=
-iver type=0D=0A(which required touching bus.[ch]). fs_dax_get() fails if =
-fsdev_dax is=0D=0Anot bound to the memory.=0D=0A=0D=0AThis function serve=
-s the same role as fs_dax_get_by_bdev(), which dax=0D=0Afile systems call=
- after opening the pmem block device.=0D=0A=0D=0AThis can't be located in=
- fsdev.c because struct dax_device is opaque=0D=0Athere.=0D=0A=0D=0AThis =
-will be called by fs/fuse/famfs.c in a subsequent commit.=0D=0A=0D=0ARevi=
-ewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>=0D=0AReviewed-by:=
- Dave Jiang <dave.jiang@intel.com>=0D=0ASigned-off-by: John Groves <john@=
-groves.net>=0D=0A---=0D=0A drivers/dax/bus.c   |  2 --=0D=0A drivers/dax/=
-bus.h   |  2 ++=0D=0A drivers/dax/super.c | 66 ++++++++++++++++++++++++++=
-++++++++++++++++++-=0D=0A include/linux/dax.h | 16 ++++++++---=0D=0A 4 fi=
-les changed, 79 insertions(+), 7 deletions(-)=0D=0A=0D=0Adiff --git a/dri=
-vers/dax/bus.c b/drivers/dax/bus.c=0D=0Aindex 1b412264bb36..32f7b7702c28 =
-100644=0D=0A--- a/drivers/dax/bus.c=0D=0A+++ b/drivers/dax/bus.c=0D=0A@@ =
--39,8 +39,6 @@ static int dax_bus_uevent(const struct device *dev, struct=
- kobj_uevent_env *env)=0D=0A =09return add_uevent_var(env, "MODALIAS=3D" =
-DAX_DEVICE_MODALIAS_FMT, 0);=0D=0A }=0D=0A=20=0D=0A-#define to_dax_drv(__=
-drv)=09container_of_const(__drv, struct dax_device_driver, drv)=0D=0A-=0D=
-=0A static struct dax_id *__dax_match_id(const struct dax_device_driver *=
-dax_drv,=0D=0A =09=09const char *dev_name)=0D=0A {=0D=0Adiff --git a/driv=
-ers/dax/bus.h b/drivers/dax/bus.h=0D=0Aindex 880bdf7e72d7..dc6f112ac4a4 1=
-00644=0D=0A--- a/drivers/dax/bus.h=0D=0A+++ b/drivers/dax/bus.h=0D=0A@@ -=
-42,6 +42,8 @@ struct dax_device_driver {=0D=0A =09void (*remove)(struct d=
-ev_dax *dev);=0D=0A };=0D=0A=20=0D=0A+#define to_dax_drv(__drv) container=
-_of_const(__drv, struct dax_device_driver, drv)=0D=0A+=0D=0A int __dax_dr=
-iver_register(struct dax_device_driver *dax_drv,=0D=0A =09=09struct modul=
-e *module, const char *mod_name);=0D=0A #define dax_driver_register(drive=
-r) \=0D=0Adiff --git a/drivers/dax/super.c b/drivers/dax/super.c=0D=0Aind=
-ex ba0b4cd18a77..d4ab60c406bf 100644=0D=0A--- a/drivers/dax/super.c=0D=0A=
-+++ b/drivers/dax/super.c=0D=0A@@ -14,6 +14,7 @@=0D=0A #include <linux/fs=
-=2Eh>=0D=0A #include <linux/cacheinfo.h>=0D=0A #include "dax-private.h"=0D=
-=0A+#include "bus.h"=0D=0A=20=0D=0A /**=0D=0A  * struct dax_device - anch=
-or object for dax services=0D=0A@@ -111,6 +112,10 @@ struct dax_device *f=
-s_dax_get_by_bdev(struct block_device *bdev, u64 *start_off,=0D=0A }=0D=0A=
- EXPORT_SYMBOL_GPL(fs_dax_get_by_bdev);=0D=0A=20=0D=0A+#endif /* CONFIG_B=
-LOCK && CONFIG_FS_DAX */=0D=0A+=0D=0A+#if IS_ENABLED(CONFIG_FS_DAX)=0D=0A=
-+=0D=0A void fs_put_dax(struct dax_device *dax_dev, void *holder)=0D=0A {=
-=0D=0A =09if (dax_dev && holder &&=0D=0A@@ -119,7 +124,66 @@ void fs_put_=
-dax(struct dax_device *dax_dev, void *holder)=0D=0A =09put_dax(dax_dev);=0D=
-=0A }=0D=0A EXPORT_SYMBOL_GPL(fs_put_dax);=0D=0A-#endif /* CONFIG_BLOCK &=
-& CONFIG_FS_DAX */=0D=0A+=0D=0A+/**=0D=0A+ * fs_dax_get() - get ownership=
- of a devdax via holder/holder_ops=0D=0A+ *=0D=0A+ * fs-dax file systems =
-call this function to prepare to use a devdax device for=0D=0A+ * fsdax. =
-This is like fs_dax_get_by_bdev(), but the caller already has struct=0D=0A=
-+ * dev_dax (and there is no bdev). The holder makes this exclusive.=0D=0A=
-+ *=0D=0A+ * @dax_dev: dev to be prepared for fs-dax usage=0D=0A+ * @hold=
-er: filesystem or mapped device inside the dax_device=0D=0A+ * @hops: ope=
-rations for the inner holder=0D=0A+ *=0D=0A+ * Returns: 0 on success, <0 =
-on failure=0D=0A+ */=0D=0A+int fs_dax_get(struct dax_device *dax_dev, voi=
-d *holder,=0D=0A+=09const struct dax_holder_operations *hops)=0D=0A+{=0D=0A=
-+=09struct dev_dax *dev_dax;=0D=0A+=09struct dax_device_driver *dax_drv;=0D=
-=0A+=09int id;=0D=0A+=0D=0A+=09id =3D dax_read_lock();=0D=0A+=09if (!dax_=
-dev || !dax_alive(dax_dev) || !igrab(&dax_dev->inode)) {=0D=0A+=09=09dax_=
-read_unlock(id);=0D=0A+=09=09return -ENODEV;=0D=0A+=09}=0D=0A+=09dax_read=
-_unlock(id);=0D=0A+=0D=0A+=09/* Verify the device is bound to fsdev_dax d=
-river */=0D=0A+=09dev_dax =3D dax_get_private(dax_dev);=0D=0A+=09if (!dev=
-_dax) {=0D=0A+=09=09iput(&dax_dev->inode);=0D=0A+=09=09return -ENODEV;=0D=
-=0A+=09}=0D=0A+=0D=0A+=09device_lock(&dev_dax->dev);=0D=0A+=09if (!dev_da=
-x->dev.driver) {=0D=0A+=09=09device_unlock(&dev_dax->dev);=0D=0A+=09=09ip=
-ut(&dax_dev->inode);=0D=0A+=09=09return -ENODEV;=0D=0A+=09}=0D=0A+=09dax_=
-drv =3D to_dax_drv(dev_dax->dev.driver);=0D=0A+=09if (dax_drv->type !=3D =
-DAXDRV_FSDEV_TYPE) {=0D=0A+=09=09device_unlock(&dev_dax->dev);=0D=0A+=09=09=
-iput(&dax_dev->inode);=0D=0A+=09=09return -EOPNOTSUPP;=0D=0A+=09}=0D=0A+=09=
-device_unlock(&dev_dax->dev);=0D=0A+=0D=0A+=09if (cmpxchg(&dax_dev->holde=
-r_data, NULL, holder)) {=0D=0A+=09=09iput(&dax_dev->inode);=0D=0A+=09=09r=
-eturn -EBUSY;=0D=0A+=09}=0D=0A+=0D=0A+=09dax_dev->holder_ops =3D hops;=0D=
-=0A+=0D=0A+=09return 0;=0D=0A+}=0D=0A+EXPORT_SYMBOL_GPL(fs_dax_get);=0D=0A=
-+#endif /* CONFIG_FS_DAX */=0D=0A=20=0D=0A enum dax_device_flags {=0D=0A =
-=09/* !alive + rcu grace period =3D=3D no new operations / mappings */=0D=
-=0Adiff --git a/include/linux/dax.h b/include/linux/dax.h=0D=0Aindex b19b=
-fe0c2fd1..a85e270bfb3c 100644=0D=0A--- a/include/linux/dax.h=0D=0A+++ b/i=
-nclude/linux/dax.h=0D=0A@@ -130,7 +130,6 @@ int dax_add_host(struct dax_d=
-evice *dax_dev, struct gendisk *disk);=0D=0A void dax_remove_host(struct =
-gendisk *disk);=0D=0A struct dax_device *fs_dax_get_by_bdev(struct block_=
-device *bdev, u64 *start_off,=0D=0A =09=09void *holder, const struct dax_=
-holder_operations *ops);=0D=0A-void fs_put_dax(struct dax_device *dax_dev=
-, void *holder);=0D=0A #else=0D=0A static inline int dax_add_host(struct =
-dax_device *dax_dev, struct gendisk *disk)=0D=0A {=0D=0A@@ -145,12 +144,1=
-2 @@ static inline struct dax_device *fs_dax_get_by_bdev(struct block_dev=
-ice *bdev,=0D=0A {=0D=0A =09return NULL;=0D=0A }=0D=0A-static inline void=
- fs_put_dax(struct dax_device *dax_dev, void *holder)=0D=0A-{=0D=0A-}=0D=0A=
- #endif /* CONFIG_BLOCK && CONFIG_FS_DAX */=0D=0A=20=0D=0A #if IS_ENABLED=
-(CONFIG_FS_DAX)=0D=0A+void fs_put_dax(struct dax_device *dax_dev, void *h=
-older);=0D=0A+int fs_dax_get(struct dax_device *dax_dev, void *holder,=0D=
-=0A+=09       const struct dax_holder_operations *hops);=0D=0A int dax_wr=
-iteback_mapping_range(struct address_space *mapping,=0D=0A =09=09struct d=
-ax_device *dax_dev, struct writeback_control *wbc);=0D=0A int dax_folio_r=
-eset_order(struct folio *folio);=0D=0A@@ -164,6 +163,15 @@ dax_entry_t da=
-x_lock_mapping_entry(struct address_space *mapping,=0D=0A void dax_unlock=
-_mapping_entry(struct address_space *mapping,=0D=0A =09=09unsigned long i=
-ndex, dax_entry_t cookie);=0D=0A #else=0D=0A+static inline void fs_put_da=
-x(struct dax_device *dax_dev, void *holder)=0D=0A+{=0D=0A+}=0D=0A+=0D=0A+=
-static inline int fs_dax_get(struct dax_device *dax_dev, void *holder,=0D=
-=0A+=09=09=09     const struct dax_holder_operations *hops)=0D=0A+{=0D=0A=
-+=09return -EOPNOTSUPP;=0D=0A+}=0D=0A static inline struct page *dax_layo=
-ut_busy_page(struct address_space *mapping)=0D=0A {=0D=0A =09return NULL;=
-=0D=0A--=20=0D=0A2.53.0=0D=0A=0D=0A
+From: John Groves <john@groves.net>=0D=0A=0D=0Afamfs needs to look up a d=
+ax_device by dev_t when resolving fmap=0D=0Aentries that reference charac=
+ter dax devices.=0D=0A=0D=0AReviewed-by: Dave Jiang <dave.jiang@intel.com=
+>=0D=0AReviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>=0D=0AS=
+igned-off-by: John Groves <john@groves.net>=0D=0A---=0D=0A drivers/dax/su=
+per.c | 3 ++-=0D=0A include/linux/dax.h | 1 +=0D=0A 2 files changed, 3 in=
+sertions(+), 1 deletion(-)=0D=0A=0D=0Adiff --git a/drivers/dax/super.c b/=
+drivers/dax/super.c=0D=0Aindex d4ab60c406bf..25cf99dd9360 100644=0D=0A---=
+ a/drivers/dax/super.c=0D=0A+++ b/drivers/dax/super.c=0D=0A@@ -521,7 +521=
+,7 @@ static int dax_set(struct inode *inode, void *data)=0D=0A =09return=
+ 0;=0D=0A }=0D=0A=20=0D=0A-static struct dax_device *dax_dev_get(dev_t de=
+vt)=0D=0A+struct dax_device *dax_dev_get(dev_t devt)=0D=0A {=0D=0A =09str=
+uct dax_device *dax_dev;=0D=0A =09struct inode *inode;=0D=0A@@ -544,6 +54=
+4,7 @@ static struct dax_device *dax_dev_get(dev_t devt)=0D=0A=20=0D=0A =09=
+return dax_dev;=0D=0A }=0D=0A+EXPORT_SYMBOL_GPL(dax_dev_get);=0D=0A=20=0D=
+=0A struct dax_device *alloc_dax(void *private, const struct dax_operatio=
+ns *ops)=0D=0A {=0D=0Adiff --git a/include/linux/dax.h b/include/linux/da=
+x.h=0D=0Aindex a85e270bfb3c..9ef95b136bb8 100644=0D=0A--- a/include/linux=
+/dax.h=0D=0A+++ b/include/linux/dax.h=0D=0A@@ -54,6 +54,7 @@ struct dax_d=
+evice *alloc_dax(void *private, const struct dax_operations *ops);=0D=0A =
+void *dax_holder(struct dax_device *dax_dev);=0D=0A void put_dax(struct d=
+ax_device *dax_dev);=0D=0A void kill_dax(struct dax_device *dax_dev);=0D=0A=
++struct dax_device *dax_dev_get(dev_t devt);=0D=0A void dax_write_cache(s=
+truct dax_device *dax_dev, bool wc);=0D=0A bool dax_write_cache_enabled(s=
+truct dax_device *dax_dev);=0D=0A bool dax_synchronous(struct dax_device =
+*dax_dev);=0D=0A--=20=0D=0A2.53.0=0D=0A=0D=0A
 
