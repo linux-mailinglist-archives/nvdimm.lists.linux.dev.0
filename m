@@ -1,64 +1,93 @@
-Return-Path: <nvdimm+bounces-13842-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13844-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DeKLVyP3GkmTAkAu9opvQ
-	(envelope-from <nvdimm+bounces-13842-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:38:20 +0200
+	id WCOwGgD33Gl/YgkAu9opvQ
+	(envelope-from <nvdimm+bounces-13844-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:00:32 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6484A3E7CDF
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:38:20 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5D553ECE02
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:00:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1D50030166CE
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 06:38:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1DAB0302C91E
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 13:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343873932E3;
-	Mon, 13 Apr 2026 06:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8B03CE4B3;
+	Mon, 13 Apr 2026 13:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGKkWrwJ"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailgw2.hygon.cn (unknown [101.204.27.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219D23128D7
-	for <nvdimm@lists.linux.dev>; Mon, 13 Apr 2026 06:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.204.27.37
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28BA3B4E9C
+	for <nvdimm@lists.linux.dev>; Mon, 13 Apr 2026 13:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776062279; cv=none; b=dZ3Ymi0Vu6a221nVJ/Ka0XuOfQvW0zfr+6Q50JjFy6e+eQvR8tl0tP+jphalR3GOjjtI59ojUVIDYYXdG1+I4EM5Gv7N8HgYWwADAF0S+HbgZjkcmlOYey4AchT5YEaXMNUrfgxYSDwx4WqwEco7uolEdJXKsYcHR5EYfOw42u0=
+	t=1776088604; cv=none; b=mEZMzXgdgx9MfebaLIhfMJtV33odNUxnpX5scE/fC79vejAWbODEaqZtWrPH2aMTCaAucC5BhQT+wEtvdRQv5mdi45BFvqPY7u8uFYdeOchG4+1KcI/AuNt816JZ6JABWuadCU8tqy7XM2Uj4tQOJdBL6KMARV82sU0VFABBmBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776062279; c=relaxed/simple;
-	bh=MJpWc2ZM9ZNlGme0TLVTzMyJF7M4BfZyxTPqJGEgH10=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jtYZvHT0Q9s63ZgulKwnLtGfjRNyIlDwV8hkdPZWhqfIWfhzSz7WPFHm/NuiVH82fgBJGxuPAodjgHkv6b5dento/6ShJzKHDIhNweapqCy4dNlTa6kUcCii4FesmNIhM397/T77qpKG5twIP2iu/dSAiAzkkHe+cHj7gdRWzsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn; spf=pass smtp.mailfrom=hygon.cn; arc=none smtp.client-ip=101.204.27.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hygon.cn
-Received: from maildlp1.hygon.cn (unknown [127.0.0.1])
-	by mailgw2.hygon.cn (Postfix) with ESMTP id 4fvHNf68dvz1YQpmG;
-	Mon, 13 Apr 2026 14:21:22 +0800 (CST)
-Received: from maildlp1.hygon.cn (unknown [172.23.18.60])
-	by mailgw2.hygon.cn (Postfix) with ESMTP id 4fvHNd3nCLz1YQpmG;
-	Mon, 13 Apr 2026 14:21:21 +0800 (CST)
-Received: from cncheex04.Hygon.cn (unknown [172.23.18.114])
-	by maildlp1.hygon.cn (Postfix) with ESMTPS id 1A3AD7892;
-	Mon, 13 Apr 2026 14:21:19 +0800 (CST)
-Received: from SH-HV00110.Hygon.cn (172.19.26.208) by cncheex04.Hygon.cn
- (172.23.18.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 13 Apr
- 2026 14:21:20 +0800
-From: Huang Shijie <huangsj@hygon.cn>
-To: <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
-	<brauner@kernel.org>
-CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
-	<muchun.song@linux.dev>, <osalvador@suse.de>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-	<zhongyuan@hygon.cn>, <fangbaoshun@hygon.cn>, <yingzhiwei@hygon.cn>, Huang
- Shijie <huangsj@hygon.cn>
-Subject: [PATCH 3/3] mm: split the file's i_mmap tree for NUMA
-Date: Mon, 13 Apr 2026 14:20:42 +0800
-Message-ID: <20260413062042.804-4-huangsj@hygon.cn>
+	s=arc-20240116; t=1776088604; c=relaxed/simple;
+	bh=Hpvv+IN2EELEEcnD5YwW84ys/b/L7dP7YW1BRzo/t8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F9QDNXgFpgIFOCcTfizu14un2fFMENFLrmHvGmR/Okr38C1Yj+Yj6+2SS5MTyZqv2ubewwFSSsp/8slR2eGQILT6gaAIS7POOcaYQglJB4gVOo23SpaBuM2uNH89Q/8ratGiFgjWAvmBmRMGFTB8JObxI+PZFmxbAtl0PVnH1jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGKkWrwJ; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2addb31945aso26962165ad.1
+        for <nvdimm@lists.linux.dev>; Mon, 13 Apr 2026 06:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776088602; x=1776693402; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IwI7fhoIYuDnAceYOXsnx6dLQgMpnwbjObgo8mwaSj4=;
+        b=hGKkWrwJtFraYa4HxnrVOtqB1YOcmYLZ7iHmbc7MNiTcXlLCWf9EJUhQ7P9WKkEWUA
+         GFNbApuzHsCCtN+i5+k4M6jk5QNqQqJNry5sNYVEk2JuAkERYhP6NY95keDNo4QQ9Yko
+         bpY2RX+ChDLRFTlBWBso2L2BjGcL/dtht0riDFZ8BwHGNa4mj325AHI8gikT2gP9Y9BR
+         i+RNi/buSHGGD1vnL0nK3nxB6nxsjR3IwUlMDPFcgRsdQr/V+dFKlGL3NxxGlqaLUSYF
+         IiIlkmZr3ajOpFX22oSG3su0B8qvz6pSFR0x5KzLx2YqvgfC7747xlZcKpw+jEPpV345
+         fGZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776088602; x=1776693402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IwI7fhoIYuDnAceYOXsnx6dLQgMpnwbjObgo8mwaSj4=;
+        b=QgxMhqtyVCRXuOwTQQ0dr6EnKvLDli/bJaBt6+Z8f+8O1guzzHU6ZA/fnmaqzb5tt0
+         XAkVNnWmtImydEbYU9Yp6hYTo32MOfMhpJKEHFwKACifHhg84H7dR/g6C+SFOx7UuRau
+         HzSZpYrhj+FUvWrZSm5NxACGL9st28Hl5zkjS3S+g0Pnc0Gg4aNJL+aED1xRsK9bkZzs
+         AqjBddIjYxq32RHxuPc09ql0Uwg9JNIHqTSAmXOQyzvnhvEuXoU8o8MmyPy80l3U4T+2
+         vLH2pEaWWfamBAp9p9ipwJhFjMHn75LtdI/Ys4lNfWzM09+cl506sN8ke3rKo0kvBMMs
+         cHxw==
+X-Forwarded-Encrypted: i=1; AFNElJ+Nne72CWtORLnkFY6+bce55oAuNpiM6eHPxZWyoad3s+A2zH0LatBMGznBA6/FfVa5Uvo06Lk=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz67YHANYGriYi1oQOWDBFnXKaCxiQIrHpy5Z/Z+ovF/1RGB4KV
+	bhcPY7HFhDHTtXXKpxGxVpZ4Am7paPWwO6OLTSYvFaiQ9LsVQgKt923q
+X-Gm-Gg: AeBDiesJ7rf/V1FCJlIF4Ycx3LNBPsG1siygqbt6kGaxnFZBxDV2/LAvOMFmqwoe+0S
+	mP7fLtf5aSANKMlclNNX8EJJRYASQraxfFSkhNJxrzQG3oLLm9tLBpTOtc0cotBQAurQ/BrWJ+H
+	YT4szC+YAubjr3gCB3z52J3+pL4GpA/OHATy+h/Hi4LG+ZPNFde8ASsSKmC9TzflSOiRlSH8Nm9
+	LtKRGjA+S31CsGW+g0ynDYD/NIBgoG89+v4r66rmvFyBrph2BHvs6Ej38cfwvigInn4tz3+K42o
+	eNBFQknJ67xFj5Kjb9KZHRtPYSO9yUkBsshu8p9eqw9vlWJ6FiKInwJ0LA6HATA7v9c3t+QLCdz
+	OnLM/ys+77tYnZ/5QC4srwPOTz97Qxth6lrD3eR3VhXUXl3GP42sKFLJp/EsoSIWtcB1CRZcJrk
+	sjvEmOOMG5LVOkUGlib/hff58d4OQyc20=
+X-Received: by 2002:a17:902:b698:b0:2b2:aa93:cc5f with SMTP id d9443c01a7336-2b2d597609dmr100423715ad.10.1776088602230;
+        Mon, 13 Apr 2026 06:56:42 -0700 (PDT)
+Received: from lgs.. ([2409:893d:1188:142d:6c67:74e8:5200:1f39])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b468273ccfsm12585665ad.43.2026.04.13.06.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 06:56:41 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	nvdimm@lists.linux.dev,
+	linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Guangshuo Li <lgs201920130244@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v3] device-dax: Fix refcount leak in __devm_create_dev_dax() error path
+Date: Mon, 13 Apr 2026 21:56:25 +0800
+Message-ID: <20260413135625.2890908-1-lgs201920130244@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260413062042.804-1-huangsj@hygon.cn>
-References: <20260413062042.804-1-huangsj@hygon.cn>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -66,432 +95,112 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: cncheex06.Hygon.cn (172.23.18.116) To cncheex04.Hygon.cn
- (172.23.18.114)
-X-Spamd-Result: default: False [0.14 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[hygon.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-13844-lists,linux-nvdimm=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-13842-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	FROM_NEQ_ENVFROM(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6484A3E7CDF
+	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,nvdimm@lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-0.999];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C5D553ECE02
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-  In NUMA, there are maybe many NUMA nodes and many CPUs.
-For example, a Hygon's server has 12 NUMA nodes, and 384 CPUs.
-In the UnixBench tests, there is a test "execl" which tests
-the execve system call.
+After device_initialize(), the embedded struct device in dev_dax is
+expected to be released through the device core with put_device().
 
-  When we test our server with "./Run -c 384 execl",
-the test result is not good enough. The i_mmap locks contended heavily on
-"libc.so" and "ld.so". For example, the i_mmap tree for "libc.so" can have 
-over 6000 VMAs, all the VMAs can be in different NUMA mode.
-The insert/remove operations do not run quickly enough.
+In __devm_create_dev_dax(), several failure paths after
+device_initialize() free dev_dax directly instead of dropping the device
+reference, which bypasses the normal device core lifetime handling and
+leaks the reference held on the embedded struct device.
 
- In order to reduce the competition of the i_mmap lock, this patch does
-following:
-   1.) Split the single i_mmap tree into several sibling trees:
-       Each NUMA node has a tree.
-   2.) Introduce a new field "tree_idx" for vm_area_struct to save the
-       sibling tree index for this VMA.
-   3.) Introduce a new field "vma_count" for address_space.
-       The new mapping_mapped() will use it.
-   4.) Rewrite the vma_interval_tree_foreach() for NUMA.
+The issue was identified by a static analysis tool I developed and
+confirmed by manual review.
 
- After this patch, the VMA insert/remove operations will work faster,
-and we can get 77% (10 times average) performance improvement
-with the above test.
+Fix this by assigning dev->type before device_initialize(), so the
+release callback is available, use put_device() in the
+post-initialization error paths, and keep dev_dax range cleanup explicit
+since it is not handled by dev_dax_release().
 
-Signed-off-by: Huang Shijie <huangsj@hygon.cn>
+Fixes: c2f3011ee697f ("device-dax: add an allocation interface for device-dax instances")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
 ---
- fs/inode.c               | 55 +++++++++++++++++++++++++++++++++++++++-
- include/linux/fs.h       | 35 +++++++++++++++++++++++++
- include/linux/mm.h       | 32 +++++++++++++++++++++++
- include/linux/mm_types.h |  1 +
- mm/mmap.c                |  3 ++-
- mm/nommu.c               |  6 +++--
- mm/vma.c                 | 34 +++++++++++++++++++------
- mm/vma_init.c            |  1 +
- 8 files changed, 155 insertions(+), 12 deletions(-)
+v3:
+  - note that the issue was identified by my static analysis tool
+  - and confirmed by manual review
 
-diff --git a/fs/inode.c b/fs/inode.c
-index cc12b68e021b..3067cb2558da 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -215,6 +215,56 @@ static int no_open(struct inode *inode, struct file *file)
- 	return -ENXIO;
- }
- 
-+#ifdef CONFIG_NUMA
-+static void free_mapping_i_mmap(struct address_space *mapping)
-+{
-+	int i;
-+
-+	if (!mapping->i_mmap)
-+		return;
-+
-+	for (i = 0; i < nr_node_ids; i++)
-+		kfree(mapping->i_mmap[i]);
-+
-+	kfree(mapping->i_mmap);
-+	mapping->i_mmap = NULL;
-+}
-+
-+static int init_mapping_i_mmap(struct address_space *mapping)
-+{
-+	struct rb_root_cached *root;
-+	int i;
-+
-+	/* The extra one is used as terminator in vma_interval_tree_foreach() */
-+	mapping->i_mmap = kzalloc(sizeof(root) * (nr_node_ids + 1), GFP_KERNEL);
-+	if (!mapping->i_mmap)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < nr_node_ids; i++) {
-+		root = kzalloc_node(sizeof(*root), GFP_KERNEL, i);
-+		if (!root)
-+			goto no_mem;
-+
-+		*root = RB_ROOT_CACHED;
-+		mapping->i_mmap[i] = root;
-+	}
-+	return 0;
-+
-+no_mem:
-+	free_mapping_i_mmap(mapping);
-+	return -ENOMEM;
-+}
-+#else
-+static int init_mapping_i_mmap(struct address_space *mapping)
-+{
-+	mapping->i_mmap = RB_ROOT_CACHED;
-+	return 0;
-+}
-+static void free_mapping_i_mmap(struct address_space *mapping)
-+{
-+}
-+#endif
-+
- /**
-  * inode_init_always_gfp - perform inode structure initialisation
-  * @sb: superblock inode belongs to
-@@ -307,6 +357,9 @@ int inode_init_always_gfp(struct super_block *sb, struct inode *inode, gfp_t gfp
- 	if (unlikely(security_inode_alloc(inode, gfp)))
- 		return -ENOMEM;
- 
-+	if (init_mapping_i_mmap(mapping))
-+		return -ENOMEM;
-+
- 	this_cpu_inc(nr_inodes);
- 
- 	return 0;
-@@ -383,6 +436,7 @@ void __destroy_inode(struct inode *inode)
- 	if (inode->i_default_acl && !is_uncached_acl(inode->i_default_acl))
- 		posix_acl_release(inode->i_default_acl);
- #endif
-+	free_mapping_i_mmap(&inode->i_data);
- 	this_cpu_dec(nr_inodes);
- }
- EXPORT_SYMBOL(__destroy_inode);
-@@ -486,7 +540,6 @@ static void __address_space_init_once(struct address_space *mapping)
- 	init_rwsem(&mapping->i_mmap_rwsem);
- 	INIT_LIST_HEAD(&mapping->i_private_list);
- 	spin_lock_init(&mapping->i_private_lock);
--	mapping->i_mmap = RB_ROOT_CACHED;
- }
- 
- void address_space_init_once(struct address_space *mapping)
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index a6a99e044265..34064c1cbd10 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -477,7 +477,12 @@ struct address_space {
- 	/* number of thp, only for non-shmem files */
- 	atomic_t		nr_thps;
- #endif
-+#ifdef CONFIG_NUMA
-+	struct rb_root_cached	**i_mmap;
-+	unsigned long		vma_count;
-+#else
- 	struct rb_root_cached	i_mmap;
-+#endif
- 	unsigned long		nrpages;
- 	pgoff_t			writeback_index;
- 	const struct address_space_operations *a_ops;
-@@ -547,6 +552,27 @@ static inline void i_mmap_assert_write_locked(struct address_space *mapping)
- 	lockdep_assert_held_write(&mapping->i_mmap_rwsem);
- }
- 
-+#ifdef CONFIG_NUMA
-+static inline int mapping_mapped(const struct address_space *mapping)
-+{
-+	return	READ_ONCE(mapping->vma_count);
-+}
-+
-+static inline void inc_mapping_vma(struct address_space *mapping)
-+{
-+	mapping->vma_count++;
-+}
-+
-+static inline void dec_mapping_vma(struct address_space *mapping)
-+{
-+	mapping->vma_count--;
-+}
-+
-+static inline struct rb_root_cached *get_i_mmap_root(struct address_space *mapping)
-+{
-+	return (struct rb_root_cached *)mapping->i_mmap;
-+}
-+#else
- /*
-  * Might pages of this file be mapped into userspace?
-  */
-@@ -555,10 +581,19 @@ static inline int mapping_mapped(const struct address_space *mapping)
- 	return	!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root);
- }
- 
-+static inline void inc_mapping_vma(struct address_space *mapping)
-+{
-+}
-+
-+static inline void dec_mapping_vma(struct address_space *mapping)
-+{
-+}
-+
- static inline struct rb_root_cached *get_i_mmap_root(struct address_space *mapping)
- {
- 	return &mapping->i_mmap;
- }
-+#endif
- 
- /*
-  * Might pages of this file have been modified in userspace?
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 15cb1da43eb2..c7f26eb34322 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -913,6 +913,9 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
- 	vma->vm_ops = &vma_dummy_vm_ops;
- 	INIT_LIST_HEAD(&vma->anon_vma_chain);
- 	vma_lock_init(vma, false);
-+#ifdef CONFIG_NUMA
-+	vma->tree_idx = numa_node_id();
-+#endif
- }
- 
- /* Use when VMA is not part of the VMA tree and needs no locking */
-@@ -3783,6 +3786,8 @@ extern atomic_long_t mmap_pages_allocated;
- extern int nommu_shrink_inode_mappings(struct inode *, size_t, size_t);
- 
- /* interval_tree.c */
-+struct rb_root_cached *get_rb_root(struct vm_area_struct *vma,
-+					struct address_space *mapping);
- void vma_interval_tree_insert(struct vm_area_struct *node,
- 			      struct rb_root_cached *root);
- void vma_interval_tree_insert_after(struct vm_area_struct *node,
-@@ -3798,9 +3803,36 @@ struct vm_area_struct *vma_interval_tree_iter_next(struct vm_area_struct *node,
- 				unsigned long start, unsigned long last);
- 
- /* Please use get_i_mmap_root() to get the @root */
-+#ifdef CONFIG_NUMA
-+/* Find the first valid VMA in the sibling trees */
-+static inline struct vm_area_struct *first_vma(struct rb_root_cached ***__r,
-+				unsigned long start, unsigned long last)
-+{
-+	struct vm_area_struct *vma = NULL;
-+	struct rb_root_cached **tree = *__r;
-+
-+	while (*tree) {
-+		vma = vma_interval_tree_iter_first(*tree++, start, last);
-+		if (vma)
-+			break;
-+	}
-+
-+	/* Save for the next loop */
-+	*__r = tree;
-+	return vma;
-+}
-+
-+/* @_tmp is referenced to avoid unused variable warning. */
-+#define vma_interval_tree_foreach(vma, root, start, last)		\
-+	for (struct rb_root_cached **_r = (void *)(root),		\
-+		**_tmp = (vma = first_vma(&_r, start, last)) ? _r : NULL;\
-+	     ((_tmp && vma) || (vma = first_vma(&_r, start, last)));	\
-+		vma = vma_interval_tree_iter_next(vma, start, last))
-+#else
- #define vma_interval_tree_foreach(vma, root, start, last)		\
- 	for (vma = vma_interval_tree_iter_first(root, start, last);	\
- 	     vma; vma = vma_interval_tree_iter_next(vma, start, last))
-+#endif
- 
- void anon_vma_interval_tree_insert(struct anon_vma_chain *node,
- 				   struct rb_root_cached *root);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 3cc8ae722886..4982e20ce27c 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -984,6 +984,7 @@ struct vm_area_struct {
- #endif
- #ifdef CONFIG_NUMA
- 	struct mempolicy *vm_policy;	/* NUMA policy for the VMA */
-+	int tree_idx;			/* The sibling tree index for the VMA */
- #endif
- #ifdef CONFIG_NUMA_BALANCING
- 	struct vma_numab_state *numab_state;	/* NUMA Balancing state */
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 5b0671dff019..81a2f4932ca8 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1832,8 +1832,9 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
- 			flush_dcache_mmap_lock(mapping);
- 			/* insert tmp into the share list, just after mpnt */
- 			vma_interval_tree_insert_after(tmp, mpnt,
--					get_i_mmap_root(mapping));
-+					get_rb_root(mpnt, mapping));
- 			flush_dcache_mmap_unlock(mapping);
-+			inc_mapping_vma(mapping);
- 			i_mmap_unlock_write(mapping);
- 		}
- 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 2e64b6c4c539..6553cfcb6683 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -569,8 +569,9 @@ static void setup_vma_to_mm(struct vm_area_struct *vma, struct mm_struct *mm)
- 
- 		i_mmap_lock_write(mapping);
- 		flush_dcache_mmap_lock(mapping);
--		vma_interval_tree_insert(vma, get_i_mmap_root(mapping));
-+		vma_interval_tree_insert(vma, get_rb_root(vma, mapping));
- 		flush_dcache_mmap_unlock(mapping);
-+		inc_mapping_vma(mapping);
- 		i_mmap_unlock_write(mapping);
- 	}
- }
-@@ -585,8 +586,9 @@ static void cleanup_vma_from_mm(struct vm_area_struct *vma)
- 
- 		i_mmap_lock_write(mapping);
- 		flush_dcache_mmap_lock(mapping);
--		vma_interval_tree_remove(vma, get_i_mmap_root(mapping));
-+		vma_interval_tree_remove(vma, get_rb_root(vma, mapping));
- 		flush_dcache_mmap_unlock(mapping);
-+		dec_mapping_vma(mapping);
- 		i_mmap_unlock_write(mapping);
- 	}
- }
-diff --git a/mm/vma.c b/mm/vma.c
-index 1768e4355a13..5aa3915d183b 100644
---- a/mm/vma.c
-+++ b/mm/vma.c
-@@ -224,6 +224,16 @@ static bool can_vma_merge_after(struct vma_merge_struct *vmg)
- 	return false;
- }
- 
-+struct rb_root_cached *get_rb_root(struct vm_area_struct *vma,
-+					struct address_space *mapping)
-+{
-+#ifdef CONFIG_NUMA
-+	return mapping->i_mmap[vma->tree_idx];
-+#else
-+	return &mapping->i_mmap;
-+#endif
-+}
-+
- static void __vma_link_file(struct vm_area_struct *vma,
- 			    struct address_space *mapping)
- {
-@@ -231,8 +241,9 @@ static void __vma_link_file(struct vm_area_struct *vma,
- 		mapping_allow_writable(mapping);
- 
- 	flush_dcache_mmap_lock(mapping);
--	vma_interval_tree_insert(vma, get_i_mmap_root(mapping));
-+	vma_interval_tree_insert(vma, get_rb_root(vma, mapping));
- 	flush_dcache_mmap_unlock(mapping);
-+	inc_mapping_vma(mapping);
- }
- 
- /*
-@@ -245,8 +256,9 @@ static void __remove_shared_vm_struct(struct vm_area_struct *vma,
- 		mapping_unmap_writable(mapping);
- 
- 	flush_dcache_mmap_lock(mapping);
--	vma_interval_tree_remove(vma, get_i_mmap_root(mapping));
-+	vma_interval_tree_remove(vma, get_rb_root(vma, mapping));
- 	flush_dcache_mmap_unlock(mapping);
-+	dec_mapping_vma(mapping);
- }
- 
- /*
-@@ -317,10 +329,13 @@ static void vma_prepare(struct vma_prepare *vp)
- 	if (vp->file) {
- 		flush_dcache_mmap_lock(vp->mapping);
- 		vma_interval_tree_remove(vp->vma,
--					get_i_mmap_root(vp->mapping));
--		if (vp->adj_next)
-+					get_rb_root(vp->vma, vp->mapping));
-+		dec_mapping_vma(vp->mapping);
-+		if (vp->adj_next) {
- 			vma_interval_tree_remove(vp->adj_next,
--					get_i_mmap_root(vp->mapping));
-+					get_rb_root(vp->adj_next, vp->mapping));
-+			dec_mapping_vma(vp->mapping);
-+		}
+v2:
+  - clarify the commit message around the device reference leak
+  - drop the unsupported use-after-free claim
+  - set dev->type before device_initialize() so put_device() can use the
+    release callback on post-init failures
+  - simplify the post-initialization error paths to use explicit range
+    cleanup plus put_device()
+
+ drivers/dax/bus.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+index fde29e0ad68b..2d92674d0d6e 100644
+--- a/drivers/dax/bus.c
++++ b/drivers/dax/bus.c
+@@ -1453,6 +1453,7 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
  	}
  
- }
-@@ -337,11 +352,14 @@ static void vma_complete(struct vma_prepare *vp, struct vma_iterator *vmi,
- 			 struct mm_struct *mm)
- {
- 	if (vp->file) {
--		if (vp->adj_next)
-+		if (vp->adj_next) {
- 			vma_interval_tree_insert(vp->adj_next,
--					get_i_mmap_root(vp->mapping));
-+					get_rb_root(vp->adj_next, vp->mapping));
-+			inc_mapping_vma(vp->mapping);
-+		}
- 		vma_interval_tree_insert(vp->vma,
--					get_i_mmap_root(vp->mapping));
-+					get_rb_root(vp->vma, vp->mapping));
-+		inc_mapping_vma(vp->mapping);
- 		flush_dcache_mmap_unlock(vp->mapping);
- 	}
+ 	dev = &dev_dax->dev;
++	dev->type = &dev_dax_type;
+ 	device_initialize(dev);
+ 	dev_set_name(dev, "dax%d.%d", dax_region->id, dev_dax->id);
  
-diff --git a/mm/vma_init.c b/mm/vma_init.c
-index 3c0b65950510..5735868b1ad4 100644
---- a/mm/vma_init.c
-+++ b/mm/vma_init.c
-@@ -71,6 +71,7 @@ static void vm_area_init_from(const struct vm_area_struct *src,
- #endif
- #ifdef CONFIG_NUMA
- 	dest->vm_policy = src->vm_policy;
-+	dest->tree_idx = src->tree_idx;
- #endif
- #ifdef __HAVE_PFNMAP_TRACKING
- 	dest->pfnmap_track_ctx = NULL;
+@@ -1499,7 +1500,6 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
+ 	dev->devt = inode->i_rdev;
+ 	dev->bus = &dax_bus_type;
+ 	dev->parent = parent;
+-	dev->type = &dev_dax_type;
+ 
+ 	rc = device_add(dev);
+ 	if (rc) {
+@@ -1522,14 +1522,13 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
+ 	return dev_dax;
+ 
+ err_alloc_dax:
+-	kfree(dev_dax->pgmap);
+ err_pgmap:
+ 	free_dev_dax_ranges(dev_dax);
+ err_range:
+-	free_dev_dax_id(dev_dax);
++	put_device(dev);
++	return ERR_PTR(rc);
+ err_id:
+ 	kfree(dev_dax);
+-
+ 	return ERR_PTR(rc);
+ }
+ 
 -- 
 2.43.0
-
 
 
