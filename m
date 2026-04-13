@@ -1,47 +1,48 @@
-Return-Path: <nvdimm+bounces-13843-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13840-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2P2WGtqP3GkmTAkAu9opvQ
-	(envelope-from <nvdimm+bounces-13843-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:40:26 +0200
+	id adcOGEiP3GkmTAkAu9opvQ
+	(envelope-from <nvdimm+bounces-13840-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:38:00 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D73173E7D5B
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33CA13E7CA8
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 08:37:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C0948303FF86
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 06:38:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 799B5300D68C
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 06:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3693932FA;
-	Mon, 13 Apr 2026 06:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 231783624C4;
+	Mon, 13 Apr 2026 06:37:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mailgw2.hygon.cn (unknown [101.204.27.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A52313E38
-	for <nvdimm@lists.linux.dev>; Mon, 13 Apr 2026 06:37:42 +0000 (UTC)
+Received: from mailgw1.hygon.cn (unknown [101.204.27.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F077DA66
+	for <nvdimm@lists.linux.dev>; Mon, 13 Apr 2026 06:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.204.27.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776062279; cv=none; b=MqKbhlXeN9JAqHNT+RBoOId2jyGBvj1aX3w1mvGsmopWALDCQw+sM9i2/wzfodfgX1a+YMU+0PF3CGeSbXzYZdcmrr8phZm/pkCi30vU7Jtchyh4hShwLCtw+b0lEstdWB0cRYttxz8XkLb1HkL4TwFMppV6d5zd228yMe2VDeA=
+	t=1776062275; cv=none; b=cz91ajQkgo1UT6f5NuvA+Tc4XuMrWwtm2SyWTLF3YX9FJlmVqOplKmXAEfREHdt3p3jUuMmx825psJoP4ndf2nxZC1Ba2DYCTl9IVIjZ1H0Y5xR+Uuv1bmM7uafk7Yqux+EpNEuy8u1qCCaavVqMtnS1Fb7rrwBm+7xS7gv+x30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776062279; c=relaxed/simple;
-	bh=oB93Jo0Hird487YH6LLEBixEFdTrDVpgeLLVzfgz3m4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S5QFBy/pGZNF2apE8BWPA9EUq0XanLEaRpYlK+j80g2n/v2FNae6e+za7EMDiGTyvh9Ye6pnXmHMyYB4fhi0obAmDgFtfW4csZhmSN7JbTzWsdYsEOvdBNHhYZnJWI9yatJMtdqj4OzKIsyEbOx12KI9mx24klCX1xYkC5ThPio=
+	s=arc-20240116; t=1776062275; c=relaxed/simple;
+	bh=0WxP6V4lltu4CPt+d+BZQBR7Zepd6vN9kz+S6rOOdd0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MmEYW+6H6lbiywb9tKKWBTFp5qTXrTyZdA4bGx46yrn9Bx+kq/pPGUgYcF4veCuh0ka+f9gkm0VT10ETUz+4qhBr2FoqJYDsPRUpi4RVDOnqqUgL+fhqv0Uo23CI5YlbLVREti7lr4GeNDvQ99NxL4mHmEkXDIPaYJqbTVZtXMU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn; spf=pass smtp.mailfrom=hygon.cn; arc=none smtp.client-ip=101.204.27.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hygon.cn
-Received: from maildlp2.hygon.cn (unknown [127.0.0.1])
-	by mailgw2.hygon.cn (Postfix) with ESMTP id 4fvHNX68Ypz1YQpmD;
-	Mon, 13 Apr 2026 14:21:16 +0800 (CST)
-Received: from maildlp2.hygon.cn (unknown [172.23.18.61])
-	by mailgw2.hygon.cn (Postfix) with ESMTP id 4fvHNW0JZ7z1YQpmD;
-	Mon, 13 Apr 2026 14:21:15 +0800 (CST)
+Received: from maildlp1.hygon.cn (unknown [127.0.0.1])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4fvHNZ430Fzb7P3;
+	Mon, 13 Apr 2026 14:21:18 +0800 (CST)
+Received: from maildlp1.hygon.cn (unknown [172.23.18.60])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4fvHNY0B89zb7P3;
+	Mon, 13 Apr 2026 14:21:17 +0800 (CST)
 Received: from cncheex04.Hygon.cn (unknown [172.23.18.114])
-	by maildlp2.hygon.cn (Postfix) with ESMTPS id F402830004D3;
-	Mon, 13 Apr 2026 14:19:21 +0800 (CST)
+	by maildlp1.hygon.cn (Postfix) with ESMTPS id 8F3C57892;
+	Mon, 13 Apr 2026 14:21:14 +0800 (CST)
 Received: from SH-HV00110.Hygon.cn (172.19.26.208) by cncheex04.Hygon.cn
  (172.23.18.114) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 13 Apr
- 2026 14:21:13 +0800
+ 2026 14:21:16 +0800
 From: Huang Shijie <huangsj@hygon.cn>
 To: <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
 	<brauner@kernel.org>
@@ -52,10 +53,12 @@ CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
 	<linux-parisc@vger.kernel.org>, <nvdimm@lists.linux.dev>,
 	<zhongyuan@hygon.cn>, <fangbaoshun@hygon.cn>, <yingzhiwei@hygon.cn>, Huang
  Shijie <huangsj@hygon.cn>
-Subject: [PATCH 0/3] mm: split the file's i_mmap tree for NUMA
-Date: Mon, 13 Apr 2026 14:20:39 +0800
-Message-ID: <20260413062042.804-1-huangsj@hygon.cn>
+Subject: [PATCH 1/3] mm: use mapping_mapped to simplify the code
+Date: Mon, 13 Apr 2026 14:20:40 +0800
+Message-ID: <20260413062042.804-2-huangsj@hygon.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260413062042.804-1-huangsj@hygon.cn>
+References: <20260413062042.804-1-huangsj@hygon.cn>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,7 +73,7 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	DMARC_POLICY_SOFTFAIL(0.10)[hygon.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
@@ -80,66 +83,74 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-13843-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13840-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-1.000];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	FROM_NEQ_ENVFROM(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hygon.cn:mid]
-X-Rspamd-Queue-Id: D73173E7D5B
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 33CA13E7CA8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-  In NUMA, there are maybe many NUMA nodes and many CPUs.
-For example, a Hygon's server has 12 NUMA nodes, and 384 CPUs.
-In the UnixBench tests, there is a test "execl" which tests
-the execve system call.
+Use mapping_mapped() to simplify the code, make
+the code tidy and clean.
 
-  When we test our server with "./Run -c 384 execl",
-the test result is not good enough. The i_mmap locks contended heavily on
-"libc.so" and "ld.so". For example, the i_mmap tree for "libc.so" can have 
-over 6000 VMAs, all the VMAs can be in different NUMA mode.
-The insert/remove operations do not run quickly enough.
+Signed-off-by: Huang Shijie <huangsj@hygon.cn>
+---
+ fs/hugetlbfs/inode.c | 4 ++--
+ mm/memory.c          | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-patch 1 & patch 2 are try to hide the direct access of i_mmap.
-patch 3 splits the i_mmap into sibling trees, and we can get better 
-performance with this patch set:
-    we can get 77% performance improvement(10 times average)
-
-
-Huang Shijie (3):
-  mm: use mapping_mapped to simplify the code
-  mm: use get_i_mmap_root to access the file's i_mmap
-  mm: split the file's i_mmap tree for NUMA
-
- arch/arm/mm/fault-armv.c   |  3 ++-
- arch/arm/mm/flush.c        |  3 ++-
- arch/nios2/mm/cacheflush.c |  3 ++-
- arch/parisc/kernel/cache.c |  4 ++-
- fs/dax.c                   |  3 ++-
- fs/hugetlbfs/inode.c       | 10 +++----
- fs/inode.c                 | 55 +++++++++++++++++++++++++++++++++++++-
- include/linux/fs.h         | 40 +++++++++++++++++++++++++++
- include/linux/mm.h         | 33 +++++++++++++++++++++++
- include/linux/mm_types.h   |  1 +
- kernel/events/uprobes.c    |  3 ++-
- mm/hugetlb.c               |  7 +++--
- mm/khugepaged.c            |  6 +++--
- mm/memory-failure.c        |  8 +++---
- mm/memory.c                |  8 +++---
- mm/mmap.c                  |  3 ++-
- mm/nommu.c                 | 11 +++++---
- mm/pagewalk.c              |  2 +-
- mm/rmap.c                  |  2 +-
- mm/vma.c                   | 36 +++++++++++++++++++------
- mm/vma_init.c              |  1 +
- 21 files changed, 204 insertions(+), 38 deletions(-)
-
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 3f70c47981de..ab5ac092d8a6 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -646,7 +646,7 @@ static void hugetlb_vmtruncate(struct inode *inode, loff_t offset)
+ 
+ 	i_size_write(inode, offset);
+ 	i_mmap_lock_write(mapping);
+-	if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
++	if (mapping_mapped(mapping))
+ 		hugetlb_vmdelete_list(&mapping->i_mmap, pgoff, 0,
+ 				      ZAP_FLAG_DROP_MARKER);
+ 	i_mmap_unlock_write(mapping);
+@@ -707,7 +707,7 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 
+ 	/* Unmap users of full pages in the hole. */
+ 	if (hole_end > hole_start) {
+-		if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
++		if (mapping_mapped(mapping))
+ 			hugetlb_vmdelete_list(&mapping->i_mmap,
+ 					      hole_start >> PAGE_SHIFT,
+ 					      hole_end >> PAGE_SHIFT, 0);
+diff --git a/mm/memory.c b/mm/memory.c
+index 2f815a34d924..366054435773 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4297,7 +4297,7 @@ void unmap_mapping_folio(struct folio *folio)
+ 	details.zap_flags = ZAP_FLAG_DROP_MARKER;
+ 
+ 	i_mmap_lock_read(mapping);
+-	if (unlikely(!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root)))
++	if (unlikely(mapping_mapped(mapping)))
+ 		unmap_mapping_range_tree(&mapping->i_mmap, first_index,
+ 					 last_index, &details);
+ 	i_mmap_unlock_read(mapping);
+@@ -4327,7 +4327,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
+ 		last_index = ULONG_MAX;
+ 
+ 	i_mmap_lock_read(mapping);
+-	if (unlikely(!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root)))
++	if (unlikely(mapping_mapped(mapping)))
+ 		unmap_mapping_range_tree(&mapping->i_mmap, first_index,
+ 					 last_index, &details);
+ 	i_mmap_unlock_read(mapping);
 -- 
 2.43.0
 
