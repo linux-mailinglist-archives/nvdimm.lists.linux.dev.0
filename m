@@ -1,51 +1,51 @@
-Return-Path: <nvdimm+bounces-13845-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13846-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wCM3MCMD3Wk3YwkAu9opvQ
-	(envelope-from <nvdimm+bounces-13845-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:52:19 +0200
+	id 6Ib5AOoE3WkZZAkAu9opvQ
+	(envelope-from <nvdimm+bounces-13846-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:59:54 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A00A3ED926
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:52:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4809D3EDA36
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 16:59:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 790A4300DD68
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 14:49:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 205423073D49
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 14:53:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4083CAE6E;
-	Mon, 13 Apr 2026 14:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59CD23DE447;
+	Mon, 13 Apr 2026 14:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXyiDmP6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyhdxi9+"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6252C21D9;
-	Mon, 13 Apr 2026 14:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABA11DFF0;
+	Mon, 13 Apr 2026 14:53:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776091788; cv=none; b=MSlFQ2GYitdv0YejCF3W7eGDKtAGZLvLcXyph4+nhq6mjtM51VFHcpYZLKcMbNzdDFKUjRBSxiOl/ENAKCSwTECvvtlLvyEmAbyNOKc2SFNU70+fhYKUJMQWt8gi5xKCTu+6idNUJLpcbwjqe282Ku00/Shoh1EGS4qE+FLFk7k=
+	t=1776091998; cv=none; b=B6/+02EftjVLHcuapQD7L6bT+Yy1ReHWDsEdipSGvqb/WP/pocl9jHYiPIx8YfT3zqFsJFQFWbTgEet7/QuFcUR/B39LvCmSxQqM8qUmBVBrYjF8f8nJK296POtks2qw4bbwY4hSSa+2FfeyNl0XlpBgd3OmHN5Uk0z7Ud0ru1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776091788; c=relaxed/simple;
-	bh=mjWzHkibbJ+YGpg8iepNJ9fmO8lj/6ddY53/GhjosH0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MmAH5NOwTcKPrAc3l5rdiDmUXDbilsanFthTrUBvDwAxPfYdXfsbVkQ+b3FRO0agROgDhwADA6abvUTSCyax2GHxLETNLRgpglrIePgg5c3eRXwhLk46VrcFOjCSvrjvMgk+cyfuTx+3/oFD8sLdW/YbCeV1Q+X2R84cC43oXjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HXyiDmP6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9A3C2BCAF;
-	Mon, 13 Apr 2026 14:49:44 +0000 (UTC)
+	s=arc-20240116; t=1776091998; c=relaxed/simple;
+	bh=SmlzEupAcTl8dpDl/4W91ji9DI1If1QZKHMeX0jJhQE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=mGQ2bWxnbNnpJ2xZ7P2XtiHPt7Oj+0C18DBKJIoIbsW1geU1K2mF0bI2eQLeJwaS5L71GTBvxBpfZtp7olpPrxc+kzxAkWy4W7sWGVXZzV5zeqToKElV+0FjPqYbgCC33kUGKDWWoxVMtIAq4dZ77gkFdYSmENwucjoIv143Psk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyhdxi9+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B031C2BCAF;
+	Mon, 13 Apr 2026 14:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776091788;
-	bh=mjWzHkibbJ+YGpg8iepNJ9fmO8lj/6ddY53/GhjosH0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HXyiDmP61caBFR6ZEDJhLV2kLFTrpfWmsebGSZkB4Sz+GvDVozGmf+j4Ma4qLWtHx
-	 vblYih3TDYo1K5L/hjqRnJSE/NNvB7I+g8EGy0zEZwP9FErtsWbxwx3MUUBbhwxjXR
-	 RiMs+KxEGJ72hftseV0cvzfNjc6QuH1kP9ywyULy3USoTE0IBt5Lkh/vHTRshbQBYO
-	 x0qd8ryPHY/QPw1CSAY7abXHysgOhE+zArf5GJu5t6o+6CYS8QeZudssfGWk8HRjTd
-	 NIgY1AhwDj7UyixFtsOC3h42MI8HKENmsWkIAwjZwEtCLjiNUUm87amLTdD59FHP6S
-	 8PQtsyQyU1o7Q==
-Message-ID: <4c08c0a8-9415-4f30-bfa9-db39318fa7d3@kernel.org>
-Date: Mon, 13 Apr 2026 16:49:40 +0200
+	s=k20201202; t=1776091997;
+	bh=SmlzEupAcTl8dpDl/4W91ji9DI1If1QZKHMeX0jJhQE=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=lyhdxi9+o47SLGVSzeL9CygkaHYOoek0pzdVy7BBu91dQX4084zZ82Wv/hwCilFgh
+	 MGOPAIAfVk6v9hiIYj9WGra1wNEygiJb8BF34YYdTYlMXp8x8F8P5Zdxd0CDAsrgSm
+	 NQviKLgaFxwNCDEPdomHWocsjqctyl1FltdwYiiTYLPHYdzz8gnSL0UzOyrCPxyKdD
+	 jMyRjny+JBeV+/Wd9KzczDO8aEH+9qURUzJCBzjEiir8JtKDh0Gkq4j8itRc6EEOlb
+	 HwI9sucCsSOY7ISuTWPS4vCzlzeLbmhgBj8an1UbxrVXqvWEhW35mDm09diJl2asZC
+	 kaGLCumaCmRww==
+Message-ID: <ac9455ad-21cd-49e9-a6fb-9f25175b5681@kernel.org>
+Date: Mon, 13 Apr 2026 16:53:10 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -54,6 +54,7 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/8] dax/kmem: atomic whole-device hotplug via sysfs
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
  vishal.l.verma@intel.com, dave.jiang@intel.com, akpm@linux-foundation.org,
  osalvador@suse.de
@@ -62,7 +63,7 @@ Cc: dan.j.williams@intel.com, ljs@kernel.org, Liam.Howlett@oracle.com,
  linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
  linux-cxl@vger.kernel.org, kernel-team@meta.com
 References: <20260321150404.3288786-1-gourry@gourry.net>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+ <4c08c0a8-9415-4f30-bfa9-db39318fa7d3@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -108,26 +109,26 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260321150404.3288786-1-gourry@gourry.net>
+In-Reply-To: <4c08c0a8-9415-4f30-bfa9-db39318fa7d3@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13845-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13846-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
@@ -136,79 +137,85 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lpc.events:url]
-X-Rspamd-Queue-Id: 3A00A3ED926
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lpc.events:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4809D3EDA36
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/21/26 16:03, Gregory Price wrote:
-> The dax kmem driver currently onlines memory during probe using the
-> system default policy, with no way to control or query the region state
-> at runtime - other than by inspecting the state of individual blocks.
+On 4/13/26 16:49, David Hildenbrand (Arm) wrote:
+> On 3/21/26 16:03, Gregory Price wrote:
+>> The dax kmem driver currently onlines memory during probe using the
+>> system default policy, with no way to control or query the region state
+>> at runtime - other than by inspecting the state of individual blocks.
+>>
+>> Offlining and removing an entire region requires operating on individual
+>> memory blocks, creating race conditions where external entities can
+>> interfere between the offline and remove steps.
+>>
+>> The problem was discussed specifically in the LPC2025 device memory
+>> sessions - https://lpc.events/event/19/contributions/2016/ - where
+>> it was discussed how the non-atomic interface for dax hotplug is causing
+>> issues in some distributions which have competing userland controllers
+>> that interfere with each other.
+>>
+>> This series adds a sysfs "hotplug" attribute for atomic whole-device
+>> hotplug control, along with the mm and dax plumbing to support it.
+>>
+>> The first five patches prepare the mm and dax layers:
+>>
+>>   1. Consolidate memory-tier type deduplication into mt_get_memory_type(),
+>>      removing redundant per-driver infrastructure.
+>>   2. Add a memory_block_align_range() helper for hotplug range alignment.
+>>   3-5. Thread an explicit online_type through the memory hotplug and dax
+>>      paths, allowing drivers to specify a preferred auto-online policy
+>>      (ZONE_NORMAL vs ZONE_MOVABLE) instead of being forced to the
+>>      system default.
+>>
+>> The last three patches build the dax/kmem feature:
+>>
+>>   6. Plumb online_type through the dax device creation path.
+>>   7. Extract hotplug/hotremove into helper functions to separate resource
+>>      lifecycle from memory onlining.
+>>   8. Add the "hotplug" sysfs attribute supporting three states:
+>>      - "unplug": memory blocks removed
+>>      - "online": online as normal system RAM
+>>      - "online_movable": online in ZONE_MOVABLE
+>>
+>> Transitions are atomic across all ranges in the device.  Backward
+>> compatibility is preserved: probe still auto-onlines when the configured
+>> policy matches the system default.
+>>
+>> Specific notes for maintainers:
+>>
+>> I downgraded a BUG() to a WARN() when unbind is called while the dax
+>> device is not un an UNPLUGGED state.  This is because the old pattern of
+>> toggling individual memory blocks is still used by userland tools, and
+>> will disconnect the `hotplug` value from the actual state of the overall
+>> memory region.
+>>
+>> Unless we move to deprecate per-block controls, we should just WARN()
+>> instead of BUG() as an indicator that userland tools need to be updated
+>> to use the new pattern (the old pattern is subject to race conditions).
+>>
+>> The first two commits are semi-unrelated cleanups that conflict with the
+>> changes made in the refactoring commits. (memory-tier dedup and align_range
+>> helper). These are intended to be used for future cxl region extensions,
+>> but if you prefer them to be dropped or submitted separately let me
+>> know.
+>>
+>> This is technically v3, but the patch line has diverged considerably and
+>> I've reworked the cover letter, apologies for prior obtuseness
+>> Link: https://lore.kernel.org/all/20260114235022.3437787-1-gourry@gourry.net/
 > 
-> Offlining and removing an entire region requires operating on individual
-> memory blocks, creating race conditions where external entities can
-> interfere between the offline and remove steps.
 > 
-> The problem was discussed specifically in the LPC2025 device memory
-> sessions - https://lpc.events/event/19/contributions/2016/ - where
-> it was discussed how the non-atomic interface for dax hotplug is causing
-> issues in some distributions which have competing userland controllers
-> that interfere with each other.
+> Hi Gregory,
 > 
-> This series adds a sysfs "hotplug" attribute for atomic whole-device
-> hotplug control, along with the mm and dax plumbing to support it.
+> against which branch / base commit is this series?
 > 
-> The first five patches prepare the mm and dax layers:
-> 
->   1. Consolidate memory-tier type deduplication into mt_get_memory_type(),
->      removing redundant per-driver infrastructure.
->   2. Add a memory_block_align_range() helper for hotplug range alignment.
->   3-5. Thread an explicit online_type through the memory hotplug and dax
->      paths, allowing drivers to specify a preferred auto-online policy
->      (ZONE_NORMAL vs ZONE_MOVABLE) instead of being forced to the
->      system default.
-> 
-> The last three patches build the dax/kmem feature:
-> 
->   6. Plumb online_type through the dax device creation path.
->   7. Extract hotplug/hotremove into helper functions to separate resource
->      lifecycle from memory onlining.
->   8. Add the "hotplug" sysfs attribute supporting three states:
->      - "unplug": memory blocks removed
->      - "online": online as normal system RAM
->      - "online_movable": online in ZONE_MOVABLE
-> 
-> Transitions are atomic across all ranges in the device.  Backward
-> compatibility is preserved: probe still auto-onlines when the configured
-> policy matches the system default.
-> 
-> Specific notes for maintainers:
-> 
-> I downgraded a BUG() to a WARN() when unbind is called while the dax
-> device is not un an UNPLUGGED state.  This is because the old pattern of
-> toggling individual memory blocks is still used by userland tools, and
-> will disconnect the `hotplug` value from the actual state of the overall
-> memory region.
-> 
-> Unless we move to deprecate per-block controls, we should just WARN()
-> instead of BUG() as an indicator that userland tools need to be updated
-> to use the new pattern (the old pattern is subject to race conditions).
-> 
-> The first two commits are semi-unrelated cleanups that conflict with the
-> changes made in the refactoring commits. (memory-tier dedup and align_range
-> helper). These are intended to be used for future cxl region extensions,
-> but if you prefer them to be dropped or submitted separately let me
-> know.
-> 
-> This is technically v3, but the patch line has diverged considerably and
-> I've reworked the cover letter, apologies for prior obtuseness
-> Link: https://lore.kernel.org/all/20260114235022.3437787-1-gourry@gourry.net/
 
+b4 am --guess-base
 
-Hi Gregory,
-
-against which branch / base commit is this series?
+Was helpful :)
 
 -- 
 Cheers,
