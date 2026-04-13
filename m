@@ -1,51 +1,51 @@
-Return-Path: <nvdimm+bounces-13854-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13855-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sB/EGwoK3WkZZAkAu9opvQ
-	(envelope-from <nvdimm+bounces-13854-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 17:21:46 +0200
+	id 6DLPMzwL3WkZZAkAu9opvQ
+	(envelope-from <nvdimm+bounces-13855-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 17:26:52 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 080343EDDCD
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 17:21:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 512A13EDF0F
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 17:26:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4D5753016D00
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 15:21:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 369C63029763
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Apr 2026 15:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9D43C65FE;
-	Mon, 13 Apr 2026 15:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23333BE17B;
+	Mon, 13 Apr 2026 15:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6z5tz8k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BYE59FG1"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBDF3BC677;
-	Mon, 13 Apr 2026 15:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40863B585C;
+	Mon, 13 Apr 2026 15:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776093679; cv=none; b=sqW31hzdNx/Z3QY1088azF37BA9z2owZLFyKt9TRZ5xtDJovl6ELkg3HZEsNZP0dSg2uBj3bW93hj3eDLkj5JpfQttH1RJEoZ4CtpImgzIdPuW1UOHM6v4pHiUcSHHPx6XP617iZFl63hVkb/2VRiDJmi5IfSY7DCX5WCXJlSGw=
+	t=1776093799; cv=none; b=s1+HvOTIOFLSiB332IrH8DHHUh6dk8mtKjY0EI3tTd2aJppHwZCx2qPq1zTvCQrfLMzWJhd33373W9eWcBLoukRn7x8NUEknBbXlGBgXDMGpNlSVpol0wjhLgETHUFqPQSseOpQ2fF9jPOz4yUNIELh5kuW4RDJxf84R0eiIGKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776093679; c=relaxed/simple;
-	bh=0tDU+gJ0igRYGEMqvw+y8S5RV0mbZpxGXNcPCdzGa7M=;
+	s=arc-20240116; t=1776093799; c=relaxed/simple;
+	bh=S45XMgptda56IsZAs7DVd5a3LNMAqRWpvRwu+DHIPGQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+9wjXDlSal034Ms8iObK1UmpcHs2iX4bZ6BBIvAaN7ru88STLLCkKCdjlwi0b+lOFcybWXXeOB6dVGlSyU4I5vOSIsvVuITVFN1ruQsVk0PoJx5LAbZe++YlVNzBx8BvBq1aEAUHekwXZZWxgoqrK8AUJN/FWeRSgsWIFDEnys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6z5tz8k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EFBC2BCAF;
-	Mon, 13 Apr 2026 15:21:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ps1TgRLS1sRujfc/1enmdtuOeRzFN3bFEV0j8MNWDqg1mr8JVZfOXpUiYG/vnRf9FtMwJCNopmzzLghNIzq7Uu4vrpi6ezZ9EHJQV+Rc9xqTex2F0u+lh0TpLYX3Ok2crdsPYzYTepbnDAcQ9kkZhzb91t4X+GmzNkqEtFjiDZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BYE59FG1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BDEC2BCB0;
+	Mon, 13 Apr 2026 15:23:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776093678;
-	bh=0tDU+gJ0igRYGEMqvw+y8S5RV0mbZpxGXNcPCdzGa7M=;
+	s=k20201202; t=1776093799;
+	bh=S45XMgptda56IsZAs7DVd5a3LNMAqRWpvRwu+DHIPGQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M6z5tz8kY/PU01R6WlDxuIBLJ/bJKpoQAnN5/1qbP5spDN/iPHFfPzBLX8mkV9DDA
-	 G3DkT5bVzg5U94Px2HUhWXhaFgUi7LQGLGjQ1MGNP2Hg7lQ00dASwHNXXyav63gc+O
-	 QJw4wroV76SWun3igUHrJLnRhHd5ncUMOZRcUV7H57gEbsMQRAPHz0ozkufzm0xY7j
-	 GLOQM9DkBLKmLeoBhWTfOczfcajffXg2kORKsS/ddCSJDfF4e+5gR9FvsqS1/3omX0
-	 fLaDhmGnEfXD2Oms09iM24cDcFoNNVmfzLMASw49qqzsjfZ+0MssJoXaRE3ZQseoyK
-	 oYUbhyfDTuhEA==
-Message-ID: <dfb42983-e5b7-49cc-bfa3-7cd3d32c4a6d@kernel.org>
-Date: Mon, 13 Apr 2026 17:21:11 +0200
+	b=BYE59FG1YQ0pT8LVUF+tv5zY7dYAb5xA9h6J7NT7HBj1dnAg7HpvrDCSEqlonD57R
+	 8HpbASIbg3q2rlDrHvQFz4aruyuJhmFLSxnSEFDPXQ0Vqbu8Q54XmzXM4D75mnM0JZ
+	 zOwruWwCr4X7vE07w18nFeU25jDCX/DuSX2K+fg0Pi6bBenTPwbEPpLhrbHaL0OZ1t
+	 pYUoSRvSbdhax38dFAUgo4xR+x2eGlzUFsw0qE5DkqmJhu3MoMoAODwwQ+8wXPbsl9
+	 +V+Q0rzeYQnoRWRQKcKIfBJd+9XzRZ9seOmCt2SmRaAzZfTCNPl5iZosMNoZ8dmXrB
+	 OBn7uKUVLvJXQ==
+Message-ID: <3a4166db-fd04-4a9a-a25a-a7b6d149b97f@kernel.org>
+Date: Mon, 13 Apr 2026 17:23:11 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -53,8 +53,7 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/8] mm/memory_hotplug: add __add_memory_driver_managed()
- with online_type arg
+Subject: Re: [PATCH 6/8] dax: plumb hotplug online_type through dax
 To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
  vishal.l.verma@intel.com, dave.jiang@intel.com, akpm@linux-foundation.org,
  osalvador@suse.de
@@ -63,7 +62,7 @@ Cc: dan.j.williams@intel.com, ljs@kernel.org, Liam.Howlett@oracle.com,
  linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
  linux-cxl@vger.kernel.org, kernel-team@meta.com
 References: <20260321150404.3288786-1-gourry@gourry.net>
- <20260321150404.3288786-6-gourry@gourry.net>
+ <20260321150404.3288786-7-gourry@gourry.net>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -110,26 +109,26 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260321150404.3288786-6-gourry@gourry.net>
+In-Reply-To: <20260321150404.3288786-7-gourry@gourry.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13854-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13855-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
@@ -138,46 +137,70 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 080343EDDCD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 512A13EDF0F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On 3/21/26 16:04, Gregory Price wrote:
-> Existing callers of add_memory_driver_managed cannot select the
-> preferred online type (ZONE_NORMAL vs ZONE_MOVABLE), requiring it to
-> hot-add memory as offline blocks, and then follow up by onlining each
-> memory block individually.
+> There is no way for drivers leveraging dax_kmem to plumb through a
+> preferred auto-online policy - the system default policy is forced.
 > 
-> Most drivers prefer the system default, but the CXL driver wants to
-> plumb a preferred policy through the dax kmem driver.
+> Add 'enum mmop' field to DAX device creation path to allow drivers
+> to specify an auto-online policy when using the kmem driver.
 > 
-> Refactor APIs to add a new interface which allows the dax kmem and
-> cxl_core modules to select a preferred policy.  Only expose this
-> interface to those modules to avoid confusion among existing API users
-> and to limit usage in out-of-tree modules.
+> Current callers initialize online_type to mhp_get_default_online_type()
+> to retain backward compatibility and to make explicit to the drivers
+> what is actually happening underneath.
 > 
-> Refactor add_memory_driver_managed, extract __add_memory_driver_managed
-> - Add proper kernel-doc for add_memory_driver_managed while refactoring
-> - New helper accepts an explicit online_type.
-> - New help validates online_type is between OFFLINE and ONLINE_MOVABLE
+> No functional changes to existing callers.
 > 
-> Refactor: add_memory_resource, extract __add_memory_resource
-> - new helper accepts an explicit online_type
-> 
-> Original APIs now explicitly pass the system-default to new helpers.
-> 
-> No functional change for existing users.
-> 
+> Cc:David Hildenbrand <david@kernel.org>
+> Signed-off-by: Gregory Price <gourry@gourry.net>
+> ---
 
-You should add here, that we only allow known in-tree modules to
-overwrite the onlining policy (where we know that it's a different
-user-requested policy), as we don't want arbitrary OOT drivers to
-overwrite the configured system policy.
+[...]
 
-Therefore EXPORT_SYMBOL_FOR_MODULES().
+>  
+>  	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 798f389df992..d4c34b2e3766 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -16,6 +16,11 @@
+>  #include "dax-private.h"
+>  #include "bus.h"
+>  
+> +/* Internal function exported only to kmem module */
+> +extern int __add_memory_driver_managed(int nid, u64 start, u64 size,
+> +				       const char *resource_name,
+> +				       mhp_t mhp_flags, enum mmop online_type);
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+This should just go to the memory_hotplug.h header.
+
+The EXPORT will make sure that only supported modules can use this.
+
+> +
+>  /* Memory resource name used for add_memory_driver_managed(). */
+>  static const char *kmem_name;
+>  /* Set if any memory will remain added when the driver will be unloaded. */
+> @@ -49,6 +54,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  	struct dax_kmem_data *data;
+>  	struct memory_dev_type *mtype;
+>  	int i, rc, mapped = 0;
+> +	enum mmop online_type;
+>  	mhp_t mhp_flags;
+>  	int numa_node;
+>  	int adist = MEMTIER_DEFAULT_LOWTIER_ADISTANCE;
+> @@ -111,6 +117,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		goto err_reg_mgid;
+>  	data->mgid = rc;
+>  
+> +	online_type = dev_dax->online_type;
+
+Do you need the temporary variable?
+
+
 
 -- 
 Cheers,
