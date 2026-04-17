@@ -1,75 +1,78 @@
-Return-Path: <nvdimm+bounces-13917-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13918-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WO8kAqeQ4mmX7QAAu9opvQ
-	(envelope-from <nvdimm+bounces-13917-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 21:57:27 +0200
+	id KICSLn2Q4mmX7QAAu9opvQ
+	(envelope-from <nvdimm+bounces-13918-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 21:56:45 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DF5641E666
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 21:57:22 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F77D41E658
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 21:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 16E4E3059FC6
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 19:56:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E5B0D305328D
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 17 Apr 2026 19:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39DD38F64A;
-	Fri, 17 Apr 2026 19:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFCC38F64A;
+	Fri, 17 Apr 2026 19:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eL/ToGA4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dRn6lXDP"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C40734216C
-	for <nvdimm@lists.linux.dev>; Fri, 17 Apr 2026 19:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424733ACA41
+	for <nvdimm@lists.linux.dev>; Fri, 17 Apr 2026 19:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776455792; cv=none; b=XFedblQobLFdb9cxr+k5piF+X4+5KhVLMUAv5qtdXzb0HQir+z3OjtEilnZTwCe4f7OjcgmxejEWyLopgzyMwlXlrHz68swYDRTuGCKZofSv9bolf0JE4ym+MqTnRcp2T+hnBdEazrhPsjNFI1kQBkjHtSHey54zDA95dHGsB/A=
+	t=1776455794; cv=none; b=pkAhDRAaJao5wvF5H4DuiddOoLTGL1pF8dhDlenqQIx0lRZ67gE6loUQSoN+vkI0MCDGtRQ5LEnK3lYFdVqbA8lQf+ZqIneIs7z6cZ4kdCrAQk0L42GmCOyGi8RaDf28mOyL870z6vl31LYNW6aLtZJRGwLl1SCLwD3pnpqjbfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776455792; c=relaxed/simple;
-	bh=ksuYBGHbHGCoFIpozDY/F5XCFRC+LNWv6xjmNIfUBnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B1aWgRrCKD3OMDDrCYBZWy/l6NHDIIUdbNphM49WO/NKb78nhNNeIplAEaA7dL01gD0J8hWKMr/8nX6cJ19pEUrBXlxLNAFy1b1Pt1gJdx0h8MZ4azoVYDRspQ4ZHLeKVbKmkxI05MdS+xCprVmFCZ7yJI/jiAN6ZWr/OrNFsn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eL/ToGA4; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1776455794; c=relaxed/simple;
+	bh=O71hqBeZQPpqnHmMrSdWvCdrTPwJvmuxC3tejCkTBI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kggZcq58yXqbXM0HnIpvp6/tUoSFtCHxsAP2Q6R+mZ5RfztWTqbK3yH+WF/4JAJ/KPt+wUlrCQZO3axMC9YPcJT2vCsaC31Kc7Qd1zp2hGxo712Dku0yrzeoBVeDn2d14gfb4FOFLkae86xaaVHq9k2JMHHYmDUzwtXDFAb9CxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dRn6lXDP; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776455790; x=1807991790;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ksuYBGHbHGCoFIpozDY/F5XCFRC+LNWv6xjmNIfUBnM=;
-  b=eL/ToGA4Tuxs2skR6m0W83j0JlLSSGAz+e3hIY3KHOuGg9M4Kg6o8E6M
-   z+HeOanP0FvqBbuVQxi2Zu9Gq0c8TCneuCSl0pQ2IJQguk0M+pjVz1WLJ
-   JxiKvLB/w1RwpHn7pCRlH3Aray695EiFjhlIqk9PsuwFFtE+5lAVTmMg7
-   QHJkbLhH1R5Hia5tqUMA5lZlXYUrWOTet2G3QrMnQT6upsqbRt6kUF1a5
-   lKHEXYTpj0IWnXltWt2oqArJYCxF/qOhkkP78ZRE9mky4khY68uR8X1DP
-   zcxcQ0Ozyd5JNfyuV08qlrxzjZERhEBQxdMEZRzovZqqy49RzOacIlVBW
-   w==;
-X-CSE-ConnectionGUID: m6ohha7cTpSVkArtm7G08A==
-X-CSE-MsgGUID: dLoJ5DsxTf6jzBJIbqR5PQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="77548545"
+  t=1776455792; x=1807991792;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=O71hqBeZQPpqnHmMrSdWvCdrTPwJvmuxC3tejCkTBI8=;
+  b=dRn6lXDP75sxI813NREhi3rjVmENUHsRpDIjUvAMZxnioDnVowAE1xjb
+   8Ig53MENPuIuI9EWEkjYqEMPxE+MnQJxi+UJQzT/YxeMAGGTIasavAaO5
+   TMcoKQXh4sOQ2TLAlYGLgA+gLKzWiyCVO+3cypm4eoePcV3GqodhX2R2n
+   Ns9Mv2rE7VI39HRjz0GdotvOqMGHc0YmUFwuVdrOeYudUq2vd1B3x6liU
+   C0sd99PZYajgIRLnSKZt94g08zhiNWAVtVIEhIaCINB3pUDjJoU0onLQk
+   sBd42VPxWYkZOUFz1Qsi8d0iCQGGhLij/mvTmCmOLRfUS5+xPYx9e0szw
+   Q==;
+X-CSE-ConnectionGUID: bGwIYb9BQeyo103wspFpcQ==
+X-CSE-MsgGUID: tsBY274PTtWTwH3mbDR8lQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="77548550"
 X-IronPort-AV: E=Sophos;i="6.23,184,1770624000"; 
-   d="scan'208";a="77548545"
+   d="scan'208";a="77548550"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 12:56:29 -0700
-X-CSE-ConnectionGUID: mJIVEl5yQ4iMF0UhAE08nw==
-X-CSE-MsgGUID: QokvExqaQA280F311kQepw==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 12:56:32 -0700
+X-CSE-ConnectionGUID: yuq24cs+SGyHZj8+RpE3kQ==
+X-CSE-MsgGUID: 1tAdxqeERjmxGjacXoq45w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,184,1770624000"; 
-   d="scan'208";a="224620538"
+   d="scan'208";a="224620545"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.124.223.71])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 12:56:29 -0700
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 12:56:31 -0700
 From: Alison Schofield <alison.schofield@intel.com>
 To: nvdimm@lists.linux.dev,
 	linux-cxl@vger.kernel.org
 Cc: Alison Schofield <alison.schofield@intel.com>,
 	Dave Jiang <dave.jiang@intel.com>,
 	"Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Subject: [ndctl PATCH v2 1/2] test/common: add helpers for CXL region replay testing
-Date: Fri, 17 Apr 2026 12:56:23 -0700
-Message-ID: <ccc1955b697f7b74e16924bff1b1e262eb52fba0.1776454849.git.alison.schofield@intel.com>
+Subject: [ndctl PATCH v2 2/2] test/cxl-region-replay.sh: add test of region replay workflow
+Date: Fri, 17 Apr 2026 12:56:24 -0700
+Message-ID: <81c7cdd6cbcb4f1f77870ff02d8dd86298036f58.1776454849.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <ccc1955b697f7b74e16924bff1b1e262eb52fba0.1776454849.git.alison.schofield@intel.com>
+References: <ccc1955b697f7b74e16924bff1b1e262eb52fba0.1776454849.git.alison.schofield@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -83,7 +86,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -91,9 +94,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13917-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13918-lists,linux-nvdimm=lfdr.de];
 	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[alison.schofield@intel.com,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
@@ -102,166 +105,214 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7DF5641E666
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cxl-translate.sh:url,cxl-qos-class.sh:url,cxl-elc.sh:url,cxl-region-replay.sh:url]
+X-Rspamd-Queue-Id: 4F77D41E658
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add replay_regions() and supporting helpers to the CXL test common
-library. The helpers capture the current region configuration, trigger
-a region replay by unbinding and rebinding the cxl_acpi driver, and
-verify that the regions reconstructed during enumeration match the
-original configuration.
+Add a CXL unit test that exercises the replay_regions() helpers
+introduced in test/common.
 
-Replay is enabled by instructing the cxl_test module to preserve its
-decoder registry across the driver unbind/bind cycle. This allows the
-decoder programming associated with user-created regions to survive
-topology teardown so that the regions are reconstructed during driver
-initialization as auto-discovered regions.
+The test creates regions through the user interface, captures the
+resulting region configuration, performs a cxl_acpi driver unbind/bind
+cycle, and verifies that the regions reconstructed during enumeration
+match the original configuration.
 
-Region signatures are derived from region attributes and memdev serial
-numbers so that the replayed configuration can be compared independent
-of topology enumeration order and device numbering.
-
-These helpers provide a reusable mechanism for CXL tests that need to
-exercise region replay behavior. A unit test, cxl-region-replay.sh, is
-posted in a follow-on patch and demonstrates the workflow.
+This validates the decoder replay mechanism implemented in the kernel
+cxl_test module by replaying user-created regions as auto-discovered
+regions during driver initialization.
 
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Reviewed-by: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
 Tested-by: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Link: https://lore.kernel.org/r/8646e0b11697e3adb4fc9a83fa486e68a4b9b5c5.1773466514.git.alison.schofield@intel.com
+Link: https://lore.kernel.org/r/7ec630ea29675b57c052e9606b1d33177e989a2a.1773466514.git.alison.schofield@intel.com
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
 
 Changes in v2:
-- Add comment for replay state comparison (Fabio)
 - Rebase onto latest ndctl/pending
 - Add Fabio's Tags
 
 
- test/common | 111 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 111 insertions(+)
+ test/cxl-region-replay.sh | 148 ++++++++++++++++++++++++++++++++++++++
+ test/meson.build          |   2 +
+ 2 files changed, 150 insertions(+)
+ create mode 100644 test/cxl-region-replay.sh
 
-diff --git a/test/common b/test/common
-index 2eb11b7396d0..d60d9e046445 100644
---- a/test/common
-+++ b/test/common
-@@ -168,3 +168,114 @@ check_dmesg()
+diff --git a/test/cxl-region-replay.sh b/test/cxl-region-replay.sh
+new file mode 100644
+index 000000000000..3049ca9f34b5
+--- /dev/null
++++ b/test/cxl-region-replay.sh
+@@ -0,0 +1,148 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2022 Intel Corporation. All rights reserved.
++
++. $(dirname $0)/common
++
++rc=77
++
++set -ex
++
++trap 'err $LINENO' ERR
++
++check_prereq "jq"
++
++modprobe -r cxl_test
++modprobe cxl_test
++
++# Replay support is exposed by cxl_acpi after cxl_test loads
++if [ ! -e /sys/bus/platform/devices/cxl_acpi.0/decoder_reset_preserve_registry ]; then
++	do_skip "test requires decoder registry replay support"
++fi
++
++rc=1
++
++# Demonstrate and validate CXL region replay support in cxl_test.
++#
++# Replay helpers in test/common snapshot the current region topology,
++# replay the configuration, and verify that the reconstructed regions
++# match the original configuration.
++#
++# Tests should use the common helper:
++#   replay_regions
++#
++# This test serves as both a sanity check for replay support and an
++# example of how other cxl_test unit tests can use replay_regions().
++
++destroy_regions() {
++	$CXL destroy-region -f -b cxl_test all
++}
++
++create_region() {
++	region=$($CXL create-region -d "$decoder" -m "$memdevs" |
++		jq -r ".region")
++
++	if [[ ! $region ]]; then
++		echo "create-region failed for $decoder"
++		err "$LINENO"
++	fi
++}
++
++create_x2_pmem_region() {
++	# Find a pmem-capable x2 decoder
++	decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
++		select(.pmem_capable == true) |
++		select(.nr_targets == 2) |
++		.decoder")
++
++	# Select one memdev for each host-bridge interleave position
++	port_dev0=$($CXL list -T -d "$decoder" | jq -r ".[] |
++		.targets | .[] | select(.position == 0) | .target")
++	port_dev1=$($CXL list -T -d "$decoder" | jq -r ".[] |
++		.targets | .[] | select(.position == 1) | .target")
++	mem0=$($CXL list -M -p "$port_dev0" | jq -r ".[0].memdev")
++	mem1=$($CXL list -M -p "$port_dev1" | jq -r ".[0].memdev")
++	memdevs="$mem0 $mem1"
++	create_region
++}
++
++create_x4_ram_region() {
++	# Find a volatile-capable x2 decoder
++	decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
++		select(.volatile_capable == true) |
++		select(.nr_targets == 2) |
++		.decoder")
++
++	# Select two memdevs for each host-bridge interleave position
++	port_dev0=$($CXL list -T -d "$decoder" | jq -r ".[] |
++		.targets | .[] | select(.position == 0) | .target")
++	port_dev1=$($CXL list -T -d "$decoder" | jq -r ".[] |
++		.targets | .[] | select(.position == 1) | .target")
++	mem0=$($CXL list -M -p "$port_dev0" | jq -r ".[0].memdev")
++	mem1=$($CXL list -M -p "$port_dev1" | jq -r ".[0].memdev")
++	mem2=$($CXL list -M -p "$port_dev0" | jq -r ".[1].memdev")
++	mem3=$($CXL list -M -p "$port_dev1" | jq -r ".[1].memdev")
++	memdevs="$mem0 $mem1 $mem2 $mem3"
++	create_region
++}
++
++AUTO_MEMDEVS=""
++AUTO_ROOT_DECODER=""
++
++capture_auto_region() {
++	local region_json dec_json
++
++	region_json=$($CXL list -R --targets)
++
++	# Expect exactly one auto region
++	[ "$(jq 'length' <<<"$region_json")" -eq 1 ] || err "$LINENO"
++
++	AUTO_MEMDEVS=$(jq -r '.[0].mappings | sort_by(.position) | .[].memdev' \
++		<<<"$region_json" | xargs)
++	[[ $AUTO_MEMDEVS ]] || err "$LINENO"
++
++	dec_json=$($CXL list -R --decoders)
++	AUTO_ROOT_DECODER=$(jq -r '.[0]["root decoders"][0].decoder' <<<"$dec_json")
++	[[ $AUTO_ROOT_DECODER ]] || err "$LINENO"
++}
++
++create_user_region_in_auto_region_space() {
++	decoder="$AUTO_ROOT_DECODER"
++	memdevs="$AUTO_MEMDEVS"
++	create_region
++}
++
++# To remove the auto region, destroy and recreate in user space.
++# With that action, there will be no 'auto' decoders and it will not be
++# preserved across acpi rebind.
++#
++# This is done here as example if test wants the resources freed
++remove_auto_region() {
++	capture_auto_region
++	destroy_regions
++	create_user_region_in_auto_region_space
++	destroy_regions
++	replay_regions || err "$LINENO"
++}
++
++# Replay the built-in auto region
++[ "$($CXL list -R | jq 'length')" -ne 0 ] || err "$LINENO"
++replay_regions || err "$LINENO"
++
++# Remove the built-in auto region to free up resources
++remove_auto_region
++[ "$($CXL list -R | jq 'length')" -eq 0 ] || err "$LINENO"
++
++# Create and replay a volatile region
++create_x4_ram_region
++replay_regions || err "$LINENO"
++
++# Add-on a pmem region
++create_x2_pmem_region
++
++# Replay both the x4_ram and x2_pmem
++replay_regions || err "$LINENO"
++
++check_dmesg "$LINENO"
++
++modprobe -r cxl_test
+diff --git a/test/meson.build b/test/meson.build
+index 4260a3fa4448..e0e2193bfd51 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -170,6 +170,7 @@ cxl_qos_class = find_program('cxl-qos-class.sh')
+ cxl_translate = find_program('cxl-translate.sh')
+ cxl_elc = find_program('cxl-elc.sh')
+ cxl_dax_hmem = find_program('cxl-dax-hmem.sh')
++cxl_region_replay = find_program('cxl-region-replay.sh')
  
- # CXL COMMON
- CXL_TEST_QOS_CLASS=42
-+
-+# CXL region replay helpers
-+#
-+# replay_regions() snapshots the current region configuration, performs
-+# a cxl_acpi driver unbind/bind cycle to trigger region replay, and
-+# verifies that the regions reconstructed during enumeration match the
-+# original configuration.
-+#
-+# This allows tests to create regions through the user interface and
-+# then replay them as auto-discovered regions during driver
-+# initialization.
-+#
-+# See example usage in test/cxl-region-replay.sh.
-+
-+CXL_EXPECTED_REGION_SIGS=""
-+
-+cxl_get_memdev_serial()
-+{
-+	local memdev="$1"
-+
-+	"$CXL" list -m "$memdev" | jq -r '.[0].serial'
-+}
-+
-+cxl_emit_region_signature()
-+{
-+	local region="$1"
-+	local region_json size type ways gran state
-+	local entry pos memdev serial sig
-+
-+	region_json=$("$CXL" list -R --targets -r "$region")
-+	[[ -n "$region_json" && "$region_json" != "[]" ]] || return 1
-+
-+	size=$(jq -r '.[0].size' <<<"$region_json")
-+	type=$(jq -r '.[0].type' <<<"$region_json")
-+	ways=$(jq -r '.[0].interleave_ways' <<<"$region_json")
-+	gran=$(jq -r '.[0].interleave_granularity' <<<"$region_json")
-+	state=$(jq -r '.[0].decode_state' <<<"$region_json")
-+
-+	sig="size=$size type=$type ways=$ways gran=$gran"
-+
-+	while IFS= read -r entry; do
-+		pos=$(jq -r '.position' <<<"$entry")
-+		memdev=$(jq -r '.memdev' <<<"$entry")
-+		serial=$(cxl_get_memdev_serial "$memdev") || return 1
-+		[[ -n "$serial" && "$serial" != "null" ]] || return 1
-+		sig="$sig pos=$pos serial=$serial"
-+	done < <(jq -c '.[0].mappings | sort_by(.position)[]' <<<"$region_json")
-+
-+	echo "$sig state=$state"
-+}
-+
-+cxl_collect_region_signatures()
-+{
-+	local region
-+	local -a regions=()
-+
-+	mapfile -t regions < <("$CXL" list -Ri | jq -r '.[].region' | sort) || return 1
-+
-+	for region in "${regions[@]}"; do
-+		cxl_emit_region_signature "$region" || return 1
-+	done | sort
-+}
-+
-+cxl_capture_expected_region_signatures()
-+{
-+	CXL_EXPECTED_REGION_SIGS=$(cxl_collect_region_signatures) || return 1
-+}
-+
-+cxl_verify_replayed_regions()
-+{
-+	local actual_region_sigs
-+	local -a expected_lines=()
-+	local -a actual_lines=()
-+	local i
-+	local expected_line actual_line
-+	local expected_struct actual_struct
-+	local expected_state actual_state
-+
-+	actual_region_sigs=$(cxl_collect_region_signatures) || return 1
-+
-+	mapfile -t expected_lines < <(printf '%s\n' "$CXL_EXPECTED_REGION_SIGS" | sed '/^$/d')
-+	mapfile -t actual_lines < <(printf '%s\n' "$actual_region_sigs" | sed '/^$/d')
-+
-+	[ "${#expected_lines[@]}" -eq "${#actual_lines[@]}" ] || return 1
-+
-+	for ((i = 0; i < ${#expected_lines[@]}; i++)); do
-+		expected_line=${expected_lines[i]}
-+		actual_line=${actual_lines[i]}
-+
-+		expected_struct=${expected_line% state=*}
-+		expected_state=${expected_line##* state=}
-+		actual_struct=${actual_line% state=*}
-+		actual_state=${actual_line##* state=}
-+
-+		# Require exact structural match for the region config.
-+		# Only enforce state when the expected state was commit.
-+		[ "$expected_struct" = "$actual_struct" ] || return 1
-+		[ "$expected_state" != "commit" ] || [ "$actual_state" = "commit" ] || return 1
-+	done
-+}
-+
-+replay_regions()
-+{
-+	echo "replaying existing regions"
-+	cxl_capture_expected_region_signatures || return 1
-+	echo 1 > /sys/bus/platform/devices/cxl_acpi.0/decoder_reset_preserve_registry
-+	echo cxl_acpi.0 > /sys/bus/platform/drivers/cxl_acpi/unbind
-+	echo cxl_acpi.0 > /sys/bus/platform/drivers/cxl_acpi/bind
-+	echo 0 > /sys/bus/platform/devices/cxl_acpi.0/decoder_reset_preserve_registry
-+	cxl_verify_replayed_regions || return 1
-+}
+ tests = [
+   [ 'libndctl',               libndctl,		  'ndctl' ],
+@@ -205,6 +206,7 @@ tests = [
+   [ 'cxl-translate.sh',       cxl_translate,      'cxl'   ],
+   [ 'cxl-elc.sh',             cxl_elc,            'cxl'   ],
+   [ 'cxl-dax-hmem.sh',        cxl_dax_hmem,       'cxl'   ],
++  [ 'cxl-region-replay.sh',   cxl_region_replay,  'cxl'   ],
+ ]
+ 
+ if get_option('destructive').enabled()
 -- 
 2.37.3
 
