@@ -1,37 +1,37 @@
-Return-Path: <nvdimm+bounces-13943-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13944-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IMyPOHlT6mkhxgIAu9opvQ
-	(envelope-from <nvdimm+bounces-13943-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:14:33 +0200
+	id kJubOHlR6mkhxgIAu9opvQ
+	(envelope-from <nvdimm+bounces-13944-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:06:01 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45EE9455635
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:14:33 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F11BA4554EF
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:05:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 20803305646E
+	by tor.lore.kernel.org (Postfix) with ESMTP id C12C7308F479
 	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 17:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26BD388370;
-	Thu, 23 Apr 2026 17:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAA2387371;
+	Thu, 23 Apr 2026 17:02:24 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E7438735A;
-	Thu, 23 Apr 2026 17:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369A0386C0A;
+	Thu, 23 Apr 2026 17:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776963742; cv=none; b=I2YYul7WUN0Xs3MIbGpoqa2359NJo55iuxM00q8UeKD1cBulBWvyeNzagUDumEpe3wJMbx6jkPxRZ3U5NWksVC13YfkWxSYeyRuE08D7gfBY7GzSTOnuYOW0GdhW7Jb5iR86wgI/d4nfNK2qNUigyldtwuXfDxoa+xeFMiR4EuI=
+	t=1776963744; cv=none; b=rX8aRA4DY0Yw/kf4rajuxQkGYa9YFy1FW1XR1f/mqjT8A5LnkeCTFJbQZQkSosiFe+jAJHFy6jlRQS78AsCw7Z6aG0yQUlBZVF4+1RJnyAn7Mo2NylU5XP1KlXZcgqqvWHKrr8U5ujwQ5UGrUsHqED6T/JL3Lqgm+LdqdhVC8vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776963742; c=relaxed/simple;
-	bh=ypyApHnZEKpoHVLOvakqXzDqjboOFWYPgK/w4Tdo4Nw=;
+	s=arc-20240116; t=1776963744; c=relaxed/simple;
+	bh=3HHkPQzEYy3AVQxaCt9xTKxJeWlgn9OWlO/P7JsaLGc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PDFFJ8H6C/Tc9hwr5vfjZhxj6Y89fBfhrR6aE4TU8HaeLOPjt+8LKG7R+RGeJcDfMBxCF8D6F7vn3IrHqHcT7W0InHe4Sd93SxHVFOMlFY6947kZfpQpPOWJpgIIAg2u+AU7pRQIVj0f4mLTun7kzx8x12kBZ64VRLBMrTJUgOk=
+	 MIME-Version; b=gNBy8Jhc8lks2Ct9/i+GxefWiFecZ65CUvPZyuBWpbkQf3JP6HaNOBgC87uWhqzpp3zlIYj8XWVLZAvSrXVyqes1zr/43A9XHYQitQRjviE1uH5UZk+cjceqZD0Hy6uDK6attStgnsX8ez4nupHF7aqiQtF3p37JnaQ2LRTGkAA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356E9C2BCAF;
-	Thu, 23 Apr 2026 17:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AC5C2BCAF;
+	Thu, 23 Apr 2026 17:02:23 +0000 (UTC)
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org,
 	nvdimm@lists.linux.dev
@@ -45,9 +45,9 @@ Cc: djbw@kernel.org,
 	gourry@gourry.net,
 	john@groves.net,
 	rick.p.edgecombe@intel.com
-Subject: [RFC PATCH 01/12] dax: rate limit dev_dax_huge_fault() output
-Date: Thu, 23 Apr 2026 10:02:08 -0700
-Message-ID: <20260423170219.281618-2-dave.jiang@intel.com>
+Subject: [RFC PATCH 02/12] dax: Save the kva from memremap
+Date: Thu, 23 Apr 2026 10:02:09 -0700
+Message-ID: <20260423170219.281618-3-dave.jiang@intel.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260423170219.281618-1-dave.jiang@intel.com>
 References: <20260423170219.281618-1-dave.jiang@intel.com>
@@ -62,7 +62,7 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[intel.com : SPF not aligned (relaxed), No valid DKIM,none];
@@ -70,10 +70,10 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13943-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13944-lists,linux-nvdimm=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
@@ -83,38 +83,95 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_NONE(0.00)[];
 	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:mid,intel.com:email]
-X-Rspamd-Queue-Id: 45EE9455635
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:mid,intel.com:email]
+X-Rspamd-Queue-Id: F11BA4554EF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use dev_dbg_ratelimited() to rate limit the output of
-dev_dax_huge_fault() in order to not flood the dmesg output.
+This patch is partially taken from John Grove's famfs dax series.
+
+Save the kva for memremap because we need direct_access() support.
 
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/dax/device.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/dax/dax-private.h |  4 ++++
+ drivers/dax/device.c      | 19 +++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
+diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
+index c6ae27c982f4..425a515905e5 100644
+--- a/drivers/dax/dax-private.h
++++ b/drivers/dax/dax-private.h
+@@ -69,6 +69,8 @@ struct dev_dax_range {
+  * data while the device is activated in the driver.
+  * @region: parent region
+  * @dax_dev: core dax functionality
++ * @virt_addr: kva from memremap; used by fsdev_dax
++ * @cached_size: cached size of the memory range for quick access; used by fsdev_dax
+  * @align: alignment of this instance
+  * @target_node: effective numa node if dev_dax memory range is onlined
+  * @dyn_id: is this a dynamic or statically created instance
+@@ -83,6 +85,8 @@ struct dev_dax_range {
+ struct dev_dax {
+ 	struct dax_region *region;
+ 	struct dax_device *dax_dev;
++	void *virt_addr;
++	u64 cached_size;
+ 	unsigned int align;
+ 	int target_node;
+ 	bool dyn_id;
 diff --git a/drivers/dax/device.c b/drivers/dax/device.c
-index 22999a402e02..62206bcb63a6 100644
+index 62206bcb63a6..4ffa3ef60a57 100644
 --- a/drivers/dax/device.c
 +++ b/drivers/dax/device.c
-@@ -244,9 +244,11 @@ static vm_fault_t dev_dax_huge_fault(struct vm_fault *vmf, unsigned int order)
- 	int id;
- 	struct dev_dax *dev_dax = filp->private_data;
+@@ -370,6 +370,7 @@ static int dax_open(struct inode *inode, struct file *filp)
+ 	filp->f_sb_err = file_sample_sb_err(filp);
+ 	filp->private_data = dev_dax;
+ 	inode->i_flags = S_DAX;
++	inode->i_size = dev_dax->cached_size;
  
--	dev_dbg(&dev_dax->dev, "%s: op=%s addr=%#lx order=%d\n", current->comm,
--		(vmf->flags & FAULT_FLAG_WRITE) ? "write" : "read",
--		vmf->address & ~((1UL << (order + PAGE_SHIFT)) - 1), order);
-+	dev_dbg_ratelimited(&dev_dax->dev, "%s: op=%s addr=%#lx order=%d\n",
-+			    current->comm,
-+			    (vmf->flags & FAULT_FLAG_WRITE) ? "write" : "read",
-+			    vmf->address & ~((1UL << (order + PAGE_SHIFT)) - 1),
-+			    order);
+ 	return 0;
+ }
+@@ -408,7 +409,9 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
+ 	struct device *dev = &dev_dax->dev;
+ 	struct dev_pagemap *pgmap;
+ 	struct inode *inode;
++	u64 data_offset = 0;
+ 	struct cdev *cdev;
++	u64 len = 0;
+ 	void *addr;
+ 	int rc, i;
  
- 	id = dax_read_lock();
- 	if (order == 0)
+@@ -451,6 +454,7 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
+ 					i, range->start, range->end);
+ 			return -EBUSY;
+ 		}
++		len += range_len(range);
+ 	}
+ 
+ 	pgmap->type = MEMORY_DEVICE_GENERIC;
+@@ -461,6 +465,21 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
+ 	if (IS_ERR(addr))
+ 		return PTR_ERR(addr);
+ 
++	/* Detect whether the data is at a non-zero offset into the memory */
++	if (pgmap->range.start != dev_dax->ranges[0].range.start) {
++		u64 phys = dev_dax->ranges[0].range.start;
++		u64 pgmap_phys = dev_dax->pgmap[0].range.start;
++
++		if (!WARN_ON(pgmap_phys > phys))
++			data_offset = phys - pgmap_phys;
++
++		pr_debug("%s: offset detected phys=%llx pgmap_phys=%llx offset=%llx\n",
++			 __func__, phys, pgmap_phys, data_offset);
++	}
++
++	dev_dax->virt_addr = addr + data_offset;
++	dev_dax->cached_size = len;
++
+ 	inode = dax_inode(dax_dev);
+ 	cdev = inode->i_cdev;
+ 	cdev_init(cdev, &dax_fops);
 -- 
 2.53.0
 
