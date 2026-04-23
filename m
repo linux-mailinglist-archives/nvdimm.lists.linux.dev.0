@@ -1,37 +1,37 @@
-Return-Path: <nvdimm+bounces-13944-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13945-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kJubOHlR6mkhxgIAu9opvQ
-	(envelope-from <nvdimm+bounces-13944-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:06:01 +0200
+	id sFs9G7NQ6mkhxgIAu9opvQ
+	(envelope-from <nvdimm+bounces-13945-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:02:43 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F11BA4554EF
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:05:58 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C65145541F
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 19:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C12C7308F479
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 17:02:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CF027300A30B
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 23 Apr 2026 17:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAA2387371;
-	Thu, 23 Apr 2026 17:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5413387373;
+	Thu, 23 Apr 2026 17:02:25 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369A0386C0A;
-	Thu, 23 Apr 2026 17:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC503822BB;
+	Thu, 23 Apr 2026 17:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776963744; cv=none; b=rX8aRA4DY0Yw/kf4rajuxQkGYa9YFy1FW1XR1f/mqjT8A5LnkeCTFJbQZQkSosiFe+jAJHFy6jlRQS78AsCw7Z6aG0yQUlBZVF4+1RJnyAn7Mo2NylU5XP1KlXZcgqqvWHKrr8U5ujwQ5UGrUsHqED6T/JL3Lqgm+LdqdhVC8vI=
+	t=1776963745; cv=none; b=kP3hj4nTYhE385oXdKDKlTSWpAx+zsstkLPlJeL8z3kl1a8y1Bu6OUDBMRChxEG/hImO36wKku4Qb/nAIZOKm9TXsOdQsU6SlCEzQRxic4Z5W/dzE5QS7i7gtEA5bkIe+HHZvH/CWSNAQYOpxpysLoglAiywrpvuXfS+XxoB4iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776963744; c=relaxed/simple;
-	bh=3HHkPQzEYy3AVQxaCt9xTKxJeWlgn9OWlO/P7JsaLGc=;
+	s=arc-20240116; t=1776963745; c=relaxed/simple;
+	bh=ocr6fd6xbunNGmuBXWUC4OxvUbjKtOF2u23N2M3zy7M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gNBy8Jhc8lks2Ct9/i+GxefWiFecZ65CUvPZyuBWpbkQf3JP6HaNOBgC87uWhqzpp3zlIYj8XWVLZAvSrXVyqes1zr/43A9XHYQitQRjviE1uH5UZk+cjceqZD0Hy6uDK6attStgnsX8ez4nupHF7aqiQtF3p37JnaQ2LRTGkAA=
+	 MIME-Version; b=gNLUZk7DIHqKgLBy5ywiSlCZPiLPUotNtmpYAl0JNoTGrx3kjAc6Qzcae0hGhs1AX3UZInCVZaxGvx/VXW306I5fc7or8CxHf17OmnYrzH7AUGn0F4TkLOXoLRVfQDNLyPxHGz7hOu/U2rrTUWFdjYH9W0EyxVsEYgLNey8LkI8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AC5C2BCAF;
-	Thu, 23 Apr 2026 17:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480E0C2BCAF;
+	Thu, 23 Apr 2026 17:02:25 +0000 (UTC)
 From: Dave Jiang <dave.jiang@intel.com>
 To: linux-cxl@vger.kernel.org,
 	nvdimm@lists.linux.dev
@@ -45,9 +45,9 @@ Cc: djbw@kernel.org,
 	gourry@gourry.net,
 	john@groves.net,
 	rick.p.edgecombe@intel.com
-Subject: [RFC PATCH 02/12] dax: Save the kva from memremap
-Date: Thu, 23 Apr 2026 10:02:09 -0700
-Message-ID: <20260423170219.281618-3-dave.jiang@intel.com>
+Subject: [RFC PATCH 03/12] dax: Add fallocate support to device dax
+Date: Thu, 23 Apr 2026 10:02:10 -0700
+Message-ID: <20260423170219.281618-4-dave.jiang@intel.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260423170219.281618-1-dave.jiang@intel.com>
 References: <20260423170219.281618-1-dave.jiang@intel.com>
@@ -62,116 +62,99 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[intel.com : SPF not aligned (relaxed), No valid DKIM,none];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13945-lists,linux-nvdimm=lfdr.de];
+	MAILSPIKE_FAIL(0.00)[2600:3c09:e001:a7::12fc:5321:query timed out];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13944-lists,linux-nvdimm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
 	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_NONE(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:mid,intel.com:email]
-X-Rspamd-Queue-Id: F11BA4554EF
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1C65145541F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This patch is partially taken from John Grove's famfs dax series.
-
-Save the kva for memremap because we need direct_access() support.
+fallocate() support is needed for the KVM guest_memfd selftest. Add a
+version of fallocate() for device dax. This is a simplistic
+implementation that just zeroes the specified range. It may need to
+be revisited and implement map/unmap to support larger files.
 
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/dax/dax-private.h |  4 ++++
- drivers/dax/device.c      | 19 +++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ drivers/dax/device.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
-index c6ae27c982f4..425a515905e5 100644
---- a/drivers/dax/dax-private.h
-+++ b/drivers/dax/dax-private.h
-@@ -69,6 +69,8 @@ struct dev_dax_range {
-  * data while the device is activated in the driver.
-  * @region: parent region
-  * @dax_dev: core dax functionality
-+ * @virt_addr: kva from memremap; used by fsdev_dax
-+ * @cached_size: cached size of the memory range for quick access; used by fsdev_dax
-  * @align: alignment of this instance
-  * @target_node: effective numa node if dev_dax memory range is onlined
-  * @dyn_id: is this a dynamic or statically created instance
-@@ -83,6 +85,8 @@ struct dev_dax_range {
- struct dev_dax {
- 	struct dax_region *region;
- 	struct dax_device *dax_dev;
-+	void *virt_addr;
-+	u64 cached_size;
- 	unsigned int align;
- 	int target_node;
- 	bool dyn_id;
 diff --git a/drivers/dax/device.c b/drivers/dax/device.c
-index 62206bcb63a6..4ffa3ef60a57 100644
+index 4ffa3ef60a57..705c59f469c2 100644
 --- a/drivers/dax/device.c
 +++ b/drivers/dax/device.c
-@@ -370,6 +370,7 @@ static int dax_open(struct inode *inode, struct file *filp)
- 	filp->f_sb_err = file_sample_sb_err(filp);
- 	filp->private_data = dev_dax;
- 	inode->i_flags = S_DAX;
-+	inode->i_size = dev_dax->cached_size;
+@@ -10,6 +10,8 @@
+ #include <linux/fs.h>
+ #include <linux/mm.h>
+ #include <linux/mman.h>
++#include <linux/range.h>
++#include <linux/falloc.h>
+ #include "dax-private.h"
+ #include "bus.h"
  
+@@ -383,7 +385,31 @@ static int dax_release(struct inode *inode, struct file *filp)
  	return 0;
  }
-@@ -408,7 +409,9 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
- 	struct device *dev = &dev_dax->dev;
- 	struct dev_pagemap *pgmap;
- 	struct inode *inode;
-+	u64 data_offset = 0;
- 	struct cdev *cdev;
-+	u64 len = 0;
- 	void *addr;
- 	int rc, i;
  
-@@ -451,6 +454,7 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
- 					i, range->start, range->end);
- 			return -EBUSY;
- 		}
-+		len += range_len(range);
- 	}
+-static const struct file_operations dax_fops = {
++static long dax_fallocate(struct file *file, int mode, loff_t offset,
++			  loff_t len)
++{
++	struct dev_dax *dev_dax = file->private_data;
++
++	if (!IS_ALIGNED(offset, dev_dax->align) ||
++	    !IS_ALIGNED(len, dev_dax->align))
++		return -EINVAL;
++
++	if (offset + len > dev_dax->cached_size)
++		return -ERANGE;
++
++	/* DAX device does not change size */
++	if (!(mode & FALLOC_FL_KEEP_SIZE))
++		return -EOPNOTSUPP;
++
++	if ((mode & ~FALLOC_FL_KEEP_SIZE) &&
++	    ((mode & (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_ZERO_RANGE)) == 0))
++		return -EOPNOTSUPP;
++
++	memset(dev_dax->virt_addr + offset, 0, len);
++	return 0;
++}
++
++const struct file_operations dax_fops = {
+ 	.llseek = noop_llseek,
+ 	.owner = THIS_MODULE,
+ 	.open = dax_open,
+@@ -391,7 +417,9 @@ static const struct file_operations dax_fops = {
+ 	.get_unmapped_area = dax_get_unmapped_area,
+ 	.mmap_prepare = dax_mmap_prepare,
+ 	.fop_flags = FOP_MMAP_SYNC,
++	.fallocate = dax_fallocate,
+ };
++EXPORT_SYMBOL_GPL(dax_fops);
  
- 	pgmap->type = MEMORY_DEVICE_GENERIC;
-@@ -461,6 +465,21 @@ static int dev_dax_probe(struct dev_dax *dev_dax)
- 	if (IS_ERR(addr))
- 		return PTR_ERR(addr);
- 
-+	/* Detect whether the data is at a non-zero offset into the memory */
-+	if (pgmap->range.start != dev_dax->ranges[0].range.start) {
-+		u64 phys = dev_dax->ranges[0].range.start;
-+		u64 pgmap_phys = dev_dax->pgmap[0].range.start;
-+
-+		if (!WARN_ON(pgmap_phys > phys))
-+			data_offset = phys - pgmap_phys;
-+
-+		pr_debug("%s: offset detected phys=%llx pgmap_phys=%llx offset=%llx\n",
-+			 __func__, phys, pgmap_phys, data_offset);
-+	}
-+
-+	dev_dax->virt_addr = addr + data_offset;
-+	dev_dax->cached_size = len;
-+
- 	inode = dax_inode(dax_dev);
- 	cdev = inode->i_cdev;
- 	cdev_init(cdev, &dax_fops);
+ static void dev_dax_cdev_del(void *cdev)
+ {
 -- 
 2.53.0
 
