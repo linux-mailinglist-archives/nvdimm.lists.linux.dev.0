@@ -1,68 +1,68 @@
-Return-Path: <nvdimm+bounces-13992-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-13994-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wBjMFHbE+GlQ0gIAu9opvQ
-	(envelope-from <nvdimm+bounces-13992-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 04 May 2026 18:08:22 +0200
+	id 4EYwId4f+Wlw5wIAu9opvQ
+	(envelope-from <nvdimm+bounces-13994-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 05 May 2026 00:38:22 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0504C12BC
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 04 May 2026 18:08:21 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 183844C475A
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 05 May 2026 00:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E7C87300A309
-	for <lists+linux-nvdimm@lfdr.de>; Mon,  4 May 2026 16:08:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8B692301C95F
+	for <lists+linux-nvdimm@lfdr.de>; Mon,  4 May 2026 22:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373543E1D06;
-	Mon,  4 May 2026 16:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B2438656C;
+	Mon,  4 May 2026 22:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEWVtHZS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCQ5ohr3"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8BA378D72
-	for <nvdimm@lists.linux.dev>; Mon,  4 May 2026 16:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7872A368263;
+	Mon,  4 May 2026 22:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777910899; cv=none; b=PqRNUj6n8RYVm7lyV+xGhcIwzG20RaLtF4JMezeyO+asnaeE5JCkMdKXNSCccUBpE4SbLjvV09ZgQglTVNmLHJIPDloMXLl/ABiPmUIxjYyytOKT4+LFMAURt7u20v8RIstsVEouGR93SQydug/4qIY3BS2IQfVQxtJIUk8lmZk=
+	t=1777934298; cv=none; b=E7tvkerMPI3N2MZqm9oUfuSL/YkcMiwmiw5ngY0RZJshEY9MChgr5QgcfziwsCiKGlicLApBU6LlwTyzt+DStsWUhddxLE6XDVr4zP2SrWk6gzKdyS11oojgen/BOMsiU4q07KWyXmQcC7gMg1TvyHFEKhhXlEj+LbLRXJ+oO7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777910899; c=relaxed/simple;
-	bh=4lCsaFuu2B5R467I+7rpTNdF6BZtih2LJJ2lk/PHSPw=;
+	s=arc-20240116; t=1777934298; c=relaxed/simple;
+	bh=zbzwGRvYkKchDj85vYPZPJGEjsRFzi2wLJWgUIvSU1E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ljtNCos/Lh2kHM3x1yPmkDYy+j3VxzQo4jJZkjW9S4GguaFd74Yv6MnCbE2v/r2faxXAC6xUytkdu7XhkytnlfCs9djrbYVFQauXhzVY4hlKjeMjfD+DYhVtgzkV0N/+gBEceX3N0OFNW3zfQZY+aBkQtYmKULPqlKUA3obzHes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEWVtHZS; arc=none smtp.client-ip=192.198.163.19
+	 In-Reply-To:Content-Type; b=gIACdBxCOjrDhoFakjodr+sk9MKqiFCE+mt4jDW4XojsemguPwK1DD1QZra5li0+rYg13SGETzeG54wDD6QRbbEKn83l/ARNi01DP9GUzbx3Sw5AUZokyXqGBOYblHbHuMfbaXMEnnOA3kruhJF551rPR7gJJKIa3C15DANkAz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCQ5ohr3; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777910897; x=1809446897;
+  t=1777934296; x=1809470296;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=4lCsaFuu2B5R467I+7rpTNdF6BZtih2LJJ2lk/PHSPw=;
-  b=kEWVtHZSqRTnaUNmYOxZbYen0iR7xrpAYZMh9QBY4EOrU/4kDYlnL9XQ
-   F80VXe2bCHZbrEDuQ9l1a9Js42XDFjqQRiNk2QiyHrk7IOxKB+4B/+TL3
-   +QUCar8cTMOaNCZlWcJIz+fLd4zRkac5jg0T2Aca1+YFVxuruu4XP0Ld3
-   APXjnyaqCmdqv4G+uHostIvyKFccehhNDmwfXArJ8km1rAp3Fkjqy2zA2
-   K8kJCvRXwVX1nC9wpg6a5Kdn1dyysFJJSdIgMMph3K2B9ZnRa7NgTW+zF
-   wnne4WCfxFz6G1FEGOlPcWENHtu6+vY6ExEhwOHl3smXvdfievSd06utm
-   Q==;
-X-CSE-ConnectionGUID: NSfHfmL8T8myLniU7aypRA==
-X-CSE-MsgGUID: lRnOzJPVSLiLsSzKrzijTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="77789301"
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="77789301"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 09:08:15 -0700
-X-CSE-ConnectionGUID: keFM9U6aQ4urZpzFRDdezg==
-X-CSE-MsgGUID: pg+QsgYJTZGFA3RcNf/zHQ==
+  bh=zbzwGRvYkKchDj85vYPZPJGEjsRFzi2wLJWgUIvSU1E=;
+  b=eCQ5ohr3138unfpH2GErzrSIYIGTvFzuOiprc/xbyUWWS3EVcbWcIrEK
+   Wbhs/fnI3gQ+3gF4RpunP//s5W3eCBTteWDxUAuhSM9/57jvGUGjza5kB
+   4cnnGi6A2cU2SwJtUcLuRNT1jEIHylrx+TWqUWlo1jNGMoBCulg+jn3EO
+   ougp7MhM1WMY0knWOMwZMJiVxOAMxmVbgep71ieY+S2fO/qXYIp0cXH4q
+   aW9nOIrzvZju6WZgateI4f3JfPAadzeTdgAnnDnBC1ZAZkFVrpobXqku3
+   ah3HDa7k4KTnhU7+mK7Oyd7PeYDTKphF0BL47l04dpbEvLny8JrthKFJZ
+   g==;
+X-CSE-ConnectionGUID: WIzzoVz5Qg+Fx9LIvo7RHA==
+X-CSE-MsgGUID: RvzztKQlRw28BRimp4gyyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="78662643"
+X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
+   d="scan'208";a="78662643"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 15:38:12 -0700
+X-CSE-ConnectionGUID: jhrnnHGhRDqDe77/Dz6YqA==
+X-CSE-MsgGUID: DhSf4iJ+SL6SklckUIvEEg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,215,1770624000"; 
-   d="scan'208";a="259211309"
+X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
+   d="scan'208";a="231270406"
 Received: from ssimmeri-mobl2.amr.corp.intel.com (HELO [10.125.110.19]) ([10.125.110.19])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 09:08:14 -0700
-Message-ID: <1eb01a65-d21a-40a8-948e-0b1a3f088a20@intel.com>
-Date: Mon, 4 May 2026 09:08:13 -0700
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 15:38:09 -0700
+Message-ID: <f63382ab-e50a-4b19-af83-a3e037a42c2b@intel.com>
+Date: Mon, 4 May 2026 15:38:08 -0700
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,121 +70,117 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fs/dax: check for empty/zero entries before calling
- pfn_to_page()
-To: Souvik Banerjee <souvik@amlalabs.com>, dan.j.williams@intel.com
-Cc: willy@infradead.org, jack@suse.cz, apopple@nvidia.com,
- linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260501233933.2614302-1-souvik@amlalabs.com>
+Subject: Re: [PATCH] MAINTAINERS: Update address for Ira Weiny
+To: Ira Weiny <ira.weiny@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+ driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Ira Weiny <iweiny@kernel.org>
+References: <20260504-change-maintain-file-v1-1-6679b030d3e0@intel.com>
 Content-Language: en-US
 From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260501233933.2614302-1-souvik@amlalabs.com>
+In-Reply-To: <20260504-change-maintain-file-v1-1-6679b030d3e0@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: EA0504C12BC
+X-Rspamd-Queue-Id: 183844C475A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13994-lists,linux-nvdimm=lfdr.de];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[intel.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13992-lists,linux-nvdimm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid,nvidia.com:email]
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
 
 
-On 5/1/26 4:39 PM, Souvik Banerjee wrote:
-> Commit 98c183a4fccf ("fs/dax: don't disassociate zero page entries")
-> added zero/empty-entry early returns to dax_associate_entry() and
-> dax_disassociate_entry(), but placed them *after* the
-> `struct folio *folio = dax_to_folio(entry);` line.  dax_to_folio()
-> expands to page_folio(pfn_to_page(dax_to_pfn(entry))), and page_folio()
-> performs READ_ONCE(page->compound_head) -- a real dereference of the
-> struct page pointer derived from a bogus PFN extracted from the
-> empty/zero XA value.
+On 5/4/26 3:38 PM, Ira Weiny wrote:
+> Update MAINTAINERS and .mailmap to point to my kernel.org address:
+> iweiny@kernel.org
 > 
-> On systems where vmemmap covers all of RAM that dereference reads
-> garbage and is harmless: the early return then discards the result.
-> On virtio-pmem with altmap (vmemmap stored inside the device), only
-> the real device PFN range is mapped, so the dereference triggers a
-> kernel paging fault from the truncate / invalidate path and from the
-> PMD-downgrade branch of dax_iomap_pte_fault when an entry is being
-> freed:
+> Downgrade from maintainer to reviewer whilst doing so.
 > 
->   Unable to handle kernel paging request at
->   virtual address ffff_fdff_bf00_0008 (vmemmap region)
->   Call trace:
->    dax_disassociate_entry.isra.0+0x20/0x50
->    dax_iomap_pte_fault
->    dax_iomap_fault
->    erofs_dax_fault
-> 
-> Close the residual gap by moving the dax_to_folio() call after the
-> zero/empty guard in dax_disassociate_entry().  Apply the same
-> treatment to dax_busy_page(), which has the identical pattern but
-> was not touched by the prior fix.
-> 
-> Fixes: 98c183a4fccf ("fs/dax: don't disassociate zero page entries")
-> Fixes: 38607c62b34b ("fs/dax: properly refcount fs dax pages")
-> Cc: stable@vger.kernel.org # v6.15+
-> Cc: Alistair Popple <apopple@nvidia.com>
-> Signed-off-by: Souvik Banerjee <souvik@amlalabs.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Acked-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
->  fs/dax.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  .mailmap    | 1 +
+>  MAINTAINERS | 6 +++---
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 6d175cd47a99..6878473265bb 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -505,21 +505,23 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
->  static void dax_disassociate_entry(void *entry, struct address_space *mapping,
->  				bool trunc)
->  {
-> -	struct folio *folio = dax_to_folio(entry);
-> +	struct folio *folio;
->  
->  	if (dax_is_zero_entry(entry) || dax_is_empty_entry(entry))
->  		return;
->  
-> +	folio = dax_to_folio(entry);
->  	dax_folio_put(folio);
->  }
->  
->  static struct page *dax_busy_page(void *entry)
->  {
-> -	struct folio *folio = dax_to_folio(entry);
-> +	struct folio *folio;
->  
->  	if (dax_is_zero_entry(entry) || dax_is_empty_entry(entry))
->  		return NULL;
->  
-> +	folio = dax_to_folio(entry);
->  	if (folio_ref_count(folio) - folio_mapcount(folio))
->  		return &folio->page;
->  	else
+> diff --git a/.mailmap b/.mailmap
+> index b78aa092b4bb..61d101ce9696 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -446,6 +446,7 @@ Juha Yrjola <juha.yrjola@nokia.com>
+>  Juha Yrjola <juha.yrjola@solidboot.com>
+>  Julien Thierry <julien.thierry.kdev@gmail.com> <julien.thierry@arm.com>
+>  Justin Iurman <justin.iurman@gmail.com> <justin.iurman@uliege.be>
+> +Ira Weiny <iweiny@kernel.org> <ira.weiny@intel.com>
+>  Iskren Chernev <me@iskren.info> <iskren.chernev@gmail.com>
+>  Kalle Valo <kvalo@kernel.org> <kvalo@codeaurora.org>
+>  Kalle Valo <kvalo@kernel.org> <quic_kvalo@quicinc.com>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 882214b0e7db..d30ab65ece8a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4255,7 +4255,7 @@ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>  M:	"Rafael J. Wysocki" <rafael@kernel.org>
+>  M:	Danilo Krummrich <dakr@kernel.org>
+>  R:	Dave Ertman <david.m.ertman@intel.com>
+> -R:	Ira Weiny <ira.weiny@intel.com>
+> +R:	Ira Weiny <iweiny@kernel.org>
+>  R:	Leon Romanovsky <leon@kernel.org>
+>  L:	driver-core@lists.linux.dev
+>  S:	Supported
+> @@ -6426,8 +6426,8 @@ M:	Jonathan Cameron <jic23@kernel.org>
+>  M:	Dave Jiang <dave.jiang@intel.com>
+>  M:	Alison Schofield <alison.schofield@intel.com>
+>  M:	Vishal Verma <vishal.l.verma@intel.com>
+> -M:	Ira Weiny <ira.weiny@intel.com>
+>  M:	Dan Williams <djbw@kernel.org>
+> +R:	Ira Weiny <iweiny@kernel.org>
+>  L:	linux-cxl@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/driver-api/cxl
+> @@ -14686,7 +14686,7 @@ LIBNVDIMM: NON-VOLATILE MEMORY DEVICE SUBSYSTEM
+>  M:	Dan Williams <djbw@kernel.org>
+>  M:	Vishal Verma <vishal.l.verma@intel.com>
+>  M:	Dave Jiang <dave.jiang@intel.com>
+> -M:	Ira Weiny <ira.weiny@intel.com>
+> +R:	Ira Weiny <iweiny@kernel.org>
+>  L:	nvdimm@lists.linux.dev
+>  S:	Supported
+>  Q:	https://patchwork.kernel.org/project/linux-nvdimm/list/
+> 
+> ---
+> base-commit: 7fd2df204f342fc17d1a0bfcd474b24232fb0f32
+> change-id: 20260504-change-maintain-file-8f033435619b
+> 
+> Best regards,
+> --  
+> Ira Weiny <ira.weiny@intel.com>
+> 
 
 
