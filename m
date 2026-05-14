@@ -1,119 +1,102 @@
-Return-Path: <nvdimm+bounces-14023-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14024-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAUeKLkDBmrFdwIAu9opvQ
-	(envelope-from <nvdimm+bounces-14023-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 19:17:45 +0200
+	id UC98J7IWBmp3egIAu9opvQ
+	(envelope-from <nvdimm+bounces-14024-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 20:38:42 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 157E954522C
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 19:17:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECAE3545F0F
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 20:38:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C2E433018C3B
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 17:17:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 426723016C95
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 14 May 2026 18:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CC7328B62;
-	Thu, 14 May 2026 17:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A7539935E;
+	Thu, 14 May 2026 18:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A32jhpR4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6FWLz5i"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFA133F5BF
-	for <nvdimm@lists.linux.dev>; Thu, 14 May 2026 17:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA703655FA;
+	Thu, 14 May 2026 18:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778779061; cv=none; b=hPgEuAvvII/F7cdf7T3kMrwxcWLLREUU+Fb4owLNCp8yHX4fIHddaZ+DnJh/XOHQEOTx0j3Sw050RNOsC+GUX9nrIqVBRDxKw18HgblXINiyXjAi/hvuFsc6K9E1a3eztlRfXze9wuokyGn2GNxlxw2IHp6g7iYW9Uz+Amu/hnc=
+	t=1778783877; cv=none; b=Gtgwh/HmRTgAqFQyZ80UOkTWkn38/U/Ur2+X5ogyTsPeoyoMGvHRDWUngO1fDmnCKh1kbrIdHKAnTZrL5yotPQR+LOD5zUwSxFtoj0Y1d3rJOwLRpnpoVtLUXdXGILW7RglhcFxnbzG9NBmsmhH3EkkNjxHu2HwT0AX7VD6CfMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778779061; c=relaxed/simple;
-	bh=8CO1iQwewkQXJns/rjcz6gE30TpmsXOilUGiO+J6az8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tdqcko/HpV3oh3TImNc2ifNax2+LWE6VQJlyFOfV42Z0imTtGn5kGQVYkr+vHuDa2Eli2DLMie8j2CkN2ZQIoihVK54/AeJBCouOKHXt0BhuUoLdbbE6QwdI6CB0RRirvGqQ+8GDLcYjfz0liURhU27v1+VMvxKjfpMEYsuXmyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A32jhpR4; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778779059; x=1810315059;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8CO1iQwewkQXJns/rjcz6gE30TpmsXOilUGiO+J6az8=;
-  b=A32jhpR4ThBXjyPuEge6VOilpnCIhf7AMno9Ov1C8h8qL1QjaAVhI+un
-   WXQZEP0L2cCJ0d1sUgXIneA2likG8xX02p0RquDpGgLFsLYHfaPq8Ekxk
-   0eYNolG3xbl5b11A/ITdOkNxCgUocjMqaZJUuD++dV47LLkcJjA3OKyZf
-   5dKWlHgrMfcJSDoY5xNsTk/pjCofEG9ZlB9v7Qms6SrTKK12eRiRCujvg
-   WJjM00XzH2FlhyFebPMCIucpx+Swr9hm0faLEU6XcZtT7w5Il5Mn4Q1g2
-   +FIHjJx0wIlnnnNNcnwnLRMXXd6nFSu67zJV8PcZbLItxu/KSw2Xowk55
-   g==;
-X-CSE-ConnectionGUID: TEM8e3XkSYyEe2Du2+S+Jw==
-X-CSE-MsgGUID: thT90WXcQRCc9I0VHVrDNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="79442417"
-X-IronPort-AV: E=Sophos;i="6.23,235,1770624000"; 
-   d="scan'208";a="79442417"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 10:17:39 -0700
-X-CSE-ConnectionGUID: OfS3zi3XT0uSUSeqK4Rgog==
-X-CSE-MsgGUID: X7/IihoeRTKmh0LjSlg45A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,235,1770624000"; 
-   d="scan'208";a="235396367"
-Received: from rchatre-mobl4.amr.corp.intel.com (HELO [10.125.108.122]) ([10.125.108.122])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 10:17:38 -0700
-Message-ID: <cbe4a705-9d87-44d6-9578-7c31ae891765@intel.com>
-Date: Thu, 14 May 2026 10:17:37 -0700
+	s=arc-20240116; t=1778783877; c=relaxed/simple;
+	bh=cyAjpV+6FMx9SmPOLKPO2HTdcek3f7cftPGWL1rQdSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gtk1eJNVyKa485UyjZY/kUev52HbIUN+FT50eHvCkQab9LJdEJdZujHwZYiDphE5nNI0q5ueMkUtnM41+SBFIMuJR+lZLbW0rtCJ/OJr991lCLgn/1lFe6a6ww6Xt0FcupZeXDJRDuL5ow4hxHHwQKgC10LrNe7Szpo9murhepQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6FWLz5i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B605C2BCB3;
+	Thu, 14 May 2026 18:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778783876;
+	bh=cyAjpV+6FMx9SmPOLKPO2HTdcek3f7cftPGWL1rQdSA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Y6FWLz5ixhUzXzW/VtZMAfBoMbWeazxqKQK+3Ece8oDuWJpvNZbwacmagkYZ4qPMO
+	 mYssfA1l+bj1l12jdc2E5i3jXHpampkmtzBEb167PEKdP0Nm5GIJDW+RUon97FUP9H
+	 krgZQdenwByA24yE/qKvVZrnWmFmPvij7S144lhewcBHCv1MuUjkjzyjDeW0hdmwV1
+	 HKeVKK4S4Gbr1YTIbIOUFswecHIq6nT0Ira0tmo0/CUis5D0FA7UHr+fZBPbXQkXpu
+	 K2YoUJ0vqE/IwWnApg8wnC5BG87dNR/VmPX1ltV/aJlGytK/3YhkXkTiGTVWzAD3Nd
+	 XjQiLAqLOXJuw==
+Date: Thu, 14 May 2026 19:37:49 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Chen Pei <cp0613@linux.alibaba.com>
+Cc: alison.schofield@intel.com, nvdimm@lists.linux.dev,
+ linux-cxl@vger.kernel.org, guoren@kernel.org
+Subject: Re: [ndctl PATCH 2/2] daxctl, util/sysfs: skip module probe-insert
+ when driver is builtin or live
+Message-ID: <20260514193749.0f0750e2@jic23-huawei>
+In-Reply-To: <20260514063234.86439-3-cp0613@linux.alibaba.com>
+References: <20260514063234.86439-1-cp0613@linux.alibaba.com>
+	<20260514063234.86439-3-cp0613@linux.alibaba.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [ndctl PATCH 2/2] daxctl, util/sysfs: skip module probe-insert
- when driver is builtin or live
-To: Chen Pei <cp0613@linux.alibaba.com>, alison.schofield@intel.com,
- nvdimm@lists.linux.dev
-Cc: linux-cxl@vger.kernel.org, guoren@kernel.org
-References: <20260514063234.86439-1-cp0613@linux.alibaba.com>
- <20260514063234.86439-3-cp0613@linux.alibaba.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260514063234.86439-3-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 157E954522C
+X-Rspamd-Queue-Id: ECAE3545F0F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14023-lists,linux-nvdimm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14024-lists,linux-nvdimm=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.jiang@intel.com,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jic23@kernel.org,nvdimm@lists.linux.dev];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:mid,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,alibaba.com:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
+On Thu, 14 May 2026 14:32:34 +0800
+Chen Pei <cp0613@linux.alibaba.com> wrote:
 
-
-On 5/13/26 11:32 PM, Chen Pei wrote:
 > kmod_module_probe_insert_module() is supposed to return 0 for builtin
 > modules, but only when libkmod can locate the modules.builtin index. If
 > the index is missing or out of sync, libkmod falls through to the real
@@ -124,16 +107,39 @@ On 5/13/26 11:32 PM, Chen Pei wrote:
 > Pre-check kmod_module_get_initstate() and short-circuit when the module
 > is KMOD_MODULE_BUILTIN or KMOD_MODULE_LIVE, matching the pattern used by
 > ndctl's own test/core.c.
+
+So I happened to run into exactly this print earlier today and was
+very happy to see this resolving it! I'm lazy so when developing in
+a VM tend to do everything I care about built in and not bother with
+installing the modules.
+
+However - despite having CONFIG_DEV_DAX = y in the kernel, I'm getting
+a state of KMOD_MODULE_COMING which is curious as there is no
+initstate file to read that from.
+
+Looking at the code in libkmod it seems to first check if it can open
+/sys/modules/device_dax/initstate and if it can't checks if
+the directory /sys/modules/device_dax/ exists. If it finds that it returns
+KMOD_MODULE_COMING which seems odd given in a fully initialized built in driver
+that particular set of circumstances is normal.
+
+Any ideas?
+
+To me the description above is misleading if we need to have something else
+for the builtin case to work.
+
+I'm out of time to today but may get time to look at this tomorrow and chase
+down if there is a way to get it to work.
+
+Jonathan
+
+
 > 
 > For builtin modules the local kmod reference is dropped because builtin
 > drivers cannot be unloaded; for live modules the reference is retained
 > in dev->module, matching the post-probe-success behavior.
 > 
 > Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-
 > ---
 >  daxctl/lib/libdaxctl.c | 18 ++++++++++++++++--
 >  util/sysfs.c           | 17 +++++++++++------
