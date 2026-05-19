@@ -1,114 +1,161 @@
-Return-Path: <nvdimm+bounces-14065-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14066-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yIQEBKVWDGqUfgUAu9opvQ
-	(envelope-from <nvdimm+bounces-14065-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 14:25:09 +0200
+	id yANvFetbDGrMgAUAu9opvQ
+	(envelope-from <nvdimm+bounces-14066-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 14:47:39 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E70657EA03
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 14:25:08 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5948957EFB7
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 14:47:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 07F4130315C0
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 12:19:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8D0883001581
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 19 May 2026 12:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962F1480964;
-	Tue, 19 May 2026 12:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D2CE4DD6D7;
+	Tue, 19 May 2026 12:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hX9M/7Hl"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470504D8D8D
-	for <nvdimm@lists.linux.dev>; Tue, 19 May 2026 12:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779193157; cv=none; b=B/3/pxoDBKBiNRxf1aw+yPmeSOxV1FcIyovAKrKCEPiu+E2om2aGW8Cmav7EC/3sXjNQquT5NdBOvYRvuRprBvYoXdxi5GI1Gh9cEljmR/XPwmYISxU0SrLaJ30mqEcjS2EX+JOadggKusBDnLRoiYitE4o+roJuTgKj8h3BrFc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779193157; c=relaxed/simple;
-	bh=FVUAOKxJ4/gQjtoEIOeX2f6c+LaBaXG9nL028JyEamU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K55+0Wm4GogbHtbdOu3GUOrUJg1zm+xI9Az8dpGvIB+gCCgQFtOZvSA1OhkOqiNh9UT1Hr14IDDMcRjcewItyt9yfs3NBXhID6Z/YpH7/ID6hzQthptKjH6DAPmP2/AJJlq9b47Xyo7NZAaC9DFz29pSeYPPeic9YlpaliyN8MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=groves.net
-Received: from omf12.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id D6DE91C0F18;
-	Tue, 19 May 2026 12:19:13 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf12.hostedemail.com (Postfix) with ESMTPA id E7B9319;
-	Tue, 19 May 2026 12:19:09 +0000 (UTC)
-Date: Tue, 19 May 2026 07:19:08 -0500
-From: John Groves <John@groves.net>
-To: John Groves <john@jagalactic.com>
-Cc: Dan Williams <djbw@kernel.org>, John Groves <jgroves@micron.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Alison Schofield <alison.schofield@intel.com>, 
-	Ira Weiny <iweiny@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
-	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>, "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 0/6] Fixes to the previously-merged drivers/dax/fsdev
- series
-Message-ID: <agxU6hGczRT2DSFD@groves.net>
-References: <20260518213452.31205-1-john@jagalactic.com>
- <0100019e3d03bba9-d27282f3-5552-4fa0-8326-981e4c13dace-000000@email.amazonses.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24866352014
+	for <nvdimm@lists.linux.dev>; Tue, 19 May 2026 12:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779194740; cv=pass; b=i6g683QkiOeablyDUVaafPNIVjSoSiN0HFS2iYcjdU0iHLlXwc9ushbi2G5vd4saK7uWIwTW2W8dBJ/g7RPrsbHpC9+PP8fKhA36Lwu42qiOOJ2Kji99bZK4Df6V2J0vicqF7aefJ3lDl8e7ESulnw/eWQKVqgLQO7+eilHykzI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779194740; c=relaxed/simple;
+	bh=iJFxbnlmJvWrQl+Lxd7lmj1zCeV+BRB2ufMB2h55rV4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jQVtJYojoexb6iDcq7rCXf4xPKuWax5Rr4beiFdCDHMTewzI29PrjSJqVqTbrGj2SCzXjucdEWkdNSXWCzPCMlgVKvfuPZqS/2HzvLqbhqGE+vLGfxBXj/XuTUJjk+uy/jYHGA/l/I0Epge3n7BhjFoDg+toZX3HJJ9Y1UVfOQI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hX9M/7Hl; arc=pass smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-303da604df1so223019eec.3
+        for <nvdimm@lists.linux.dev>; Tue, 19 May 2026 05:45:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779194738; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UcAOM5fPGk3oLLZjM981cr2NAVFbNin7RPcNl9RO4zdazCImCfbQhQomU0zHtESnpK
+         NmWoQpKK0iwL2n3rWvPPtC4N0SbUVYyNgGSTjCRUtS9VOcj1qFn6SVDz+K66FWSiJRUU
+         0LuRkpSATXLWoHGoaBaQeM7Upz+A9P8HGU5FQYvHPKTSryvdJAjZIvGu28iyaDl63/z2
+         gtLH9bUNcYWEciEvaqF/S0TzHcVYFjkvIcDR1yTwj6mGwgDyCpdnkUXqCq9UKLcHCxRg
+         1Rt4N1u+X13sf7r8S4ervUbcsDXHjIbUoJx8iVXkYvzwu+yOg6AdicmWhqZVaSIpgecu
+         koQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iJFxbnlmJvWrQl+Lxd7lmj1zCeV+BRB2ufMB2h55rV4=;
+        fh=4IBxhdyHYJUQKk9yJvuAR3RX4G+fqT6cNlAALP/BQQs=;
+        b=djMftc++bWQnesdiho2ElTWOr5X3Ks1Mzj0uMjOL/O0eb5glHoJGmlI7QqHtIX5S2a
+         TXErAsVhjgSqH7qWVL6hdWObkDFp2EfNMBiLHqm+QpOszZ/1CEe2zeI2EZKeBeu6W641
+         J8buYtQzgScu7WK0GCzOujUcw9RVXwj6S2lV5GLVxq5o4lps0bvw6VgGMreEqUHtU2hD
+         3are8DzRgPB2MXMkXhTdLW566ZtMNp5CBNupiTVe5he0mu3/zQhn8JPuj80Ttxw17Z4t
+         ZGsZ8YzCuNmuL6uovchxBYbVqKMnDeK3znVQBNBW68A/k63+aKWTVcpGY/TKWAI6vfee
+         mosA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779194738; x=1779799538; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iJFxbnlmJvWrQl+Lxd7lmj1zCeV+BRB2ufMB2h55rV4=;
+        b=hX9M/7HlvdjoGrix+5vizW6S2ozIOnMJNZSxmqTtlsbAqDxG3reR48sNJ+UPG9gaDP
+         OqnSn2ETlfXhQUFRfRL4hpb4a92XBCdr3jV72fwxeETf8Xt4q9GBTTSs0/nII1GjgJat
+         3YYgrGePA7I4AremQHA/GFgCQNo4KXxdWEYkEeKKRnN+08UCoinb2MXS2P2PstRLLM9g
+         TuyQQ4La5T7eK7kcpp6ZaQpEJk/nrjIJm3m+7/Ts3ksMPzJRZwFKkWHDNI0eyZ1tCWdI
+         sKqZ7e74Fim5RFNT+ZrJO/ng4QyxrdMiYWVxi9731tU195mJC9mvBJAzJxcYcap24vdH
+         mCTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779194738; x=1779799538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iJFxbnlmJvWrQl+Lxd7lmj1zCeV+BRB2ufMB2h55rV4=;
+        b=Vm0g0nGsbu4Jgkl4zZYv3aMZ7NVl4WFdjuvdsbuL9iKQKiVVDDa1k+F/4edTwyeCer
+         Fk/67Ft3QRsts03coX4UVN84+uYB5aKhAS80TcZghyilfnXnYgW1lMZM8Yf/zEHIXr6l
+         17X2UkLgP4wBkKItKGhNbnWFUx6rtTX2A3+HU6LhefPn3r3QoCwXzAfTpGo9z2HCuOZ/
+         A5MvjehUAH2TMiKpdwTLvGbOdmpHixlgKmixLhvPNzpt7L6iEw0c10pTH5pNuz7qzGM0
+         /eaaAxCh5M8rQiScJJkP0HVkD6P2dutsJF1RY3vqQN/TzS3u6Ugf5/gEqBdEOKp/K5sy
+         PA7g==
+X-Forwarded-Encrypted: i=1; AFNElJ86/u0gYZb/b+215e/fGT7u1VpDjztEoGTvl5wCjU9EAKq7SlTFyf/NscFmY1LtD7/vfR7Kbps=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz5n0YYQJERvyS1y9qzc7WDjYiyzedjH/XrcnqyTbP2aYMkr0P4
+	U88GLDkiqDLUgjngCMn8kNu7URpof7PnjdjYoL8plcsND4wFgch7a+YYWEvOTWla92eYH34OFsy
+	+cYTTgvsbpPLEVQcJPcMDS4PAJNyY6E4=
+X-Gm-Gg: Acq92OErgFiJFd3kprIk7cqbJEdmhNmK74L16OV7nUrgINhmy+3hc1Hc8iA158Wd+d5
+	7rhW0b8BoZYQ1U1oEkT9h2mLI3LynvO9ATXonq76QLORGsLEj7eCC0aRl2dcrfMPgdKZO1iFWqU
+	njShPKVaxHxKLb8kuv53afKk2RzjEa2Q4Qnu39+r4DXM2dXAokkLSxvHPwnyvxKkpQlr9AFpFq4
+	jLgulnhoqCe5lO6z5tJy/IlLXUENP89cOUdMmx8Z1jr/b1f+NaZr3a1QlICtnZR7lZRKYOdCDWs
+	XR4d+tGux1c61LO8i0AdJkmS1zRx/puqPLrCwe0L4olL0amAGmaTZzuiAIB06m/xQXh7f/yKfHN
+	vCDUUFdbEjfKJL2WHN1NLo4c=
+X-Received: by 2002:a05:7301:1284:b0:2ce:db5e:354b with SMTP id
+ 5a478bee46e88-3039868c605mr4201196eec.6.1779194738147; Tue, 19 May 2026
+ 05:45:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0100019e3d03bba9-d27282f3-5552-4fa0-8326-981e4c13dace-000000@email.amazonses.com>
-X-Stat-Signature: 5kxpnegw4c6uyiky9yxy64ydg3r5qgid
-X-Session-Marker: 6A6F686E4067726F7665732E6E6574
-X-Session-ID: U2FsdGVkX1+OXa13HFXgL+p58q8pzyuxChQey+jLsT8=
-X-HE-Tag: 1779193149-569511
-X-HE-Meta: U2FsdGVkX19yeEv3a442bfJ6Yp0ZhKTvBQTuk/D99eL/Go/uC1nboEHA5QcppkRGqzsIEmQKpTqagUO8+NZ+7SzFa/+CYeuB+5GwMTpYFnhUl/6TscUruVkpXBSmcKKutEwyDQ/d7dz6GZGv4g4KOUKyU2RInuG8GgKsIfOa1Ru+94F6zdxm63bUpufl8C6HwKtmAg9Y9jG7YmBhraaS0f4nRVWlWIEUxIGMMxsmftv2HSHZyCwsBlbqKc8LzaKybRZB630LCxt4sit9lRxS1UPYAkkstO4b2gCaOw3S+YLvxnskYnkc+FH5tESkG1rDKetJ9CztZ83t6DCHn+X1aSwroKod9ogzfX5sXYsr66Xr/MkadHV3gGBG6ix5Fsrq
-X-Spamd-Result: default: False [-1.46 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+References: <cover.1779116497.git.d@ilvokhin.com> <1854fc006c03647a3201a442743a1c22b13b404d.1779116497.git.d@ilvokhin.com>
+ <CANiq72mG-EpBWbW_hZYPgtV_R1vyUBsn0ytaz2X2Zw9fr0keOA@mail.gmail.com> <agxPiQKt2pykEIA4@shell.ilvokhin.com>
+In-Reply-To: <agxPiQKt2pykEIA4@shell.ilvokhin.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 19 May 2026 14:45:25 +0200
+X-Gm-Features: AVHnY4I3tKHMpeVy0SsdLCwhfLkAoVFoOWpjpia5ybm3cMqW4XsbiRrpZww0564
+Message-ID: <CANiq72nTDFiGp5f6=Xh3w4jnULq-Vs60Bztj6FhfGFeihwa_QQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] cleanup: Annotate guard constructors with __nonnull()
+To: Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Dan Williams <djbw@kernel.org>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Christian Brauner <brauner@kernel.org>, Marco Elver <elver@google.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, nvdimm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14065-lists,linux-nvdimm=lfdr.de];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DMARC_NA(0.00)[groves.net];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	FROM_NEQ_ENVFROM(0.00)[John@groves.net,nvdimm@lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-14066-lists,linux-nvdimm=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[groves.net:mid,groves.net:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 6E70657EA03
+	FROM_NEQ_ENVFROM(0.00)[miguelojedasandonis@gmail.com,nvdimm@lists.linux.dev];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,ilvokhin.com:email,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 5948957EFB7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26/05/18 09:35PM, John Groves wrote:
-> From: John Groves <john@groves.net>
-> 
-> This series applies bug fixes (mostly found via sashiko) to the dax/fsdev
-> series. This has been soaking in the famfs CI pipeline for 2+ weeks and
-> 1) won't affect anything that doesn't use drivers/dax/fsdev.c, and 2)
-> doesn't affect any known workloads - although the bugs would have
-> manifested when multi-range DCD dax devices are a thing (soon-ish).
+On Tue, May 19, 2026 at 1:54=E2=80=AFPM Dmitry Ilvokhin <d@ilvokhin.com> wr=
+ote:
+>
+> Thanks, fixed locally.
 
-Quick note: I just noticed that this series generates a conflict on 
-7.1-rc4. I'll update within a day or so to clean that up.
+Sounds good, thanks!
 
-John
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
+Cheers,
+Miguel
 
