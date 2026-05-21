@@ -1,175 +1,164 @@
-Return-Path: <nvdimm+bounces-14081-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14083-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cNfIA8hEDmoM9gUAu9opvQ
-	(envelope-from <nvdimm+bounces-14081-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 May 2026 01:33:28 +0200
+	id wJtHKsexDmr6AwYAu9opvQ
+	(envelope-from <nvdimm+bounces-14083-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 May 2026 09:18:31 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6625259CCB8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 May 2026 01:33:27 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC69859FFB5
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 May 2026 09:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 056263467BAD
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 20 May 2026 21:59:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C9AE0300BC5B
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 21 May 2026 07:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 988023AF65C;
-	Wed, 20 May 2026 21:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A692396561;
+	Thu, 21 May 2026 07:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2x4AZIv"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="m3aCTD9G"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4D23ACF11;
-	Wed, 20 May 2026 21:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DA9342CBA
+	for <nvdimm@lists.linux.dev>; Thu, 21 May 2026 07:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779314360; cv=none; b=nKYlGN3gf4ZHd91FH4f7T3ea6anJw3kheh62OjKecwkyfihRhqyU2pEqiGv+MiYknXEEpm9Xv0aPLdOq3IPBAbtnOs6iHffTP0T4Xcf+rXXmc9yiUxc0k5f1m/us5Mao7pbYrAoeBcQlx4jImCgdk9lmZ1LO6G8T2kj4N6GU8cU=
+	t=1779347903; cv=none; b=OE0GyOC26VTrOem+B6ChlR3OdkQXXCH0Qr1QU7NFjEJ+wZu3eSRb1LzMvkvUqN7EQw9gKrDLqwrhzPXvLtVF3f1Ge7zcJjp3wuuQdqdyO1AsNbpx+7gqd6VLbvRjSLbG5JAWGFuzqyZPW1w0+aAZldu3FJqUXOHrmUQqU/A2XMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779314360; c=relaxed/simple;
-	bh=GlcOLnjqMn1eg6/oyGkPDFurrDtO5hbVAp2Q27rBlPk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sH88EfBq3V5dZ2yIeS/3b7MV6pRTkZIuX+d2XFJbx8ow5WAnctJ8LK6OUxGijzkWR9ZFujg3eZoBLvTLLcH8YzAG/h9h9zn8AETqJns6myjECG8zQXNUR8eAdR5Ql7I/7bIJYVYdt/jJeCbSA8kkEN6r2KjGeTAWFwVTWFVEH3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2x4AZIv; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E5B1F000E9;
-	Wed, 20 May 2026 21:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779314356;
-	bh=tjrZfJA5LVaV6nvefAlqmqd3ZyjRNop6UOwyOfVB51I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=F2x4AZIvETZuTswgfkeOHnkgP5j/iV47PP07EQkqmBL9s+K6OVe8bb6kBrdcw6Pen
-	 zlEo7klNwkxdCSf6YBhEwzzm+AO0xa3E+EZg0itoUCZPOytvcbderUtMUDl4pTs5t6
-	 srPasluXZ8Sp9zApk2v8seFMUk+PjFypnjRiXDicDb1RplKUjqjQetm8EYfSEvqA53
-	 rDqAqNkEgz1aNSxK/MeIE/Ax+nrZkLjCbVBE/OxHTdx6rKzVFiscIjtvxZeCT770Pa
-	 t5j5khIrKUWesKiRhXErmr56Kke6x3kknpbZ1Z0hk9Ee7dDPZ/u88t9ONgQMT2ifsy
-	 uuRBaiONd0mSg==
-Message-ID: <003bbdb8-85ae-4e1a-9260-fb2a85fb9b3c@kernel.org>
-Date: Wed, 20 May 2026 23:59:08 +0200
+	s=arc-20240116; t=1779347903; c=relaxed/simple;
+	bh=75g6sSQ/lrb9ilJb7+DXotnUnUUesyJWpcPEDhFKzHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eDsC71sni6NzCvT/00anTaxPz0Xoon9BP5peW88AizLIHLsuR2sfaGdhA/szXdgh8Z3hSfHavZJbsJgMBVY70KTvns0uvoqJcsfHDURk9KxmaoQhZ2kVpSmXSxK0rHMzjPrMtJVCkT9lxHxODWaRKCMQtg2qBoZ2l4SCiPLoiHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=m3aCTD9G; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from localhost.localdomain (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 61CFED0925;
+	Thu, 21 May 2026 07:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1779347900;
+	bh=lI9FQx8ShFhvPIZrLKYCCXVlmy7Lwsl7O7ulvfACmMI=;
+	h=From:To:Cc:Subject:Date;
+	b=m3aCTD9G4ehzIQeFoi/FvKLPBsCJ1EHAnXHzvu+GkPTPKU1Zk+FZFIiyHJT5NN9/O
+	 4xaFY9WoD2K4oG+bVVLIOmpRg2kvfbya+1X0j9jxwpPcqJZ8iQCnBl913Er6ON+ZoW
+	 +Rk2N6/Z2GuHOK+P5ltQMW+1IAbMAm3uuBxwc9V0=
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Dan Williams <djbw@kernel.org>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Marco Elver <elver@google.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel-team@meta.com,
+	Dmitry Ilvokhin <d@ilvokhin.com>
+Subject: [PATCH v4 0/4] cleanup: Remove NULL check from unconditional guards
+Date: Thu, 21 May 2026 07:18:00 +0000
+Message-ID: <cover.1779286416.git.d@ilvokhin.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/mm: fix vmemmap leak on memory hot-remove
-To: Dave Hansen <dave.hansen@intel.com>, Juhyung Park <qkrwngud825@gmail.com>
-Cc: linux-mm@kvack.org, stable@vger.kernel.org,
- Lu Baolu <baolu.lu@linux.intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Oscar Salvador <osalvador@suse.de>, Andrew Morton
- <akpm@linux-foundation.org>, Dave Hansen <dave.hansen@linux.intel.com>,
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dan Williams <djbw@kernel.org>,
- Dave Jiang <dave.jiang@intel.com>, Vishal Verma <vishal.l.verma@intel.com>,
- linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
-References: <20260519151008.1399226-1-qkrwngud825@gmail.com>
- <e9a08bed-3d5f-4606-8d17-80a16a4c82f1@kernel.org>
- <CAD14+f316+wMZNm_sJF6ULRDUD9EbkdecdDwhGQKcsu70Bdp0w@mail.gmail.com>
- <9c0e3e53-d284-4675-89d8-943f93436e07@kernel.org>
- <78ef8003-9c86-4969-95b9-589127b30be2@intel.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <78ef8003-9c86-4969-95b9-589127b30be2@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14083-lists,linux-nvdimm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[intel.com,gmail.com];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TAGGED_FROM(0.00)[bounces-14081-lists,linux-nvdimm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 6625259CCB8
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: AC69859FFB5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 5/20/26 23:54, Dave Hansen wrote:
-> On 5/20/26 14:52, David Hildenbrand (Arm) wrote:
->> On 5/20/26 12:33, Juhyung Park wrote:
->>> Neat. Any sign of it getting merged?
->> I hope it will catch the attention of more x86 maintainers soon 🙂
-> 
-> David, thanks a ton for that patch. It's in the queue behind a couple of
-> other things, but I'll definitely take a look.
-> 
-> Attention caught, I promise! ;)
+Unconditional guard destructors have dead NULL checks. The lock operation in
+the constructor would crash before the destructor ever runs with NULL.
 
-No need to excuse ... my inbox is overflowing because of conferences and travel ...
+- Patches 1-2 prepare guards that legitimately handle NULL.
+- Patch 3 adds __nonnull() to guard constructors for compile-time enforcement.
+- Patch 4 removes the dead checks.
 
-Note that I have more cleanups that are waiting for that fix (including,
-removing the order parameter from free_pagetable(), removing
-CONFIG_HAVE_BOOTMEM_INFO_NODE), so expect free_pagetable() and
-free_vmemmap_pages() getting cleaned up properly next.
+As compiled by GCC-11 with defconfig on top of the locking/core:
+
+    Total: Before=23889980, After=23834334, chg -0.23%
+
+Changes in v4:
+
+- Re-worded commit message paragraph about nonnull "compiler-enforced
+  verification" (Miguel Ojeda).
+- Fixed GCC documentation link for nonnull() attribute (Miguel Ojeda).
+- Placed nonnull() before nonstring() in
+  include/linux/compiler_attributes.h (Miguel Ojeda).
+- Picked up tags, where appropriate.
+
+Changes in v3:
+
+- Audited usages of DEFINE_GUARD(), __DEFINE_UNLOCK_GUARD() and
+  DEFINE_LOCK_GUARD_1() to make sure NULL check removal will work correctly
+  (Peter Zijlstra).
+- Moved NULL check into irqdesc_lock unlock expression (Peter Zijlstra).
+- Added compiler-enforced nonnull() check for guard constructors.
+- Converted nvdimm_bus guard to class.
+
+Changes in v2:
+
+- Expand commit message with detailed reasoning, why the proposed
+  change is correct.
+- Rebase on top of locking/core.
+
+v3: https://lore.kernel.org/all/cover.1779116497.git.d@ilvokhin.com/
+v2: https://lore.kernel.org/all/20260512071510.92451-1-d@ilvokhin.com/
+v1: https://lore.kernel.org/all/20260427165037.205337-1-d@ilvokhin.com/
+
+See also [1] for relevant discussion.
+
+[1]: https://lore.kernel.org/all/afCS4d4YccQFtvpi@shell.ilvokhin.com/
+
+Dmitry Ilvokhin (4):
+  nvdimm: Convert nvdimm_bus guard to class
+  genirq: Move NULL check into irqdesc_lock guard unlock expression
+  cleanup: Annotate guard constructors with __nonnull()
+  cleanup: Remove NULL check from unconditional guards
+
+ drivers/nvdimm/nd.h                 | 7 +++++--
+ include/linux/cleanup.h             | 8 +++++---
+ include/linux/compiler_attributes.h | 6 ++++++
+ kernel/irq/internals.h              | 2 +-
+ 4 files changed, 17 insertions(+), 6 deletions(-)
 
 -- 
-Cheers,
+2.53.0-Meta
 
-David
 
