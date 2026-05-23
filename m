@@ -1,81 +1,81 @@
-Return-Path: <nvdimm+bounces-14110-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14112-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BY3Nrx3EWrymQYAu9opvQ
-	(envelope-from <nvdimm+bounces-14110-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 11:47:40 +0200
+	id IDIzG/x3EWrymQYAu9opvQ
+	(envelope-from <nvdimm+bounces-14112-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 11:48:44 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564E35BE47B
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 11:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A93485BE4BF
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 11:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D219D305046A
-	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 09:43:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 94B4A305A8AB
+	for <lists+linux-nvdimm@lfdr.de>; Sat, 23 May 2026 09:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F7F38737B;
-	Sat, 23 May 2026 09:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701E4386C2C;
+	Sat, 23 May 2026 09:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdKg03uE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fl+wv+xn"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C9438736A
-	for <nvdimm@lists.linux.dev>; Sat, 23 May 2026 09:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806713859DC
+	for <nvdimm@lists.linux.dev>; Sat, 23 May 2026 09:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779529436; cv=none; b=sInABnSqzHahDGDl8i1t8iztGtvbIGKVq06ksjGcYFW56f+BI1HkJjER7wg4TU6BJg/vBay0hwTUjUbp4M4SFQCgpHSDaEKcHwcdJJozFAvepbtD01VRw8iRqwaj6Xjt+5J682CyXVApnX9rO9FIEkqKKKE/Hit/xgmnapjDSzQ=
+	t=1779529438; cv=none; b=HWOqeWfvQVNHp8lLpRAoPivQjV3gsq4dVLoeQiUaVG3qzGwdSV7cC9ufKJg229nlBC7i6v2QFAnVYnMJI9N2jcxQRwrst1n3fwJWb9pjsdPA77TUzoczMtHi7MthJO641wukHW7I9uV37juUhjR4vsXCuXZ01GGakvMOARETnVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779529436; c=relaxed/simple;
-	bh=cA6OvtiMYiH8fWm6hs/pB2NqRBhSnJLhmhXOqE10cNA=;
+	s=arc-20240116; t=1779529438; c=relaxed/simple;
+	bh=WdPnNZdBMfPNVkxZQcUkvrepHszswdE8ldfahIBUbPc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rfUsQfYNx1A/F8a+qH6109BNU22QG8ZTVMtzI1vzgnXQRwVAODZ0cH2NwVEzTExG4YxjBlXyeVJOGv5meREYmy+NVmTr1kbY8PASJst4WgYqDk9pOddCbSfqNOEhndrBtVwMY9d7ksnQFohYeJxEfnWaUK9m0rpeoita1G89Xrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XdKg03uE; arc=none smtp.client-ip=74.125.82.180
+	 MIME-Version; b=JSn5sn7GWWMy1jX7taYlqKHLkM0O2YeOknX+0EgFShFJ1G2ZoffrEVWBJBmQqn5EXT/4SEyT7cQaUnEX/4KG4pLJbuU7eZhP3cglwdsNcveoHvjeMOVfL/e8ANLAteoRRVrwUxmpMmsgaWMsTvV7yP0weyY4oiyWcDcCXIcXJIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fl+wv+xn; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso12795986eec.0
-        for <nvdimm@lists.linux.dev>; Sat, 23 May 2026 02:43:54 -0700 (PDT)
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-132830d8281so2577269c88.1
+        for <nvdimm@lists.linux.dev>; Sat, 23 May 2026 02:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779529433; x=1780134233; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1779529435; x=1780134235; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=veSAHzzDLBJHWUT6ObwVQlgXBETLjKgsofHDN9ZwSyE=;
-        b=XdKg03uEXY6wYeMLVjPJHBCdyDz4cCkcndzQ9478VOr9a8OqCx/EbXPgb+3XzpOXFb
-         B2yAYZyZswJMAm+sr0mvBBZ+zXxQmj/pIEFL6hgguK6OAjOWaeSz/bcvcRhNYEYirJ2X
-         AVOsr5ezJajipH5AoRkfQfOuXvJDGjA/XgZcHn2NOrWVMJBEERT1bR/KraMs64l+Ws0d
-         RmLYF3nlriZ5awI2tdDzolRdXGTD+OS1Gj5iXdU8JUs54lF3g0fVv0Ka8OI5ifk4goUk
-         7w3wVSsZGokWc/Ym1S6R6z5U56+FDKf+MHC4lvU6SixH7yh2eViS5varOl6vNY3XYpDh
-         gSHg==
+        bh=drGooomvIKHMHD9aQDfS7/igAqAzAvEceRuTEAEvyv8=;
+        b=Fl+wv+xnMtTqlEcU26vrpqxMDz98QN+Gkc+Ys0+5bG59W5YsU2kUhHdDIVMOopVNEM
+         ajIRHXxWoSOTipV7GO+EPl1AxWDyi/B4pMMMpPiUTliM0mjQdtwulItkGDUvZ24a5E+w
+         shuEVe9Ugzu4j4NUQMaWdmpvBB4n01xTwHgkkzlCTE1Xe8PCXEcUvuv+Cis4jqzZiAw5
+         mBNz/SzgDEk1SGqVDVq4QtyEfnURqjzssrSTl+X4t4RbhacYnoVQI+ePERWoW1GUlDJj
+         2lnlnvmhuL5leRS7n0do+ZM4hcTSG97Qp1biwgfsaN4YgdnueefQ4ptKMPI2g+/hoB9t
+         K49w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779529433; x=1780134233;
+        d=1e100.net; s=20251104; t=1779529435; x=1780134235;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=veSAHzzDLBJHWUT6ObwVQlgXBETLjKgsofHDN9ZwSyE=;
-        b=nwQfW9R7dhB8TYGl6vl3SLSnE5qw0SgBJJBympoPIWqQRQLJ8xDyqDWinKAZWtyC5E
-         yH0xbX197OtEwkkvl36RPUx53xA9htfj7LsDbVasR35UDzR5ieITVXW7AMICUvdFn5Na
-         APjFzeUOUkO3GrEeHXkRyI5Pyoi8Pn3l5SdlqorN60bGD1hAOMhxA4CyP+mbhG1gpWxF
-         noay9rOPhaEjoHMeYvp6yAeZ7+l++1YPm1WBZ4pDCbIH2I1m2CMnzb5MQoseaiASPX6d
-         RkUALdgcBo3gti5ohCeWtM8vvZO3yzDfovBNZt1I1qphlQAkDkyQ9SSzkQ6Mr1mbfS71
-         7A+A==
-X-Gm-Message-State: AOJu0YzSFM99Tj9HZUBdDjEtOdO2wXG94mIdDIT20umIH5DSnmVcfeo7
-	LqPhBHFp8eVwVViTwiiDCmv19SxOX7MQZTd9wTiiw56UNzK9UsmgC+SG
-X-Gm-Gg: Acq92OFGEPgR75+yoSWFk6QyDTweaCemJdillVP/TPqW/X4OHuzHU67SpUrSkJn0prY
-	lvnhXRPCdnq/TOdlgpcJYetG7A5kTFs+3iJJI24DHTi6uZdlYktwOsfr7ZI2mNzUWFv/+DJ06Jd
-	bCqMdWTj2dA4Mmy2QU4MFteOo9QAFzIJKA8GK5PLDckhnrBHbuu/AF5kXB9R69xMnJR4q/jujFl
-	1s7qmSoVxnTLWzF3nqCXMM7MScbzI4IvxRCibPC+tbxhw8GoY3LbhTmivr6Pbhs4QWnr4NujsPG
-	7CetUU6M2lcanaRP1vCCTZNjtwANLMl+v0X/PCXuF/OCMUsePcDIbfUjdsa7i318RAf+0VhSaPV
-	bVvWUXN5gFehw0zE/d/C+ZRv2BzVs/5q9VtMQURCNWtrnv29wD+vwS5Ncss8CQeSUOpua2jUra4
-	V9/SapNxP8juvyWBxSH4X8H6oKzk22kS7iVqnCEPHtgIzGW1wXDkPuaDq8cGqNSbnVu4YEudKNh
-	SbNNPyVeR3c429EqA==
-X-Received: by 2002:a05:7022:1e11:b0:130:6c8f:5a87 with SMTP id a92af1059eb24-1365f81e50amr3002026c88.13.1779529433221;
-        Sat, 23 May 2026 02:43:53 -0700 (PDT)
+        bh=drGooomvIKHMHD9aQDfS7/igAqAzAvEceRuTEAEvyv8=;
+        b=E62wKaXILsLGdTO/gN+MsjI8YH/h7GOiGlteW7Zt2KcHB+2GsZ+Qd3+4EH4ppKyRKD
+         eyUIk8NkNBRUk+5qPxWgK1d1kIqhoInadhvfdq2vDt094ZwlQoGpITfQTe+dozJx953S
+         wwLy67fC+vQ/cMV0ANu4TZY1x5r2RGg3Uj+PaHkyynOv55voCo62a0CmlXlm9g+vpEPi
+         ofPBBe4khM5pwZo1J4bJ36XL0iEIwP3W8pBimEWit/DPA7wkBu24nuen8wlX7L75D1hz
+         fgjSK772BbNyqQ8D1kzRgm2vdkliswX8xiuFbXnHQsqSUO0JowcnYL3x7vXVvtyoG9bl
+         Crvg==
+X-Gm-Message-State: AOJu0YyDHzgaIgMdho4AAz4DuxSEjjYKPGEqNEHzNpvyDL4iGU4jctNS
+	cxgvBELQoaRWYu/+UkvvXSpDehlcKpJpL5XcxgvoTrvaMdd0ej1egW7h
+X-Gm-Gg: Acq92OFskqfjSKRe3rQARRmODwvmsXJpgyU+LcXGa1HZK8zdCTiLeBNsNBG0Hypgk57
+	CgaYEWSpGR9K044DOSep8Y+TxNtYDzGpDg5A56FToCl5rCdGe+hiV+eWop98RY6wRYClL3DjGHr
+	TEUxBrc4nI1BfhkK4lPkV+dF9ym3GIYm4DcW8PqsepAf/WrtersoCr64rjl/R6mUNK9cskfpVtZ
+	y3cRMTwSQOcKyKFKoJprEY3ucVN07P8xJOMTaumzBXmXqKyED+1K6G22FsNn3tw/x6jnUk9+7qJ
+	xgR/tEuoyNPnNl0MzlDlGPhJn4uqE0sZIM353d7EZsUWLa97AqlDDA1Nj89CDcpoAqCj1sfwnrA
+	cuzLnCWp48K1NfJXSxFR1jmUVnhd1u5Fz4p1mMxKrGLlNGyJOxhgDxSDZJJC4CDSdxH+5XxPtMm
+	vNscDqQAnvj3w4HsjrnBX1ggAu1O1/PRqNIXk7TBoKdDQlvUso3MVt8KKtLk2/Zvnh98CGF5mOJ
+	W7uG5c=
+X-Received: by 2002:a05:7022:511:b0:134:d708:1a24 with SMTP id a92af1059eb24-1365f8161bemr2409921c88.17.1779529434676;
+        Sat, 23 May 2026 02:43:54 -0700 (PDT)
 Received: from AnisaLaptop.localdomain (c-73-170-217-179.hsd1.ca.comcast.net. [73.170.217.179])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a40305csm2376358c88.7.2026.05.23.02.43.52
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a40305csm2376358c88.7.2026.05.23.02.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 02:43:52 -0700 (PDT)
+        Sat, 23 May 2026 02:43:54 -0700 (PDT)
 From: Anisa Su <anisa.su887@gmail.com>
 X-Google-Original-From: Anisa Su <anisa.su@samsung.com>
 To: linux-cxl@vger.kernel.org,
@@ -91,13 +91,10 @@ Cc: nvdimm@lists.linux.dev,
 	John Groves <John@Groves.net>,
 	Gregory Price <gourry@gourry.net>,
 	Ira Weiny <ira.weiny@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Fan Ni <fan.ni@samsung.com>,
-	Li Ming <ming.li@zohomail.com>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH v10 09/31] cxl/pci: Factor out interrupt policy check
-Date: Sat, 23 May 2026 02:43:03 -0700
-Message-ID: <a211cbf4417cfeac8ebb9152ff66d9acf9b2c085.1779528761.git.anisa.su@samsung.com>
+	Anisa Su <anisa.su@samsung.com>
+Subject: [PATCH v10 10/31] cxl/mem: Configure dynamic capacity interrupts
+Date: Sat, 23 May 2026 02:43:04 -0700
+Message-ID: <7f2e4fe385415e0b77b58f4bd988bc5895557dcf.1779528761.git.anisa.su@samsung.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1779528761.git.anisa.su@samsung.com>
 References: <cover.1779528761.git.anisa.su@samsung.com>
@@ -108,104 +105,230 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [3.84 / 15.00];
-	SEM_URIBL(3.50)[zohomail.com:email];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
-	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14110-lists,linux-nvdimm=lfdr.de];
-	PRECEDENCE_BULK(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	R_DKIM_ALLOW(0.00)[gmail.com:s=20251104];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
+	TAGGED_FROM(0.00)[bounces-14112-lists,linux-nvdimm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	NEURAL_HAM(-0.00)[-0.974];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
-	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 564E35BE47B
+X-Rspamd-Queue-Id: A93485BE4BF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Dynamic Capacity Devices (DCD) require event interrupts to process
-memory addition or removal.  BIOS may have control over non-DCD event
-processing.  DCD interrupt configuration needs to be separate from
-memory event interrupt configuration.
+Dynamic Capacity Devices (DCD) support extent change notifications
+through the event log mechanism.  The interrupt mailbox commands were
+extended in CXL 3.1 to support these notifications.  Firmware can't
+configure DCD events to be FW controlled but can retain control of
+memory events.
 
-Factor out event interrupt setting validation.
+Configure DCD event log interrupts on devices supporting dynamic
+capacity.  Disable DCD if interrupts are not supported.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Fan Ni <fan.ni@samsung.com>
-Reviewed-by: Li Ming <ming.li@zohomail.com>
-Link: https://lore.kernel.org/all/663922b475e50_d54d72945b@dwillia2-xfh.jf.intel.com.notmuch/ [1]
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Care is taken to preserve the interrupt policy set by the FW if FW first
+has been selected by the BIOS.
+
+Accept the 4-byte CXL 2.0 reply on GET Event Interrupt Policy by setting
+min_out to CXL_EVENT_INT_POLICY_BASE_SIZE; pre-CXL 3.1 firmware omits
+dcd_settings and would otherwise fail the size check.
+
+Based on an original patch by Navneet Singh.
+
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Anisa Su <anisa.su@samsung.com>
 
 ---
 Changes:
 [anisa: rebase]
+[anisa: accept 4-byte CXL 2.0 GET reply via min_out]
+[anisa: drop Reviewed-by tags now that the patch carries new changes]
 ---
- drivers/cxl/pci.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ drivers/cxl/cxlmem.h |  2 ++
+ drivers/cxl/pci.c    | 75 ++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 64 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index 10175ca3b7ee..65c009b02da6 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -218,7 +218,9 @@ struct cxl_event_interrupt_policy {
+ 	u8 warn_settings;
+ 	u8 failure_settings;
+ 	u8 fatal_settings;
++	u8 dcd_settings;
+ } __packed;
++#define CXL_EVENT_INT_POLICY_BASE_SIZE 4 /* info, warn, failure, fatal */
+ 
+ /**
+  * struct cxl_event_state - Event log driver state
 diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index 35942b2ace53..8d12c684d670 100644
+index 8d12c684d670..83617439bbd3 100644
 --- a/drivers/cxl/pci.c
 +++ b/drivers/cxl/pci.c
-@@ -639,6 +639,21 @@ static bool cxl_event_int_is_fw(u8 setting)
- 	return mode == CXL_INT_FW;
+@@ -557,6 +557,8 @@ static int cxl_event_get_int_policy(struct cxl_memdev_state *mds,
+ 		.opcode = CXL_MBOX_OP_GET_EVT_INT_POLICY,
+ 		.payload_out = policy,
+ 		.size_out = sizeof(*policy),
++		/* CXL 2.0 firmware omits dcd_settings; accept the shorter reply */
++		.min_out = CXL_EVENT_INT_POLICY_BASE_SIZE,
+ 	};
+ 	int rc;
+ 
+@@ -569,23 +571,34 @@ static int cxl_event_get_int_policy(struct cxl_memdev_state *mds,
  }
  
-+static bool cxl_event_validate_mem_policy(struct cxl_memdev_state *mds,
-+					  struct cxl_event_interrupt_policy *policy)
-+{
-+	if (cxl_event_int_is_fw(policy->info_settings) ||
-+	    cxl_event_int_is_fw(policy->warn_settings) ||
-+	    cxl_event_int_is_fw(policy->failure_settings) ||
-+	    cxl_event_int_is_fw(policy->fatal_settings)) {
-+		dev_err(mds->cxlds.dev,
-+			"FW still in control of Event Logs despite _OSC settings\n");
-+		return false;
+ static int cxl_event_config_msgnums(struct cxl_memdev_state *mds,
+-				    struct cxl_event_interrupt_policy *policy)
++				    struct cxl_event_interrupt_policy *policy,
++				    bool native_cxl)
+ {
+ 	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++	size_t size_in = CXL_EVENT_INT_POLICY_BASE_SIZE;
+ 	struct cxl_mbox_cmd mbox_cmd;
+ 	int rc;
+ 
+-	*policy = (struct cxl_event_interrupt_policy) {
+-		.info_settings = CXL_INT_MSI_MSIX,
+-		.warn_settings = CXL_INT_MSI_MSIX,
+-		.failure_settings = CXL_INT_MSI_MSIX,
+-		.fatal_settings = CXL_INT_MSI_MSIX,
+-	};
++	/* memory event policy is left if FW has control */
++	if (native_cxl) {
++		*policy = (struct cxl_event_interrupt_policy) {
++			.info_settings = CXL_INT_MSI_MSIX,
++			.warn_settings = CXL_INT_MSI_MSIX,
++			.failure_settings = CXL_INT_MSI_MSIX,
++			.fatal_settings = CXL_INT_MSI_MSIX,
++			.dcd_settings = 0,
++		};
 +	}
 +
-+	return true;
++	if (cxl_dcd_supported(mds)) {
++		policy->dcd_settings = CXL_INT_MSI_MSIX;
++		size_in += sizeof(policy->dcd_settings);
++	}
+ 
+ 	mbox_cmd = (struct cxl_mbox_cmd) {
+ 		.opcode = CXL_MBOX_OP_SET_EVT_INT_POLICY,
+ 		.payload_in = policy,
+-		.size_in = sizeof(*policy),
++		.size_in = size_in,
+ 	};
+ 
+ 	rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);
+@@ -632,6 +645,30 @@ static int cxl_event_irqsetup(struct cxl_memdev_state *mds,
+ 	return 0;
+ }
+ 
++static int cxl_irqsetup(struct cxl_memdev_state *mds,
++			struct cxl_event_interrupt_policy *policy,
++			bool native_cxl)
++{
++	struct cxl_dev_state *cxlds = &mds->cxlds;
++	int rc;
++
++	if (native_cxl) {
++		rc = cxl_event_irqsetup(mds, policy);
++		if (rc)
++			return rc;
++	}
++
++	if (cxl_dcd_supported(mds)) {
++		rc = cxl_event_req_irq(cxlds, policy->dcd_settings);
++		if (rc) {
++			dev_err(cxlds->dev, "Failed to get interrupt for DCD event log\n");
++			cxl_disable_dcd(mds);
++		}
++	}
++
++	return 0;
 +}
 +
+ static bool cxl_event_int_is_fw(u8 setting)
+ {
+ 	u8 mode = FIELD_GET(CXLDEV_EVENT_INT_MODE_MASK, setting);
+@@ -657,18 +694,26 @@ static bool cxl_event_validate_mem_policy(struct cxl_memdev_state *mds,
  static int cxl_event_config(struct pci_host_bridge *host_bridge,
  			    struct cxl_memdev_state *mds, bool irq_avail)
  {
-@@ -661,14 +676,8 @@ static int cxl_event_config(struct pci_host_bridge *host_bridge,
+-	struct cxl_event_interrupt_policy policy;
++	struct cxl_event_interrupt_policy policy = { 0 };
++	bool native_cxl = host_bridge->native_cxl_error;
+ 	int rc;
+ 
+ 	/*
+ 	 * When BIOS maintains CXL error reporting control, it will process
+ 	 * event records.  Only one agent can do so.
++	 *
++	 * If BIOS has control of events and DCD is not supported skip event
++	 * configuration.
+ 	 */
+-	if (!host_bridge->native_cxl_error)
++	if (!native_cxl && !cxl_dcd_supported(mds))
+ 		return 0;
+ 
+ 	if (!irq_avail) {
+ 		dev_info(mds->cxlds.dev, "No interrupt support, disable event processing.\n");
++		if (cxl_dcd_supported(mds)) {
++			dev_info(mds->cxlds.dev, "DCD requires interrupts, disable DCD\n");
++			cxl_disable_dcd(mds);
++		}
+ 		return 0;
+ 	}
+ 
+@@ -676,10 +721,10 @@ static int cxl_event_config(struct pci_host_bridge *host_bridge,
  	if (rc)
  		return rc;
  
--	if (cxl_event_int_is_fw(policy.info_settings) ||
--	    cxl_event_int_is_fw(policy.warn_settings) ||
--	    cxl_event_int_is_fw(policy.failure_settings) ||
--	    cxl_event_int_is_fw(policy.fatal_settings)) {
--		dev_err(mds->cxlds.dev,
--			"FW still in control of Event Logs despite _OSC settings\n");
-+	if (!cxl_event_validate_mem_policy(mds, &policy))
+-	if (!cxl_event_validate_mem_policy(mds, &policy))
++	if (native_cxl && !cxl_event_validate_mem_policy(mds, &policy))
  		return -EBUSY;
--	}
  
- 	rc = cxl_event_config_msgnums(mds, &policy);
+-	rc = cxl_event_config_msgnums(mds, &policy);
++	rc = cxl_event_config_msgnums(mds, &policy, native_cxl);
  	if (rc)
+ 		return rc;
+ 
+@@ -687,12 +732,16 @@ static int cxl_event_config(struct pci_host_bridge *host_bridge,
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = cxl_event_irqsetup(mds, &policy);
++	rc = cxl_irqsetup(mds, &policy, native_cxl);
+ 	if (rc)
+ 		return rc;
+ 
+ 	cxl_mem_get_event_records(mds, CXLDEV_EVENT_STATUS_ALL);
+ 
++	dev_dbg(mds->cxlds.dev, "Event config : %s DCD %s\n",
++		native_cxl ? "OS" : "BIOS",
++		cxl_dcd_supported(mds) ? "supported" : "not supported");
++
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
