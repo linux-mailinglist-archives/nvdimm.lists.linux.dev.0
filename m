@@ -1,68 +1,68 @@
-Return-Path: <nvdimm+bounces-14171-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14172-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kKOUMk2EF2rJHggAu9opvQ
-	(envelope-from <nvdimm+bounces-14171-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 01:54:53 +0200
+	id IBHXCzSFF2rJHggAu9opvQ
+	(envelope-from <nvdimm+bounces-14172-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 01:58:44 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2740A5EB11D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 01:54:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A88795EB19E
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 01:58:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA2AC30A9938
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 27 May 2026 23:54:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7F87430960C3
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 27 May 2026 23:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA143BB11A;
-	Wed, 27 May 2026 23:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C393B7B66;
+	Wed, 27 May 2026 23:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k64qZv6D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MrF3kgtq"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506293B3C0A
-	for <nvdimm@lists.linux.dev>; Wed, 27 May 2026 23:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48853B102F
+	for <nvdimm@lists.linux.dev>; Wed, 27 May 2026 23:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779926083; cv=none; b=H4P/FPFrCjbeS+z33M9Nf0zLb8c0xCLYC7+N7E1/VWQ3f+7QjefWiyGJFJCdBvLhW6/fN8NIaaekEI9ceQVkcaW+dPf3NEOSlNRpcFuV8ukXlhH1C80iWha3ven0mhblemDQxHnATUsGJx3S8htgmVcHHEBT+Le7tSVxu85IGtU=
+	t=1779926198; cv=none; b=GPH/YFhHcAzZ3uvu/74/IhQuXwnBPj6yHHLEhbJKfwr1kyMKdiAs6lq63OdKG2/S6Oksq20qS5h2BUzH4NBVZNJG9doDv1T0LZmzgyPED70RdYOFhJ0x0AMHPTRgqbzRm4/S4rSbANeBH5WT4gXcMadqYXkhnJpj+AjPzMQlwvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779926083; c=relaxed/simple;
-	bh=vzEii6/0ejhgue9HP1CEyY9U9zw6a1wG1JkwGca0vdM=;
+	s=arc-20240116; t=1779926198; c=relaxed/simple;
+	bh=8B1l/48CLbRhx2n8v80j9bxI/bl8qnfGgEPXWm9Rk9E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NvKjNQsdxX/inqN3ylQwSgzFNKD/eMh69Qqv7IXbmW/ubkOcIVLi1TKTy1CgJsKnGiphRo1KxUIWdAFaqnNd2tudakKxI6epQQfYZWgv91oqV2T5c8eoFWdUdHu1mnx8gMlvGRjX4bbDHwu03wnUz96WaksJZaXUcMsUlvBF1Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k64qZv6D; arc=none smtp.client-ip=192.198.163.7
+	 In-Reply-To:Content-Type; b=nYgJd0xMVtYWK630PwjOQdp5kQX6UlJGORnWCy5M/jZOYHidqPrjdFGnf9QkywdWIJAkoRYEHA7vHHXtwuK8c8V8K1OfuplP11S3oYeNTg/ZQeJtLthBi2sao1ibtOp+EInk9bcxIRYosT/n+8kFaiKuGi3WdzhJDZWKGSDl0o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MrF3kgtq; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779926081; x=1811462081;
+  t=1779926197; x=1811462197;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=vzEii6/0ejhgue9HP1CEyY9U9zw6a1wG1JkwGca0vdM=;
-  b=k64qZv6DRv/zbO6R/k1fR76reRfoorqrlF2CcVazJI6c9F/25Vp7trU3
-   IJmFalNB53PMQ2B7N7wp+ndxffKxuUSf64HNlncvIc1P9P4xmtchCbiM7
-   4Y5GY+IIsDMbXLUo2MquNgT5ylBIvmdKVFt1lIOjxvVNc4PNSIgqKaZms
-   dor3RlEqxLdaq756NAgK+kFDcg+eu1SzSRY8JpskqNaFypgHkWXIy70hb
-   JRneYNNqJ5+pGsmiI6cfMw3xYdGXtrGIm5EPeO0vDzvGfkINhpkGpWa9v
-   KLoO9sEdjKpKqo87c5ucIRSRL8Dr8eGQNdqd7o7ZyR+aiyTyp/8zCbJzb
+  bh=8B1l/48CLbRhx2n8v80j9bxI/bl8qnfGgEPXWm9Rk9E=;
+  b=MrF3kgtqE9I3wbMEVf7wC8QO/33NdSs+i68yFafK6KqTxpzRn/XHAR/W
+   FFJudcLSL+s1wSwu2SWnD9zyIqdbbfWLOsTS4jhCwvMROVWwa50/1K+3A
+   UZEyUEEBG3u0CFhtG3di57OWuabi48vNtYxrc2hOBWqwN2K6srbtAdvBX
+   iFQzeyfNyt0oWq6Moa7AJByA7E3n63DhQTLHBotHvqEoM5bGL0GgmTdIW
+   WusLminQ+1gJXUJvuEenLjHhKRs7cnTTPOnXkoo57NsoN0dNxYI7iHKtC
+   N8UieBbKWx7uk1Rl2bKb5vuy5atvJg/oGHdZrrqSTCEQWpZDwYgw58yUb
    Q==;
-X-CSE-ConnectionGUID: FwsOSe8IRpKROKod/Nsv8w==
-X-CSE-MsgGUID: gmWxayIsRr6M6BvVPXFZCg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="106219722"
+X-CSE-ConnectionGUID: GZjzy7CFTe++o4+Y/oJ1kQ==
+X-CSE-MsgGUID: 11NRXiDYR/mbIIyXT7GqRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="106219802"
 X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="106219722"
+   d="scan'208";a="106219802"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 16:54:40 -0700
-X-CSE-ConnectionGUID: H7Q5c5g2T0ysD3gakfKSmQ==
-X-CSE-MsgGUID: Oj7m7OmAQ2yBoOFT6dscYQ==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 16:56:36 -0700
+X-CSE-ConnectionGUID: VoN3Gxe1RcKLfdg+rXotvA==
+X-CSE-MsgGUID: GXMx3vPpTxSP9WZIn/QQfg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="266273524"
+   d="scan'208";a="266273822"
 Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.125.111.23]) ([10.125.111.23])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 16:54:39 -0700
-Message-ID: <cc026dd7-0aa5-425a-821e-7300ecff687b@intel.com>
-Date: Wed, 27 May 2026 16:54:38 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 16:56:35 -0700
+Message-ID: <df99e0c6-e571-4dba-a8c4-2a8ecbb47c34@intel.com>
+Date: Wed, 27 May 2026 16:56:34 -0700
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -92,18 +92,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14171-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14172-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -113,8 +113,8 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 2740A5EB11D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email,intel.com:mid,intel.com:dkim]
+X-Rspamd-Queue-Id: A88795EB19E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -129,12 +129,6 @@ On 5/23/26 2:42 AM, Anisa Su wrote:
 > Expose the first dynamic ram partition through sysfs.
 > 
 > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
-Missing Anisa sign off
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-
 > 
 > ---
 > Changes:
@@ -157,6 +151,11 @@ Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 > +What:		/sys/bus/cxl/devices/memX/dynamic_ram_a/size
 > +Date:		May, 2025
 > +KernelVersion:	v7.0
+
+Probably should update this to 7.3 maybe?
+
+DJ
+
 > +Contact:	linux-cxl@vger.kernel.org
 > +Description:
 > +		(RO) The first Dynamic RAM partition capacity as bytes.
