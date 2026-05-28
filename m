@@ -1,155 +1,165 @@
-Return-Path: <nvdimm+bounces-14176-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14177-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FslKCLkF2otUggAu9opvQ
-	(envelope-from <nvdimm+bounces-14176-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 08:43:46 +0200
+	id OIHcAPbkF2otUggAu9opvQ
+	(envelope-from <nvdimm+bounces-14177-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 08:47:18 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED30E5ED5C3
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 08:43:45 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC0D5ED619
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 08:47:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DD6CD303100A
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 06:41:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3CB3630254E3
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 28 May 2026 06:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A81633BBC6;
-	Thu, 28 May 2026 06:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4394B340293;
+	Thu, 28 May 2026 06:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="oqaGV0xo"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="LDZwJR+X"
 X-Original-To: nvdimm@lists.linux.dev
-Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED5831A807
-	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582413191D3
+	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779950486; cv=none; b=JD78AaLpL8o57gb4jYn7psvMDoxyZapqTDSajLU6RVcC7x0OHxPPybQmGQnFp6RcoCTFAsiv+gSiwpjIHQ4SEBDBmygr9CIAEs1FqhUFpWK350szUlv/xnn3oV+A1xbmsiUmUIxLYy+b0XaqgI8Z2lPbTZh6hKMUyzS9hrMAcRI=
+	t=1779950835; cv=none; b=uEkwuht6w692Q9/b+FbMWdHTAzcalVX4/FsAL2aj76XJ670zSVwkRDtDj2OcOyAlIzEDRNO7jbe995+b4xsSrXkGqK+wMAGnO6yVG9jKZlR8KnhycMdu9KeaRGtDnXnk5QX6EZFQkzrvH4aFipb7dm3gIHsmf94bD8rbVfqkuEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779950486; c=relaxed/simple;
-	bh=Dzq99QaUsF9Zc98cd/Hd2hOxwzORJWSrqkCmv+Cz4vg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZOYvdeqrkOodb/sdnpn+go4K806rY9urHP8ufJ9bKM5wmUVng9i20dsMY873INKu+TddCQKMha5yJrHeMRPWckEYo5DwkCJBkW0P6lHIpIGXroMKKLTCTxW+JTI9nCIGeE6VUpkQ2z9/6ijCLo+b84KEoCKjMcxCButBySfwXK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=oqaGV0xo; arc=none smtp.client-ip=139.138.61.252
+	s=arc-20240116; t=1779950835; c=relaxed/simple;
+	bh=prdtrxY4K6tpuyuEGT/BUZzB6ZtzGfmw31jIxmiUMc0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Tpk3ai72sXrLbJesSE2UzB9Et8PVP2llc+wDlj61tk7ekx47FZS+Gbo2/3QnwVLqG1EfOyuRx/Uocuic/z5JBPxhsFKdFnI2+hbzmHJcYtsQfdvobn9r27FfjegyRCy/sU1ovgJ4iP5ONSV8LgsqBbZNW4V7wmg7zUgJNIPkzgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=LDZwJR+X; arc=none smtp.client-ip=207.54.90.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1779950484; x=1811486484;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Dzq99QaUsF9Zc98cd/Hd2hOxwzORJWSrqkCmv+Cz4vg=;
-  b=oqaGV0xoRx5Ebi6iikHAETrlsjfBMgztRue2jLFY0HFxnRS/JC6mGf0X
-   gjGrx7BescoV6lPuRJA+k/jGvlfO/7B10hKVirC7KRwG3yQIKi1bbR3tl
-   JP1jWRSk5wvu0K0475V64vNFZaPGltIyO7pma6B5KIUR6QOXE80+Z/0aE
-   3mI0nYScUST8c2PZoTbRGsbdqaSVx3MCf6FdycNP51Tf3+njCpUdaTtSV
-   B6y7+QfWKotU4mOIPWFeSKWR/dP9eBl41UpfW0fbtHV14SDGN24ti9Ust
-   mPBPZkGXlyRwBdRSp9Kt3KW4icSDiLqu7zpfy++3VyQJam+4PpYVXwocr
-   g==;
-X-CSE-ConnectionGUID: 4XlaTu8vTyyhKjNDfx9XNw==
-X-CSE-MsgGUID: zXX3mhdPQieCPMc/wsWQRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="221042641"
-X-IronPort-AV: E=Sophos;i="6.24,172,1774278000"; 
-   d="scan'208";a="221042641"
-Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
-  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 15:40:14 +0900
+  t=1779950834; x=1811486834;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=prdtrxY4K6tpuyuEGT/BUZzB6ZtzGfmw31jIxmiUMc0=;
+  b=LDZwJR+X8056i3qlcTcaX6O38jWoLYCQEEryJA1+Y7BUTFYS+DzaZIgm
+   KT3IjKLq3CGysJJiO0OR48ehWXsmae6Se22t1ESS3GbYxs/Qucf6R1NSC
+   lfB9uDa65fSRSd8zB/6CW6XIE+55dz5tzH6xeu7kTVeHd7r8jqmaxdtdJ
+   hAtBFlWnIjfME3smgaB28W388X6/Ml7fobOujW7kjPyWUHZimsTxupouH
+   Pht6E1T/Jc0ptfvdl5gYaqP6V2hdlL/XAw8enxuH8JnBibgtOGfCM+YI/
+   DaEDKv2YzkMXV3YpLZaVm8eWkUFRhjDjnpcq84ox+GurqvfPChTetXtAK
+   w==;
+X-CSE-ConnectionGUID: cU58zM+bTyCIDDxFxkHKpw==
+X-CSE-MsgGUID: PU+cydo7T3WVOaCRVW2q7Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="242082765"
+X-IronPort-AV: E=Sophos;i="6.24,173,1774278000"; 
+   d="scan'208";a="242082765"
+Received: from gmgwnl01.global.fujitsu.com (HELO mgmgwnl01.global.fujitsu.com) ([52.143.17.124])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 15:46:04 +0900
 Received: from az2nlsmgm3.fujitsu.com (unknown [10.150.26.205])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 019DA407579
-	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:40:14 +0000 (UTC)
+	by mgmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 32CDDADB6
+	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:46:03 +0000 (UTC)
 Received: from az2uksmom2.o.css.fujitsu.com (unknown [10.151.22.203])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by az2nlsmgm3.fujitsu.com (Postfix) with ESMTPS id 9DD80197F0E8
-	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:40:13 +0000 (UTC)
+	by az2nlsmgm3.fujitsu.com (Postfix) with ESMTPS id D91F818461B5
+	for <nvdimm@lists.linux.dev>; Thu, 28 May 2026 06:46:02 +0000 (UTC)
 Received: from dhcp-portal (unknown [10.172.107.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by az2uksmom2.o.css.fujitsu.com (Postfix) with ESMTPS id A9AF61400123;
-	Thu, 28 May 2026 06:40:12 +0000 (UTC)
+	by az2uksmom2.o.css.fujitsu.com (Postfix) with ESMTPS id E6B7A1400132;
+	Thu, 28 May 2026 06:46:01 +0000 (UTC)
 Received: from isar2.ecs00.fujitsu.local (unknown [10.172.183.27])
-	by dhcp-portal (Postfix) with ESMTP id 4E39060A0E;
-	Thu, 28 May 2026 08:40:12 +0200 (CEST)
+	by dhcp-portal (Postfix) with ESMTP id 3E41260A0E;
+	Thu, 28 May 2026 08:46:01 +0200 (CEST)
 From: Tomasz Wolski <tomasz.wolski@fujitsu.com>
-To: alison.schofield@intel.com
-Cc: ardb@kernel.org,
-	benjamin.cheatham@amd.com,
-	dan.j.williams@intel.com,
-	dave.jiang@intel.com,
-	djbw@kernel.org,
-	icheng@nvidia.com,
-	jonathan.cameron@huawei.com,
+To: smita.koralahallichannabasappa@amd.com,
+	alison.schofield@intel.com,
+	dan.j.williams@intel.com
+Cc: icheng@nvidia.com,
 	linux-cxl@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	nvdimm@lists.linux.dev,
-	smita.koralahallichannabasappa@amd.com,
-	tomasz.wolski@fujitsu.com
-Subject: Re: [PATCH v2] dax/bus: Upgrade resource conflict message to dev_err() in alloc_dax_region()
-Date: Thu, 28 May 2026 08:40:02 +0200
-Message-Id: <20260528064002.21542-1-tomasz.wolski@fujitsu.com>
+	ardb@kernel.org,
+	benjamin.cheatham@amd.com,
+	dave.jiang@intel.com,
+	jonathan.cameron@huawei.com,
+	Tomasz Wolski <tomasz.wolski@fujitsu.com>
+Subject: [PATCH v3] dax/bus: Upgrade resource conflict message to dev_err() in alloc_dax_region()
+Date: Thu, 28 May 2026 08:45:46 +0200
+Message-Id: <20260528064546.23362-1-tomasz.wolski@fujitsu.com>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <ahc7h8zMaTW2XUMU@aschofie-mobl2.lan>
-References: <ahc7h8zMaTW2XUMU@aschofie-mobl2.lan>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=fj2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14176-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-14177-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tomasz.wolski@fujitsu.com,nvdimm@lists.linux.dev];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[fujitsu.com:email,fujitsu.com:mid,fujitsu.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[fujitsu.com:mid,fujitsu.com:dkim];
+	FROM_NEQ_ENVFROM(0.00)[tomasz.wolski@fujitsu.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[fujitsu.com:+];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: ED30E5ED5C3
+X-Rspamd-Queue-Id: 6AC0D5ED619
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
->> Hi Tomasz,
->>
->> As the person who caused the churn, I sympathize w you, but
->> as the person who will likely merge this, please send a v3 that
->> removes the Fixes tag, which was the other change in v2.
->>
->> It'll keep the history cleaner.
->>
->> Thanks!
->> Alison
+The dax_region resource conflict in alloc_dax_region() indicates a
+serious configuration problem — two subsystems (e.g. dax_hmem and
+dax_cxl) are attempting to register overlapping address ranges. This is
+not a transient or debug-level condition; it represents a genuine
+resource conflict that an administrator needs to be aware of.
 
-Hello Alison,
+Promote the log level from dev_dbg() to dev_err() so that the conflict
+is visible by default without requiring dynamic debug to be enabled.
 
-No problem, I will post v3 :)
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Link: https://lore.kernel.org/linux-cxl/69c1a8d1c0fa9_7ee3100a1@dwillia2-mobl4.notmuch/
+Signed-off-by: Tomasz Wolski <tomasz.wolski@fujitsu.com>
+---
+ drivers/dax/bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Tomasz
+diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+index 68437c05e21d..cd963eeeef7b 100644
+--- a/drivers/dax/bus.c
++++ b/drivers/dax/bus.c
+@@ -672,7 +672,7 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+ 
+ 	rc = request_resource(&dax_regions, &dax_region->res);
+ 	if (rc) {
+-		dev_dbg(parent, "dax_region resource conflict for %pR\n",
++		dev_err(parent, "dax_region resource conflict for %pR\n",
+ 			&dax_region->res);
+ 		goto err_res;
+ 	}
+-- 
+2.47.3
 
 
