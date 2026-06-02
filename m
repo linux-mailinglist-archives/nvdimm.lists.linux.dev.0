@@ -1,187 +1,187 @@
-Return-Path: <nvdimm+bounces-14286-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14287-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id TyfwE3lSH2qkkQAAu9opvQ
-	(envelope-from <nvdimm+bounces-14286-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 03 Jun 2026 00:00:25 +0200
+	id mvUUBwtaH2q+kwAAu9opvQ
+	(envelope-from <nvdimm+bounces-14287-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 03 Jun 2026 00:32:43 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471336324B7
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 03 Jun 2026 00:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DCAAA63274E
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 03 Jun 2026 00:32:41 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=bYNYy6De;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14286-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14286-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=none) header.from=intel.com;
+	dkim=pass header.d=fastmail.com header.s=fm1 header.b=atbO2Xrx;
+	dkim=pass header.d=messagingengine.com header.s=fm1 header.b="P OEGbUN";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14287-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14287-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=pass (policy=none) header.from=fastmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 413173026501
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  2 Jun 2026 21:59:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0DCB13021797
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  2 Jun 2026 22:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58DA3AE194;
-	Tue,  2 Jun 2026 21:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B533C4577;
+	Tue,  2 Jun 2026 22:28:11 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A8F38B122
-	for <nvdimm@lists.linux.dev>; Tue,  2 Jun 2026 21:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE673BAD96
+	for <nvdimm@lists.linux.dev>; Tue,  2 Jun 2026 22:28:09 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780437535; cv=none; b=b8VGlJ5yzzZ3C731pbaZa7kUax4cPeazrJy3UyV6P4E7bwvVOft9YnHNZPCSwEIXwYSQfczqRcUfIJI6uBkVIemSax/i6ZxCfi5rHBUyD6yzhpTyRrpl4pL1g5S9DPm06M0Qf0Q5NWczhgYke1fDs+E2g4zXp1pWoJlKkd3VjAI=
+	t=1780439291; cv=none; b=f6rj/Yak5//XrUH73GEcyuq4c/rHg0YEfJRdjXAVDv4Z04nLuPQJBd71QLrp+QcumSmkS7IBGqgDgMEr0+GO6JtSVYJUl5kYJwlFUfvwBYh1ILL4rvYQ7+TtlTMZccbD4TnRnIiwJlBtUpJI0nLFqfKLlnNKFikXI487yqBkKYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780437535; c=relaxed/simple;
-	bh=lNy4OD9Hyui7+ARYdd9IyIqNHVlY1wQRJPb6kguiFcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gpErt3PyXrtHN5nBvSk8CaXL5+/uXwI90HNMsf4AGysRuH2+4vHLLjeCu25N2GGvefEnr1ZH18SDbW+AM7oKk1bXoxZk9SJxkimvuA5h3uFCtnCMYCD2ywCqznanSqcy/lHgh5JGI0md4kemeX9sXESp43It7zOIfZLrcRYhLx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bYNYy6De; arc=none smtp.client-ip=198.175.65.20
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780437535; x=1811973535;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lNy4OD9Hyui7+ARYdd9IyIqNHVlY1wQRJPb6kguiFcI=;
-  b=bYNYy6DenQmibd184gy309DYHMHwjWYvHZTXDlK7bSrjzpoTIhKrZyoJ
-   3jDItJOsf1I1bR9E04I48smfD5NA5VlsswveJLWPt1b81hsByd5lOMM7P
-   A2sFtyu5AJ6IhUajRO7DGakjJQWZAtAHDlh2yurEHJHDLbqtu2Yij5sWO
-   1uhk8j/Bd+BdtjBfEnbtHsNvVWrTRmHrw8oacseERoYAt5VSI9UTQj+40
-   Fey9I0MG+Qg4iffh1k2o7g0dHnfDgR5DDaIk8suCJV7NHyrflQiDL1+Fy
-   JAWd9bn5uS0trC6qMhcrfj6Q1mNLJRijr10dZ8SzeCM1fq/Wr//Dv8Q3I
-   Q==;
-X-CSE-ConnectionGUID: da6zUwyyT4qhh8yyG9QIQA==
-X-CSE-MsgGUID: VEsGiND0RgmQJX5veo4CXw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="80973649"
-X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="80973649"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:58:54 -0700
-X-CSE-ConnectionGUID: IG+QdlJ5TlK0+C4nKDLCdg==
-X-CSE-MsgGUID: 9clSxAXFQ5mnHp1Pm9/Kgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="245838734"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:58:51 -0700
-Date: Wed, 3 Jun 2026 00:58:49 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Hans de Goede <hansg@kernel.org>, Armin Wolf <w_armin@gmx.de>,
-	Dan Williams <djbw@kernel.org>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	nvdimm@lists.linux.dev
-Subject: Re: [PATCH v1 01/17] ACPI: bus: Introduce
- devm_acpi_install_notify_handler()
-Message-ID: <ah9SGXfJv2fz22Yl@ashevche-desk.local>
-References: <4739447.LvFx2qVVIh@rafael.j.wysocki>
- <2268031.irdbgypaU6@rafael.j.wysocki>
- <ah8l-p0Ih9tzu0G1@ashevche-desk.local>
- <CAJZ5v0i0bKHa28xoVRiy_7i_PgjqYD_TA0yRoofmjH1oHGQuQA@mail.gmail.com>
+	s=arc-20240116; t=1780439291; c=relaxed/simple;
+	bh=+pMv4X7bQR6UeFfuGC2LYtxgHg3wt+U8czs+0iCG94w=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=l9giiOhwR5P+w2D7sz2BPkKTftFzlBntKIuGVnMdob8yl7Xn+OdXUAM7q9UQXmJUJ0OxK7wUOY7HLCucH+3CkRUzlELvgDxoxdS2hM2uYEiCdyuUSDP6+rEWcn4kYYdsaJhUX0pxG5YSXkF19bQKKRIv8TouENeeDLxGXZvTStI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=atbO2Xrx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=POEGbUN/; arc=none smtp.client-ip=202.12.124.141
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailflow.stl.internal (Postfix) with ESMTP id 8D92C1300365;
+	Tue,  2 Jun 2026 18:28:08 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-09.internal (MEProxy); Tue, 02 Jun 2026 18:28:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1780439288;
+	 x=1780446488; bh=F34b1hUbJxZD2bXt3Lmg+L1DOUXFzTn8nRLFgXfeAHU=; b=
+	atbO2Xrx9Rn3638FVu63eFs4aKN6QWfyPz4Ts4I2nsKnfTYJhCvLI/c7mpg3juzK
+	0KTeaT7/QBccQsLzGNcILxJ6+3XQyXpsq88mfhnKJqWmO/UAJmZSCZn31b7TQ9v3
+	GDtUmvJU2VWFgbfHHKgNFmmApky8wxNK7ToiwLkHjKVH+CNNOY9u714wlDDGVK6g
+	JBaesuNNVSKACPZxJduMQ76dH5GX4Punem/w0KpLj6BNoPvIxzTF4xduF+rF4g7h
+	b7RwRTdL1aSvKzEzdltVtoVavGNQTwQVUj2UAF3u0apRdtE2CRphzndGU/REVgnB
+	mdXzDs8bKHTql54zOT9/bQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1780439288; x=
+	1780446488; bh=F34b1hUbJxZD2bXt3Lmg+L1DOUXFzTn8nRLFgXfeAHU=; b=P
+	OEGbUN/jzV1QkNtZVZ6dWcRC9JAlBXlsiRpdta5iRN7AHYWGDyWEKfd4FJvniLDr
+	Lf3PJIkSby7KiMOtjmpsgm36Bf0PkvLFszhgDfmQjvfzrOM6mnQQGAZo0Vd0x6f4
+	cssfNkbNAXpGGeggZbozoEBkFD5y9NhIJ+2NhTbnu8qfsdYsBxXjiZf6DAoiY85J
+	yskzuPGfzsgmqvHUwUFKsm9up8o/JNF5FwJ9aodHPvl3eAa/lZ3XlCpeBL6QVHnZ
+	h7a6+a5H0mdm0oNqT1dq0Y3YmarkqZswx+9hH5MiQLWkqDSdA0/aeMLPOu33r48r
+	AFGZsgC8NmsG6wI2vVTzQ==
+X-ME-Sender: <xms:91gfaoWmVndgonyL5KNZNTRlOBKr1VlKz_fSt2oz8JuMQZnoeSN06w>
+    <xme:91gfanY4q11fU7drLQd-yBRCBWZCt6HQRfYKdHiHKk-uJjPjbR4XM7rWqd88REdIR
+    mucja5FDnlgCR7m6bKs90VAB4sta7XulkmOEZov4o1c0KluA3LYKA>
+X-ME-Proxy-Cause: dmFkZTE73+p5uhQtg4vhv7+7FfVsEhMDvDaEr7zlAfmZA2plZqa1/pJ+m/vQdV9QLZzLF3
+    2nAZVfDZPDPRHrb5vc7mOAUSl77an2XZizYWX3/evGjAlomFjEtKPDZeproZ0jlVJduyQs
+    dAI5imOnpBv9Jv9xoVkFGCzg1V+JdqAaGN2Ult4PPPhZeJXB/kAkh6YBXKQ2AxPMz54Ouf
+    vZs/hONJL1K2ZF+NU0iyrSsD1r9TQHdxHl3766qcJkEjBXnJssVUHn8HI1d3/30GP0g3oN
+    xmL+1FnajOS1ITNP/I9YmU2gnAgoQY3IuxgmaGUYgfzHleUXekuaj1Ky1/XUgfDqaNRSMZ
+    P+H8e2JH/4xrI/1S2QwDYk7M/WPNNDm1Au09MIhXbgJMtJU5ZJijW37d3S/3IlbmOvc6Bo
+    L67B7hNxCUmIvz662IPqUPNX0zoaCcYPT71pmMKYeWOivJKdSK3gqYtawa9Qdn5f7Avj8a
+    9hV6XRqcBxaZ4sTSDoyxm9TxbVM1kAzJFuaEnzvHzmWh7a5WGuuvrwYcRGwzhY+SBROXT4
+    3AT9yZyGs/vOLBVz+eIrELeVVmntkRlRd+dERA7YX8eKxMzFMyS6dS/Pge3+SRav+NaVAm
+    NAnjKLpC4kVaL/wYseN+dVCUbykNyG8mzjtQ3NfIjkNS7v7hqhUYRfZGO94w
+X-ME-Proxy: <xmx:91gfaq5MCnq1Ni5NqhlBN3yteZm00qBSNz5vpxtMSI5KSUalgChaLQ>
+    <xmx:91gfakVtWf-yLf1rd7MkCXVhh69tNNgq2k1pBz2Ypdxqg7GvJE-MRg>
+    <xmx:91gfapP0vgNdY6HGsKjun1vp4ZbumEKpbDSgvmKSufAMz2oX7rGocg>
+    <xmx:91gfajgEIHCPCNBT25DwQVykcghfyoIPo6aS7RMkJigbfE55MuTbXA>
+    <xmx:-Fgfakk4THXoWMPCs3g3A2Oj0GER-koU5UwTQQL0CYxC1L9jeqGDyTmh>
+Feedback-ID: if7ae487a:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2CB2B700065; Tue,  2 Jun 2026 18:28:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0i0bKHa28xoVRiy_7i_PgjqYD_TA0yRoofmjH1oHGQuQA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Date: Tue, 02 Jun 2026 15:27:45 -0700
+From: "John Groves" <jgroves@fastmail.com>
+To: "Alison Schofield" <alison.schofield@intel.com>,
+ "John Groves" <john@jagalactic.com>
+Cc: "John Groves" <John@groves.net>, "Dan Williams" <djbw@kernel.org>,
+ "John Groves (jgroves)" <jgroves@micron.com>,
+ "Vishal Verma" <vishal.l.verma@intel.com>,
+ "Dave Jiang" <dave.jiang@intel.com>,
+ "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+ "Aravind Ramesh" <arramesh@micron.com>, "Ajay Joshi" <ajayjoshi@micron.com>,
+ "venkataravis@micron.com" <venkataravis@micron.com>,
+ "dev.srinivasulu@gmail.com" <dev.srinivasulu@gmail.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+ "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>
+Message-Id: <35827e07-1faf-4168-8fd5-932afc37d620@app.fastmail.com>
+In-Reply-To: <ah9RVik9fE4H8Uxx@aschofie-mobl2.lan>
+References: <20260526170148.56398-1-john@jagalactic.com>
+ <0100019e653c6c88-44f88088-8c87-4163-b88b-b3f3fc7aa726-000000@email.amazonses.com>
+ <ah9RVik9fE4H8Uxx@aschofie-mobl2.lan>
+Subject: Re: [PATCH V6 0/2] daxctl: Add support for famfs mode
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.65 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[fastmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	R_DKIM_ALLOW(-0.20)[fastmail.com:s=fm1,messagingengine.com:s=fm1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14286-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14287-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmx.de,intel.com,lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[andriy.shevchenko@linux.intel.com,nvdimm@lists.linux.dev];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:rafael@kernel.org,m:linux-acpi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:hansg@kernel.org,m:w_armin@gmx.de,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:ira.weiny@intel.com,m:nvdimm@lists.linux.dev,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,nvdimm@lists.linux.dev];
+	FORGED_SENDER(0.00)[jgroves@fastmail.com,nvdimm@lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_FROM(0.00)[fastmail.com];
+	FORGED_RECIPIENTS(0.00)[m:alison.schofield@intel.com,m:john@jagalactic.com,m:John@groves.net,m:djbw@kernel.org,m:jgroves@micron.com,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:Jonathan.Cameron@huawei.com,m:arramesh@micron.com,m:ajayjoshi@micron.com,m:venkataravis@micron.com,m:dev.srinivasulu@gmail.com,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:devsrinivasulu@gmail.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[groves.net,kernel.org,micron.com,intel.com,huawei.com,gmail.com,vger.kernel.org,lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jgroves@fastmail.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[fastmail.com:+,messagingengine.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	ALIAS_RESOLVED(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:from_mime,ashevche-desk.local:mid,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,messagingengine.com:dkim,fastmail.com:from_mime,fastmail.com:dkim,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 471336324B7
+X-Rspamd-Queue-Id: DCAAA63274E
 
-On Tue, Jun 02, 2026 at 10:57:23PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Jun 2, 2026 at 8:50 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, May 21, 2026 at 03:59:50PM +0200, Rafael J. Wysocki wrote:
 
-...
 
-> > > +     acpi_dev_remove_notify_handler(ACPI_COMPANION(dev), dr->handler_type,
-> >
-> > acpi_dev might be also part of the same data structure, so you won't need to
-> > take dev again and derive adev from it.
+On Tue, Jun 2, 2026, at 2:55 PM, Alison Schofield wrote:
+> On Tue, May 26, 2026 at 05:01:59PM +0000, John Groves wrote:
+> > From: John Groves <john@groves.net>
+> > 
+> > This series adds famfs mode support to daxctl, alongside the existing
+> > devdax and system-ram modes.  A daxdev is in famfs mode when it is bound
+> > to fsdev_dax.ko (drivers/dax/fsdev.c).  famfs is a shared,
+> > memory-mappable filesystem for disaggregated and CXL memory; see
+> > https://famfs.org for more information.
+> > 
+> > Patch 1 adds the library plumbing: mode detection helpers, an enable
+> > function, and the device.c reconfigure-device wiring.  Patch 2 adds a test
+> > that exercises mode transitions on the nfit_test emulated backend.
+> > 
+> > This series depends on the fsdev_dax kernel driver (which provides famfs
+> > mode) and on the famfs kernel patch series.
 > 
-> I'm not sure what you mean.
+> Thanks!
+> Applied to: https://github.com/pmem/ndctl/tree/pending
 > 
-> Put acpi_dev into struct acpi_notify_handler_devres?
-
-Yes.
-
-> > > +                                    dr->handler);
-
-...
-
-> > > + * devm_acpi_install_notify_handler - Install an ACPI notify handler for a
-
-> > > + *                                 managed device
-> >
-> > There is a stray space just after asterisk.
+> with minor touchup to the unit test patch:
+> [ as: drop -nfit suffix on test name, wrap commit lines at 70 columns ]
 > 
-> Which asterisk?
-
-The line above has "<space>*<space>(sic!)<tab><tab> ... managed device".
-The <space> after the asterisk is a stray one.
-
-...
-
-> > > +             return dev_err_probe(dev, -ENODEV, "No ACPI companion in %s()\n", __func__);
-> >
-> > Not sure how __func__ may help here. We will have a device instance to be
-> > printed. It's obvious then how to find the culprit call.
 > 
-> But it doesn't hurt either, does it?
 
-From my p.o.v. it's just extra information that's not needed. But I'm not going
-fight to death against it.
+Thanks Alison!
 
-...
-
-> So thanks for the review, but I don't think I want to send a v2 at this point.
-> 
-> I'd rather send a follow-up patch to clean up these things.
-
-Okay!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+John
 
