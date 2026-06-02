@@ -1,50 +1,50 @@
-Return-Path: <nvdimm+bounces-14271-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14275-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aGWLFYuFHmqhkQkAu9opvQ
-	(envelope-from <nvdimm+bounces-14271-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 02 Jun 2026 09:26:03 +0200
+	id UPsrGr+HHmr0kgkAu9opvQ
+	(envelope-from <nvdimm+bounces-14275-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 02 Jun 2026 09:35:27 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 125A7629A82
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 02 Jun 2026 09:26:02 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EDC2629C01
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 02 Jun 2026 09:35:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 28A503014ABD
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  2 Jun 2026 07:21:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 44638306BE5B
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  2 Jun 2026 07:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512AA369D72;
-	Tue,  2 Jun 2026 07:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F8D3655CF;
+	Tue,  2 Jun 2026 07:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="12adhDAQ"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="T7xBVUUF"
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE917357D00
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DF3360EFA
 	for <nvdimm@lists.linux.dev>; Tue,  2 Jun 2026 07:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780384918; cv=none; b=a8aCIm+XC+MOGzIAQQo8SPpxYV4tqhEumrNZCbfI9Ukl8/xdnV0jJJ4TKrlmQBddF8AxLhvgGMZEggVtdnGWjV9iy69PgeTvZSHkz6WHdJEpmdIZX3GiEdUw4dmRy+0hTtUr3QOK90UCpE3Qi1ta+oGZNSILE0/2cgkNynmAF3A=
+	t=1780384919; cv=none; b=ThWjkC/GN4O75sWNkqpMykIwpLwODIqa+eBVd9p6ov3PnEL5KiHuISakd/ghdN7VQA7jUBxB7HQuY8m/iTqsWRhmNmRLAhso3cEd4/His+GAnfNJ6V6XUgtXotRUva4PGv3CYwXhZ1MoCNLSvCvyQR8TookVnEdXRWiGwRzl4Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780384918; c=relaxed/simple;
-	bh=6tHY8J5FZLwsZSvp67K8n1Zpn1BPM8ttSTjEaithh3w=;
+	s=arc-20240116; t=1780384919; c=relaxed/simple;
+	bh=rDf3nABXNo8vMeXp5HldaYDR5skbzeT8SXMZO6GsOxo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uaZrbP5eFIvZoN/MN6YmQqTatJp80gmEDHAuxx4DlgdKKnpkKq4Fkq2oUpJt2CiQU0bkyx/E/FB72tDztNd7CAchTaqISiDWy3PMQzSs/zTPX0EhRB4de9TIxVAsQCkBR1cGKsz0tgXOXBZTPTKsNhr1Z8Jjb5S+Os2Da596S7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=12adhDAQ; arc=none smtp.client-ip=178.62.254.231
+	 MIME-Version; b=ErAONTOuNrwE7Cdqe34xzkJfo57/RSHe2VD5aefFj5Nf+jg+4NRGezi6qPoK9OT4rMVIF6bCC7k05yT6OO2V3ektra3f2/P65NE/ItOsvQyg7bKj9qSg/6zyRXK/dKLhj4Lw/160eGzU6J32LDr4QiMCR687TaJzFjOEr0czMtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=T7xBVUUF; arc=none smtp.client-ip=178.62.254.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
 Received: from localhost.localdomain (shell.ilvokhin.com [138.68.190.75])
 	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id 3D789D0F60;
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 885BBD0F64;
 	Tue, 02 Jun 2026 07:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
 	s=mail; t=1780384410;
-	bh=q9nFC7Z6g0jTQPCQtPDnRmGJV7FHjg8u5lzjUyjo/pY=;
+	bh=lDIPRhu4eC69IHX//CJMd4ihavt8RgvIqQIf1iXGap8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=12adhDAQBMv06fSZOopwItXmo4Lw/7ockRyACsAaB6poBkYNvma5vTCgI3NHqHYqp
-	 w9lZXhbKznr/Jmm93wlarHH2wV6ETfxx4kcHGyPoR9qy70NeKpuYsWdZLgefIB/urd
-	 QZnTi9X04U9hZ5ji9cB+bqbylG8MPEQ36EXRI3gA=
+	b=T7xBVUUFAUZ1XGP2Kw6qlEA5/9HEkKGDkpi3ueWDkrUHbugbWP+f5+jASUCpDetB3
+	 4VhZqrAwpI1CpEaFkNI6YNWgQbT3VEsrLpJWa6QTYtlfzm0R7SkfeEpjPD4kl/4SeI
+	 4lhx15kW9dsRc2+66dNtTMKze+UJipjJ5sF4pcLs=
 From: Dmitry Ilvokhin <d@ilvokhin.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Dan Williams <djbw@kernel.org>,
@@ -62,9 +62,9 @@ Cc: nvdimm@lists.linux.dev,
 	linux-mm@kvack.org,
 	kernel-team@meta.com,
 	Dmitry Ilvokhin <d@ilvokhin.com>
-Subject: [PATCH v5 1/4] nvdimm: Convert nvdimm_bus guard to class
-Date: Tue,  2 Jun 2026 07:12:50 +0000
-Message-ID: <8c0417904d280896ecf2e9923ffa9f20076f59b8.1780064327.git.d@ilvokhin.com>
+Subject: [PATCH v5 2/4] genirq: Move NULL check into irqdesc_lock guard unlock expression
+Date: Tue,  2 Jun 2026 07:12:51 +0000
+Message-ID: <ab457810653e4356e29b2d74ba616478bd9328ad.1780064327.git.d@ilvokhin.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1780064327.git.d@ilvokhin.com>
 References: <cover.1780064327.git.d@ilvokhin.com>
@@ -80,18 +80,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14271-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14275-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,nvdimm@lists.linux.dev];
@@ -101,44 +101,38 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 125A7629A82
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,ilvokhin.com:email,ilvokhin.com:mid,ilvokhin.com:dkim]
+X-Rspamd-Queue-Id: 6EDC2629C01
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The nvdimm_bus guard accepts NULL and skips locking when NULL is passed.
-Convert from DEFINE_GUARD() to DEFINE_CLASS() + DEFINE_CLASS_IS_GUARD().
+irqdesc_lock uses __DEFINE_UNLOCK_GUARD() directly with a custom
+constructor that can set .lock to NULL.
 
-This is a preparatory change for making DEFINE_GUARD() constructors
-__nonnull_args(). nvdimm_bus legitimately passes NULL, so it must be
-adjusted to avoid a compile error.
+In preparation for removing the NULL check from __DEFINE_UNLOCK_GUARD(),
+move the NULL check into the irqdesc_lock unlock expression, making the
+NULL handling explicit at the call site.
 
 No functional change.
 
 Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/nvdimm/nd.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ kernel/irq/internals.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-index b199eea3260e..18b64559664b 100644
---- a/drivers/nvdimm/nd.h
-+++ b/drivers/nvdimm/nd.h
-@@ -632,8 +632,11 @@ u64 nd_region_interleave_set_cookie(struct nd_region *nd_region,
- u64 nd_region_interleave_set_altcookie(struct nd_region *nd_region);
- void nvdimm_bus_lock(struct device *dev);
- void nvdimm_bus_unlock(struct device *dev);
--DEFINE_GUARD(nvdimm_bus, struct device *,
--	     if (_T) nvdimm_bus_lock(_T), if (_T) nvdimm_bus_unlock(_T));
-+DEFINE_CLASS(nvdimm_bus, struct device *,
-+	     if (_T) nvdimm_bus_unlock(_T),
-+	     ({ if (_T) nvdimm_bus_lock(_T); _T; }),
-+	     struct device *_T);
-+DEFINE_CLASS_IS_GUARD(nvdimm_bus);
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 9412e57056f5..347cb333b9fe 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -171,7 +171,7 @@ void __irq_put_desc_unlock(struct irq_desc *desc, unsigned long flags, bool bus)
  
- bool is_nvdimm_bus_locked(struct device *dev);
- void nvdimm_check_and_set_ro(struct gendisk *disk);
+ __DEFINE_CLASS_IS_CONDITIONAL(irqdesc_lock, true);
+ __DEFINE_UNLOCK_GUARD(irqdesc_lock, struct irq_desc,
+-		      __irq_put_desc_unlock(_T->lock, _T->flags, _T->bus),
++		      if (_T->lock) __irq_put_desc_unlock(_T->lock, _T->flags, _T->bus),
+ 		      unsigned long flags; bool bus);
+ 
+ static inline class_irqdesc_lock_t class_irqdesc_lock_constructor(unsigned int irq, bool bus,
 -- 
 2.53.0-Meta
 
