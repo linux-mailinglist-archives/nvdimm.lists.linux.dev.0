@@ -1,82 +1,82 @@
-Return-Path: <nvdimm+bounces-14321-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14318-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ypztJ44+I2omlwEAu9opvQ
-	(envelope-from <nvdimm+bounces-14321-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 05 Jun 2026 23:24:30 +0200
+	id v1c9KaY9I2p4lgEAu9opvQ
+	(envelope-from <nvdimm+bounces-14318-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 05 Jun 2026 23:20:38 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8A7B64B5E2
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 05 Jun 2026 23:24:29 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10D1F64B57C
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 05 Jun 2026 23:20:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gourry.net header.s=google header.b=ngyz7bdh;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14321-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14321-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gourry.net header.s=google header.b=IHMlRkjv;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14318-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14318-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4FCFB307917E
-	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Jun 2026 21:19:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B5D653058043
+	for <lists+linux-nvdimm@lfdr.de>; Fri,  5 Jun 2026 21:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE743D348C;
-	Fri,  5 Jun 2026 21:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA9A3D331A;
+	Fri,  5 Jun 2026 21:19:29 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B6536C582
-	for <nvdimm@lists.linux.dev>; Fri,  5 Jun 2026 21:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346773C4561
+	for <nvdimm@lists.linux.dev>; Fri,  5 Jun 2026 21:19:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780694373; cv=none; b=AnupRIwNsaeXis/9mS+EpJ6flI+QLNMZOxKDeLKp9h8IvxXakvvNgfHnDyJ5zjZCnCapOyJwmauP9y5XgADYOBUyTHf8MnyT97v4mB8ZZJ0+F0umqy64vgCZkFTmeyxY1136sq+cVHhXsZ0pP+6rH7rqsMb8HW3s8NxC0ABQ9Hg=
+	t=1780694369; cv=none; b=oeIrQF3OWDvzTM0M/xkZl5BRhWwkaXX2rek/8fngAIEhXk0ZUk0RR4x6wwjmqnhhaOYAuIzPE9JbCc8Bf6DupfXfseGBU/vUZ57kYvI16vL7k0YjK0wXZHXmmrJKVYbXbUzlv/ItVTldcu2ZvD5C7Grdvs+6JmGoi7joTGvdGD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780694373; c=relaxed/simple;
-	bh=43zFHi5h2geuF8B5bCDMfCmgrfTcOhgF/U/MHNHLK9s=;
+	s=arc-20240116; t=1780694369; c=relaxed/simple;
+	bh=8XSA39MWql4+HD8uM30BGvMeffgmWZcxL5DHKZ0ylW0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fnEVF+QJH0GNvGA2TOwvkQoHtFQkOpHQgOjXsZPstxd3vtk6vE8RXvTqj9kOvq+zz/D892vPxjV0AtZyBxQ0/lGtptIqORV3j5sPl+k541OcY+faAmlsMyD4Rbggh82xQFW7p6iHeLHwt+2hhV6ueof59A8JAaXngPb3glKiPyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=ngyz7bdh; arc=none smtp.client-ip=209.85.219.48
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8ccda0ac4fcso23913306d6.2
-        for <nvdimm@lists.linux.dev>; Fri, 05 Jun 2026 14:19:24 -0700 (PDT)
+	 MIME-Version; b=nh1ZU8/VxGziwEuxMOVhSlwQ9Wby+SPSW51zd7p+Y7XqeCoC4wmjTuDp1YOE3MXh89YNIUN2WBfyX+Ak4cMMw4r+x/kEE3LEwmzpAXiHYBaXagJAsi0bcKUgBF8LgkQVdAqDg4J7/vV1Afq/3rI5U0deBs36HDodXuxIP+58LhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=IHMlRkjv; arc=none smtp.client-ip=209.85.219.41
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8ccdf8d4ac5so26223456d6.1
+        for <nvdimm@lists.linux.dev>; Fri, 05 Jun 2026 14:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1780694364; x=1781299164; darn=lists.linux.dev;
+        d=gourry.net; s=google; t=1780694366; x=1781299166; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/dc8rrr2XcrLtsxKN6sh//CYz2F36Y4vG25xCNA+gt8=;
-        b=ngyz7bdhDcdZxiyMupoYYCXl/LGxAv8mL68xuX9yGeLfshSDkjt/B/zYb4viqBHxlO
-         LHc2sRRk+/PR6gFzMXlMjHSsUW1y1LoxtE977ydKu+Na6/Gc+9XN+ykQmmzQ9QjP0R6i
-         223y4kruMTRoLetoNeCLKeaIbINxRfyt39EPxDX703Eq7psPgx2B361ddPR9gq/G5nlZ
-         mi/YJW1DxMp1xg0UbL5MEYUJQi6l/wv5RTQN4KqsqKj47++vPs/EglBG+WcwVpv57sWv
-         taYLKi7BAkU1fCcTxRxwhvWHZ2matWCxHQUjz/gPDdybJpjMKECY0xz+XAKbxZtTUwhr
-         nVFQ==
+        bh=JknNzkAaj+qc6G+hjBE1CQp9oF9WvErr7R4W+FLnrFQ=;
+        b=IHMlRkjvERgu5wmw1CMgxuNIsVhoycWtdoMaGBQT6Z3hcb1mQbM9ZgG8lnEDzfqj2b
+         K2j+uRoM4OVd6LrtYwkKFhyaD+eoVfxwSj4ILdnTqqoy9ohtuE6MQIucCUdnLWxEpno2
+         OT6ZKOXzg1xt2KpaH+sQ/gkCBXH7x+TkFLqr96kAD52/Fo2ispv0+K8MEYUS3FhzxBt4
+         weNY2Qz6l3+cQKgkJTdnb30cCN5GM0B3lzBUZy0MngQYItpaUnFey8w6gPprP4rJ5pZC
+         cOg/9aIpxQP5aHPXSBjXmFfDD43KC/e6D4G6cZsGfrNtst1Zb4OI+77q5NQFBZrWP6IN
+         iTSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780694364; x=1781299164;
+        d=1e100.net; s=20251104; t=1780694366; x=1781299166;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/dc8rrr2XcrLtsxKN6sh//CYz2F36Y4vG25xCNA+gt8=;
-        b=hiTBwrwUtt6BhDfHv+SL5ET14YEe6ekXNXB13WOtXUCMv8qwDo1dJa0rDhxcUzVeFn
-         kHZTxkKuI25DHBNR7yutpiGfXf0EyJ0W/7eR4CNcM0GzAk74/qY6WjHh44lt8M2vKfJv
-         KQTtaADTzrz406WDSkhT8sE7oo6NN8eHorYtc+1n1nlX96NUZyY01mxxG8bw0i8HNCrv
-         1VxfVbLXoCYlaBDUwa8qFzE3XWJ/tbxfZc7001XluYuyu4mjlu4aoy1d9TxP0R4M4ucb
-         lpbN28GCnmPi7qAmRDIMVzZysQ5kGHYsOM6zx2ykd4iBexzaYEKgnqi7hJdSzCv6cR4v
-         hk4g==
-X-Forwarded-Encrypted: i=1; AFNElJ/JUOpQDNt+Wv9SxZcbPjGKIZBdVNy1KD4TKcwBhBrqzZc/S/NwxODmvVtPqOQO3Qxb24Fp2uc=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzy5B9RwMIW6xpkUI5P8fDKXSp/kZaA1qvsStoeO9Lual6slTEK
-	Vy02sjNLLuh4YoNSyrQd+UmrjuZkhTxDYIOj187AMJ6ZNJxpKku6la4Cx+YxFCTDpZk=
-X-Gm-Gg: Acq92OG29OtCPYCdEnGOKjAC0EIJZ7XVEpLtpoYL+Ugyo4sNc5+8cffmO1CrvP3LH5B
-	W5g9/OKmIbF4+oTaFWWxoQLhYwbd1RssMp3ehcoYhQUX4JLBqdF4vMw80nwzdYD+hei1RSmDoXn
-	lRYfJsj2ZkAtYW+NxG5AhRSCl6yiGbKMve+lg3KROL4TYjWvJ9iUQE/I0PCuNrKCQ65iFEsvCTS
-	iYdhr/FT7YtFupQ022F8lnM5pEQS+X+NawFcp0fnIX5zwHxsgk3G1ymiVHzZ6E+VR+f5xGMQbaC
-	W37eYw5kkS/6kZiPDdjzn6UAvxlM5SCysAj3dyjJ+mQO33jmWrNfRXzYDY/T+AAbFlbCeIoWJfm
-	F2G1eNcBjgDe7KM5O4+iElAXSctfTJGf4lMQhpa/cZ87qnnMV3yVZvihuzKYC7nqjnzvKmA6D8e
-	N0h8XiC6Ufawm2WsgX9kUSKfeLHnn4tDHDqHoRYShUU8j9pH9DFo/ij/b+Z7uNyeEcByqrlukrK
-	E3cvD47NT3ysfMFVvT6RhhXz2ux/wMZDw==
-X-Received: by 2002:a05:6214:5904:b0:8cc:f135:52ab with SMTP id 6a1803df08f44-8cee625b0ffmr97629096d6.39.1780694363997;
-        Fri, 05 Jun 2026 14:19:23 -0700 (PDT)
+        bh=JknNzkAaj+qc6G+hjBE1CQp9oF9WvErr7R4W+FLnrFQ=;
+        b=mx69UGk+pjePKVxrcH3v97eSgHPrYQJw1CETjfccsax2N+4q/HMh85sw/JC4j93hHY
+         W1h8e6l1sqOiGLgmFhnUpdaWmXmpXbZTIonn5rkddG8Rt8K3n9G2nUtMr2ZMvaEiET6+
+         KzSpIkd0XmrUdM0QXPjXlp+M8oxkR3Ib/HBPv1gGU3jgLL3D/qRdFT/zTHDVniWr5+Iy
+         1GuEAp3wAXDEaiC3qQqxSpkp4HwjHHXwnCnM1V7MCRGzjpdI0b1VfO0PVVf9gbvMGRYf
+         S8YIzWzpwhW6Mo0SnNRNKNR3q5f+xWuDdSk9oPbOayEEStWzLrxuUwiPauaAksIcgToa
+         pjig==
+X-Forwarded-Encrypted: i=1; AFNElJ8rl65xmRwh8Swwo4O9GgbLFn/MzFJEDaUf9YjDngmatgvkbAbHygeNwN1AQRn+R+6Wd6EVio8=@lists.linux.dev
+X-Gm-Message-State: AOJu0YziS3pGWdEuHV7Mqg7JL20sHccmEFOOekJrptvdd2ysdwxbgVno
+	Yxurw3/SFvaGTE6f6X39FKJcFfxH7mYm5UzeDAfRi7ezxZ9g6HLmnO0HZUyar8G+whM=
+X-Gm-Gg: Acq92OGAC+Rf5An+DlZxqyzeX/IJ+u/VngmHEM+pmXiNbxqAcD56FEGOF0emLAF/pl0
+	srPMC3jJQo7pDW6ctD+rOjENG0uQhYAJBJv9iqd5MKcr+nzTcsFkXNZZoErBvko8DaJGYjmydGr
+	AtoZWIJhOYNtAL2caEeupJA8jGWyvkEQFk478m2cSWaBbzzb+gNpl2OM1Ejhe92jw0DIrN3Alu7
+	sWzyZT9dEX58NZmo8+t1+T2YaerA3rZEsMY1SbAKquONlq1Y0uSuRhBIIzxzikNz6f0V6lKDSU3
+	YKwWJ+rDnqIKCDqc5nwnUK74ZekrxySZukyf6EMxvnmOJbF8279X/G4i4mz4yPs05QFLSuS5ijn
+	ntg0InpxPWpEDjn7DM+Av2No0DEw9nvCa/57hsgG53o89ODcRm51cYzUmBYL0/G43MdLo9AAqsr
+	3cVzJisF+axKZld7Rj4iOmPpE8vCBUpG5thdr5bvaDvcf4iqMA9chnBZcdCG6vxCgUeG7i0wTjO
+	o3FmDCE5ZYTJndqWc8S3kM=
+X-Received: by 2002:a05:6214:4ed0:b0:8cc:dd20:7a46 with SMTP id 6a1803df08f44-8cee6137878mr86899206d6.37.1780694366285;
+        Fri, 05 Jun 2026 14:19:26 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd277bbcsm90518196d6.49.2026.06.05.14.19.21
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cecd277bbcsm90518196d6.49.2026.06.05.14.19.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 14:19:23 -0700 (PDT)
+        Fri, 05 Jun 2026 14:19:25 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org,
 	nvdimm@lists.linux.dev
@@ -102,9 +102,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Smita.KoralahalliChannabasappa@amd.com,
 	ira.weiny@intel.com,
 	apopple@nvidia.com
-Subject: [PATCH v4 4/9] mm/memory_hotplug: add __add_memory_driver_managed() with online_type arg
-Date: Fri,  5 Jun 2026 22:19:06 +0100
-Message-ID: <20260605211911.2160954-5-gourry@gourry.net>
+Subject: [PATCH v4 5/9] mm/memory_hotplug: add multi-range hotunplug
+Date: Fri,  5 Jun 2026 22:19:07 +0100
+Message-ID: <20260605211911.2160954-6-gourry@gourry.net>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260605211911.2160954-1-gourry@gourry.net>
 References: <20260605211911.2160954-1-gourry@gourry.net>
@@ -121,13 +121,13 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:kernel-team@meta.com,m:linux-cxl@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:akpm@linux-foundation.org,m:david@kernel.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:osalvador@suse.de,m:shuah@kernel.org,m:gourry@gourry.net,m:alison.schofield@intel.com,m:Smita.KoralahalliChannabasappa@amd.com,m:ira.weiny@intel.com,m:apopple@nvidia.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-14321-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14318-lists,linux-nvdimm=lfdr.de];
 	DMARC_NA(0.00)[gourry.net];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
@@ -136,7 +136,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gourry.net:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
 	TO_DN_NONE(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -147,195 +147,168 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[24];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:mid,gourry.net:dkim,gourry.net:from_mime,gourry.net:email,lists.linux.dev:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux-foundation.org:email,suse.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lists.linux.dev:from_smtp,gourry.net:mid,gourry.net:dkim,gourry.net:from_mime,gourry.net:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E8A7B64B5E2
+X-Rspamd-Queue-Id: 10D1F64B57C
 
-Existing callers of add_memory_driver_managed cannot select the
-preferred online type (ZONE_NORMAL vs ZONE_MOVABLE), requiring it to
-hot-add memory as offline blocks, and then follow up by onlining each
-memory block individually.
+offline_and_remove_memory() handles a single contiguous range.
 
-Most drivers prefer the system default, but the CXL driver wants to
-plumb a preferred policy through the dax kmem driver.
+Callers that manage a device composed of several ranges (e.g. dax/kmem)
+currently have to call it in a loop, which gives up atomicity.
 
-Refactor APIs to add a new interface which allows the dax kmem module
-to select a preferred policy.
+This creates a race condition where another daemon can online a block
+that was just offlined while other blocks are being offlined, causing
+the eventual (original) unplug operation to fail.
 
-Overriding the configured auto-online policy is only safe for known
-in-tree modules, where we know the override reflects a different,
-user-requested policy.  We do not want arbitrary out-of-tree drivers
-silently overriding the system-wide onlining policy, so restrict the
-new interface to the kmem module using EXPORT_SYMBOL_FOR_MODULES()
-rather than a plain EXPORT_SYMBOL_GPL().  Other in-tree modules (e.g.
-cxl_core) can be added to the allowed list as the need arises.
+Add offline_and_remove_memory_ranges(), which takes an array of ranges
+and processes them as one operation under a single lock_device_hotplug():
 
-Refactor add_memory_driver_managed, extract __add_memory_driver_managed
-- Add proper kernel-doc for add_memory_driver_managed while refactoring
-- New helper accepts an explicit online_type.
-- New helper validates online_type is between OFFLINE and ONLINE_MOVABLE
+  - Phase 1 offlines every block of every range, remembering each block's
+    previous online type.
+  - Phase 2 removes the ranges only once all of them are offline.
+  - If any offline fails, the offlining done so far is reverted and
+    nothing is removed.
 
-Refactor: add_memory_resource, extract __add_memory_resource
-- new helper accepts an explicit online_type
+This gives callers all-or-nothing semantics for the offline step, so a
+failed or interrupted unplug leaves every range online as before rather
+than in an inconsistent partially-removed state.
 
-Original APIs now explicitly pass the system-default to new helpers.
-
-No functional change for existing users.
-
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 Signed-off-by: Gregory Price <gourry@gourry.net>
 ---
- include/linux/memory_hotplug.h |  3 ++
- mm/memory_hotplug.c            | 61 +++++++++++++++++++++++++++++-----
- 2 files changed, 56 insertions(+), 8 deletions(-)
+ include/linux/memory_hotplug.h |  7 +++
+ mm/memory_hotplug.c            | 95 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
 
 diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index f059025f8f8b..d3edeb80aadb 100644
+index d3edeb80aadb..7f1da7c428dc 100644
 --- a/include/linux/memory_hotplug.h
 +++ b/include/linux/memory_hotplug.h
-@@ -294,6 +294,9 @@ extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
- extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
- extern int add_memory_resource(int nid, struct resource *resource,
- 			       mhp_t mhp_flags);
-+int __add_memory_driver_managed(int nid, u64 start, u64 size,
-+				const char *resource_name, mhp_t mhp_flags,
-+				enum mmop online_type);
- extern int add_memory_driver_managed(int nid, u64 start, u64 size,
- 				     const char *resource_name,
- 				     mhp_t mhp_flags);
+@@ -267,6 +267,7 @@ extern int offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+ extern int remove_memory(u64 start, u64 size);
+ extern void __remove_memory(u64 start, u64 size);
+ extern int offline_and_remove_memory(u64 start, u64 size);
++int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges);
+ 
+ #else
+ static inline void try_offline_node(int nid) {}
+@@ -283,6 +284,12 @@ static inline int remove_memory(u64 start, u64 size)
+ }
+ 
+ static inline void __remove_memory(u64 start, u64 size) {}
++
++static inline int offline_and_remove_memory_ranges(const struct range *ranges,
++						   int nr_ranges)
++{
++	return -EBUSY;
++}
+ #endif /* CONFIG_MEMORY_HOTREMOVE */
+ 
+ #ifdef CONFIG_MEMORY_HOTPLUG
 diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 494257054095..7d145217adc6 100644
+index 7d145217adc6..e486d35c22b2 100644
 --- a/mm/memory_hotplug.c
 +++ b/mm/memory_hotplug.c
-@@ -1494,10 +1494,10 @@ static int create_altmaps_and_memory_blocks(int nid, struct memory_group *group,
-  *
-  * we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG
-  */
--int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
-+static int __add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags,
-+				 enum mmop online_type)
- {
- 	struct mhp_params params = { .pgprot = pgprot_mhp(PAGE_KERNEL) };
--	enum mmop online_type = mhp_get_default_online_type();
- 	enum memblock_flags memblock_flags = MEMBLOCK_NONE;
- 	struct memory_group *group = NULL;
- 	u64 start, size;
-@@ -1585,7 +1585,7 @@ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
- 		merge_system_ram_resource(res);
- 
- 	/* online pages if requested */
--	if (mhp_get_default_online_type() != MMOP_OFFLINE)
-+	if (online_type != MMOP_OFFLINE)
- 		walk_memory_blocks(start, size, &online_type,
- 				   online_memory_block);
- 
-@@ -1603,7 +1603,13 @@ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
- 	return ret;
- }
- 
--/* requires device_hotplug_lock, see add_memory_resource() */
-+int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
-+{
-+	return __add_memory_resource(nid, res, mhp_flags,
-+				     mhp_get_default_online_type());
-+}
-+
-+/* requires device_hotplug_lock, see __add_memory_resource() */
- int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags)
- {
- 	struct resource *res;
-@@ -1631,7 +1637,15 @@ int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags)
- }
- EXPORT_SYMBOL_GPL(add_memory);
- 
--/*
-+/**
-+ * __add_memory_driver_managed - add driver-managed memory with explicit online_type
-+ * @nid: NUMA node ID where the memory will be added
-+ * @start: Start physical address of the memory range
-+ * @size: Size of the memory range in bytes
-+ * @resource_name: Resource name in format "System RAM ($DRIVER)"
-+ * @mhp_flags: Memory hotplug flags
-+ * @online_type: Auto-Online behavior (offline, online, kernel, movable)
-+ *
-  * Add special, driver-managed memory to the system as system RAM. Such
-  * memory is not exposed via the raw firmware-provided memmap as system
-  * RAM, instead, it is detected and added by a driver - during cold boot,
-@@ -1639,6 +1653,7 @@ EXPORT_SYMBOL_GPL(add_memory);
-  *
-  * Reasons why this memory should not be used for the initial memmap of a
-  * kexec kernel or for placing kexec images:
-+ *
-  * - The booting kernel is in charge of determining how this memory will be
-  *   used (e.g., use persistent memory as system RAM)
-  * - Coordination with a hypervisor is required before this memory
-@@ -1651,9 +1666,12 @@ EXPORT_SYMBOL_GPL(add_memory);
-  *
-  * The resource_name (visible via /proc/iomem) has to have the format
-  * "System RAM ($DRIVER)".
-+ *
-+ * Return: 0 on success, negative error code on failure.
-  */
--int add_memory_driver_managed(int nid, u64 start, u64 size,
--			      const char *resource_name, mhp_t mhp_flags)
-+int __add_memory_driver_managed(int nid, u64 start, u64 size,
-+				const char *resource_name, mhp_t mhp_flags,
-+				enum mmop online_type)
- {
- 	struct resource *res;
- 	int rc;
-@@ -1663,6 +1681,9 @@ int add_memory_driver_managed(int nid, u64 start, u64 size,
- 	    resource_name[strlen(resource_name) - 1] != ')')
- 		return -EINVAL;
- 
-+	if (online_type < MMOP_OFFLINE || online_type > MMOP_ONLINE_MOVABLE)
-+		return -EINVAL;
-+
- 	lock_device_hotplug();
- 
- 	res = register_memory_resource(start, size, resource_name);
-@@ -1671,7 +1692,7 @@ int add_memory_driver_managed(int nid, u64 start, u64 size,
- 		goto out_unlock;
- 	}
- 
--	rc = add_memory_resource(nid, res, mhp_flags);
-+	rc = __add_memory_resource(nid, res, mhp_flags, online_type);
- 	if (rc < 0)
- 		release_memory_resource(res);
- 
-@@ -1679,6 +1700,30 @@ int add_memory_driver_managed(int nid, u64 start, u64 size,
- 	unlock_device_hotplug();
+@@ -2483,4 +2483,99 @@ int offline_and_remove_memory(u64 start, u64 size)
  	return rc;
  }
-+EXPORT_SYMBOL_FOR_MODULES(__add_memory_driver_managed, "kmem");
+ EXPORT_SYMBOL_GPL(offline_and_remove_memory);
 +
 +/**
-+ * add_memory_driver_managed - add driver-managed memory
-+ * @nid: NUMA node ID where the memory will be added
-+ * @start: Start physical address of the memory range
-+ * @size: Size of the memory range in bytes
-+ * @resource_name: Resource name in format "System RAM ($DRIVER)"
-+ * @mhp_flags: Memory hotplug flags
++ * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
++ * @ranges: array of physical address ranges to offline and remove
++ * @nr_ranges: number of entries in @ranges
 + *
-+ * Add driver-managed memory with the system default online type set by
-+ * build config or kernel boot parameter.
++ * Offline and remove several memory ranges as one operation, serialized
++ * against other hotplug operations by a single lock_device_hotplug().
 + *
-+ * See __add_memory_driver_managed for more details.
++ * Unlike calling offline_and_remove_memory() in a loop, this offlines *all*
++ * ranges before removing any of them.  If offlining any range fails, the
++ * offlining of the ranges processed so far is reverted and nothing is
++ * removed, leaving every range online as it was before the call.  This gives
++ * callers all-or-nothing semantics for the offline step, so a failed unplug
++ * does not leave a device split between online and removed ranges.
 + *
-+ * Return: 0 on success, negative error code on failure.
++ * Each range must be memory-block aligned in start and size.
++ *
++ * Return: 0 on success, negative errno otherwise.  On failure no range has
++ * been removed.
 + */
-+int add_memory_driver_managed(int nid, u64 start, u64 size,
-+			      const char *resource_name, mhp_t mhp_flags)
++int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges)
 +{
-+	return __add_memory_driver_managed(nid, start, size, resource_name,
-+					   mhp_flags,
-+					   mhp_get_default_online_type());
++	unsigned long mb_total = 0;
++	uint8_t *online_types, *tmp;
++	int i, rc = 0;
++
++	if (!ranges || nr_ranges <= 0)
++		return -EINVAL;
++
++	for (i = 0; i < nr_ranges; i++) {
++		u64 start = ranges[i].start;
++		u64 size = range_len(&ranges[i]);
++
++		if (!IS_ALIGNED(start, memory_block_size_bytes()) ||
++		    !IS_ALIGNED(size, memory_block_size_bytes()) || !size)
++			return -EINVAL;
++		mb_total += size / memory_block_size_bytes();
++	}
++
++	/*
++	 * Remember the old online type of every memory block across all ranges,
++	 * so we can revert if offlining a later block fails.  All entries start
++	 * as MMOP_OFFLINE so blocks we never touched are skipped on rollback.
++	 */
++	online_types = kmalloc_array(mb_total, sizeof(*online_types),
++				     GFP_KERNEL);
++	if (!online_types)
++		return -ENOMEM;
++	memset(online_types, MMOP_OFFLINE, mb_total);
++
++	lock_device_hotplug();
++
++	/* Phase 1: offline every block in every range. */
++	tmp = online_types;
++	for (i = 0; i < nr_ranges; i++) {
++		rc = walk_memory_blocks(ranges[i].start, range_len(&ranges[i]),
++					&tmp, try_offline_memory_block);
++		if (rc)
++			break;
++	}
++
++	/*
++	 * Phase 2: only once everything is offline, remove it.  This cannot
++	 * fail as the memory can no longer be onlined in the meantime.
++	 */
++	if (!rc) {
++		for (i = 0; i < nr_ranges; i++) {
++			rc = try_remove_memory(ranges[i].start,
++					       range_len(&ranges[i]));
++			if (rc) {
++				pr_err("%s: Failed to remove memory: %d",
++				       __func__, rc);
++				break;
++			}
++		}
++	}
++
++	/*
++	 * Roll back the offlining if anything failed.  Blocks we never offlined
++	 * are marked MMOP_OFFLINE and skipped by try_reonline_memory_block().
++	 */
++	if (rc) {
++		tmp = online_types;
++		for (i = 0; i < nr_ranges; i++)
++			walk_memory_blocks(ranges[i].start,
++					   range_len(&ranges[i]), &tmp,
++					   try_reonline_memory_block);
++	}
++	unlock_device_hotplug();
++
++	kfree(online_types);
++	return rc;
 +}
- EXPORT_SYMBOL_GPL(add_memory_driver_managed);
- 
- /*
++EXPORT_SYMBOL_GPL(offline_and_remove_memory_ranges);
+ #endif /* CONFIG_MEMORY_HOTREMOVE */
 -- 
 2.54.0
 
