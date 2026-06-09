@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-14351-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id qv+1NnvmJ2qJ4QIAu9opvQ
-	(envelope-from <nvdimm+bounces-14351-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:10:03 +0200
+	id d355CNjkJ2r94AIAu9opvQ
+	(envelope-from <nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:03:04 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6DB365EC0C
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:10:02 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFFEF65EAE3
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:03:03 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=EdJ8oAhD;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14351-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14351-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="FBly/emr";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BCADE3121A35
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Jun 2026 09:53:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD4433044848
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Jun 2026 09:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD2D3ED3D1;
-	Tue,  9 Jun 2026 09:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEDB3E63A8;
+	Tue,  9 Jun 2026 09:55:32 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC433E317C;
-	Tue,  9 Jun 2026 09:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DF13AE190;
+	Tue,  9 Jun 2026 09:55:31 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780998749; cv=none; b=n3Z/ItWIwM2ntlFfmCiq6hjQiUZwPjFqK7uvfFAWOsYfT721491cYICQiLwoXH2BOzcynnCpsN2WjliQCTH/hjGkrV/nN8FZNeOkCv0hY6byofN9fOPM/V06X9Eelgx9SrhwHPqXQ88swk7CRkO1M49CKCCdhGi0NbiQHrbdMnQ=
+	t=1780998932; cv=none; b=txJBJgH03oBHjxHztUL859vJYCgBe2w9rezr+rR9xIlNzcrxldgl03Lx+2npNACV/LBAzwO1CezwTq0T9GP+nJlvu5FPh6+DBHnU3E3TbFctjxIN2YfqfUC2U2Urf44zzaEoKyBbCHayo2IKDtlmBDgDjlZQLgSAef3KTxlLJxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780998749; c=relaxed/simple;
-	bh=+yIsKG/di6ADpuNhtgHYEq77+GkT9np8TF1SDcDj0ME=;
+	s=arc-20240116; t=1780998932; c=relaxed/simple;
+	bh=ybnaUx1Nmhp1eRp72eSYzT/hXkHureho+3ab/xqBw5s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=busq++H2HjrZ//UapU93js7w4OSqBH28SLvkpHY0jgdkVOSyV2Fpww5QekctKVrW8TXpA8MaLcnZMfkyhqKeHApBJsyOwJ1aTV6K4qIVJHowVvEE8nW3qYeSoZHFPbw1CybakO7AexUQQsKdunaEYUKrZiJ5Vg+MLL5KrQGRpZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EdJ8oAhD; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2671F00893;
-	Tue,  9 Jun 2026 09:52:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=NF/+szfxW7ppaxzQRvJTFVNEVY58RRRn+0lWtPB/OkcFBH8qPahu0ODCD4DKcuaW7mhwsPMqXgCcClNAK1ffnoqmVzXK7OqwVx8aEqhGKMs1o2wpL6MgwNYACF/5XoIr1s1LFztTbXch7jfBx2v3OAX8Yam58fBYLbmJqVUsmPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBly/emr; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132451F00893;
+	Tue,  9 Jun 2026 09:55:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780998748;
-	bh=5so1zQzA3lUehIl+R5tarTFJddQnlpvCs0HLxFL+tjw=;
+	s=k20260515; t=1780998931;
+	bh=fb64ERX8IQ5RCHgdgmlatnPmlzWSU7KCQUnwmM/R8Rs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=EdJ8oAhDB4jlPL/ZT5bVbmQ4zOqZLB12oMWuGtKw+P8SplpmGHTGwEO0fcqSLNmfD
-	 yCBR2segffkcKQRFslMscamXUNBoAaa0orR82Hcj5S4BtvPQCy2aLkwO0zR6kbSdim
-	 IMP7XPNy7zmoS39snomGHxew7hNHYaP8KDBx9M03nh73yc/zDlLXfJYt7acD1WB2WD
-	 HpWgrQfhC/t6ajYRTsHB+wvNjNPn9dAoWgBkVCr8Oz59MfHWtZO/GDzppWXdmUoZEE
-	 9YwQkkV0tv3FH7f8+ryiiWrun2Hih6kJ95ueGldYFy/y0nHO7ByioCA8wVnxqUKXE7
-	 7/x9XMEGUDXQg==
-Message-ID: <eaea4aac-fcba-4f83-99dd-f8289e5556c0@kernel.org>
-Date: Tue, 9 Jun 2026 11:52:21 +0200
+	b=FBly/emrcxyfCk+GXZrRzoiHJ0QgVUIjuPDwX+0uOFY0Y3qZPGr5C69oLvso6kSPr
+	 jmMSB4TXSQO/sx25g+1CCuROqXzjgepmaDDwcciTevuHDg3OIoytUNPTXdwyyDjoSK
+	 2ele79KVgfWuUPIfcTGAyKK2E+XdOgXmWmKPc8VgN40ApZliUoegw6PAYMwMAiw8sX
+	 pI4vJiFAq8lwe3wOL/WaplbPe9IVlz4W25R6S/CX+G5Jwq+c0GryXS4CtmeToeak6h
+	 FDp0SMwRRfZKOLxjiCoxOBdh9acmLItKBRm3O8c+/ChOL5+KluWOu2Ym4mK1SwcQT6
+	 U77WkaQ9d80iQ==
+Message-ID: <9361f783-5af4-4380-a901-8d330370491a@kernel.org>
+Date: Tue, 9 Jun 2026 11:55:24 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/9] mm/memory_hotplug: export
- mhp_get_default_online_type
+Subject: Re: [PATCH v4 4/9] mm/memory_hotplug: add
+ __add_memory_driver_managed() with online_type arg
 To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
  nvdimm@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
@@ -67,7 +67,7 @@ Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
  alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
  ira.weiny@intel.com, apopple@nvidia.com
 References: <20260605211911.2160954-1-gourry@gourry.net>
- <20260605211911.2160954-4-gourry@gourry.net>
+ <20260605211911.2160954-5-gourry@gourry.net>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -114,14 +114,14 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260605211911.2160954-4-gourry@gourry.net>
+In-Reply-To: <20260605211911.2160954-5-gourry@gourry.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -132,11 +132,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_SENDER(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[23];
-	TAGGED_FROM(0.00)[bounces-14351-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14352-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
@@ -148,30 +148,70 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,suse.de:email,linux-foundation.org:email,lists.linux.dev:from_smtp,gourry.net:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D6DB365EC0C
+X-Rspamd-Queue-Id: AFFEF65EAE3
 
 On 6/5/26 23:19, Gregory Price wrote:
-> Drivers which may pass hotplug policy down to DAX need MMOP_ symbols
-> and the mhp_get_default_online_type function for hotplug use cases.
+> Existing callers of add_memory_driver_managed cannot select the
+> preferred online type (ZONE_NORMAL vs ZONE_MOVABLE), requiring it to
+> hot-add memory as offline blocks, and then follow up by onlining each
+> memory block individually.
 > 
-> Some drivers (cxl) co-mingle their hotplug and devdax use-cases into
-> the same driver code, and chose the dax_kmem path as the default driver
-> path - making it difficult to require hotplug as a predicate to building
-> the overall driver (it may break other non-hotplug use-cases).
+> Most drivers prefer the system default, but the CXL driver wants to
+> plumb a preferred policy through the dax kmem driver.
 > 
-> Export mhp_get_default_online_type function to allow these drivers to
-> build when hotplug is disabled and still use the DAX use case.
+> Refactor APIs to add a new interface which allows the dax kmem module
+> to select a preferred policy.
 > 
-> In the built-out case we simply return MMOP_OFFLINE as it's
+> Overriding the configured auto-online policy is only safe for known
+> in-tree modules, where we know the override reflects a different,
+> user-requested policy.  We do not want arbitrary out-of-tree drivers
+> silently overriding the system-wide onlining policy, so restrict the
+> new interface to the kmem module using EXPORT_SYMBOL_FOR_MODULES()
+> rather than a plain EXPORT_SYMBOL_GPL().  Other in-tree modules (e.g.
+> cxl_core) can be added to the allowed list as the need arises.
+> 
+> Refactor add_memory_driver_managed, extract __add_memory_driver_managed
+> - Add proper kernel-doc for add_memory_driver_managed while refactoring
+> - New helper accepts an explicit online_type.
+> - New helper validates online_type is between OFFLINE and ONLINE_MOVABLE
+> 
+> Refactor: add_memory_resource, extract __add_memory_resource
+> - new helper accepts an explicit online_type
+> 
+> Original APIs now explicitly pass the system-default to new helpers.
+> 
+> No functional change for existing users.
+> 
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Gregory Price <gourry@gourry.net>
+> ---
+>  include/linux/memory_hotplug.h |  3 ++
+>  mm/memory_hotplug.c            | 61 +++++++++++++++++++++++++++++-----
+>  2 files changed, 56 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index f059025f8f8b..d3edeb80aadb 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -294,6 +294,9 @@ extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
+>  extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
+>  extern int add_memory_resource(int nid, struct resource *resource,
+>  			       mhp_t mhp_flags);
+> +int __add_memory_driver_managed(int nid, u64 start, u64 size,
+> +				const char *resource_name, mhp_t mhp_flags,
+> +				enum mmop online_type);
 
-Ah, you mean without CONFIG_MEMORY_HOTPLUG
+We prefer two-tab indent on second parameter line while touching code / adding
+new code.
 
-> non-destructive.  The internal function can never return -1 either,
-> so we choose this to allow for defining the function with 'enum mmop'.
+Same applies to the other instances below.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+Apart from that (still) LGTM.
 
 -- 
 Cheers,
