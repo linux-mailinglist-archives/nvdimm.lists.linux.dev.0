@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14353-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id d355CNjkJ2r94AIAu9opvQ
-	(envelope-from <nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:03:04 +0200
+	id kr+oMIHoJ2r14QIAu9opvQ
+	(envelope-from <nvdimm+bounces-14353-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:18:41 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFFEF65EAE3
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:03:03 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5C2C65ECCD
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 09 Jun 2026 12:18:40 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="FBly/emr";
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14352-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="f/DNTIH/";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14353-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14353-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CD4433044848
-	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Jun 2026 09:55:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CBE23307E961
+	for <lists+linux-nvdimm@lfdr.de>; Tue,  9 Jun 2026 10:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEDB3E63A8;
-	Tue,  9 Jun 2026 09:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD953EE1F8;
+	Tue,  9 Jun 2026 10:06:46 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DF13AE190;
-	Tue,  9 Jun 2026 09:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2135368287;
+	Tue,  9 Jun 2026 10:06:44 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780998932; cv=none; b=txJBJgH03oBHjxHztUL859vJYCgBe2w9rezr+rR9xIlNzcrxldgl03Lx+2npNACV/LBAzwO1CezwTq0T9GP+nJlvu5FPh6+DBHnU3E3TbFctjxIN2YfqfUC2U2Urf44zzaEoKyBbCHayo2IKDtlmBDgDjlZQLgSAef3KTxlLJxY=
+	t=1780999606; cv=none; b=TNKzl/fJ8htS+oAR8GG+AspEkzaPqO8OLkJVVUL2WmeXGIMvQ20IOgk5vastaEhpzXZ+WRWz6Hr0rH1Id1arl4l07qii0mMrk5S0shqGQ1Wo1uPBl6kLydWGkdnT2xnXQamVxMJccfdINnzvxRfuc9pZVUYe5F+99AikjkU5n6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780998932; c=relaxed/simple;
-	bh=ybnaUx1Nmhp1eRp72eSYzT/hXkHureho+3ab/xqBw5s=;
+	s=arc-20240116; t=1780999606; c=relaxed/simple;
+	bh=6vaEOQWfHt0+Xy+mj8HE6cKKkv5QTIXPQRFdqMKFba4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NF/+szfxW7ppaxzQRvJTFVNEVY58RRRn+0lWtPB/OkcFBH8qPahu0ODCD4DKcuaW7mhwsPMqXgCcClNAK1ffnoqmVzXK7OqwVx8aEqhGKMs1o2wpL6MgwNYACF/5XoIr1s1LFztTbXch7jfBx2v3OAX8Yam58fBYLbmJqVUsmPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBly/emr; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132451F00893;
-	Tue,  9 Jun 2026 09:55:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=HRmMFWKUhlWrcN/Kcur53Tx57vX41l9W5bgrkaJBoKBlBOC2KAaJ4dBoYHq9cWE2FLCRCkadwyiilt8z7LqWJn9g+j+9dB+jkKauxtTuciEC3aaVnbJ6/LNTz40etpfic7Xf0H0g5J54GR5jSLi5PUj/Qj1fbs/6Y2tqH+v1BNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/DNTIH/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF681F00899;
+	Tue,  9 Jun 2026 10:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780998931;
-	bh=fb64ERX8IQ5RCHgdgmlatnPmlzWSU7KCQUnwmM/R8Rs=;
+	s=k20260515; t=1780999604;
+	bh=1ihPSDA/h0Hov+M03ajn9GoQMpAb1QB0ZzEH18p98fI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=FBly/emrcxyfCk+GXZrRzoiHJ0QgVUIjuPDwX+0uOFY0Y3qZPGr5C69oLvso6kSPr
-	 jmMSB4TXSQO/sx25g+1CCuROqXzjgepmaDDwcciTevuHDg3OIoytUNPTXdwyyDjoSK
-	 2ele79KVgfWuUPIfcTGAyKK2E+XdOgXmWmKPc8VgN40ApZliUoegw6PAYMwMAiw8sX
-	 pI4vJiFAq8lwe3wOL/WaplbPe9IVlz4W25R6S/CX+G5Jwq+c0GryXS4CtmeToeak6h
-	 FDp0SMwRRfZKOLxjiCoxOBdh9acmLItKBRm3O8c+/ChOL5+KluWOu2Ym4mK1SwcQT6
-	 U77WkaQ9d80iQ==
-Message-ID: <9361f783-5af4-4380-a901-8d330370491a@kernel.org>
-Date: Tue, 9 Jun 2026 11:55:24 +0200
+	b=f/DNTIH/yx46ZasoAMnEH1+Guyhpk0JvhSaZTirQQds6faAGBzhYHerjrdgUJJXsL
+	 NxG7D2lZanD7LmDxrolbWQwz1dgenNB8N/Sk3ZjzoJtO4qCGocSDl3ka2ajzQwzINO
+	 ufSlpY6Mw0IEcUn5oDqsTUaF8tN4YxQX/omJoDv9avZg2Lj5GgPJLD6hYn4LMbVlWS
+	 qJpz8NsESC8hOvNFqp6R4rjHENMkwgI54a/ADNU+G/qhYgGo93a+0egI/oPX4EKYS2
+	 wQTSOcY/Hqs6YvPvTydGkejXD076sN7iZsS1Aj3OK7xeY3ZHeOFWVwc1J1o3NMWSbe
+	 ZhJct0Cn7Aa9g==
+Message-ID: <b62e071b-9dec-423f-9b4b-e3c34ea0a409@kernel.org>
+Date: Tue, 9 Jun 2026 12:06:38 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -55,8 +55,7 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/9] mm/memory_hotplug: add
- __add_memory_driver_managed() with online_type arg
+Subject: Re: [PATCH v4 5/9] mm/memory_hotplug: add multi-range hotunplug
 To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
  nvdimm@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
@@ -67,7 +66,7 @@ Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com,
  alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
  ira.weiny@intel.com, apopple@nvidia.com
 References: <20260605211911.2160954-1-gourry@gourry.net>
- <20260605211911.2160954-5-gourry@gourry.net>
+ <20260605211911.2160954-6-gourry@gourry.net>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -114,14 +113,14 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260605211911.2160954-5-gourry@gourry.net>
+In-Reply-To: <20260605211911.2160954-6-gourry@gourry.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -132,11 +131,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_SENDER(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[23];
-	TAGGED_FROM(0.00)[bounces-14352-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14353-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
@@ -148,70 +147,39 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,suse.de:email,linux-foundation.org:email,lists.linux.dev:from_smtp,gourry.net:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AFFEF65EAE3
-
-On 6/5/26 23:19, Gregory Price wrote:
-> Existing callers of add_memory_driver_managed cannot select the
-> preferred online type (ZONE_NORMAL vs ZONE_MOVABLE), requiring it to
-> hot-add memory as offline blocks, and then follow up by onlining each
-> memory block individually.
-> 
-> Most drivers prefer the system default, but the CXL driver wants to
-> plumb a preferred policy through the dax kmem driver.
-> 
-> Refactor APIs to add a new interface which allows the dax kmem module
-> to select a preferred policy.
-> 
-> Overriding the configured auto-online policy is only safe for known
-> in-tree modules, where we know the override reflects a different,
-> user-requested policy.  We do not want arbitrary out-of-tree drivers
-> silently overriding the system-wide onlining policy, so restrict the
-> new interface to the kmem module using EXPORT_SYMBOL_FOR_MODULES()
-> rather than a plain EXPORT_SYMBOL_GPL().  Other in-tree modules (e.g.
-> cxl_core) can be added to the allowed list as the need arises.
-> 
-> Refactor add_memory_driver_managed, extract __add_memory_driver_managed
-> - Add proper kernel-doc for add_memory_driver_managed while refactoring
-> - New helper accepts an explicit online_type.
-> - New helper validates online_type is between OFFLINE and ONLINE_MOVABLE
-> 
-> Refactor: add_memory_resource, extract __add_memory_resource
-> - new helper accepts an explicit online_type
-> 
-> Original APIs now explicitly pass the system-default to new helpers.
-> 
-> No functional change for existing users.
-> 
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Gregory Price <gourry@gourry.net>
-> ---
->  include/linux/memory_hotplug.h |  3 ++
->  mm/memory_hotplug.c            | 61 +++++++++++++++++++++++++++++-----
->  2 files changed, 56 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index f059025f8f8b..d3edeb80aadb 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -294,6 +294,9 @@ extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
->  extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
->  extern int add_memory_resource(int nid, struct resource *resource,
->  			       mhp_t mhp_flags);
-> +int __add_memory_driver_managed(int nid, u64 start, u64 size,
-> +				const char *resource_name, mhp_t mhp_flags,
-> +				enum mmop online_type);
-
-We prefer two-tab indent on second parameter line while touching code / adding
-new code.
-
-Same applies to the other instances below.
+X-Rspamd-Queue-Id: B5C2C65ECCD
 
 
-Apart from that (still) LGTM.
+>  EXPORT_SYMBOL_GPL(offline_and_remove_memory);
+> +
+> +/**
+> + * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
+> + * @ranges: array of physical address ranges to offline and remove
+> + * @nr_ranges: number of entries in @ranges
+> + *
+> + * Offline and remove several memory ranges as one operation, serialized
+> + * against other hotplug operations by a single lock_device_hotplug().
+> + *
+> + * Unlike calling offline_and_remove_memory() in a loop, this offlines *all*
+> + * ranges before removing any of them.  If offlining any range fails, the
+> + * offlining of the ranges processed so far is reverted and nothing is
+> + * removed, leaving every range online as it was before the call.  This gives
+> + * callers all-or-nothing semantics for the offline step, so a failed unplug
+> + * does not leave a device split between online and removed ranges.
+> + *
+> + * Each range must be memory-block aligned in start and size.
+> + *
+> + * Return: 0 on success, negative errno otherwise.  On failure no range has
+> + * been removed.
+> + */
+> +int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges)
+> +{
+
+Is there a way to just generalize the logic in offline_and_remove_memory() to
+multiple ranges, making offline_and_remove_memory() then a simple wrapper around
+the new offline_and_remove_memory_ranges(), providing only a single range?
 
 -- 
 Cheers,
