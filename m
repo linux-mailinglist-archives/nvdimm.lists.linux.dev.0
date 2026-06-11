@@ -1,202 +1,217 @@
-Return-Path: <nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14397-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id JuLkH9frKmrczQMAu9opvQ
-	(envelope-from <nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:09:43 +0200
+	id vkSBHDT2KmpR0AMAu9opvQ
+	(envelope-from <nvdimm+bounces-14397-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:53:56 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B302673DF2
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:09:42 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C065B6742EB
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:53:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=jagalactic.com header.s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq header.b=q8BUBMgY;
+	dkim=pass header.d=amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b="bNY/tLZs";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14397-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14397-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=pass (policy=quarantine) header.from=jagalactic.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ACF21345DFDE
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 17:02:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A4E0B34A7100
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 17:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1197747DF85;
-	Thu, 11 Jun 2026 17:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C88833F377;
+	Thu, 11 Jun 2026 17:31:10 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a11-75.smtp-out.amazonses.com (a11-75.smtp-out.amazonses.com [54.240.11.75])
+	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F2D47DF8E
-	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 17:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE0F40D585
+	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 17:31:08 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781197323; cv=none; b=LS2PezfkLc0FET5mDUdtVYCWQxhP8JR7du/nXpJ+YNTOXunZcvGEVg4bUJCGuUw1jUfLoqw4SCqinhey+nontYGMjWgVHvU8cI4H3ZhWBfkeBW/S2Uw0sIS/a6S/ceP4XYx+qcj2N118IoahCY7/lHNpbm5MMT0M6CH7Qp0ihcs=
+	t=1781199070; cv=none; b=FBG9laFZc+dTEfIxOl+VpPMgAhdixO7yypXe3HKJB5FJadLFKTKMZgYCUYD1l6p0VwBSJyIZAY0YbUOydZouO9k9UJILmzHxn+svnWnexRMdHckSnxaMvSpahq9jUT8z1LIv3daFhLs4aSjcldtRS9xqEbYRlC0XXevtyUugc+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781197323; c=relaxed/simple;
-	bh=KMh/mtHDXIo+rUiDJ/NhzUP9bhikfjbFj1UnRrU6nZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p7VKbTd+XvkmW1jqLg8X73EQWd+FPHty0bHbIMr1RBWFvUYjYiit/uJSSIXIKT6yd4MO/PuEgWIHnagMaOMCS0WCw/fedxV5kFvkgsIo/qrd6X3ihuw1LK/83ITLD/WnF8AmeP6SqgmQtuj1EViK91Kq+eJNZBv12h8TZZ2GRbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.15
-Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 0331F1C2539;
-	Thu, 11 Jun 2026 17:01:47 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf13.hostedemail.com (Postfix) with ESMTPA id 8633F20016;
-	Thu, 11 Jun 2026 17:01:43 +0000 (UTC)
-Date: Thu, 11 Jun 2026 12:01:42 -0500
-From: John Groves <John@groves.net>
-To: Richard Cheng <icheng@nvidia.com>
-Cc: John Groves <john@jagalactic.com>, Dan Williams <djbw@kernel.org>, 
-	John Groves <jgroves@micron.com>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Alison Schofield <alison.schofield@intel.com>, 
-	Ira Weiny <iweiny@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
-	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>, "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V4 7/9] dax: fix holder_ops race in fs_put_dax()
-Message-ID: <airpeRKxMewYR5yc@groves.net>
-References: <0100019ea3929225-a0f8e6f7-30ae-4f8e-ae6f-19129666c4c3-000000@email.amazonses.com>
- <20260607193405.94390-1-john@jagalactic.com>
- <0100019ea3941018-519230fa-2897-41b8-9677-dabc8d1124ca-000000@email.amazonses.com>
- <aiaeCdwZEP7o1Q5M@MWDK4CY14F>
+	s=arc-20240116; t=1781199070; c=relaxed/simple;
+	bh=1dPFrDsgw8V7mX3qiYp6cFhED8GErkHr+s9XReyzx9k=;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:References:
+	 Message-ID; b=HjUHboR+ES+cjYMt/4Uc8ugQmCoTUl8AU8Ss/cdCEQJg648l1VZYi20fMfLjKg2oyY8XoHuPfG1Fp5jQ22UT/AUmm+GsiKGKrOxTX5o/10jinC5qiyeNvWv+r2FnrDxVFHsylaZqeVfUtquG66SLBZy6MPiDUfHllpYDxuK4quQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=q8BUBMgY; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=bNY/tLZs; arc=none smtp.client-ip=54.240.11.75
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1781199067;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:References:Message-Id;
+	bh=1dPFrDsgw8V7mX3qiYp6cFhED8GErkHr+s9XReyzx9k=;
+	b=q8BUBMgYiCNw4bZrIsR3Vm0MaxgKEnZPP18H9xWHwObrvXrICJRhDGIc5f29X2tb
+	xp4PWZP11QjT308PNN2B6mET+6DVcgp7FNEl+mUl8gZZf1NGqqm9xOFF//GPTF666/k
+	MGhU4JKB9cMq8oHVtKXds/zB4bxDveR/cZK6wsas=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1781199067;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:References:Message-Id:Feedback-ID;
+	bh=1dPFrDsgw8V7mX3qiYp6cFhED8GErkHr+s9XReyzx9k=;
+	b=bNY/tLZsrI7L/b60zTCTWMUuVexfvZr7ChithnbDA3m+nvhzPveGvbM4Xj/GxnWH
+	LP43Ws3iyeG3CGxgfuY9PDVteQVxCehgCWFahQMdv8wp4u65gcKwYETi0VIIqUPOKmg
+	xemqPoJMzq5I1//TzOEG+332JfBE8vHforFb/Le4=
+Subject: [PATCH V5 0/9] Fixes to the previously-merged drivers/dax/fsdev
+ series
+From: =?UTF-8?Q?John_Groves?= <john@jagalactic.com>
+To: =?UTF-8?Q?John_Groves?= <John@Groves.net>, 
+	=?UTF-8?Q?Dan_Williams?= <djbw@kernel.org>
+Cc: =?UTF-8?Q?John_Groves?= <jgroves@micron.com>, 
+	=?UTF-8?Q?Vishal_Verma?= <vishal.l.verma@intel.com>, 
+	=?UTF-8?Q?Dave_Jiang?= <dave.jiang@intel.com>, 
+	=?UTF-8?Q?Matthew_Wilcox?= <willy@infradead.org>, 
+	=?UTF-8?Q?Jan_Kara?= <jack@suse.cz>, 
+	=?UTF-8?Q?Alexander_Viro?= <viro@zeniv.linux.org.uk>, 
+	=?UTF-8?Q?Christian_Brauner?= <brauner@kernel.org>, 
+	=?UTF-8?Q?Miklos_Szeredi?= <miklos@szeredi.hu>, 
+	=?UTF-8?Q?Alison_Schofiel?= =?UTF-8?Q?d?= <alison.schofield@intel.com>, 
+	=?UTF-8?Q?Ira_Weiny?= <iweiny@kernel.org>, 
+	=?UTF-8?Q?Jonathan_Cameron?= <jic23@kernel.org>, 
+	=?UTF-8?Q?nvdimm=40lists=2Elinux=2Edev?= <nvdimm@lists.linux.dev>, 
+	=?UTF-8?Q?linux-cxl=40vger=2Ekernel=2Eorg?= <linux-cxl@vger.kernel.org>, 
+	=?UTF-8?Q?linux-kernel=40vger=2Ekernel=2Eorg?= <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?linux-fsdevel=40vger=2Ekernel=2Eorg?= <linux-fsdevel@vger.kernel.org>, 
+	=?UTF-8?Q?John_Groves?= <john@groves.net>
+Date: Thu, 11 Jun 2026 17:31:07 +0000
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aiaeCdwZEP7o1Q5M@MWDK4CY14F>
-X-Stat-Signature: chb7d47k3w1af5g81r6bd3q4sp3uwtzt
-X-Session-Marker: 6A6F686E4067726F7665732E6E6574
-X-Session-ID: U2FsdGVkX1+LQw6JS1WBqmpMkfxEkazhT2jL1zGk7z0=
-X-HE-Tag: 1781197303-13568
-X-HE-Meta: U2FsdGVkX18tpzCV4eXTn7FEUyLmxDuAsNVOpAKiGdbyzQwwMAQrz4VHQ2l/XfVQvtvoLqYU1wyF9YdgznNpNfpKd5jQHQOfw4LYBL7/5iD7bHNep4ZSvXwdFAcjUiESxNjCkDLPC5h6T+UNRrdEhy0BNJgJqwgV7NKULuX1U/cqms6ZXsbgxXJp1DrxTtzARsCqJj0RKfOpgJopQNLbxB1fvuuqWoVJSaTsXNtsZwKJ3eDAwyJG9Z8WOLOcPxxlUF9/gNlrJvn8nDQK33zFdRPmE5guvMae/zlFycGi0DVBaUKv8/aZ/2/vEft1Pab3gGXcMV+7xSGBSbqHZeAFjDQuDHm+ZLzLkE12ACa36fw/mDeMAdt8j3FxFdYC25dy
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <20260611173057.65868-1-john@jagalactic.com>
+X-Mailer: Amazon WorkMail
+Thread-Index: AQHc+cgVGG8eowYzQH2jFnHuaOQQNQ==
+Thread-Topic: [PATCH V5 0/9] Fixes to the previously-merged drivers/dax/fsdev
+ series
+X-Wm-Sent-Timestamp: 1781199066
+X-Original-Mailer: git-send-email 2.52.0
+Message-ID: <0100019eb7bcda4b-3f8edae9-d7a4-4bfa-aaea-fcef77fdbbc3-000000@email.amazonses.com>
+Feedback-ID: ::1.us-east-1.LF00NED762KFuBsfzrtoqw+Brn/qlF9OYdxWukAhsl8=:AmazonSES
+X-SES-Outgoing: 2026.06.11-54.240.11.75
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [0.75 / 15.00];
+	TO_EXCESS_QP(1.20)[];
+	CC_EXCESS_QP(1.20)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[jagalactic.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[jagalactic.com:s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq,amazonses.com:s=224i4yxa5dv7c2xz3womw6peuasteono];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14395-lists,linux-nvdimm=lfdr.de];
+	XM_UA_NO_VERSION(0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[groves.net];
-	FORGED_RECIPIENTS(0.00)[m:icheng@nvidia.com,m:john@jagalactic.com,m:djbw@kernel.org,m:jgroves@micron.com,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:willy@infradead.org,m:jack@suse.cz,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:miklos@szeredi.hu,m:alison.schofield@intel.com,m:iweiny@kernel.org,m:jic23@kernel.org,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[John@groves.net,nvdimm@lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FORGED_RECIPIENTS(0.00)[m:John@Groves.net,m:djbw@kernel.org,m:jgroves@micron.com,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:willy@infradead.org,m:jack@suse.cz,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:miklos@szeredi.hu,m:alison.schofield@intel.com,m:iweiny@kernel.org,m:jic23@kernel.org,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:john@groves.net,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[john@jagalactic.com,nvdimm@lists.linux.dev];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14397-lists,linux-nvdimm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[John@groves.net,nvdimm@lists.linux.dev];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john@jagalactic.com,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[jagalactic.com:+,amazonses.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[groves.net:email,groves.net:mid,groves.net:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lists.linux.dev:from_smtp]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EXCESS_QP(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[email.amazonses.com:mid,jagalactic.com:dkim,jagalactic.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,groves.net:email,lists.linux.dev:from_smtp,amazonses.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2B302673DF2
+X-Rspamd-Queue-Id: C065B6742EB
 
-On 26/06/08 06:52PM, Richard Cheng wrote:
-> On Sun, Jun 07, 2026 at 07:34:10PM +0800, John Groves wrote:
-> > From: John Groves <John@Groves.net>
-> > 
-> > Clear holder_ops before holder_data so that a concurrent fs_dax_get()
-> > cannot have its newly installed holder_ops overwritten. cmpxchg()
-> > provides release ordering on weakly-ordered architectures, ensuring the
-> > WRITE_ONCE(holder_ops, NULL) store is visible to any CPU that observes
-> > the holder_data release.
-> > 
-> > Add a WARN_ON() that fires only when the cmpxchg observes a non-NULL
-> > value that is not @holder, i.e. fs_put_dax() called by something that
-> > is not the current holder. That is an API contract violation; the
-> > WARN_ON() does not prevent the damage but makes the bug visible.
-> > 
-> > A NULL cmpxchg result is deliberately tolerated: kill_dax() clears
-> > holder_data while a holder is still attached when a device is removed
-> > out from under a mounted filesystem (after delivering MF_MEM_PRE_REMOVE).
-> > The holder's subsequent fs_put_dax() - e.g. xfs_free_buftarg() after a
-> > forced shutdown - then legitimately finds holder_data already NULL, so
-> > warning on that case would turn supported device removal into a splat
-> > (or a panic with panic_on_warn).
-> > 
-> > Also add a kerneldoc comment documenting that fs_put_dax() must only
-> > be called by the current holder.
-> > 
-> > Fixes: eec38f5d86d27 ("dax: Add fs_dax_get() func to prepare dax for fs-dax usage")
-> > Signed-off-by: John Groves <john@groves.net>
-> > ---
-> >  drivers/dax/super.c | 42 +++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 39 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> > index 25cf99dd9360b..96f778dcde50b 100644
-> > --- a/drivers/dax/super.c
-> > +++ b/drivers/dax/super.c
-> > @@ -116,11 +116,47 @@ EXPORT_SYMBOL_GPL(fs_dax_get_by_bdev);
-> >  
-> >  #if IS_ENABLED(CONFIG_FS_DAX)
-> >  
-> > +/**
-> > + * fs_put_dax() - release holder ownership of a dax_device
-> > + * @dax_dev: dax device to release (may be NULL)
-> > + * @holder: the holder pointer previously passed to fs_dax_get() or
-> > + *          fs_dax_get_by_bdev(); must match exactly, as it is used
-> > + *          in a cmpxchg to atomically release ownership
-> > + *
-> > + * Must only be called by the current holder. Clears holder_ops before
-> > + * holder_data to avoid a race where a concurrent fs_dax_get() could have
-> > + * its newly installed holder_ops overwritten.
-> > + */
-> >  void fs_put_dax(struct dax_device *dax_dev, void *holder)
-> >  {
-> > -	if (dax_dev && holder &&
-> > -	    cmpxchg(&dax_dev->holder_data, holder, NULL) == holder)
-> > -		dax_dev->holder_ops = NULL;
-> > +	if (dax_dev && holder) {
-> > +		void *prev;
-> > +
-> > +		/*
-> > +		 * Clear holder_ops before releasing holder_data. A concurrent
-> > +		 * dax_holder_notify_failure() that sees NULL ops returns
-> > +		 * -EOPNOTSUPP cleanly. A concurrent fs_dax_get() that acquires
-> > +		 * holder_data after the cmpxchg below is guaranteed to observe
-> > +		 * holder_ops=NULL first (cmpxchg provides release ordering), so
-> > +		 * its subsequent store of new ops will not be overwritten.
-> > +		 */
-> 
-> This isn't guaranteed today. dax-holder_notify_failure() reads
-> dax_dev->holder_ops twice without READ_ONCE(). With your WRITE_ONCE()
-> racing in between, the second read "dax_dev->holder_ops->notify_failure()" can
-> return NULL and result in NULL deref, so the "see NULL cleanly" property the comment relies
-> on doesn't hold.
-> 
-> Or reading it once into a local would make it tru
-> """
-> const struct dax_holder_operations *ops = READ_ONCE(dax_dev->holder_ops);
-> 
-> if (!ops)
-> 	return -EOPNOTSUPP;
-> rc = ops->notify_failure(dax_dev, off, len, mf_flags);
-> """
-> 
-> What do you think ?
-
-Another good catch. Adding a fix to dax_holder_notify_failure(), to get
-the ops via READ_ONCE().
-
-Thanks,
-John
-
-<snip>
-
+From: John Groves <john@groves.net>=0D=0A=0D=0AThis series applies bug fi=
+xes (mostly found via sashiko) to the dax/fsdev=0D=0Aseries. It has been =
+soaking in the famfs CI pipeline and 1) won't affect=0D=0Aanything that d=
+oesn't use drivers/dax/fsdev.c, and 2) doesn't affect any=0D=0Aknown work=
+loads -- although the bugs would have manifested when multi-range=0D=0ADC=
+D dax devices are a thing (soon-ish).=0D=0A=0D=0AMost of the series is co=
+nfined to drivers/dax/fsdev.c. Two patches touch=0D=0Ashared DAX core in =
+drivers/dax/super.c: patch 7 reads holder_ops once in=0D=0Adax_holder_not=
+ify_failure() to close a double-fetch NULL dereference, and=0D=0Apatch 8 =
+reorders fs_put_dax() and adds a WARN_ON(). fs_put_dax() is used by=0D=0A=
+ext2/ext4/erofs/xfs, but only holder-passing callers (like XFS in-tree) w=
+ill=0D=0Asee a behavior change, and only a new warning if they misuse it.=
+=0D=0A=0D=0AChanges since V4:=0D=0A=0D=0A- New patch 7 (dax: read holder_=
+ops once in dax_holder_notify_failure()):=0D=0A  split the reader-side RE=
+AD_ONCE() fix out of the fs_put_dax() patch and=0D=0A  placed it first, s=
+o the fs_put_dax() patch's "a concurrent=0D=0A  dax_holder_notify_failure=
+() that sees NULL ops returns -EOPNOTSUPP=0D=0A  cleanly" reasoning actua=
+lly holds when it lands. dax_holder_notify_failure()=0D=0A  read holder_o=
+ps twice without READ_ONCE(); a concurrent clear could make=0D=0A  the NU=
+LL check pass while the indirect call dereferenced NULL. Carries=0D=0A  F=
+ixes: 8012b86608552 ("dax: introduce holder for dax_device"), the commit=0D=
+=0A  that introduced the unmarked double fetch. Suggested by Richard Chen=
+g (and=0D=0A  the Sashiko bot).=0D=0A- Patch 2 (multi-range memory_failur=
+e offset): the ->memory_failure callback=0D=0A  now walks the pagemap's o=
+wn immutable range array (pgmap->ranges[]) rather=0D=0A  than dev_dax->ra=
+nges[], which a concurrent sysfs mapping_store() can=0D=0A  krealloc() un=
+der dax_region_rwsem while this callback holds no such lock.=0D=0A  For d=
+ynamic devices the two arrays are identical, so the reported offset is=0D=
+=0A  unchanged for the multi-range case this patch targets. Suggested by =
+Richard=0D=0A  Cheng (and the Sashiko bot).=0D=0A- Dropped the dax_dev_ge=
+t()/dax_dev_find() patch (V4 patch 8) from this=0D=0A  revision. There is=
+ no in-tree caller yet; it will be sent together with the=0D=0A  famfs fi=
+lesystem series that introduces the caller. (Per Richard Cheng /=0D=0A  S=
+ashiko.)=0D=0A- Patch 8 (holder_ops race in fs_put_dax()): unchanged from=
+ V4 (renumbered=0D=0A  from 7 to 8).=0D=0A- Collected Reviewed-by from Da=
+ve Jiang on patches 4 and 6.=0D=0A=0D=0AChanges since V3:=0D=0A=0D=0A- Pa=
+tch 4: Adopted Dave's suggested refactor -- factor out=0D=0A  fsdev_acqui=
+re_pgmap() and defer the dev_dax->pgmap assignment until=0D=0A  probe can=
+ no longer fail, replacing the goto-based cleanup. Did not=0D=0A  carry A=
+lison's V3 Reviewed-by due to the rewrite.=0D=0A- Patch 5: Also remove th=
+e now write-only dev_dax->virt_addr field,=0D=0A  per Dave's review.=0D=0A=
+- Patch 7: Fixed the WARN_ON() to tolerate holder_data =3D=3D NULL, which=
+=0D=0A  legitimately occurs when kill_dax() clears it during device remov=
+al=0D=0A  under a live holder (per Dave's review). Wrong-holder calls sti=
+ll=0D=0A  warn.=0D=0A- Patch 8: Kept the Fixes tag -- the exported symbol=
+ itself is the=0D=0A  hazard; stable kernels carrying the export should w=
+ant this fix.=0D=0A=0D=0AChanges since V2:=0D=0A=0D=0A* Patch 1 (comment =
+fix): No change. Responded to Dave's question about=0D=0A  the dropped pr=
+econdition -- the new comment correctly covers both=0D=0A  callers; fsdev=
+_clear_folio_state() does not guarantee share=3D=3D0 before=0D=0A  callin=
+g, so the old precondition was no longer universally true.=0D=0A* V2 patc=
+h 2 (three fixes): Split into three separate patches (patches=0D=0A  2-4)=
+ per Dave's review.=0D=0A* V2 patch 3 (two fixes): Split into two separat=
+e patches (patches 5-6)=0D=0A  per Dave's review.=0D=0A* V2 patch 4 (clam=
+p direct_access / remove cached_size): Dropped.=0D=0A  Dave's analysis co=
+rrectly showed the claimed bug does not exist --=0D=0A  dax_pgoff_to_phys=
+() already enforces that the full requested size fits=0D=0A  within a sin=
+gle range before returning, making the clamp a no-op in=0D=0A  every reac=
+hable path.=0D=0A* V2 patch 5 (holder_ops race): Use WRITE_ONCE() for the=
+ holder_ops=0D=0A  store; add WARN_ON() on the cmpxchg result to catch wr=
+ong-holder and=0D=0A  double-put API contract violations; fix the inline =
+comment, which=0D=0A  incorrectly claimed dax_holder_notify_failure() con=
+sults holder_ops=0D=0A  only when holder_data is non-NULL.=0D=0A* V2 patc=
+h 6 (dax_dev_find): Add dax_alive() check under dax_read_lock()=0D=0A  af=
+ter ilookup5() to prevent returning a device that is concurrently=0D=0A  =
+being torn down by kill_dax().=0D=0A* V2 patch 7 (formatting cleanup): Dr=
+op incorrect Fixes: tag; add=0D=0A  Dave's Reviewed-by.=0D=0A* The series=
+ grows from 7 to 9 patches.=0D=0A=0D=0AChanges since v1:=0D=0A* Dropped m=
+odes from patch 6 to fs/fuse/famfs.c and=20=0D=0A  fs/famfs/famfs_inode.c=
+, which are not upstream so it broke=0D=0A  attempts to apply the series.=
+ Oops...=0D=0A* Added patch 7, which addresses a previously-missed review=
+ comment=0D=0A  from Jonathan - minor cleanup=0D=0A=0D=0A=0D=0A=0D=0AJohn=
+ Groves (9):=0D=0A  dax: fix misleading comment about share/index union i=
+n=0D=0A    dax_folio_reset_order()=0D=0A  dax/fsdev: fix multi-range offs=
+et in memory_failure handler=0D=0A  dax/fsdev: clear vmemmap_shift when b=
+inding static pgmap=0D=0A  dax/fsdev: don't leave a dangling dev_dax->pgm=
+ap on probe failure=0D=0A  dax/fsdev: use __va(phys) for kaddr in direct_=
+access=0D=0A  dax/fsdev: fail probe on invalid pgmap offset=0D=0A  dax: r=
+ead holder_ops once in dax_holder_notify_failure()=0D=0A  dax: fix holder=
+_ops race in fs_put_dax()=0D=0A  dax: fsdev.c minor formatting cleanup=0D=
+=0A=0D=0A drivers/dax/dax-private.h |   2 -=0D=0A drivers/dax/fsdev.c    =
+   | 126 +++++++++++++++++++++++++-------------=0D=0A drivers/dax/super.c=
+       |  53 ++++++++++++++--=0D=0A fs/dax.c                  |  12 ++--=0D=
+=0A 4 files changed, 136 insertions(+), 57 deletions(-)=0D=0A=0D=0A=0D=0A=
+base-commit: 4549871118cf616eecdd2d939f78e3b9e1dddc48=0D=0A--=20=0D=0A2.5=
+3.0=0D=0A=0D=0A
 
