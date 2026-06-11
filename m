@@ -1,45 +1,45 @@
-Return-Path: <nvdimm+bounces-14396-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xAKZEanqKmp2zQMAu9opvQ
-	(envelope-from <nvdimm+bounces-14396-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:04:41 +0200
+	id JuLkH9frKmrczQMAu9opvQ
+	(envelope-from <nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:09:43 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC290673D3A
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:04:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B302673DF2
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 19:09:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14396-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.232.135.74 as permitted sender) smtp.mailfrom="nvdimm+bounces-14396-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14395-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3D42E3004F3F
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 17:04:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ACF21345DFDE
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 17:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8183F20FF;
-	Thu, 11 Jun 2026 17:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1197747DF85;
+	Thu, 11 Jun 2026 17:02:04 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B347C2ED866
-	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 17:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F2D47DF8E
+	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 17:01:56 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781197478; cv=none; b=X1+Ds0tq2rYcBylRD7DbvBERhGc84kmNlXh1n1p01We4FpgM2/PK2xK5aRTprxYJeTEL/5FhK+yKbyNpSkov8P+ZAh6eJvKes/B+nA5FkLY1RGFrWvcM4q2Ukt0CQ5tNix89uuxHu+QpqE/KQ4aKdVAKpQZk9480bfjGWDHP6VI=
+	t=1781197323; cv=none; b=LS2PezfkLc0FET5mDUdtVYCWQxhP8JR7du/nXpJ+YNTOXunZcvGEVg4bUJCGuUw1jUfLoqw4SCqinhey+nontYGMjWgVHvU8cI4H3ZhWBfkeBW/S2Uw0sIS/a6S/ceP4XYx+qcj2N118IoahCY7/lHNpbm5MMT0M6CH7Qp0ihcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781197478; c=relaxed/simple;
-	bh=8H5LpKzD03n99I+lGSVIBTJwhXA/uHimZYsVdWCk/2Q=;
+	s=arc-20240116; t=1781197323; c=relaxed/simple;
+	bh=KMh/mtHDXIo+rUiDJ/NhzUP9bhikfjbFj1UnRrU6nZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L+wnRo1Q4RZQIYEzz6LDPBYHBUUe2+8/+jzU9gQ8Qla2KKAX9FfP/VOXR3R6aM1FffSRr0cBu2rD4S8AlV0zt4y+l3OTpttqQ9EMlMIUTtfJL8XKFJWToXV0nSdkk5xGDGHVKAK+ueSY/TiuJbl22jI9MLOp+JtWVwv0nbCZSPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.14
-Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 76B031406FE;
-	Thu, 11 Jun 2026 16:59:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf05.hostedemail.com (Postfix) with ESMTPA id 5A06C20011;
-	Thu, 11 Jun 2026 16:59:17 +0000 (UTC)
-Date: Thu, 11 Jun 2026 11:59:15 -0500
+	 Content-Type:Content-Disposition:In-Reply-To; b=p7VKbTd+XvkmW1jqLg8X73EQWd+FPHty0bHbIMr1RBWFvUYjYiit/uJSSIXIKT6yd4MO/PuEgWIHnagMaOMCS0WCw/fedxV5kFvkgsIo/qrd6X3ihuw1LK/83ITLD/WnF8AmeP6SqgmQtuj1EViK91Kq+eJNZBv12h8TZZ2GRbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=groves.net; spf=pass smtp.mailfrom=groves.net; arc=none smtp.client-ip=216.40.44.15
+Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 0331F1C2539;
+	Thu, 11 Jun 2026 17:01:47 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: john@groves.net) by omf13.hostedemail.com (Postfix) with ESMTPA id 8633F20016;
+	Thu, 11 Jun 2026 17:01:43 +0000 (UTC)
+Date: Thu, 11 Jun 2026 12:01:42 -0500
 From: John Groves <John@groves.net>
 To: Richard Cheng <icheng@nvidia.com>
 Cc: John Groves <john@jagalactic.com>, Dan Williams <djbw@kernel.org>, 
@@ -50,13 +50,12 @@ Cc: John Groves <john@jagalactic.com>, Dan Williams <djbw@kernel.org>,
 	Ira Weiny <iweiny@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
 	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>, "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH V4 2/9] dax/fsdev: fix multi-range offset in
- memory_failure handler
-Message-ID: <airpFzvwQhx_KoKD@groves.net>
+Subject: Re: [PATCH V4 7/9] dax: fix holder_ops race in fs_put_dax()
+Message-ID: <airpeRKxMewYR5yc@groves.net>
 References: <0100019ea3929225-a0f8e6f7-30ae-4f8e-ae6f-19129666c4c3-000000@email.amazonses.com>
- <20260607193314.94291-1-john@jagalactic.com>
- <0100019ea3934be1-ce7c2c13-b9fd-40b2-9284-14bc42d5cb08-000000@email.amazonses.com>
- <aiafDCGP0mI3IhrY@MWDK4CY14F>
+ <20260607193405.94390-1-john@jagalactic.com>
+ <0100019ea3941018-519230fa-2897-41b8-9677-dabc8d1124ca-000000@email.amazonses.com>
+ <aiaeCdwZEP7o1Q5M@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -65,20 +64,20 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aiafDCGP0mI3IhrY@MWDK4CY14F>
-X-Stat-Signature: ctweu9cdfsxj6hazwmeirduq3ybub3p5
+In-Reply-To: <aiaeCdwZEP7o1Q5M@MWDK4CY14F>
+X-Stat-Signature: chb7d47k3w1af5g81r6bd3q4sp3uwtzt
 X-Session-Marker: 6A6F686E4067726F7665732E6E6574
-X-Session-ID: U2FsdGVkX1/Kgex3958l7Fl9/QwAv4satewivFouAMM=
-X-HE-Tag: 1781197157-925519
-X-HE-Meta: U2FsdGVkX1964EgNpXtRpm6CDOUXzcItVFtYU3r7fAqfHXO2x4cReEB+fn0VbT1mKz6yzZr76Y6IZiiqDcamL1FHuNe06NClarhqYZq+DJ7ulMQf13IkAu/iHktLozwgvls6vcIIoyyTnCbNa3jwGH4Zyjj3zd/4I1olS/rghrMyhHbaI7oRX8DhpXMT7+rpXgurcDAXNqaYGtO8Yw0+EGUxD4afDfBmfh85bbFzwE+Gc68YS+G250nGxNCN1kpVO7zK4X4cI96EQD0Whfdqouq2slfd14isaEa+4hVpAOJcZUDSSF7UQP5Pjyj6YBiBSLYO5txA2cVLWF+mmVRlseIBQdguj8fSGENBJpWVAS9OABG56g0XErVkLeE78kWP9yebPplSGo5fOE3ma8LryA==
+X-Session-ID: U2FsdGVkX1+LQw6JS1WBqmpMkfxEkazhT2jL1zGk7z0=
+X-HE-Tag: 1781197303-13568
+X-HE-Meta: U2FsdGVkX18tpzCV4eXTn7FEUyLmxDuAsNVOpAKiGdbyzQwwMAQrz4VHQ2l/XfVQvtvoLqYU1wyF9YdgznNpNfpKd5jQHQOfw4LYBL7/5iD7bHNep4ZSvXwdFAcjUiESxNjCkDLPC5h6T+UNRrdEhy0BNJgJqwgV7NKULuX1U/cqms6ZXsbgxXJp1DrxTtzARsCqJj0RKfOpgJopQNLbxB1fvuuqWoVJSaTsXNtsZwKJ3eDAwyJG9Z8WOLOcPxxlUF9/gNlrJvn8nDQK33zFdRPmE5guvMae/zlFycGi0DVBaUKv8/aZ/2/vEft1Pab3gGXcMV+7xSGBSbqHZeAFjDQuDHm+ZLzLkE12ACa36fw/mDeMAdt8j3FxFdYC25dy
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14396-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14395-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[groves.net];
@@ -96,69 +95,106 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[John@groves.net,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,groves.net:email,groves.net:mid,groves.net:from_mime,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[groves.net:email,groves.net:mid,groves.net:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CC290673D3A
+X-Rspamd-Queue-Id: 2B302673DF2
 
-On 26/06/08 06:56PM, Richard Cheng wrote:
-> On Sun, Jun 07, 2026 at 07:33:19PM +0800, John Groves wrote:
+On 26/06/08 06:52PM, Richard Cheng wrote:
+> On Sun, Jun 07, 2026 at 07:34:10PM +0800, John Groves wrote:
 > > From: John Groves <John@Groves.net>
 > > 
-> > Fix memory_failure offset calculation for multi-range devices. The old code
-> > subtracted ranges[0].range.start from the faulting PFN's physical address,
-> > which produces an incorrect (inflated) logical offset when the PFN falls in
-> > ranges[1] or beyond due to physical gaps between ranges. Add
-> > fsdev_pfn_to_offset() to walk the range list and compute the correct
-> > device-linear byte offset.
+> > Clear holder_ops before holder_data so that a concurrent fs_dax_get()
+> > cannot have its newly installed holder_ops overwritten. cmpxchg()
+> > provides release ordering on weakly-ordered architectures, ensuring the
+> > WRITE_ONCE(holder_ops, NULL) store is visible to any CPU that observes
+> > the holder_data release.
 > > 
-> > Fixes: d5406bd458b0a ("dax: add fsdev.c driver for fs-dax on character dax")
+> > Add a WARN_ON() that fires only when the cmpxchg observes a non-NULL
+> > value that is not @holder, i.e. fs_put_dax() called by something that
+> > is not the current holder. That is an API contract violation; the
+> > WARN_ON() does not prevent the damage but makes the bug visible.
 > > 
-> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > Reviewed-by: Alison Schofield <alison.schofield@intel.com>
+> > A NULL cmpxchg result is deliberately tolerated: kill_dax() clears
+> > holder_data while a holder is still attached when a device is removed
+> > out from under a mounted filesystem (after delivering MF_MEM_PRE_REMOVE).
+> > The holder's subsequent fs_put_dax() - e.g. xfs_free_buftarg() after a
+> > forced shutdown - then legitimately finds holder_data already NULL, so
+> > warning on that case would turn supported device removal into a splat
+> > (or a panic with panic_on_warn).
+> > 
+> > Also add a kerneldoc comment documenting that fs_put_dax() must only
+> > be called by the current holder.
+> > 
+> > Fixes: eec38f5d86d27 ("dax: Add fs_dax_get() func to prepare dax for fs-dax usage")
 > > Signed-off-by: John Groves <john@groves.net>
 > > ---
-> >  drivers/dax/fsdev.c | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> >  drivers/dax/super.c | 42 +++++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 39 insertions(+), 3 deletions(-)
 > > 
-> > diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
-> > index 188b2526bee45..f315533b299e9 100644
-> > --- a/drivers/dax/fsdev.c
-> > +++ b/drivers/dax/fsdev.c
-> > @@ -135,11 +135,26 @@ static void fsdev_clear_ops(void *data)
-> >   * The core mm code in free_zone_device_folio() handles the wake_up_var()
-> >   * directly for this memory type.
-> >   */
-> > +static u64 fsdev_pfn_to_offset(struct dev_dax *dev_dax, unsigned long pfn)
-> > +{
-> > +	phys_addr_t phys = PFN_PHYS(pfn);
-> > +	u64 offset = 0;
+> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> > index 25cf99dd9360b..96f778dcde50b 100644
+> > --- a/drivers/dax/super.c
+> > +++ b/drivers/dax/super.c
+> > @@ -116,11 +116,47 @@ EXPORT_SYMBOL_GPL(fs_dax_get_by_bdev);
+> >  
+> >  #if IS_ENABLED(CONFIG_FS_DAX)
+> >  
+> > +/**
+> > + * fs_put_dax() - release holder ownership of a dax_device
+> > + * @dax_dev: dax device to release (may be NULL)
+> > + * @holder: the holder pointer previously passed to fs_dax_get() or
+> > + *          fs_dax_get_by_bdev(); must match exactly, as it is used
+> > + *          in a cmpxchg to atomically release ownership
+> > + *
+> > + * Must only be called by the current holder. Clears holder_ops before
+> > + * holder_data to avoid a race where a concurrent fs_dax_get() could have
+> > + * its newly installed holder_ops overwritten.
+> > + */
+> >  void fs_put_dax(struct dax_device *dax_dev, void *holder)
+> >  {
+> > -	if (dax_dev && holder &&
+> > -	    cmpxchg(&dax_dev->holder_data, holder, NULL) == holder)
+> > -		dax_dev->holder_ops = NULL;
+> > +	if (dax_dev && holder) {
+> > +		void *prev;
 > > +
-> > +	for (int i = 0; i < dev_dax->nr_range; i++) {
-> > +		struct range *range = &dev_dax->ranges[i].range;
-> > +
+> > +		/*
+> > +		 * Clear holder_ops before releasing holder_data. A concurrent
+> > +		 * dax_holder_notify_failure() that sees NULL ops returns
+> > +		 * -EOPNOTSUPP cleanly. A concurrent fs_dax_get() that acquires
+> > +		 * holder_data after the cmpxchg below is guaranteed to observe
+> > +		 * holder_ops=NULL first (cmpxchg provides release ordering), so
+> > +		 * its subsequent store of new ops will not be overwritten.
+> > +		 */
 > 
-> IMHO, this walks dev_dax->ranges[] locklessly from the memory_failure callback.
-> mapping_store() can krealloc() that array via alloc_dev_dax_range() without
-> checking dev->driver, so a sysfs mapping write concurrent with a HW poison event
-> can move/free it under this walk.
+> This isn't guaranteed today. dax-holder_notify_failure() reads
+> dax_dev->holder_ops twice without READ_ONCE(). With your WRITE_ONCE()
+> racing in between, the second read "dax_dev->holder_ops->notify_failure()" can
+> return NULL and result in NULL deref, so the "see NULL cleanly" property the comment relies
+> on doesn't hold.
 > 
-> We have pgmap->ranges[], the imuutable copy populated at probe and never mutated
-> afterwards, right here in the callback, and its accumulated range_len() is exactly
-> the device-linear offset.
-> Maybe walking that instread closes the race.
+> Or reading it once into a local would make it tru
+> """
+> const struct dax_holder_operations *ops = READ_ONCE(dax_dev->holder_ops);
 > 
-> What do you think?
+> if (!ops)
+> 	return -EOPNOTSUPP;
+> rc = ops->notify_failure(dax_dev, off, len, mf_flags);
+> """
+> 
+> What do you think ?
 
-Good idea. Revising to use the pgmap->ranges instead. Thanks Richard!
+Another good catch. Adding a fix to dax_holder_notify_failure(), to get
+the ops via READ_ONCE().
 
-Regards,
+Thanks,
 John
 
 <snip>
