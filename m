@@ -1,76 +1,80 @@
-Return-Path: <nvdimm+bounces-14382-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ztKdKCP/KWpogwMAu9opvQ
-	(envelope-from <nvdimm+bounces-14382-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 02:19:47 +0200
+	id 4eoXGDBaKmrDnwMAu9opvQ
+	(envelope-from <nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:16 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A56366D7E0
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 02:19:47 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5962866F235
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=UzihZEb9;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14382-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14382-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=none) header.from=intel.com;
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=hygon.cn (policy=none);
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9718130AB792
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 00:19:33 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id ED1693008D27
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 06:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E7D175A72;
-	Thu, 11 Jun 2026 00:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97B3366074;
+	Thu, 11 Jun 2026 06:47:44 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41101A3166
-	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 00:19:31 +0000 (UTC)
+Received: from mailgw1.hygon.cn (unknown [101.204.27.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A46E361675
+	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 06:47:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781137173; cv=none; b=XhtQE8eUhsizLtX8qoNHq4kGikRp1Rffu14+gxjCTVRaNkwXTktd+MeORnWhGtqZnEPGAtgYH7VsmYw84YeMGBUYJETBdtLfQD38eJNvsdqMmGXHuIIBqQrx4vVKUItDG7bEwYTSuBD6MSNhnFKLmAEiR0OS+KDtbQ/C9/gZQRI=
+	t=1781160464; cv=none; b=GVMXnpYLNyQfGruKL4chLfstfPuDl84AihcNiQ5JfG/M8ne12syynL9KXXzjs7gi96t03QADrOHhaIFSAYYUnYorghEsqx85SAnZH+aSOc0zX4VCyRaYHwWZwzO+c+veqWf20SdvSNvEe0/1ZbKqQA5BfBmNYWQm/omiXwBXel4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781137173; c=relaxed/simple;
-	bh=DH6dugzs3ehSD4MRH2PCC1byzEHK65hv0gCFpARWDnk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DKeDChQ1R9iQIlpd0KdPA42FCW0p/zjycvlmrd3N9hdKdGA0Hd5SBL0rrenKR4XoZS9hHQrj51Bi8sYKyaLpwzgBFd6Y2sRin347i2yuadIXMxd/U9nL+BEs2i+dLf5Gqo24yhbRC9ZqQgSnQ2+ip27y4SFh4deBm+oU9ClpYrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzihZEb9; arc=none smtp.client-ip=192.198.163.15
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781137172; x=1812673172;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DH6dugzs3ehSD4MRH2PCC1byzEHK65hv0gCFpARWDnk=;
-  b=UzihZEb9ID+HZbHyvgDpuVQFFiX3ipxFiGV00fxVXIvulmmmJnFNgtQ1
-   rCVFRCfctMGlSDsq88UIORYp5t8A4qgUIORnPgBazX8dH7sK4ascVAXmS
-   5OBTe7j3bSEGA1db4XUG6J9RX1MUvgV+oZfmqpEXyyZMr+xfAbwQke7SY
-   4TLs46MI/xKbozcBjDMGmDscmjFUxolNR8h1dr0NEmPbBNXgKItr2nhxp
-   7nMpJ5wclIt7isBds0pNDNVB6XUd267qpCaWFq0R4o8r5wtAkXKx8gveJ
-   Xeuz17tSJYDfRI3LHWnAK8N21NtCFUYRW4wtR4XQofcN3mK7GCJHkTuCT
-   Q==;
-X-CSE-ConnectionGUID: 54MdvoBxTPWzeBEosp/B5w==
-X-CSE-MsgGUID: h7pzDRdYQXeP70amFwPJ0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="82054172"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="82054172"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 17:19:30 -0700
-X-CSE-ConnectionGUID: faHe5xMCQnCgxptVhJiLJg==
-X-CSE-MsgGUID: ae/fApmeTzKA0P7rVwmQVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="242181829"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.124.220.46])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 17:19:30 -0700
-From: Alison Schofield <alison.schofield@intel.com>
-To: nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org
-Cc: Alison Schofield <alison.schofield@intel.com>
-Subject: [ndctl PATCH 3/3] test/cxl-create-region.sh: add passthrough >16K granularity test case
-Date: Wed, 10 Jun 2026 17:19:21 -0700
-Message-ID: <b7a3c495100ca0ca85c980770a254fcf9b307ae6.1781136221.git.alison.schofield@intel.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1781136221.git.alison.schofield@intel.com>
-References: <cover.1781136221.git.alison.schofield@intel.com>
+	s=arc-20240116; t=1781160464; c=relaxed/simple;
+	bh=qQjh1hPpEnkXFa73SRjJ9kqCtdzJ5Kh2Hsa46GK1zZk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UlV70iuIBEtnVX5LQnIxVGFG/FqpvxmNLDBly1inhLf4+Ibdllc/JQ2LlBWvKlbMTR9CxwAAjp0GlbXTaRXbZ58m10nAEKw28DtwJ6GIalf00yDtfWTJXy6TB0Qn47T6Hh4FuP7l1QCTICd0y8j2BetKdY3E5T+XOCpN6AsKADE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn; spf=pass smtp.mailfrom=hygon.cn; arc=none smtp.client-ip=101.204.27.37
+Received: from maildlp2.hygon.cn (unknown [127.0.0.1])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbk745pz1dd8Y;
+	Thu, 11 Jun 2026 14:21:38 +0800 (CST)
+Received: from maildlp2.hygon.cn (unknown [172.23.18.61])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbh5hZnz1dd8Y;
+	Thu, 11 Jun 2026 14:21:36 +0800 (CST)
+Received: from cncheex04.Hygon.cn (unknown [172.23.18.114])
+	by maildlp2.hygon.cn (Postfix) with ESMTPS id 7FE3430004DB;
+	Thu, 11 Jun 2026 14:20:11 +0800 (CST)
+Received: from hsj-2U-Workstation.hygon.cn (172.19.20.61) by
+ cncheex04.Hygon.cn (172.23.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Thu, 11 Jun 2026 14:21:31 +0800
+From: Huang Shijie <huangsj@hygon.cn>
+To: <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
+	<brauner@kernel.org>, <jack@suse.cz>, <muchun.song@linux.dev>,
+	<osalvador@suse.de>, <david@kernel.org>
+CC: <surenb@google.com>, <mjguzik@gmail.com>, <liam@infradead.org>,
+	<ljs@kernel.org>, <vbabka@kernel.org>, <shakeel.butt@linux.dev>,
+	<rppt@kernel.org>, <mhocko@suse.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <linux@armlinux.org.uk>, <dinguyen@kernel.org>,
+	<schuster.simon@siemens-energy.com>, <James.Bottomley@HansenPartnership.com>,
+	<deller@gmx.de>, <djbw@kernel.org>, <willy@infradead.org>,
+	<peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <mark.rutland@arm.com>,
+	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+	<irogers@google.com>, <adrian.hunter@intel.com>, <james.clark@linaro.org>,
+	<mhiramat@kernel.org>, <oleg@redhat.com>, <ziy@nvidia.com>,
+	<baolin.wang@linux.alibaba.com>, <npache@redhat.com>, <ryan.roberts@arm.com>,
+	<dev.jain@arm.com>, <baohua@kernel.org>, <lance.yang@linux.dev>,
+	<linmiaohe@huawei.com>, <nao.horiguchi@gmail.com>, <jannh@google.com>,
+	<pfalcato@suse.de>, <riel@surriel.com>, <harry@kernel.org>,
+	<will@kernel.org>, <brian.ruley@gehealthcare.com>,
+	<rmk+kernel@armlinux.org.uk>, <dave.anglin@bell.net>, <linux-mm@kvack.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-parisc@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+	<linux-perf-users@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<zhongyuan@hygon.cn>, <fangbaoshun@hygon.cn>, <yingzhiwei@hygon.cn>, Huang
+ Shijie <huangsj@hygon.cn>
+Subject: [PATCH v2 0/4] mm: split the file's i_mmap tree for NUMA
+Date: Thu, 11 Jun 2026 14:18:56 +0800
+Message-ID: <20260611061915.2354307-1-huangsj@hygon.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -78,128 +82,102 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: cncheex05.Hygon.cn (172.23.18.115) To cncheex04.Hygon.cn
+ (172.23.18.114)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [1.64 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[hygon.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14382-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[google.com,gmail.com,infradead.org,kernel.org,linux.dev,suse.com,lwn.net,linuxfoundation.org,armlinux.org.uk,siemens-energy.com,HansenPartnership.com,gmx.de,redhat.com,arm.com,linux.intel.com,intel.com,linaro.org,nvidia.com,linux.alibaba.com,huawei.com,suse.de,surriel.com,gehealthcare.com,bell.net,kvack.org,vger.kernel.org,lists.infradead.org,lists.linux.dev,hygon.cn];
+	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:mjguzik@gmail.com,m:liam@infradead.org,m:ljs@kernel.org,m:vbabka@kernel.org,m:shakeel.butt@linux.dev,m:rppt@kernel.org,m:mhocko@suse.com,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:djbw@kernel.org,m:willy@infradead.org,m:peterz@infradead.org,m:mingo@redhat.com,m:acme@kernel.org,m:namhyung@kernel.org,m:mark.rutland@arm.com,m:alexander.shishkin@linux.intel.com,m:jolsa@kernel.org,m:irogers@google.com,m:adrian.hunter@intel.com,m:james.clark@linaro.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:ziy@nvidia.com,m:baolin.wang@linux.alibaba.com,m:npache@redhat.com,m:ryan.roberts@arm.com,m:dev.jain@arm.com,m:baohua@kernel.org,m:lance.yang@linux.dev,m:linmiaohe
+ @huawei.com,m:nao.horiguchi@gmail.com,m:jannh@google.com,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:will@kernel.org,m:brian.ruley@gehealthcare.com,m:rmk+kernel@armlinux.org.uk,m:dave.anglin@bell.net,m:linux-mm@kvack.org,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:zhongyuan@hygon.cn,m:fangbaoshun@hygon.cn,m:yingzhiwei@hygon.cn,m:huangsj@hygon.cn,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:alison.schofield@intel.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[alison.schofield@intel.com,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-14388-lists,linux-nvdimm=lfdr.de];
+	FORGED_SENDER(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alison.schofield@intel.com,nvdimm@lists.linux.dev];
+	FROM_NEQ_ENVFROM(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:from_smtp,hygon.cn:mid,hygon.cn:from_mime,lkml.org:url];
 	ALIAS_RESOLVED(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,intel.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCPT_COUNT_GT_50(0.00)[66];
+	TAGGED_RCPT(0.00)[linux-nvdimm,kernel];
+	R_DKIM_NA(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3A56366D7E0
+X-Rspamd-Queue-Id: 5962866F235
 
-The CXL driver region configuration use to reject valid topologies
-containing passthrough decoders beneath a wide parent interleave.
-A recent kernel patch fixed that issue and extended cxl-test with
-a topology that exercises it.
+  In NUMA, there are maybe many NUMA nodes and many CPUs.
+For example, a Hygon's server has 12 NUMA nodes, and 384 CPUs.
+In the UnixBench tests, there is a test "execl" which tests
+the execve system call.
 
-Add a create-and-destroy region case spanning the two host bridges
-beneath the new 2-way 16K root decoder to verify that such
-configurations are accepted.
+  When we test our server with "./Run -c 384 execl",
+the test result is not good enough. The i_mmap locks contended heavily on
+"libc.so" and "ld.so". For example, the i_mmap tree for "libc.so" can have 
+over 6000 VMAs, all the VMAs can be in different NUMA mode.
+The insert/remove operations do not run quickly enough.
 
-The test case is quietly skipped if the new cxl/test topology is
-not found, which also means the kernel fix is not yet present.
+patch 1 & patch 2 are try to hide the direct access of i_mmap.
+patch 3 splits the i_mmap into sibling trees, each tree has separate lock,
+and we can get better performance with this patch set in our NUMA server:
+    we can get over 400% performance improvement.
 
-Assisted-by: Claude:Opus-4-8
-Signed-off-by: Alison Schofield <alison.schofield@intel.com>
----
- test/cxl-create-region.sh | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+I did not test the non-NUMA case, since I do not have such server.    
+    
+v1 --> v2:
+	Not only split the immap tree, but also split the lock.
+	v1 : https://lkml.org/lkml/2026/4/13/199
 
-diff --git a/test/cxl-create-region.sh b/test/cxl-create-region.sh
-index 5941e18f338d..c24e477c4f5c 100644
---- a/test/cxl-create-region.sh
-+++ b/test/cxl-create-region.sh
-@@ -170,10 +170,12 @@ setup_x1()
- 
- setup_x2()
- {
--	# Find an x2 decoder
-+	# Find an x2 decoder. Pin to the 256 granularity root to avoid
-+	# the 16K root used by the passthrough granularity test.
- 	decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
- 		select(.pmem_capable == true) |
- 		select(.nr_targets == 2) |
-+		select(.interleave_granularity == 256) |
- 		.decoder")
- 
- 	# Find a memdev for each host-bridge interleave position
-@@ -184,10 +186,12 @@ setup_x2()
- 
- setup_x4()
- {
--	# find an x2 decoder
-+	# find an x2 decoder. Pin to the 256 granularity root to avoid
-+	# the 16K root used by the passthrough granularity test.
- 	decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
- 		select(.pmem_capable == true) |
- 		select(.nr_targets == 2) |
-+		select(.interleave_granularity == 256) |
- 		.decoder")
- 
- 	# Find a memdev for each host-bridge interleave position
-@@ -198,6 +202,23 @@ setup_x4()
- 	memdevs="$mem0 $mem1 $mem2 $mem3"
- }
- 
-+setup_passthru_gran()
-+{
-+	# Find the 2-way 16K root. A region spanning both host bridges
-+	# places one endpoint under each. The intermediate switch decoders
-+	# are passthrough decoders with 32K granularity.
-+	decoder=$($CXL list -b cxl_test -D -d root | jq -r ".[] |
-+		select(.pmem_capable == true) |
-+		select(.nr_targets == 2) |
-+		select(.interleave_granularity == 16384) |
-+		.decoder")
-+
-+	# Find a memdev for each host-bridge interleave position
-+	mem0=$(find_memdev "$decoder" 0 0)
-+	mem1=$(find_memdev "$decoder" 1 0)
-+	memdevs="$mem0 $mem1"
-+}
-+
- setup_x3()
- {
- 	# find an x3 decoder
-@@ -252,6 +273,11 @@ setup_x3
- if [[ $decoder ]]; then
- 	create_and_destroy_region
- fi
-+# 16K root may not be available in cxl/test topo yet
-+setup_passthru_gran
-+if [[ $decoder ]]; then
-+	create_and_destroy_region
-+fi
- 
- check_dmesg "$LINENO"
- 
+Huang Shijie (4):
+  mm: use mapping_mapped to simplify the code
+  mm: use get_i_mmap_root to access the file's i_mmap
+  mm/fs: split the file's i_mmap tree
+  docs/mm: update document for split i_mmap tree
+
+ Documentation/mm/process_addrs.rst |  63 +++++++---
+ arch/arm/mm/fault-armv.c           |   3 +-
+ arch/arm/mm/flush.c                |   3 +-
+ arch/nios2/mm/cacheflush.c         |   3 +-
+ arch/parisc/kernel/cache.c         |   4 +-
+ fs/Kconfig                         |   8 ++
+ fs/dax.c                           |   3 +-
+ fs/hugetlbfs/inode.c               |  30 +++--
+ fs/inode.c                         |  75 +++++++++++-
+ include/linux/fs.h                 | 179 ++++++++++++++++++++++++++++-
+ include/linux/mm.h                 |  81 +++++++++++++
+ include/linux/mm_types.h           |   3 +
+ kernel/events/uprobes.c            |   3 +-
+ mm/hugetlb.c                       |   7 +-
+ mm/internal.h                      |   3 +-
+ mm/khugepaged.c                    |   6 +-
+ mm/memory-failure.c                |   8 +-
+ mm/memory.c                        |   8 +-
+ mm/mmap.c                          |  11 +-
+ mm/nommu.c                         |  28 +++--
+ mm/pagewalk.c                      |   4 +-
+ mm/rmap.c                          |   2 +-
+ mm/vma.c                           |  74 +++++++++---
+ mm/vma_init.c                      |   3 +
+ 24 files changed, 534 insertions(+), 78 deletions(-)
+
 -- 
-2.37.3
+2.53.0
+
 
 
