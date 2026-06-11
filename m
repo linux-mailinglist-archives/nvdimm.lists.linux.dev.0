@@ -1,49 +1,50 @@
-Return-Path: <nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14387-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4eoXGDBaKmrDnwMAu9opvQ
-	(envelope-from <nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:16 +0200
+	id 3NQyLyhaKmq7nwMAu9opvQ
+	(envelope-from <nvdimm+bounces-14387-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:08 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5962866F235
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:15 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55DEF66F22B
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 08:48:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=hygon.cn (policy=none);
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14388-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14387-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14387-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ED1693008D27
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 06:47:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C6F603036FB7
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 11 Jun 2026 06:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97B3366074;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7359E364EAA;
 	Thu, 11 Jun 2026 06:47:44 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from mailgw1.hygon.cn (unknown [101.204.27.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A46E361675
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A330358360
 	for <nvdimm@lists.linux.dev>; Thu, 11 Jun 2026 06:47:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781160464; cv=none; b=GVMXnpYLNyQfGruKL4chLfstfPuDl84AihcNiQ5JfG/M8ne12syynL9KXXzjs7gi96t03QADrOHhaIFSAYYUnYorghEsqx85SAnZH+aSOc0zX4VCyRaYHwWZwzO+c+veqWf20SdvSNvEe0/1ZbKqQA5BfBmNYWQm/omiXwBXel4=
+	t=1781160464; cv=none; b=qdN+vgguOHaXHqFo2YJo7jtCSpx0s2tfSGjnDEseefht5KA3Kd39pWaF36dBGbZLCM4ldW3Kz5axf2Od1j1wW91Z6Azxb1NaHIRwN21LjSxePJnOKfAt9p2ajF5CorwvRc9XtGQbqIBV4w5UnWluIV+9Qr+0PCpOmmIA92bLGnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1781160464; c=relaxed/simple;
-	bh=qQjh1hPpEnkXFa73SRjJ9kqCtdzJ5Kh2Hsa46GK1zZk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UlV70iuIBEtnVX5LQnIxVGFG/FqpvxmNLDBly1inhLf4+Ibdllc/JQ2LlBWvKlbMTR9CxwAAjp0GlbXTaRXbZ58m10nAEKw28DtwJ6GIalf00yDtfWTJXy6TB0Qn47T6Hh4FuP7l1QCTICd0y8j2BetKdY3E5T+XOCpN6AsKADE=
+	bh=NwnuO8Z0UsG+3NUpzyI9s9wy3riFEcPQ4uqsjijXHjQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B2L/9bfcvSNoGJ+yeZPiGLW05n4jK3tLaY3xgyIkas5z/WJbCedtB8Wryq+Co8zY2Nk3hGVpn19aKkJkZUM0yZ8HWZdrzPP/veK3AaIouCTP1IDbQpMELfSH2lA3fuI12xh4420C5ZsloKMq++xuDaUljTlcayoHMZTb2T5X8GI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hygon.cn; spf=pass smtp.mailfrom=hygon.cn; arc=none smtp.client-ip=101.204.27.37
-Received: from maildlp2.hygon.cn (unknown [127.0.0.1])
-	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbk745pz1dd8Y;
-	Thu, 11 Jun 2026 14:21:38 +0800 (CST)
-Received: from maildlp2.hygon.cn (unknown [172.23.18.61])
-	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbh5hZnz1dd8Y;
-	Thu, 11 Jun 2026 14:21:36 +0800 (CST)
+Received: from maildlp1.hygon.cn (unknown [127.0.0.1])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbn74Ckz12NXN;
+	Thu, 11 Jun 2026 14:21:41 +0800 (CST)
+Received: from maildlp1.hygon.cn (unknown [172.23.18.60])
+	by mailgw1.hygon.cn (Postfix) with ESMTP id 4gbXbn6tJgz12NXN;
+	Thu, 11 Jun 2026 14:21:41 +0800 (CST)
 Received: from cncheex04.Hygon.cn (unknown [172.23.18.114])
-	by maildlp2.hygon.cn (Postfix) with ESMTPS id 7FE3430004DB;
-	Thu, 11 Jun 2026 14:20:11 +0800 (CST)
+	by maildlp1.hygon.cn (Postfix) with ESMTPS id D585816CF;
+	Thu, 11 Jun 2026 14:21:23 +0800 (CST)
 Received: from hsj-2U-Workstation.hygon.cn (172.19.20.61) by
  cncheex04.Hygon.cn (172.23.18.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Thu, 11 Jun 2026 14:21:31 +0800
+ 15.2.1544.36; Thu, 11 Jun 2026 14:21:36 +0800
 From: Huang Shijie <huangsj@hygon.cn>
 To: <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
 	<brauner@kernel.org>, <jack@suse.cz>, <muchun.song@linux.dev>,
@@ -71,10 +72,12 @@ CC: <surenb@google.com>, <mjguzik@gmail.com>, <liam@infradead.org>,
 	<linux-perf-users@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
 	<zhongyuan@hygon.cn>, <fangbaoshun@hygon.cn>, <yingzhiwei@hygon.cn>, Huang
  Shijie <huangsj@hygon.cn>
-Subject: [PATCH v2 0/4] mm: split the file's i_mmap tree for NUMA
-Date: Thu, 11 Jun 2026 14:18:56 +0800
-Message-ID: <20260611061915.2354307-1-huangsj@hygon.cn>
+Subject: [PATCH v2 1/4] mm: use mapping_mapped to simplify the code
+Date: Thu, 11 Jun 2026 14:18:57 +0800
+Message-ID: <20260611061915.2354307-2-huangsj@hygon.cn>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260611061915.2354307-1-huangsj@hygon.cn>
+References: <20260611061915.2354307-1-huangsj@hygon.cn>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -91,7 +94,7 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	DMARC_POLICY_SOFTFAIL(0.10)[hygon.cn : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
@@ -102,80 +105,79 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:mjguzik@gmail.com,m:liam@infradead.org,m:ljs@kernel.org,m:vbabka@kernel.org,m:shakeel.butt@linux.dev,m:rppt@kernel.org,m:mhocko@suse.com,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:djbw@kernel.org,m:willy@infradead.org,m:peterz@infradead.org,m:mingo@redhat.com,m:acme@kernel.org,m:namhyung@kernel.org,m:mark.rutland@arm.com,m:alexander.shishkin@linux.intel.com,m:jolsa@kernel.org,m:irogers@google.com,m:adrian.hunter@intel.com,m:james.clark@linaro.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:ziy@nvidia.com,m:baolin.wang@linux.alibaba.com,m:npache@redhat.com,m:ryan.roberts@arm.com,m:dev.jain@arm.com,m:baohua@kernel.org,m:lance.yang@linux.dev,m:linmiaohe
  @huawei.com,m:nao.horiguchi@gmail.com,m:jannh@google.com,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:will@kernel.org,m:brian.ruley@gehealthcare.com,m:rmk+kernel@armlinux.org.uk,m:dave.anglin@bell.net,m:linux-mm@kvack.org,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:zhongyuan@hygon.cn,m:fangbaoshun@hygon.cn,m:yingzhiwei@hygon.cn,m:huangsj@hygon.cn,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14388-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14387-lists,linux-nvdimm=lfdr.de];
 	FORGED_SENDER(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[huangsj@hygon.cn,nvdimm@lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:from_smtp,hygon.cn:mid,hygon.cn:from_mime,lkml.org:url];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,hygon.cn:email,hygon.cn:mid,hygon.cn:from_mime];
 	ALIAS_RESOLVED(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[66];
 	TAGGED_RCPT(0.00)[linux-nvdimm,kernel];
 	R_DKIM_NA(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5962866F235
+X-Rspamd-Queue-Id: 55DEF66F22B
 
-  In NUMA, there are maybe many NUMA nodes and many CPUs.
-For example, a Hygon's server has 12 NUMA nodes, and 384 CPUs.
-In the UnixBench tests, there is a test "execl" which tests
-the execve system call.
+Use mapping_mapped() to simplify the code, make
+the code tidy and clean.
 
-  When we test our server with "./Run -c 384 execl",
-the test result is not good enough. The i_mmap locks contended heavily on
-"libc.so" and "ld.so". For example, the i_mmap tree for "libc.so" can have 
-over 6000 VMAs, all the VMAs can be in different NUMA mode.
-The insert/remove operations do not run quickly enough.
+Signed-off-by: Huang Shijie <huangsj@hygon.cn>
+---
+ fs/hugetlbfs/inode.c | 4 ++--
+ mm/memory.c          | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-patch 1 & patch 2 are try to hide the direct access of i_mmap.
-patch 3 splits the i_mmap into sibling trees, each tree has separate lock,
-and we can get better performance with this patch set in our NUMA server:
-    we can get over 400% performance improvement.
-
-I did not test the non-NUMA case, since I do not have such server.    
-    
-v1 --> v2:
-	Not only split the immap tree, but also split the lock.
-	v1 : https://lkml.org/lkml/2026/4/13/199
-
-Huang Shijie (4):
-  mm: use mapping_mapped to simplify the code
-  mm: use get_i_mmap_root to access the file's i_mmap
-  mm/fs: split the file's i_mmap tree
-  docs/mm: update document for split i_mmap tree
-
- Documentation/mm/process_addrs.rst |  63 +++++++---
- arch/arm/mm/fault-armv.c           |   3 +-
- arch/arm/mm/flush.c                |   3 +-
- arch/nios2/mm/cacheflush.c         |   3 +-
- arch/parisc/kernel/cache.c         |   4 +-
- fs/Kconfig                         |   8 ++
- fs/dax.c                           |   3 +-
- fs/hugetlbfs/inode.c               |  30 +++--
- fs/inode.c                         |  75 +++++++++++-
- include/linux/fs.h                 | 179 ++++++++++++++++++++++++++++-
- include/linux/mm.h                 |  81 +++++++++++++
- include/linux/mm_types.h           |   3 +
- kernel/events/uprobes.c            |   3 +-
- mm/hugetlb.c                       |   7 +-
- mm/internal.h                      |   3 +-
- mm/khugepaged.c                    |   6 +-
- mm/memory-failure.c                |   8 +-
- mm/memory.c                        |   8 +-
- mm/mmap.c                          |  11 +-
- mm/nommu.c                         |  28 +++--
- mm/pagewalk.c                      |   4 +-
- mm/rmap.c                          |   2 +-
- mm/vma.c                           |  74 +++++++++---
- mm/vma_init.c                      |   3 +
- 24 files changed, 534 insertions(+), 78 deletions(-)
-
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 78d61bf2bd9b..216e1a0dd0b2 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -614,7 +614,7 @@ static void hugetlb_vmtruncate(struct inode *inode, loff_t offset)
+ 
+ 	i_size_write(inode, offset);
+ 	i_mmap_lock_write(mapping);
+-	if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
++	if (mapping_mapped(mapping))
+ 		hugetlb_vmdelete_list(&mapping->i_mmap, pgoff, 0,
+ 				      ZAP_FLAG_DROP_MARKER);
+ 	i_mmap_unlock_write(mapping);
+@@ -675,7 +675,7 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 
+ 	/* Unmap users of full pages in the hole. */
+ 	if (hole_end > hole_start) {
+-		if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
++		if (mapping_mapped(mapping))
+ 			hugetlb_vmdelete_list(&mapping->i_mmap,
+ 					      hole_start >> PAGE_SHIFT,
+ 					      hole_end >> PAGE_SHIFT, 0);
+diff --git a/mm/memory.c b/mm/memory.c
+index 86a973119bd4..5335077765e2 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4386,7 +4386,7 @@ void unmap_mapping_folio(struct folio *folio)
+ 	details.zap_flags = ZAP_FLAG_DROP_MARKER;
+ 
+ 	i_mmap_lock_read(mapping);
+-	if (unlikely(!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root)))
++	if (unlikely(mapping_mapped(mapping)))
+ 		unmap_mapping_range_tree(&mapping->i_mmap, first_index,
+ 					 last_index, &details);
+ 	i_mmap_unlock_read(mapping);
+@@ -4416,7 +4416,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
+ 		last_index = ULONG_MAX;
+ 
+ 	i_mmap_lock_read(mapping);
+-	if (unlikely(!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root)))
++	if (unlikely(mapping_mapped(mapping)))
+ 		unmap_mapping_range_tree(&mapping->i_mmap, first_index,
+ 					 last_index, &details);
+ 	i_mmap_unlock_read(mapping);
 -- 
 2.53.0
 
