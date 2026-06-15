@@ -1,55 +1,55 @@
-Return-Path: <nvdimm+bounces-14428-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14429-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xBsNF/IkMGpcOwUAu9opvQ
-	(envelope-from <nvdimm+bounces-14428-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 18:14:42 +0200
+	id +aeSHUokMGocOwUAu9opvQ
+	(envelope-from <nvdimm+bounces-14429-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 18:11:54 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C016D688344
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 18:14:41 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9C98688298
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 18:11:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=jagalactic.com header.s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq header.b=g3vH1bkb;
-	dkim=pass header.d=amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=YOoFEp5k;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14428-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14428-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=jagalactic.com header.s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq header.b="Wt/G9BK3";
+	dkim=pass header.d=amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=QSm9ac8M;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14429-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14429-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=jagalactic.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8FED3314751A
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 16:07:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 593BB30BD7D1
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 15 Jun 2026 16:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B059407CDD;
-	Mon, 15 Jun 2026 16:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2205E40803A;
+	Mon, 15 Jun 2026 16:07:13 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from a8-156.smtp-out.amazonses.com (a8-156.smtp-out.amazonses.com [54.240.8.156])
+Received: from a11-32.smtp-out.amazonses.com (a11-32.smtp-out.amazonses.com [54.240.11.32])
 	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98A2408603
-	for <nvdimm@lists.linux.dev>; Mon, 15 Jun 2026 16:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A5A408015
+	for <nvdimm@lists.linux.dev>; Mon, 15 Jun 2026 16:07:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781539624; cv=none; b=WpD0+CXdKOXu9p4TRtIb2P7zdWNpjgUnbqIgIi1fn5uriwH9PpLo9rNSMciE72zeRYqgr567GfdXtDh64kA1T+FdHs1K/KvaDjAlcVLXkHA1vJwh67MAVQZQz33Qkkh/6u0N5fL4fedE72wLyM+QNqUwE/1LTI8tQPQdufaHh9A=
+	t=1781539632; cv=none; b=XOjSs9MgWNY6/+3CL3RVMRYu+I2dDO7Xc5iCjCEkTWB8wbduo/KZriyBnP4TNPhiMeJO7NtJJb+me3aYKYFEF734nyxafH9d7F7/xQMVOCrNsCPLh5tHJSJMSGjuSwVl+gaHJ7Vodscxr5kcRcRtIXWqoxVB0HnsN9QmHaRzvCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781539624; c=relaxed/simple;
-	bh=aJfKGGbKIwZVaE6xn3WTQW2oBGJ0JEBmYwkBOPnWUsU=;
+	s=arc-20240116; t=1781539632; c=relaxed/simple;
+	bh=Fi8SdNbhwZEiFKG+bWC467VWOw9jTHPS2TcJOoQVHeg=;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:In-Reply-To:
-	 References:Message-ID; b=jlYEijtm6crWvyNq+FfK/iRFtM2+2DA4QUm797LHBaqYzTKoTy6sbhkvPSGLz1Wtbgm9M4ltoI/yGMGFGmSHuubOJyIrbxQ9dn6UXoRCZ19YnLGr7Mj+wJIEv9Y/O3AjbSerVi85qrPSK7X7SdJ7sREVHbQkCFYUrj6b559GWfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=g3vH1bkb; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=YOoFEp5k; arc=none smtp.client-ip=54.240.8.156
+	 References:Message-ID; b=WmyBrd44VO3X42FAGn5BYH2EQtT9pcFl8n1vaBKZuI+T099ofw+T1KYmXENnZMH1NvYmg6C0F1699a8fQv3eyLOWy6G2ulRbrmMRSC6Xjt9KeAJx+OOgMK5vXmgxvKT2PvOzBmItO6EK4XeoYWcjwz+RoO/AwIKVNAe+x33sOb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jagalactic.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (1024-bit key) header.d=jagalactic.com header.i=@jagalactic.com header.b=Wt/G9BK3; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=QSm9ac8M; arc=none smtp.client-ip=54.240.11.32
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1781539621;
+	s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq; d=jagalactic.com; t=1781539630;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id;
-	bh=aJfKGGbKIwZVaE6xn3WTQW2oBGJ0JEBmYwkBOPnWUsU=;
-	b=g3vH1bkbI6fFt3dM5rFOyNpYm5pr1xvjpFiY+EZn8BP6SahsxfPAA8TS0YHzeJyh
-	tIGbD9e3rm4j+aOmb2UZcXmLHeINzqcxzG3rZasfy5W7t550dmkE6erlIBzPjp/Z9dL
-	DLyaVr9lvV6E2EnKuScksdw5WtRUttTp/NXIMTRE=
+	bh=Fi8SdNbhwZEiFKG+bWC467VWOw9jTHPS2TcJOoQVHeg=;
+	b=Wt/G9BK3eZnLNois3yUPp0hf2M9RHjabHZ49TJVXtO8mDtMuaFEz5Z9x1JHErB0L
+	nHk+oxPCld36gj9IMhxoDrVkWiTgZkyq3Jgup0tWyqcsb8xY5hb5OFTpsoiEUiSXOHO
+	Kn/gCkL1NQkkQss1FnxN22lLLCTu767ziXSK1Exg=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1781539621;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1781539630;
 	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References:Message-Id:Feedback-ID;
-	bh=aJfKGGbKIwZVaE6xn3WTQW2oBGJ0JEBmYwkBOPnWUsU=;
-	b=YOoFEp5kWuvz+pRRxeuzKz30OD+zyvfWoRzX47RpUACm60rOebzJZePaaXtqRWEM
-	ef5UPdh4JrkgqQ8LNvEkLRjizfHJvC3boJtxbx/t1A5WY0TW7xjotKWlQWxIw08L/7/
-	Z8seygVHWJrE6sknfVtxVBckxLLNFNv1rgdvZo+I=
-Subject: [PATCH V6 05/10] dax/fsdev: clear pgmap ops and owner on unbind
+	bh=Fi8SdNbhwZEiFKG+bWC467VWOw9jTHPS2TcJOoQVHeg=;
+	b=QSm9ac8MGeFr5Ry8bJbOS2Cnz5+IpDuf/g/KyEsGmV2/pr4nKiHAdGQM8Dg+JI0+
+	nm5RjsOetMw8A/m+UFnzc/b/bppfCJrt+a5ehtAjPClpYz5Ivs6pwkXtFNCvftdayS2
+	JXmuIsSIpbw/3/2qxX5f3kVpOMpUeS15FFckEclQ=
+Subject: [PATCH V6 06/10] dax/fsdev: use __va(phys) for kaddr in direct_access
 From: =?UTF-8?Q?John_Groves?= <john@jagalactic.com>
 To: =?UTF-8?Q?John_Groves?= <John@Groves.net>, 
 	=?UTF-8?Q?Dan_Williams?= <djbw@kernel.org>
@@ -68,9 +68,8 @@ Cc: =?UTF-8?Q?John_Groves?= <jgroves@micron.com>,
 	=?UTF-8?Q?linux-cxl=40vger=2Ekernel=2Eorg?= <linux-cxl@vger.kernel.org>, 
 	=?UTF-8?Q?linux-kernel=40vger=2Ekernel=2Eorg?= <linux-kernel@vger.kernel.org>, 
 	=?UTF-8?Q?linux-fsdevel=40vger=2Ekernel=2Eorg?= <linux-fsdevel@vger.kernel.org>, 
-	=?UTF-8?Q?Richard_Cheng?= <icheng@nvidia.com>, 
 	=?UTF-8?Q?John_Groves?= <john@groves.net>
-Date: Mon, 15 Jun 2026 16:07:01 +0000
+Date: Mon, 15 Jun 2026 16:07:10 +0000
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -78,20 +77,21 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 In-Reply-To: 
  <0100019ecc080a68-8dc0c99f-ab17-4aa9-83d9-490e9c97ac2e-000000@email.amazonses.com>
 References: 
  <0100019ecc080a68-8dc0c99f-ab17-4aa9-83d9-490e9c97ac2e-000000@email.amazonses.com> 
- <20260615160656.17533-1-john@jagalactic.com>
+ <20260615160704.17550-1-john@jagalactic.com>
 X-Mailer: Amazon WorkMail
-Thread-Index: AQHc/ODO6LspbHjzStSzrfP9PzvfSwAADER+
-Thread-Topic: [PATCH V6 05/10] dax/fsdev: clear pgmap ops and owner on unbind
-X-Wm-Sent-Timestamp: 1781539620
+Thread-Index: AQHc/ODO6LspbHjzStSzrfP9PzvfSwAADZ2X
+Thread-Topic: [PATCH V6 06/10] dax/fsdev: use __va(phys) for kaddr in
+ direct_access
+X-Wm-Sent-Timestamp: 1781539629
 X-Original-Mailer: git-send-email 2.52.0
-Message-ID: <0100019ecc094b6e-fc163bde-0396-4a33-909f-fb88e740be27-000000@email.amazonses.com>
+Message-ID: <0100019ecc096de8-8bc254a7-d2cc-44b6-82b1-1394fda8bb41-000000@email.amazonses.com>
 Feedback-ID: ::1.us-east-1.LF00NED762KFuBsfzrtoqw+Brn/qlF9OYdxWukAhsl8=:AmazonSES
-X-SES-Outgoing: 2026.06.15-54.240.8.156
+X-SES-Outgoing: 2026.06.15-54.240.11.32
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [0.75 / 15.00];
 	TO_EXCESS_QP(1.20)[];
@@ -99,7 +99,7 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MV_CASE(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[jagalactic.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[jagalactic.com:s=o25mqk5iffcfzgc3wo2zjhkohcyjzsoq,amazonses.com:s=224i4yxa5dv7c2xz3womw6peuasteono];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -109,13 +109,13 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORGED_RECIPIENTS(0.00)[m:John@Groves.net,m:djbw@kernel.org,m:jgroves@micron.com,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:willy@infradead.org,m:jack@suse.cz,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:miklos@szeredi.hu,m:alison.schofield@intel.com,m:iweiny@kernel.org,m:jic23@kernel.org,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:icheng@nvidia.com,m:john@groves.net,s:lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FORGED_RECIPIENTS(0.00)[m:John@Groves.net,m:djbw@kernel.org,m:jgroves@micron.com,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:willy@infradead.org,m:jack@suse.cz,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:miklos@szeredi.hu,m:alison.schofield@intel.com,m:iweiny@kernel.org,m:jic23@kernel.org,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:john@groves.net,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER(0.00)[john@jagalactic.com,nvdimm@lists.linux.dev];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-14428-lists,linux-nvdimm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-14429-lists,linux-nvdimm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -127,78 +127,56 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FROM_EXCESS_QP(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,email.amazonses.com:mid,groves.net:email,jagalactic.com:dkim,jagalactic.com:from_mime,nvidia.com:email,amazonses.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[groves.net:email,lists.linux.dev:from_smtp,email.amazonses.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email,amazonses.com:dkim,jagalactic.com:dkim,jagalactic.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C016D688344
+X-Rspamd-Queue-Id: D9C98688298
 
-From: John Groves <John@Groves.net>
-
-fsdev_dax_probe() sets pgmap->ops = &fsdev_pagemap_ops and
-pgmap->owner = dev_dax, but nothing ever clears them. For a dynamic
-device the pgmap is devm-allocated and freed on unbind, so this is
-harmless. For a static device the pgmap is the shared, long-lived one
-owned by the dax bus (kill_dev_dax() only NULLs dev_dax->pgmap for the
-non-static case), and device.c's probe sets only pgmap->type, never
-clearing ops/owner.
-
-So after fsdev unbinds a static device the stale fsdev_pagemap_ops
-survives on the shared pgmap. If the device is then rebound to
-device_dax (MEMORY_DEVICE_GENERIC, which installs no ->memory_failure),
-or the fsdev_dax module is unloaded, a subsequent memory_failure on that
-pgmap dispatches through the stale -- and possibly freed -- handler.
-
-Register a devm action that clears pgmap->ops and pgmap->owner on unbind,
-symmetric with setting them at probe, so the pgmap carries no fsdev state
-once fsdev is detached.
-
-Suggested-by: Richard Cheng <icheng@nvidia.com>
-Fixes: d5406bd458b0a ("dax: add fsdev.c driver for fs-dax on character dax")
-Signed-off-by: John Groves <john@groves.net>
----
- drivers/dax/fsdev.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/drivers/dax/fsdev.c b/drivers/dax/fsdev.c
-index 0fd5e1293d725..68a4369562f70 100644
---- a/drivers/dax/fsdev.c
-+++ b/drivers/dax/fsdev.c
-@@ -127,6 +127,23 @@ static void fsdev_clear_ops(void *data)
- 	dax_set_ops(dev_dax->dax_dev, NULL);
- }
- 
-+static void fsdev_clear_pgmap_ops(void *data)
-+{
-+	struct dev_pagemap *pgmap = data;
-+
-+	/*
-+	 * fsdev installs pgmap->ops and ->owner at probe. For a static device
-+	 * the pgmap is shared and long-lived (owned by the dax bus), so
-+	 * leaving fsdev's ops behind on unbind would let a later
-+	 * memory_failure -- after rebind to another driver, or after this
-+	 * module is unloaded -- dispatch through a stale or freed
-+	 * ->memory_failure handler. Clear them so the pgmap carries no fsdev
-+	 * state once we are unbound.
-+	 */
-+	pgmap->ops = NULL;
-+	pgmap->owner = NULL;
-+}
-+
- /*
-  * Page map operations for FS-DAX mode
-  * Similar to fsdax_pagemap_ops in drivers/nvdimm/pmem.c
-@@ -306,6 +323,11 @@ static int fsdev_dax_probe(struct dev_dax *dev_dax)
- 	if (IS_ERR(addr))
- 		return PTR_ERR(addr);
- 
-+	/* Drop fsdev's pgmap->ops/owner on unbind so no stale ops survive. */
-+	rc = devm_add_action_or_reset(dev, fsdev_clear_pgmap_ops, pgmap);
-+	if (rc)
-+		return rc;
-+
- 	/*
- 	 * Clear any stale compound folio state left over from a previous
- 	 * driver (e.g., device_dax with vmemmap_shift). Also register this
--- 
-2.53.0
-
+From: John Groves <John@Groves.net>=0D=0A=0D=0AUse __va(phys) instead of =
+virt_addr + linear_offset for the kaddr=0D=0Areturn in __fsdev_dax_direct=
+_access(). The previous code added a=0D=0Adevice-linear byte offset to vi=
+rt_addr (which is __va of ranges[0]),=0D=0Abut for multi-range devices wi=
+th physical gaps between ranges, this=0D=0Alinear arithmetic crosses the =
+gap and produces a wrong kernel virtual=0D=0Aaddress. Using __va(phys) wh=
+ere phys comes from dax_pgoff_to_phys()=0D=0Ais correct for any range lay=
+out because the direct map translates=0D=0Aeach physical address independ=
+ently.=0D=0A=0D=0AThis leaves dev_dax->virt_addr write-only, so remove th=
+e field=0D=0A(suggested by Dave Jiang).=0D=0A=0D=0AFixes: 759455848df0b (=
+"dax: Save the kva from memremap")=0D=0A=0D=0AReviewed-by: Dave Jiang <da=
+ve.jiang@intel.com>=0D=0AReviewed-by: Alison Schofield <alison.schofield@=
+intel.com>=0D=0ASigned-off-by: John Groves <john@groves.net>=0D=0A---=0D=0A=
+ drivers/dax/dax-private.h | 2 --=0D=0A drivers/dax/fsdev.c       | 8 ++-=
+-----=0D=0A 2 files changed, 2 insertions(+), 8 deletions(-)=0D=0A=0D=0Ad=
+iff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h=0D=0Ain=
+dex 81e4af49e39c1..607a53a91f58b 100644=0D=0A--- a/drivers/dax/dax-privat=
+e.h=0D=0A+++ b/drivers/dax/dax-private.h=0D=0A@@ -69,7 +69,6 @@ struct de=
+v_dax_range {=0D=0A  * data while the device is activated in the driver.=0D=
+=0A  * @region: parent region=0D=0A  * @dax_dev: core dax functionality=0D=
+=0A- * @virt_addr: kva from memremap; used by fsdev_dax=0D=0A  * @cached_=
+size: size of daxdev cached by fsdev_dax=0D=0A  * @align: alignment of th=
+is instance=0D=0A  * @target_node: effective numa node if dev_dax memory =
+range is onlined=0D=0A@@ -85,7 +84,6 @@ struct dev_dax_range {=0D=0A stru=
+ct dev_dax {=0D=0A =09struct dax_region *region;=0D=0A =09struct dax_devi=
+ce *dax_dev;=0D=0A-=09void *virt_addr;=0D=0A =09u64 cached_size;=0D=0A =09=
+unsigned int align;=0D=0A =09int target_node;=0D=0Adiff --git a/drivers/d=
+ax/fsdev.c b/drivers/dax/fsdev.c=0D=0Aindex 68a4369562f70..57c589e19b539 =
+100644=0D=0A--- a/drivers/dax/fsdev.c=0D=0A+++ b/drivers/dax/fsdev.c=0D=0A=
+@@ -51,9 +51,7 @@ static long __fsdev_dax_direct_access(struct dax_device=
+ *dax_dev, pgoff_t pgoff,=0D=0A =09struct dev_dax *dev_dax =3D dax_get_pr=
+ivate(dax_dev);=0D=0A =09size_t size =3D nr_pages << PAGE_SHIFT;=0D=0A =09=
+size_t offset =3D pgoff << PAGE_SHIFT;=0D=0A-=09void *virt_addr =3D dev_d=
+ax->virt_addr + offset;=0D=0A =09phys_addr_t phys;=0D=0A-=09unsigned long=
+ local_pfn;=0D=0A=20=0D=0A =09phys =3D dax_pgoff_to_phys(dev_dax, pgoff, =
+size);=0D=0A =09if (phys =3D=3D -1) {=0D=0A@@ -63,11 +61,10 @@ static lon=
+g __fsdev_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,=0D=
+=0A =09}=0D=0A=20=0D=0A =09if (kaddr)=0D=0A-=09=09*kaddr =3D virt_addr;=0D=
+=0A+=09=09*kaddr =3D __va(phys);=0D=0A=20=0D=0A-=09local_pfn =3D PHYS_PFN=
+(phys);=0D=0A =09if (pfn)=0D=0A-=09=09*pfn =3D local_pfn;=0D=0A+=09=09*pf=
+n =3D PHYS_PFN(phys);=0D=0A=20=0D=0A =09/*=0D=0A =09 * Use cached_size wh=
+ich was computed at probe time. The size cannot=0D=0A@@ -351,7 +348,6 @@ =
+static int fsdev_dax_probe(struct dev_dax *dev_dax)=0D=0A =09=09pr_debug(=
+"%s: offset detected phys=3D%llx pgmap_phys=3D%llx offset=3D%llx\n",=0D=0A=
+ =09=09       __func__, phys, pgmap_phys, data_offset);=0D=0A =09}=0D=0A-=
+=09dev_dax->virt_addr =3D addr + data_offset;=0D=0A=20=0D=0A =09inode =3D=
+ dax_inode(dax_dev);=0D=0A =09cdev =3D inode->i_cdev;=0D=0A--=20=0D=0A2.5=
+3.0=0D=0A=0D=0A
 
