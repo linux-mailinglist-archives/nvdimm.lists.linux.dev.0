@@ -1,311 +1,146 @@
-Return-Path: <nvdimm+bounces-14454-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14456-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id sBzIHY2HM2qxDAYAu9opvQ
-	(envelope-from <nvdimm+bounces-14454-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 07:52:13 +0200
+	id 0KwzN221M2pMFQYAu9opvQ
+	(envelope-from <nvdimm+bounces-14456-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 11:07:57 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC0C69DBEB
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 07:52:13 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7E7969EB8F
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 11:07:56 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=dm0bAPHD;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14454-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14454-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=linux.alibaba.com header.s=default header.b=tWXdO41J;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14456-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14456-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=pass (policy=none) header.from=linux.alibaba.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6433A301E98D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 05:52:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8E0D8302EF72
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 18 Jun 2026 09:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9153F2F99B8;
-	Thu, 18 Jun 2026 05:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273083859F7;
+	Thu, 18 Jun 2026 09:07:09 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACF8312834
-	for <nvdimm@lists.linux.dev>; Thu, 18 Jun 2026 05:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170B73890E1
+	for <nvdimm@lists.linux.dev>; Thu, 18 Jun 2026 09:07:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781761929; cv=none; b=RCDx7jytdKN45I6YFZwNs93rsZ+mvLQt5VqGBQTtP4q1aTorl28plwYFLIMouqXhu+EviXPAcy5Fi0nRATvVvt7fBhhzbnXIZuJ8vZwOMXlOdKA2HIOwV1WXBM7Y5Q9vQc3/NIgcg58hiC5eWxLbYVZnygN/EurR5s5JT2S5kmU=
+	t=1781773628; cv=none; b=jUCwpsU3WY8jbJrp06/VIzoE2Kmw66azb02Nk/Tfl/mc+yn1bls8tSd1/WNcH0LS+GuYLsJ5ph+uBKTu3XXGj6MxiXTUArXFHwLPX+jEXTOXJivVp4vtaiQ0nTxMX5LVKmvhzFAnu5QOL5bwg2fl4pZ01UVFbw5GaUgJQqhCqh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781761929; c=relaxed/simple;
-	bh=Roc6jFBtRQ/L7AkcFCDl2Mo7X9RLH3mFsVpZO/wwArc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYaYM9i1UdxWZKfnf4kr3y+2fk7bbB2eYzh+7hMPyRTpQqYLyf3YUW1BwGVUFQcUvLrCnvSwXFsE9MGoOQgm0Tadvt4qSJkBMI5NlXlpK9GunJxtPi1lfaeGr5kkzeH+f2l7IP/PUpI5quQduSsn2zbjgRQissG5ZW3ih3+2FP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dm0bAPHD; arc=none smtp.client-ip=74.125.82.171
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-30bc871ecdfso692760eec.1
-        for <nvdimm@lists.linux.dev>; Wed, 17 Jun 2026 22:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781761927; x=1782366727; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RVcrgdyxAFY0JrdBQcLjQ6NN4IVLGqhuG6k48kJCsJI=;
-        b=dm0bAPHDaoOiN6CpH+/Gdo5d6QKa5ZQxM1FZm0QEpfinoGHQYD+7dbBwKVcVg9L5KP
-         a7uJvj1rcNVacdZX0+BU92147fDYjLwP0Snbh/VmC+GwXofxgXEH2mnj084/GqFetvXl
-         teAXmwtNqBt3AaVM34pKpI6HKvk8CSVzGrJbWWP9Qaimm4XZbKQlPK0z7vt6tgE8qL0l
-         r8XNozrPvOpgKzqyIBqFOGHAbyiNt446bibuzWqKMV6Za6r1D7CypOTMzbiR4j51K0Bu
-         7Be49zvVKg1Xoi49gEs59XDbVtr4yW/GEalIvH3SF5LENAraJF9SHNPKPRJO+JryB6Rw
-         d2pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781761927; x=1782366727;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RVcrgdyxAFY0JrdBQcLjQ6NN4IVLGqhuG6k48kJCsJI=;
-        b=qcEEKANsYRh8RPVSp3sk/TPsBPMYYI+GKZrPvkKvDseFzHzyi1A7K8BAI4oqthzaWx
-         70HWH87RmfOW+f8LBYYO04P0iPnYJGvXA+yJjZQPLC8+MIOv+ZGB33Vs9K5ekj4xJoyA
-         EkNDiM4dO3HEOCdXOyOHBB2byBkptc2nnJfKnQWivXRtp2wSc/Y0tijh7McLAeNWSTHG
-         0tbWO7X3Cy53mPFisOmCMaC4nWuYTOSQr+JClPw/ekrXqsWammUWCSKtWzUIpWpj8iL+
-         iVJXklhynSoFeiEhdzRiOdXJma8G/C4//i7fGzekOyO2ZDAv+yLHjBUk79PRWaA7Lu0G
-         gEYA==
-X-Forwarded-Encrypted: i=1; AFNElJ899wbfksNkK6/2mdkbZudTj4ZNSRksktb2WMThgLzejusVrHRq5WtELNn2PuE9Xqr5/RzLYJc=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyKwM1PnRW05+lAtPbjHUmo95Zy/HnbCNL03qdm4Oqcc3OvA7bq
-	y+V0HyiNyu6e4tZvThhkVfycfCu4ub7DYjJ+L7Wb1keJ53Kl45saSM/X
-X-Gm-Gg: AfdE7cljxk+0lTQ3+7FluqwTdI3LL3rOKlHOJYQUtgB9ciDa2WiimG5RWh4WxFRsBYk
-	EjYjVlTEjQe4fjebLGGM/cT3lPK8ObYCJKUBtgal7QZAZwgSIx0L143zEKE870HHZvLsvRFy2+j
-	sJplNWFb1j0H+hPfBVrg4VPawN48p1RHEj3qGfDZyHq2jdAJ2vaRQjOSd9+ieqjjttkDLYdRu1A
-	BxCjkTVzfAYdNZYICEkvsGbwCxhym62QiYxr8v263/q7VLMbE9odFsMS94YbREj3u+d8GE33qRg
-	AOTv7Uf5si8K/C2MH8SAoH96OxsA+nCwsbF4SM9Qj7NnJSVz4xTeRQIe7LMPnzvYbW1EQmqkaic
-	2zHcC2pw/+4ThWAWHnkC4pT4mLBcMCdA5dXms2FcSP+mcAoy37GySFNywZWnMFs7fyV3YFy6dQ3
-	SGD6bkomFVuzQogPRPETihgEB7yG7ILqlGGgq/9azmW1n8ddz6jRN8iGHSN6RoSyr8qmHCpl5Jh
-	3c8JLE=
-X-Received: by 2002:a05:7300:4356:b0:2da:2ec2:64fe with SMTP id 5a478bee46e88-30bca082050mr4530581eec.24.1781761926706;
-        Wed, 17 Jun 2026 22:52:06 -0700 (PDT)
-Received: from AnisaLaptop.localdomain (c-73-170-217-179.hsd1.ca.comcast.net. [73.170.217.179])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30bbbd636fasm7130687eec.22.2026.06.17.22.52.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 22:52:06 -0700 (PDT)
-From: Anisa Su <anisa.su887@gmail.com>
-X-Google-Original-From: Anisa Su <anisa.su@samsung.com>
-Date: Wed, 17 Jun 2026 22:52:04 -0700
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: Anisa Su <anisa.su887@gmail.com>, linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-	Dan Williams <djbw@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <iweiny@kernel.org>,
-	John Groves <John@groves.net>, Gregory Price <gourry@gourry.net>
-Subject: Re: [PATCH v6 0/7] ndctl: Dynamic Capacity additions for cxl-cli
-Message-ID: <ajOHhP7hX8r2ptKC@AnisaLaptop.localdomain>
-References: <20260523095043.471098-1-anisa.su@samsung.com>
- <aiJh7vcs2u1fMDX4@aschofie-mobl2.lan>
- <ajJITxBewsUuQGzp@aschofie-mobl2.lan>
+	s=arc-20240116; t=1781773628; c=relaxed/simple;
+	bh=vqzSHVraWJ3lA2x/nbaLi6niYGBohFEolLg8HEQtoI4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MMaT70ykvl1GP4CkcFVE8M6JDUgQwJMKOEVpTH/P6S5kxIsIqLKdlfrBX9P/Ofq7uoejP+NmARyPIsHXfOcocPhjRx6wop1rLK0d94GUiptRi+G2vO9wDoFa1baiOCuRJxmQ4Qyi4S19ttxM4lV60yVYjkuJEMj8y7XO+Gvcdvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=tWXdO41J; arc=none smtp.client-ip=115.124.30.130
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1781773622; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=WfDo512nvniMZKkfKfvO/nzCYtOh6GV69rZ/ybkLD9o=;
+	b=tWXdO41J+AvONGJfnl3+O5Lx/Ya5sxznxxeIocB+tiUISzTPhQZyP//tMYngDth4O334WTsOWZcNlwvYua208200epD74g0AtwXaiKcrOMgDXUrQYTkqmARRYghWk6xjN/yiyNC4laRmgAXtKDOEE9y0ye3930r/5CiUL+qlN+g=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0X56RkjL_1781773613;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X56RkjL_1781773613 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Jun 2026 17:07:01 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: alison.schofield@intel.com,
+	dave.jiang@intel.com,
+	jic23@kernel.org,
+	nvdimm@lists.linux.dev
+Cc: guoren@kernel.org,
+	linux-cxl@vger.kernel.org
+Subject: [ndctl PATCH v3 0/2] daxctl, util/sysfs: fix builtin-driver false failure on enable
+Date: Thu, 18 Jun 2026 17:06:51 +0800
+Message-ID: <20260618090653.8983-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ajJITxBewsUuQGzp@aschofie-mobl2.lan>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-7.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[alibaba.com:D:+];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.alibaba.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	R_DKIM_ALLOW(-0.20)[linux.alibaba.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14454-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:alison.schofield@intel.com,m:anisa.su887@gmail.com,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:dave.jiang@intel.com,m:iweiny@kernel.org,m:John@groves.net,m:gourry@gourry.net,m:anisasu887@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,lists.linux.dev,kernel.org,stgolabs.net,intel.com,groves.net,gourry.net];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14456-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:alison.schofield@intel.com,m:dave.jiang@intel.com,m:jic23@kernel.org,m:nvdimm@lists.linux.dev,m:guoren@kernel.org,m:linux-cxl@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER(0.00)[cp0613@linux.alibaba.com,nvdimm@lists.linux.dev];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cp0613@linux.alibaba.com,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.alibaba.com:+];
+	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,cxl-dcd.sh:url,cxl-security.sh:url]
+	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:from_smtp,linux.alibaba.com:dkim,linux.alibaba.com:mid,linux.alibaba.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0EC0C69DBEB
+X-Rspamd-Queue-Id: D7E7969EB8F
 
-On Wed, Jun 17, 2026 at 12:10:07AM -0700, Alison Schofield wrote:
-> On Thu, Jun 04, 2026 at 10:43:10PM -0700, Alison Schofield wrote:
-> > On Sat, May 23, 2026 at 02:50:35AM -0700, Anisa Su wrote:
-> > > CXL Dynamic Capacity Device (DCD) support has continued to evolve in the
-> > > upstream kernel since Ira's v5 posting [1].  The kernel side has settled
-> > > on a uuid-driven claim model for sparse DAX devices: dax_resources carry
-> > > the tag delivered with each extent, and userspace selects which ones to
-> > > claim by writing a UUID to the dax device's sysfs 'uuid' attribute (or
-> > > "0" to claim a single untagged resource).  Size on a sparse region is
-> > > determined by the claim, not requested up-front.
-> > > 
-> > > This series brings cxl-cli and daxctl in line with that model and
-> > > extends cxl_test to exercise the new paths end-to-end.
-> > 
-> > Hi Anisa,
-> > 
-> > I just now picked this up with the kernel side and took it for a quick
-> > test drive. Based on what's been touched, first meaningful finding is
-> > all the DAX unit tests pass, and then for CXL unit tests, all but these
-> > 2 pass: cxl-security.sh and cxl-dcd.sh
-> > 
-> > Please let me know if there are known problems with either of those
-> > before I explore further.
-> 
-> Hi Anisa,
-> 
-> Good news, DCD exposed a long hidden bug that made cxl-security.sh
-> fail. It is not an issue w DCD patches.
-> 
-> Found that DCD set changes which mock memdev the test happens to
-> land on, and that's enough to uncover a latent hex/decimal bug in
-> CXL nvdimm code. We use to always land on id '1', but now this patch:
-> 
-> tools/testing/cxl: Add DC Regions to mock mem data
-> 
-> reorders the sorted dimm list, so the test selects a dimm with
-> serial 10 (0xa), and there's the hex/decimal mismatch.
-> 
-> The renumbering is harmless in itself but it just changed the
-> serial the test exercises and tripped over the old bug.
-> 
-> I'll send a separate fixup patch for the hex/dec cleanup.
-> 
-> (No answer on cxl-dcd.sh yet)
-> 
-> -- Alison
-> 
-Thanks for looking into this! I can also look into what might be going
-on with cxl-dcd.sh if you let me know the base commit you applied the
-dcd patches onto? :)
+When a DAX / ndctl driver is builtin (not a loadable module),
+daxctl_insert_kmod_for_mode() and __util_bind() still call
+kmod_module_probe_insert_module() unconditionally. libkmod only
+short-circuits builtin modules when it can find the modules.builtin
+index; otherwise it falls through to init_module() and returns -ENOENT,
+surfacing as a spurious "insert failure".
 
-Thanks,
-Anisa
+Pre-check kmod_module_get_initstate() and skip probe-insert when the
+module is already BUILTIN or LIVE, matching the pattern used by ndctl's
+own test/core.c.
 
-> > 
-> > Question below about dependency....
-> > 
-> > > 
-> > > The corresponding kernel patchset is here:
-> > > https://lore.kernel.org/linux-cxl/cover.1779528761.git.anisa.su@samsung.com/T/#t
-> > > 
-> > > Picked up unchanged from v5 (Ira):
-> > > 
-> > >   libcxl: Add Dynamic RAM A partition mode support
-> > >   cxl/region: Add cxl-cli support for dynamic RAM A
-> > >   libcxl: Add extent functionality to DC regions
-> > >   cxl/region: Add extent output to region query
-> > > 
-> > > New in v6:
-> > > 
-> > >   daxctl: Add --uuid option to create-device for DC DAX regions
-> > >     - Plumbs writes to the new dax 'uuid' sysfs attribute through a new
-> > >       daxctl_dev_set_uuid() helper (LIBDAXCTL_11).
-> > >     - --uuid is mutually exclusive with --size; pass "0" to claim a
-> > >       single untagged dax_resource.  An unmatched UUID surfaces ENOENT
-> > >       from the kernel and leaves the device at size 0.
-> > >     - Documents the option in the man page.
-> > > 
-> > >   cxl/test: Add Dynamic Capacity tests (rewritten on top of Ira's
-> > >   original patch to track the post-redesign kernel)
-> > >     - Routes untagged claims via --uuid "0" so daxctl exercises the
-> > >       kernel uuid_store path; tagged claims use real UUID strings.
-> > >     - Asserts that for DC regions, size-grow returns -EOPNOTSUPP (real grow is
-> > >       --uuid only) and that tag reuse across More-chains is rejected
-> > >       by the cross-More uniqueness gate.
-> > >     - Adds coverage for the new validators: test_uuid_no_match,
-> > >       test_uuid_no_match_seed_intact, test_uuid_show,
-> > >       test_cross_more_uniqueness, test_alignment_rejection.
-> > >     - Sharable-partition coverage (test_shared_extent_inject,
-> > >       test_seq_integrity_gap) is routed at runtime to a dedicated mock
-> > >       memdev that tools/testing/cxl stamps with serial 0xDCDC, so a
-> > >       single cxl_test module load exercises both regimes.
-> > >     - Localizes positional-arg assignments in every helper so functions
-> > >       no longer clobber caller globals (the previous behavior leaked
-> > >       the sharable memdev into later tests).
-> > >     - test_reject_overlapping arithmetic now lands an actual overlap
-> > >       inside the DC region (the prior math landed past the end).
-> > > 
-> > > Depends on the kernel DCD/sparse-DAX series; without it the new tests
-> > > will skip and 'cxl list -r N -Nu' will simply report no extents.
-> > 
-> > What is this dependency- DCD/sparse-DAX series ?
-> > 
-> > > 
-> > > The branch is also available at:
-> > > 
-> > >   https://github.com/anisa-su993/anisa-ndctl/tree/dcd-2026-05-21
-> > > 
-> > > Based on pmem/pending commit:
-> > > 
-> > >   bbd403a test/cxl-sanitize: avoid sanitize submit/wait race
-> > > 
-> > > [1] https://lore.kernel.org/nvdimm/20250413-dcd-region2-v5-0-fbd753a2e0e8@intel.com/
-> > > 
-> > > ---
-> > > Changes in v6:
-> > > - anisa: New patch — daxctl --uuid option + daxctl_dev_set_uuid() helper
-> > > - anisa: Rewrite cxl/test DCD tests against the post-redesign kernel
-> > >          (uuid sysfs claim, tag-group atomic release, cross-More
-> > >          uniqueness, alignment rejection, DC size-grow refusal)
-> > > - anisa: Rebase onto bbd403a (pmem/pending)
-> > > - Link to v5: https://lore.kernel.org/nvdimm/20250413-dcd-region2-v5-0-fbd753a2e0e8@intel.com/
-> > > 
-> > > Changes in v5:
-> > > - iweiny: Adjust all code to view only the dynamic RAM A partition
-> > > - Alison: s/tag/uuid/ in region query extent output
-> > > - Link to v4: https://patch.msgid.link/20241214-dcd-region2-v4-0-36550a97f8e2@intel.com
-> > > 
-> > > Anisa Su (1):
-> > >   daxctl: Add --uuid option to create-device for DC regions
-> > > 
-> > > Ira Weiny (6):
-> > >   ndctl: Dynamic Capacity additions for cxl-cli
-> > >   libcxl: Add Dynamic RAM A partition mode support
-> > >   cxl/region: Add cxl-cli support for dynamic RAM A
-> > >   libcxl: Add extent functionality to DC regions
-> > >   cxl/region: Add extent output to region query
-> > >   cxl/test: Add Dynamic Capacity tests
-> > > 
-> > >  Documentation/cxl/cxl-list.txt                |   29 +
-> > >  Documentation/cxl/lib/libcxl.txt              |   33 +-
-> > >  Documentation/daxctl/daxctl-create-device.txt |   12 +
-> > >  cxl/filter.h                                  |    3 +
-> > >  cxl/json.c                                    |   67 +
-> > >  cxl/json.h                                    |    3 +
-> > >  cxl/lib/libcxl.c                              |  181 +++
-> > >  cxl/lib/libcxl.sym                            |    9 +
-> > >  cxl/lib/private.h                             |   14 +
-> > >  cxl/libcxl.h                                  |   21 +-
-> > >  cxl/list.c                                    |    3 +
-> > >  cxl/memdev.c                                  |    4 +-
-> > >  cxl/region.c                                  |   27 +-
-> > >  daxctl/device.c                               |   72 +-
-> > >  daxctl/lib/libdaxctl.c                        |   44 +
-> > >  daxctl/lib/libdaxctl.sym                      |    5 +
-> > >  daxctl/libdaxctl.h                            |    1 +
-> > >  test/cxl-dcd.sh                               | 1267 +++++++++++++++++
-> > >  test/meson.build                              |    2 +
-> > >  util/json.h                                   |    1 +
-> > >  20 files changed, 1771 insertions(+), 27 deletions(-)
-> > >  create mode 100644 test/cxl-dcd.sh
-> > > 
-> > > 
-> > > base-commit: bbd403a03fa2a1551c1a10bbf78f32027c718758
-> > > -- 
-> > > 2.43.0
-> > > 
-> > 
+Changes since v2 [3]:
+  - Patch 2/2: Add a Reviewed-by tag.
+
+Changes since v1 [1]:
+  - Patch 1/2: unchanged; collected Reviewed-by from Dave and Alison.
+  - Patch 2/2: factored the state check into a new helper
+    util_kmod_skip_probe_insert() in util/sysfs.{c,h} so both
+    daxctl_insert_kmod_for_mode() and __util_bind() share it. The
+    helper also returns the observed libkmod state via an out
+    parameter so the caller does not re-read /sys/module/<name>/
+    initstate to distinguish LIVE from BUILTIN.
+  - Patch 2/2: additionally treat KMOD_MODULE_COMING as builtin when
+    /sys/module/<name>/ exists but the initstate file does not. This
+    is the pattern libkmod's sysfs fallback emits for builtin drivers
+    when the modules.builtin index is missing (e.g. a kernel installed
+    without running modules_install). This was the case Jonathan hit
+    on a builtin DAX VM setup; rather than rely on a libkmod fix, ndctl
+    handles the corner case directly. Suggested by Alison [2].
+
+[1]: https://lore.kernel.org/nvdimm/20260514063234.86439-1-cp0613@linux.alibaba.com/
+[2]: https://lore.kernel.org/nvdimm/agtf5uwBJOaCDR6l@aschofie-mobl2.lan/
+[3]: https://lore.kernel.org/nvdimm/20260526132251.254476-1-cp0613@linux.alibaba.com/
+
+Chen Pei (2):
+  daxctl: fix kmod reference leak on probe-insert failure
+  daxctl, util/sysfs: skip module probe-insert when driver is builtin or
+    live
+
+ daxctl/lib/libdaxctl.c | 23 ++++++++++++++++++++--
+ util/sysfs.c           | 44 +++++++++++++++++++++++++++++++++++++++++-
+ util/sysfs.h           | 16 +++++++++++++++
+ 3 files changed, 80 insertions(+), 3 deletions(-)
+
+-- 
+2.43.0
+
 
