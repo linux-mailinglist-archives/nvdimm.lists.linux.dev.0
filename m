@@ -1,59 +1,59 @@
-Return-Path: <nvdimm+bounces-14475-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14476-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bhK8C/jhN2q2VAcAu9opvQ
-	(envelope-from <nvdimm+bounces-14475-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 15:07:04 +0200
+	id 2PgFIWPhN2qUVAcAu9opvQ
+	(envelope-from <nvdimm+bounces-14476-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 15:04:35 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C6C26AAD4C
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 15:07:03 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ED6D6AAD09
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 15:04:35 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.beauty header.s=zmail header.b=EFmv781H;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14475-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14475-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=linux.beauty header.s=zmail header.b=ek8+MBuj;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14476-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14476-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=none) header.from=linux.beauty;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4020C3042923
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 13:04:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 064AD300E178
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 21 Jun 2026 13:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35759367291;
-	Sun, 21 Jun 2026 13:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D171E3672B2;
+	Sun, 21 Jun 2026 13:03:59 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D291936682A;
-	Sun, 21 Jun 2026 13:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8218F3655FD;
+	Sun, 21 Jun 2026 13:03:58 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782047035; cv=pass; b=IdBGhN+0cJBAh6tAJd8B9nzKJfd1kqaaykzD55VRUAMF/fzclXw3XeCPL1J8C2t5uJRDdqedOeBbayKLwPtcbpnpxefF2mkaU00w5hCfo3L1dAgrgiGt868Jz5Mnzi0wQLiC6fvxt3deAncpymbvwNRRRFBoPP81bTc1ebtF7RE=
+	t=1782047039; cv=pass; b=ejxOu7gtxXn7YMTovNb8XYyetksFW5uztY2naU8g8yB7gLyc4BNKUyD2sA4oC88Dx96ABam2P96/bSB+fMygL3e5c1QjRHuizR9Z2a6dVaZxRRVbpaFL6TxjmIxgJ/jleiYBFJAHO6Y7NQBpKMd9sP39vwCfuT6MQXwPik5Hq3k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782047035; c=relaxed/simple;
-	bh=7M9kmKBZp9rRu0tA2yaME8tBtzESVFG0IxssR+73ZAI=;
+	s=arc-20240116; t=1782047039; c=relaxed/simple;
+	bh=AuZG6eLVxtRjnPbYcuX0f0Nm13o7MKcCVWJRxui5OnI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gZXgeJQTXXkzrGZUf8HVtE6e/8x9JMsK9NXsxsvZw6F7XHs0OYRo6OF3boJk68TOC/iwSwf8z41KNddsFgg5PaH+ewKWzWitvoatCxYVgheII2hrPOz8c/PX2P0uArF4hcoiUHBhGV9WQDC48hPaws255A9jKvMZRUx3HFF0RmQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=EFmv781H; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal: i=1; a=rsa-sha256; t=1782047016; cv=none; 
+	 MIME-Version; b=nmEMLk5tt0t8sLILGOkWZ4zm3hgetQzltju6XuXSqG+Sd/lG6ifGKK/8Vjew7PNqK2vdmteSOsdwba36ZPwxOCRX2cFHGp9CBxMVprvmY1Iru2/EZOPGCyMzR95vnmZHXl6JzcgI1jq8FRZNCR+yN5CaMpN8tPuvcI04pehx7eo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=ek8+MBuj; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal: i=1; a=rsa-sha256; t=1782047020; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=f9E9qvTYWBNIBDkXm6fgw6tSiaHY/GxLNBJ03Uj9UiPyJPbXyjlv9phHJEYJvsBiLbg82GgVS5wJTZXmM0SKEzkYOpeG5XGID2DVA2Az+cxuXpBLIhJBeu4UKFWrr+7+OBwE4Od8ymL+orH+F9TtOdtm4BIvDqC0KkZGVSJjlrU=
+	b=bfaJ9l7nNjq+fyqJ7vWYfioo80HaaNE6oCdLgYWe5PQ6HN1R338bVXRgVj0ObM9SAw3njsy6HaktJOOPvmQ36EchKPvysT6aOa8RIVvRc+Q2oeKACIuL6ht0PQGiIcnvCiCEX3uKUw/FwA8EkGom0Vd/nue+M2I0HmR8BBnFo7o=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1782047016; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=LZLBhHbmtjpySzZTarBL23J3mQcNrZwkvgLBIJ78RGM=; 
-	b=bAlad01sDqx1GLmgptCqPp1NLsmH+y41m3zan5lt70cBWIFgxgYg/mkrIcuIufj7JKkYLHqgT9lUzY0Pu4vPRlZkxA7UBYAiyOSm4tqSt52GD3dFAt2iMZ5dad7g9R2JARjxq6v1eY5mDi1QcOAdDGrlxVwY86NHsJ7SlpMwioA=
+	t=1782047020; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=MEsva7hJtbMtZ8GDT7P31U3EHKfjcwNJzPN0mOdKvuQ=; 
+	b=Q0v1Z0EPoeOBBRVAkFPKlnWbKTf6wtvTryHRwnNhD2QWE8aHU2xIvPJi0xndoNKpP6c3GYm3eJZry7Oi+rkOu5mhHJI/hZI8aOsHQV6U8rllq1DOQDuY3GpvzKv/Yk8GLVw/dV72rpG/hxJRvHSEEPuSrfHPTDZgKwuyW/iUm+w=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=linux.beauty;
 	spf=pass  smtp.mailfrom=me@linux.beauty;
 	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1782047016;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1782047020;
 	s=zmail; d=linux.beauty; i=me@linux.beauty;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=LZLBhHbmtjpySzZTarBL23J3mQcNrZwkvgLBIJ78RGM=;
-	b=EFmv781HFfJZxTBIGc5tZUGUme4fRFChURsdzCnruo146STntdNbJDjOoLv5fwW7
-	vtM5gyRbD2Xnwn4ydJD/c5ZUe5rExCE2vlWfhPCpxUxlXiEz8YlZmhIedOfcg4LBfPR
-	S7VUGj5aFDr5Y51D1uvCRSXM7T7mHquUEi+1b6sQ=
-Received: by mx.zohomail.com with SMTPS id 1782047013626864.9869101777588;
-	Sun, 21 Jun 2026 06:03:33 -0700 (PDT)
+	bh=MEsva7hJtbMtZ8GDT7P31U3EHKfjcwNJzPN0mOdKvuQ=;
+	b=ek8+MBujHE+ItXMDGilx144xNRG0Uin7RXIFskcKk80FN4AzQRFvZFH+KZrtRgOG
+	HzotoXnFF2nhh9u1R8730EKjekj9Tps1C7P2vX+5+4MsFbQr5TXgyKJvICdE9fVj4OQ
+	49wo26f6lVC9VjVaI5eWukBl2eiYE4wHqXt0f/iI=
+Received: by mx.zohomail.com with SMTPS id 1782047017371275.4613699500153;
+	Sun, 21 Jun 2026 06:03:37 -0700 (PDT)
 From: Li Chen <me@linux.beauty>
 To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
 	Dan Williams <dan.j.williams@intel.com>,
@@ -65,9 +65,9 @@ To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
 	nvdimm@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org,
 	Li Chen <me@linux.beauty>
-Subject: [PATCH v6 09/12] nvdimm: virtio_pmem: publish done with release/acquire
-Date: Sun, 21 Jun 2026 21:02:40 +0800
-Message-ID: <20260621130246.2973254-10-me@linux.beauty>
+Subject: [PATCH v6 10/12] nvdimm: virtio_pmem: isolate DMA request buffers
+Date: Sun, 21 Jun 2026 21:02:41 +0800
+Message-ID: <20260621130246.2973254-11-me@linux.beauty>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260621130246.2973254-1-me@linux.beauty>
 References: <20260621130246.2973254-1-me@linux.beauty>
@@ -87,12 +87,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[linux.beauty,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[linux.beauty:s=zmail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14475-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14476-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -110,71 +110,61 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lists.linux.dev:from_smtp,linux.beauty:dkim,linux.beauty:email,linux.beauty:mid,linux.beauty:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,lists.linux.dev:from_smtp,linux.beauty:dkim,linux.beauty:email,linux.beauty:mid,linux.beauty:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9C6C26AAD4C
+X-Rspamd-Queue-Id: 1ED6D6AAD09
 
-virtio_pmem_host_ack() publishes the device response by setting done and
-waking the submitter. The submitter reads resp.ret after wait_event()
-observes done.
+The virtio-pmem request object stores wait queues, flags, and list
+pointers next to buffers mapped for virtqueue DMA. The response buffer is
+mapped DMA_FROM_DEVICE, so non-coherent DMA invalidation must not share a
+cache line with CPU-owned fields.
 
-Use smp_store_release() on done and smp_load_acquire() in the wait
-condition so the response read is ordered after completion.
+Keep the request buffer outside the DMA-from-device group and wrap only
+the response buffer with __dma_from_device_group_begin/end.
 
 Signed-off-by: Li Chen <me@linux.beauty>
 ---
 Changes in v6:
 - New patch.
 
- drivers/nvdimm/nd_virtio.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ drivers/nvdimm/virtio_pmem.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
-index 7b6761adf28bc..35d36bd36a526 100644
---- a/drivers/nvdimm/nd_virtio.c
-+++ b/drivers/nvdimm/nd_virtio.c
-@@ -17,6 +17,19 @@ static void virtio_pmem_req_release(struct kref *kref)
- 	kfree(req);
- }
+diff --git a/drivers/nvdimm/virtio_pmem.h b/drivers/nvdimm/virtio_pmem.h
+index 1017e498c9b4c..23bff40249c1b 100644
+--- a/drivers/nvdimm/virtio_pmem.h
++++ b/drivers/nvdimm/virtio_pmem.h
+@@ -10,6 +10,7 @@
+ #ifndef _LINUX_VIRTIO_PMEM_H
+ #define _LINUX_VIRTIO_PMEM_H
  
-+static void virtio_pmem_signal_done(struct virtio_pmem_request *req)
-+{
-+	/* Pairs with smp_load_acquire() in virtio_pmem_req_done(). */
-+	smp_store_release(&req->done, true);
-+	wake_up(&req->host_acked);
-+}
-+
-+static bool virtio_pmem_req_done(struct virtio_pmem_request *req)
-+{
-+	/* Pairs with smp_store_release() in virtio_pmem_signal_done(). */
-+	return smp_load_acquire(&req->done);
-+}
-+
- static void virtio_pmem_wake_one_waiter(struct virtio_pmem *vpmem)
- {
- 	struct virtio_pmem_request *req_buf;
-@@ -42,8 +55,7 @@ void virtio_pmem_host_ack(struct virtqueue *vq)
- 	spin_lock_irqsave(&vpmem->pmem_lock, flags);
- 	while ((req_data = virtqueue_get_buf(vq, &len)) != NULL) {
- 		virtio_pmem_wake_one_waiter(vpmem);
--		WRITE_ONCE(req_data->done, true);
--		wake_up(&req_data->host_acked);
-+		virtio_pmem_signal_done(req_data);
- 		kref_put(&req_data->kref, virtio_pmem_req_release);
- 	}
- 	spin_unlock_irqrestore(&vpmem->pmem_lock, flags);
-@@ -130,7 +142,8 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
- 		err = -EIO;
- 	} else {
- 		/* A host response results in "host_ack" getting called */
--		wait_event(req_data->host_acked, READ_ONCE(req_data->done));
-+		wait_event(req_data->host_acked,
-+			   virtio_pmem_req_done(req_data));
- 		err = le32_to_cpu(req_data->resp.ret);
- 	}
++#include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <uapi/linux/virtio_pmem.h>
+ #include <linux/kref.h>
+@@ -19,8 +20,6 @@
  
+ struct virtio_pmem_request {
+ 	struct kref kref;
+-	struct virtio_pmem_req req;
+-	struct virtio_pmem_resp resp;
+ 
+ 	/* Wait queue to process deferred work after ack from host */
+ 	wait_queue_head_t host_acked;
+@@ -30,6 +29,11 @@ struct virtio_pmem_request {
+ 	wait_queue_head_t wq_buf;
+ 	bool wq_buf_avail;
+ 	struct list_head list;
++
++	struct virtio_pmem_req req;
++	__dma_from_device_group_begin(resp);
++	struct virtio_pmem_resp resp;
++	__dma_from_device_group_end(resp);
+ };
+ 
+ struct virtio_pmem {
 -- 
 2.52.0
 
