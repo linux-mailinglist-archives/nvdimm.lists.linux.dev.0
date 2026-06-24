@@ -1,155 +1,225 @@
-Return-Path: <nvdimm+bounces-14519-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14520-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bZCNMmD1O2r/gQgAu9opvQ
-	(envelope-from <nvdimm+bounces-14519-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 17:18:56 +0200
+	id R6k5Onf1O2oLgggAu9opvQ
+	(envelope-from <nvdimm+bounces-14520-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 17:19:19 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BC996BF902
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 17:18:56 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BA116BF914
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 17:19:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=codethink.co.uk header.s=imap4-20230908 header.b=rfwvfeFq;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14519-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14519-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=reject) header.from=codethink.co.uk;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=LVadAMav;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14520-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14520-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6E054313929C
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 15:07:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5482030F9EB1
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 15:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2B93D8131;
-	Wed, 24 Jun 2026 15:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A21B3DA5B2;
+	Wed, 24 Jun 2026 15:08:34 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CC33B7B7B;
-	Wed, 24 Jun 2026 15:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2716F3DB332;
+	Wed, 24 Jun 2026 15:08:32 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782313649; cv=none; b=Uwwk3vpYBl+WlCHoRZIMjaxFIENMiWYb0l9elS3rnHDnkTk6QQ1XAAzFg6B/ChXn2FWG7ZpGiIW93ZnFUkGWT8SV+NYxdRi+YZcWRCzg1HePgl8+MJduCDz6+tGMu7l6DRluFvCYl5JTVDxJ48TkgRX6EoJLfgP/whXQLYX7EmM=
+	t=1782313714; cv=none; b=Cyn3AAwtCegUM0whc5WZ55gwVXkwdutiDchgYJ+yU8hJfTRR3XI2CkalOk7rgK7LZ8ow+YJp0ezi4nmCLlYi6pzVdPlU/jJO15/4fTcJAXhzQv2kxZotC3GGxcCwjH4+AjKm4jhyzORvm3Pn6ZieZIIxFnxD07hpmtNT5o2D3mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782313649; c=relaxed/simple;
-	bh=l47BwNV4FbSGQ7kxOpU8tVlitZeXZd11zYwrbfYg/0I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hvLJuwHbxl5y/66xX+C/LD04k+r/1fd0saLP7jzC0GYayq/pvayy8hjs1EmRzh4BDcLha/NDqyJ+Sg1WDrySU1UFffRysK2NGuFkNlw++JIYGVzhBN4eKPhD4NandByq0k/OJh/F12VSQG69rZ3ZtHCi40XrJggqZK4y/jC3nQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=rfwvfeFq; arc=none smtp.client-ip=188.40.203.114
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codethink.co.uk; s=imap4-20230908; h=Sender:Content-Transfer-Encoding:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Reply-To; bh=sZtRwSHBG39kFYsblWRkqc3V1NEZRJ5ugiBZSqoq2i4=; b=rfwvfeFqnZextBS2
-	SuOcrLDUroi2DEez9AUt/h4Cgvzw0x7itKV2Mj31YX4iRwWBnVYH735YDgR+Vf+xJvIt7f1hcL18p
-	kbeevGbEg/cWYrj9Djab3IF05rPUAzSolOFoUApmgYAIIJisA96BD0u5F07+CEzYKtwUiBOBUbB49
-	GwwQ+CfDAO9u1xeKG70tdo6iSl9AspIR1Am7cozMYlYacmrsGVxJqU/XFRHes3uKM6KfzqungtHbC
-	lN35fajdwpx/819Q23sDRipSHMHp1H4aVwYl7xVPrI2v9Ud1iGHidd8n2cyYKJqhGOLq6FE9ure1A
-	1SWp//t7kXbE60BIuw==;
-Received: from [167.98.27.226] (helo=[10.35.6.194])
-	by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-	id 1wcPC9-00HXJw-5j; Wed, 24 Jun 2026 16:07:17 +0100
-Message-ID: <2ebb44d6-43b2-4e57-a044-9d3ec67ca6c7@codethink.co.uk>
-Date: Wed, 24 Jun 2026 16:07:15 +0100
+	s=arc-20240116; t=1782313714; c=relaxed/simple;
+	bh=emGGf4QTkQS7nVeXMTrukNn51b3SE9d2sIVCALvxxp0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=o/DbtGqZIpvKmKVkddpRTAMdc/xL61Ok1Hmjg1zDPhggxruSuuOnToV9y416t1pJWf3mM6KoN4+bRnIOiPS78UfhfruvUkIU2ablY5tuRytAnaLy9ziYPWHdieywTGF0Cxla3IIaYv6SP6kHLMXVfVbHMigzj7IITbjQIapJjPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVadAMav; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE15F1F000E9;
+	Wed, 24 Jun 2026 15:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782313712;
+	bh=vSzx+C4yhPV80wdSya0nsc4cxaMvWNegCrxAgtF7yNQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LVadAMavq4dT1DawEgx6zhX4QMJqXHERSEd0lKYyzgjpEnm2p9MAhapXM9jB4DrTg
+	 6JHCZxZ1fzLEwWu2iST6QG84tq3DS30kyr3fwAKKLpkz20+dU8Y01rpsGVEzzjhJEk
+	 9tg+CV7AWiBiQDgR6gVMhHMbHK41FnlEt7gHeSJtOircZojZV5rfM2Ws0M5sKl8hjW
+	 zLDfHsUbeZI217kErdGOTY3dBcrRDDm3qWYSozpGi8iJFwtWOhf15y7f6h04SQxmLu
+	 /MWwK5FMpH4h+Rn3XFf3T+FA4VsG8dGkK/eEcYGcjvDpQrLtJoWQKixQYR0+oCLTu+
+	 ipwesJ4UsmyxQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 1/9] mm/memory: add memory_block_aligned_range()
+ helper
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Gregory Price" <gourry@gourry.net>
+Cc: linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev
+In-Reply-To: <20260624145744.3532049-2-gourry@gourry.net>
+References: <20260624145744.3532049-1-gourry@gourry.net>
+ <20260624145744.3532049-2-gourry@gourry.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 24 Jun 2026 15:08:31 +0000
+Message-Id: <20260624150832.AE15F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nvdimm/btt: add endian conversion in dev_err in
- btt_log_read
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: Dan Williams <djbw@kernel.org>, Vishal Verma <vishal.l.verma@intel.com>,
- Dave Jiang <dave.jiang@intel.com>, Ira Weiny <iweiny@kernel.org>,
- nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20260622142011.491522-1-ben.dooks@codethink.co.uk>
- <ajscAZsK9ulXov8w@aschofie-mobl2.lan>
-Content-Language: en-GB
-From: Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <ajscAZsK9ulXov8w@aschofie-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: ben.dooks@codethink.co.uk
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[codethink.co.uk,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[codethink.co.uk:s=imap4-20230908];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14519-lists,linux-nvdimm=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[ben.dooks@codethink.co.uk,nvdimm@lists.linux.dev];
-	HAS_ORG_HEADER(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14520-lists,linux-nvdimm=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:alison.schofield@intel.com,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:iweiny@kernel.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:gourry@gourry.net,m:linux-cxl@vger.kernel.org,m:nvdimm@lists.linux.dev,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[codethink.co.uk:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-nvdimm];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ben.dooks@codethink.co.uk,nvdimm@lists.linux.dev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[codethink.co.uk:dkim,codethink.co.uk:mid,codethink.co.uk:url,codethink.co.uk:from_mime,lists.linux.dev:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,lists.linux.dev:from_smtp,smtp.kernel.org:mid,gourry.net:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1BC996BF902
+X-Rspamd-Queue-Id: 4BA116BF914
 
-On 24/06/2026 00:51, Alison Schofield wrote:
-> On Mon, Jun 22, 2026 at 03:20:11PM +0100, Ben Dooks wrote:
->> The dev_err() call in btt_log_read() is passing a seq value
->> into dev_err() which is a __le32 without any conversion.
->>
->> Fix the following (prototype) sparse warnings:
->> drivers/nvdimm/btt.c:342:17: warning: incorrect type in argument 5 (different base types)
->> drivers/nvdimm/btt.c:342:17:    expected int
->> drivers/nvdimm/btt.c:342:17:    got restricted __le32 [usertype] seq
->> drivers/nvdimm/btt.c:342:17: warning: incorrect type in argument 6 (different base types)
->> drivers/nvdimm/btt.c:342:17:    expected int
->> drivers/nvdimm/btt.c:342:17:    got restricted __le32 [usertype] seq
-> 
-> Hi Ben,
-> 
-> Please revise the commit log.
-> 
-> The commit log is a message to all future readers, not a place to
-> paste static analysis warnings and leave the user visible impact
-> assumed, or as an exercise for the reader.
-> 
-> Prefer something like this:
-> 
-> 	When BTT log corruption is detected, btt_log_read() reports the
-> 	sequence numbers of the two log entries. Those values are stored
-> 	little-endian, so printing them without conversion can report
-> 	byte-swapped sequence numbers on big-endian systems.
-> 
-> 	Convert the sequence numbers to CPU endianness before passing
-> 	them to dev_err().
-> 
-> 	Issue reported by sparse.
-> 
-> 
-> (There is no need for the sparse pastings.)
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Thanks, I've posted a v2, with a reworded patch commit log.
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but elevating the ma=
+th into a generic helper codifies a vulnerability: boundary calculations in=
+ `memory_block_aligned_range()` can mathematically underflow or overflow, b=
+ypassing the recommended validity check and producing massive invalid range=
+s.
+--
 
-The only comment is that I like the sparse warnings as it makes it
-easier to search if there is a patch in flight for this.
+commit 6ed2cd40240e54e5a9638798bd15e535e425a3da
+Author: Gregory Price <gourry@gourry.net>
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+mm/memory: add memory_block_aligned_range() helper
 
-https://www.codethink.co.uk/privacy.html
+Memory hotplug operations require ranges aligned to memory block
+boundaries. This is a generic operation for hotplug. Add
+memory_block_aligned_range() as a common helper in <linux/memory.h>
+that aligns the start address up and end address down to memory block
+boundaries. Update dax/kmem to use this helper.
+
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index a18e2b968e4da..592171ec10f49 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+[ ... ]
+> @@ -33,9 +33,7 @@ static int dax_kmem_range(struct dev_dax *dev_dax, int =
+i, struct range *r)
+>  	struct dev_dax_range *dax_range =3D &dev_dax->ranges[i];
+>  	struct range *range =3D &dax_range->range;
+> =20
+> -	/* memory-block align the hotplug range */
+> -	r->start =3D ALIGN(range->start, memory_block_size_bytes());
+> -	r->end =3D ALIGN_DOWN(range->end + 1, memory_block_size_bytes()) - 1;
+> +	*r =3D memory_block_aligned_range(range);
+>  	if (r->start >=3D r->end) {
+>  		r->start =3D range->start;
+>  		r->end =3D range->end;
+
+[ ... ]
+
+> diff --git a/include/linux/memory.h b/include/linux/memory.h
+> index 463dc02f6cff0..9f5ef0309f773 100644
+> --- a/include/linux/memory.h
+> +++ b/include/linux/memory.h
+[ ... ]
+> @@ -100,6 +101,27 @@ int arch_get_memory_phys_device(unsigned long start_=
+pfn);
+>  unsigned long memory_block_size_bytes(void);
+>  int set_memory_block_size_order(unsigned int order);
+> =20
+> +/**
+> + * memory_block_aligned_range - align a physical address range to memory=
+ blocks
+> + * @range: the input range to align
+> + *
+> + * Aligns the start address up and the end address down to memory block
+> + * boundaries. This is required for memory hotplug operations which must
+> + * operate on memory-block aligned ranges.
+> + *
+> + * Returns the aligned range. Callers should check that the returned
+> + * range is valid (aligned.start < aligned.end) before using it.
+> + */
+> +static inline struct range memory_block_aligned_range(const struct range=
+ *range)
+> +{
+> +	struct range aligned;
+> +
+> +	aligned.start =3D ALIGN(range->start, memory_block_size_bytes());
+> +	aligned.end =3D ALIGN_DOWN(range->end + 1, memory_block_size_bytes()) -=
+ 1;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but elevating the math into a
+generic helper codifies an issue. Could this boundary calculation underflow
+and produce massive invalid ranges?
+
+If a caller provides an unaligned physical address range that falls entirely
+before the first memory block boundary, for example when
+range->end + 1 < memory_block_size_bytes(), the ALIGN_DOWN calculation
+evaluates to 0.
+
+Subtracting 1 then causes aligned.end to underflow to U64_MAX.
+
+While it is physically unlikely for a DAX device to be located below 128MB,
+an edge case near physical address 0 triggers this underflow.
+
+When this happens, the invalid range check in dax_kmem_range() is bypassed:
+
+drivers/dax/kmem.c:dax_kmem_range() {
+    ...
+    *r =3D memory_block_aligned_range(range);
+    if (r->start >=3D r->end) {
+    ...
+}
+
+Because r->end evaluates to U64_MAX and aligned.start aligns up to 128MB
+(if range->start > 0), the check 128MB >=3D U64_MAX is false. This incorrec=
+tly
+signals the empty range as valid and aligned.
+
+In contrast, an empty range in a higher memory block correctly fails this
+check.
+
+If this underflowed range is then passed to hotplug APIs like
+__add_memory_driver_managed(), could it cause an immediate OOM and kernel
+crash as the system attempts to allocate tracking structures for millions of
+memory blocks?
+
+> +
+> +	return aligned;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624145744.3532=
+049-1-gourry@gourry.net?part=3D1
 
