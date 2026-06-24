@@ -1,58 +1,58 @@
-Return-Path: <nvdimm+bounces-14497-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14498-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bRoXDVtzO2oxYAgAu9opvQ
-	(envelope-from <nvdimm+bounces-14497-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:11 +0200
+	id tkhYNWVzO2o0YAgAu9opvQ
+	(envelope-from <nvdimm+bounces-14498-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:21 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7770F6BBAB1
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:10 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25246BBABE
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:20 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=S5hsxPAK;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14497-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14497-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=ZXfKe0hR;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14498-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14498-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 03610301443B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:04:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 888E5300869E
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF67D3876BA;
-	Wed, 24 Jun 2026 06:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA483876C4;
+	Wed, 24 Jun 2026 06:03:47 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3892C386C3B;
-	Wed, 24 Jun 2026 06:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38848386C36;
+	Wed, 24 Jun 2026 06:03:46 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782281026; cv=none; b=m3RdZR2fooLIY9Q9Qc/+zMRH1sRn1qG5mEhRdu/5IY875sZYs1bwmpEz+aHa8lzHvXTOsahMaiZVZtqFh/FcUqkxfA54CDjn7fFqEsxyXzX8epekvg+MEFvOSxfLIFeIIoZkBod8HvYALyrkgrZ7MERrev1ExU7I/4h/zMkTmO4=
+	t=1782281026; cv=none; b=LTVF27yNs1FZ/CSl/kKTFEKES4ZX5F5e3quq5pJzDKukCYGBFs1hzM1ct++TlUdOvVBdeXKFRtlmdEOxq6UmHY6BpSSTNKCnTh2WXN6KekLVtqwCoF+e4tZojfb7tWVADEHoCFQKcmEg1HWq3s4EGeFyoQBQeYfprRRBHj6yMKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782281026; c=relaxed/simple;
-	bh=L8Sqgnf8uN3wM5yGArKu/lhmaHR3yE4CYwBxApOTw/g=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZvU3DFhSlHV6UXwbI339vdVlvfqdB00gvrHdnVMNQiJ/Hs/qgALXb3C9ZanGj768oRhFAvV/wjA1o9XaKHDB48k4c9BlavW4KK4ejBDlENrZr6q7sUmM7YkzU5m3cHZpYGWlFyZ9TyEo88YI+I+lgwWHhsIlUyZGNfEv1LVAH1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S5hsxPAK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A14B1C2BCF4;
+	bh=FpQrQoPqPJW3h6WyS+ln+mYHPK2LlUvR/MySMZU1FPI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Ox+NOIJ3/B1aedBr8bQAjwYj0puUlXuOtPjSMtyvlErQCo1ujBf/+hVc+fYOmMuCa9GOF3npzVlQnbTCbZ+Yw0R/mldEiy29FmBRgQnx5QabuBAXZ6UBDgR/476Fv9cqoOpqkojsgX8JT1U8+Puj/hgnMd4tIWG2gDCHzOIH4uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXfKe0hR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8E74C2BCB4;
 	Wed, 24 Jun 2026 06:03:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1782281025;
-	bh=L8Sqgnf8uN3wM5yGArKu/lhmaHR3yE4CYwBxApOTw/g=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=S5hsxPAKnG7QVKRXzj65Q4uwudDxn71hQQsATdm2hXvKdgIKRBFVsVyeDrc1jk32l
-	 k2uCsziD4KmbpkCjkIzfhQ3yJWHTCv8OtAidELilhZErnMK3gEBTtVXaGD8pZlOIww
-	 oap67GMJa10QZncUjBhz7u3Ad5tugE7yXDYcBR5JgHE3DqnUxDHmD/tqA7AaLiv4oT
-	 S8VWhxLj4GYhKWvK5XO+mEDcTZsvt4bixvFMdjueArkLY9SCSpYiDypDJAIko3rRK9
-	 4/Lyq66fShxHCCJ8df64M6/CU5paVV69mrldCBheZhtOWjCjsy9hcU7oH7kY3VHapt
-	 mlyU4Grjv2szg==
+	bh=FpQrQoPqPJW3h6WyS+ln+mYHPK2LlUvR/MySMZU1FPI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=ZXfKe0hRFu7SpoAVfHNqVxdZAN8YH2xVlPCAMCNLG7XVBC2FjijMadB8bboUpLk2X
+	 VF0kKK7xvb06zzFqhiZRLhbw8DkJ3bpxQYfWtnHFGgy+bIqjMQEI0xsF2jTlXJIjdd
+	 vJTluRTuF6h/2Mv+CCG/7+oOvyXjGP2maEnws3RbHtvm30Ikjd/xwmj53ptydhTQ+o
+	 w7D+y7Yrfd46rRO/oRBMWCjsa+EdB+C8j0YZtdqiNM0K8JUgpjfprTMc+atsn9rHoJ
+	 c5f4kHbhWltFcHGCCTIRwVJXfL0c0tv3B67sPy/gXStD+A7SPvRwcOKr+ZZ36OIf8y
+	 9/ED8BpUB131A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69015CDB47F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D675CDB470;
 	Wed, 24 Jun 2026 06:03:45 +0000 (UTC)
 From: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
-Subject: [PATCH v3 0/2] libnvdimm/labels: two on-media validation fixes in
+Date: Wed, 24 Jun 2026 01:03:45 -0500
+Subject: [PATCH v3 1/2] libnvdimm/labels: Prevent integer overflow in
  __nd_label_validate()
-Date: Wed, 24 Jun 2026 01:03:44 -0500
-Message-Id: <20260624-b4-disp-d8279485-v3-0-cdb6cab28b41@proton.me>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -61,19 +61,19 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEBzO2oC/x3MTQqAIBBA4avErBtIM3+6SrTInGo2JgoRRHdPW
- n6L9x4olJkKjM0DmS4ufMaKvm1gPZa4E3KoBtlJ3Wmp0CsMXBIGK41TdkDhB7d5vRgrHNQsZdr
- 4/pfT/L4frMyAZ2IAAAA=
+Message-Id: <20260624-b4-disp-d8279485-v3-1-cdb6cab28b41@proton.me>
+References: <20260624-b4-disp-d8279485-v3-0-cdb6cab28b41@proton.me>
+In-Reply-To: <20260624-b4-disp-d8279485-v3-0-cdb6cab28b41@proton.me>
 To: Dave Jiang <dave.jiang@intel.com>, Dan Williams <djbw@kernel.org>, 
  Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <iweiny@kernel.org>
 Cc: Alison Schofield <alison.schofield@intel.com>, nvdimm@lists.linux.dev, 
  David Laight <david.laight.linux@gmail.com>, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782281024; l=2655;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782281024; l=1957;
  i=hexlabsecurity@proton.me; s=proton; h=from:subject:message-id;
- bh=L8Sqgnf8uN3wM5yGArKu/lhmaHR3yE4CYwBxApOTw/g=;
- b=5RXIvnD8J7x5fbfvBUQb7P8JRbME0qUD7DDe60KUsqBq0d/qEMNQEyDgITlkTq5IkXxCC+5M0
- YNCs6EWDDECCCwZ3UfdGHMNo8N+nWwZjCgplBvJxidDKWZvqYo8p8WD
+ bh=iBEqX8HPWjAgcZWGDGjBLr0kG9lZNDGGFL2JmOhPZfY=;
+ b=+Upio+vIexII5OXdL3yy4kHq5Xu9Cae/FTXba91+xIIt9Cs9U0Jym4A80Dvys6gWCxLm25aAo
+ jl7bUm18jufAmb2Me4rgjbzkEDK5c8BV9hxG9350qjnd1XoyZfQ4Fwf
 X-Developer-Key: i=hexlabsecurity@proton.me; a=ed25519;
  pk=dmppBMZNLLoPzxHi9l8tZDzEZUunPbgsYqIZYXeUrL0=
 X-Endpoint-Received: by B4 Relay for hexlabsecurity@proton.me/proton with
@@ -85,12 +85,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14497-lists,linux-nvdimm=lfdr.de,hexlabsecurity.proton.me];
+	TAGGED_FROM(0.00)[bounces-14498-lists,linux-nvdimm=lfdr.de,hexlabsecurity.proton.me];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:dave.jiang@intel.com,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:nvdimm@lists.linux.dev,m:david.laight.linux@gmail.com,m:linux-kernel@vger.kernel.org,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
@@ -101,76 +101,68 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	HAS_REPLYTO(0.00)[hexlabsecurity@proton.me];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,proton.me:replyto,proton.me:email,proton.me:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,intel.com:email,proton.me:replyto,proton.me:email,proton.me:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7770F6BBAB1
+X-Rspamd-Queue-Id: F25246BBABE
 
-__nd_label_validate() reads several index fields straight from the label
-storage medium.  This series fixes two of them.
+From: Bryam Vargas <hexlabsecurity@proton.me>
 
-Patch 1 (the original report): the bound multiplies the on-media nslot by the
-label size in 32 bits, which wraps, so a crafted nslot passes the config_size
-check and then drives an out-of-bounds memset in nd_label_data_init().
-Evaluate the product in 64 bits.  Tagged for stable.
+The on-media namespace index field nslot is a u32 read from the DIMM
+label storage area.  __nd_label_validate() bounds it against the config
+area size, but sizeof_namespace_label() returns unsigned, so the product
+nslot * label_size is evaluated in 32-bit and wraps modulo 2^32 before
+the comparison.  A crafted nslot passes the bound and is then used as the
+loop trip count in nd_label_data_init(), whose memset() walks off the end
+of the config_size buffer: an out-of-bounds write.
 
-Patch 2: the v1.2 label size is computed as 1 << (7 + labelsize), where
-labelsize is a u8 from the medium; a value of 24 or more makes the shift
-undefined.  Reject labelsize > 1 before the shift.
+The field is not trusted -- it comes from the medium, or from userspace
+via ND_CMD_SET_CONFIG_DATA.  Evaluate the product in 64-bit so the bound
+check is exact; conforming labels are unaffected.
 
-v3: Drop the "cap nslot at 64K" patch from v2.  A closer reading -- and the
-    Sashiko AI review -- showed it was wrong on both counts: the allocation in
-    nd_label_data_init() is kvzalloc(config_size), not nslot-derived, so the
-    cap shrinks nothing; and the kernel itself writes nslot =
-    nvdimm_num_label_slots() on init, which exceeds 64K once config_size is
-    above ~8.4MB, so the cap would reject a freshly-formatted large device on
-    the next probe -- a self-brick.  Patch 1's exact 64-bit bound already
-    closes the overflow.  Replaced it with the labelsize-shift fix the same
-    review surfaced.
-    v2: https://lore.kernel.org/all/20260623-b4-disp-1f2c537a-v2-0-59af73f1f090@proton.me/
-    v1: https://lore.kernel.org/all/20260620-b4-disp-7f43b155-v1-1-0cfd8017f7a0@proton.me/
+The check was safe when introduced by commit 4a826c83db4e ("libnvdimm:
+namespace indices: read and validate"): it multiplied by sizeof(struct
+nd_namespace_label), a size_t, so on a 64-bit build the product did not
+wrap.  Commit 564e871aa66f ("libnvdimm, label: add v1.2 nvdimm label
+definitions") narrowed it to 32 bits when the label size became a runtime
+value read via sizeof_namespace_label().
 
-Verified -m64 and -m32: patch 1's 64-bit bound agrees with an exact
-divide-based check, and an out-of-tree module mirroring nd_label_data_init()
-reproduces the KASAN slab-out-of-bounds write unpatched and is clean when
-patched.
-A boundary truth table confirms the self-brick the v2 cap would have caused
-(kernel nslot > 64K for config_size > ~8.4MB) and that rejecting labelsize > 1
-removes the undefined shift while keeping the two valid sizes.  Harness
-available on request.
-
-A negative ndctl test (test/label-compat.sh) will follow separately, per
-Alison's suggestion.  With the nslot cap dropped it now covers two vectors
-rather than one: an oversize nslot for patch 1 and an oversize labelsize for
-patch 2.
-
+Fixes: 564e871aa66f ("libnvdimm, label: add v1.2 nvdimm label definitions")
+Cc: stable@vger.kernel.org
+Reviewed-by: Alison Schofield <alison.schofield@intel.com>
 Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
 ---
-Bryam Vargas (2):
-      libnvdimm/labels: Prevent integer overflow in __nd_label_validate()
-      libnvdimm/labels: Bound the on-media label size before the shift
+ drivers/nvdimm/label.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/nvdimm/label.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
----
-base-commit: 502d801f0ab03e4f32f9a33d203154ce84887921
-change-id: 20260624-b4-disp-d8279485-1b59fb6a7819
+diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
+index 4218e3ac4a2a..ec12ce72cfe2 100644
+--- a/drivers/nvdimm/label.c
++++ b/drivers/nvdimm/label.c
+@@ -202,7 +202,7 @@ static int __nd_label_validate(struct nvdimm_drvdata *ndd)
+ 		}
+ 
+ 		nslot = __le32_to_cpu(nsindex[i]->nslot);
+-		if (nslot * sizeof_namespace_label(ndd)
++		if ((u64)nslot * sizeof_namespace_label(ndd)
+ 				+ 2 * sizeof_namespace_index(ndd)
+ 				> ndd->nsarea.config_size) {
+ 			dev_dbg(dev, "nsindex%d nslot: %u invalid, config_size: %#x\n",
 
-Best regards,
 -- 
-Bryam Vargas <hexlabsecurity@proton.me>
+2.43.0
 
 
 
