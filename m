@@ -1,181 +1,169 @@
-Return-Path: <nvdimm+bounces-14490-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14493-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id HJQyJNFaO2qlWggAu9opvQ
-	(envelope-from <nvdimm+bounces-14490-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:19:29 +0200
+	id WjTVEF5dO2oQWwgAu9opvQ
+	(envelope-from <nvdimm+bounces-14493-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:30:22 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF136BB39B
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:19:28 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 384076BB408
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:30:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=h4mN55++;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14490-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14490-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=h4v04cQu;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14493-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14493-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D2F3A3063902
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 04:19:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 49F3030095D3
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 04:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F33B366562;
-	Wed, 24 Jun 2026 04:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBBE30DECE;
+	Wed, 24 Jun 2026 04:30:15 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F73C257844;
-	Wed, 24 Jun 2026 04:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B742BD587
+	for <nvdimm@lists.linux.dev>; Wed, 24 Jun 2026 04:30:13 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782274743; cv=none; b=P1wvd2vA6LT5RuCw+nNmFejqr5+L6catksVw3uKVhthXCRp83UkmblyAaynmLkuxAQrhZe1/1cFcTzhmxZFCctArrgB5PZIUV5efb5eDzlD31SqiIQtbHLtvDadUmGBzoBS1DUcXyZI4G8sm33idIkOy516BnXyJ+rKF4hjEhUk=
+	t=1782275415; cv=none; b=qpjIkR/OMfJklUuxuhH+MIlibvO//YE3sn11W9ZCuQJg/90IHiXrO2e/JatQ5FxUEKLO8T0fcAvReV7FFzWmqfkxlnpn66G/Ok5JYpdmrsnrQ1mVrg0Xgxxse03PmMSAfJYMeAXcLCVFw5AZYu7GhcouYWUd3k7fU8JtDr4SAoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782274743; c=relaxed/simple;
-	bh=IF76+bi8vVUJi85fMXfnnIAagGFOCYS6w3SxOSwQ03Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dD8CJaFeK3LBS4BMLIOZrq5HlSb/e8OlIf6YRPoOWkwtVMKSFYyrB/ShFkFgN2Z/PlevcEudAJVsiWGns46tlZKDQuQx/k9SmbNtaRsKQxcZ+tHktbQqvsYwD6c3GuzBAl4v3ptqy0LUfrovvrApkMmYVnqn8j5DfcLRF6ini7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4mN55++; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D1E77C2BCF4;
-	Wed, 24 Jun 2026 04:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1782274742;
-	bh=IF76+bi8vVUJi85fMXfnnIAagGFOCYS6w3SxOSwQ03Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=h4mN55++t5YUtKVvp4vVU45nPOXNmnjPWCIz3Bu7yS5mxU/5gttkI6wK11R9joSe7
-	 JEz4YySJjRapgVFTaw2BRZYyPxECQTv9YOQDEW5FNNYKrdwSthqG/sS4Q5DcJjXY7V
-	 /LHTCqEFlTGBmtIWOJuL5mn4TO9IodTYotz/cjAeMOgQy3eOQntWc0V+lskZ8ndGO1
-	 0Earkyrnw5RFy531PBwbPnx/THTyoLOF1iESoydylNfhxzmV1j/9QcFc7CztraqiLe
-	 cxRI7LteNnSWT5OUoQdnZ8jCNYMURjrnNg53uNka5ashiHa5zXjTqj0HUzEQYYWuE4
-	 BDHcWjWz+R0Zg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC443CDB481;
-	Wed, 24 Jun 2026 04:19:02 +0000 (UTC)
-From: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
-Date: Tue, 23 Jun 2026 23:19:03 -0500
-Subject: [PATCH v2 2/2] libnvdimm/labels: reject an implausibly large
+	s=arc-20240116; t=1782275415; c=relaxed/simple;
+	bh=te02MGvWggn5yLlbLVy3r4gr8+VpGgdhMMg3uj/MBdY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OnVlWGgMvRckBlfcnX92m/wUBhnYu5uFGNNQdB9U1UB+oMcYIZrjTPo9KXyL1MA8Elh3MhDYbHSWxK3PSOj9UEg97MczrFy2RGWNYboMwQhX+cL5LsiswIPxymSyhSTwecIYGm/wHCP73dAYMpNKwp1oFz5ML6CGw9Hp+rvZdSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4v04cQu; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD331F000E9;
+	Wed, 24 Jun 2026 04:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782275413;
+	bh=DWQ+WQn/rwl+aGo9qtqh88aLfYDbf1G1AIth4FiOSyg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=h4v04cQuO9sm6Or2BexlEuVOGfLmfsuQuDg1+QKSsoYdO0PSyQI4hd0iXMy8UrlZP
+	 bhxYgBggUH98XXO9QNFKdlT38j48jOiB8PwdbCEhdMlEAwsROhSQlZ078bKzSA3bl2
+	 VOP8hOKuPmU9bI2WTe0M8lLLuoOT72sKWioBcddhJMPQUtD2W1bh/etjTDtE+5u/Q/
+	 NOS2KJNLRZz2q1R3qGzTZk9TrANlqBFlZeiq5qikMYmIz2Heg9rREvx7GDwXfOHlNe
+	 EZTw8t58TNm542nYaeYiR1WI+jsS+I5iPMKA52wYWOW5nH6E4OrGdIr9VOnKdH8tEO
+	 wsG13X3X9/HSw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 2/2] libnvdimm/labels: reject an implausibly large
  on-media slot count
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Bryam Vargas via B4 Relay" <devnull+hexlabsecurity.proton.me@kernel.org>
+Cc: nvdimm@lists.linux.dev
+In-Reply-To: <20260623-b4-disp-1f2c537a-v2-2-59af73f1f090@proton.me>
+References: <20260623-b4-disp-1f2c537a-v2-0-59af73f1f090@proton.me>
+ <20260623-b4-disp-1f2c537a-v2-2-59af73f1f090@proton.me>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 24 Jun 2026 04:30:13 +0000
+Message-Id: <20260624043013.9AD331F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-b4-disp-1f2c537a-v2-2-59af73f1f090@proton.me>
-References: <20260623-b4-disp-1f2c537a-v2-0-59af73f1f090@proton.me>
-In-Reply-To: <20260623-b4-disp-1f2c537a-v2-0-59af73f1f090@proton.me>
-To: Ira Weiny <iweiny@kernel.org>, Vishal Verma <vishal.l.verma@intel.com>, 
- Dan Williams <djbw@kernel.org>, Dave Jiang <dave.jiang@intel.com>
-Cc: David Laight <david.laight.linux@gmail.com>, 
- Alison Schofield <alison.schofield@intel.com>, nvdimm@lists.linux.dev, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782274741; l=2142;
- i=hexlabsecurity@proton.me; s=proton; h=from:subject:message-id;
- bh=2tqdVOXGrP3V/0SevNfIQBF49FyQ7PW7p3H8Z9FOK7I=;
- b=8RLtTIfJu3Nxr/7NWZq68j+42eciXwKhk35vyYWjXy/+TOsAxYm1bvIkH4byfD6MDoi+a4CbR
- aAfNWPktGcLDk3wH4Xfwo77kVPkp2S7b/JkUoTTY186EfEdV2ln50zk
-X-Developer-Key: i=hexlabsecurity@proton.me; a=ed25519;
- pk=dmppBMZNLLoPzxHi9l8tZDzEZUunPbgsYqIZYXeUrL0=
-X-Endpoint-Received: by B4 Relay for hexlabsecurity@proton.me/proton with
- auth_id=814
-X-Original-From: Bryam Vargas <hexlabsecurity@proton.me>
-Reply-To: hexlabsecurity@proton.me
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14490-lists,linux-nvdimm=lfdr.de,hexlabsecurity.proton.me];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-14493-lists,linux-nvdimm=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:devnull+hexlabsecurity.proton.me@kernel.org,m:nvdimm@lists.linux.dev,m:devnull@kernel.org,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:iweiny@kernel.org,m:vishal.l.verma@intel.com,m:djbw@kernel.org,m:dave.jiang@intel.com,m:david.laight.linux@gmail.com,m:alison.schofield@intel.com,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[devnull@kernel.org,nvdimm@lists.linux.dev];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,intel.com,lists.linux.dev,vger.kernel.org];
+	RCPT_COUNT_TWO(0.00)[2];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	HAS_REPLYTO(0.00)[hexlabsecurity@proton.me];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,nvdimm@lists.linux.dev];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[proton.me:replyto,proton.me:email,proton.me:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lists.linux.dev:from_smtp]
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-nvdimm,hexlabsecurity.proton.me];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,proton.me:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DEF136BB39B
+X-Rspamd-Queue-Id: 384076BB408
 
-From: Bryam Vargas <hexlabsecurity@proton.me>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The hardcoded cap of 64K for `nslot` breaks legitimate devices wit=
+h large label storage areas and introduces a self-bricking behavior by reje=
+cting natively generated label formats.
+--
 
-Even with the bound evaluated in 64-bit, nslot is constrained only by
-config_size, which nvdimm_init_nsarea() takes verbatim from the dimm's
-ND_CMD_GET_CONFIG_SIZE response with no upper sanity check.  A firmware
-or emulated device reporting a large config_size would let a
-correspondingly large on-media nslot pass validation and drive a large
-allocation and memset loop in nd_label_data_init().
+commit e9419d2283340d1b7069d74b83a7188e43fd5de9
+Author: Bryam Vargas <hexlabsecurity@proton.me>
 
-Reject an nslot above NSINDEX_NSLOT_MAX (64K).  The largest legitimate
-count is config_size / label_size -- about 1K on a real ~128K label area
--- so this cannot affect a conforming device, and it bounds the slot loop
-independently of the firmware-reported config_size.
+libnvdimm/labels: reject an implausibly large on-media slot count
 
-Suggested-by: David Laight <david.laight.linux@gmail.com>
-Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
----
- drivers/nvdimm/label.c | 4 ++++
- drivers/nvdimm/label.h | 7 +++++++
- 2 files changed, 11 insertions(+)
+This commit adds a 64K upper bound check on the nslot value read from the
+media to prevent large allocations. It validates the nslot field in
+__nd_label_validate() against the newly introduced NSINDEX_NSLOT_MAX.
 
 diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
-index ec12ce72cfe2..ce1e43d67bab 100644
+index ec12ce72cfe2c..ce1e43d67babe 100644
 --- a/drivers/nvdimm/label.c
 +++ b/drivers/nvdimm/label.c
-@@ -202,6 +202,10 @@ static int __nd_label_validate(struct nvdimm_drvdata *ndd)
+@@ -202,6 +202,10 @@ static int __nd_label_validate(struct nvdimm_drvdata *=
+ndd)
  		}
- 
- 		nslot = __le32_to_cpu(nsindex[i]->nslot);
+=20
+ 		nslot =3D __le32_to_cpu(nsindex[i]->nslot);
 +		if (nslot > NSINDEX_NSLOT_MAX) {
 +			dev_dbg(dev, "nsindex%d nslot: %u implausibly large\n", i, nslot);
 +			continue;
 +		}
+[Severity: High]
+Could this cause a regression by breaking legitimate devices with large
+label areas?
+
+If a device has a config_size larger than ~8.4MB, nvdimm_num_label_slots()
+will naturally generate an nslot value greater than 64K.
+
+When the kernel formats such a device in nd_label_write_index(), it writes
+this unbounded nslot to the media:
+
+drivers/nvdimm/label.c:nd_label_write_index() {
+    ...
+    if (flags & ND_NSINDEX_INIT)
+        nslot =3D nvdimm_num_label_slots(ndd);
+    ...
+}
+
+Will __nd_label_validate() then reject these newly initialized labels on the
+next probe, making the namespaces inaccessible?
+
+Also, does this check prevent the large allocation mentioned in the commit
+message? Looking at nd_label_data_init(), the allocation appears to use
+config_size directly before nslot is even read or validated.
+
  		if ((u64)nslot * sizeof_namespace_label(ndd)
  				+ 2 * sizeof_namespace_index(ndd)
  				> ndd->nsarea.config_size) {
-diff --git a/drivers/nvdimm/label.h b/drivers/nvdimm/label.h
-index 0650fb4b9821..74d7c1cc7476 100644
---- a/drivers/nvdimm/label.h
-+++ b/drivers/nvdimm/label.h
-@@ -28,6 +28,13 @@ enum {
- 	ND_LABEL_MIN_SIZE = 256 * 4, /* see sizeof_namespace_index() */
- 	ND_LABEL_ID_SIZE = 50,
- 	ND_NSINDEX_INIT = 0x1,
-+	/*
-+	 * A sane ceiling on the on-media slot count.  The largest legitimate
-+	 * value is config_size / label_size -- about 1K on a real ~128K label
-+	 * area.  A count this large cannot describe a real device; it would
-+	 * only drive a large allocation in nd_label_data_init(), so reject it.
-+	 */
-+	NSINDEX_NSLOT_MAX = 64 * 1024,
- };
- 
- /**
+[ ... ]
 
--- 
-2.43.0
-
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623-b4-disp-1f=
+2c537a-v2-0-59af73f1f090@proton.me?part=3D2
 
