@@ -1,172 +1,168 @@
-Return-Path: <nvdimm+bounces-14499-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14500-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rjOPEGRzO2ozYAgAu9opvQ
-	(envelope-from <nvdimm+bounces-14499-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:20 +0200
+	id aIm/I12MO2qDZggAu9opvQ
+	(envelope-from <nvdimm+bounces-14500-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 09:50:53 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367FD6BBAB9
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 08:04:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D69D16BC56A
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 09:50:52 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=AuqFmosx;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14499-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14499-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=TfHCqtur;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14500-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14500-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B66123015C86
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 06:04:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8C2FE3024537
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 24 Jun 2026 07:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFFDB3876B5;
-	Wed, 24 Jun 2026 06:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AAA391E7E;
+	Wed, 24 Jun 2026 07:50:01 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C535386C3D;
-	Wed, 24 Jun 2026 06:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8075E2EEE66
+	for <nvdimm@lists.linux.dev>; Wed, 24 Jun 2026 07:50:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782281026; cv=none; b=G7TaIKjQfXUkbWmuzT+ElXYS3wsbIGonxPpuO9ZObQfgy4sUsAe3hKa47m59vGe3xtrQJMRYLd4b0bY4VN+qLc8HFTsAwSM8eN6HyImNV7HFoPTQ7hYJb49lxFErL5QqEvyMOTcJA6TM9UYQOq4hvG2oJyTcLZwis0ZlDFLlHdI=
+	t=1782287401; cv=none; b=Y/XRfK2k27EjJwTocJVsNTJb0JyWJdkZUSV/zLn7Se+DSaDofqiY/k++q2Vuvm9+4ItGrAzO6g0VCVQ6XeydbCX+MWNfppqyar6Um8j5CEk8rta20DWiyNoVcYfrgQAxBvRk0QUeUNr9+mimJTbCR98bt4dzjweWvittHdVFa4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782281026; c=relaxed/simple;
-	bh=71wJOwJmMWs0vcnxWQcdHUJHn90LE6ORfjQ82/1YR5s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FFYQ7dTaP7gQ+g+RoTOt03FYmS324NWyXzOLgYHGY32QN0UlZyOmJUK2MC0HIuul5Sjh89pPR5sXwMzpoNe8Peqthn3WKmDLj8CJJICCtoHcqVSfnDauNFSt9akvVcQoNvjl6BUzcmZa0wY5Xd0ZPBfaoBkswfwH/7u0r4ogTEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AuqFmosx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D79FCC4AF0B;
-	Wed, 24 Jun 2026 06:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1782281025;
-	bh=71wJOwJmMWs0vcnxWQcdHUJHn90LE6ORfjQ82/1YR5s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AuqFmosxONZjcUsS0NMnnilknekfqx78w0031cl4DmRVedJoBf1NE93HXLrHxhk0R
-	 c6/zp+uWpO9E6CnFX0fq6aU+ko4gbBgD9EqkMCFnI7J5CBdOqz3cmtCL0THbyywW0m
-	 oY36hJRuQcm5PJ4Yq99U4nTIwERVXo9Ui1NF/os+D2Z0AeBs9Sjok3FiX6G4Osm01n
-	 m74X0hTma24089rwWutCy6wm0tE1cYDxxA6oJPX70QWcTP1Hc3x2xx+jxKuH+8aUaD
-	 q7XBOXET61Zy4k81h6lisAKTRyL40pVrdrywvwQ2E/ZzFmanK9Hh6yII6v608zbG8b
-	 dQClMOirH/8yQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE07DCDE000;
-	Wed, 24 Jun 2026 06:03:45 +0000 (UTC)
-From: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
-Date: Wed, 24 Jun 2026 01:03:46 -0500
-Subject: [PATCH v3 2/2] libnvdimm/labels: Bound the on-media label size
- before the shift
+	s=arc-20240116; t=1782287401; c=relaxed/simple;
+	bh=48CBAiVLI24/iZduWhrvqOuRvaOxBYrMQGx5TphZKVI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+NjpadXiR8InBF1RNVAtnYvjLNZrhrmWiqEGAFlwl8qcF0eGYbpsMloJ325BEFXoKhaX79QNFExKfd9md9vr3qmhJnD+9SVBYsBbsPPp8BSeYQ7U4KkjAkeW5RH81E6OunMMDsVFFHAdSoqEzYmQpKdr6lPkdcpIEgkq/27ghE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TfHCqtur; arc=none smtp.client-ip=74.125.82.171
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-30c713f37c2so113666eec.0
+        for <nvdimm@lists.linux.dev>; Wed, 24 Jun 2026 00:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782287400; x=1782892200; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lnkemTVFtevu9LEJarGGlEd0BNgo1KPMK+RxKbsyiwU=;
+        b=TfHCqturUjJzue/LctppwrXQCo7Bk+ORg1SjyjVbaETWhKKD2/KmCCvU3dNVl2ehp7
+         88h066IhVEb/lSJCKEs/o+pRS6Z020ZgHYQl4aZkDzktP1Hb0cr0QLEARu3AhSPMGdF2
+         C0j2K3noa3yBMVXtLhLEbh+wH6f0wjd9T6nxzSFx15uNXTsEjk00Eb+cNGETGRW7cT2E
+         F8w9SzTJGayH73S9XwC4Z2xntwBN8Xb2/DTtpQBiz/X3U6KloXvBw6Al/FLPhBNw5Z/T
+         A/rJz/En0n9eejxnctN4E6GhDCrP6a2y1njIwY37d+Np4ytdhTneQst2DDL0ZvttuN7j
+         Vgcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782287400; x=1782892200;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lnkemTVFtevu9LEJarGGlEd0BNgo1KPMK+RxKbsyiwU=;
+        b=Fae6hhVfJXizGCTl5+qXRigFZqEga/dUM26WryGvZctA1ffKArESgSz02+injO99w/
+         AaO+M8WQ2FY8pWQpUDCqVCksr4BCIDBvNMbyDq2V/XP3VfqFeXLapPCFlZ7FiZKTnn31
+         6x77fza9wvetbtLpD29rz30tQKWwiy0U/QxIEyXxYc4EummUPwLNtSVigF0Pg9trfqRE
+         RR9m2zeze3sq4CYeipTMcVqs2gc5jYWFSoJ34P62ealdoY9svMS//b6O6lla/psf808b
+         WiC8l2W88rWOdWdNqvmigs/GpEd46jH5ToHchKQUBTdsyznnxctyb8hWWv8c2CJ6bIf+
+         BBmw==
+X-Forwarded-Encrypted: i=1; AHgh+RpVuozEkgJ8ngAaZbDTPawVrLED0rqPkKqTXeMT3uYvRL2e7+NizEYFdIAUPJ09Hu6+IblmtDo=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwdujzwGaw335bXCpeVOE5SKVvdwVw8fbZNBAlid5HEZx6KDqqP
+	seqDYjUeCR9Oast0qcDwhA+LgaJVRs9dgNowE147afDwPglf8T7mUR3I
+X-Gm-Gg: AfdE7ckA8k2l0PQ9V0y3Xln6R/8cBY763XjP1qI/MpzawHTk2AXi1CyMP6gCEDzP9qo
+	9FFrwOq66LexIlcGxKjdz4NUFiBvBO3MCdFK+SZy8Y1JfGkKhciYBccSoKeNizpAri9zjgR1mbN
+	Yv4nSQWoTN2b/b0JWjF/zV0FrLnjp6Cpdl8vNbI6v3DvEzSp3nu/aKDsurdLyfnsVbdty7z4/CA
+	dbJsJv4u0j1XlouH3XC2aZnaF6TLbAJZLD3Vt6x9tXWjff+yQxo7XuzYwJ6JNx65R4NzaQqbfyX
+	n0ylNAc53p1QOrckeaol/5u1XT/RdRSvzNsWyyIagQsepfsXiiB90e810tIzHkqDxE34VJ5CwdM
+	g4mj+n6067anqo3LPZ/fH/XcG2bPJVDQ9Js6IKKqKg0OUZg95MoIdj0A0euf3Oo87rer0B/othr
+	5uLVsPyuxTUo11czOGYC01zEAke6+DkKrqbXs5zdjbFhkvYyxLwV4Phbh4czndfEgPgndsYd1jM
+	4g3cPo=
+X-Received: by 2002:a05:7300:1801:b0:2ed:a58c:942 with SMTP id 5a478bee46e88-30c5556303cmr6682109eec.8.1782287399572;
+        Wed, 24 Jun 2026 00:49:59 -0700 (PDT)
+Received: from AnisaLaptop.localdomain (c-73-170-217-179.hsd1.ca.comcast.net. [73.170.217.179])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba57dc4sm21112608eec.9.2026.06.24.00.49.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 00:49:59 -0700 (PDT)
+From: Anisa Su <anisa.su887@gmail.com>
+X-Google-Original-From: Anisa Su <anisa.su@samsung.com>
+Date: Wed, 24 Jun 2026 00:49:58 -0700
+To: Anisa Su <anisa.su887@gmail.com>
+Cc: linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nvdimm@lists.linux.dev, Dan Williams <djbw@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <iweiny@kernel.org>,
+	Alison Schofield <alison.schofield@intel.com>,
+	John Groves <John@groves.net>, Gregory Price <gourry@gourry.net>
+Subject: Re: [PATCH v10 00/31] DCD: Add support for Dynamic Capacity Devices
+ (DCD)
+Message-ID: <ajuMJi5nTQRB_ZP0@AnisaLaptop.localdomain>
+References: <cover.1779528761.git.anisa.su@samsung.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260624-b4-disp-d8279485-v3-2-cdb6cab28b41@proton.me>
-References: <20260624-b4-disp-d8279485-v3-0-cdb6cab28b41@proton.me>
-In-Reply-To: <20260624-b4-disp-d8279485-v3-0-cdb6cab28b41@proton.me>
-To: Dave Jiang <dave.jiang@intel.com>, Dan Williams <djbw@kernel.org>, 
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <iweiny@kernel.org>
-Cc: Alison Schofield <alison.schofield@intel.com>, nvdimm@lists.linux.dev, 
- David Laight <david.laight.linux@gmail.com>, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782281024; l=1823;
- i=hexlabsecurity@proton.me; s=proton; h=from:subject:message-id;
- bh=MCs2th/N4QIgCQZkHTxmp+qdeY/SC2RCINMmfLHg+qc=;
- b=F2z/lOJ7ISu1i4FzLpyEsruEoUCsY4nMfCTetttK5QlV4cktepaI+SOGuIMlvD/VopX4oaNjS
- /OP8hbkQj+qBc9B7S4YYjPa94wg+4etk/579Y2y5GlXT63WY6Z0TD7H
-X-Developer-Key: i=hexlabsecurity@proton.me; a=ed25519;
- pk=dmppBMZNLLoPzxHi9l8tZDzEZUunPbgsYqIZYXeUrL0=
-X-Endpoint-Received: by B4 Relay for hexlabsecurity@proton.me/proton with
- auth_id=814
-X-Original-From: Bryam Vargas <hexlabsecurity@proton.me>
-Reply-To: hexlabsecurity@proton.me
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1779528761.git.anisa.su@samsung.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14499-lists,linux-nvdimm=lfdr.de,hexlabsecurity.proton.me];
+	FORGED_RECIPIENTS(0.00)[m:anisa.su887@gmail.com,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:dave.jiang@intel.com,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:John@groves.net,m:gourry@gourry.net,m:anisasu887@gmail.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:dave.jiang@intel.com,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:nvdimm@lists.linux.dev,m:david.laight.linux@gmail.com,m:linux-kernel@vger.kernel.org,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[devnull@kernel.org,nvdimm@lists.linux.dev];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[intel.com,lists.linux.dev,gmail.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14500-lists,linux-nvdimm=lfdr.de];
+	FORGED_SENDER(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	HAS_REPLYTO(0.00)[hexlabsecurity@proton.me];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,nvdimm@lists.linux.dev];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[proton.me:replyto,proton.me:email,proton.me:mid,lists.linux.dev:from_smtp]
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,AnisaLaptop.localdomain:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 367FD6BBAB9
+X-Rspamd-Queue-Id: D69D16BC56A
 
-From: Bryam Vargas <hexlabsecurity@proton.me>
-
-For a v1.2+ index, __nd_label_validate() computes the label size as
-1 << (7 + nsindex[i]->labelsize), where labelsize is a u8 read from
-the label storage medium.  A value of 25 or more makes the shift count
-reach or exceed the width of int -- undefined behavior -- and 24 already
-shifts into the sign bit.  Only 0 (128-byte) and 1 (256-byte) are valid.
-
-Reject a labelsize above 1 before the shift.  The result was rejected by
-the following size comparison anyway, so this only removes the undefined
-shift on a crafted or corrupted medium; conforming labels are unaffected.
-
-Fixes: 564e871aa66f ("libnvdimm, label: add v1.2 nvdimm label definitions")
-Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
----
- drivers/nvdimm/label.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/nvdimm/label.c b/drivers/nvdimm/label.c
-index ec12ce72cfe2..dea2eee86d13 100644
---- a/drivers/nvdimm/label.c
-+++ b/drivers/nvdimm/label.c
-@@ -145,10 +145,21 @@ static int __nd_label_validate(struct nvdimm_drvdata *ndd)
- 		/* label sizes larger than 128 arrived with v1.2 */
- 		version = __le16_to_cpu(nsindex[i]->major) * 100
- 			+ __le16_to_cpu(nsindex[i]->minor);
--		if (version >= 102)
-+		if (version >= 102) {
-+			/*
-+			 * labelsize feeds the shift below; only 0 (128-byte)
-+			 * and 1 (256-byte) are valid -- a larger value would
-+			 * overflow or exceed the width of int.
-+			 */
-+			if (nsindex[i]->labelsize > 1) {
-+				dev_dbg(dev, "nsindex%d labelsize: %d invalid\n",
-+					i, nsindex[i]->labelsize);
-+				continue;
-+			}
- 			labelsize = 1 << (7 + nsindex[i]->labelsize);
--		else
-+		} else {
- 			labelsize = 128;
-+		}
+On Sat, May 23, 2026 at 02:42:54AM -0700, Anisa Su wrote:
  
- 		if (labelsize != sizeof_namespace_label(ndd)) {
- 			dev_dbg(dev, "nsindex%d labelsize %d invalid\n",
+[snip] 
+> This series:
+> https://github.com/anisa-su993/anisa-linux-kernel/tree/dcd-v10-23-05-2026
+> 
+> The corresponding NDCTL branch:
+> https://github.com/anisa-su993/anisa-ndctl/tree/dcd-2026-05-21
+> 
+Making a note here that we were also able to validate a very basic
+case on real HW of adding a single extent on GNR-AP platform with the
+given kernel branch + NDCTL branch, create a DAX device from it, as well
+as run the FAMFS smoke tests on it.
 
--- 
-2.43.0
+Since I've made a ton of changes based on feedback and plan to send out
+v11 by EOW, I will ask the team helping us with this task to try more
+cases on the next version and report findings as they become
+available :)
 
+Anisa
 
+[snip]
+ -- 
+> 2.43.0
+> 
 
