@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-14537-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14538-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id NR2zGj3cPGrqtQgAu9opvQ
-	(envelope-from <nvdimm+bounces-14537-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 09:43:57 +0200
+	id 93INJJfcPGr3tQgAu9opvQ
+	(envelope-from <nvdimm+bounces-14538-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 09:45:27 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD28D6C3755
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 09:43:56 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1207A6C3773
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 09:45:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=SNY0gmJI;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14537-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14537-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="mXl9fp/v";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14538-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14538-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 730DE307B35D
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 07:40:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B8012309ECC5
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 07:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C37D3A9014;
-	Thu, 25 Jun 2026 07:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C304D381B15;
+	Thu, 25 Jun 2026 07:41:39 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDEB3815ED;
-	Thu, 25 Jun 2026 07:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF48B26FD9B;
+	Thu, 25 Jun 2026 07:41:38 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782373213; cv=none; b=tsVTWkbyzYubbvTxujdbm5JYkFlaa8IXdq0Juz3rhCK3ZK8ieHczjwm5lnRp/ccFMy6sRcFY+yep3E63AX5DfmNcdF9PSa6BgliePE98zSM0H8yznEF3EhaBnaZ3ZG24+GiHBHKJIyAAuBu8dm0q8rCcEjr5VzwjjFZy9IjMHKs=
+	t=1782373299; cv=none; b=MmyQEh6+OYMdOa9oVMYKyPvKuH2UncEwO6qQzLPJfuyR3PfVIhMCNlLL1nFML1+nsig4Owbvp9PVtuotudFmyFPaXLJ8W7HXSZnyDoPkbFHiS46NRQZu1kxNE0WE9RXlU84ouBw2b1L0/0S9dib6CJY31TvS1DLgn5GKl9p6DnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782373213; c=relaxed/simple;
-	bh=wLp3MaGuBaurQfyTF7tq7PviXwXQ+F8xCjPM7/OW12s=;
+	s=arc-20240116; t=1782373299; c=relaxed/simple;
+	bh=WKyvy6T9dUu8Q1fCEj/HVCx0/OFIePMbFHSjpyaO9to=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nazyw8nMIVeYlRG2dPAM26TAxPt0TDTAWjKeEI8ZbzplwD8ObGj0DpdikYPDgGmIuf24aV3npMr/+u4YLigPe3qZHg7WLTD3nKvez0ndXqOQZ9iXebeaYEbD1xRqabZPAiiVLDcVdiWjXPgSDvZWrBo/bZG1icLvq2gwvbFATsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNY0gmJI; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E00A1F00A3A;
-	Thu, 25 Jun 2026 07:40:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=QXsH9LMB0tM1hd43nFULkveYEPCZDQEvLrbAPezsH/HnSbAfOTxvMoR3GhOXwTHbRj7qciwxTH0etZM7X4nxT3waG1JWJhyRcpf6+27ls0xee9mxrunXmVKxDxwnTVb6y5ck0U+lNyZwA5AN2YmvMZzOG1QkyEq5gxRzNwgDxrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXl9fp/v; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED8A1F000E9;
+	Thu, 25 Jun 2026 07:41:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782373211;
-	bh=D0yxXYlC+6ZzOInCXh8esiMObDCmFa28JgIqXqu60pE=;
+	s=k20260515; t=1782373298;
+	bh=qR6oIry2jf0Fr09AE+fKexDY2/aMs8tOBo4q26NdOrM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SNY0gmJIRd8aAsNgBLSo9uATdut1LoqElrTqsbgNwRX34c4pz0dA2LXltTCm5J2jd
-	 GCKHbC/0HGMiLrrlgZ7sJgoYk/hvOlx2FQsSzSGbHdvEvi2Y6fHGEOv+6errkLxuyN
-	 FEG4hWpDHHl+2/TbXpxcGR+W7rPBRxmUm7UluzvbnL7Pv9Fc+0i8btgnVJEZnCPSTT
-	 oXx/29zepKkQnx7lLBxYJuk4hVstAm3j549aahwWIoI7j+zXF7pE6/py3rP9S4IaX/
-	 hYNwq2jhob3kh6PbUWCnnIc6d0oNUzlfu7kXxyZ4x5BAf9EGrZ6nJLQ+SU/c15xN9o
-	 IVgh763KB88WQ==
-Message-ID: <1d8f74a7-502b-43cb-a0f0-1923049aa213@kernel.org>
-Date: Thu, 25 Jun 2026 09:40:02 +0200
+	b=mXl9fp/vua3/fO7+bl2QOvYDw6IGCi/i5tNvJKEo1qmWqSHI+kpeGoVdtIiZ1jXRB
+	 C3BiULwUh4wqxeWOs19bVnurtNPF94AAgAzzYefnUPzahdtagh4tleRfKVgX7X7m5x
+	 +hA4MAe+zAAYVztI5FnEhQ6towFy78rD++77RmwiiRXb8oN9WFvEaF0WmwRcYbRRl7
+	 3rCu34Q5w1qUK5SV2+ziaq6O5jtURiXpP8HJII2qRtRJl2XtXJfkychZLCg8xLg53z
+	 kq1ldF0v602LP92+s+hZFBb8851THUi/mrL4XeIN3GS+DtaOWrJYcsAoenEymXvK5n
+	 kTuIY4wCywKTA==
+Message-ID: <dd45e774-a2bf-4cdd-b27e-35a533fadedc@kernel.org>
+Date: Thu, 25 Jun 2026 09:41:30 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -55,8 +55,7 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 8/9] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
+Subject: Re: [PATCH v5 0/9] dax/kmem: atomic whole-device hotplug via sysfs
 To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org,
  nvdimm@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
@@ -67,9 +66,9 @@ Cc: linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
  ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
  surenb@google.com, mhocko@suse.com, shuah@kernel.org,
  alison.schofield@intel.com, Smita.KoralahalliChannabasappa@amd.com,
- ira.weiny@intel.com, apopple@nvidia.com, Hannes Reinecke <hare@suse.de>
+ ira.weiny@intel.com, apopple@nvidia.com
 References: <20260624145744.3532049-1-gourry@gourry.net>
- <20260624145744.3532049-9-gourry@gourry.net>
+ <ajwpCOSGapenRPsu@gourry-fedora-PF4VCD3F>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -116,30 +115,30 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260624145744.3532049-9-gourry@gourry.net>
+In-Reply-To: <ajwpCOSGapenRPsu@gourry-fedora-PF4VCD3F>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14537-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14538-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:gourry@gourry.net,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:alison.schofield@intel.com,m:Smita.KoralahalliChannabasappa@amd.com,m:ira.weiny@intel.com,m:apopple@nvidia.com,m:hare@suse.de,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:gourry@gourry.net,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:alison.schofield@intel.com,m:Smita.KoralahalliChannabasappa@amd.com,m:ira.weiny@intel.com,m:apopple@nvidia.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[28];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[27];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[david@kernel.org,nvdimm@lists.linux.dev];
@@ -151,78 +150,18 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CD28D6C3755
+X-Rspamd-Queue-Id: 1207A6C3773
 
-On 6/24/26 16:57, Gregory Price wrote:
-> There is no atomic mechanism to offline and remove an entire
-> multi-block DAX kmem device.  This is presently done in two steps:
->     1. offline all
->     2. remove all).
+On 6/24/26 20:59, Gregory Price wrote:
+> On Wed, Jun 24, 2026 at 10:57:35AM -0400, Gregory Price wrote:
+>> ... snip ...
 > 
-> This creates a race condition where another entity operates directly
-> on the memory blocks and can cause hot-unplug to fail / unbind to
-> deadlock.
+> Disregard, there are a few unaddressed Sashiko comments, I'm just going
+> to respin this.  Will wait until after the merge window closes for v6.
 > 
-> Add a new 'state' sysfs attribute that enables an atomic whole-device
-> hotplug operation across its entire memory region.
-> 
-> daxX.Y/state mirrors the per-block memoryX/state ABI:
->   - [offline, online, online_kernel, online_movable]
->   - "unplugged" - is added specifically for dax0.0/state
-> 
-> The valid writable states include:
->   - "unplugged":      memory blocks are not present
->   - "online":         memory is online, zone chosen by the kernel
->   - "online_kernel":  memory is online in ZONE_NORMAL
->   - "online_movable": memory is online in ZONE_MOVABLE
-> 
-> Valid transitions:
->   - unplugged                -> online[_kernel|_movable]
->   - online[_kernel|_movable] -> unplugged
->   - offline                  -> unplugged
-> 
-> A device can only be onlined from "unplugged", so it must be returned
-> there before being onlined into a different state.
-> 
-> For backwards compatibility the memory blocks are always created at
-> probe - existing tools expect them to be present after kmem binds.
-> 
-> "offline" is therefore a reportable state but is not writable: it only
-> arises from the legacy auto_online_blocks=offline policy.  Onlining
-> such a device through this attribute requires unplugging it first in
-> an effort to get drivers creating DAX devices to set a default.
-> 
-> Unplug is atomic across the whole device: dax_kmem_do_hotremove()
-> collects every added range and offlines/removes them in one operation.
-> Either the operation succeeds or is entirely rolled back.
-> 
-> Unbind Note:
->   We used to call remove_memory() during unbind, which would fire a
->   BUG() if any of the memory blocks were online at that time.  We lift
->   this into a WARN in the cleanup routine and don't attempt hotremove
->   if ->state is not DAX_KMEM_UNPLUGGED or MMOP_OFFLINE.
-> 
->   An offline dax device memory is removed on unbind as before.
-> 
->   If online at unbind, the resources are leaked (as before), but now
->   we prevent deadlock if a memory region is impossible to hotremove.
-> 
-> Suggested-by: Hannes Reinecke <hare@suse.de>
-> Suggested-by: David Hildenbrand <david@kernel.org>
-> Signed-off-by: Gregory Price <gourry@gourry.net>
-> ---
->  Documentation/ABI/testing/sysfs-bus-dax |  26 +++
->  drivers/base/memory.c                   |   9 +
+> The rough shape of things should still hold w/ prior feedback.
 
-Can we have this ...
-
->  drivers/dax/kmem.c                      | 224 ++++++++++++++++++++----
->  include/linux/memory_hotplug.h          |   1 +
-> 
-
-... and this as a separate patch, please?
-
-Nothing else jumped at me.
+Added some comments :)
 
 -- 
 Cheers,
