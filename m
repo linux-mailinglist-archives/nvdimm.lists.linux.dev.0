@@ -1,81 +1,82 @@
-Return-Path: <nvdimm+bounces-14582-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14583-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id zra9OaAuPWphyggAu9opvQ
-	(envelope-from <nvdimm+bounces-14582-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 15:35:28 +0200
+	id WEzzJaEyPWpgywgAu9opvQ
+	(envelope-from <nvdimm+bounces-14583-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 15:52:33 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8172F6C62B9
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 15:35:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C976C6452
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 15:52:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gourry.net header.s=google header.b=QGQpbzPn;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14582-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14582-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gourry.net header.s=google header.b=MFUYTj7l;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14583-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14583-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1BE8C30332F1
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:35:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C51B4304E0D5
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DF73368B5;
-	Thu, 25 Jun 2026 13:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755D73451C6;
+	Thu, 25 Jun 2026 13:51:51 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188AD32E121
-	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 13:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EAA2F12A5
+	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 13:51:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782394520; cv=none; b=coodIRT2z/HR4eQuJW59nPaZht5tN79J6hTAzUmD/9X11uTP0wk2npIg1yEYKlq1tx1APvToB1X8kOGXPa8+XiMNLeXd4Ma0pQWln6FqkTQ2rb2xpz5FOZ3lParDGvfrLMQ1ogILPDn5vospGukh+mdykiUgVevXU8sVUKOE3CU=
+	t=1782395511; cv=none; b=pVmSh1XueVxIKizjg5Fd39XJ0+Y5fVKdqKEvP3D403NJ+XmbVJXUfZNYIenhMZ5XGewr1iy8Am2N2iikIGM0fA7XLgDbRLa3waynsLg0mrE3y3KfWXmeLhRMBFHYvrRyC33hljzMd2BOgbWuqAVrLIUZC3SFS3PD4FUCfIA2Rco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782394520; c=relaxed/simple;
-	bh=VTl59t5FGNxl9vwIccoBE1FSh1ipsJkGVWNaK8PoD04=;
+	s=arc-20240116; t=1782395511; c=relaxed/simple;
+	bh=hLIxkknUY1qEk33mNlGnfp7C3XVSiZnlZVJPB7bPOFE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cspgHHWYcRurdQJ1g6UI3yGBpwFFWTLtShc8EFcfq5FapUd8PQcvU6rgeXJJH6RpawOInaRdEU13Qv6vOWXEIq5dJTZDjGxljJ33btttnCA/hGYLOVIiYyNqzt4ApZHyBkn6Gzk+UKZORw9CDW1a7YQz8MuO0ucH4452UbW2onY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=QGQpbzPn; arc=none smtp.client-ip=209.85.219.43
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8dea42b547eso32422756d6.1
-        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 06:35:17 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pZANvDLoMD2+UUr7gH4khOHDgrNhgSp+9FW7/myR9B/90NAMEysACmCCd+Xwz2/QScv7aq6oYVemmEBByOHsvwuKgjA2Cz0WWmTOPnVKSXed4ri1Tf6zITw/FauvIJwxRYOz0UzcUCvI0KuIPWh4rGWOogY5febgR8HPI5SSLzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=MFUYTj7l; arc=none smtp.client-ip=209.85.222.175
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-91562bf6c12so217876385a.2
+        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 06:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1782394517; x=1782999317; darn=lists.linux.dev;
+        d=gourry.net; s=google; t=1782395508; x=1783000308; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8pz5eRLl5osDfg8s+rI8Lgc8KwmBuE9WN+Pu83DenE=;
-        b=QGQpbzPnl5MyHZLUnj9THzPangH1zWjxsP1pkD827M1XlLlW78v2NhQ7sPcghDaSJo
-         sOgHdGO/foc2k1Ax7vAx7NxpAXC89vLdEjhz5C5Jel17f3O4Of1kyF9JLahwHGdvXciF
-         PMen8VBmMPzLhbhXa9Sc9JQ4+IHT5B/P9M9k2FxaMATsCnQh27KE1j3ekLJImp0X1+A2
-         2s/hsAW6XgOSACO6Lvh6oepSMb4aC//AEZRdYKCeAdIYss0oXnCKmfKURqMVnIgx9F3u
-         fkZGVaKG2YrVGnQC9zAWqFcHpTUjc0GnP8aZx/LE6aAxJDyKEZheBeGyFdjFGdWw20hC
-         zpPw==
+        bh=aKYJf6dgXdgamkqA4Gs/PyiillXu8yFih4YnbHcGiuM=;
+        b=MFUYTj7liC8bZroNHkOTT7lWvzLv2g84KUdlbV1WuumXGxMzn2ITFaTnMwOQpnh5eg
+         NTYooFsHxEStm+CWOvDppkDJXoECaZ2CczrPPXPX0rcR3Vita2H0XQv4meXy1hBDLM4u
+         RsPMI1MzYE3GYRFn/Tmmfn7o9+W37AfmYJ59tEbhlwU2ceId57aTkAH+6Ercq9/JP2J8
+         oPAunXWFYDi4AYRMx6PfcN+dY3FzH2hW9WY0YVR71cdmatmA5xUmmhe5EJbkVIpQ0wV8
+         CW23JZMDe8NG4LYw6O88i0zmxOmVqRHWwV5A0/11S6lKlDH/rxKX89eQvHnIIxYOBgI8
+         97Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782394517; x=1782999317;
+        d=1e100.net; s=20251104; t=1782395508; x=1783000308;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q8pz5eRLl5osDfg8s+rI8Lgc8KwmBuE9WN+Pu83DenE=;
-        b=FSxhJ0yodLNxQy8ZkHwtaj3s99UI+goHmZ6WABP+8Mu6gGPSsywcOCm4Zaz2OsUiRq
-         Yhxpa1iryZbH2Tnx2CU+DKp9GdgCFYwolxleSR5tPanXczbaHsNtkHX2DVnnITknecDg
-         Tp4mz3taEX5qPz3NOyz45BjnLqJbzo9RYJFcgclfG67Gdf+3kXCZv2fIHjzI0PlJ4PGe
-         ObGDpj1Wr85A1h2MJzvrQXRKgQtZ78UNrsX+IHDbhZIw/611CIxeaVpAZT0QrP3CSMAT
-         E27MYxHsqb5SvR5sd3S/n/RfSi1LpAV6eZngdw6qYW/8KyFVXDTv+E/iyGwd0EttjtbL
-         9Jew==
-X-Forwarded-Encrypted: i=1; AHgh+Rpq/tmmYvbAnz+R68f9EwllI6Rm0Wbj9dd4rvbaVxQWqXGekCx/DGV1t5QS8QTjYkL36D5cTeU=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxD1hpkJXG6zgVAjYw8fCKI9v+rqUj8pFTvj2PP9TgP4wkrTUcT
-	aGf0/+m7URcmzc9PQazP0lX4lF3Dnmggvn22CuiATiWYG/sd8XiLkXhPnS7duGm356c=
-X-Gm-Gg: AfdE7cneDksCqFxJgMjeauPj5cLyR97/TUngQBAbYQ1Xq0yeKzBAu1frX2KPPNKRtVz
-	wYZpTMFiE7Eqglqc9sl45j7ni47w9dD/sYael81ZwSFT2cPkojmDiAVG1rRV4tBFSiKNTpm2DYy
-	JfTQGPGviYSJnzSog5DLbCQhqsjQGWPDOHOAJRqJ4BaN6/y9UxJwNUXZ5faXIP/khwoZ9wlmJsT
-	FWizVqdBmH0ZKn6KRCEez12TQfWMY8KATU7i2znJ4Ve1qcM+ulErjfA9TpJOR7hT+fx/7yFcfSe
-	9rEqkiycrMRqR2s9rCCCsqd7t20YCTgxnwkFL9OdIIfgj2M+2fcEpVR7lJlKiSp23y86THsqjTK
-	RJCGnzbu1Unlp4vmVz/B0rVWHcKsfi0xqGjJ/ZvprfrudDap7Bw5quHkt1F97PvIwCD1NVPVKeH
-	eZZ+U2aVTMIxsi8sNS1bUMsY6Eiue+KikAvbnTEXLCthN7HpTS+qbUvT4fe7jQm15N0dv0
-X-Received: by 2002:a05:6214:2686:b0:8cf:9bd:744 with SMTP id 6a1803df08f44-8e6d2ec8509mr48772246d6.12.1782394516856;
-        Thu, 25 Jun 2026 06:35:16 -0700 (PDT)
+        bh=aKYJf6dgXdgamkqA4Gs/PyiillXu8yFih4YnbHcGiuM=;
+        b=HwvmGppFO8uwPKoPAKIJw7xmMB5cuUazTrrOgV9wChN8axTwOOJso/tJ1pO13aY4z1
+         ykBshZZW/nyHaB5nc8rzGS4w3soZOaiW/+Z++LQ3eMOqsn16W/JVzMW9hmq0LaAMIFFh
+         hTFsYCkPbzKmz/iRfS/eF0WoyqVEvjoSSim83dkwptxOMBWE00lVMIOScvUIH89i0bqw
+         Xp7SEPL0kIQWWxxtHnLNezEYeUZBCvXGlPSnt621AIatMZmWbQ3+KLkQFaRbUt6thZQ2
+         fS0EdysOjxIOAFPYd4D/ZQtUsgflPNe1Ji3HM+j1LhrIbKgDvCg1WELVCEQeFZGib61k
+         tJjg==
+X-Forwarded-Encrypted: i=1; AFNElJ8dubNoxhhdsOOnYX3DRQFfl3aXcYCPIButhWAdYkSdsgH0VNDkTP4u8mqwoT2PrJfkq1Lm9cw=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzFcaSbEv+p72pVpoCixjVW4UuThWN17BHZv6Jb0jNzxHKlOXRX
+	vO7/1cfdkhdpjED1aVEO0YhkP7+ILYO3KoCHyIzCliDAeK2O42zvyKEGRO6n/Wb47y8=
+X-Gm-Gg: AfdE7cmYAQnqLXTBlYMs8jVU/i3+WFvz2WAvfUsWOegzkuC3qGilb6Wm5xdzF3A5RPs
+	XsOTtZcXlZl9Kz7o7cHrbrlz/JbLZQVN3H2gnlGA/UNKbWHmRPBRHVoo3gDhRSw29ITYcKdlqna
+	BWEW5/bSzb1IAHa+emFm1ti0+O9cxJ5v2gQ1D4CoLbIpVeLVjmVCLsEui42CWUZIzvrSyeoWLlr
+	ihVivzQcdfBkpIoPvB9VGouhfUBYmKlDSkR7FXzgL5SrPVVV50rLJX/ahc6v8m/ud6mXvZBhKnt
+	M8JWBHJw3pHD5vfsXzw62B8DITDlL57iBRZrfRWdhaqpLWNhip93Dq+ENSqNNWHCJOOkh4/d0Sf
+	LuErDfqrcNB4n16lakvtUJlEG7SRihy46+4cRtg202AepdqiSH6EJgKuSQOBo+b+pcvO24QhXpx
+	air16XsiYpcVwAYmmuqpPnnUJokO7o55IenxHDYvwi5Jwj+38z3Er5pr0mQLQI0jS1g6cz9FWEu
+	x+3D7E=
+X-Received: by 2002:a05:620a:2887:b0:91e:7a20:3cc9 with SMTP id af79cd13be357-9293d5b247dmr385793985a.52.1782395507830;
+        Thu, 25 Jun 2026 06:51:47 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8df81cde319sm183477356d6.31.2026.06.25.06.35.15
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8df7f5ff5e6sm180208286d6.12.2026.06.25.06.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 06:35:16 -0700 (PDT)
-Date: Thu, 25 Jun 2026 09:35:12 -0400
+        Thu, 25 Jun 2026 06:51:47 -0700 (PDT)
+Date: Thu, 25 Jun 2026 09:51:42 -0400
 From: Gregory Price <gourry@gourry.net>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
@@ -88,13 +89,13 @@ Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
 	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
 	mhocko@suse.com, shuah@kernel.org, alison.schofield@intel.com,
 	Smita.KoralahalliChannabasappa@amd.com, ira.weiny@intel.com,
-	apopple@nvidia.com, Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v5 8/9] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-Message-ID: <aj0ukAdiKRDEtYeN@gourry-fedora-PF4VCD3F>
+	apopple@nvidia.com
+Subject: Re: [PATCH v5 5/9] mm/memory_hotplug:
+ offline_and_remove_memory_ranges()
+Message-ID: <aj0ybgV7n0pqXF0b@gourry-fedora-PF4VCD3F>
 References: <20260624145744.3532049-1-gourry@gourry.net>
- <20260624145744.3532049-9-gourry@gourry.net>
- <1d8f74a7-502b-43cb-a0f0-1923049aa213@kernel.org>
+ <20260624145744.3532049-6-gourry@gourry.net>
+ <d48feca1-0203-43ff-bd66-6243291a51ba@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -103,23 +104,23 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1d8f74a7-502b-43cb-a0f0-1923049aa213@kernel.org>
+In-Reply-To: <d48feca1-0203-43ff-bd66-6243291a51ba@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:david@kernel.org,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:alison.schofield@intel.com,m:Smita.KoralahalliChannabasappa@amd.com,m:ira.weiny@intel.com,m:apopple@nvidia.com,m:hare@suse.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:david@kernel.org,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:alison.schofield@intel.com,m:Smita.KoralahalliChannabasappa@amd.com,m:ira.weiny@intel.com,m:apopple@nvidia.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[gourry.net];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	TAGGED_FROM(0.00)[bounces-14582-lists,linux-nvdimm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	TAGGED_FROM(0.00)[bounces-14583-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -134,28 +135,91 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,gourry-fedora-PF4VCD3F:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,gourry.net:dkim,gourry.net:from_mime,gourry-fedora-PF4VCD3F:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8172F6C62B9
+X-Rspamd-Queue-Id: E3C976C6452
 
-On Thu, Jun 25, 2026 at 09:40:02AM +0200, David Hildenbrand (Arm) wrote:
-> >  Documentation/ABI/testing/sysfs-bus-dax |  26 +++
-> >  drivers/base/memory.c                   |   9 +
+On Thu, Jun 25, 2026 at 09:22:01AM +0200, David Hildenbrand (Arm) wrote:
+> On 6/24/26 16:57, Gregory Price wrote:
+> >  extern int offline_and_remove_memory(u64 start, u64 size);
+> > +int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges);
+> >  
+> >  #else
+> >  static inline void try_offline_node(int nid) {}
+> > @@ -283,6 +284,12 @@ static inline int remove_memory(u64 start, u64 size)
+> >  }
+> >  
+> >  static inline void __remove_memory(u64 start, u64 size) {}
+> > +
+> > +static inline int offline_and_remove_memory_ranges(const struct range *ranges,
+> > +						   int nr_ranges)
 > 
-> Can we have this ...
-> 
-> >  drivers/dax/kmem.c                      | 224 ++++++++++++++++++++----
-> >  include/linux/memory_hotplug.h          |   1 +
-> > 
-> 
-> ... and this as a separate patch, please?
-> 
-> Nothing else jumped at me.
+> Best to use "unsigned int" right from the start and use two tabs to indent.
 > 
 
-ack
+ack, ack.  need to reprogram my brain to two-indent style, i keep doing
+this reflexively.
+
+> > +int offline_and_remove_memory_ranges(const struct range *ranges, int nr_ranges)
+> > +{
+> > +	unsigned long mb_total = 0;
+> >  	uint8_t *online_types, *tmp;
+> > -	int rc;
+> > +	int i, rc = 0;
+> >  
+> > -	if (!IS_ALIGNED(start, memory_block_size_bytes()) ||
+> > -	    !IS_ALIGNED(size, memory_block_size_bytes()) || !size)
+> > +	if (!ranges || nr_ranges <= 0)
+> 
+> With "unsigned int" this will be !nr_ranges.
+> 
+> Wondering whether we would WARN_ON_ONCE() here.
+> 
+
+Seems reasonable.  Do we normally WARN when callers send dumb arguments?
+Seems like sending -EINVAL is sufficient?
+
+> > -	online_types = kmalloc_array(mb_count, sizeof(*online_types),
+> > +	online_types = kmalloc_array(mb_total, sizeof(*online_types),
+> >  				     GFP_KERNEL);
+> 
+> Is "mb_total" really more expressive than "mb_count"?
+> 
+
+No, this was mostly my way ok keeping try of what was being moved around
+while working it.  I will change it back.
+
+> >  	/*
+> > -	 * In case we succeeded to offline all memory, remove it.
+> > -	 * This cannot fail as it cannot get onlined in the meantime.
+> > +	 * Phase 2: Remove each range. This essentially cannot fail as we hold
+> > +	 * the hotplug lock . WARN if that assumption is ever broken.
+> >  	 */
+> >  	if (!rc) {
+> > -		rc = try_remove_memory(start, size);
+> > -		if (rc)
+> > -			pr_err("%s: Failed to remove memory: %d", __func__, rc);
+> > +		for (i = 0; i < nr_ranges; i++) {
+> > +			rc = try_remove_memory(ranges[i].start,
+> > +					       range_len(&ranges[i]));
+> > +			if (WARN_ON_ONCE(rc)) {
+> > +				pr_err("%s: Failed to remove memory: %d",
+> > +				       __func__, rc);
+> > +				break;
+> 
+> Do we really want to break? I'd say, just warn and continue, and fake rc == 0.
+> Something is seriously messed up already, and we partially removed memory. There
+> is no clean rollback possible.
+> 
+> Similar to __remove_memory(), ignoring the error because it offlined it already.
+> 
+
+This seems reasonable, will change to warn and continue + return error.
+
+Sashiko actually pointed out there there's a corner condition here with
+offline rollback, so i needed to tweak this chunk anyway.
 
 ~Gregory
 
