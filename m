@@ -1,64 +1,63 @@
-Return-Path: <nvdimm+bounces-14595-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14596-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bDNJCq5yPWoR3QgAu9opvQ
-	(envelope-from <nvdimm+bounces-14595-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:25:50 +0200
+	id h7M4EbJyPWoT3QgAu9opvQ
+	(envelope-from <nvdimm+bounces-14596-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:25:54 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7274D6C82E8
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:25:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D26116C82F0
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:25:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=CS+5uu+I;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14595-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14595-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=J7izsc5y;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14596-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14596-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5859A303C4D3
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 18:23:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B357303FFBA
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 18:23:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB77630F7EB;
-	Thu, 25 Jun 2026 18:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4EBC30EF97;
+	Thu, 25 Jun 2026 18:23:41 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA630566D;
-	Thu, 25 Jun 2026 18:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D09D313534;
+	Thu, 25 Jun 2026 18:23:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782411819; cv=none; b=Tnkclmsba6KP7p0+gnYWwR0eXJAZOT1qy+UMQWkoXFSPHQPwAX0xPSU6USXpTl5a1KZGuNaVLXNv3jR50YG6wUDUpvJfAHxCfsaahYViexZELhWzoHq4gld+Kf/JEOXu70r8QOi7nE0suJ2hzm3+1fMvKUedJRORwoZvQVxYS3o=
+	t=1782411821; cv=none; b=G7YaLqvjAHmpjGpGijU7JAhRw4zI8B7ifR+KDb2MQ8X/7qlgYcj1skR8ekd87yC9IrWZa2l/ExGbeXJWG+udeBzFy8aoxA2waPJD78v4PhozEJoHJeZRHIgOmn6cusd4+/30x8sCB3MUNijntdCsKc2TzwsI94B2qVtnWAoJBiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782411819; c=relaxed/simple;
-	bh=OwKUqxlGbPsWvu9qthqwCqAWAlOWYOUFpMgWUwZAAXI=;
+	s=arc-20240116; t=1782411821; c=relaxed/simple;
+	bh=0DteaYx7VQxQGaJhmiex9PmE5ROIwiBSINeeDfXJEh8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SvF1sFK9GX5nVNhH6lyI7gQ2iZHRAjO6wsCWvjrq1OH6+NcRgPK+4Q8n53EkeMXGYtenKMI9s2NdIrC2s8RO/MtHg4Bv74vheU483+hSyyFS5rfjZoT4W9gVEBM47egtQo4XUtQNnumspIrLqsxTPXtMjo2ARXH6VlYgMtKugCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CS+5uu+I; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D111F000E9;
-	Thu, 25 Jun 2026 18:23:37 +0000 (UTC)
+	 Message-Id; b=FMPM8zdcnFBMYzanL1/UiqW8fnSa92ODM5hCIykOWY2p2JrBVMnUYZOTGucBik4+ZJq1lSJEx10SfZSOmHKutIU0e+W7r/H7De1upNHMuUE8nrs5gM9LHFbWbVezMpmD3b9K7cC8+fRooHXG+RZy494vG0Ll4+se4LwSK4sm9so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J7izsc5y; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A1F1F00A3A;
+	Thu, 25 Jun 2026 18:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782411818;
-	bh=xLhZFNhS3+ZXz2n8oW+J5yqGYjG7Lw07ccDp0qGfycA=;
+	s=k20260515; t=1782411820;
+	bh=1xR3wA4l0Nt7Q+pGc0G0Nbh8J4QX5bOjWGUcEVXTFn8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CS+5uu+IF1BiT8nq903h0nTEZlqpvmHDy20kzC0bvi8Qrd6hJqGv7eWce8SsKPaMK
-	 UZlxFl2EAQpDvSrScmfy1fWqbi6mDlcWRYb4XkJJxiDeQE1t/rJSjAJCVAPZDBZnW/
-	 InzZX86LxT5AYG87yc6Ag9dCF5BLBqw2nM703fJ8lcSqFb1CiC+hri+G4Ro3BfGKA3
-	 JmroLvF5CzArUlEAQERx8FzuiykV1VsJesmmQFhjSG8vxH45PzPxG4u+4xlhs9Xiq1
-	 GnUxRYKIv0yp8RKefNNs6jZz96Af37FeRtcwVUKtGS7lzuBd28AAU3qsCKl8CISNh8
-	 cotP/fObRsgNA==
+	b=J7izsc5yboFDkguUxRcZz1VqV+eXXeQ7ZwRQxyiiaiX0KM15vlsx3TBX3hSlhXVLW
+	 LYGas+ZZP8gHHHwvmt5Ro3a7SWqm0F0oacDgWBZfeAtwb+ptfyslq/h9xEtQn/Uxg5
+	 iBxokjT1+wbKAARJngljyzWVGnWEEaJLy+Zl32XGXPydmKhKHYyUiA1Qu1K2w5KiqG
+	 0ZhKYVcjjqeCLQsXpnu/arSNeTGDaHLsRJUS5IB5XCeqJPnDjPHUIYc2sRQy9YG9sY
+	 fUQ0HTKds5WYnfcgaqYc7dmoA8BupgC3FXj0kI9h2DmzeYkiDlSWPMctjSwha8v9+N
+	 s9lQoUyGGgY0w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 19/31] cxl/extent: Enforce cross-region tag
- uniqueness
+Subject: Re: [PATCH v11 18/31] cxl/extent: Handle DC Release Capacity events
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Anisa Su" <anisa.su887@gmail.com>
 Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-In-Reply-To: <20260625112638.550691-20-anisa.su@samsung.com>
+In-Reply-To: <20260625112638.550691-19-anisa.su@samsung.com>
 References: <20260625112638.550691-1-anisa.su@samsung.com>
- <20260625112638.550691-20-anisa.su@samsung.com>
+ <20260625112638.550691-19-anisa.su@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 25 Jun 2026 18:23:37 +0000
-Message-Id: <20260625182337.F1D111F000E9@smtp.kernel.org>
+Date: Thu, 25 Jun 2026 18:23:38 +0000
+Message-Id: <20260625182339.95A1F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,7 +69,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -78,7 +77,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14595-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14596-lists,linux-nvdimm=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:anisa.su887@gmail.com,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:anisasu887@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -98,94 +97,153 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCPT_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid,lists.linux.dev:replyto,lists.linux.dev:from_smtp,sashiko.dev:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,lists.linux.dev:from_smtp,smtp.kernel.org:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7274D6C82E8
+X-Rspamd-Queue-Id: D26116C82F0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Use-after-free of `tag_group` in `cxl_realize_group()` when extent=
- addition fails.
-- [High] Data race on `group->nr_extents` during concurrent extent device r=
-elease leading to UAF/leak.
+- [High] Lockless iteration over the shared `cxlr_dax->dc_extents` xarray l=
+eads to Use-After-Free.
+- [High] Unsynchronized non-atomic modifications to `group->nr_extents` lea=
+d to lost decrements and tag group leak.
+- [High] Multi-extent tag group releases incorrectly tear down the entire g=
+roup on the first chunk, causing spurious errors and WARN_ON stack traces o=
+n subsequent chunks.
 --
 
-commit 0105c4aa2861118ac775e4aaac54f4e888f84aa2
-Author: Anisa Su <anisa.su887@gmail.com>
+commit 277b0b7ee1e3ee9199ddbac19db51d5566770cbb
+Author: Ira Weiny <iweiny@kernel.org>
 
-cxl/extent: Enforce cross-region tag uniqueness
-
-This patch adds a host-wide registry of live tag groups with non-null uuids
-to ensure that tag uuids are unique across all regions and memdevs. It
-updates alloc_tag_group() to register new tags, free_tag_group() to
-unregister them, and validation logic to reject conflicting tags.
+cxl/extent: Handle DC Release Capacity events
+   =20
+This commit replaces the no-op ack stub for cxl_rm_extent() with the real
+teardown logic. It resolves the released DPA range to its region and endpoi=
+nt
+decoder, locates the matching dc_extent, and tears down the entire containi=
+ng
+tag group atomically.
 
 > diff --git a/drivers/cxl/core/extent.c b/drivers/cxl/core/extent.c
-> index a590a89f35802..36be56ca10974 100644
+> index 0ebb581ca8335..a590a89f35802 100644
 > --- a/drivers/cxl/core/extent.c
 > +++ b/drivers/cxl/core/extent.c
-
 [ ... ]
-
->  static void free_tag_group(struct cxl_dc_tag_group *group)
->  {
-> +	cxl_tag_unregister(group);
->  	xa_destroy(&group->dc_extents);
->  	/* Drop the pin taken in alloc_tag_group(). */
->  	put_device(&group->cxlr_dax->dev);
+> +static void rm_tag_group(struct cxl_dc_tag_group *group)
+> +{
+> +	struct device *region_dev =3D &group->cxlr_dax->dev;
+> +	struct dc_extent *dc_extent;
+> +	unsigned long index;
+> +
+> +	/*
+> +	 * Pin @group across the walk: each devm_release_action runs the
+> +	 * dc_extent_unregister action synchronously, which drops the last
+> +	 * reference on the dc_extent device and fires dc_extent_release.
+> +	 * The release decrements group->nr_extents and, on the final
+> +	 * decrement, frees @group.  Without the pin the next iteration's
+> +	 * xa_find_after() dereferences a freed xarray.
+> +	 */
+> +	group->nr_extents++;
+> +	xa_for_each(&group->dc_extents, index, dc_extent)
+> +		devm_release_action(region_dev, dc_extent_unregister, dc_extent);
 
 [Severity: High]
-Can this lead to a use-after-free of the tag_group pointer?
+What happens if a device releases a multi-extent tag group by sending multi=
+ple
+DCD release events (one per chunk)?
 
-If xa_insert() fails (e.g., due to -ENOMEM) for the first extent in
-cxlr_add_extent(), the allocated tag_group is retained in
-mds->add_ctx.group but its dc_extents xarray remains empty.
+When the host processes the first event, cxl_rm_extent() resolves the group
+and calls rm_tag_group(), which atomically unregisters all extents. If the
+sysfs reference is > 0 (e.g. userspace has a file open), the extents remain
+in the xarray.
 
-Back in cxl_realize_group(), the loop continues and eventually extracts
-this empty tag_group:
+When subsequent release events for the remaining chunks are processed,
+cxl_rm_extent() finds the same group and calls rm_tag_group() again. Will
+invoking devm_release_action() on already-removed actions trigger a
+WARN_ON(!devres) stack trace?
 
-cxl_realize_group() {
-        ...
-        tag_group =3D mds->add_ctx.group;
-        ...
-        rc =3D online_tag_group(tag_group, !existing);
-        ...
-        if (existing)
-                rc =3D __cxlr_notify_extent(tag_group->cxlr_dax->cxlr, ...
-}
-
-If online_tag_group() iterates over the empty xarray, decrements
-group->nr_extents to 0, frees the tag_group via free_tag_group(), and
-returns 0 (success), won't cxl_realize_group() then proceed to
-dereference the freed tag_group pointer when calling
-__cxlr_notify_extent() or cxlr_notify_extent()?
+> +	group->nr_extents--;
+> +	if (!group->nr_extents)
+> +		free_tag_group(group);
 
 [Severity: High]
-Can a data race occur on group->nr_extents during concurrent releases?
+Can this result in lost decrements and a tag group leak?
 
-The group->nr_extents counter is decremented with a non-atomic
-group->nr_extents-- in both dc_extent_release() and rm_tag_group().
-Because sysfs files like length and offset are world-readable,
-unprivileged userspace processes can hold references to multiple extents
-within the same tag group.
+Since group->nr_extents is a plain unsigned int, a lockless decrement here
+in rm_tag_group() could race with dc_extent_release(). If userspace holds
+references to multiple extents in the same tag group via sysfs and closes
+them concurrently, dc_extent_release() will run on multiple CPUs
+simultaneously.
 
-If these processes close the sysfs files concurrently,
-dc_extent_release() executes on multiple CPUs concurrently.
+This would race with the decrement here, preventing the counter from reachi=
+ng
+zero and permanently leaking the cxl_dc_tag_group and its UUID.
 
-If one CPU reads the counter, and a second CPU reads, decrements, and
-frees the tag_group via free_tag_group(), won't the first CPU then
-write to the nr_extents field of the freed memory?
-
->  	kfree(group);
->  }
-
+> +}
+> +
+> +int cxl_rm_extent(struct cxl_memdev_state *mds, struct cxl_extent *exten=
+t)
+> +{
 [ ... ]
+> +	/*
+> +	 * Find the dc_extent whose DPA range covers the released range and
+> +	 * whose tag matches.  The release targets the entire containing
+> +	 * tag group atomically; partial release is not supported.
+> +	 */
+> +	group =3D NULL;
+> +	xa_for_each(&cxlr_dax->dc_extents, idx, dc_extent) {
+> +		if (dc_extent->cxled !=3D cxled)
+
+[Severity: High]
+Is it safe to iterate the shared cxlr_dax->dc_extents xarray without RCU
+protection or a write lock here?
+
+cxl_rm_extent() and cxlr_dax_classify_extent() iterate over the shared
+xarray using xa_for_each() while holding cxl_rwsem.region only for read. If
+concurrent DCD events from different memdevs in the same interleaved region
+trigger rm_tag_group() or a failed cxl_add_extent(), dc_extent objects can =
+be
+removed and synchronously freed via kfree() in dc_extent_release() by anoth=
+er
+thread.
+
+Since xa_for_each() drops the internal RCU lock during the loop body, could
+the iterating thread dereference a freed dc_extent pointer here?
+
+> +			continue;
+> +		if (!range_contains(&dc_extent->dpa_range, &dpa_range))
+> +			continue;
+> +		if (!uuid_equal(&dc_extent->group->uuid, &tag))
+> +			continue;
+> +		group =3D dc_extent->group;
+> +		break;
+> +	}
+> +	if (!group) {
+> +		dev_err(&cxlr_dax->dev,
+> +			"release DPA %pra (%pU) matches no dc_extent\n",
+> +			&dpa_range, &tag);
+
+[Severity: High]
+Could this error path be triggered spuriously on multi-chunk releases?
+
+If a device sends multiple DCD release events for a multi-extent tag group,
+the first chunk will cause rm_tag_group() to unregister all extents. If sys=
+fs
+references are zero, the extents are freed immediately.
+
+When subsequent release events for the remaining chunks are processed, they
+will fail to find the group here and print this spurious "matches no dc_ext=
+ent"
+error.
+
+> +		return -EINVAL;
+> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260625112638.5506=
-91-1-anisa.su@samsung.com?part=3D19
+91-1-anisa.su@samsung.com?part=3D18
 
