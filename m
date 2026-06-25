@@ -1,63 +1,63 @@
-Return-Path: <nvdimm+bounces-14593-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14594-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Aw67IEdxPWrI3AgAu9opvQ
-	(envelope-from <nvdimm+bounces-14593-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:19:51 +0200
+	id smMaBpFxPWrc3AgAu9opvQ
+	(envelope-from <nvdimm+bounces-14594-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:21:05 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20EE06C8263
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:19:51 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D76D6C828C
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 20:21:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=oqtQbvnx;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14593-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.232.135.74 as permitted sender) smtp.mailfrom="nvdimm+bounces-14593-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=ULVSt+Vm;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14594-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14594-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7B2A8301D4F0
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 18:19:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CDCAF3028121
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 18:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11CAB30677E;
-	Thu, 25 Jun 2026 18:19:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B388431F983;
+	Thu, 25 Jun 2026 18:20:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAB02F8E9F;
-	Thu, 25 Jun 2026 18:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418EF31F98E;
+	Thu, 25 Jun 2026 18:20:52 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782411586; cv=none; b=XFL9UvbxCAW2m4JGiTK1V0DmUyQlvlqOGO1TIaaURqzfa8RwZSm4aQMY6n4j0cYFFnQLZ0ejVPGErC/6wOmj9o/PjNyQzhNR5TAMPByFi8vkUfINIU+pTuxoBG4bLKOHJWsonzxD/aRKVV2d/jeMofpiOmQVNIjZA+VPwvnPzqc=
+	t=1782411655; cv=none; b=Iy7N/GIeKkHL0Y2CA4Zef7/asgnLCD58he9Z2eSGTqNb9COrHzQu70VjOV9L030xwTzRU2EIoNSyMnZQmIo8rY/3iRnCUH+W5iPogFPgAU6oVZvklwXzMnntpf7jRWvdRnt5Jum63l3nm4/v5QiMNotFx7VDieRcF23jDZsxDFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782411586; c=relaxed/simple;
-	bh=LFpDp31rWkSWLBFtSvZWEG6R6DdfpeTikPQNTyvpoJc=;
+	s=arc-20240116; t=1782411655; c=relaxed/simple;
+	bh=86JPG3ye2RD/9r+qkIVEYVzqipkTnMDxw1D/0qVHrHc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZoJsoDEedFuoh6CR951+us+MLiWaYoPa2fj23KmUerg/mOwKaNXbQAuuVijoAe7Ghz+HPIaydzY1u0iLV4id4j4tkI0aibGuufWz6GM5BO3gMtU7MvF71xsD2zdsrKu0Nvls4E/4E6E1DTMzmOZy25YbbcRqMZbRdu1n3JQmOrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqtQbvnx; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C431F000E9;
-	Thu, 25 Jun 2026 18:19:45 +0000 (UTC)
+	 Message-Id; b=ko0x6z1lenz8MCO5vI7JGM3uWk9b4jbvZR5/NscZdorifAIb+fZwzHvLRZlqCHIa2ZhdtPsyxNUKiDRZzhWiA4/ZbOINuMVqvNy8nzKHwfEmhP/866FDI1GSEnhnJYipIUp6PzLpuObbEeVcqu1QWMadSivbcI6TmDfBQ5RIQ9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULVSt+Vm; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E301F000E9;
+	Thu, 25 Jun 2026 18:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782411585;
-	bh=jwvxhbn3uBBmJLSWq2Pdqp83rjyhglXlEyp+dQYmeKo=;
+	s=k20260515; t=1782411652;
+	bh=W5HKQ6V5lHzB+BCAVeKKCbJS4YWGIEs3PaOFAv/UFT8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oqtQbvnxlIodhdTbmHRndruTidEWjy17CujcjcJJa+bNAxv5JBx2O72/b4tqE5D3S
-	 zYvsCEjnhKJno6wQasftl9/KV/7NrniQtE6Xg8AbIBTEOC6u1tSIM/gScAsBsbCx7u
-	 LyMSNbVPgyeknrhH5yq5UbPeMBYuGnRsnKiThjG96DGn5AtsXLKBYhPghEyFHGzwSh
-	 VZT7VYwnSG4NsypFzfUxLqe5vUS1DwaT5T9/6VMknzWpdHUsJqZ5anL9TOLDW7XVMH
-	 zrWsQ7JOPqlzeb89UqScX1Mf2ufVpdybWfWFKlhpC/cizyXo7TTLwqF4TvO/6EQjUo
-	 PKDbGxmPAGj/Q==
+	b=ULVSt+VmeYrnLXsqVmXWH5qiN5s1uneTE3xVRwRQ9g/mqUhVPw7o6OBdm3FrVE/ah
+	 ZT5KcZDIOthN9BBhEzbQXoE4hR15XBrKe7EYUsvXrR3UXVAecW3HVps/8dFahVKRIR
+	 OGZWDtD7VkF6efxXagd8W/NN3JXsW9IeRCRNtihCcHP1Ln5JskKt4T9r9mQ4bV2GY/
+	 UFt5K/+48jQ/Jg+cFVCzmKx92qdNqlh6ThdQ6kWm3zLlpujkVQspiLBveZs6ut1BtN
+	 lAjesW7PgIYfKjSzL0fyonZ3X/kPymgioiAOwIrhpr8d7Ke/DoOzkJfy/CjS1xvUKu
+	 euxV6imMYaytw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 15/31] cxl/mem: Drop misaligned DCD extent groups
+Subject: Re: [PATCH v11 16/31] cxl/extent: Validate DC extent partition
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Anisa Su" <anisa.su887@gmail.com>
 Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-In-Reply-To: <20260625112638.550691-16-anisa.su@samsung.com>
+In-Reply-To: <20260625112638.550691-17-anisa.su@samsung.com>
 References: <20260625112638.550691-1-anisa.su@samsung.com>
- <20260625112638.550691-16-anisa.su@samsung.com>
+ <20260625112638.550691-17-anisa.su@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 25 Jun 2026 18:19:44 +0000
-Message-Id: <20260625181945.41C431F000E9@smtp.kernel.org>
+Date: Thu, 25 Jun 2026 18:20:51 +0000
+Message-Id: <20260625182052.07E301F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -69,7 +69,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -77,7 +77,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14593-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14594-lists,linux-nvdimm=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:anisa.su887@gmail.com,m:nvdimm@lists.linux.dev,m:linux-cxl@vger.kernel.org,m:anisasu887@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -97,84 +97,127 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCPT_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,lists.linux.dev:replyto,lists.linux.dev:from_smtp,smtp.kernel.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,smtp.kernel.org:mid,lists.linux.dev:replyto,lists.linux.dev:from_smtp,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 20EE06C8263
+X-Rspamd-Queue-Id: 7D76D6C828C
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Un-ratelimited `dev_warn` on invalid CXL device input can lead t=
-o log flooding and Denial of Service.
+
+Pre-existing issues:
+- [High] Entirely duplicate tag groups are rejected and dropped instead of =
+replying success to the device.
+- [High] Concurrent access to `group->nr_extents` without locks causes a me=
+mory leak and pins the DAX region device indefinitely.
 --
 
-commit 2eb192d0644cd71e7046e47b82d5b1422081590e
+commit b3bfb6df5d2f0f0f9e2b022064279f74742afa2e
 Author: Ira Weiny <iweiny@kernel.org>
 
-cxl/mem: Drop misaligned DCD extent groups
+cxl/extent: Validate DC extent partition
+   =20
+Extend cxl_validate_extent() =E2=80=94 the per-extent check of the add pipe=
+line
+to check partition membership. Resolves an extent's DPA to its containing
+DC partition. Sharability is a property of the partition (part->shareable),
+taken from its CDAT DSMAS entry.
 
-This commit adds an alignment check to cxl_add_pending() to ensure that
-extents in a tag group are aligned to the dax region's mapping granularity.
-Misaligned extents now cause the entire group to be dropped.
-
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 08f51b8807c06..14ba263044f08 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
+> diff --git a/drivers/cxl/core/extent.c b/drivers/cxl/core/extent.c
+> index 6e67e787d14de..2e770c5279c23 100644
+> --- a/drivers/cxl/core/extent.c
+> +++ b/drivers/cxl/core/extent.c
 
 [ ... ]
 
-> @@ -1395,11 +1410,38 @@ static int cxl_realize_group(struct cxl_memdev_st=
-ate *mds, const uuid_t *tag,
->  	return group_cnt;
->  }
-> =20
-> +/*
-> + * Validate a tag @group before realizing it.  Returns 0 if the group ma=
-y be
-> + * added, or a negative errno if it must be dropped.  Further gates laye=
-r in
-> + * here in later commits.
-> + */
-> +static int cxl_validate_group(struct cxl_memdev_state *mds, const uuid_t=
- *tag,
-> +			      struct list_head *group)
-> +{
-> +	struct device *dev =3D mds->cxlds.dev;
-> +	struct cxl_extent_list_node *pos;
+> @@ -101,6 +159,27 @@ static int cxl_validate_extent(struct cxl_memdev_sta=
+te *mds,
+>  		.end =3D start_dpa + le64_to_cpu(extent->length) - 1,
+>  	};
+>  	struct range ed_range;
+> +	uuid_t uuid;
 > +
-> +	/* Alignment gate =E2=80=94 drop the group if any member fails */
-> +	list_for_each_entry(pos, group, list) {
-> +		if (!cxl_extent_dcd_aligned(pos->extent)) {
-> +			dev_warn(dev,
-> +				 "Tag %pUb: dropping group, extent DPA:%#llx LEN:%#llx not %#llx-ali=
-gned\n",
-> +				 tag,
-> +				 le64_to_cpu(pos->extent->start_dpa),
-> +				 le64_to_cpu(pos->extent->length),
-> +				 (u64)PMD_SIZE);
-
-[Severity: Medium]
-Could this un-ratelimited dev_warn() lead to log flooding?
-
-If a malfunctioning or compromised CXL device rapidly sends DCD_ADD_CAPACITY
-events with misaligned extents, it appears this could spam the kernel log
-and cause high CPU overhead.
-
-Should this use dev_warn_ratelimited() instead, since it is driven by
-untrusted device input?
-
-> +			return -EINVAL;
+> +	import_uuid(&uuid, extent->uuid);
+> +
+> +	part =3D cxl_extent_dc_partition(mds, extent, &ext_range);
+> +	if (!part)
+> +		return -ENXIO;
+> +
+> +	if (part->shareable) {
+> +		if (uuid_is_null(&uuid)) {
+> +			dev_err_ratelimited(dev,
+> +				"DC extent DPA %pra: sharable-partition extent has null tag (firmwar=
+e bug)\n",
+> +				&ext_range);
+> +			return -ENXIO;
 > +		}
+> +	} else if (le16_to_cpu(extent->shared_extn_seq)) {
+> +		dev_err_ratelimited(dev,
+> +			"DC extent DPA %pra (%pU): non-sharable partition but shared_extn_seq=
+=3D%u (firmware bug)\n",
+> +			&ext_range, &uuid, le16_to_cpu(extent->shared_extn_seq));
+> +		return -ENXIO;
 > +	}
-> +
-> +	return 0;
-> +}
+> =20
+>  	cxlr =3D cxl_dpa_to_region(cxlmd, start_dpa, &cxled);
+>  	if (!cxlr || !cxlr->cxlr_dax)
+
+[Severity: High]
+This is a pre-existing issue, but I noticed a potential race condition in
+drivers/cxl/core/extent.c:dc_extent_release() that might lead to a leak:
+
+	group->nr_extents--;
+	if (!group->nr_extents)
+		free_tag_group(group);
+
+Could concurrent access to group->nr_extents without locks cause a lost
+decrement?
+
+When userspace closes sysfs files for multiple extents of the same tag group
+concurrently, their kobject refcounts can drop to 0 simultaneously, causing
+dc_extent_release() to run on multiple CPUs in parallel.
+
+If group->nr_extents never reaches 0, does this permanently pin the DAX
+region device (since the reference isn't dropped) and leak the
+cxl_dc_tag_group structure?
+
+[Severity: High]
+This isn't a bug introduced by this patch, but I have a question about how
+duplicate tag groups are handled between drivers/cxl/core/extent.c and
+drivers/cxl/core/mbox.c.
+
+In drivers/cxl/core/extent.c:cxl_add_extent(), duplicate extents return 0
+without allocating or assigning mds->add_ctx.group:
+
+	case CXL_EXT_DUPLICATE:
+		/*
+		 * Idempotent accept simplifies the dax-side scan for existing
+		 * extents on region creation; reply success without duplicating.
+		 */
+		dev_warn_ratelimited(&cxled->cxld.dev,
+				     "Extent %pra exists; accept again\n",
+				     &ext_range);
+		return 0;
+
+If all extents in a group are duplicates, cxl_realize_group() in
+drivers/cxl/core/mbox.c finishes its loop with group_cnt > 0 but
+mds->add_ctx.group remains NULL. It then returns -ENXIO:
+
+	tag_group =3D mds->add_ctx.group;
+	mds->add_ctx.group =3D NULL;
+	if (!tag_group)
+		return -ENXIO;
+
+Since this causes the caller cxl_add_pending() to treat the group as an err=
+or
+and drop the extents instead of adding them to the accepted list, does this
+leave the device hanging without an ADD_DC_RESPONSE if it resends an
+unacknowledged extent group?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260625112638.5506=
-91-1-anisa.su@samsung.com?part=3D15
+91-1-anisa.su@samsung.com?part=3D16
 
