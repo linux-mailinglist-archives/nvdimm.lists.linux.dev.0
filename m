@@ -1,128 +1,126 @@
-Return-Path: <nvdimm+bounces-14543-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14545-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id iwB6A3L2PGpJvAgAu9opvQ
-	(envelope-from <nvdimm+bounces-14543-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 11:35:46 +0200
+	id 56ZAKqsQPWouwggAu9opvQ
+	(envelope-from <nvdimm+bounces-14545-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:27:39 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FDE6C4486
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 11:35:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F24556C5162
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:27:38 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=aJbrljCO;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14543-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14543-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=P2VzsZBf;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14545-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14545-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2F508305EFDD
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 09:34:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 348E3303AB6B
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 11:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312713803D1;
-	Thu, 25 Jun 2026 09:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198F13D8907;
+	Thu, 25 Jun 2026 11:27:13 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEC13909A8
-	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 09:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9633D88E1
+	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 11:27:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782380077; cv=none; b=Ga3GqBxFbW4UkXmMnhQY7j4GnQh1x410lq7J88MQBEL/nHpIfMtw6jBFHOSPuG+FUistsvZBvAen9VrjR0S09iUGbWnh92oBpSe84d1AQoJ5h9uJxhTFGTkE4rjVLvImLv9WOO7c3NacJnJai/PsW8J2H7/IacsHaVfz7rWNmpo=
+	t=1782386832; cv=none; b=uL3w5n2Wqv5d4xy9NxBVp24aiWt1/ff0uFLHyVLPdZOSfwQe5CoIgINQvZx58DDRRxDHyWcgtEz9uUiqSA+5hb/diWWis2Zn1JcojNCCybDqqXKYNAe3IZYQW/Xp9WYj6esEtQP4QSl0+aHuNxJj4PQAQWgPu1pG5XmmBX+9wUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782380077; c=relaxed/simple;
-	bh=9nMFJcXJ2+U7+N/MThZ5PTmUFgeso7NSMjClz15v5OE=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gwUEIrTKo+FAw2V8BlFDd5jGRESoEsF3DGw01DfXt8eQooFPAXwlxZNrWAjcgUaMdISSO1qwVTtE27KTY2yZiKST8SPHa3Q9z8LvEYFCl6al4xqkcrOYjDiCRatBegfBqLIxfVpFYY1D0s0t0w/Ogkrh/B7VvYndcgckTASwIpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJbrljCO; arc=none smtp.client-ip=74.125.82.170
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-30c52f96f60so3873365eec.1
-        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 02:34:32 -0700 (PDT)
+	s=arc-20240116; t=1782386832; c=relaxed/simple;
+	bh=LmvPCFD+L9lwBEig933fzBIMD0QXMC38dYdC1O3Oy30=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ggSDTN/my/d3cMWrXIu1a3XY2gI2a8+DkZ+WPQzKH4+tcxHGAfvp8SnqZ/iJ2jQkVQ5SUn6QGWm90OBYqZO3CsYg+/xIICe5rKhA25YlJAXjkcd6OwaE8JSaX4PAQLLf7NwRTO+rK1tBlIvq5jdujhK8Xoi1Uo6aR52D7QthAng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2VzsZBf; arc=none smtp.client-ip=74.125.82.175
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30bf132969bso3016393eec.0
+        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 04:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782380071; x=1782984871; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EXXLxtO1asfwxF78X/30o4nSWm0EU7VHxFXckaOFZZY=;
-        b=aJbrljCOVVl1fKPavL/JPq8q0CpSIg28ijvWhEVP6Jp6+Rimx6/qhYRsGUmUMbTOiD
-         tzSD80+U0u/j+zBJ7qAPlmIy8PV8h4ygENAWBB22dIVdpvJsCDjLlAPhH+ZQ+l2Y0Gak
-         Q52b4W9otIvEngALCnsuoj45JSHOVkzykuwgMbfIa64fhmuLqv4UM6aj9ZyahV+kCKqS
-         KcBBWc3bX5WTpux8PE5AS9Vn6l+GTR77Bx0VcUGYbbCHInSAR071+v9sSBhH/pci6i4k
-         Jb8AmWyATnXeNCgwTib48pGO8creQin+4Oya/loCrKv2CpfxGOh3cTLPBN4VkrM+s2UM
-         V6XQ==
+        d=gmail.com; s=20251104; t=1782386830; x=1782991630; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KbV+zTChUJJL9Nh9LhvDFMWNZUpm1oVcSOi1CT2kASE=;
+        b=P2VzsZBf25yFmYVqH9qOwvgnjD5yHsoQAtwMV6f1Y34Y7GXiKRTnA8fAMCpcR0kzDl
+         p43YSDK8gtU+eIOQDPl65aDPzwGXZyyIsob2PJDpl4MCzh18ZHUI7WrPttxttv6JZvv9
+         V217emRq1nOSem6zEMTObikkdsR5bbRgVwOftU/xBy8vYq32BwkKIbnZCR6dlF/21aVg
+         4hX9dvD4+yYccTCjACZBZplkGEhUGaIXdmYDb4mCMFUIH8PDsNRTaL0sgWmz+uahmUah
+         DjRY+34+ar+Jzy6CJaVRIrzAVe7IzqVWelYFtZLTBBn0GVy2yTkKSU16flJ4Gki+UmBR
+         7eGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782380071; x=1782984871;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EXXLxtO1asfwxF78X/30o4nSWm0EU7VHxFXckaOFZZY=;
-        b=INeEW3+1+QJL/fPD5MQSrPM/IqEENfCEsC/cvY4RJl+Ti37FSF+3lzqBgN7ensXT7l
-         my3I5tCCgQsdnoWYzLuqsb0WDTpROoG9cmQ7mYniOpJ4oKZxfX2WlQqJdktqV5XpJTDM
-         1KO41Ancyk5No2jMlj/rAKwc4WixYZB9P4GeirTQ5yN6SiL9e6y55zOtj0pz3vvE7hVx
-         2JWA1e6V/0pfqisnJcRUIFMErQqjlABWJwsSRZmnyeSYQlRWKfqW9t+c0RcQhP9g4gYM
-         1VvKArOe61PFHKnExrNvy5nJioTZmq10X2P/WWkYb5vSDFG1eLyX+eQtD9YigD6lLIjq
-         XImA==
-X-Forwarded-Encrypted: i=1; AHgh+RoquyiExXSqCfOPopYyr7nQmYQBCiXcSjrc4jLnpaFFnCETWAbKM7JNKtwhrlqH6NVCl1W8JYQ=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxVNl5CM1IMrU8gLN6g60Q+gn6j85uKMF6hD4cvJfvHPAuuuzuy
-	LPTJEFxhWAbRA73Pl1Fs5B4cidswllSeybQtbEirgpZG1Y0osDVre/RO
-X-Gm-Gg: AfdE7cmNiRNEwOBVsuQr0vhXMBAGsy/0M6l+CQbg25z/h0090Q9OiH7tBEWOvV72mly
-	VgNjLW+0jKOV0A7ZZ71o1vQ+kStzIuMP5GRf3PlxBgh/9r54r38cKLnUHMSOrJP+hDnJ6nHhuty
-	NQCLdi/j3uhH+RH1baODtuqNgN4a4dhcrXa7McWlNMFikTyGk+s+PH1SH2mD4yncZMZP+wHPqk1
-	2nu8RkOqcEnyQNHy45YIwqYNchlGp9487nC/+TNgXFNKZYDi5Q0E9O4HBwDMi/gssJo4n1uuw3f
-	V4xejtqL+UEdGJ5HAiO5HzzoI0BUHddowEOG2c2TE+8fgfzcfaFiBubueo8s/AajW0t+kSvlm36
-	F7crU0PXV54cbKGh0khamCPrRmr10K2PSy/vbIH1B1bxodsy6ev2QT1dg2j2UIRYTAPA27OLSXv
-	BrENHk5aohYtiY/+NbCpRgM24ls3cwLrQ/aSJNoV6GuqeOhvfFwMGk6/qhLO1OaAKxXftl
-X-Received: by 2002:a05:7301:a83:b0:304:de28:1b16 with SMTP id 5a478bee46e88-30c84dac8e5mr1913396eec.28.1782380071247;
-        Thu, 25 Jun 2026 02:34:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782386830; x=1782991630;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KbV+zTChUJJL9Nh9LhvDFMWNZUpm1oVcSOi1CT2kASE=;
+        b=jgxUmermXu+uz22+i63GbWd+QxBlXWu8+ZND3p5DVlh3aiT1iLhD5Xi+VSpCNTF5of
+         eWZdSun7iTJr4hNzoWxgYBYEGGgHFyLAXSMv34pRz67J8dpNEAHlj29O0/LXdYOuMyO+
+         J0OU3zLkP+NtKyNLSx0JmcLPChmXSYRG+8uKIDcdlGdVvMW7kQNawO9cJ6+55moDjAAG
+         D0c6sA1o3VbJDr2rGVnqYt610uzqVpIZFRZcj/z5ymOeenDjINj7oT3bbrtIIJ8Ha8eF
+         JIRR+tYFGQBRTX03w1g0eyv39eeo2e62rw7lG2MEMfDay/8ePfpRlinGz24EqRU1uzHh
+         KIvA==
+X-Gm-Message-State: AOJu0YzpumBbZjpK9EG1KlAW0QXsh+Y0D2BfOFQycbOCbMH9Yto4NWJP
+	mPACSQOCTcuheR6xbCI0FFMLzp+x26kaTiE0yCwU+PBm+c5X7mprPi+u
+X-Gm-Gg: AfdE7cmM2mburU0Ae+1S4r/vymcNYGERxYkUiKdd1iXJi4E3dvkGU6lt/rzyDwH8JCk
+	OAUSJzvX0ISE63aRoSF8o84DrSGoxArNSGz+wgOr+DW0yauEa3pXTL2QfkrrQt4Aq35HSpBXl+u
+	XsBSYHT3KFizpV03loDyjLr0tXhVIKvxuPfbEvYD++QjICxBNlf2WMaF9Fr7ZvwON+q8hYf1ZfM
+	u51phJ42u9N6PZj+yqQbQBej89taQUvf3hPPfnr/K1YPMK1TuVPc/yDYI+lYlPbag+Ee2mvRUyh
+	T55CZpOSsrL7w/KyhjYTp9SrRt0a2kfGgzzVJLkjaNF8J7H1WD8Cji4/tB4mWX9iVjvIXC6D9ZG
+	rPLlCongZNNT/FUemxI7vuSxYNkvQd6/QS8KBYi6e4LnwRkmi3fLkCS7fOsXO4SBbOtOc8fGI/N
+	fbAHyomo++LC6YNUfpW0NI4acHZ4t+CHCwX5hvl4sdRNbQDAW1+ixWtqB+NEYPId8GCihS
+X-Received: by 2002:a05:7300:c8d:b0:30c:5121:7c0f with SMTP id 5a478bee46e88-30c84d462d6mr2454156eec.21.1782386830137;
+        Thu, 25 Jun 2026 04:27:10 -0700 (PDT)
 Received: from AnisaLaptop.localdomain (c-73-170-217-179.hsd1.ca.comcast.net. [73.170.217.179])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7c4c9dafsm8680698eec.1.2026.06.25.02.34.30
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7cab08c2sm8744614eec.29.2026.06.25.04.27.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 02:34:30 -0700 (PDT)
+        Thu, 25 Jun 2026 04:27:09 -0700 (PDT)
 From: Anisa Su <anisa.su887@gmail.com>
 X-Google-Original-From: Anisa Su <anisa.su@samsung.com>
-Date: Thu, 25 Jun 2026 02:34:29 -0700
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: Anisa Su <anisa.su887@gmail.com>, linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-	Dan Williams <djbw@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>, Ira Weiny <iweiny@kernel.org>,
+To: linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: nvdimm@lists.linux.dev,
+	Dan Williams <djbw@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <iweiny@kernel.org>,
 	Alison Schofield <alison.schofield@intel.com>,
-	John Groves <John@groves.net>, Gregory Price <gourry@gourry.net>,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH v6 7/7] cxl/test: Add Dynamic Capacity tests
-Message-ID: <ajz2JTDDoW6wRX5m@AnisaLaptop.localdomain>
-References: <20260523095043.471098-1-anisa.su@samsung.com>
- <20260523095043.471098-8-anisa.su@samsung.com>
- <d58b398a-eba8-4b4e-b1ab-cfed64fe11e8@intel.com>
+	John Groves <John@Groves.net>,
+	Gregory Price <gourry@gourry.net>,
+	Anisa Su <anisa.su@samsung.com>
+Subject: DCD: Add support for Dynamic Capacity Devices (DCD)
+Date: Thu, 25 Jun 2026 04:04:37 -0700
+Message-ID: <20260625112638.550691-1-anisa.su@samsung.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d58b398a-eba8-4b4e-b1ab-cfed64fe11e8@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14543-lists,linux-nvdimm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:dave.jiang@intel.com,m:anisa.su887@gmail.com,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:John@groves.net,m:gourry@gourry.net,m:ira.weiny@intel.com,m:anisasu887@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,lists.linux.dev,kernel.org,stgolabs.net,intel.com,groves.net,gourry.net];
+	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[13];
-	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:dave.jiang@intel.com,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:John@Groves.net,m:gourry@gourry.net,m:anisa.su@samsung.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14545-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -130,205 +128,328 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cxl-dax-hmem.sh:url,cxl-translate.sh:url,cxl-elc.sh:url,cxl-region-replay.sh:url,AnisaLaptop.localdomain:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email,cxl-dcd.sh:url,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cxl-dcd.sh:url,lists.linux.dev:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,samsung.com:mid,cxl-region-replay.sh:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 66FDE6C4486
+X-Rspamd-Queue-Id: F24556C5162
 
-On Mon, Jun 08, 2026 at 05:24:08PM -0700, Dave Jiang wrote:
-> 
-> 
-> On 5/23/26 2:50 AM, Anisa Su wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > cxl_test provides a good way to ensure quick smoke and regression
-> > testing.  The complexity of DCD and the new sparse DAX regions
-> > required to use them benefits greatly with a series of smoke tests.
-> > 
-> > The only part of the kernel stack which must be bypassed is the actual
-> > irq of DCD events.  However, the event processing itself can be tested
-> > via cxl_test calling directly into the event processing.
-> > 
-> > In this way the rest of the stack; management of sparse regions, the
-> > extent device lifetimes, and the dax device operations can be tested.
-> > 
-> > Add Dynamic Capacity Device tests for kernels which have DCD support.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Anisa Su <anisa.su887@gmail.com>
-> 
-> A nit below. Otherwise
-> 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> 
-[snip] 
-> > +test_event_reporting()
-> > +{
-> > +	# Test event reporting
-> > +	# results expected
-> > +	num_dcd_events_expected=2
-> > +
-> > +	echo "Test: Prep event trace"
-> > +	echo "" > /sys/kernel/tracing/trace
-> > +	echo 1 > /sys/kernel/tracing/events/cxl/enable
-> > +	echo 1 > /sys/kernel/tracing/tracing_on
-> > +
-> > +	inject_extent ${device} $base_ext_dpa $base_ext_length ""
-> > +	remove_extent ${device} $base_ext_dpa $base_ext_length
-> 
-> Missing the tag arg
-> 
-> DJ
+Table of Contents
+=================
+  1. Changes since v10
+  2. Background
+  3. Patch organization
+  4. Noteable
+  5. Testing
 
-Fixed, thanks!
+This series branch: https://github.com/anisa-su993/anisa-linux-kernel/tree/dcd-v11-06-23-26
+NDCTL branch: https://github.com/anisa-su993/anisa-ndctl/tree/dcd-2026-06-24
 
-Anisa
-> 
-> > +
-> > +	echo 0 > /sys/kernel/tracing/tracing_on
-> > +
-> > +	echo "Test: Events seen"
-> > +	trace_out=$(cat /sys/kernel/tracing/trace)
-> > +
-> > +	# Look for DCD events
-> > +	num_dcd_events=$(grep -c "cxl_dynamic_capacity" <<< "${trace_out}")
-> > +	echo "     LOG     (Expected) : (Found)"
-> > +	echo "     DCD events    ($num_dcd_events_expected) : $num_dcd_events"
-> > +
-> > +	if [ "$num_dcd_events" -ne $num_dcd_events_expected ]; then
-> > +		err "$LINENO"
-> > +	fi
-> > +}
-> > +
-> > +
-> > +# ========================================================================
-> > +# main()
-> > +# ========================================================================
-> > +
-> > +modprobe -r cxl_test
-> > +modprobe cxl_test
-> > +
-> > +# The mock stamps a single cxl_mem instance with this serial (0xDCDC).
-> > +# That memdev's DC partition is advertised as sharable in CDAT and is
-> > +# the only one that can host the shared-extent tests.  All other DCD
-> > +# memdevs stay non-sharable and host the rest of the suite.
-> > +MOCK_DC_SHARABLE_SERIAL=56540
-> > +
-> > +readarray -t memdevs < <("$CXL" list -b cxl_test -Mi | jq -r '.[].memdev')
-> > +
-> > +sharable_mem=""
-> > +sharable_decoder=""
-> > +sharable_bus=""
-> > +sharable_device=""
-> > +sharable_dra_size=""
-> > +
-> > +for cand in ${memdevs[@]}; do
-> > +	cand_dra=$($CXL list -m $cand | jq -r '.[].dynamic_ram_a_size')
-> > +	if [ "$cand_dra" == "null" ]; then
-> > +		continue
-> > +	fi
-> > +	cand_decoder=$($CXL list -b cxl_test -D -d root -m "$cand" |
-> > +		  jq -r ".[] |
-> > +		  select(.volatile_capable == true) |
-> > +		  select(.nr_targets == 1) |
-> > +		  select(.max_available_extent >= ${cand_dra}) |
-> > +		  .decoder")
-> > +	if [[ -z "$cand_decoder" ]]; then
-> > +		continue
-> > +	fi
-> > +	cand_serial=$($CXL list -m $cand | jq -r '.[].serial')
-> > +	cand_bus=`"$CXL" list -b cxl_test -m ${cand} | jq -r '.[].bus'`
-> > +	cand_device=$($CXL list -m $cand | jq -r '.[].host')
-> > +
-> > +	if [ "$cand_serial" == "$MOCK_DC_SHARABLE_SERIAL" ]; then
-> > +		if [ -z "$sharable_mem" ]; then
-> > +			sharable_mem="$cand"
-> > +			sharable_decoder="$cand_decoder"
-> > +			sharable_bus="$cand_bus"
-> > +			sharable_device="$cand_device"
-> > +			sharable_dra_size="$cand_dra"
-> > +		fi
-> > +	else
-> > +		if [ -z "$mem" ]; then
-> > +			mem="$cand"
-> > +			decoder="$cand_decoder"
-> > +			bus="$cand_bus"
-> > +			device="$cand_device"
-> > +			dra_size="$cand_dra"
-> > +		fi
-> > +	fi
-> > +
-> > +	if [ -n "$mem" ] && [ -n "$sharable_mem" ]; then
-> > +		break
-> > +	fi
-> > +done
-> > +
-> > +echo "TEST: non-sharable bus:${bus} decoder:${decoder} mem:${mem} device:${device} size:${dra_size}"
-> > +echo "TEST: sharable     bus:${sharable_bus} decoder:${sharable_decoder} mem:${sharable_mem} device:${sharable_device} size:${sharable_dra_size}"
-> > +
-> > +if [ "$decoder" == "" ] || [ "$device" == "" ] || [ "$dra_size" == "" ]; then
-> > +	echo "No non-sharable mem device/decoder found with DCD support"
-> > +	exit 77
-> > +fi
-> > +
-> > +if [ "$sharable_mem" == "" ]; then
-> > +	echo "No sharable mem device found (mock did not stamp MOCK_DC_SHARABLE_SERIAL)"
-> > +	exit 77
-> > +fi
-> > +
-> > +# testing pre existing extents must be called first as the extents were created
-> > +# by cxl-test being loaded
-> > +test_pre_existing_extents
-> > +test_remove_extent_under_dax_device
-> > +test_create_dax_dev_spanning_two_extents
-> > +test_inject_tag_support
-> > +test_uuid_no_match
-> > +test_uuid_no_match_seed_intact
-> > +test_uuid_aggregation
-> > +test_uuid_show
-> > +# These two run on the sharable memdev (serial $MOCK_DC_SHARABLE_SERIAL).
-> > +test_shared_extent_inject
-> > +test_seq_integrity_gap
-> > +test_cross_more_uniqueness
-> > +test_alignment_rejection
-> > +test_partial_extent_remove
-> > +test_multiple_extent_remove
-> > +test_destroy_region_without_extent_removal
-> > +test_destroy_with_extent_and_dax
-> > +test_dax_device_ops
-> > +test_reject_overlapping
-> > +test_two_regions
-> > +test_more_bit
-> > +test_driver_reload
-> > +test_event_reporting
-> > +
-> > +modprobe -r cxl_test
-> > +
-> > +check_dmesg "$LINENO"
-> > +
-> > +exit 0
-> > diff --git a/test/meson.build b/test/meson.build
-> > index e0e2193..cd06bf8 100644
-> > --- a/test/meson.build
-> > +++ b/test/meson.build
-> > @@ -171,6 +171,7 @@ cxl_translate = find_program('cxl-translate.sh')
-> >  cxl_elc = find_program('cxl-elc.sh')
-> >  cxl_dax_hmem = find_program('cxl-dax-hmem.sh')
-> >  cxl_region_replay = find_program('cxl-region-replay.sh')
-> > +cxl_dcd = find_program('cxl-dcd.sh')
-> >  
-> >  tests = [
-> >    [ 'libndctl',               libndctl,		  'ndctl' ],
-> > @@ -207,6 +208,7 @@ tests = [
-> >    [ 'cxl-elc.sh',             cxl_elc,            'cxl'   ],
-> >    [ 'cxl-dax-hmem.sh',        cxl_dax_hmem,       'cxl'   ],
-> >    [ 'cxl-region-replay.sh',   cxl_region_replay,  'cxl'   ],
-> > +  [ 'cxl-dcd.sh',             cxl_dcd,            'cxl'   ],
-> >  ]
-> >  
-> >  if get_option('destructive').enabled()
-> 
+v10: https://lore.kernel.org/linux-cxl/ajuMJi5nTQRB_ZP0@AnisaLaptop.localdomain/T/#mfdfc28c829071204333824c542ca3af4170dafb4
+
+Changes since v10
+=================
+The overall architecture and semantics are unchanged; v11 is review
+fixes, naming/ABI corrections, and irons out locking/concurrency edge cases
+between the CXL and DAX layers.
+
+Naming / ABI:
+ - Renamed dynamic_ram_a to dynamic_ram_1 throughout (endpoint-decoder
+   mode, the partition sysfs name, and enum CXL_PARTMODE_DYNAMIC_RAM_1),
+   matching the numbered-partition convention.
+ - Sharable extent sequence numbers are now a dense 0..n-1 (previously
+   1..n); the CXL validation path and the DAX claim path enforce the same
+   0..n-1 invariant.
+ - The DAX 'uuid' attribute reads back the null UUID (all-zeroes) when
+   untagged rather than "0".
+
+Recovery and lifecycle:
+ - Creating a region over a DC partition now reads the device's
+   already-accepted extents at probe time. cxl_dax_region probe
+   and recovered extents are not re-acknowledged via Add-DC-Response.  New
+   add events are deferred until the initial scan completes so a tag already in use
+   is never registered twice.
+ - Per-tag-group add and release of DAX resources are atomic (all-or-none). Previously,
+   adding a tag group only locked for each extent addition. The lock is widened to
+   the entire group.
+ - Upper bound of 100 pending extents to prevent 20-second timeout for the More
+   chain to close from being infinitely refreshed (unlikely unless device is malicious)
+
+Robustness (device-supplied data is treated as untrusted):
+ - Various device-supplied payload sizing checks, overflow/underflow, etc.
+ - Fix places where we need to check for native_cxl to avoid overriding
+   BIOS-owned events
+
+Documentation:
+ - Small changes to reflect dynamic_ram_a to dynamic_ram_1 change and the
+   sequence num change (0...n-1 instead of 1...n)
+ - Bump kver to 7.3 and date for sysfs attribute documentation
+
+Signoffs/Tags:
+- updated Ira's signoffs and authored-by to use iweiny@kernel.org
+- update Jonathan Cameron's email to jic23@kernel.org for various review tags
+- update Fan's email to nifan.cxl@gmail.com
+- update Dan's email to djbw@kernel.org
+
+Background
+=============
+A Dynamic Capacity Device (DCD) (CXL 3.1 sec 9.13.3) is a CXL memory
+device that allows memory capacity within a region to change
+dynamically without the need for resetting the device, reconfiguring
+HDM decoders, or reconfiguring software DAX regions.
+One of the biggest anticipated use cases for Dynamic Capacity is to
+allow hosts to dynamically add or remove memory from a host within a
+data center without physically changing the per-host attached memory nor
+rebooting the host.
+The general flow for the addition or removal of memory is to have an
+orchestrator coordinate the use of the memory.  Generally there are 5
+actors in such a system, the Orchestrator, Fabric Manager, the Logical
+device, the Host Kernel, and a Host User.
+An example work flow is shown below.
+Orchestrator      FM         Device       Host Kernel    Host User
+    |             |           |            |               |
+    |-------------- Create region ------------------------>|
+    |             |           |            |               |
+    |             |           |            |<-- Create ----|
+    |             |           |            |    Region     |
+    |             |           |            |(dynamic_ram_1)|
+    |<------------- Signal done ---------------------------|
+    |             |           |            |               |
+    |-- Add ----->|-- Add --->|--- Add --->|               |
+    |  Capacity   |  Extent   |   Extent   |               |
+    |             |           |            |               |
+    |             |<- Accept -|<- Accept  -|               |
+    |             |   Extent  |   Extent   |               |
+    |             |           |            |<- Create -----|
+    |             |           |            |   DAX dev     |-- Use memory
+    |             |           |            |               |   |
+    |             |           |            |               |   |
+    |             |           |            |<- Release ----| <-+
+    |             |           |            |   DAX dev     |
+    |             |           |            |               |
+    |<------------- Signal done ---------------------------|
+    |             |           |            |               |
+    |-- Remove -->|- Release->|- Release ->|               |
+    |  Capacity   |  Extent   |   Extent   |               |
+    |             |           |            |               |
+    |             |<- Release-|<- Release -|               |
+    |             |   Extent  |   Extent   |               |
+    |             |           |            |               |
+    |-- Add ----->|-- Add --->|--- Add --->|               |
+    |  Capacity   |  Extent   |   Extent   |               |
+    |             |           |            |               |
+    |             |<- Accept -|<- Accept  -|               |
+    |             |   Extent  |   Extent   |               |
+    |             |           |            |<- Create -----|
+    |             |           |            |   DAX dev     |-- Use memory
+    |             |           |            |               |   |
+    |             |           |            |<- Release ----| <-+
+    |             |           |            |   DAX dev     |
+    |<------------- Signal done ---------------------------|
+    |             |           |            |               |
+    |-- Remove -->|- Release->|- Release ->|               |
+    |  Capacity   |  Extent   |   Extent   |               |
+    |             |           |            |               |
+    |             |<- Release-|<- Release -|               |
+    |             |   Extent  |   Extent   |               |
+    |             |           |            |               |
+    |-- Add ----->|-- Add --->|--- Add --->|               |
+    |  Capacity   |  Extent   |   Extent   |               |
+    |             |           |            |<- Create -----|
+    |             |           |            |   DAX dev     |-- Use memory
+    |             |           |            |               |   |
+    |-- Remove -->|- Release->|- Release ->|               |   |
+    |  Capacity   |  Extent   |   Extent   |               |   |
+    |             |           |            |               |   |
+    |             |           |     (Release Ignored)      |   |
+    |             |           |            |               |   |
+    |             |           |            |<- Release ----| <-+
+    |             |           |            |   DAX dev     |
+    |<------------- Signal done ---------------------------|
+    |             |           |            |               |
+    |             |- Release->|- Release ->|               |
+    |             |  Extent   |   Extent   |               |
+    |             |           |            |               |
+    |             |<- Release-|<- Release -|               |
+    |             |   Extent  |   Extent   |               |
+    |             |           |            |<- Destroy ----|
+    |             |           |            |   Region      |
+    |             |           |            |               |
+
+
+Patch organization
+==================
+Device enablement and partition configuration:
+ - cxl/mbox: Flag support for Dynamic Capacity Devices (DCD)
+ - cxl/mem: Read dynamic capacity configuration from the device
+ - cxl/cdat: Gather DSMAS data for DCD partitions
+ - cxl/core: Enforce partition order/simplify partition calls
+ - cxl/mem: Expose dynamic ram 1 partition in sysfs
+ - cxl/port: Add 'dynamic_ram_1' to endpoint decoder mode
+ - cxl/region: Add DC DAX region support
+
+Event and interrupt plumbing:
+ - cxl/events: Split event msgnum configuration from irq setup
+ - cxl/pci: Factor out interrupt policy check
+ - cxl/mem: Configure dynamic capacity interrupts
+ - cxl/core: Return endpoint decoder information from region search
+ - cxl/mem: Set up framework for handling DC Events
+ - cxl/mem: Add 20 second timeout for stalled DC_ADD_CAPACITY chains
+
+Extent handling - add, release, and validation:
+ - cxl/extent: Handle DC Add Capacity events
+ - cxl/mem: Drop misaligned DCD extent groups
+ - cxl/extent: Validate DC extent partition
+ - cxl/mem: Enforce tag-group semantics
+ - cxl/extent: Handle DC Release Capacity events
+ - cxl/extent: Enforce cross-region tag uniqueness
+ - cxl/region/extent: Expose dc_extent information in sysfs
+
+DAX resource surfacing and device model:
+ - cxl + dax: Surface dax_resources on DCD Add Capacity events
+ - cxl + dax: Release dax_resources on DCD Release Capacity events
+ - dax/bus: Factor out dev dax resize logic
+ - dax/bus: Add uuid sysfs attribute to dax devices
+ - dax/bus: Reject resize on DC dax devices and enforce 0-size creation
+ - dax/bus: Tag-aware uuid claim and show on DC dax devices
+ - cxl/region: Read existing extents on region creation
+
+Tracing, test infrastructure, and documentation:
+ - cxl/mem: Trace Dynamic capacity Event Record
+ - tools/testing/cxl: Make event logs dynamic
+ - tools/testing/cxl: Add DC Regions to mock mem data
+ - Documentation/cxl: Document DCD extent handling and DC-backed DAX regions
+
+
+Noteable
+========
+ - A More=1 add chain is bounded by the 20s timeout and CXL_DC_MAX_PENDING_EXTENTS,
+   set to 100. Suggested by Sashiko as a defensive cap against a fabric manager
+   that never closes the chain.  The value is arbitrary; feedback on it is welcome.
+
+ - Several Sashiko review comments assumed multiple host threads could process a
+   single DCD add event, or concurrently mutate one tag group, at the same
+   time. But I don't think that happens because DCD events for a memdev are delivered
+   and handled serially by that device's event-interrupt thread,
+   and a tag group is owned by exactly one memory device.  Those comments
+   were therefore ignored. Please correct me if this assumption is wrong
+   so I can fix those.
+
+Testing
+=======
+ndctl unit suite: built and run against the QEMU cxl_test mock with the
+ndctl 'cxl' suite (branch dcd-2026-06-24): 16 of 17 tests pass and
+cxl-features is skipped as unsupported, including cxl-dcd.sh and the
+cxl-region-replay.sh crash-recovery test that exercises reading
+pre-existing extents on region creation.
+
+QEMU end-to-end: used Ali's QEMU patchset adding tag support
+[1], with the below topology:
+
+TOPO='-object memory-backend-file,id=cxl-mem1,mem-path=/tmp/t3_cxl1.raw,size=12G \
+     -object memory-backend-file,id=cxl-lsa1,mem-path=/tmp/t3_lsa1.raw,size=1G \
+     -device usb-ehci,id=ehci \
+     -device pxb-cxl,bus_nr=12,bus=pcie.0,id=cxl.1,hdm_for_passthrough=true \
+     -device cxl-rp,port=0,bus=cxl.1,id=cxl_rp_port0,chassis=0,slot=2 \
+     -device cxl-type3,bus=cxl_rp_port0,id=cxl-dcd0,dc-regions-total-size=12G,num-dc-regions=1,sn=99 \
+     -device usb-cxl-mctp,bus=ehci.0,id=usb1,target=cxl-dcd0\
+     -machine cxl-fmw.0.targets.0=cxl.1,cxl-fmw.0.size=12G,cxl-fmw.0.interleave-granularity=1k'
+
+The exact instructions are the same as the previous version, so I've truncated some details.
+
+  1. Boot the guest.
+  2. QMP object-add a tagged 8G memory-backend-ram
+     (tag 5be13bce-ae34-4a77-b6c3-16df975fcf1a).
+  3. cxl create-region -m -d decoder0.0 -w 1 -s 8G mem0 -t dynamic_ram_1
+  4. QMP cxl-add-dynamic-capacity (prescriptive, region 0, same tag)
+     injecting an 8G extent at offset 0.
+  5. The extent surfaces under the region: dax_region0/extent0.0 reports
+     offset 0x0, length 0x200000000, uuid 5be13bce-...
+  6. daxctl create-device -r region0 --uuid 5be13bce-... creates the 8G
+     devdax device.
+
+We are also working with some internal teams to test on real hardware, so
+I'll report any findings as we go.
+
+References:
+[1] https://lore.kernel.org/linux-cxl/20260325184259.366-1-alireza.sanaee@huawei.com/T/#t
+
+This series applies on the v7.1 tag (Linus' tree).
+
+base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
+
+Anisa Su (6):
+  cxl/mem: Add 20 second timeout for stalled DC_ADD_CAPACITY chains
+  cxl/mem: Enforce tag-group semantics
+  cxl/extent: Enforce cross-region tag uniqueness
+  dax/bus: Add uuid sysfs attribute to dax devices
+  dax/bus: Tag-aware uuid claim and show on DC dax devices
+  Documentation/cxl: Document DCD extent handling and DC-backed DAX
+    regions
+
+Ira Weiny (25):
+  cxl/mbox: Flag support for Dynamic Capacity Devices (DCD)
+  cxl/mem: Read dynamic capacity configuration from the device
+  cxl/cdat: Gather DSMAS data for DCD partitions
+  cxl/core: Enforce partition order/simplify partition calls
+  cxl/mem: Expose dynamic ram 1 partition in sysfs
+  cxl/port: Add 'dynamic_ram_1' to endpoint decoder mode
+  cxl/region: Add DC DAX region support
+  cxl/events: Split event msgnum configuration from irq setup
+  cxl/pci: Factor out interrupt policy check
+  cxl/mem: Configure dynamic capacity interrupts
+  cxl/core: Return endpoint decoder information from region search
+  cxl/mem: Set up framework for handling DC Events
+  cxl/extent: Handle DC Add Capacity events
+  cxl/mem: Drop misaligned DCD extent groups
+  cxl/extent: Validate DC extent partition
+  cxl/extent: Handle DC Release Capacity events
+  cxl/region/extent: Expose dc_extent information in sysfs
+  cxl + dax: Surface dax_resources on DCD Add Capacity events
+  cxl + dax: Release dax_resources on DCD Release Capacity events
+  dax/bus: Factor out dev dax resize logic
+  dax/bus: Reject resize on DC dax devices and enforce 0-size creation
+  cxl/region: Read existing extents on region creation
+  cxl/mem: Trace Dynamic capacity Event Record
+  tools/testing/cxl: Make event logs dynamic
+  tools/testing/cxl: Add DC Regions to mock mem data
+
+ Documentation/ABI/testing/sysfs-bus-cxl       |  100 +-
+ Documentation/ABI/testing/sysfs-bus-dax       |   18 +
+ .../driver-api/cxl/linux/cxl-driver.rst       |  149 +++
+ .../driver-api/cxl/linux/dax-driver.rst       |  169 +++
+ drivers/cxl/core/Makefile                     |    2 +-
+ drivers/cxl/core/cdat.c                       |   12 +
+ drivers/cxl/core/core.h                       |   67 +-
+ drivers/cxl/core/extent.c                     |  783 ++++++++++++
+ drivers/cxl/core/hdm.c                        |   14 +-
+ drivers/cxl/core/mbox.c                       | 1107 +++++++++++++++-
+ drivers/cxl/core/memdev.c                     |   87 +-
+ drivers/cxl/core/port.c                       |    9 +
+ drivers/cxl/core/region.c                     |   53 +-
+ drivers/cxl/core/region_dax.c                 |   49 +-
+ drivers/cxl/core/trace.h                      |   75 ++
+ drivers/cxl/cxl.h                             |  114 +-
+ drivers/cxl/cxlmem.h                          |  162 ++-
+ drivers/cxl/mem.c                             |    2 +-
+ drivers/cxl/pci.c                             |  136 +-
+ drivers/dax/bus.c                             |  653 +++++++++-
+ drivers/dax/bus.h                             |    4 +-
+ drivers/dax/cxl.c                             |  115 +-
+ drivers/dax/dax-private.h                     |   63 +
+ drivers/dax/hmem/hmem.c                       |    2 +-
+ drivers/dax/pmem.c                            |    2 +-
+ include/cxl/cxl.h                             |    7 +-
+ include/cxl/event.h                           |   38 +
+ tools/testing/cxl/Kbuild                      |    5 +-
+ tools/testing/cxl/test/cxl.c                  |   12 +
+ tools/testing/cxl/test/mem.c                  | 1109 +++++++++++++++--
+ tools/testing/cxl/test/mock.h                 |    9 +
+ 31 files changed, 4858 insertions(+), 269 deletions(-)
+ create mode 100644 drivers/cxl/core/extent.c
+
+-- 
+2.43.0
+
 
