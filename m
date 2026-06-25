@@ -1,131 +1,133 @@
-Return-Path: <nvdimm+bounces-14575-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14544-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1LVeCaESPWqSwggAu9opvQ
-	(envelope-from <nvdimm+bounces-14575-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:36:01 +0200
+	id H9JjOJ4PPWoOwggAu9opvQ
+	(envelope-from <nvdimm+bounces-14544-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:23:10 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B8266C5294
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:36:00 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB706C5124
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 13:23:10 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=rS4VPnyC;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14575-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14575-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=DlHbaYzR;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14544-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14544-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6F8533101305
-	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 11:30:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 936E230471D9
+	for <lists+linux-nvdimm@lfdr.de>; Thu, 25 Jun 2026 11:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07C13DE42E;
-	Thu, 25 Jun 2026 11:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CCBA3D9666;
+	Thu, 25 Jun 2026 11:22:25 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C9C3DB63D
-	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 11:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5BB3DA5D5
+	for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 11:22:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782386961; cv=none; b=n9Ap5zbLEX/ribRJwrkJusptPGe/C/PD7L07BGZQ2SVJ8zwUFxQ6pJmnzIoreOtA37MM6gq0DmC9IeNy5MnWHIsVkxf5G1Xc46cpP5remlHBtgDAsoN7wQ/a8UgNfcuTDMrTC1hIF7shvsOLa0PdnIAt44L33wA9KfZE0g8zUME=
+	t=1782386545; cv=none; b=i75en/B1ooz52gv2owEuta1ymYO7U4XnpzBTE7HdvgCmQFRxjHV0UWigijUHxCp+C4WeS5qJs5ypYxxWMs35MHomCbmKJ4YkmOXzdoTKwtkr2zzVzRLM5FnV6QZxsdodFNax735IlFmS0/H03GFjaWFQveckU+SMEteoCX+D90M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782386961; c=relaxed/simple;
-	bh=phNb/Cv7MIb+nqtCqQ1+NhpCPbZrQpgvxiP2mqsDqT0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lqe+qyKUBxGna1Zi2fb+fXeRiyFDDHy0AMHEgHXPq96pnDvrsHaoeqDexsIgqSFKnMf6Hawwx8i37HcKGKbBMYBNPbXCsaP4bQbRu4+qEla5kMzO3acWCj/4mpkvo0nWGzBEeRuqyafLk76uep5gD1eNwb91NtZkhff8Jc5ZRRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rS4VPnyC; arc=none smtp.client-ip=74.125.82.175
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30bf132969bso3018932eec.0
-        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 04:29:19 -0700 (PDT)
+	s=arc-20240116; t=1782386545; c=relaxed/simple;
+	bh=XYRGCI0PpLZn96DXsjLNkmeVGjCZSWKZKnuK6Ui7fm0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=svGk35KNa+cf00rH8ywLlSyWK9O8V11sRZ1pQlmZ02IC/B05F8QNPuLhO7Cc+PjeOJ1Hzzn4iNMPMeVhy9INEU41hkXjF7R6V4ypMBGwHlxq1zaCtIE+qSNysTcJ3hBOIVoal2Dudp6Sm/SUYmQcR6UZpEorKvtle2/Tn/Hc0xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlHbaYzR; arc=none smtp.client-ip=74.125.82.179
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3078e0dcd67so3092049eec.0
+        for <nvdimm@lists.linux.dev>; Thu, 25 Jun 2026 04:22:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782386959; x=1782991759; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V8DekyuZFm8kNJKd8ijojgD5FjCszYptkn1mojUsymk=;
-        b=rS4VPnyC8UJfZAn1zqltK1TM9Ayac904JLWU8+a+7F6wA07U5beB9Qa+Ft3SkY2oY0
-         Q8m6g9W6kPvCYmms9z4JIp33UgNpjT7nuc0jtSCc2q+4FK1QmZVVJAbJ0VUUEZ3INf7F
-         B5yDDRU9Dq2schCjWfFXhJ+cblbCwh8Q0qtG5USXAUya8yHGdYlu3VRSyecNR+T4gXXX
-         ASrdnjaewTYVAXw3x8SF30PYftINPwhRQdHLJ8T67vpSYhSwy3N3u46YK0BC8zFhhSeZ
-         u82UYX8xD+HfwEkdztawW6NZsxVj5DoDTjZJgCVrq+zGVw3rRXMdKOTV9GWQ7DXSnak/
-         OpPQ==
+        d=gmail.com; s=20251104; t=1782386542; x=1782991342; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=c6i9WQZ/zufg9FXTGnUqqmUX8ApC23bsNFALJTl/rt0=;
+        b=DlHbaYzR9AWdPRm0qHtd9gmgz+mNuVngLfniEKcm3YTPOE/JZhco48dqFip/8LRedT
+         i1yOCJzZMRXAmZStV4/oTw3Ou/vytRq3mETnn6sK8Y0y/GJsGiLtq+yV5RnZ82gq2dPJ
+         DTnJ3YmigG4SWKe0jeQXqa+DfVXnLpilcExP9J4YnHa7USDgc21l0AJ3UA+tm9tzm2av
+         NfakH5SM1fbtozUJ+90ruaAEmDfwShQ3qpQZCX1Sjq/CT1ZfcfYn7U4wWuHygRTkgfch
+         uusXbVZqQwXLcNpWxRYXi2K3KjNP7yJeQozW5K+1WkisV8/xKNC8GVulo+vK15sL4ZsW
+         jM8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782386959; x=1782991759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=V8DekyuZFm8kNJKd8ijojgD5FjCszYptkn1mojUsymk=;
-        b=CvmTFvB8/M5lVrXqo/wEc1Xgr8NUYxWPETZKanGVtaylQE1BVMuOvw9gyhhrpzOTHZ
-         1VZCRaqyqjyGjl4SXMAbEr/I22UMmUkPWaZsPs+2srfuLRdnhELfCqvaD6Ra5A4xoRoj
-         pqcMp/0mB0fwnFprA8oBY+pqnnAz3bhqFQqsFguSD30qaQrMpP048fmfZGp3t9X4d1PX
-         vAKR4vZ5l6wxDTGfstBewa/waVCIPR+USbX4a1ZLQ4Cv6Ely46cbff6pwa67Y788wMPq
-         vhJGf204WBuZqVfGkgmaKB6SilNIBMmCPs7+fZPhtc+Tn6akFp9Jh+YMEY2C0l2b0zBl
-         yB5Q==
-X-Gm-Message-State: AOJu0YyuerxCKMkH7qcMiWCS1Axzr3OJocunD1HtTpQu5CSPcGIFIsfM
-	lNaoClri+seGT3IMi5WyoJ/gASokqlDnIe0DPEU/tTYXr2FbzIybrOGjL+J2jA==
-X-Gm-Gg: AfdE7cnPvzk5rnLuUfmUXV3CeQcV17sOkL6FQhUimt39HnO1NjFaFJglvKjakDD4oC7
-	HjhQrlTNfXfcik7Fh4Kpm3JSXXNG24aP3YciCM0nHAHs2c2afGWnm/h6hhCtXZLnrB5NZI3Lp8v
-	phTsZl90AQ5vR+RxV/XSO/H99Amg3w0IlqJhoRMkycUa9ArhBjmPNE9udv8P50FHPNWPnXCMjUG
-	zi6256MQQHsP9ADUcxJMGPI9+McN5tjXwTWJsLDiA2s4GjXG0SDqhJ+z8jlDjUO3SYzwBEdHsMb
-	3jS79gmm6MrSV12UwDVwpoHKUlPlnFedCemh4F9NQ5hipWV6RIm1iQ/xaCacpq+oJ63IKkWhPZk
-	jjffLf7b4/NaawCl4sX5m2gMbkRaQOtw11FOKXB6URqDkivqAwdJ7En3TzL7TsEOkDxY+cdt0+o
-	fZz0BLuI/CKgV8TdsNMyhwhZjmUGcLm8rxHiP5vYcfP20Gpc0HUC65I0O2UrKWKc4eKT0T7Zzm4
-	MA5o6w=
-X-Received: by 2002:a05:7301:2a08:b0:307:e4fa:894b with SMTP id 5a478bee46e88-30c84ba3223mr2722276eec.8.1782386958440;
-        Thu, 25 Jun 2026 04:29:18 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782386542; x=1782991342;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c6i9WQZ/zufg9FXTGnUqqmUX8ApC23bsNFALJTl/rt0=;
+        b=jOSA8dxM8/b7QngcFTTcCECv+H21/lzVVKeCjvOAKrMb8k3j+397l46iTEVhwdUGaR
+         rsReWSvN73BR5syB5Mt4BGFD3XmQ8KTAarZdipc5TTRkEJ0mI4rQMJkPf873iHgENGPL
+         edv9EyO+REqAGHijnxHQkoX/YfYPcdgPygHZx3wSGhX/ueDhDdHxS8b1N85ghKkX9kBW
+         ke7YqKzwL06U1lLDBOE/0rzpDLD8BLpPWcrj5H1u7xjL+RDL3m4SzOCR06UMqyEz7JNW
+         jd8bJ7DYevYNO8ASKWeQDR6fX3IB1C0nIYQ3AzwpoWm1HXKHZVS5Zr6UYZS7mo3epwYx
+         Oq6A==
+X-Forwarded-Encrypted: i=1; AHgh+RoC42s2O+nYfYXHkQ2AdvJb5ufJM/ywxY/Yf4Oypd5luWDLP7GJSkfgrxfwghW8XQ9NZBthi9U=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxkLmMj09QSS1sGoB8TLJJx8NWrRSOPOcFymUunhLtM+5TYkI9X
+	WyyLgiTajbRif0xH0Mf9rzd8ykTH5+w7Nf66ASmncWKIuVWt+10J8E8+
+X-Gm-Gg: AfdE7cnNhVbBqaD2UWoNHhjpuyuuSbEJDNWmD/zZk37w09h2VUWLSJthJyZhAqVFlsN
+	M/yvtbcEa8G65PY/CGTlMpMyJj1POAT51QU0hevbukP18/4w06zaNXCaJ70cg6aIRKWnLvFngCN
+	1xKfkmGEhYdUgDw0xNtAAgg2zSNAuXKPeaTYbB7Xc6mmtXnqVSP9YbfPAt6hHmVYeo9HhdsMebe
+	x2uE4vWKIjWPG2G82pt5bfOej10ST2JLS+W3NBPAD2+Rebjh8q90O57HdyS0OyTj34Z1yjvMEtV
+	Yc7oWo1LSoaPAQgDPKe/YlDMiJFgapa7axYdkjUUGQPEZk2dHd2n+hn+kY6esoDTsmwJxu4T0E5
+	cGUeQ+LbYZ6Zeidfnp8NLB/Kh7lfhuH1PlBALtl5tqinMe05bHtT5DSR3sPPAOirwXw/D1UXxcZ
+	qejb1xkJx+ncyCa+Z76xutVowKa2ORF3RVAmbCkCK2yHmvnMJnJI9wPLs7zEhJ8viijJw4
+X-Received: by 2002:a05:7300:fb8d:b0:304:b14:ec53 with SMTP id 5a478bee46e88-30c84dab521mr2310208eec.27.1782386541222;
+        Thu, 25 Jun 2026 04:22:21 -0700 (PDT)
 Received: from AnisaLaptop.localdomain (c-73-170-217-179.hsd1.ca.comcast.net. [73.170.217.179])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7cab08c2sm8744614eec.29.2026.06.25.04.29.17
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c8c02a2a2sm4473498eec.2.2026.06.25.04.22.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 04:29:18 -0700 (PDT)
+        Thu, 25 Jun 2026 04:22:20 -0700 (PDT)
 From: Anisa Su <anisa.su887@gmail.com>
 X-Google-Original-From: Anisa Su <anisa.su@samsung.com>
-To: linux-cxl@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: nvdimm@lists.linux.dev,
-	Dan Williams <djbw@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
+Date: Thu, 25 Jun 2026 04:22:18 -0700
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: Anisa Su <anisa.su887@gmail.com>, linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+	Dan Williams <djbw@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
 	Davidlohr Bueso <dave@stgolabs.net>,
-	Dave Jiang <dave.jiang@intel.com>,
 	Vishal Verma <vishal.l.verma@intel.com>,
 	Ira Weiny <iweiny@kernel.org>,
 	Alison Schofield <alison.schofield@intel.com>,
-	John Groves <John@Groves.net>,
-	Gregory Price <gourry@gourry.net>,
-	Anisa Su <anisa.su@samsung.com>
-Subject: [PATCH v11 31/31] Documentation/cxl: Document DCD extent handling and DC-backed DAX regions
-Date: Thu, 25 Jun 2026 04:05:08 -0700
-Message-ID: <20260625112638.550691-32-anisa.su@samsung.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260625112638.550691-1-anisa.su@samsung.com>
-References: <20260625112638.550691-1-anisa.su@samsung.com>
+	John Groves <John@groves.net>, Gregory Price <gourry@gourry.net>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v10 30/31] tools/testing/cxl: Add DC Regions to mock mem
+ data
+Message-ID: <aj0Pah7Mu4OnFvAY@AnisaLaptop.localdomain>
+References: <cover.1779528761.git.anisa.su@samsung.com>
+ <b8aa5ccbb32745a1ec53b81c72b670ed05557691.1779528761.git.anisa.su@samsung.com>
+ <a82c78ca-a944-44e4-a634-6d3dbdcbfe42@intel.com>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <a82c78ca-a944-44e4-a634-6d3dbdcbfe42@intel.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-14544-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:dave.jiang@intel.com,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:John@Groves.net,m:gourry@gourry.net,m:anisa.su@samsung.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:dave.jiang@intel.com,m:anisa.su887@gmail.com,m:linux-cxl@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:djbw@kernel.org,m:jic23@kernel.org,m:dave@stgolabs.net,m:vishal.l.verma@intel.com,m:iweiny@kernel.org,m:alison.schofield@intel.com,m:John@groves.net,m:gourry@gourry.net,m:ira.weiny@intel.com,m:anisasu887@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[anisasu887@gmail.com,nvdimm@lists.linux.dev];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14575-lists,linux-nvdimm=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,lists.linux.dev,kernel.org,stgolabs.net,intel.com,groves.net,gourry.net];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -133,390 +135,1092 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:mid,samsung.com:email,lists.linux.dev:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email,cxl-dcd.sh:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6B8266C5294
+X-Rspamd-Queue-Id: 2EB706C5124
 
-Extend the CXL and DAX driver-api documentation to cover Dynamic
-Capacity Devices.
+On Fri, May 29, 2026 at 04:42:46PM -0700, Dave Jiang wrote:
+> 
+> 
+> On 5/23/26 2:43 AM, Anisa Su wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > cxl_test provides a good way to ensure quick smoke and regression
+> > testing.  The complexity of Dynamic Capacity (DC) extent processing as
+> > well as the complexity of DC-backed DAX regions can mostly be tested
+> > through cxl_test.  This includes management of DC regions and DAX
+> > devices on those regions; the management of extent device lifetimes;
+> > and the processing of DCD events.
+> > 
+> > The only missing functionality from this test is actual interrupt
+> > processing.
+> > 
+> > Mock memory devices can easily mock DC information and manage fake
+> > extent data.
+> > 
+> > Define mock_dc_partition information within the mock memory data.  Add
+> > sysfs entries on the mock device to inject and delete extents.
+> > 
+> > The inject format is <start>:<length>:<tag>:<more>[:<seq>] where <tag>
+> > is a UUID string (or "" / "0" for the null UUID) and <seq> is an
+> > optional shared_extn_seq value used for sharable-partition tests
+> > (defaults to 0).
+> > The delete format is <start>:<length>:<uuid>
+> > 
+> > Directly call the event irq callback to simulate irqs to process the
+> > test extents.
+> > 
+> > Add DC mailbox commands to the CEL and implement those commands.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Anisa Su <anisa.su@samsung.com>
+> > 
+> > ---
+> > Changes:
+> > [anisa: add uuid + shared_extn_seq, align mock with kernel validators,
+> >         introduce a sharable-partition test fixture]
+> > [anisa: replace "sparse" terminology with "DC" / "DC-backed"]
+> > 
+> > Carry a uuid_t and a u16 shared_extn_seq on each mock extent, parse
+> > tags via uuid_parse() in the inject path and the pre-extent fixture,
+> > and propagate both fields through log_dc_event() and
+> > mock_get_dc_extent_list().  An optional 5th field in the inject
+> > format supplies the shared_extn_seq for sharable-partition tests.
+> > The delete format takes the uuid as its third field so release
+> > events carry tag identity to the host.
+> > 
+> > Mock fixes required to satisfy the host-side validators:
+> > 
+> >   - dsmad_handle starts at 0xFA, not 0xFADE.  The Get Dynamic
+> >     Capacity Configuration response's DSMAD Handle field is 1 byte
+> >     per the CXL spec; the kernel rejects any handle with the upper
+> >     24 bits non-zero as a firmware-bug.
+> > 
+> >   - dc_accept_extent() treats a re-accept of an already-accepted
+> >     extent as a successful no-op (look up dc_accepted_exts when the
+> >     sent xa lookup misses).  The host replays accepts for pre-
+> >     injected extents on region creation; without this the existing-
+> >     extent ingest aborts with -ENOMEM.
+> > 
+> >   - __dc_del_extent_store() runs strim() on the trailing uuid field
+> >     so the '
+> > ' shell write tail doesn't cause parse_tag() to fall
+> >     through to uuid_parse() and -EINVAL.
+> > 
+> >   - NUM_MOCK_DC_REGIONS reduced from 2 to 1.  The host's
+> >     cxl_dev_dc_identify() surfaces partitions[0] only, so extents
+> >     seeded into a second mock partition land outside the registered
+> >     DC range; for tagged groups that also trips the partition-
+> >     equality gate and drops the whole group (including the in-range
+> >     member).
+> > 
+> > Sharable-partition test fixture:
+> > 
+> >   - Stamp MOCK_DC_SHARABLE_SERIAL (0xDCDC) on the cxl_mem instance
+> >     at pdev->id == 0.  The companion cxl_test driver checks this
+> >     serial in mock_cxl_endpoint_parse_cdat() and sets the DC
+> >     partition's perf.shareable on that memdev only — exposing both
+> >     sharable and non-sharable DC partitions from one cxl_test
+> >     module load so the userspace suite can exercise both regimes.
+> > 
+> >   - Skip inject_prev_extents() on that one memdev: the pre-injected
+> >     extents are untagged / seq=0 and would be rejected as firmware-
+> >     bug by cxl_validate_extent() on a sharable partition, leaving
+> >     spurious noise in dmesg at probe.
+> > ---
+> >  tools/testing/cxl/test/cxl.c |  21 +
+> >  tools/testing/cxl/test/mem.c | 806 ++++++++++++++++++++++++++++++++++-
+> >  2 files changed, 826 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
+> > index 418669927fb0..ac6060ede061 100644
+> > --- a/tools/testing/cxl/test/cxl.c
+> > +++ b/tools/testing/cxl/test/cxl.c
+> > @@ -18,6 +18,15 @@ static int interleave_arithmetic;
+> >  static bool extended_linear_cache;
+> >  static bool fail_autoassemble;
+> >  
+> > +/*
+> > + * Mock serial sentinel.  The cxl_mock_mem probe stamps this serial on
+> > + * exactly one platform device (cxl_mem with id 0); that single memdev's
+> > + * DC partition is marked sharable below in mock_cxl_endpoint_parse_cdat
+> > + * so the suite can exercise sharable-extent code paths without losing
+> > + * the non-sharable coverage on the other mock memdevs.
+> > + */
+> > +#define MOCK_DC_SHARABLE_SERIAL 0xDCDCULL
+> 
+> This is defined in cxl.c and mem.c. Why not just put it in a shared header?
+> 
+Moved to mock.h
 
-cxl-driver.rst gains a "Dynamic Capacity Extents" section describing
-the conditions under which the CXL core accepts an offered extent
-(per-extent: region resolution, full ED-range containment,
-no-overlap, duplicate tolerance; per-tag-group: host-wide tag-uuid
-uniqueness, sequence-number integrity, partition equality,
-alignment) and the conditions under which a release request is
-honoured (DPA-range containment in some member, tag match,
-DAX-layer EBUSY deferral, whole-tag-group release).  The host-wide
-uniqueness gate is enforced by the cxl_tag_register registry in
-drivers/cxl/core/extent.c.  For sequence numbers the doc spells out
-both regimes — device-stamped 0..n-1 on sharable allocations and
-host-assigned arrival-order 0..n-1 (assigned by cxl_realize_group())
-on non-sharable allocations — and notes that the DAX layer sees one
-unified 0..n-1 dense invariant.
+> > +
+> >  #define FAKE_QTG_ID	42
+> >  
+> >  #define NR_CXL_HOST_BRIDGES 2
+> > @@ -1432,6 +1441,18 @@ static void mock_cxl_endpoint_parse_cdat(struct cxl_port *port)
+> >  		};
+> >  
+> >  		dpa_perf_setup(port, &range, perf);
+> > +
+> > +		/*
+> > +		 * The mock probe stamps MOCK_DC_SHARABLE_SERIAL onto exactly
+> > +		 * one cxl_mem instance; mark its DC partition sharable so
+> > +		 * cxl_validate_extent() routes shared-seq injects through
+> > +		 * the sharable regime.  Every other memdev keeps its DC
+> > +		 * partition non-sharable so the existing untagged / seq=0
+> > +		 * tests still run on this kernel.
+> > +		 */
+> > +		if (cxlds->part[i].mode == CXL_PARTMODE_DYNAMIC_RAM_A &&
+> > +		    cxlds->serial == MOCK_DC_SHARABLE_SERIAL)
+> > +			perf->shareable = true;
+> >  	}
+> >  
+> >  	cxl_memdev_update_perf(cxlmd);
+> > diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+> > index fe1dadddd18e..9cc97b718b5f 100644
+> > --- a/tools/testing/cxl/test/mem.c
+> > +++ b/tools/testing/cxl/test/mem.c
+> > @@ -20,6 +20,7 @@
+> >  #define FW_SLOTS 3
+> >  #define DEV_SIZE SZ_2G
+> >  #define EFFECT(x) (1U << x)
+> > +#define BASE_DYNAMIC_CAP_DPA DEV_SIZE
+> >  
+> >  #define MOCK_INJECT_DEV_MAX 8
+> >  #define MOCK_INJECT_TEST_MAX 128
+> > @@ -113,6 +114,22 @@ static struct cxl_cel_entry mock_cel[] = {
+> >  				      EFFECT(SECURITY_CHANGE_IMMEDIATE) |
+> >  				      EFFECT(BACKGROUND_OP)),
+> >  	},
+> > +	{
+> > +		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_DC_CONFIG),
+> > +		.effect = CXL_CMD_EFFECT_NONE,
+> > +	},
+> > +	{
+> > +		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_DC_EXTENT_LIST),
+> > +		.effect = CXL_CMD_EFFECT_NONE,
+> > +	},
+> > +	{
+> > +		.opcode = cpu_to_le16(CXL_MBOX_OP_ADD_DC_RESPONSE),
+> > +		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_IMMEDIATE)),
+> > +	},
+> > +	{
+> > +		.opcode = cpu_to_le16(CXL_MBOX_OP_RELEASE_DC),
+> > +		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_IMMEDIATE)),
+> > +	},
+> >  };
+> >  
+> >  /* See CXL 2.0 Table 181 Get Health Info Output Payload */
+> > @@ -173,6 +190,16 @@ struct vendor_test_feat {
+> >  	__le32 data;
+> >  } __packed;
+> >  
+> > +/*
+> > + * The kernel surfaces only the first DC partition reported by the
+> > + * device (cxl_dev_dc_identify() takes partitions[0] only), so any
+> > + * extents we pre-inject into a second mock partition end up rejected
+> > + * as "not in a valid DC partition" — and for tagged groups they also
+> > + * trip the partition-equality gate and drop the whole group (including
+> > + * the in-range member in DC0).  Keep the mock at one DC partition.
+> > + */
+> > +#define NUM_MOCK_DC_REGIONS 1
+> > +
+> >  struct cxl_mockmem_data {
+> >  	void *lsa;
+> >  	void *fw;
+> > @@ -191,6 +218,20 @@ struct cxl_mockmem_data {
+> >  	unsigned long sanitize_timeout;
+> >  	struct vendor_test_feat test_feat;
+> >  	u8 shutdown_state;
+> > +
+> > +	struct cxl_dc_partition dc_partitions[NUM_MOCK_DC_REGIONS];
+> > +	u32 dc_ext_generation;
+> > +	struct mutex ext_lock;
+> > +
+> > +	/*
+> > +	 * Extents are in 1 of 3 states
+> > +	 * FM (sysfs added but not sent to the host yet)
+> > +	 * sent (sent to the host but not accepted)
+> > +	 * accepted (by the host)
+> > +	 */
+> > +	struct xarray dc_fm_extents;
+> > +	struct xarray dc_sent_extents;
+> > +	struct xarray dc_accepted_exts;
+> >  };
+> >  
+> >  static struct mock_event_log *event_find_log(struct device *dev, int log_type)
+> > @@ -607,6 +648,229 @@ static void cxl_mock_event_trigger(struct device *dev)
+> >  	cxl_mem_get_event_records(mdata->mds, mes->ev_status);
+> >  }
+> >  
+> > +struct cxl_extent_data {
+> > +	u64 dpa_start;
+> > +	u64 length;
+> > +	uuid_t uuid;
+> > +	u16 shared_extn_seq;
+> > +	bool shared;
+> > +};
+> > +
+> > +/*
+> > + * Parse a tag string into a uuid_t.  Accepts the empty string and "0"
+> > + * as shorthand for the null UUID; anything else must be a UUID string
+> > + * uuid_parse() can understand.
+> > + */
+> > +static int parse_tag(const char *tag, uuid_t *out)
+> > +{
+> > +	if (!tag || tag[0] == '\0' || strcmp(tag, "0") == 0) {
+> > +		uuid_copy(out, &uuid_null);
+> > +		return 0;
+> > +	}
+> > +	return uuid_parse(tag, out);
+> > +}
+> > +
+> > +static int __devm_add_extent(struct device *dev, struct xarray *array,
+> > +			     u64 start, u64 length, const char *tag,
+> > +			     u16 shared_extn_seq, bool shared)
+> > +{
+> > +	struct cxl_extent_data *extent;
+> > +	int rc;
+> > +
+> > +	extent = devm_kzalloc(dev, sizeof(*extent), GFP_KERNEL);
+> > +	if (!extent)
+> > +		return -ENOMEM;
+> > +
+> > +	extent->dpa_start = start;
+> > +	extent->length = length;
+> > +	rc = parse_tag(tag, &extent->uuid);
+> > +	if (rc) {
+> > +		dev_err(dev, "Failed to parse tag '%s'\n", tag);
+> > +		devm_kfree(dev, extent);
+> > +		return rc;
+> > +	}
+> > +	extent->shared_extn_seq = shared_extn_seq;
+> > +	extent->shared = shared;
+> > +
+> > +	if (xa_insert(array, start, extent, GFP_KERNEL)) {
+> > +		devm_kfree(dev, extent);
+> > +		dev_err(dev, "Failed xarry insert %#llx\n", start);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int devm_add_fm_extent(struct device *dev, u64 start, u64 length,
+> > +			      const char *tag, u16 shared_extn_seq, bool shared)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	return __devm_add_extent(dev, &mdata->dc_fm_extents, start, length,
+> > +				 tag, shared_extn_seq, shared);
+> > +}
+> > +
+> > +static int dc_accept_extent(struct device *dev, u64 start, u64 length)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_extent_data *ext;
+> > +
+> > +	dev_dbg(dev, "Host accepting extent %#llx\n", start);
+> > +	mdata->dc_ext_generation++;
+> 
+> Should this only happen after xa_load() succeeds and checked?
+> 
+Yes, moved after the if (!ext || ...)
+> > +
+> > +	lockdep_assert_held(&mdata->ext_lock);
+> 
+> Maybe this should go above the increment above
+> 
+lockdep_assert_held moved up to top of function.
 
-dax-driver.rst gains a "Dynamic Capacity (DC) Regions" section
-that lays out the four-object layering device extent → dc_extent →
-dax_resource → DAX device, with cardinalities: one tagged
-allocation maps to one cxl_dc_tag_group containing N dc_extents and
-N dax_resources, claimed into one DAX device with N range entries
-in seq_num order; an untagged Add delivery becomes its own
-single-member group.  Each dc_extent carries its own hpa_range —
-there is no aggregated bounding-box range across siblings.
-Tag-based DAX device creation, DC-only sizing rules (no non-zero
-resize, size=0 to destroy), and the uuid attribute semantics are
-documented alongside.
+> > +	ext = xa_load(&mdata->dc_sent_extents, start);
+> > +	if (!ext || ext->length != length) {
+> > +		/*
+> > +		 * The host may re-accept extents we already moved into the
+> > +		 * accepted xarray (e.g. pre-injected extents replayed on
+> > +		 * region creation).  Treat that as a successful no-op so
+> > +		 * the existing-extent ingest path doesn't abort.
+> > +		 */
+> > +		ext = xa_load(&mdata->dc_accepted_exts, start);
+> > +		if (ext && ext->length == length)
+> > +			return 0;
+> > +		dev_err(dev, "Extent %#llx-%#llx not found\n",
+> > +			start, start + length);
+> > +		return -ENOMEM;
+> > +	}
+> > +	xa_erase(&mdata->dc_sent_extents, start);
+> > +	return xa_insert(&mdata->dc_accepted_exts, start, ext, GFP_KERNEL);
+> > +}
+> > +
+> > +static void release_dc_ext(void *md)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = md;
+> > +
+> > +	xa_destroy(&mdata->dc_fm_extents);
+> > +	xa_destroy(&mdata->dc_sent_extents);
+> > +	xa_destroy(&mdata->dc_accepted_exts);
+> > +}
+> > +
+> > +/* Pretend to have some previous accepted extents */
+> > +struct pre_ext_info {
+> > +	u64 offset;
+> > +	u64 length;
+> > +	const char *tag;
+> > +} pre_ext_info[] = {
+> > +	{
+> > +		.offset = SZ_128M,
+> > +		.length = SZ_64M,
+> > +		.tag = "",
+> > +	},
+> > +	{
+> > +		.offset = SZ_256M,
+> > +		.length = SZ_64M,
+> > +		.tag = "deadbeef-cafe-baad-f00d-fedcba987654",
+> > +	},
+> > +};
+> > +
+> > +static int devm_add_sent_extent(struct device *dev, u64 start, u64 length,
+> > +				const char *tag, u16 shared_extn_seq, bool shared)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +
+> > +	lockdep_assert_held(&mdata->ext_lock);
+> > +	return __devm_add_extent(dev, &mdata->dc_sent_extents, start, length,
+> > +				 tag, shared_extn_seq, shared);
+> > +}
+> > +
+> > +static int inject_prev_extents(struct device *dev, u64 base_dpa)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	int rc;
+> > +
+> > +	dev_dbg(dev, "Adding %ld pre-extents for testing\n",
+> > +		ARRAY_SIZE(pre_ext_info));
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	for (int i = 0; i < ARRAY_SIZE(pre_ext_info); i++) {
+> > +		u64 ext_dpa = base_dpa + pre_ext_info[i].offset;
+> > +		u64 ext_len = pre_ext_info[i].length;
+> > +
+> > +		dev_dbg(dev, "Adding pre-extent DPA:%#llx LEN:%#llx tag:%s\n",
+> > +			ext_dpa, ext_len, pre_ext_info[i].tag);
+> > +
+> > +		rc = devm_add_sent_extent(dev, ext_dpa, ext_len,
+> > +					  pre_ext_info[i].tag, 0, false);
+> > +		if (rc) {
+> > +			dev_err(dev, "Failed to add pre-extent DPA:%#llx LEN:%#llx; %d\n",
+> > +				ext_dpa, ext_len, rc);
+> > +			return rc;
+> > +		}
+> > +
+> > +		rc = dc_accept_extent(dev, ext_dpa, ext_len);
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> > +	return 0;
+> > +}
+> > +
+> > +static int cxl_mock_dc_partition_setup(struct device *dev)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	u64 base_dpa = BASE_DYNAMIC_CAP_DPA;
+> > +	u32 dsmad_handle = 0xFA;
+> > +	u64 decode_length = SZ_512M;
+> > +	u64 block_size = SZ_512;
+> > +	u64 length = SZ_512M;
+> > +	int rc;
+> > +
+> > +	mutex_init(&mdata->ext_lock);
+> > +	xa_init(&mdata->dc_fm_extents);
+> > +	xa_init(&mdata->dc_sent_extents);
+> > +	xa_init(&mdata->dc_accepted_exts);
+> > +
+> > +	rc = devm_add_action_or_reset(dev, release_dc_ext, mdata);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	for (int i = 0; i < NUM_MOCK_DC_REGIONS; i++) {
+> > +		struct cxl_dc_partition *part = &mdata->dc_partitions[i];
+> > +
+> > +		dev_dbg(dev, "Creating DC partition DC%d DPA:%#llx LEN:%#llx\n",
+> > +			i, base_dpa, length);
+> > +
+> > +		part->base = cpu_to_le64(base_dpa);
+> > +		part->decode_length = cpu_to_le64(decode_length /
+> > +						  CXL_CAPACITY_MULTIPLIER);
+> > +		part->length = cpu_to_le64(length);
+> > +		part->block_size = cpu_to_le64(block_size);
+> > +		part->dsmad_handle = cpu_to_le32(dsmad_handle);
+> > +		dsmad_handle++;
+> > +
+> > +		/*
+> > +		 * Skip pre-injection on the sharable mock memdev.  The
+> > +		 * pre-injected extents are untagged / seq=0, which a
+> > +		 * sharable partition rejects as firmware-bug; leaving the
+> > +		 * sharable memdev with an empty DC partition is what its
+> > +		 * dedicated tests (test_shared_extent_inject and
+> > +		 * test_seq_integrity_gap in cxl-dcd.sh) expect anyway.
+> > +		 *
+> > +		 * The sharable fixture is the memdev at pdev->id == 0 —
+> > +		 * see the matching MOCK_DC_SHARABLE_SERIAL stamp in
+> > +		 * cxl_mock_mem_probe().  This relies on tools/testing/cxl
+> > +		 * always allocating a "cxl_mem" platform device with id 0
+> > +		 * as the first memdev; if that invariant ever breaks the
+> > +		 * sharable test fixture will land on the wrong device.
+> > +		 */
+> > +		if (to_platform_device(dev)->id != 0) {
+> > +			rc = inject_prev_extents(dev, base_dpa);
+> > +			if (rc) {
+> > +				dev_err(dev,
+> > +					"Failed to add pre-extents for DC%d\n",
+> > +					i);
+> > +				return rc;
+> > +			}
+> > +		}
+> > +
+> > +		base_dpa += decode_length;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int mock_gsl(struct cxl_mbox_cmd *cmd)
+> >  {
+> >  	if (cmd->size_out < sizeof(mock_gsl_payload))
+> > @@ -1582,6 +1846,193 @@ static int mock_get_supported_features(struct cxl_mockmem_data *mdata,
+> >  	return 0;
+> >  }
+> >  
+> > +static int mock_get_dc_config(struct device *dev,
+> > +			      struct cxl_mbox_cmd *cmd)
+> > +{
+> > +	struct cxl_mbox_get_dc_config_in *dc_config = cmd->payload_in;
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	u8 partition_requested, partition_start_idx, partition_ret_cnt;
+> > +	struct cxl_mbox_get_dc_config_out *resp;
+> > +	int i;
+> > +
+> > +	partition_requested = min(dc_config->partition_count, NUM_MOCK_DC_REGIONS);
+> > +
+> > +	if (cmd->size_out < struct_size(resp, partition, partition_requested))
+> > +		return -EINVAL;
+> > +
+> > +	memset(cmd->payload_out, 0, cmd->size_out);
+> > +	resp = cmd->payload_out;
+> > +
+> > +	partition_start_idx = dc_config->start_partition_index;
+> > +	partition_ret_cnt = 0;
+> > +	for (i = 0; i < NUM_MOCK_DC_REGIONS; i++) {
+> > +		if (i >= partition_start_idx) {
+> 
+> Should there be a check for partition_requested and exit when reached?
+> 
+changed loop condition to i < NUM_MOCK_DC_REGIONS && partition_ret_cnt < partition_requested;
+> > +			memcpy(&resp->partition[partition_ret_cnt],
+> > +				&mdata->dc_partitions[i],
+> > +				sizeof(resp->partition[partition_ret_cnt]));
+> > +			partition_ret_cnt++;
+> > +		}
+> > +	}
+> > +	resp->avail_partition_count = NUM_MOCK_DC_REGIONS;
+> > +	resp->partitions_returned = i;
+> 
+> partition returned always return NUM_MOCK_DC_REGIONS. Never takes into account partition_start_idx.
+> 
+fixed: resp->partitions_returned = partition_ret_cnt;
 
-Signed-off-by: Anisa Su <anisa.su@samsung.com>
----
- .../driver-api/cxl/linux/cxl-driver.rst       | 149 +++++++++++++++
- .../driver-api/cxl/linux/dax-driver.rst       | 169 ++++++++++++++++++
- 2 files changed, 318 insertions(+)
+> > +
+> > +	dev_dbg(dev, "Returning %d dc partitions\n", partition_ret_cnt);
+> > +	return 0;
+> > +}
+> > +
+> > +static int mock_get_dc_extent_list(struct device *dev,
+> > +				   struct cxl_mbox_cmd *cmd)
+> > +{
+> > +	struct cxl_mbox_get_extent_out *resp = cmd->payload_out;
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_mbox_get_extent_in *get = cmd->payload_in;
+> > +	u32 total_avail = 0, total_ret = 0;
+> > +	struct cxl_extent_data *ext;
+> > +	u32 ext_count, start_idx;
+> > +	unsigned long i;
+> > +
+> > +	ext_count = le32_to_cpu(get->extent_cnt);
+> > +	start_idx = le32_to_cpu(get->start_extent_index);
+> > +
+> > +	memset(resp, 0, sizeof(*resp));
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	/*
+> > +	 * Total available needs to be calculated and returned regardless of
+> > +	 * how many can actually be returned.
+> > +	 */
+> > +	xa_for_each(&mdata->dc_accepted_exts, i, ext)
+> > +		total_avail++;
+> > +
+> > +	if (start_idx > total_avail)
+> > +		return -EINVAL;
+> > +
+> > +	xa_for_each(&mdata->dc_accepted_exts, i, ext) {
+> > +		if (total_ret >= ext_count)
+> > +			break;
+> > +
+> > +		if (total_ret >= start_idx) {
+> 
+> In the case where start_idx > 0, I think we hit an infinite loop.
+> 
+Added var idx, which always increments:
 
-diff --git a/Documentation/driver-api/cxl/linux/cxl-driver.rst b/Documentation/driver-api/cxl/linux/cxl-driver.rst
-index dd6dd17dc536..581dca271749 100644
---- a/Documentation/driver-api/cxl/linux/cxl-driver.rst
-+++ b/Documentation/driver-api/cxl/linux/cxl-driver.rst
-@@ -619,6 +619,155 @@ from HPA to DPA.  This is why they must be aware of the entire interleave set.
- Linux does not support unbalanced interleave configurations.  As a result, all
- endpoints in an interleave set must have the same ways and granularity.
- 
-+Dynamic Capacity Extents
-+========================
-+
-+A `Dynamic Capacity Device (DCD)` advertises capacity in `DC partitions`
-+and surfaces individual chunks of that capacity to the host as `extents`.
-+The device may add an extent at any time (a `pending add`) and may
-+request that a previously accepted extent be released (a `pending
-+release`).  Each transition is mediated by a mailbox handshake whose
-+state machine the CXL driver enforces in
-+:code:`drivers/cxl/core/{mbox.c,extent.c}`.
-+
-+Extents that share a non-null tag form one logical allocation.  Each
-+surviving member becomes its own :code:`struct dc_extent` (per-extent
-+sysfs device, per-extent HPA range); their containing tag group is an
-+internal-only :code:`struct cxl_dc_tag_group` keyed by UUID with no
-+sysfs identity.  Each :code:`dc_extent` becomes one
-+:code:`dax_resource` on the DAX side, and a tagged DAX device is built
-+by claiming every :code:`dax_resource` that carries the tag.
-+
-+For DAX-side semantics — how accepted extents materialize into
-+:code:`dax_resource` objects and DAX devices — see
-+:doc:`dax-driver`.
-+
-+Accepting Extents
-+-----------------
-+Extents are made available to the host from the device through DC ADD events.
-+Event records contain extents, which may be tagged or untagged, shared or
-+not shared. Multiple event records can by chained together by the `More` flag.
-+
-+The unit of allocation is a `tag`.  All extents
-+sharing a tag form one allocation; the More flag is a delivery boundary
-+only, meaning when the More chain ends, the host can assume that all extents
-+have been collected for each tag.
-+A tag may be the null UUID (an `untagged` allocation, valid in
-+non-sharable regions) or a non-null UUID identifying a sharable or
-+non-sharable allocation.
-+
-+When a `More`-terminated chain of pending adds closes, the driver
-+processes the pending list one tag group at a time.  A group is
-+committed only if it passes every gate below; failing any gate drops
-+the entire group with a firmware-bug warning, and the dropped extents
-+do not appear in the :code:`ADD_DC_RESPONSE`.  There is no
-+partial-extent acceptance — either an offered extent is accepted whole
-+or it is dropped whole.
-+
-+Per-extent gates (applied in :code:`cxl_add_extent`,
-+:code:`drivers/cxl/core/extent.c`):
-+
-+* The extent's DPA range must resolve to a CXL region via
-+  :code:`cxl_dpa_to_region()`.  An extent with no owning region is
-+  dropped; the device sees the omission from :code:`ADD_DC_RESPONSE`.
-+* The extent's DPA range must be `fully contained` in the endpoint
-+  decoder's DPA range.  An extent that straddles the decoder boundary
-+  is rejected with :code:`-ENXIO`; the driver never clips an extent to
-+  fit.
-+* The extent must not overlap an extent already present in the same
-+  region.  Overlap classification is done in
-+  :code:`cxlr_dax_classify_extent()` using :code:`range_overlaps()`.
-+  Exact duplicates of a previously-accepted range are tolerated —
-+  accepting the same range twice is a no-op, which simplifies
-+  probe-time scans of the device's existing accepted list.
-+
-+Per-group gates (applied in :code:`cxl_add_pending`,
-+:code:`drivers/cxl/core/mbox.c`):
-+
-+* `Host-wide tag uniqueness`: a non-null tag must not already
-+  correspond to a live :code:`cxl_dc_tag_group` anywhere on this host.
-+  The orchestrator (FM) owns tag-UUID allocation per spec; the
-+  registry in :code:`drivers/cxl/core/extent.c`
-+  (:code:`cxl_tag_register` / :code:`cxl_tag_already_committed`)
-+  catches firmware bugs and orchestrator misbehavior across every
-+  region and memdev.  Skipped for the null UUID, which has no
-+  cross-chain identity.
-+* `Sequence-number integrity`: every member must carry the wire
-+  field :code:`shared_extn_seq == 0` (non-sharable allocation), or
-+  the group's sorted sequence numbers must be exactly
-+  :code:`0, 1, …, n-1` (sharable allocation).  Mixed, gapped,
-+  duplicate, or sets that do not start at 0 are rejected.
-+* `Partition equality`: every tagged extent in the group must
-+  resolve to the same DC partition.  A single allocation cannot span
-+  partitions because CDAT describes sharable / writable / coherency
-+  attributes per-partition.  Skipped for the null UUID.
-+* `Alignment`: every extent's :code:`start_dpa` and :code:`length`
-+  must be :code:`PMD_SIZE`-aligned.  Partial acceptance
-+  of an aligned subset would leave an unusable DAX device, so the
-+  group is dropped instead.
-+
-+Surviving extents are sorted by the wire field
-+:code:`shared_extn_seq` — stable, so arrival order is preserved for
-+the all-zero non-sharable case — and each becomes a
-+:code:`dc_extent` inserted into a fresh :code:`cxl_dc_tag_group`
-+keyed by the group's UUID.  Each :code:`dc_extent` carries its own
-+:code:`hpa_range`; the tag group itself has no aggregate range.
-+
-+As each surviving extent is attached the host assigns it a 0..n-1
-+:code:`seq_num`: for sharable allocations this equals the
-+device-stamped :code:`shared_extn_seq` directly; for non-sharable
-+allocations the device sends :code:`shared_extn_seq == 0` and the
-+host fills in the arrival-order position (assigned in
-+:code:`cxl_realize_group`).  The DAX layer enforces the same
-+:code:`0..n-1` dense invariant in both cases.
-+
-+The tag group is brought online via :code:`online_tag_group()`,
-+which registers every member :code:`dc_extent` as an
-+:code:`extentX.Y` child of :code:`cxlr_dax->dev`, the DAX layer is
-+notified with :code:`DCD_ADD_CAPACITY`, and the accepted extents are
-+spliced into the response list for a single :code:`ADD_DC_RESPONSE`
-+mailbox per More-chain.
-+
-+Releasing Extents
-+-----------------
-+
-+A release may be initiated by the device (a pending release
-+notification) or by the host (when destroying a DAX device or tearing
-+down a region).  Both paths converge on :code:`cxl_rm_extent`
-+(:code:`drivers/cxl/core/extent.c`).
-+
-+Per-extent gates:
-+
-+* The DPA range must resolve to a CXL region.  If it does not — for
-+  example, an extent left over from a host crash that has not yet
-+  been re-claimed, or a duplicate release racing region teardown —
-+  the release is acknowledged via :code:`memdev_release_extent()` so
-+  the device knows the host is not using the capacity, and the
-+  operation returns :code:`-ENXIO`.
-+* The DPA range must be `fully contained` in some member
-+  :code:`dc_extent`'s :code:`dpa_range` on the region's
-+  :code:`cxlr_dax`, and the tag (UUID) on that member's
-+  :code:`cxl_dc_tag_group` must match the release request.  Releases
-+  are keyed by :code:`(DPA range, tag)` rather than by pointer
-+  because the device, not the host, supplies the identity.  A
-+  request that matches no :code:`dc_extent` is rejected with
-+  :code:`-EINVAL`.
-+
-+If those gates pass, the DAX layer is notified with
-+:code:`DCD_RELEASE_CAPACITY` and consulted for permission to proceed.
-+If the DAX layer returns :code:`-EBUSY` — the capacity is still mapped
-+or otherwise in use — the release is deferred and
-+:code:`cxl_rm_extent` returns success without unregistering anything.
-+When the DAX layer ultimately grants release,
-+:code:`rm_tag_group()` invalidates the backing memregion once for the
-+whole group, then unregisters every member :code:`dc_extent` device,
-+which cascades through the DAX layer to drop the corresponding
-+:code:`dax_resource`\ s.
-+
-+The release path is always whole-tag-group: tagged allocations
-+release atomically, and the kernel does not split a group in response
-+to a sub-range release request.
-+
- Example Configurations
- ======================
- .. toctree::
-diff --git a/Documentation/driver-api/cxl/linux/dax-driver.rst b/Documentation/driver-api/cxl/linux/dax-driver.rst
-index 10d953a2167b..d869bcad41f4 100644
---- a/Documentation/driver-api/cxl/linux/dax-driver.rst
-+++ b/Documentation/driver-api/cxl/linux/dax-driver.rst
-@@ -27,6 +27,175 @@ CXL capacity in the task's page tables.
- Users wishing to manually handle allocation of CXL memory should use this
- interface.
- 
-+Dynamic Capacity (DC) Regions
-+=============================
-+A region backed by a CXL `Dynamic Capacity Device (DCD)` is a `DC region`:
-+its HPA window is fixed at probe time, but the DPA capacity that fills the
-+window arrives and departs at runtime as the device offers and reclaims
-+`extents`.  DC regions are distinguished from static regions by the
-+:code:`IORESOURCE_DAX_DCD` flag on the :code:`dax_region`.
-+
-+For the CXL-side rules governing when an offered extent is accepted or a
-+release request is honoured, see :doc:`cxl-driver`.  This section covers
-+the DAX-side mapping between accepted extents and DAX devices.
-+
-+The Extent Layering Model
-+-------------------------
-+Four objects sit between the wire-level CXL extent and the
-+user-visible DAX device.  Understanding the cardinality between them
-+is the key to the DC-region model.
-+
-+::
-+
-+    device extents     dc_extent           dax_resource         DAX device
-+    (CXL device)       (CXL core)          (DAX bus)            (/dev/daxN.Y)
-+    -------------      -------------       -------------        ------------
-+    e1 ─┐                ┌─► dc_e1 ──►     res_1 (seq=0) ──┐
-+    e2 ─┼─── tag A ──►   ┼─► dc_e2 ──►     res_2 (seq=1) ──┼──►  daxN.0
-+    e3 ─┘                └─► dc_e3 ──►     res_3 (seq=2) ──┘     (claimed by tag A,
-+                                                                   size = Σ |e_i|)
-+
-+    e4 ─── tag B ────►     dc_e4 ──►       res_4 (seq=0) ────►   daxN.1
-+
-+    e5 ─── null tag ─►     dc_e5 ──►       res_5 (seq=0) ────►   daxN.2
-+    e6 ─── null tag ─►     dc_e6 ──►       res_6 (seq=0) ────►   daxN.3
-+
-+The CXL core groups extents sharing a non-null tag into a single
-+:code:`cxl_dc_tag_group` (internal-only, no sysfs identity), but each
-+member extent stays a distinct :code:`dc_extent` with its own HPA
-+range.  The DAX bridge creates one :code:`dax_resource` per
-+:code:`dc_extent`, and userspace claims a DAX device by writing the
-+tag's UUID to the seed device's :code:`uuid` attribute, which carves
-+every matching :code:`dax_resource` (in :code:`seq_num` order) into
-+the device's :code:`ranges[]` array.
-+
-+`Device extent`
-+  The unit the CXL device delivers over the mailbox: a
-+  :code:`(DPA, length, tag, shared_extn_seq)` tuple inside an
-+  Add-Capacity event.  The tag is either a non-null UUID (a
-+  `tagged allocation`) or the null UUID (`untagged`).
-+
-+:code:`dc_extent`
-+  The CXL core's per-extent object, one per surviving device extent.
-+  Each :code:`dc_extent` is registered as its own :code:`extentX.Y`
-+  sysfs device under :code:`cxlr_dax->dev` and carries its own
-+  :code:`hpa_range` — there is no aggregated / bounding-box HPA
-+  range across siblings.  Members of one tag group point at a
-+  shared :code:`cxl_dc_tag_group` (which holds the UUID and a
-+  manual refcount on the surviving siblings) but otherwise exist as
-+  independent kernel objects.
-+
-+  For a `non-null tag`, the host-wide tag-uniqueness gate
-+  (:doc:`cxl-driver`) guarantees there is at most one
-+  :code:`cxl_dc_tag_group` per UUID on the host, so the set of
-+  :code:`dc_extent`\ s sharing that UUID is a single allocation.
-+
-+  For the `null tag` there is no cross-event identity — the spec is
-+  silent on aggregating untagged extents across Add-Capacity events.
-+  Each untagged device extent becomes its own :code:`dc_extent` in
-+  its own single-member tag group; two untagged extents delivered
-+  separately are two distinct allocations.
-+
-+:code:`dax_resource`
-+  The DAX bus's per-extent view, one-to-one with :code:`dc_extent`.
-+  When the CXL DAX driver receives a :code:`DCD_ADD_CAPACITY`
-+  notification it iterates the tag group and calls
-+  :code:`dax_region_add_resource()` once per member, creating one
-+  :code:`dax_resource` per :code:`dc_extent`.  Each
-+  :code:`dax_resource` carries that member's HPA range, the tag
-+  UUID (copied from :code:`dc_extent->group->uuid`), and a 0..n-1
-+  :code:`seq_num` so :code:`uuid_claim_tagged` can carve the matched
-+  set into the device's :code:`ranges[]` array in the right order
-+  (see :code:`drivers/dax/bus.c`).
-+
-+`DAX device` (:code:`/dev/daxN.Y`)
-+  Created by userspace claiming a set of :code:`dax_resource`\ s via
-+  the :code:`uuid` sysfs attribute.  Each DAX device corresponds to
-+  exactly one allocation:
-+
-+  * A `tagged` DAX device is built from every :code:`dax_resource`
-+    carrying the tag — one per :code:`dc_extent` in the allocation
-+    — carved into the device's :code:`ranges[]` in :code:`seq_num`
-+    order.  Its size equals the sum of every member's size.
-+  * An `untagged` DAX device is built from one untagged
-+    :code:`dax_resource` and its size equals that one extent.
-+
-+So the end-to-end rule is: **one tagged allocation = one
-+cxl_dc_tag_group = N dc_extents = N dax_resources = one DAX device
-+with N range entries**.  An untagged device extent becomes its own
-+:code:`dc_extent` / :code:`dax_resource` / single-range DAX device,
-+claimed one at a time.
-+
-+Release follows the same layering in reverse.  When the CXL core
-+calls :code:`rm_tag_group()` (after the device asks for release and
-+the DAX layer consents), the DAX bridge collects every matching
-+:code:`dax_resource` and removes them as a set via
-+:code:`dax_region_rm_resources()`.  The removal is refuse-all-or-none
-+under :code:`dax_region_rwsem`: if any member is in use, the whole
-+group stays.  When removal commits, the HPA capacity returns to the
-+region's free pool and any DAX device that had claimed it is left
-+with no backing capacity.  Userspace tears the DAX device down via
-+:code:`daxctl destroy-device` (size=0, then write the device name to
-+the region's :code:`delete` attribute).
-+
-+UUID-Based DAX Device Creation
-+------------------------------
-+A DAX device on a DC region is created by writing a UUID to the
-+seed device's :code:`uuid` attribute
-+(:code:`/sys/bus/dax/devices/daxN.Y/uuid`).  The seed starts at
-+size 0; writing :code:`uuid` is a `claim` operation that resolves
-+the layering above and populates the device:
-+
-+* A `non-null UUID` claims `every` :code:`dax_resource` whose tag
-+  matches.  :code:`uuid_claim_tagged` (in
-+  :code:`drivers/dax/bus.c`) collects them, sorts by
-+  :code:`seq_num`, enforces the dense :code:`0..n-1` invariant, and
-+  carves each via :code:`__dev_dax_resize` in :code:`seq_num` order
-+  so the device's :code:`ranges[]` array is dense and ordered.
-+  The resulting DAX device represents exactly the tagged
-+  allocation: its size equals the sum of every member extent's
-+  size.
-+
-+  The dense :code:`0..n-1` invariant is the unified rule the CXL
-+  side maintains for both sharable and non-sharable allocations
-+  (see :doc:`cxl-driver`); the match set has exactly one entry per
-+  :code:`dc_extent` in the tag group.
-+
-+* The value :code:`"0"` is shorthand for the null UUID and claims
-+  exactly `one` untagged :code:`dax_resource`.  Untagged
-+  :code:`dax_resource`\ s correspond to independent untagged
-+  allocations; collapsing several into one device would aggregate
-+  unrelated capacity, so each :code:`uuid` write consumes a single
-+  untagged resource.
-+
-+* A write that matches no :code:`dax_resource` returns
-+  :code:`-ENOENT` and the device remains at size 0.
-+
-+* Writes to the :code:`uuid` attribute on non-DC regions return
-+  :code:`-EOPNOTSUPP`; the attribute itself is read-only (0444) on
-+  non-DC devices.
-+
-+The device's size is determined entirely by the backing allocation:
-+users do not choose a size on DC regions.  Accordingly, the
-+:code:`size` attribute on a DC DAX device rejects any non-zero resize
-+(grow or partial shrink) with :code:`-EOPNOTSUPP`.  Writing :code:`0`
-+is still permitted and is
-+how :code:`daxctl destroy-device` returns each claimed extent to the
-+region's available pool before the device's name is written to the
-+region's :code:`delete` attribute.
-+
-+Reads of :code:`uuid` report the tag identifying the capacity
-+backing the device:
-+
-+* For a non-null-UUID-claimed DC DAX device, :code:`uuid` reads
-+  back the claimed UUID.
-+* For a DC DAX device claimed via :code:`"0"`, or for any
-+  non-DCD DAX device, :code:`uuid` reads back the null UUID
-+  (:code:`00000000-0000-0000-0000-000000000000`).
-+
-+See :code:`Documentation/ABI/testing/sysfs-bus-dax` for the
-+authoritative attribute contracts.
-+
- kmem conversion
- ===============
- The :code:`dax_kmem` driver converts a `DAX Device` into a series of `hotplug
--- 
-2.43.0
+if (idx++ >= start_idx) { ...
 
+> > +			resp->extent[total_ret].start_dpa =
+> > +						cpu_to_le64(ext->dpa_start);
+> > +			resp->extent[total_ret].length =
+> > +						cpu_to_le64(ext->length);
+> > +			export_uuid(resp->extent[total_ret].uuid, &ext->uuid);
+> > +			resp->extent[total_ret].shared_extn_seq =
+> > +						cpu_to_le16(ext->shared_extn_seq);
+> > +			total_ret++;
+> > +		}
+> > +	}
+> > +
+> > +	resp->returned_extent_count = cpu_to_le32(total_ret);
+> > +	resp->total_extent_count = cpu_to_le32(total_avail);
+> > +	resp->generation_num = cpu_to_le32(mdata->dc_ext_generation);
+> > +
+> > +	dev_dbg(dev, "Returning %d extents of %d total\n",
+> > +		total_ret, total_avail);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void dc_clear_sent(struct device *dev)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_extent_data *ext;
+> > +	unsigned long index;
+> > +
+> > +	lockdep_assert_held(&mdata->ext_lock);
+> > +
+> > +	/* Any extents not accepted must be cleared */
+> > +	xa_for_each(&mdata->dc_sent_extents, index, ext) {
+> > +		dev_dbg(dev, "Host rejected extent %#llx\n", ext->dpa_start);
+> > +		xa_erase(&mdata->dc_sent_extents, ext->dpa_start);
+> > +	}
+> > +}
+> > +
+> > +static int mock_add_dc_response(struct device *dev,
+> > +				struct cxl_mbox_cmd *cmd)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_mbox_dc_response *req = cmd->payload_in;
+> > +	u32 list_size = le32_to_cpu(req->extent_list_size);
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	for (int i = 0; i < list_size; i++) {
+> > +		u64 start = le64_to_cpu(req->extent_list[i].dpa_start);
+> > +		u64 length = le64_to_cpu(req->extent_list[i].length);
+> > +		int rc;
+> > +
+> > +		rc = dc_accept_extent(dev, start, length);
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> 
+> mock response seems to be missing ordering check. CXL r4.0 8.2.10.9.9.3 requires ADD_DC_RESPONSE to be sent in same order as the Add Capacity Event Records or return invalid input.
+> 
+ordering check added
+
+> > +
+> > +	dc_clear_sent(dev);
+> > +	return 0;
+> > +}
+> > +
+> > +static void dc_delete_extent(struct device *dev, unsigned long long start,
+> > +			     unsigned long long length)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	unsigned long long end = start + length;
+> > +	struct cxl_extent_data *ext;
+> > +	unsigned long index;
+> > +
+> > +	dev_dbg(dev, "Deleting extent at %#llx len:%#llx\n", start, length);
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	xa_for_each(&mdata->dc_fm_extents, index, ext) {
+> > +		u64 extent_end = ext->dpa_start + ext->length;
+> > +
+> > +		/*
+> > +		 * Any extent which 'touches' the released delete range will be
+> > +		 * removed.
+> > +		 */
+> > +		if ((start <= ext->dpa_start && ext->dpa_start < end) ||
+> > +		    (start <= extent_end && extent_end < end))
+> 
+> would this work?
+> if (start < extent_end && ext->dpa_start < end)
+> 
+Yeah I think so
+> 
+> > +			xa_erase(&mdata->dc_fm_extents, ext->dpa_start);
+> > +	}
+> > +
+> > +	/*
+> > +	 * If the extent was accepted let it be for the host to drop
+> > +	 * later.
+> > +	 */
+> > +}
+> > +
+> > +static int release_accepted_extent(struct device *dev, u64 start, u64 length)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_extent_data *ext;
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	ext = xa_load(&mdata->dc_accepted_exts, start);
+> > +	if (!ext || ext->length != length) {
+> > +		dev_err(dev, "Extent %#llx not in accepted state\n", start);
+> > +		return -EINVAL;
+> > +	}
+> > +	xa_erase(&mdata->dc_accepted_exts, start);
+> > +	mdata->dc_ext_generation++;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int mock_dc_release(struct device *dev,
+> > +			   struct cxl_mbox_cmd *cmd)
+> > +{
+> > +	struct cxl_mbox_dc_response *req = cmd->payload_in;
+> > +	u32 list_size = le32_to_cpu(req->extent_list_size);
+> > +
+> > +	for (int i = 0; i < list_size; i++) {
+> > +		u64 start = le64_to_cpu(req->extent_list[i].dpa_start);
+> > +		u64 length = le64_to_cpu(req->extent_list[i].length);
+> > +
+> > +		dev_dbg(dev, "Extent %#llx released by host\n", start);
+> > +		release_accepted_extent(dev, start, length);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int cxl_mock_mbox_send(struct cxl_mailbox *cxl_mbox,
+> >  			      struct cxl_mbox_cmd *cmd)
+> >  {
+> > @@ -1673,6 +2124,18 @@ static int cxl_mock_mbox_send(struct cxl_mailbox *cxl_mbox,
+> >  	case CXL_MBOX_OP_GET_SUPPORTED_FEATURES:
+> >  		rc = mock_get_supported_features(mdata, cmd);
+> >  		break;
+> > +	case CXL_MBOX_OP_GET_DC_CONFIG:
+> > +		rc = mock_get_dc_config(dev, cmd);
+> > +		break;
+> > +	case CXL_MBOX_OP_GET_DC_EXTENT_LIST:
+> > +		rc = mock_get_dc_extent_list(dev, cmd);
+> > +		break;
+> > +	case CXL_MBOX_OP_ADD_DC_RESPONSE:
+> > +		rc = mock_add_dc_response(dev, cmd);
+> > +		break;
+> > +	case CXL_MBOX_OP_RELEASE_DC:
+> > +		rc = mock_dc_release(dev, cmd);
+> > +		break;
+> >  	case CXL_MBOX_OP_GET_FEATURE:
+> >  		rc = mock_get_feature(mdata, cmd);
+> >  		break;
+> > @@ -1739,6 +2202,14 @@ static void init_event_log(struct mock_event_log *log)
+> >  	log->last_handle = 1;
+> >  }
+> >  
+> > +/*
+> > + * Stamp this serial on a single mock cxl_mem instance so the
+> > + * companion cxl_test driver can find it and mark its DC partition
+> > + * sharable in mock_cxl_endpoint_parse_cdat().  Must match the value
+> > + * defined in tools/testing/cxl/test/cxl.c.
+> > + */
+> > +#define MOCK_DC_SHARABLE_SERIAL 0xDCDCULL
+> > +
+> >  static int cxl_mock_mem_probe(struct platform_device *pdev)
+> >  {
+> >  	struct device *dev = &pdev->dev;
+> > @@ -1758,6 +2229,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+> >  		return -ENOMEM;
+> >  	dev_set_drvdata(dev, mdata);
+> >  
+> > +	rc = cxl_mock_dc_partition_setup(dev);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> >  	mdata->lsa = vmalloc(LSA_SIZE);
+> >  	if (!mdata->lsa)
+> >  		return -ENOMEM;
+> > @@ -1774,7 +2249,23 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > -	mds = cxl_memdev_state_create(dev, pdev->id + 1, 0);
+> > +	{
+> > +		u64 serial = pdev->id + 1;
+> > +
+> > +		/*
+> > +		 * Reserve the memdev at pdev->id == 0 as the sharable DC
+> > +		 * partition test fixture.  This relies on tools/testing/cxl
+> > +		 * always allocating a "cxl_mem" platform device with id 0
+> > +		 * as the first memdev — currently true in cxl.c, but if
+> > +		 * the topology ever renumbers, the sharable serial will be
+> > +		 * stamped on the wrong device (or no device).  Matched by
+> > +		 * the skip-pre-inject guard in cxl_mock_dc_partition_setup
+> > +		 * and by mock_cxl_endpoint_parse_cdat in cxl_test.
+> > +		 */
+> > +		if (pdev->id == 0)
+> > +			serial = MOCK_DC_SHARABLE_SERIAL;
+> > +		mds = cxl_memdev_state_create(dev, serial, 0);
+> > +	}
+> 
+> Would prefer not have inline anonymous block. Just declare the var at top.
+> 
+> >  	if (IS_ERR(mds))
+> >  		return PTR_ERR(mds);
+> >  
+> > @@ -1814,6 +2305,9 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > +	if (cxl_dcd_supported(mds))
+> > +		cxl_configure_dcd(mds, &range_info);
+> > +
+> >  	rc = cxl_dpa_setup(cxlds, &range_info);
+> >  	if (rc)
+> >  		return rc;
+> > @@ -1921,11 +2415,321 @@ static ssize_t sanitize_timeout_store(struct device *dev,
+> >  
+> >  static DEVICE_ATTR_RW(sanitize_timeout);
+> >  
+> > +/* Return if the proposed extent would break the test code */
+> > +static bool new_extent_valid(struct device *dev, size_t new_start,
+> > +			     size_t new_len)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_extent_data *extent;
+> > +	size_t new_end, i;
+> > +
+> > +	if (!new_len)
+> > +		return false;
+> > +
+> > +	new_end = new_start + new_len;
+> > +
+> > +	dev_dbg(dev, "New extent %zx-%zx\n", new_start, new_end);
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	dev_dbg(dev, "Checking extents starts...\n");
+> > +	xa_for_each(&mdata->dc_fm_extents, i, extent) {
+> > +		if (extent->dpa_start == new_start)
+> > +			return false;
+> > +	}
+> > +
+> > +	dev_dbg(dev, "Checking sent extents starts...\n");
+> > +	xa_for_each(&mdata->dc_sent_extents, i, extent) {
+> > +		if (extent->dpa_start == new_start)
+> > +			return false;
+> > +	}
+> > +
+> > +	dev_dbg(dev, "Checking accepted extents starts...\n");
+> > +	xa_for_each(&mdata->dc_accepted_exts, i, extent) {
+> > +		if (extent->dpa_start == new_start)
+> > +			return false;
+> > +	}
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +struct cxl_test_dcd {
+> > +	uuid_t id;
+> > +	struct cxl_event_dcd rec;
+> > +} __packed;
+> > +
+> > +struct cxl_test_dcd dcd_event_rec_template = {
+> > +	.id = CXL_EVENT_DC_EVENT_UUID,
+> > +	.rec = {
+> > +		.hdr = {
+> > +			.length = sizeof(struct cxl_test_dcd),
+> > +		},
+> > +	},
+> > +};
+> > +
+> > +static int log_dc_event(struct cxl_mockmem_data *mdata, enum dc_event type,
+> > +			u64 start, u64 length, const char *tag_str,
+> > +			u16 shared_extn_seq, bool more)
+> > +{
+> > +	struct device *dev = mdata->mds->cxlds.dev;
+> > +	struct cxl_test_dcd *dcd_event;
+> > +	uuid_t tag;
+> > +	int rc;
+> > +
+> > +	dev_dbg(dev, "mock device log event %d\n", type);
+> > +
+> > +	dcd_event = devm_kmemdup(dev, &dcd_event_rec_template,
+> > +				     sizeof(*dcd_event), GFP_KERNEL);
+> > +	if (!dcd_event)
+> > +		return -ENOMEM;
+> > +
+> > +	dcd_event->rec.flags = 0;
+> > +	if (more)
+> > +		dcd_event->rec.flags |= CXL_DCD_EVENT_MORE;
+> > +	dcd_event->rec.event_type = type;
+> > +	dcd_event->rec.extent.start_dpa = cpu_to_le64(start);
+> > +	dcd_event->rec.extent.length = cpu_to_le64(length);
+> > +	rc = parse_tag(tag_str, &tag);
+> > +	if (rc) {
+> > +		devm_kfree(dev, dcd_event);
+> > +		return rc;
+> > +	}
+> > +	export_uuid(dcd_event->rec.extent.uuid, &tag);
+> > +	dcd_event->rec.extent.shared_extn_seq = cpu_to_le16(shared_extn_seq);
+> > +
+> > +	mes_add_event(mdata, CXL_EVENT_TYPE_DCD,
+> > +		      (struct cxl_event_record_raw *)dcd_event);
+> > +
+> > +	/* Fake the irq */
+> > +	cxl_mem_get_event_records(mdata->mds, CXLDEV_EVENT_STATUS_DCD);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void mark_extent_sent(struct device *dev, unsigned long long start)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	struct cxl_extent_data *ext;
+> > +
+> > +	guard(mutex)(&mdata->ext_lock);
+> > +	ext = xa_erase(&mdata->dc_fm_extents, start);
+> > +	if (xa_insert(&mdata->dc_sent_extents, ext->dpa_start, ext, GFP_KERNEL))
+> > +		dev_err(dev, "Failed to mark extent %#llx sent\n", ext->dpa_start);
+> 
+> Should it also clean up 'ext' since insert failed?
+> 
+> DJ
+> > +}
+> > +
+> > +/*
+> > + * Format <start>:<length>:<tag>:<more_flag>
+> > + *
+> > + * start and length must be a multiple of the configured partition block size.
+> > + * Tag can be any string up to 16 bytes.
+> > + *
+> > + * Extents must be exclusive of other extents
+> > + *
+> > + * If the more flag is specified it is expected that an additional extent will
+> > + * be specified without the more flag to complete the test transaction with the
+> > + * host.
+> > + */
+> > +static ssize_t __dc_inject_extent_store(struct device *dev,
+> > +					struct device_attribute *attr,
+> > +					const char *buf, size_t count,
+> > +					bool shared)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	unsigned long long start, length, more;
+> > +	char *len_str, *uuid_str, *more_str, *seq_str;
+> > +	u16 shared_extn_seq = 0;
+> > +	size_t buf_len = count;
+> > +	int rc;
+> > +
+> > +	char *start_str __free(kfree) = kstrdup(buf, GFP_KERNEL);
+> > +	if (!start_str)
+> > +		return -ENOMEM;
+> > +
+> > +	len_str = strnchr(start_str, buf_len, ':');
+> > +	if (!len_str) {
+> > +		dev_err(dev, "Extent failed to find len_str: %s\n", start_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	*len_str = '\0';
+> > +	len_str += 1;
+> > +	buf_len -= strlen(start_str);
+> > +
+> > +	uuid_str = strnchr(len_str, buf_len, ':');
+> > +	if (!uuid_str) {
+> > +		dev_err(dev, "Extent failed to find uuid_str: %s\n", len_str);
+> > +		return -EINVAL;
+> > +	}
+> > +	*uuid_str = '\0';
+> > +	uuid_str += 1;
+> > +
+> > +	more_str = strnchr(uuid_str, buf_len, ':');
+> > +	if (!more_str) {
+> > +		dev_err(dev, "Extent failed to find more_str: %s\n", uuid_str);
+> > +		return -EINVAL;
+> > +	}
+> > +	*more_str = '\0';
+> > +	more_str += 1;
+> > +
+> > +	/* Optional 5th field: shared_extn_seq.  Absent -> 0. */
+> > +	seq_str = strnchr(more_str, buf_len, ':');
+> > +	if (seq_str) {
+> > +		unsigned long long seq;
+> > +
+> > +		*seq_str = '\0';
+> > +		seq_str += 1;
+> > +		if (kstrtoull(seq_str, 0, &seq) || seq > U16_MAX) {
+> > +			dev_err(dev, "Extent failed to parse seq: %s\n",
+> > +				seq_str);
+> > +			return -EINVAL;
+> > +		}
+> > +		shared_extn_seq = seq;
+> > +	}
+> > +
+> > +	if (kstrtoull(start_str, 0, &start)) {
+> > +		dev_err(dev, "Extent failed to parse start: %s\n", start_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	if (kstrtoull(len_str, 0, &length)) {
+> > +		dev_err(dev, "Extent failed to parse length: %s\n", len_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	if (kstrtoull(more_str, 0, &more)) {
+> > +		dev_err(dev, "Extent failed to parse more: %s\n", more_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	if (!new_extent_valid(dev, start, length))
+> > +		return -EINVAL;
+> > +
+> > +	rc = devm_add_fm_extent(dev, start, length, uuid_str, shared_extn_seq,
+> > +				shared);
+> > +	if (rc) {
+> > +		dev_err(dev, "Failed to add extent DPA:%#llx LEN:%#llx; %d\n",
+> > +			start, length, rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	mark_extent_sent(dev, start);
+> > +	rc = log_dc_event(mdata, DCD_ADD_CAPACITY, start, length, uuid_str,
+> > +			  shared_extn_seq, more);
+> > +	if (rc) {
+> > +		dev_err(dev, "Failed to add event %d\n", rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	return count;
+> > +}
+> > +
+> > +static ssize_t dc_inject_extent_store(struct device *dev,
+> > +				      struct device_attribute *attr,
+> > +				      const char *buf, size_t count)
+> > +{
+> > +	return __dc_inject_extent_store(dev, attr, buf, count, false);
+> > +}
+> > +static DEVICE_ATTR_WO(dc_inject_extent);
+> > +
+> > +static ssize_t dc_inject_shared_extent_store(struct device *dev,
+> > +					     struct device_attribute *attr,
+> > +					     const char *buf, size_t count)
+> > +{
+> > +	return __dc_inject_extent_store(dev, attr, buf, count, true);
+> > +}
+> > +static DEVICE_ATTR_WO(dc_inject_shared_extent);
+> > +
+> > +static ssize_t __dc_del_extent_store(struct device *dev,
+> > +				     struct device_attribute *attr,
+> > +				     const char *buf, size_t count,
+> > +				     enum dc_event type)
+> > +{
+> > +	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+> > +	unsigned long long start, length;
+> > +	char *len_str, *uuid_str;
+> > +	size_t buf_len = count;
+> > +	int rc;
+> > +
+> > +	char *start_str __free(kfree) = kstrdup(buf, GFP_KERNEL);
+> > +	if (!start_str)
+> > +		return -ENOMEM;
+> > +
+> > +	len_str = strnchr(start_str, buf_len, ':');
+> > +	if (!len_str) {
+> > +		dev_err(dev, "Failed to find len_str: %s\n", start_str);
+> > +		return -EINVAL;
+> > +	}
+> > +	*len_str = '\0';
+> > +	len_str += 1;
+> > +	buf_len -= strlen(start_str);
+> > +
+> > +	uuid_str = strnchr(len_str, buf_len, ':');
+> > +	if (!uuid_str) {
+> > +		dev_err(dev, "Failed to find uuid_str: %s\n", len_str);
+> > +		return -EINVAL;
+> > +	}
+> > +	*uuid_str = '\0';
+> > +	uuid_str += 1;
+> > +	/*
+> > +	 * uuid_str is the trailing field; trim shell-added '\n' so
+> > +	 * parse_tag()/uuid_parse() see a clean string.
+> > +	 */
+> > +	uuid_str = strim(uuid_str);
+> > +
+> > +	if (kstrtoull(start_str, 0, &start)) {
+> > +		dev_err(dev, "Failed to parse start: %s\n", start_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	if (kstrtoull(len_str, 0, &length)) {
+> > +		dev_err(dev, "Failed to parse length: %s\n", len_str);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	dc_delete_extent(dev, start, length);
+> > +
+> > +	if (type == DCD_FORCED_CAPACITY_RELEASE)
+> > +		dev_dbg(dev, "Forcing delete of extent %#llx len:%#llx\n",
+> > +			start, length);
+> > +
+> > +	rc = log_dc_event(mdata, type, start, length, uuid_str, 0, false);
+> > +	if (rc) {
+> > +		dev_err(dev, "Failed to add event %d\n", rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	return count;
+> > +}
+> > +
+> > +/*
+> > + * Format <start>:<length>:<uuid>
+> > + */
+> > +static ssize_t dc_del_extent_store(struct device *dev,
+> > +				   struct device_attribute *attr,
+> > +				   const char *buf, size_t count)
+> > +{
+> > +	return __dc_del_extent_store(dev, attr, buf, count,
+> > +				     DCD_RELEASE_CAPACITY);
+> > +}
+> > +static DEVICE_ATTR_WO(dc_del_extent);
+> > +
+> > +static ssize_t dc_force_del_extent_store(struct device *dev,
+> > +					 struct device_attribute *attr,
+> > +					 const char *buf, size_t count)
+> > +{
+> > +	return __dc_del_extent_store(dev, attr, buf, count,
+> > +				     DCD_FORCED_CAPACITY_RELEASE);
+> > +}
+> > +static DEVICE_ATTR_WO(dc_force_del_extent);
+> > +
+> >  static struct attribute *cxl_mock_mem_attrs[] = {
+> >  	&dev_attr_security_lock.attr,
+> >  	&dev_attr_event_trigger.attr,
+> >  	&dev_attr_fw_buf_checksum.attr,
+> >  	&dev_attr_sanitize_timeout.attr,
+> > +	&dev_attr_dc_inject_extent.attr,
+> > +	&dev_attr_dc_inject_shared_extent.attr,
+> > +	&dev_attr_dc_del_extent.attr,
+> > +	&dev_attr_dc_force_del_extent.attr,
+> >  	NULL
+> >  };
+> >  ATTRIBUTE_GROUPS(cxl_mock_mem);
+> 
 
