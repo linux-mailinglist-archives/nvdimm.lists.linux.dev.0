@@ -1,51 +1,51 @@
-Return-Path: <nvdimm+bounces-14620-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14621-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id wtvGHTdkQmqZ6AkAu9opvQ
-	(envelope-from <nvdimm+bounces-14620-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 14:25:27 +0200
+	id ViP9CHdkQmq56AkAu9opvQ
+	(envelope-from <nvdimm+bounces-14621-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 14:26:31 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D92E56DA1F2
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 14:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E336DA25A
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 14:26:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=BMLJ0QC8;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14620-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14620-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=oh8cmU8O;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14621-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14621-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C056D3040DA8
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 12:24:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EEBB0304DE82
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 29 Jun 2026 12:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D774028D9;
-	Mon, 29 Jun 2026 12:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5405F403B03;
+	Mon, 29 Jun 2026 12:24:03 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9219402420;
-	Mon, 29 Jun 2026 12:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F371340314D;
+	Mon, 29 Jun 2026 12:24:01 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782735839; cv=none; b=Sk7hpT75w32cC2/+aYoqhJdM6+hD7Ac++mFeCNHjIX47TocllKdtfIZZC/vAJoFY8NhDHQJjz5GRMVPqvkwNNwy8WhMgT/XKUwZJHBllTBszOv6VKlZhdzsZn52J7yQ+Rc6kb2ANSuE4EjmVFq5lPb/s46G2p+cXwv/VUBT++nU=
+	t=1782735843; cv=none; b=LPcbrJAqGV2v9iaqvIx/drXv4/r/Y2BHxmQeoE0HALuIg2cy2YOAqEFvRmTbV41X1Fl3QcUIRsA+aIlGxMkKwtThurNPOd75YRVw7iLGn6MrlKoBL7AWXhgEFsJowr3Yuyqj0OTxWzfKZmKMMWT9wLjjJD1gMAJeBR4dLHmytFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782735839; c=relaxed/simple;
-	bh=OL69J7MtkWT1skHTWtM8dqe2tErstikOFSMrjC+xQt4=;
+	s=arc-20240116; t=1782735843; c=relaxed/simple;
+	bh=o52UYnqObCpYmk3JYu6VG+Xb5jANbPrT1TexxoaeOsA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hh7gM1LLCLIGURtNp4cAHUmTijztxgsEqaW9jHml2ziob5V64z8lZUtA41gvm3JQ72Vx4oyJoE2GTivalgRG6uQbDGBCk0Zvhgwtato2BH14/3VDCyTF8eTn8zegU/8g+v1E6jGuKeyH8nwfav1kp6Vh8C9LwhgdcH7FIJO8pT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMLJ0QC8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62E51F000E9;
-	Mon, 29 Jun 2026 12:23:57 +0000 (UTC)
+	 MIME-Version; b=uQ40DO6CIt/4TX91bOzCkchT3DZe/3sNlIQCClXmPgf8QBGjTSsaWi2Dle72c+3QWiFSH9PHWerSlB0L/7gposhM2nQ5COGUVNSNgB0JPNZ0SCcUHaX4lSCdZXRfum5WXrXfT5lNQXL3FeGVj6Kd1Mh6xHITqgj6/A3lLNnCvmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oh8cmU8O; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9F1D1F00A3E;
+	Mon, 29 Jun 2026 12:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782735838;
-	bh=swky/ttPkfzr7S5T51FCZc+wQHBhhjRzTF+CZs6EI2Y=;
+	s=k20260515; t=1782735841;
+	bh=7qj3/BXq+ERCdoh9SOaphljDHw7CHBVFrg7fKGArfF8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BMLJ0QC8vq16id6FWSytyc9WeUIS7JfINQPDzJsgK3lTD2+Pt+YhpaXljUZ46/gWl
-	 u4vnladD2OhaGNHvVhsUEKYZgcwpq91WRLMCG9fzRajYPiItxFBM4oxxDAJvoSlXcj
-	 AXmP9TLZPDtR6taGzYr9o4/3DefiaTZu0k6kzde+oQchdYnetq1kQBDelY3Tg5Vayt
-	 2csO1d2BBpXPMc/dR3xcayC1JQyR8Vp8v4DkrMhux2kOpk30jpyyDfeJ8H3+10kYT3
-	 2Wn/cXoyrBgAPy8yfNf7rNJ5A9kAichrnL8ho92XTSW+VMlDBaGxdB9AvyibXTm/72
-	 eINA9KxllLbWA==
+	b=oh8cmU8OIg75QXIVeNi2ei1ndGeWnWG9RU2MCpw2g+mWCbfpOy4TThFTXu2AcwGU8
+	 a/PR9drmHY0W6+1jhaKUmHIPFs15yos98GDWqelwftfBTj8KpKOyW9r8qcZ9/2wjKA
+	 qR1fh6TE2BJqTDqOZrypAuvTCZ8QeIDvaPLudS6E4fCAbhPevd+Mr94Xii/7kdK2v6
+	 i1xmlq6thncTopue/ywRunKf211reD3QdYSCHXK1reUhNNmu4gm8eW7YO+Ls232oZj
+	 w8FWGZw3/WfuL6IRFRiZ0CCOibPaVbL9f9y5awsCqQVzF12n5a57x1pcYNY0qOSM6N
+	 mRwrOyQzknWZw==
 From: Lorenzo Stoakes <ljs@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Russell King <linux@armlinux.org.uk>,
@@ -122,9 +122,9 @@ Cc: Russell King <linux@armlinux.org.uk>,
 	Rik van Riel <riel@surriel.com>,
 	Harry Yoo <harry@kernel.org>,
 	Jann Horn <jannh@google.com>
-Subject: [PATCH 01/30] mm: move vma_start_pgoff() into mm.h and clean up
-Date: Mon, 29 Jun 2026 13:23:12 +0100
-Message-ID: <b28b698df4c009e85c4728446ca5863d8e633164.1782735110.git.ljs@kernel.org>
+Subject: [PATCH 02/30] mm: add kdoc comments for vma_start/last_pgoff()
+Date: Mon, 29 Jun 2026 13:23:13 +0100
+Message-ID: <8c618dfd7de419e3b797b8bd1cd921d4c5b8878b.1782735110.git.ljs@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1782735110.git.ljs@kernel.org>
 References: <cover.1782735110.git.ljs@kernel.org>
@@ -147,22 +147,22 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyprowski@samsung.com,m
- :peterz@infradead.org,m:acme@kernel.org,m:namhyung@kernel.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:rostedt@goodmis.org,m:sj@kernel.org,m:linmiaohe@huawei.com,m:hughd@google.com,m:rppt@kernel.org,m:kees@kernel.org,m:pbonzini@redhat.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-sgx@vger.kernel.org,m:etnaviv@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:linux-tegra@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-mm@kvack.org,m:iommu@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:kasan-dev@googlegroups.com,m:damon@lists.linux.dev,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:jannh@google.com,m:patrikrjakobsson@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[armlinux.org.uk,kernel.org,siemens-energy.com,HansenPartnership.com,gmx.de,redhat.com,alien8.de,linux.intel.com,mev.co.uk,visionengravers.com,pengutronix.de,gmail.com,ffwll.ch,suse.de,oss.qualcomm.com,ideasonboard.com,nvidia.com,amd.com,shazbot.org,zeniv.linux.org.uk,linux.dev,google.com,infradead.org,samsung.com,goodmis.org,huawei.com,vger.kernel.org,lists.infradead.org,lists.freedesktop.org,lists.linux.dev,kvack.org,googlegroups.com,surriel.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14620-lists,linux-nvdimm=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyprowski@samsung.com,m
+ :peterz@infradead.org,m:acme@kernel.org,m:namhyung@kernel.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:rostedt@goodmis.org,m:sj@kernel.org,m:linmiaohe@huawei.com,m:hughd@google.com,m:rppt@kernel.org,m:kees@kernel.org,m:pbonzini@redhat.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-sgx@vger.kernel.org,m:etnaviv@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:linux-tegra@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-mm@kvack.org,m:iommu@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:kasan-dev@googlegroups.com,m:damon@lists.linux.dev,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:jannh@google.com,m:patrikrjakobsson@gmail.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14621-lists,linux-nvdimm=lfdr.de];
 	FORGED_SENDER(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	RCPT_COUNT_GT_50(0.00)[75];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
@@ -170,66 +170,65 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D92E56DA1F2
+X-Rspamd-Queue-Id: C7E336DA25A
 
-vma_last_pgoff() already lives there, so it's a bit odd to keep
-vma_start_pgoff() in mm/interval_tree.c. Move them together.
+Describe what vma_start_pgoff() and vma_last_pgoff() actually provide in
+detail.
 
-These each return unsigned long, which pgoff_t is typedef'd to. Make this
-consistent and have these functions return pgoff_t instead.
-
-Additionally, express vma_last_pgoff() in terms of vma_start_pgoff(), since
-we wrap the vma->vm_pgoff access, we may as well use it here.
-
-Also while we're here, const-ify the VMA and cleanup a bit.
+This is in order that we can differentiate this between functions that will
+be added in a subsequent patch which provide a different page offset.
 
 No functional change intended.
 
 Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 ---
- include/linux/mm.h | 9 +++++++--
- mm/interval_tree.c | 5 -----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ include/linux/mm.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 485df9c2dbdd..059144435729 100644
+index 059144435729..2f00c75e66bd 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -4278,9 +4278,14 @@ static inline unsigned long vma_pages(const struct vm_area_struct *vma)
+@@ -4278,11 +4278,37 @@ static inline unsigned long vma_pages(const struct vm_area_struct *vma)
  	return (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
  }
  
--static inline unsigned long vma_last_pgoff(struct vm_area_struct *vma)
-+static inline pgoff_t vma_start_pgoff(const struct vm_area_struct *vma)
++/**
++ * vma_start_pgoff() - Get the page offset of the start of @vma
++ * @vma: The VMA whose page offset is required.
++ *
++ * If the VMA is file-backed, this is the page offset into the file.
++ *
++ * If the VMA is anonymous, this is the virtual page offset of the start of the
++ * VMA - if unfaulted, then vma->vm_start >> PAGE_SHIFT, if faulted then the
++ * virtual page offset at the time of first fault.
++ *
++ * Note that if @vma is a MAP_PRIVATE file-backed mapping, then this returns the
++ * file offset.
++ *
++ * Returns: The page offset of the start of @vma.
++ */
+ static inline pgoff_t vma_start_pgoff(const struct vm_area_struct *vma)
  {
--	return vma->vm_pgoff + vma_pages(vma) - 1;
-+	return vma->vm_pgoff;
-+}
-+
-+static inline pgoff_t vma_last_pgoff(const struct vm_area_struct *vma)
-+{
-+	return vma_start_pgoff(vma) + vma_pages(vma) - 1;
+ 	return vma->vm_pgoff;
  }
  
- static inline unsigned long vma_desc_size(const struct vm_area_desc *desc)
-diff --git a/mm/interval_tree.c b/mm/interval_tree.c
-index 32bcfbfcf15f..344d1f5946c7 100644
---- a/mm/interval_tree.c
-+++ b/mm/interval_tree.c
-@@ -10,11 +10,6 @@
- #include <linux/rmap.h>
- #include <linux/interval_tree_generic.h>
- 
--static inline unsigned long vma_start_pgoff(struct vm_area_struct *v)
--{
--	return v->vm_pgoff;
--}
--
- INTERVAL_TREE_DEFINE(struct vm_area_struct, shared.rb,
- 		     unsigned long, shared.rb_subtree_last,
- 		     vma_start_pgoff, vma_last_pgoff, /* empty */, vma_interval_tree)
++/**
++ * vma_last_pgoff() - Get the page offset of the last page in @vma
++ * @vma: The VMA whose last page offset is required.
++ *
++ * This returns the last page offset contained within @vma.
++ *
++ * See the description of vma_start_pgoff() for a description of VMA page
++ * offsets.
++ *
++ * Returns: The last page offset of @vma.
++ */
+ static inline pgoff_t vma_last_pgoff(const struct vm_area_struct *vma)
+ {
+ 	return vma_start_pgoff(vma) + vma_pages(vma) - 1;
 -- 
 2.54.0
 
