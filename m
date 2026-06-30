@@ -1,81 +1,81 @@
-Return-Path: <nvdimm+bounces-14681-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14682-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id tKAaFsbkQ2qblAoAu9opvQ
-	(envelope-from <nvdimm+bounces-14681-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 17:46:14 +0200
+	id RXPYMEzmQ2oJlQoAu9opvQ
+	(envelope-from <nvdimm+bounces-14682-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 17:52:44 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9C9F6E6141
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 17:46:13 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9F56E6217
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 17:52:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gourry.net header.s=google header.b=jf1e0vbX;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14681-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14681-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gourry.net header.s=google header.b=sC2YQpPc;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14682-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14682-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 80F7530842BC
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 15:42:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 95B9930ED312
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 15:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6644534A8;
-	Tue, 30 Jun 2026 15:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9C54657F1;
+	Tue, 30 Jun 2026 15:46:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64044E052
-	for <nvdimm@lists.linux.dev>; Tue, 30 Jun 2026 15:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652444657CF
+	for <nvdimm@lists.linux.dev>; Tue, 30 Jun 2026 15:46:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782834147; cv=none; b=J4nGWDLm2B7osEDwU7FG99eV9SjVUUVHmCBEeEJW3mfJDAAK9igKYP3UE3jZTq72ca2USAcQx3jfz3bywKUfU2gCl/RIuBB+TNOxlmXcY18YnMX7fdhfaYMaCHZVuBEheo21icQxF7hA418VFBW0ed/bcisjp8YEItVvxdtaCRU=
+	t=1782834415; cv=none; b=oy+QEtCH0EkXknYv3yxz9HFXdLeRf2VDJUUW7SzFCtXfRQH0WvAUZjzmqf/NI27itLIPPPWSulJXWrNA6AQb0TQaXsSXSlBcUIAUoxWJwfubYC36ewywXv2NFx/uOnEc5ds43HIx397qesZasu583fAOBDPqWWQe7F4HdhmH38A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782834147; c=relaxed/simple;
-	bh=G7yBa9qRXwqvk5O66eyJS/F0IvVRBRnFUCu+8taoCIs=;
+	s=arc-20240116; t=1782834415; c=relaxed/simple;
+	bh=dDmXL5XwXaYV+8+puY+mAXsJDpis0aF3tebQ04m+2HU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gt1SfAc2ZJ1AENM6V3/V9GPENrcXpRkOEWn3xErWyd+xD/UpjCKiYBkqiklZ8lsIXAkwd9uT6aUCS5FOSgVF/Vl5diPw0fIlULw1/5M8km6cO6D5gDWWpjfHZU0cBWfMBwKxmVCItn2h9QLE/pWsKh403aRimZDz1reJ6WNQ8bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=jf1e0vbX; arc=none smtp.client-ip=209.85.222.169
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-92e65e18969so87345285a.1
-        for <nvdimm@lists.linux.dev>; Tue, 30 Jun 2026 08:42:24 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=f/Q9iOzO8tccuHYYy+KSPPXRRYoyHFDMwFjOXVAXe1Ujxo6Q31/m9Phyzp8U37lcsbbTGDrvjj1FrHor9JmKpcJTtxZrZC7kCcBqt6MHo2YQtpa0ikJJnSQROzl0moB8jckHDcXpe/BubBaMRNzcPqQHPtg7gAmFmTaM8N0WU28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=sC2YQpPc; arc=none smtp.client-ip=209.85.222.174
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e65e18969so87968385a.1
+        for <nvdimm@lists.linux.dev>; Tue, 30 Jun 2026 08:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1782834144; x=1783438944; darn=lists.linux.dev;
+        d=gourry.net; s=google; t=1782834412; x=1783439212; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QB3LlP562wM9vhAInyZtqjaYedctMNHlJgLHcqpXNiE=;
-        b=jf1e0vbXN9WHA75z7y2uYxs71+5ddmPHth4etxgt04k/1p5i7sLLhabahl3YdJtTvp
-         rpc+uGW61RRmBWNp8kDuAOd2ZljKbGChcSgOr7iTvO5IPCs9yc3HuuwSzuhXSF33M86i
-         DVaxf0P7Cjh4eZbpElqnurfthpg04+ty0kMBt8XAIKCzHcOp0EYu1IlpbwB5CfpW6QwJ
-         Ovp00MLwt4ucDo/iKwAOVSoQnID0L03RYBC/zp2IdG1DJti4RAkjf82k8S9tawFOne8g
-         1/TfBGX9+nniM2SBdZS8qzOMl2OcOjtBriP5OM1eHHukvyotZm7NVjUZuduid54TYmp3
-         Stxg==
+        bh=z3V1BQpPjw58FUuLj010lwChkcBGTpKii5KT4CVPULY=;
+        b=sC2YQpPcwy5ia7j1FG5jQDsE5CsL2Lgol2k3URKDbBERnY8r1p8uO8pCAXl0TOvfib
+         8wv3CsBpKm1xSlWcv0T1vnLOGYoaML79hDO/qPifMAIUHbZZ/4h640vXHLVc93n9Ehb3
+         Z/+0W/wKsiRAbEbqWfnxSTwVjaFAXeZyjID2ASCx7+kf2/fH5sph85bj7Lk0AwzKVBUC
+         h4nwI5XBRfQ0LkuhchIg2aUJC4/k1nt9P6prFt8Kh6S2y+p4bUY3byyVWiw5PF0swxvX
+         jeM2zeADMqUC2hGxtStBT19HHMrckri/q795Z7nj5C6i5iOdjGMn1nzwBBCoNaUVWRSe
+         bZ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782834144; x=1783438944;
+        d=1e100.net; s=20251104; t=1782834412; x=1783439212;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QB3LlP562wM9vhAInyZtqjaYedctMNHlJgLHcqpXNiE=;
-        b=hQDzya3hWONOoDINZ9V/Y8uT83zCno0Vt6VKu7yN1lfnpaq8gzSAWURPwFLlsZIq7L
-         f/T5LWnt1Nj1kNPrG5TYVsb2rejO9e1Nqa3hl+E1wZ60OYbuQs8N75LWVfhP4d4zUl0V
-         H3vsqEHESaR39JFBlzgIkkqT9A2fNR7TtcBaG/CHi6D5cQnfERx2T+XLYgkppJz3mL15
-         e24zK2HITVPMmbCATiJK1drKWsggmTvmZTjBfxE7M8imu1eDuVfZDGjL+Tw+l2qG+IHm
-         xA63VEA8lxbTe3Roq/DOyRfnC7+DTzXL5iu/vPWWNhHf2DxNtkuZVf2oeGs3ulYtGVnU
-         kMsQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8S/z1y0QGb7oZMukXmAzPeHugyJxKQ22mL5CoJWeAmd9QyPoNIDSCTvRF1keKdYoEIVrU0OCg=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyOoGDNmzxIhrta33P7vvHWU32Xm8+Ojs1jOtT6HHFnL6UcPqTF
-	OhkD23tWkv0UzRQWi71NoDBiHQmpQ01fjcjchZ1nstzMeU0GFyIvpm5RKfXNjh7N0Cc=
-X-Gm-Gg: AfdE7clY2hVvCPnBDL2JzvfXaU93ixMTdo3oixtCZ8CZRGEZncBcjxqaaRatgyDVly6
-	cY0zql759CPMJI9j8Nw+KtXwV6Cx0HXewuAPXqzvUxsoypazhW0MeYXuV2x1nn4MrJBdkhDKr1R
-	7HBwouQyrH3EDV04vDzNM93jxqqkKiDDrlfDA+9e1NErGzZKiW6EtNFqRDk+vPgmZZMS3Pd7/vA
-	Y1wVYtQW+F9PAaCOecHMly/+mt9sWkAGrxdfCgBkQCApkErFvNcClMzj2dWdYTK+GLRKsCufvGx
-	ZoMJIw7UTnlM4cqqQCCfzr3Nk+Ybwra7zDZOWW6o6ZQYnU4HOEHRUtUxs33phgVrDYoywLTusOM
-	adApCAKJUTOg3XRE/YsxTvSQ3vmKJiY6kf7egWqEtBu8wf6zEHY7FZ7EdTwIof2FkBrKptZnQHm
-	aIKZbuDZI4YDbAaxd3miTJWDUITl7r+BzrcNgBij4EttYvu8RXk2Csa3cFf5ybHqc4NkEA
-X-Received: by 2002:a05:620a:271d:b0:91e:712d:f79d with SMTP id af79cd13be357-92e6984d3d1mr270456885a.40.1782834143842;
-        Tue, 30 Jun 2026 08:42:23 -0700 (PDT)
+        bh=z3V1BQpPjw58FUuLj010lwChkcBGTpKii5KT4CVPULY=;
+        b=QQvc3omhVXhytcXo269iZFlnqmOlunM9WoDokNnTw8OIYJUxV7bYQf9Q4MI2Hjk7eF
+         18zIqFIKA1qI5w10KMCoZX1UitCBZ2BIdSwPs/dm4kKosYuSfXwOKt7d9f5TYKa2EVqp
+         Ob19BDrEzXoWF3aldPZfqrVrJh72DF+8zM1J+0+lCS2HylsY2uQfMb2Wq2w+VClG82Fx
+         B7ziaTxNDdKoBUt7TdaQ7En6h6L1zmvFSUbE9QZzgDtMGpWQeh7bZb/bgUbmT1o6SGXF
+         7jR3+3CoY5vIG3jIiQvbUQhKDCBtnBeC5JITH/lHMqdwE5GqatldVJ/QyYkArfdvrjy7
+         r4ig==
+X-Forwarded-Encrypted: i=1; AFNElJ9nNmI1lUfFF++eVBwytEDsXkk4j+0zw60h8Y3FpeicwK+PO1zpslQtajOTNtqlBB9fwSgQcoY=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwshZ3CMP7khjcydl0+25sZfk+/jHHu4PJMKtwcpWAZMoNKvX+1
+	AE8pHH+bxNajbI6uG++Bu+cl3s/4GyrZzutF+lZ2vxrBFwDK3tduDytNHD9BNf4ytLk=
+X-Gm-Gg: AfdE7ckEBDKTDR1qC22Wl2MnolN2TAC+ZIQ7SeDrDCQKFODT6tGh5c2W00Xa3Ejax3L
+	wJUjN1zi2rHZwutXfcRCShHk8aMHIZ6U06RAkiLeXJbeL9h4sDfKTD0/ighBU7C4MQ1drTZAhSi
+	JpojzwiZfGk04fVWB+GZo731dLA5D5lIKpD44GNW5nrmXMLwK4ztVoZbvOypY6Gteer9eh8uKcV
+	fdEvxqmaKaCrIxvVNj3hi9EEfhaDqIZ1FlRlWgbwQWYUuoheH/SZ17tFTxK5vUwEt1ffgK2P7p4
+	iBApYHBtsaQZNBIeu90RXM5o0YYsSWA+/lPYtW2sPypoVc91Hv1abkNQFxE0FeLtqeEx0lkAOct
+	LKO+Cc0uAgeJc1miM5jjwH2QS1KCVpyIwZ5EbBOZSR6e3yd5v5Oq0JSiqr+9OKl1mCN6EEhv4gn
+	+XHSY5TjA9el457fgq81AhEXAsy3xT2xQU3aNUF8QF/gh4BhtLtnSey2AITmMTxPptdjvs
+X-Received: by 2002:a05:620a:2913:b0:915:a47c:f721 with SMTP id af79cd13be357-92e6974d636mr316697685a.21.1782834412151;
+        Tue, 30 Jun 2026 08:46:52 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e6234dc50sm263249085a.39.2026.06.30.08.42.21
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e6233a5acsm267797785a.35.2026.06.30.08.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 08:42:23 -0700 (PDT)
-Date: Tue, 30 Jun 2026 11:42:18 -0400
+        Tue, 30 Jun 2026 08:46:51 -0700 (PDT)
+Date: Tue, 30 Jun 2026 11:46:46 -0400
 From: Gregory Price <gourry@gourry.net>
 To: Lorenzo Stoakes <ljs@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -133,11 +133,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	damon@lists.linux.dev, Pedro Falcato <pfalcato@suse.de>,
 	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
 	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 08/30] mm/rmap: rename vma_interval_tree_*() to
- mapping_interval_tree_*()
-Message-ID: <akPj2snngOp5nOYq@gourry-fedora-PF4VCD3F>
+Subject: Re: [PATCH 09/30] mm/rmap: parameterise anon_vma_interval_tree_*()
+ by anon_vma
+Message-ID: <akPk5o_gHD1SxX_0@gourry-fedora-PF4VCD3F>
 References: <cover.1782735110.git.ljs@kernel.org>
- <f95462457025370efd047b9dfb039e76bbddf58b.1782735110.git.ljs@kernel.org>
+ <1c1df7b905ef340cbf2effef769a4e770a8e0eb1.1782735110.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -146,18 +146,18 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f95462457025370efd047b9dfb039e76bbddf58b.1782735110.git.ljs@kernel.org>
+In-Reply-To: <1c1df7b905ef340cbf2effef769a4e770a8e0eb1.1782735110.git.ljs@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14681-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14682-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:ljs@kernel.org,m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyprow
@@ -178,34 +178,36 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[76];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,gourry-fedora-PF4VCD3F:mid,gourry.net:dkim,gourry.net:email,gourry.net:from_mime,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,gourry-fedora-PF4VCD3F:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,gourry.net:dkim,gourry.net:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B9C9F6E6141
+X-Rspamd-Queue-Id: 1C9F56E6217
 
-On Mon, Jun 29, 2026 at 01:23:19PM +0100, Lorenzo Stoakes wrote:
-> The family of vma_interval_tree_() functions manipulate the
-> address_space (which, of course, is generally referred to as 'mapping')
-> reverse mapping, but are named the 'VMA' interval tree.
+On Mon, Jun 29, 2026 at 01:23:20PM +0100, Lorenzo Stoakes wrote:
+> Similar to what we did with mapping_interval_tree*(), let's declare
+> anon_vma_interval_tree*() in terms of anon_vma rather than rb_root_cached.
 > 
-> VMAs may be mapped by an anon_vma, an address_space, or both. Therefore
-> calling the mapping interval tree a 'VMA' interval tree is rather
-> confusing.
+> In each case the rb tree referenced is &anon_vma->rb_root, so just pass
+> anon_vma and the functions can figure this out themselves.
 > 
-> This is also inconsistent with the anon_vma_interval_tree_*() functions
-> which explicitly reference the rmap object to which they pertain.
-> 
-> Rename the vma_interval_tree_*() functions to mapping_interval_tree_*() to
-> correct this.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
+> Additionally, rename 'node' to 'avc', 'index' to 'pgoff_start', and 'last'
+> to 'pgoff_last' to make clear what is being passed.
+>
 
-obligatory "naming is hard", this patch helps, thank you.
+would it be possible to split the pure rename changes out from the
+changed function declarations?  It's hard to pick out this as something
+that needs to be looked at as more than just a %s/x/y/
 
-Reviewed-by: Gregory Price <gourry@gourry.net>
+> +void anon_vma_interval_tree_insert(struct anon_vma_chain *avc,
+> +				   struct anon_vma *anon_vma)
+...
+> -	__anon_vma_interval_tree_insert(node, root);
+> +	__anon_vma_interval_tree_insert(avc, &anon_vma->rb_root);
+
+an annoying request, sorry
+
+~Gregory
 
