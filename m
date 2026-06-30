@@ -1,59 +1,59 @@
-Return-Path: <nvdimm+bounces-14668-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14669-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id IooOMpaNQ2rZbQoAu9opvQ
-	(envelope-from <nvdimm+bounces-14668-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 11:34:14 +0200
+	id E1wIAk6MQ2qGbAoAu9opvQ
+	(envelope-from <nvdimm+bounces-14669-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 11:28:46 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40B7F6E23AB
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 11:34:14 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EF4C6E22D8
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 11:28:45 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.beauty header.s=zmail header.b=SSpYC49F;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14668-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14668-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=linux.beauty header.s=zmail header.b="RR2K/AEH";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14669-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.232.135.74 as permitted sender) smtp.mailfrom="nvdimm+bounces-14669-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=none) header.from=linux.beauty;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2980C304F156
-	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 09:26:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1F0B33042D7C
+	for <lists+linux-nvdimm@lfdr.de>; Tue, 30 Jun 2026 09:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A7643EDE70;
-	Tue, 30 Jun 2026 09:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120C43EE1D4;
+	Tue, 30 Jun 2026 09:24:49 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C563E2754;
-	Tue, 30 Jun 2026 09:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC273EDE6A;
+	Tue, 30 Jun 2026 09:24:47 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782811484; cv=pass; b=GO0jkM8OiXDsjGVEe8O8Smp8ceLFYASEp+xU/zHCDYsVf+AQKSAqDngsErojAydKGx5IYVNvvNmID4VjpFS1+80ujQEtKuzC9RcyrKy1tTXfOq1NLJyrklBJp8oWkP+6/UkyzYfOjkPJfUb+hKqLVNn6EKVTawY7/A+JoTmSjkU=
+	t=1782811488; cv=pass; b=dDNXwF2zebF29j6Ezm9hBKo3uC+phfI8GpyWTMCZdBdHai4razDVt0FKFwgXvYdz3UAUG0uYUkUNiCo8UyfFyLBb3EOaYJ7zA+vQZshpd0i2rUFL2rpFs/O7ZcdhQCXC+omhsWlp8AQhBXENyWjLF5bJKJ1Ax0HuHDifhIt/ko8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782811484; c=relaxed/simple;
-	bh=HOkboN4hDdShgcwZeRsLk2Buy2Re5704yodFz9T9gCw=;
+	s=arc-20240116; t=1782811488; c=relaxed/simple;
+	bh=hd18FWLb1hcER0eGN0CDNYzR1McHOJM564y1QUlWJmQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PblxZC4okGOnSbUnBg1ZRmZCgqHnCt3U0b5cpWp8CiLV9CbvwEFD2o1NB5pJ2CyGtV3lfbOs2jxhgLwg2GumBctoAcfjgukUit7OYQnXYn1SZ8WW6kRpjfWNX6AMHaZAChBM/LWfyBo9MROPeK8LkWnDCek+/r3h8NfMITRnmO0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=SSpYC49F; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal: i=1; a=rsa-sha256; t=1782811453; cv=none; 
+	 MIME-Version; b=DtewIB7jO1HX7fQDctqTdM3rA3JQSFVTC72HJwvu53NDWHKjXwiXIudTLMrZ2zSXYcn+jabBY3PcghGIvMEKcH927NU+BecU4uNVtY4XAEgwntUS9wajcjQ18HhByWxlbIfQbgEOzE8ZmiflhF1GjNiXPg3ThGBRy45TWT6ub4I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=RR2K/AEH; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal: i=1; a=rsa-sha256; t=1782811458; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=T/3nxGkQkR2lEGjewomW2ASSSqvcBIbWy12oP6WV0COlh2tXcY5GSNK25B81fl8CynQQTz1G677oO1AQSw5AIsWJG3UYOcL2JlTkRKxiAehD3i9dkhBq135hPift+uZah5kJMze8sQnby/aGMCKolXb+lDR1x3FmCIWSsPjknME=
+	b=j6vtgyyidvpfh4yzjBIDMs5mOJAKY75BgwtRI2LDH/HA0UPV9N3EVykPW/cIpkSrcfTl08cxZkyw9sgK0DLocqXW7D3jbzgkB6vL8HEPBgecJSz2TVLBexGQ9bQ8Dq/VoljQCoQNawZCwA/ylQyITiceJ2TngW4YPzxWLqwCB3g=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1782811453; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=v+XVFe2bm4JGeaAkEpcvHOdpOCS/g1TcjllGxU9z6Hk=; 
-	b=ZHrky8XFlX2GPpUSu8S/g78ut1EBMfr1TtXLwCGBaQVEDs3d0AcMfZHac7hxkzK2RhNKkTNsYGmqn4AZZzZp1uXUH6bN6K8Lxqpmx2lYpnE3VgyVqHi2sVsn4dFRKQs9QttuyfkDu/Jgs4nFL13rgRPALGFaEx8877y4PXarQbI=
+	t=1782811458; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=cV4ALsu3V/Afm3yHy+Bf/CmLmsd/Z4GOKtaXkbRgoWk=; 
+	b=GjdsKrYjH905os0InRouB9nPwKhtti4oMsjHdbjLVYWryMI1fiMna2m8bMJo0D/n1r++7LpCJiBC7rP2tEP2mOmsfVWAloNI0tasqZITxqtiGWCDKkTtvk7Bd25tyKlmBBxFVeh26SkI0mo+c3vnHLmOcMGg/38ILqgoE7c+LTk=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=linux.beauty;
 	spf=pass  smtp.mailfrom=me@linux.beauty;
 	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1782811453;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1782811458;
 	s=zmail; d=linux.beauty; i=me@linux.beauty;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=v+XVFe2bm4JGeaAkEpcvHOdpOCS/g1TcjllGxU9z6Hk=;
-	b=SSpYC49F711ZpC6yqb1INvu/Z9z/ZH/l4cTX6a2M+P9IuvaqlUspuV5oIzG0uung
-	FYod9E4ytXKK0ECi6rECyhnrHNtkYwsAH/wFyaacfx/9bpkQBzQ3x7sDzxU4d3nYW6P
-	v3CVkR4Ba7OumzGI1Jzm2FLZ8EqPF9sL5J2RJNDs=
-Received: by mx.zohomail.com with SMTPS id 1782811452036829.5784203426026;
-	Tue, 30 Jun 2026 02:24:12 -0700 (PDT)
+	bh=cV4ALsu3V/Afm3yHy+Bf/CmLmsd/Z4GOKtaXkbRgoWk=;
+	b=RR2K/AEHiJ4oSAvOUtieRYacbkQ9uu9kx0b1u0GQLhDoiqJwDrVoWNJf5P48M2ef
+	ERUiyQKPlWWNSYKl+ySKiHyrkDLBS5ahMlC8PFbPTB/VZ5nPXzRWB4YDxSpLHTo5O4z
+	FdS0owk7i1tGqQ0bSlpTeXrn9Q8B872/zHVkGJp0=
+Received: by mx.zohomail.com with SMTPS id 1782811455428174.18424278975897;
+	Tue, 30 Jun 2026 02:24:15 -0700 (PDT)
 From: Li Chen <me@linux.beauty>
 To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
 	Vishal Verma <vishal.l.verma@intel.com>,
@@ -63,9 +63,9 @@ To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
 	nvdimm@lists.linux.dev
 Cc: linux-kernel@vger.kernel.org,
 	Li Chen <me@linux.beauty>
-Subject: [PATCH v7 05/12] nvdimm: virtio_pmem: use GFP_NOIO for flush requests
-Date: Tue, 30 Jun 2026 17:23:30 +0800
-Message-ID: <20260630092338.2094628-6-me@linux.beauty>
+Subject: [PATCH v7 06/12] nvdimm: virtio_pmem: always wake -ENOSPC waiters
+Date: Tue, 30 Jun 2026 17:23:31 +0800
+Message-ID: <20260630092338.2094628-7-me@linux.beauty>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260630092338.2094628-1-me@linux.beauty>
 References: <20260630092338.2094628-1-me@linux.beauty>
@@ -85,12 +85,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[linux.beauty,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[linux.beauty:s=zmail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14668-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14669-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -108,44 +108,77 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linux.beauty:dkim,linux.beauty:email,linux.beauty:mid,linux.beauty:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linux.beauty:dkim,linux.beauty:email,linux.beauty:mid,linux.beauty:from_mime,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 40B7F6E23AB
+X-Rspamd-Queue-Id: 9EF4C6E22D8
 
-virtio_pmem_flush() can run from pmem_submit_bio() while filesystem IO
-is waiting on the flush completion. The request object allocation can
-sleep, but it should not enter filesystem or block IO reclaim from this
-flush path.
-
-Use GFP_NOIO for the request allocation. The virtqueue descriptor
-allocation still uses GFP_ATOMIC because it runs under pmem_lock.
+virtio_pmem_host_ack() reclaims virtqueue descriptors with
+virtqueue_get_buf(). The -ENOSPC waiter wakeup is tied to completing the
+returned token. If token completion is skipped for any reason, reclaimed
+descriptors may not wake a waiter and the submitter may sleep forever
+waiting for a free slot. Always wake one -ENOSPC waiter for each virtqueue
+completion before touching the returned token.
 
 Signed-off-by: Li Chen <me@linux.beauty>
 ---
-Changes in v7:
-- Keep GFP_NOIO for the virtio-pmem request allocation after removing the
-  child flush bio path.
-Changes in v6:
-- New patch; keep GFP_NOIO only for the virtio-pmem request allocation.
+v2->v3:
+- Split out the waiter wakeup ordering change from READ_ONCE()/WRITE_ONCE()
+  updates (now patch 4/7), per Pankaj's suggestion.
+v3->v4:
+- Rebased onto v7.1-rc7 and renumbered after the flush error patches.
 
- drivers/nvdimm/nd_virtio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvdimm/nd_virtio.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
-index 8e16b7780be1a..a35044afddf34 100644
+index a35044afddf34..fcb26a595d7c6 100644
 --- a/drivers/nvdimm/nd_virtio.c
 +++ b/drivers/nvdimm/nd_virtio.c
-@@ -61,7 +61,7 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
- 		return -EIO;
+@@ -15,26 +15,33 @@ struct virtio_pmem_flush_work {
+ 	struct bio *bio;
+ };
+ 
++static void virtio_pmem_wake_one_waiter(struct virtio_pmem *vpmem)
++{
++	struct virtio_pmem_request *req_buf;
++
++	if (list_empty(&vpmem->req_list))
++		return;
++
++	req_buf = list_first_entry(&vpmem->req_list,
++				   struct virtio_pmem_request, list);
++	req_buf->wq_buf_avail = true;
++	wake_up(&req_buf->wq_buf);
++	list_del(&req_buf->list);
++}
++
+  /* The interrupt handler */
+ void virtio_pmem_host_ack(struct virtqueue *vq)
+ {
+ 	struct virtio_pmem *vpmem = vq->vdev->priv;
+-	struct virtio_pmem_request *req_data, *req_buf;
++	struct virtio_pmem_request *req_data;
+ 	unsigned long flags;
+ 	unsigned int len;
+ 
+ 	spin_lock_irqsave(&vpmem->pmem_lock, flags);
+ 	while ((req_data = virtqueue_get_buf(vq, &len)) != NULL) {
++		virtio_pmem_wake_one_waiter(vpmem);
+ 		req_data->done = true;
+ 		wake_up(&req_data->host_acked);
+-
+-		if (!list_empty(&vpmem->req_list)) {
+-			req_buf = list_first_entry(&vpmem->req_list,
+-					struct virtio_pmem_request, list);
+-			req_buf->wq_buf_avail = true;
+-			wake_up(&req_buf->wq_buf);
+-			list_del(&req_buf->list);
+-		}
  	}
- 
--	req_data = kmalloc_obj(*req_data);
-+	req_data = kmalloc_obj(*req_data, GFP_NOIO);
- 	if (!req_data)
- 		return -ENOMEM;
- 
+ 	spin_unlock_irqrestore(&vpmem->pmem_lock, flags);
+ }
 -- 
 2.52.0
 
