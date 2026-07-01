@@ -1,197 +1,175 @@
-Return-Path: <nvdimm+bounces-14720-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14721-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vylqHJCwRGoyzAoAu9opvQ
-	(envelope-from <nvdimm+bounces-14720-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 01 Jul 2026 08:15:44 +0200
+	id /GYoOp2yRGqQzAoAu9opvQ
+	(envelope-from <nvdimm+bounces-14721-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 01 Jul 2026 08:24:29 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C72956EA257
-	for <lists+linux-nvdimm@lfdr.de>; Wed, 01 Jul 2026 08:15:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F94D6EA2FC
+	for <lists+linux-nvdimm@lfdr.de>; Wed, 01 Jul 2026 08:24:29 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=nVkPquKq;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=IgLbW7hT;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=nVkPquKq;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=IgLbW7hT;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14720-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14720-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
-	dmarc=pass (policy=none) header.from=suse.de;
+	dkim=pass header.d=gourry.net header.s=google header.b=Xy8kEGHj;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14721-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14721-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9A6633022F4E
-	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Jul 2026 06:13:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 001A03040AA1
+	for <lists+linux-nvdimm@lfdr.de>; Wed,  1 Jul 2026 06:24:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 854B1376481;
-	Wed,  1 Jul 2026 06:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498E23ADBA1;
+	Wed,  1 Jul 2026 06:24:00 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D88437FF7B
-	for <nvdimm@lists.linux.dev>; Wed,  1 Jul 2026 06:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C378F3A5E90
+	for <nvdimm@lists.linux.dev>; Wed,  1 Jul 2026 06:23:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782886412; cv=none; b=Xj8vFJYc1hOGckzp3m6V6bLOAsHNyT6g/ncfKSYyspB2lzPqrpu7THuHxDX2JRv6pN7upy4U+WmZ99f9zp6YMPEtfFalpNFu6dnU0osr7RJedTALypj2MOaNuqREkcMNOA1hKzChbGnMBG6TUTK88HXg+uM56KI4gurn9bTJJzk=
+	t=1782887040; cv=none; b=TC13YvjwPr4HGSmyfflRezzu8MX9F9T9KueNW+9OGwD91HOZ7VEEfQNfvFO1+9SkWouuYrK6dHzmtF8+zosKauNh4NJyTAil28rDLAASrOeWsArOa01mOj/X/HN5m0+KC+FJXCapAYpBX0MADmcEfEhxzs3KsfZsoB21O8nNq4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782886412; c=relaxed/simple;
-	bh=5IugnX6ei1qX95xqi+Dab5Sz2YMHXwt1aK+XcCyrIao=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aRMWh3OpAYCDaQsKVA3GuZirqidCSWnDy7O77vHKv+e9okv2TaKA+0nkLq9R5/nsbSHZ7S7TS2EXR/YEO1L1yRMjcDM7bTCxqRC2U6ERMK1zEFsKgSfEu19FdXBoBIDmp9EB95pv9Ne3BxVAxqeA3dpxFF77ESYcfpI1sDv0abA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVkPquKq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IgLbW7hT; arc=none smtp.client-ip=195.135.223.131
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 386CC75FA2;
-	Wed,  1 Jul 2026 06:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
-	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
-	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782886409;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
-	2Irk1zJbX7sxlFAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782886409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=nVkPquKqfnuglwRA64kO/65FlsWtnZVcUr3tQjW84mZEt5kIK1Id+IAvCnd8COFWAMIdCN
-	A+LLI/gXRqAumQ6m6nZvELRBDLiulChfZexd6Z8RaTTDRKPx8SMbetsUAzw04D6Lu6YrUo
-	3Tt20D3L669qjQts1PWJhNHngCyL2zI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782886409;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KYQUm/ch17JGjQTwSu+BBLhvek6prevgXa6ce8KlIcw=;
-	b=IgLbW7hT3Aoo3CqPjJU1FBDZYQCfBqX2sBw4KqeELLYrzoJwo6zrbQBzA6udP+eNK09Hw4
-	2Irk1zJbX7sxlFAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88874779AA;
-	Wed,  1 Jul 2026 06:13:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9virHwiwRGoNTQAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 01 Jul 2026 06:13:28 +0000
-Message-ID: <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
-Date: Wed, 1 Jul 2026 08:13:28 +0200
+	s=arc-20240116; t=1782887040; c=relaxed/simple;
+	bh=hP4nlPGIrqeNY9wpwr+srgGK8bvJUTL6djQnXyZwy5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HOwaof1xwNA6IOEoc8JcIfHOTOULdUpd1dzKNSmMzxP5UgrMp57gddu6hhv+ilHT5Fglzn5dtM6iyJ1wnLcDd+QxPbseEEKGN2Yyi4tNIIVEs6jSKCm1N75fuFZE56C3jR1lk2uo27OQQyQZWwJRIyRsXhykXdc45mU83dPArgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Xy8kEGHj; arc=none smtp.client-ip=209.85.219.43
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8eff5ce3b95so3314286d6.3
+        for <nvdimm@lists.linux.dev>; Tue, 30 Jun 2026 23:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1782887038; x=1783491838; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5xWJ7lGSS4cy1ExwRI73Ip42ktEi6AnmleUk+CzcRsY=;
+        b=Xy8kEGHjcMQarQz/Ebqn9z5Dcz+OzRRd/bum7H4PK39WBfljLn7O0Jr9aZA+gkVzHO
+         BWBkPl8zFAhJzFeJRNKq7w0VkoSDf6BNLW8iyNE6MiolgnLgXxb+2K2ik+9aABqLx98A
+         ZSa79sncwYYiBes+VrIzcQL6Svmqf8ZGCuW/yVptfNLTiW/usH1YKnEHrLbMI0v6RbeC
+         UB2Z2IauA4mF+/rHAYSsd0jQlDmWZIpygDJ4gDtTMT+pe4gcHsXoSAOvzQxva5TjNkO2
+         xf47l0Ji//mpGVfe3PJmFt/1CtEORb0ITe+DUzv3HOG2S/DAsehd2PexTub6pE28XpO0
+         Hk6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782887038; x=1783491838;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5xWJ7lGSS4cy1ExwRI73Ip42ktEi6AnmleUk+CzcRsY=;
+        b=sCK7Tu6eRFCAUCMoLQnOTbgnxkufuyIT5QuyZN8GrMkLqYrgrXwhJakBUncijz6BBl
+         EvrfF+icincYITEhnDpo3wnnzte0xR4ZPAxS7lUZY+KV1NnmyzLRHDZx+eot7bwHwVsx
+         gXqUUQ44qpvXQFQ1gs4JqsfwtZYtYQ1VOi9WCMFqHP9czhTymW3ctNqwSGL7LNOv24Cx
+         feqoAFBJBwX3s33AJFFE2C4yxxAQbExQgeoG5tDJG7v349HTmP7o0Y+0j4vgV4iXhYTG
+         ddPPPnu6uyQymfuYGjDVCQAim2P8H6Ct0wFEjB8KD0RtcqZjNS1MoLGXfvvxPAv3bTFj
+         JWzQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrsZ0OSEvHLPIfVyc76Il3jmmYm0SGLwMSDyU3yT9S28HydkD4Ud1Q1yr2/AAUx6TCzKJ+/5CU=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4+l58LzCS4nM9PRpt8rHsmzr02CvNuKCDPJrYvTl5y1dUeBO/
+	PnArEWlpH30CISLGHewy8x9jnrX7ChXOq27jSpbO985GKtemNEpcmV+8YnZKnYokCGo=
+X-Gm-Gg: AfdE7cnEtUmG6F3Qv3qBfieh+hAUUbxLmR2eK428xDreNGHSohPq/2NmDkgUKrB46g+
+	p0nyuY8RB7dfVEuZtnWVWpGsUT07hPw2jA7XQssonyp1GtnaBHyDO8uzjSHDEOzsPTggJGpbP0I
+	DnItlisZEYVNHUO7mY+ZDeJOdKi+ahmdC6/z4fywM6lmV1UCpglogD7biiTJevefWLwNGSaN6SI
+	jHc4Ff9u20EyiTRo/nc2i9vqKtuyKfpy3huuEGmY6Ws6G2MkQCP6Pqsr7TMk6oltnhdASb0ekXp
+	03QpRA51gmJw78VV7KsIiy0ze7bH4KWSXcUeauzzJKwjZk8BjTugPmTydEO6M0vcsDyHGNASsOy
+	zfABWr1a4B24duRPbUQiNMSEzh2dbsF4rUD5sF9dCDSXbb6pftCp2hOSDpbSimU0XPX1ifLJnd9
+	JFLqzpqwWTFlVN+SI2Lj4zbnTVec1K/yUSZRrfA3QkTrf4WvnDeuo1kcMrS0+EA7wHN2hH
+X-Received: by 2002:a05:6214:2dca:b0:8e4:d2ba:d677 with SMTP id 6a1803df08f44-8f3c7e708demr3649096d6.29.1782887037749;
+        Tue, 30 Jun 2026 23:23:57 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f361ba3efdsm12323456d6.39.2026.06.30.23.23.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 23:23:57 -0700 (PDT)
+Date: Wed, 1 Jul 2026 02:23:52 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Hannes Reinecke <hare@suse.de>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
+ whole-device hotplug
+Message-ID: <akSyeHnfcDmxnCSz@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-10-gourry@gourry.net>
+ <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
+ <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
 List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
-Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, david@kernel.org,
- osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
- dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com,
- dave.jiang@intel.com, alison.schofield@intel.com, akpm@linux-foundation.org,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, shuah@kernel.org, iweiny@kernel.org,
- Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-10-gourry@gourry.net>
- <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <akQ_xlJtXNgnGUdf@gourry-fedora-PF4VCD3F>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abde41f0-7d40-42ba-a232-cc0538cd0e4b@suse.de>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14720-lists,linux-nvdimm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:hare@suse.de,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:david@kernel.org,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:alison.schofield@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:iweiny@kernel.org,m:Smita.KoralahalliChannabasappa@amd.com,m:apopple@nvidia.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:gourry@gourry.net,m:linux-mm@kvack.org,m:nvdimm@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:david@kernel.org,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:alison.schofield@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:iweiny@kernel.org,m:Smita.KoralahalliChannabasappa@amd.com,m:apopple@nvidia.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[hare@suse.de,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[suse.de:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[gourry.net];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	TAGGED_FROM(0.00)[bounces-14721-lists,linux-nvdimm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[gourry.net:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,nvdimm@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lists.linux.dev:from_smtp,suse.de:dkim,suse.de:email,suse.de:mid,suse.de:from_mime]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C72956EA257
+X-Rspamd-Queue-Id: 3F94D6EA2FC
 
-On 7/1/26 12:14 AM, Gregory Price wrote:
-> On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
->> There is no atomic mechanism to offline and remove an entire
->> multi-block DAX kmem device.  This is presently done in two steps:
+On Wed, Jul 01, 2026 at 08:13:28AM +0200, Hannes Reinecke wrote:
+> On 7/1/26 12:14 AM, Gregory Price wrote:
+> > On Tue, Jun 30, 2026 at 05:18:41PM -0400, Gregory Price wrote:
+> > > There is no atomic mechanism to offline and remove an entire
+> > > multi-block DAX kmem device.  This is presently done in two steps:
+> > 
+> > ... snip snip snip ...
+> > 
+> > Sashiko pointed out a false-positive, but adding a fixup patch
+> > here that adds additional consistency.
+> > 
+> > On total failure - release all resources.  This makes the sysfs
+> > interface consistent with the probe failure path.
+> > 
 > 
-> ... snip snip snip ...
-> 
-> Sashiko pointed out a false-positive, but adding a fixup patch
-> here that adds additional consistency.
-> 
-> On total failure - release all resources.  This makes the sysfs
-> interface consistent with the probe failure path.
-> 
+> Speaking of which ...
+> With this patch we now have _two_ interfaces to do the same thing.
+> And both will be generating uevents.
+> Which is far from ideal (one could easily envision _conflicting_
+> udev rules, one set doing an 'online' on the old interface,
+> and another set doing an 'offline' on the new interface...)
+> Is there a way to not sending uevents for the old interface
+> or to make it configurable?
 
-Speaking of which ...
-With this patch we now have _two_ interfaces to do the same thing.
-And both will be generating uevents.
-Which is far from ideal (one could easily envision _conflicting_
-udev rules, one set doing an 'online' on the old interface,
-and another set doing an 'offline' on the new interface...)
-Is there a way to not sending uevents for the old interface
-or to make it configurable?
-The old interface had the nasty side effect of generating
-_tons_ of uevents during booting, and on larger machines we
-even had seen udev acting as a fork-bomb during booting,
-taking down the entire machine (we had to restrict udev
-to 512 threads max to avoid that from happening).
-So if we could disable uevents for the old interface
-things would be _so_ much easier ...
+We do not allow "offline" in the new interface.
 
-Cheers,
+That fixes the entire issue - the blocks are gone, nothing to poke.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+~Gregory
 
