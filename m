@@ -1,93 +1,145 @@
-Return-Path: <nvdimm+bounces-14870-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14882-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id uC7/HPpWUWohCwMAu9opvQ
-	(envelope-from <nvdimm+bounces-14870-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:32:58 +0200
+	id qne4IspaUWoHDAMAu9opvQ
+	(envelope-from <nvdimm+bounces-14882-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:49:14 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCFBC73E5D0
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:32:57 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F297473E7AB
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:49:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=V2b4QNsr;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14870-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14870-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=gourry.net header.s=google header.b=Y8KNEOjU;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14882-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14882-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 25E94301F647
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:26:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C0D72303D097
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB433A380E;
-	Fri, 10 Jul 2026 20:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4248390222;
+	Fri, 10 Jul 2026 20:49:08 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0649039A048;
-	Fri, 10 Jul 2026 20:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2516385D61
+	for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 20:49:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783715174; cv=none; b=uJs9Sc6i1ZZeGWyRRIY3umtD6rn4VQ3O8bCrISrMzdFsd0ShN1M0mcCrSCPiKKIhmnZ5bAtrM2ZeiaGdMBlqA+4KLGH1qE+m7uMRYTckwweXSiZ3buMCcLtdwqtTK9wjZkFxMBmrzHha3FTC27Eu62Cam66pBsxtwR4wHnpJSGU=
+	t=1783716548; cv=none; b=sStL9z5c7/FGUeDuvT20qRxjj8jGit3Y1mRfAus1g5sVifVnkTJ9A0yJM2Pu47SD/siaM+Ks9jTCHljqgAZUDZzf8YN+zaLYyye8vb1MCVLVbE//hyDEzeJpfet+5WcXsAzuquzxDBbZz5k4CdtbOicylj7eFNUpZloVg2jX5wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783715174; c=relaxed/simple;
-	bh=tvL+MaL12eeA7d5mggypk6vRzguHxh6VWopq+u01ZHQ=;
+	s=arc-20240116; t=1783716548; c=relaxed/simple;
+	bh=gC5eUqeAebp3PWfUT6EP2kjPnQImFCyW8H71EpslMQY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kXD3zmDFUHNQ9nVsy5pIuC28qjdHfI3uQU/kKftKqN/8B9ITDHWaOpGvZIjElqTi5xbWKMnuS0gm3Hf9sTc9INPYR97FcadVD3L46ZaVmUOG6GXI6aD74oJcJLlkLaWR8UJeZZJxKFdTII/EfyF+16IHtdD9MGnKosMcdozUt4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V2b4QNsr; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180A71F00A3D;
-	Fri, 10 Jul 2026 20:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783715172;
-	bh=n6273CuNOciMTKCjXSxMrvgGm9l+epwLM6e4G6yOjIk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=V2b4QNsrlF0LdXzO3awhRO40eRtQvfaV/HOjdbw5a9ThC5CaV62SRPS+o0Q+YfyWf
-	 1FVCx1Os6a192C2l5SnQMCn0D7RrdCz2ViuE7eCtMLxvcfkCQHjC0nn0igDYgx/lEK
-	 8v8I7ByoNOMMbCUdWAR7qOt4PyHUnaVpBakMgQLbjRjpNsRE73xOFL/wPzBQ/rOSV6
-	 tkllPYfbAzDgQ0XGhYYzZc28UxmgDagjeYwNH6ql4CD6zU4oFDuJT/UxPIWqXHJJR5
-	 Og/JsMmeP3J2/oqnYpv5pL/Ia81wK2Bfj0r5G7e5AmI+G7yexlxowXi92aVVdo47u/
-	 UbXYnmBP/FRjQ==
-Date: Fri, 10 Jul 2026 21:25:47 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Gregory Price <gourry@gourry.net>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Russell King <linux@armlinux.org.uk>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Simon Schuster <schuster.simon@siemens-energy.com>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Ian Abbott <abbotti@mev.co.uk>, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, Lucas Stach <l.stach@pengutronix.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov <lumag@kernel.org>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Thierry Reding <thierry.reding@kernel.org>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Christian Koenig <christian.koenig@amd.com>, Huang Rui <ray.huang@amd.com>, Ankit Agrawal <ankita@nvidia.com>, 
-	Alex Williamson <alex@shazbot.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Dan Williams <djbw@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Liam R . Howlett" <liam@infradead.org>, Matthew Wilcox <willy@infradead.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, SeongJae Park <sj@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Hugh Dickins <hughd@google.com>, Mike Rapoport <rppt@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org, linux-sgx@vger.kernel.org, 
-	etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org, 
-	freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev, linux-mm@kvack.org, 
-	iommu@lists.linux.dev, linux-perf-users@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com, damon@lists.linux.dev, 
-	Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	 Content-Type:Content-Disposition:In-Reply-To; b=EC8eCZ2N3cgpG8G5sGXJzdojgfDHDc3UifWTQ/XJfssEIdP8KNP0NswAS+G2070JQ1r9FXJYuZpHCbf9OJnX3Wb/jXhvLNFzgkIJNDpcCg/837aQrmW8CA+Q3EDx3Cee8+apKhS3nJDHbBuMmcsllQehcq1KbepPNUm0z5VpX2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Y8KNEOjU; arc=none smtp.client-ip=209.85.160.171
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-517dc520840so9180781cf.3
+        for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 13:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1783716545; x=1784321345; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fM3Bw1AZy4lAkPPHaL59OrI7vB0RIP/keCGdI0vS7tk=;
+        b=Y8KNEOjU05iAKU7TSYKEYWUF5soYf9fExvab3Zk6BFaEGfmsrras5zppLfwO2R0xfA
+         Q+9iNXQyhqo/kMLoBRVbZoL82WyNT3c6DJ0SKPPOfkkDCMyH68r0MregpgJy5aQj2wbH
+         K7yygdOcD188bFhupTslho2x/ghdMcG2hzrzFeaV24cmvZSpcQg4eT8FX1F9L5Jllp61
+         PjCQg+MKf2GkdweQvjxqPEca2AqijT97V2N1a+Ybu0JBSrx4GlVrCIpbNJBBXi11Zlqn
+         S4y/QXUk8VRzpQ0QzjFgFBa7W1rzyvAAPqA2diU5mkOtDFHHWY+leD6GKeL87Z/FVRGc
+         /J2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783716545; x=1784321345;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fM3Bw1AZy4lAkPPHaL59OrI7vB0RIP/keCGdI0vS7tk=;
+        b=Kc6wuvjfFgz0WFWThgVCtPnmAPtrxqtaR9auDFHfsjaOhUTP0/QW8jZ7DACPN8hdaL
+         t/pvEKYSKFRVQTiitNn/6prCorDNbir20qDIPt2PHC6J9P0GSspTVKlgLP/uH/UvCQ0e
+         YxKtgA3jTvGBTFdZPAKxqIxzvhXVseLJAcHwv+x7dyrCr1GnzG4S/yqVIB0lSx4FinMW
+         M8xAd75YdY1VaWpw8zw6iEVKURvyN+oc8/t5hun6MDJyU3wJRKSuV+dhi4L/zE1W/OJ3
+         dIaEYZjIKFl2+F3iNvtahAHn0FlFm9Pab/RagSlcCzZDSS/g06P9avcoJJg9hKy9Daco
+         /nJQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpDE/sKXL/b0kQX6AY3VYF4nL3FwX0BTi4O3iVr9ZuOTmB/bbc6IxqgrDkrCbC+mQSxvfTcHno=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVayT0+0GcurxlKB/tWa32y6sTR9BtV/dFxUSSFOI/LwHrRaPL
+	MTl7lR0c4YuJVNhoquRr9EmG0GFkS33xRd4qGkB9YcD2SC7kBwbC9PBGFdfR+ZJrAGE=
+X-Gm-Gg: AfdE7cm7HjhglnYuY9uBsFW0WreLfY/YQUZ/w+xWJK/Jm+SfZHVgPOFAGB7T1b+6oyw
+	rqwggKxQXsiv2W2G/+KNIG316A8CWWCcjpr1cVb+o3U6u7HMZv2jUhqDrR/DRs/AMrcVXw7RCkQ
+	Gcy8Xb5MjL9mOxZnQCGQ4IOkJmT2JcZsbtlbHI/c1CijpYtrvUXURdLz5+vzEdimoy6KuutL4p3
+	eaDHR1mZ87+fuTaELgNqRfc6q33eG0FSzWfm/aQg8j7ZkeuaQf5OP3oIftGD6msmVqwJWw+d+YZ
+	qFTsYWDuTVnEK0I93CAqXziDUNG+xgFVTbiws64XoPJTpChGhRQ3uBRj/+rCfEuh+YdPpEEesBL
+	Qkop7GQlyTJTbPMCeb6VwZo2nkk8KxTd+UhiHWSbeWf7aVh7wLF56E09Lo9YLuRWifl1vRjXv6D
+	tEEvt3yIhxzND/W0H0J5o5AiQneDCNNuydm3TvEyj7r9Mj8o3Ieafb6/6gomot70IEQVTw
+X-Received: by 2002:a05:622a:15c4:b0:51c:7b11:41a3 with SMTP id d75a77b69052e-51cbf361a3bmr5658901cf.80.1783716544856;
+        Fri, 10 Jul 2026 13:49:04 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caaf5f61csm24147321cf.22.2026.07.10.13.49.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 13:49:04 -0700 (PDT)
+Date: Fri, 10 Jul 2026 16:48:58 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Simon Schuster <schuster.simon@siemens-energy.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Christian Koenig <christian.koenig@amd.com>,
+	Huang Rui <ray.huang@amd.com>, Ankit Agrawal <ankita@nvidia.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Dan Williams <djbw@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>, SeongJae Park <sj@kernel.org>,
+	Miaohe Lin <linmiaohe@huawei.com>, Hugh Dickins <hughd@google.com>,
+	Mike Rapoport <rppt@kernel.org>, Kees Cook <kees@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+	linux-sgx@vger.kernel.org, etnaviv@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+	kvm@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-mm@kvack.org, iommu@lists.linux.dev,
+	linux-perf-users@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	damon@lists.linux.dev, Pedro Falcato <pfalcato@suse.de>,
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
 	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 29/30] tools/testing/vma: default VMA flag bits to 64-bit
-Message-ID: <alFUVjk7yP8VoBGp@lucifer>
+Subject: Re: [PATCH 30/30] tools/testing/vma: output compared expression on
+ ASSERT_[EQ, NE]()
+Message-ID: <alFausURKttxHUAI@gourry-fedora-PF4VCD3F>
 References: <cover.1782735110.git.ljs@kernel.org>
- <27cd07f6dd862d92410cf9db03f7c11e5f66854d.1782735110.git.ljs@kernel.org>
- <alFT7lx8F04rN01D@gourry-fedora-PF4VCD3F>
+ <432444fa4c12ae1c4047550e2b205d3e9bab458f.1782735110.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -96,107 +148,123 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alFT7lx8F04rN01D@gourry-fedora-PF4VCD3F>
+In-Reply-To: <432444fa4c12ae1c4047550e2b205d3e9bab458f.1782735110.git.ljs@kernel.org>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14882-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14870-lists,linux-nvdimm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:gourry@gourry.net,m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyp
- rowski@samsung.com,m:peterz@infradead.org,m:acme@kernel.org,m:namhyung@kernel.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:rostedt@goodmis.org,m:sj@kernel.org,m:linmiaohe@huawei.com,m:hughd@google.com,m:rppt@kernel.org,m:kees@kernel.org,m:pbonzini@redhat.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-sgx@vger.kernel.org,m:etnaviv@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:linux-tegra@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-mm@kvack.org,m:iommu@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:kasan-dev@googlegroups.com,m:damon@lists.linux.dev,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:jannh@google.com,m:patrikrjakobsson@gmail.com,s:lists@lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:ljs@kernel.org,m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyprow
+ ski@samsung.com,m:peterz@infradead.org,m:acme@kernel.org,m:namhyung@kernel.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:rostedt@goodmis.org,m:sj@kernel.org,m:linmiaohe@huawei.com,m:hughd@google.com,m:rppt@kernel.org,m:kees@kernel.org,m:pbonzini@redhat.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-sgx@vger.kernel.org,m:etnaviv@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:linux-tegra@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-mm@kvack.org,m:iommu@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:kasan-dev@googlegroups.com,m:damon@lists.linux.dev,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:jannh@google.com,m:patrikrjakobsson@gmail.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[linux-foundation.org,armlinux.org.uk,kernel.org,siemens-energy.com,hansenpartnership.com,gmx.de,redhat.com,alien8.de,linux.intel.com,mev.co.uk,visionengravers.com,pengutronix.de,gmail.com,ffwll.ch,suse.de,oss.qualcomm.com,ideasonboard.com,nvidia.com,amd.com,shazbot.org,zeniv.linux.org.uk,linux.dev,google.com,infradead.org,samsung.com,goodmis.org,huawei.com,vger.kernel.org,lists.infradead.org,lists.freedesktop.org,lists.linux.dev,kvack.org,googlegroups.com,surriel.com];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[gourry.net];
+	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	DKIM_TRACE(0.00)[gourry.net:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[76];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,nvdimm@lists.linux.dev];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[76];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:from_smtp]
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gourry.net:from_mime,gourry.net:dkim,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BCFBC73E5D0
+X-Rspamd-Queue-Id: F297473E7AB
 
-On Fri, Jul 10, 2026 at 04:19:58PM -0400, Gregory Price wrote:
-> On Mon, Jun 29, 2026 at 01:23:40PM +0100, Lorenzo Stoakes wrote:
-> > With all of the sanitisers turned on, setting the VMA flag bits depth to
-> > 128 by default results in overly long build times.
-> >
-> > Reduce this to 64 - we can always manipulate these later for testing of
-> > larger bitmaps as needed.
-> >
-> > Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
->
-> Seems like this causes instrumented inlining to go crazy.
->
-> static inline void bitmap_or(...) {
-> 	if (small_const_nbits(nbits))
-> 		*dst = *src1 | *src2;
-> 	else
-> 		__bitmap_or(dst, src1, src2, nbits);
-> 	        ^^^^ this branch is being hit ^^^^
-> }
->
-> tl;dr: __bitmap_or() gets emitted and then the sanitizers have to
-> instrument a ton of inlined functions instead of the compiler simply
-> injecting a couple 'or' instructions.
->
-> if you wanted to keep the coverage you could do something like
->
-> # These can be varied to test different sizes.
-> NUM_VMA_FLAG_BITS ?= 64
-> NUM_MM_FLAG_BITS  ?= 64
-> CFLAGS += -DNUM_VMA_FLAG_BITS=$(NUM_VMA_FLAG_BITS) -DNUM_MM_FLAG_BITS=$(NUM_MM_FLAG_BITS)
->
-> w/
->
-> make NUM_VMA_FLAG_BITS=128
->
-> would let you still test the branch but not by default.
+On Mon, Jun 29, 2026 at 01:23:41PM +0100, Lorenzo Stoakes wrote:
+> -#define ASSERT_TRUE(_expr)						\
+> -	do {								\
+> -		if (!(_expr)) {						\
+> -			fprintf(stderr,					\
+> -				"Assert FAILED at %s:%d:%s(): %s is FALSE.\n", \
+> -				__FILE__, __LINE__, __FUNCTION__, #_expr); \
+> -			return false;					\
+> -		}							\
+> +#define __ASSERT_TRUE(_expr, _fmt, ...)					   \
+> +	do {								   \
+> +		if (!(_expr)) {						   \
+> +			fprintf(stderr,					   \
+> +				"Assert FAILED at %s:%d:%s(): %s is FALSE" \
+> +				_fmt ".\n",				   \
+> +				__FILE__, __LINE__, __FUNCTION__, #_expr   \
+> +				__VA_OPT__(,) __VA_ARGS__);		   \
+> +			return false;					   \
+> +		}							   \
+>  	} while (0)
+> 
+> +#define __TO_SCALAR(x)	((unsigned long long)(uintptr_t)(x))
+> +
+> +#define ASSERT_TRUE(_expr) __ASSERT_TRUE(_expr, "")
 
-Yeah I need to make it easier to set.
+Mmmmm... macro madness.... I don't think this is what you want.
 
-And that's a pity re: the sanitisers, the generated code should still be
-efficient (will investigate some more over time) but yeah puts a lot more
-pressure on the sanitisers for sure.
+I think you end up double-running the expression in the failure branch.
 
-Is there a way maybe to configure the compiler to not instrument like that or
-somehow derive things? Or maybe it's inherent... I am kinda fine with assuming
-the bitmap stuff is OK!
+  ASSERT_EQ(cleanup_mm(&mm, &vmi), 2)
 
->
-> anyway:
->
-> Reviewed-by: Gregory Price <gourry@gourry.net>
+run through the preprocessor expands to:
 
-Sorry but I'm sending out the v2 I thought maybe you were done :|| and I'm so
-tired with this heatwave + UK houses being like ovens in the summer (cold in the
-winter!) that I just needed to get it sending.
+  do {
+      if (!( (cleanup_mm(&mm, &vmi)) == (2) )) {
+              **** first run ****
 
-Could you pop it over on the relevant patch on the v2? Once the sending stops,
-b4 went crazy and added half the kernel so it's taking a while ;)
+          fprintf(stderr,
+              "Assert FAILED at %s:%d:%s(): %s is FALSE" " (0x%llx != 0x%llx)" ".\n",
+              "merge.c", 645, __FUNCTION__,
+              "(cleanup_mm(&mm, &vmi)) == (2)",
+              ((unsigned long long)(uintptr_t)(cleanup_mm(&mm, &vmi))),
+                                               **** second run ****
 
->
-> ~Gregory
+              ((unsigned long long)(uintptr_t)(2)));
+          return false;
+      }
+  } while (0);
 
-Cheers, Lorenzo
+
+A bunch of existing ASSERT callers mutate state, so there's no guarantee
+the printed value matches teh actual test value.
+
+I think you want something like:
+
+#define ASSERT_EQ(_val1, _val2) do {	\
+	__auto_type _v1 = (_val1);	\
+	__auto_type _v2 = (_val2);	\
+	__ASSERT_TRUE(_v1 == _v2, " (0x%llx != 0x%llx)",	\
+		__TO_SCALAR(_v1), __TO_SCALAR(_v2));	\
+} while (0)
+
+which expands to:
+
+  do {
+      __auto_type _v1 = (cleanup_mm(&mm, &vmi));
+      __auto_type _v2 = (2);
+      do {
+          if (!(_v1 == _v2)) {
+              fprintf(stderr, "...FALSE (0x%llx != 0x%llx).\n",
+                      "merge.c", 645, __FUNCTION__, "_v1 == _v2",
+                      ((unsigned long long)(uintptr_t)(_v1)),
+                      ((unsigned long long)(uintptr_t)(_v2)));
+              return false;
+          }
+      } while (0);
+  } while (0);
+
+~Gregory
 
