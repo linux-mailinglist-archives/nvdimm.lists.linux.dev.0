@@ -1,54 +1,55 @@
-Return-Path: <nvdimm+bounces-14872-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14873-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id DPEKEiRXUWosCwMAu9opvQ
-	(envelope-from <nvdimm+bounces-14872-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:33:40 +0200
+	id He+XLZ1WUWr/CgMAu9opvQ
+	(envelope-from <nvdimm+bounces-14873-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:31:25 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 904EE73E5FE
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:33:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2898873E566
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:31:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KJhYClFf;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=drJA3TiK;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14872-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14872-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14873-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.105.105.114 as permitted sender) smtp.mailfrom="nvdimm+bounces-14873-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50C4F30B2BF9
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:26:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BD65D304E72F
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:27:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEB653A3835;
-	Fri, 10 Jul 2026 20:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F0EB3A4513;
+	Fri, 10 Jul 2026 20:27:12 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6BC39A4C5;
-	Fri, 10 Jul 2026 20:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0143339F190;
+	Fri, 10 Jul 2026 20:27:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783715209; cv=none; b=LFBu26Hg+DHKal56VszniZCs/xw+c2Jt8VjJqgLW7eGHv7FVV9U3jo/gYE2/yXmHF6OLVGzCv34DHLTPSn3rQD1/nxYuDLuCAenFzd1gtcMEgHcvPjHLHUhuSkYUpbelbgi3Rz2vIiGmNlyqa0uzzze4Zk4YkxCOVANwu5ujYrw=
+	t=1783715232; cv=none; b=JCQQ0moX0OVFs9XIRF8eZBg2/1LZcyByNTuI1C7eAxKbebylc7S4YjDFiiaMq5spaESvB3QauMUywLE/BUs7maqX3b63q27zf37IwTebBdF2/mit1BZTKlDb2oioYvhmAXu9691bDD5qB42xHhCl7qjgU0igqNzfQwqH1HtIkHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783715209; c=relaxed/simple;
-	bh=RcQMOr7okmwmrMHVS+mP4E/LNV7GZ1eHmNfHonDKIh4=;
+	s=arc-20240116; t=1783715232; c=relaxed/simple;
+	bh=DYBIxKjyIjg2H1S6yqXRCrIrObFnJroA9O36yuI28hY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j/Au2Sove0G+MiCY7yDeBif7jvCxROTeVPBEsIqFMk2y4k1LcLpiijrBNN19BNahqukm5olStkRJxFAZQWIcJZZD/xIIuPPX6siH1TMv3u2y2BS3c5Urr2XrP5r6NbIEf12ca+JpwLz1GupMb+3anS4UxeQYzNUY/YHMBTqbyYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJhYClFf; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF241F000E9;
-	Fri, 10 Jul 2026 20:26:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=RGNqb4d/6WrxT1SVF/cb4s+V+y7cAXVjMzv5RyXMDPbMfauG1bOD/Zpk9LFZ5LvRJXhspytKptwCc2uBs8qLTrLLA3dlsmeFfzHxuck5gnDpTSNghMQkgP9rN4Idcez3EA1/suDUpT8Xp69DOqPs85bT3i7stmCs2VWmPixP/cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drJA3TiK; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F841F00A3A;
+	Fri, 10 Jul 2026 20:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783715207;
-	bh=8BJkMOjdL3tYxtw1Cjs8vTxoBiLW1eSUk6BqH+zEY+k=;
+	s=k20260515; t=1783715230;
+	bh=IPE+/P9KdKkfiafscak8Qeedwgljtr0X+OnR3tsbkh0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=KJhYClFfxeYjHFNUJ47V90SMGBiO8cXGZT/ciRY6YGuiovsxmCZXbNG8ahV8lExKU
-	 tQcg5juhIffLIZR//R2LnhwNbF2SWsLkmhBmD+P3wCCkI8has8aK417Z9gX5cPgN5N
-	 O+WrgR++oi31JXVQTxnmR3S7RoF9o//OqplK+v/9t3m3KtccaKhsOrAOzBemo3Zgek
-	 UChBNvQ+b/sZpnFQ0j4P6s+A3MZgRix818w+Bj62VOR3GS2+I0T/V0+ecp5+FlSWF1
-	 5JFGPlM8nir+1FX9Y4JpdoDcAbLwkE2MWd4CLEAoi5F5BhiWr7r0SvrxT+zQz/LeXk
-	 sNZOexe92wEtg==
+	b=drJA3TiK+PeoZ2nu79QhphTfcNqJcaVpJ8OrZAJ/WiBLBgSuNTzJICprZt5FC4O9S
+	 3h2HjqlXf6uHYTGH6HKtyVkmlM9tNpsnzlHgJ8SgIXhPRwO8Mxflc7CI7u/LnJl1jN
+	 o3Y/oZKScReVzOIjwXvsQpQsUhs+NzRIePHqBDAniSxzca3Wp2d9hKCB6EFAc6Ena5
+	 9eifILN5EaHhUs5Jl8ljfGagLXkvH/vjQc/WrufaW+JVZZLpI6hJqNBN9v+ubRWI+D
+	 f8OFGl0Cv9BKeEGVwh9lipVXptpUW5ZjL2aUnSqMgN5SfwTyhiP7bXRjj2XwzYCTtx
+	 851hK/6GxFGqw==
 From: Lorenzo Stoakes <ljs@kernel.org>
-Date: Fri, 10 Jul 2026 21:17:05 +0100
-Subject: [PATCH v2 24/33] mm/vma: move __install_special_mapping() to vma.c
+Date: Fri, 10 Jul 2026 21:17:06 +0100
+Subject: [PATCH v2 25/33] mm/vma: make vma_set_range() static, drop
+ insert_vm_struct() decl
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -57,7 +58,7 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-b4-pre-scalable-cow-v2-24-2a5aa403d977@kernel.org>
+Message-Id: <20260710-b4-pre-scalable-cow-v2-25-2a5aa403d977@kernel.org>
 References: <20260710-b4-pre-scalable-cow-v2-0-2a5aa403d977@kernel.org>
 In-Reply-To: <20260710-b4-pre-scalable-cow-v2-0-2a5aa403d977@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -138,12 +139,12 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
  freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org, 
  kvm@vger.kernel.org, Russell King <linux+etnaviv@armlinux.org.uk>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3781; i=ljs@kernel.org;
- h=from:subject:message-id; bh=RcQMOr7okmwmrMHVS+mP4E/LNV7GZ1eHmNfHonDKIh4=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLICg23TKi///r6kSOvV5xDfzfGOb6oPXXY1TXU/3FG9L
- CtbrPlZRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACaiHM/wT5s1/65G5dPAPVxJ
- G8UOCEgpfvhQp5s3ie3DtArRTalMMgz/i5dGzF+52+hHxDG+v5+01R6VF9vrGkwUN0h/sfeoZfN
- PLgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3631; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=DYBIxKjyIjg2H1S6yqXRCrIrObFnJroA9O36yuI28hY=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLICg22X7tsrcNZQdubGGY8ZeW1e29V7zlxxOK3+cPbOG
+ WeF5aVsOkpZGMS4GGTFFFmefxHfHyQSNq/zgr8bzBxWJpAhDFycAjCR14YM/9R8K5NV5Y2MWF6c
+ vSte8e2PzcyIgNeTetd93BU5Q92s+h0jw6WMAI+VUk1/mc91c4Z2cZ/wmvv59r+qxuBd6nsvamy
+ S5gAA
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 X-Rspamd-Action: no action
@@ -152,12 +153,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14872-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14873-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -168,7 +169,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FREEMAIL_TO(0.00)[linux-foundation.org,kernel.org,infradead.org,google.com,suse.com,surriel.com,linux.dev,suse.de,armlinux.org.uk,siemens-energy.com,HansenPartnership.com,gmx.de,zeniv.linux.org.uk,suse.cz,redhat.com,arm.com,linux.intel.com,intel.com,linaro.org,nvidia.com,linux.alibaba.com,huawei.com,gmail.com,zte.com.cn,sk.com,gourry.net,samsung.com,goodmis.org,efficios.com,alien8.de,zytor.com,mev.co.uk,visionengravers.com,pengutronix.de,ffwll.ch,oss.qualcomm.com,poorly.run,somainline.org,ideasonboard.com,amd.com,ziepe.ca,shazbot.org];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[122];
@@ -181,22 +182,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm,etnaviv];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gourry.net:email,suse.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gourry.net:email,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 904EE73E5FE
+X-Rspamd-Queue-Id: 2898873E566
 
-This function is operating on VMAs and rightly belongs in vma.c, where it
-can be subject to VMA userland testing and allows us to isolate it from the
+With __install_special_mapping() moved to vma.c, vma_set_range() can be
+made into a static function there and is now completely isolated from the
 rest of mm.
 
-The _install_special_mapping() function will remain in mmap.c as a wrapper,
-since this is used by architecture-specific code.
+While we're here, we can also remove the insert_vm_struct() declaration
+from mm.h - the function is implemented in vma.c and already declared in
+vma.h, and has no users outside of mm.
 
-Doing so allows us to isolate more functions in vma.c for the same reasons.
-
-This forms part of work to allow for tracking MAP_PRIVATE file-backed
-mappings by their anonymous virtual page offset, as doing so allows us to
-isolate and keep code that interacts with this together.
+Also update the VMA userland tests to reflect this change.
 
 No functional change intended.
 
@@ -204,120 +202,94 @@ Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 Reviewed-by: Gregory Price <gourry@gourry.net>
 Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 ---
- mm/mmap.c | 38 --------------------------------------
- mm/vma.c  | 38 ++++++++++++++++++++++++++++++++++++++
- mm/vma.h  |  5 +++++
- 3 files changed, 43 insertions(+), 38 deletions(-)
+ include/linux/mm.h         | 1 -
+ mm/internal.h              | 9 ---------
+ mm/vma.c                   | 8 ++++++++
+ tools/testing/vma/shared.c | 9 ---------
+ tools/testing/vma/shared.h | 5 -----
+ 5 files changed, 8 insertions(+), 24 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 91eaa0c9e7ee..308a43eabd83 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1447,44 +1447,6 @@ static vm_fault_t special_mapping_fault(struct vm_fault *vmf)
- 	return VM_FAULT_SIGBUS;
- }
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 3d69b597b9b1..762313b47301 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -4130,7 +4130,6 @@ void anon_rmap_tree_verify(struct anon_vma_chain *avc);
  
--static struct vm_area_struct *__install_special_mapping(
--	struct mm_struct *mm,
--	unsigned long addr, unsigned long len,
--	vm_flags_t vm_flags, void *priv,
--	const struct vm_operations_struct *ops)
+ /* mmap.c */
+ extern int __vm_enough_memory(const struct mm_struct *mm, long pages, int cap_sys_admin);
+-extern int insert_vm_struct(struct mm_struct *, struct vm_area_struct *);
+ extern void exit_mmap(struct mm_struct *);
+ bool mmap_read_lock_maybe_expand(struct mm_struct *mm, struct vm_area_struct *vma,
+ 				 unsigned long addr, bool write);
+diff --git a/mm/internal.h b/mm/internal.h
+index 01a762bcc2b2..2c650d280e90 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1540,15 +1540,6 @@ extern bool mirrored_kernelcore;
+ bool memblock_has_mirror(void);
+ void memblock_free_all(void);
+ 
+-static __always_inline void vma_set_range(struct vm_area_struct *vma,
+-					  unsigned long start, unsigned long end,
+-					  pgoff_t pgoff)
 -{
--	int ret;
--	struct vm_area_struct *vma;
--
--	vma = vm_area_alloc(mm);
--	if (unlikely(vma == NULL))
--		return ERR_PTR(-ENOMEM);
--
--	vma_set_range(vma, addr, addr + len, 0);
--	vm_flags |= mm->def_flags | VM_DONTEXPAND;
--	if (pgtable_supports_soft_dirty())
--		vm_flags |= VM_SOFTDIRTY;
--	vm_flags_init(vma, vm_flags & ~VM_LOCKED_MASK);
--	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
--
--	vma->vm_ops = ops;
--	vma->vm_private_data = priv;
--
--	ret = insert_vm_struct(mm, vma);
--	if (ret)
--		goto out;
--
--	vm_stat_account(mm, vma->vm_flags, len >> PAGE_SHIFT);
--
--	perf_event_mmap(vma);
--
--	return vma;
--
--out:
--	vm_area_free(vma);
--	return ERR_PTR(ret);
+-	vma->vm_start = start;
+-	vma->vm_end = end;
+-	vma->vm_pgoff = pgoff;
 -}
 -
- bool vma_is_special_mapping(const struct vm_area_struct *vma,
- 	const struct vm_special_mapping *sm)
+ static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
  {
+ 	/*
 diff --git a/mm/vma.c b/mm/vma.c
-index bdd99ba56b4d..5308aa5a8c91 100644
+index 5308aa5a8c91..cc0e449ad0be 100644
 --- a/mm/vma.c
 +++ b/mm/vma.c
-@@ -3399,3 +3399,41 @@ __weak unsigned long vma_mmu_pagesize(struct vm_area_struct *vma)
- {
- 	return vma_kernel_pagesize(vma);
- }
-+
-+struct vm_area_struct *__install_special_mapping(
-+	struct mm_struct *mm,
-+	unsigned long addr, unsigned long len,
-+	vm_flags_t vm_flags, void *priv,
-+	const struct vm_operations_struct *ops)
-+{
-+	int ret;
-+	struct vm_area_struct *vma;
-+
-+	vma = vm_area_alloc(mm);
-+	if (unlikely(vma == NULL))
-+		return ERR_PTR(-ENOMEM);
-+
-+	vma_set_range(vma, addr, addr + len, 0);
-+	vm_flags |= mm->def_flags | VM_DONTEXPAND;
-+	if (pgtable_supports_soft_dirty())
-+		vm_flags |= VM_SOFTDIRTY;
-+	vm_flags_init(vma, vm_flags & ~VM_LOCKED_MASK);
-+	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
-+
-+	vma->vm_ops = ops;
-+	vma->vm_private_data = priv;
-+
-+	ret = insert_vm_struct(mm, vma);
-+	if (ret)
-+		goto out;
-+
-+	vm_stat_account(mm, vma->vm_flags, len >> PAGE_SHIFT);
-+
-+	perf_event_mmap(vma);
-+
-+	return vma;
-+
-+out:
-+	vm_area_free(vma);
-+	return ERR_PTR(ret);
-+}
-diff --git a/mm/vma.h b/mm/vma.h
-index 47fe35e5307e..14f026bf3be4 100644
---- a/mm/vma.h
-+++ b/mm/vma.h
-@@ -775,4 +775,9 @@ static inline bool map_deny_write_exec(const vma_flags_t *old,
- }
- #endif
+@@ -70,6 +70,14 @@ struct mmap_state {
+ 		.state = VMA_MERGE_START,				\
+ 	}
  
-+struct vm_area_struct *__install_special_mapping(struct mm_struct *mm,
-+		unsigned long addr, unsigned long len,
-+		vm_flags_t vm_flags, void *priv,
-+		const struct vm_operations_struct *ops);
++static void vma_set_range(struct vm_area_struct *vma, unsigned long start,
++			  unsigned long end, pgoff_t pgoff)
++{
++	vma->vm_start = start;
++	vma->vm_end = end;
++	vma->vm_pgoff = pgoff;
++}
 +
- #endif	/* __MM_VMA_H */
+ /* Was this VMA ever forked from a parent, i.e. maybe contains CoW mappings? */
+ static bool vma_is_fork_child(struct vm_area_struct *vma)
+ {
+diff --git a/tools/testing/vma/shared.c b/tools/testing/vma/shared.c
+index 2565a5aecb80..bea9ea6db02a 100644
+--- a/tools/testing/vma/shared.c
++++ b/tools/testing/vma/shared.c
+@@ -120,12 +120,3 @@ unsigned long rlimit(unsigned int limit)
+ {
+ 	return (unsigned long)-1;
+ }
+-
+-void vma_set_range(struct vm_area_struct *vma,
+-		   unsigned long start, unsigned long end,
+-		   pgoff_t pgoff)
+-{
+-	vma->vm_start = start;
+-	vma->vm_end = end;
+-	vma->vm_pgoff = pgoff;
+-}
+diff --git a/tools/testing/vma/shared.h b/tools/testing/vma/shared.h
+index 8b9e3b11c3cb..ca4f1238f1c7 100644
+--- a/tools/testing/vma/shared.h
++++ b/tools/testing/vma/shared.h
+@@ -125,8 +125,3 @@ void __vma_set_dummy_anon_vma(struct vm_area_struct *vma,
+ /* Provide a simple dummy VMA/anon_vma dummy setup for testing. */
+ void vma_set_dummy_anon_vma(struct vm_area_struct *vma,
+ 			    struct anon_vma_chain *avc);
+-
+-/* Helper function to specify a VMA's range. */
+-void vma_set_range(struct vm_area_struct *vma,
+-		   unsigned long start, unsigned long end,
+-		   pgoff_t pgoff);
 
 -- 
 2.55.0
