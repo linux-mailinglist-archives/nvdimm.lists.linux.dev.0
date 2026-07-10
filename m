@@ -1,83 +1,83 @@
-Return-Path: <nvdimm+bounces-14838-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14839-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id NkXQKfdBUWqFBQMAu9opvQ
-	(envelope-from <nvdimm+bounces-14838-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 21:03:19 +0200
+	id 6HQkIIVCUWq7BQMAu9opvQ
+	(envelope-from <nvdimm+bounces-14839-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 21:05:41 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9FF73D819
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 21:03:19 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78E1C73D864
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 21:05:40 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gourry.net header.s=google header.b=qj3hG3K5;
+	dkim=pass header.d=gourry.net header.s=google header.b=GxTqMWE0;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14838-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14838-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14839-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14839-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0F5D7302F9BB
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 19:02:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 823A9300A5A3
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 19:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16402380FDD;
-	Fri, 10 Jul 2026 19:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90213382379;
+	Fri, 10 Jul 2026 19:05:36 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E56C382398
-	for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 19:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308D437EFE6
+	for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 19:05:34 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783710126; cv=none; b=bUWCIfMuTEYHZr9O3w86eP1hkMF5TLyl7kFPwXQpOTn/SFGnYt+uQZ2PSL6NgSexLoxELDLDK+jp56306/820o1WLIe7/r7nwKSGCJJgm4lMVV96hL7jGU/e3g/1APa50A2OPWygJ45kvZH5ncKpKsdiBp8FV+fqSfTMTzknPZk=
+	t=1783710336; cv=none; b=dc7PdyqC4LkxB7KAF9nVNN98gc9RN3gIHE7xYIZtMXnC6KvKLhpkdB1RB6Sdo3cOPSHNvAmpE1WZY+x1z8sOcXcmjLW+y6huAdP/fU0TIpEHPOnQgifsXSrJIJn+bNbph8rJZAjI2XqzbFE+XZQCVK3m6wcaMHAH9HgzbwV8W1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783710126; c=relaxed/simple;
-	bh=47yOZh0uL9PiUmgaP7WAHRIYSRvyXRhMxAEwOuVsgWY=;
+	s=arc-20240116; t=1783710336; c=relaxed/simple;
+	bh=0O95+yAo6D3yNWuX9lzWEAviyk6KjGyNsi91HXznKL4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PEz0i/sOtyyr3+khdj+CibkIagJ6aYraiZOhTwvUof7AjXx0gOofwiClH1WZNbqeqFvVLEe0w9vAK25aygdT4rZJo/C50yncbfUphKATDbsmGK+KZXihPMU90b0OPZLsnUW4VEqSUfRqe8RxhqyLvNZD56CDBP4bpC/JviUrghg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=qj3hG3K5; arc=none smtp.client-ip=209.85.217.54
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-73a75f251a7so369038137.2
-        for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 12:02:04 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oLo5WKeR2zsiAER0sSLgfS8kvFSXJV84NRpMW5Iz7R4kUP7FzePq81LuRukNRr2X7WyQ2SrIddfVKLi301GuLgc/93t19exQr0LByQGT0tR2EDSf+6DSIzg9QbWAUf3MdGII+/CXdlVodRsHJNDP7Lt++ZPQIWPEH9hKHDM0BqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=GxTqMWE0; arc=none smtp.client-ip=209.85.222.171
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-92e855da580so102269585a.1
+        for <nvdimm@lists.linux.dev>; Fri, 10 Jul 2026 12:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783710124; x=1784314924; darn=lists.linux.dev;
+        d=gourry.net; s=google; t=1783710333; x=1784315133; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=pC/3U7Ftz6dY/QSNTLtw6DNyhuKVUlnEMcNANT8zsUU=;
-        b=qj3hG3K5GJstRdx4P8mI49geBnx1AwKrEXmFU9weImfE+s8EwYAtVGpMhdHjEF6ULC
-         OjFldmI/TWaGd6/W3ciKhkslBUhns04lhs8Xr3V/dVqM8TgxVZkNVIsugi1I4kD9y1Yn
-         TsE0ZotCu9FjdZ4ljyYy8vXSS/Ft0QWVcvPNZSPELYD118Te5rgAkDAnpEu/weIfq9uD
-         Eo02S4mYfywvXXY60z1BnaLFgT6Efj04lKJOAz82AkDRhgMbS0mdZaZXccngwx1pgJs9
-         B4CclEhOyx2CgTKTnJaieib4uy3SQGOSRc6LuWwWVAthKPG6Q1WfGDU5Y21OeOZdYjg0
-         xJAg==
+        bh=5Cb4T8zzpAMOVzwqCT+1eDu/jZ6x8Q2fk7Pyrqw1u7c=;
+        b=GxTqMWE09Su8xxtpbgkqunzXi5C75QUhYYefq/HT4TMsLU8UKfDBEPy/lMVfKyKVoj
+         h8j/JBL+7bvOIfESliEenCJstxcQLcHfj8YOd3ej12iI5zd31m/tcRCi0JVO/6U1b7Nf
+         TerVIxjxZAWRldnNcC7MlRGlfGe5U/MULwGx6B6VuYn2KW8oljZbupaMrM/hLX9J5pGt
+         DFCYjxLQKhWvLyE8l3IEwoAHKn67t+9YD7azyNUL32vLKyxtxpZvlBFFHgCo47JpffKY
+         RvNq4rKthPZ1DiJPFe77F2qUwkHAxtjWGvrBFkj4ad99j1DbSWwwwRyqIs9T8k5PUvR+
+         3m1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783710124; x=1784314924;
+        d=1e100.net; s=20251104; t=1783710333; x=1784315133;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pC/3U7Ftz6dY/QSNTLtw6DNyhuKVUlnEMcNANT8zsUU=;
-        b=FDLLmsjLB68ckTmScYHxvS57kvjfnDlifWsZFKbu1gQXKv67Z9b3zSRnGO8fcDYJmT
-         u/ob2QgWe0Zvh7GV4vd7t+f4NcP9J3szGxTSyR+pthic2phHVWo+ScY6+6U+GejxlYQ3
-         Qs08KioSxTamknDYzge6DP5lzpDI+wtDVIhnGduzMBq2Id5fm36PkwZtRaY8aanxaaxy
-         igFiQHUGTjJ/KLdqqH0QmfkG4qrTZT3FTOTlD5iqhVN2krtpLXyM0N/EN8xfDQv7hd+R
-         vCW679MXUGuegKhMjSUefJ5c9QzA2jJLzxupra/5YgPAJ0A7C+ndoGRFBKXWXig8umyf
-         MtFQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpbCg0r+qU2dDRxIjEmpyNhbLzeBdgVjcj7S63PnU+Z1ERkMRze5gWrUPCfp5mjwvvRoTqlouE=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx0wEzAoSimfxWrFpph2Rue3/6+fY5uuz1GoJgQhpGjW988YXW0
-	smRO6I/aO2haAX8agjB1t0iBa9aHnpvZX3Ap81SGa9da5bLNiB++q5V3kq0tXMXnG6g=
-X-Gm-Gg: AfdE7cklSGU7JU+3M6O+dLGyD9ODA+Nuf1fuVhRcpNRK1JEjXAB3ToxeciN22FclShi
-	m9TWzg8K7j7RmTABrGS47eKiuAX2FjgQElKvJ7HkN5GOUMu5yMY1pXXMsrDg2QXTpZ2Zv4zgQSn
-	KNc9KRDvnZMxtCpaZkfRu0kQibOSd78txQTWmeI318PWEgGsqeTQqEQTuyPDGFNK8+wFJeOtYIP
-	GQCukWI7Z5Z+JP4uo/XTyrnMf833nPvXDaNr+8JdZ844fkqYiUNzsavtGzsBqipb5DZvUUXFqjv
-	UFqhHVh/LgBZ0/Gpghi6lNjdepc6Ja9kKtL660C4X+grL/6RdJN+GRnABBoh58Q5viPARyYs8WZ
-	S3nER+D7TVjKzvLqqzznuJws9T7+htUX+J673kewK+7sraZxkHEFf/eHHmnM8Azc6Aane1FjNIs
-	VO0jn6zp+C59HCJVhd+gfO1UQpgaJc/2qwATrlROyZp1YoV4euPyIZkbG4TbchGk/LYe6L
-X-Received: by 2002:a05:6102:689c:b0:739:5f55:3c3c with SMTP id ada2fe7eead31-74533d66217mr325833137.13.1783710114831;
-        Fri, 10 Jul 2026 12:01:54 -0700 (PDT)
+        bh=5Cb4T8zzpAMOVzwqCT+1eDu/jZ6x8Q2fk7Pyrqw1u7c=;
+        b=GClDnyN2cgW74EqEuLWSmVtQ42lkCQohMh2efBhPw2g2WuRGlaEJovw6zNQXu2ezTw
+         XdqP8TgKjUSkUkVHRMNcLvMY8mI4o+NPqA9pAF+cQmIMd3GLzZM64g9meD0vi7uFLAaa
+         2Xiu7oyua9XYBOYyVc/QtMvK697uOdqH3Kwr+IaXZ6LSWQ02+DueXdFyDDH2VkTBOudy
+         ZI64YBuShKV+mQj8NLGtgG3WQZpO3DSmirVO4mwVlH+b/kEfDBHmGuTHzGefZnKYJPms
+         MaFgyasfr/BHbw9q960iWGUCzXjxMWqCoNaRMaZDsSIFON6X4RFTn2x4/fgrAZcM1wZX
+         VWEw==
+X-Forwarded-Encrypted: i=1; AHgh+RpFh5A/yXVG4E8EYpnx4x04hBe18XPYgZuXCUykcC/TLUjRwcci54Z345U01n1L3iOwOtytTgA=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyxuYsPuT3sWLvjAXA1l3Ra982+8Kfj/KYGhQtzJcZeB4NBGWBQ
+	8qbAkhK6W0Pxu5xe0zdKfeRSAvTLEPv4wlA7utrsYsN4lrHlbAVKMM598UgplnIqhoQ=
+X-Gm-Gg: AfdE7cm3gDCT7eKAcdcTXybk8UJRxtIaHLdr3sN3c64175mbEkqmT7JlqiOEUcmlI2M
+	Es62ccqZzLOhOoKo7vKPTIp6pLFwl+/jzjrwJxpiUuWoNxQjmaZY15otW26SLEu7rNCd95s4tZJ
+	qliVYRbrCxwGItVbRsU8KvOqBrLdgVg5k+faTHiTYITl0RYV/sSOnEfi6ZvtTWV9zV2Mifouhtd
+	cRfzjpeuWBxZfxBockHKNvAwpMndWmYvtFqzB+7+JuvOAMacsDOXUqZJkuDld+oe9HNvZDKh3XN
+	viod+BSJe2pld2hQd+dTZsDRLTbuXfoJTOGqj9Rwa6tMtGnkQM88r0Z++19yp6PXzpfV2C+LiH+
+	eCSDjhQNitweU4Rm3yc6qk0CbWbgJdc9xtEfFHCvkJXlVI+eLcLOezLmP8Iba/MCwgLrfTY1AfQ
+	hnN25Oa4jF+Xv1ck1jXpA4xYBrVCIJp2TseIllUviEIQ++ygoj4w1Bdvp7eKSn9lduzB9j
+X-Received: by 2002:a05:6214:33c5:b0:8f0:65c7:315d with SMTP id 6a1803df08f44-903ff971194mr4994756d6.24.1783710333250;
+        Fri, 10 Jul 2026 12:05:33 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd56c4b91sm48074036d6.19.2026.07.10.12.01.53
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd80fe009sm47940576d6.38.2026.07.10.12.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 12:01:54 -0700 (PDT)
-Date: Fri, 10 Jul 2026 15:01:49 -0400
+        Fri, 10 Jul 2026 12:05:32 -0700 (PDT)
+Date: Fri, 10 Jul 2026 15:05:27 -0400
 From: Gregory Price <gourry@gourry.net>
 To: Lorenzo Stoakes <ljs@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -135,10 +135,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	damon@lists.linux.dev, Pedro Falcato <pfalcato@suse.de>,
 	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
 	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 21/30] mm/vma: add and use vma_[add/sub]_pgoff()
-Message-ID: <alFBnZ8RcRN1hlk5@gourry-fedora-PF4VCD3F>
+Subject: Re: [PATCH 20/30] mm/vma: introduce vma_assert_can_modify()
+Message-ID: <alFCd1RtttwxKBLc@gourry-fedora-PF4VCD3F>
 References: <cover.1782735110.git.ljs@kernel.org>
- <794044881e454fd8ac13e59d5ff5fc86fca08b03.1782735110.git.ljs@kernel.org>
+ <23c7602c58cacc23ef22618a27af9a2d54addf58.1782735110.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -147,30 +147,31 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <794044881e454fd8ac13e59d5ff5fc86fca08b03.1782735110.git.ljs@kernel.org>
+In-Reply-To: <23c7602c58cacc23ef22618a27af9a2d54addf58.1782735110.git.ljs@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14839-lists,linux-nvdimm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14838-lists,linux-nvdimm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:ljs@kernel.org,m:akpm@linux-foundation.org,m:linux@armlinux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:jarkko@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:abbotti@mev.co.uk,m:hsweeten@visionengravers.com,m:l.stach@pengutronix.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:patrik.r.jakobsson@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:christian.koenig@amd.com,m:ray.huang@amd.com,m:ankita@nvidia.com,m:alex@shazbot.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:djbw@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:surenb@google.com,m:liam@infradead.org,m:willy@infradead.org,m:m.szyprow
  ski@samsung.com,m:peterz@infradead.org,m:acme@kernel.org,m:namhyung@kernel.org,m:mhiramat@kernel.org,m:oleg@redhat.com,m:rostedt@goodmis.org,m:sj@kernel.org,m:linmiaohe@huawei.com,m:hughd@google.com,m:rppt@kernel.org,m:kees@kernel.org,m:pbonzini@redhat.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-parisc@vger.kernel.org,m:linux-sgx@vger.kernel.org,m:etnaviv@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:linux-tegra@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:nvdimm@lists.linux.dev,m:linux-mm@kvack.org,m:iommu@lists.linux.dev,m:linux-perf-users@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:kasan-dev@googlegroups.com,m:damon@lists.linux.dev,m:pfalcato@suse.de,m:riel@surriel.com,m:harry@kernel.org,m:jannh@google.com,m:patrikrjakobsson@gmail.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[linux-foundation.org,armlinux.org.uk,kernel.org,siemens-energy.com,hansenpartnership.com,gmx.de,redhat.com,alien8.de,linux.intel.com,mev.co.uk,visionengravers.com,pengutronix.de,gmail.com,ffwll.ch,suse.de,oss.qualcomm.com,ideasonboard.com,nvidia.com,amd.com,shazbot.org,zeniv.linux.org.uk,linux.dev,google.com,infradead.org,samsung.com,goodmis.org,huawei.com,vger.kernel.org,lists.infradead.org,lists.freedesktop.org,lists.linux.dev,kvack.org,googlegroups.com,surriel.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[gourry.net];
 	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
 	DKIM_TRACE(0.00)[gourry.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -178,25 +179,34 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[76];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm];
-	TO_DN_SOME(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,gourry-fedora-PF4VCD3F:mid,gourry.net:from_mime,gourry.net:email,gourry.net:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0E9FF73D819
+X-Rspamd-Queue-Id: 78E1C73D864
 
-On Mon, Jun 29, 2026 at 01:23:32PM +0100, Lorenzo Stoakes wrote:
-> Add helpers for adding or subtracting to a VMA's page offset, exposed
-> internally for VMA users within mm in mm/vma.h.
+On Mon, Jun 29, 2026 at 01:23:31PM +0100, Lorenzo Stoakes wrote:
+> vma_assert_write_locked() and vma_assert_attached() are useful for their
+> own purposes, however VMA code absolutely does allow the modification of
+> non-write locked VMAs if they are at that point detached (i.e. unreachable
+> from anywhere).
 > 
-> This is to lay the foundations for tracking anonymous page offset for
-> MAP_PRIVATE file-backed mappings, where adding and subtracting from this
-> value must be reflected in both the file and anonymous offsets.
+
+curiosity: I presume this happens mostly during init and/or teardown of
+a vma?
+
+> It's therefore useful to be able to assert that a VMA is either
+> detached (modification doesn't matter) or write locked (you're explicitly
+> locked for modification).
 > 
-> These are used on VMA split and downward stack expansion.
+> Therefore introduce vma_assert_can_modify() for this purpose.
 > 
-> No functional change intended.
+> While we're here, make vma_is_attached() available generally - if
+> !CONFIG_PER_VMA_LOCKS, then there's no sense in which a VMA is
+> detached (vma_mark_detached() is a noop), so have this default to true in
+> this case.
 > 
 > Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 
