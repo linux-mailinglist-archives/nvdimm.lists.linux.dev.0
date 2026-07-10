@@ -1,55 +1,55 @@
-Return-Path: <nvdimm+bounces-14879-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14880-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 52/2Ad1XUWpxCwMAu9opvQ
-	(envelope-from <nvdimm+bounces-14879-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:36:45 +0200
+	id 04XWAkJYUWqFCwMAu9opvQ
+	(envelope-from <nvdimm+bounces-14880-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:38:26 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5784E73E697
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:36:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5430173E6C8
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 22:38:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=RPSZGvZw;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Rn0Rgzrg;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14879-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14879-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14880-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14880-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 518B3304096E
-	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:29:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1605B309EA1C
+	for <lists+linux-nvdimm@lfdr.de>; Fri, 10 Jul 2026 20:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8863A5E84;
-	Fri, 10 Jul 2026 20:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4993AC0E4;
+	Fri, 10 Jul 2026 20:29:55 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8EB375F8B;
-	Fri, 10 Jul 2026 20:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5233A5421;
+	Fri, 10 Jul 2026 20:29:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783715371; cv=none; b=K9Fc2UBTJb0wYYKRRHqgPS9RRY7OGH42gCaJGyf0rROoeNthWSpuH/6o2DZ0SrB6hGSuBt8+O3cBYtj62URPZTnwe9YRfGErlFNKRXI3+NFSMXY75tRw+6FbilQSnVRxYTsMWPvKQIh0SER6vKYXgzaZUTevXcHmJeLE61KRhq0=
+	t=1783715395; cv=none; b=JMCzHc0VywFNMNBiWPjRZEI8+Jnr+k6BkSU/T5ZZ+0q7Yj93EZ8pEFuYFPsn6QMDLtWk0KZP2h9+McdcJaW9pk/4cpS03nE9m1KfzZRCY+ucfsmXMxBk/5YlH3Wsf2+5CjYmSgR3p8t2QKFPwsUSZn0D0thY2FlHBP3OCaza47w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783715371; c=relaxed/simple;
-	bh=FCbfUVh/U5U1bRHGVKwt5UwXPlTKD0aFqMH/5ltaMTc=;
+	s=arc-20240116; t=1783715395; c=relaxed/simple;
+	bh=BSllJJ+2rRUlWzlXkjh5aitKXn0vM/W5l9yfCPbZwkk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r0gnb1Zg3ihpN/ae7PazbbBXbc5XNwgZPpO+703P0oljG5C8AaRDibFUDrUdjp0hVA1mVmPHgvz9eAh9e3AQgubw7JO9GI6MvsdT6eIfj3/ffNSObXMEYGqg0MHvQzGKu46ZeQJVwda04hpBrzToQveqiHbnIRxhWaDu8atSykg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPSZGvZw; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A991E1F000E9;
-	Fri, 10 Jul 2026 20:29:07 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=WXe40fy7ElBuM1vHUPfrylomYTMU0+i1cM8bYVo5Bb8DQavbh2qILVynofHnCDMNatO5NP9KmrFD1vL9M7cmk3A96kpLi3+apKSEkH/HU6XE9hUh1me038AxKMo5qKrxza+IxeSpgk1KkmtJ1vSWyWVdJKM4f31/J9CGZBClrw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rn0Rgzrg; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37601F00A3A;
+	Fri, 10 Jul 2026 20:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783715370;
-	bh=aHI3HtWrClTz694ElWYDKnmNafJcRIPtS6NobkrqaKw=;
+	s=k20260515; t=1783715393;
+	bh=h9TL51kQxKXHzSfeISmn1qw+QGG9KCcdgBvdsczJlCQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=RPSZGvZwyFoF6ClRKN9BpyNR8hpTZDK48TFpXqSipi37enIb5dUT+EctMObMcHEeV
-	 Poej32H984Cm5vZ1zE7duVLeHD7YFi8mfbo6mFJ4FJOXEPXEGfFbv3VcFF00WQ1jLn
-	 ci5P3XH7w6VvBnhFwpIJkr1BIv5hune/exyRWAf4inZWPzWlVWUvSq6OdsuSNl2puz
-	 vb5dtyH1nVV9TGprKRirNigppE+kAcMcj9yNM+9vchbstpVeQeFueRmccReV6x/9MS
-	 /rOKm4zBsOKdlYcPeiG1SaWJiU5ywO100RbwZxu+N6fqHKIukkw5XKszp/AF+Cr13o
-	 8grz4e0FS40fg==
+	b=Rn0Rgzrg1X9P5gZsTrshFOS+gMVue/gsuP7CnzM73czznQcn4F9ItkfgBxrFDuH66
+	 94EeIgI5hcr2XIsN3JzPfM7oBQE/vD8l9enMDbVOU8lNTUaYV6fcAL/6vBz7qX6VIq
+	 NV817DVIfXpi6wJ/hRvPJWaIpuFGj1/DltiI/mD1dBclCFblMGKiu2Oj5CzNoyCves
+	 RnQ7aytJQVF43RBtHHafqZbjIwVNRBtQ8O3PLFYcWa7naE5fgN6Q0oqeQLqBuFn/+5
+	 cBxamOvFBWiDSagHuu6Y8tOkVPWaz0YBClxQVn17b8Kz9ZPR1RYz7NH+4ZEm0mLklt
+	 x3Y3guK3Ete2A==
 From: Lorenzo Stoakes <ljs@kernel.org>
-Date: Fri, 10 Jul 2026 21:17:12 +0100
-Subject: [PATCH v2 31/33] mm/vma: use guard clauses in
- can_vma_merge_[before, after]()
+Date: Fri, 10 Jul 2026 21:17:13 +0100
+Subject: [PATCH v2 32/33] tools/testing/vma: default VMA, mm flag bits to
+ 64-bit
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-b4-pre-scalable-cow-v2-31-2a5aa403d977@kernel.org>
+Message-Id: <20260710-b4-pre-scalable-cow-v2-32-2a5aa403d977@kernel.org>
 References: <20260710-b4-pre-scalable-cow-v2-0-2a5aa403d977@kernel.org>
 In-Reply-To: <20260710-b4-pre-scalable-cow-v2-0-2a5aa403d977@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -139,12 +139,12 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
  freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org, 
  kvm@vger.kernel.org, Russell King <linux+etnaviv@armlinux.org.uk>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2052; i=ljs@kernel.org;
- h=from:subject:message-id; bh=FCbfUVh/U5U1bRHGVKwt5UwXPlTKD0aFqMH/5ltaMTc=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLICg23zeIx4g070KS4J7SnPZellbdxntl3j/lv3O2c9w
- v49kCntKGVhEONikBVTZHn+RXx/kEjYvM4L/m4wc1iZQIYwcHEKwERufGT4Z6zbfDP29beUVLPf
- /n92Zv2YtttYd9U3pvkvz+nZFXIKCTMyrBHkfC6/9G9fO9ff/UuWhPwoNS5edYn3QQfz2ZTDa99
- vYwQA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1053; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=BSllJJ+2rRUlWzlXkjh5aitKXn0vM/W5l9yfCPbZwkk=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLICg23tbadanfaQzj1y4rvlNcVF9qIRv947JUd902jK7
+ TLzq0/oKGVhEONikBVTZHn+RXx/kEjYvM4L/m4wc1iZQIYwcHEKwERaNBj+qb36GFjppLrx8Iv8
+ qbKmX233/fKVUtoRUPVgwvsv2l762Qz/dFWP/9kU0fePtSxGdTuTmXbp2f3yftdqG2/ekOSalyL
+ PCAA=
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 X-Rspamd-Action: no action
@@ -153,12 +153,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14879-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14880-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -169,7 +169,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FREEMAIL_TO(0.00)[linux-foundation.org,kernel.org,infradead.org,google.com,suse.com,surriel.com,linux.dev,suse.de,armlinux.org.uk,siemens-energy.com,HansenPartnership.com,gmx.de,zeniv.linux.org.uk,suse.cz,redhat.com,arm.com,linux.intel.com,intel.com,linaro.org,nvidia.com,linux.alibaba.com,huawei.com,gmail.com,zte.com.cn,sk.com,gourry.net,samsung.com,goodmis.org,efficios.com,alien8.de,zytor.com,mev.co.uk,visionengravers.com,pengutronix.de,ffwll.ch,oss.qualcomm.com,poorly.run,somainline.org,ideasonboard.com,amd.com,ziepe.ca,shazbot.org];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[122];
@@ -182,71 +182,34 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm,etnaviv];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:email,lists.linux.dev:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5784E73E697
+X-Rspamd-Queue-Id: 5430173E6C8
 
-Rather than combining a bunch of conditionals in a single expression,
-simplify by inverting the mergeability requirements into guard clauses.
+With all of the sanitisers turned on, setting the VMA and mm flag bits
+depth to 128 by default results in overly long build times.
 
-that is - instead of checking what must be true for the conditions to be
-met, instead check the inverse of the requirements and return false if any
-are true, defaulting to true.
+Reduce this to 64 - we can always manipulate these later for testing of
+larger bitmaps as needed.
 
-No functional change intended.
-
-Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-Reviewed-by: Gregory Price <gourry@gourry.net>
 Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 ---
- mm/vma.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ tools/testing/vma/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/vma.c b/mm/vma.c
-index 737f0d692e6b..9d556d33b24b 100644
---- a/mm/vma.c
-+++ b/mm/vma.c
-@@ -215,13 +215,13 @@ static void init_multi_vma_prep(struct vma_prepare *vp,
-  */
- static bool can_vma_merge_before(struct vma_merge_struct *vmg)
- {
--	if (is_mergeable_vma(vmg, /* merge_next = */ true) &&
--	    is_mergeable_anon_vma(vmg, /* merge_next = */ true)) {
--		if (vmg_end_pgoff(vmg) == vma_start_pgoff(vmg->next))
--			return true;
--	}
--
--	return false;
-+	if (!is_mergeable_vma(vmg, /* merge_next = */ true))
-+		return false;
-+	if (!is_mergeable_anon_vma(vmg, /* merge_next = */ true))
-+		return false;
-+	if (vmg_end_pgoff(vmg) != vma_start_pgoff(vmg->next))
-+		return false;
-+	return true;
- }
+diff --git a/tools/testing/vma/Makefile b/tools/testing/vma/Makefile
+index e72b45dedda5..ef6cc558afe1 100644
+--- a/tools/testing/vma/Makefile
++++ b/tools/testing/vma/Makefile
+@@ -10,7 +10,7 @@ OFILES = $(SHARED_OFILES) main.o shared.o maple-shim.o
+ TARGETS = vma
  
- /*
-@@ -235,12 +235,13 @@ static bool can_vma_merge_before(struct vma_merge_struct *vmg)
-  */
- static bool can_vma_merge_after(struct vma_merge_struct *vmg)
- {
--	if (is_mergeable_vma(vmg, /* merge_next = */ false) &&
--	    is_mergeable_anon_vma(vmg, /* merge_next = */ false)) {
--		if (vma_end_pgoff(vmg->prev) == vmg_start_pgoff(vmg))
--			return true;
--	}
--	return false;
-+	if (!is_mergeable_vma(vmg, /* merge_next = */ false))
-+		return false;
-+	if (!is_mergeable_anon_vma(vmg, /* merge_next = */ false))
-+		return false;
-+	if (vma_end_pgoff(vmg->prev) != vmg_start_pgoff(vmg))
-+		return false;
-+	return true;
- }
+ # These can be varied to test different sizes.
+-CFLAGS += -DNUM_VMA_FLAG_BITS=128 -DNUM_MM_FLAG_BITS=128
++CFLAGS += -DNUM_VMA_FLAG_BITS=64 -DNUM_MM_FLAG_BITS=64
  
- static void __vma_link_file(struct vm_area_struct *vma,
+ main.o: main.c shared.c shared.h vma_internal.h tests/merge.c tests/mmap.c tests/vma.c ../../../mm/vma.c ../../../mm/vma_init.c ../../../mm/vma_exec.c ../../../mm/vma.h include/custom.h include/dup.h include/stubs.h
+ 
 
 -- 
 2.55.0
