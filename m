@@ -1,82 +1,82 @@
-Return-Path: <nvdimm+bounces-14901-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14904-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vivxFZS2U2pveAMAu9opvQ
-	(envelope-from <nvdimm+bounces-14901-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:45:24 +0200
+	id fXMaLPu2U2qTeAMAu9opvQ
+	(envelope-from <nvdimm+bounces-14904-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:47:07 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id F04477453C2
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:45:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08CC274540C
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:47:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gourry.net header.s=google header.b=FmBTRZE6;
+	dkim=pass header.d=gourry.net header.s=google header.b=Nl3hvZlF;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14901-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.232.135.74 as permitted sender) smtp.mailfrom="nvdimm+bounces-14901-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14904-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.234.253.10 as permitted sender) smtp.mailfrom="nvdimm+bounces-14904-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A16323004F1A
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 15:45:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E49EA3038AE1
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 15:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D473264E4;
-	Sun, 12 Jul 2026 15:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6791343886;
+	Sun, 12 Jul 2026 15:45:28 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4959328136F
-	for <nvdimm@lists.linux.dev>; Sun, 12 Jul 2026 15:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F47340A6F
+	for <nvdimm@lists.linux.dev>; Sun, 12 Jul 2026 15:45:21 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783871122; cv=none; b=SITeVR6mTP2M2ijWClmQuAqM6xFRyskBF6biLFYPbD06vHG/2Zkoi6OEb292t30Djr+yritcfwQgnoKYBFmn+/pTxjZAGO902FTXNdeqpTbSmogRTpZ7pybWNbd97Kg9yC9ffE8F4ckdcAjncUdvxbr4ySkJY5xFrd9U5eCavf4=
+	t=1783871128; cv=none; b=qbDMasTh438ucudHSgA+QD+jjd3/Eh7ygkz5pfsITbA/EAjOS2iitpYZ6foneOxHV5rOzLYeyJ6bcx1DBkVHD1c0G65NpcZM0UxQPWYjvynP989OyCm8l2E317BbqBFFMFQ0VPK3jRwUFbafEg9RQ3DhWL0+cMGUrEQwinbReDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783871122; c=relaxed/simple;
-	bh=tfx6dOdIwwqQC/jjpRe//jhDfVXsvDei4cyYZa9VMO0=;
+	s=arc-20240116; t=1783871128; c=relaxed/simple;
+	bh=PA4Bqt4ZM/5eU9t/Xv2IagzZnnLp2iO/pQZpXfi9d2E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pBalCaG5+yK1SnD0zaFElWJEde9J1NdWkar8eUyu0TBAZVnpV2RoI4axN1V8p3xihzKI1SxZ/FLIWDkXGCc5QCbvN3i5MieCWm+Ni1Ts5XszB1kUEbVn6pfjZXiwVLeJTQo3A2tAU+t71DeWcKrOSrhhbUgzTJqvQpyf7d1PSrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=FmBTRZE6; arc=none smtp.client-ip=209.85.222.170
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-92e533aacf2so116711885a.2
-        for <nvdimm@lists.linux.dev>; Sun, 12 Jul 2026 08:45:20 -0700 (PDT)
+	 MIME-Version; b=TNjuwlrCnww4JkCrWg9+592UKCtej0JWFmIm3B5Kz09DcARYtiIw4EhX2z8M1zD45u9lfryb0+7/n5Yk3ENuHfCYBaEb3+xQX97CA1a7ubVAGy4ygiAqd3L5itz7IVS1TNFx8RjNGe+aQGUjoHvL5zSFFcL7wgT3QCyrzd7bfdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Nl3hvZlF; arc=none smtp.client-ip=209.85.222.178
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e67555e24so131163985a.3
+        for <nvdimm@lists.linux.dev>; Sun, 12 Jul 2026 08:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783871119; x=1784475919; darn=lists.linux.dev;
+        d=gourry.net; s=google; t=1783871121; x=1784475921; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=r1M/Y6Dv0V9NOM4+/puP8NWosRoeWXHurd+5rEoqGA8=;
-        b=FmBTRZE6QlyWOMmqEzOs3toFavNaIiaeL9t2z1EB5jHF1TZEcWHkCFcpD1FwOF6wBt
-         DdRLitWlH2Dw1pQJhOG+fGuGbYZGi0BYgB3PnWdE47d4jkVf13xCiXhTPyCjadx8lg4g
-         4on5xfSzy62tzHiSl73F7n/ha0jDGKk1SJ5o1xICNqyG0aczhJDNgdTCm7s2lFwkTlKc
-         z1s9P8NJBVlgJeobkllS6SoFFmNH0Kno1z6GuFsM5hJLUQnXIH5AqglT4XRUrr7wT1i+
-         p+5FUN70WwHLSTG6twSBTAX858PdnZHdsUHoE85xuKmsbk3eP0w+d2d6gs+6Xh0TdX8A
-         BObQ==
+        bh=qpaKnc1e95Tg7VSs2UGrLw6c/qizit0d3ArQLheYoTo=;
+        b=Nl3hvZlFIAK7zFjufg9IY8vMHRfOIKaQnMADQeJNUNu3EN21Nqpz0t5KHVLhwSWN3L
+         7RcvhPV1QuzkHccEZh1X+lkud2OAQJTDy/X8qg6b2Yyka5DixI8U3xrCN8SiApabg12y
+         gOnPw3q2aWDIKi96TuQRgqNeyUrYZ0EtCKNtVKpCiZ6v8G9Hok13M++y4kXQUZR73kRM
+         E8T+ilGTMma/99mn/kMHAM45dgK4VeEAoieSugn5hYHL7ADTc+TTCZz9Nk/lxH0XZywB
+         YZmBcj4pSAQEp5fJQtLX+rHPMdcMaK0nQZWuKPWykmBdIS7lp8rLhx+BBQCQ9s5MZx1V
+         e3bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783871119; x=1784475919;
+        d=1e100.net; s=20251104; t=1783871121; x=1784475921;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=r1M/Y6Dv0V9NOM4+/puP8NWosRoeWXHurd+5rEoqGA8=;
-        b=lB9E+3Te1l4Jiok9jZkASWi7wUDVPfq44Fk3p6x+pbj2h0j8M6V0900PyG8dd8G7Mq
-         BrrfXUfl6D/9QneYPoLTM6kY2EgswPukui9BeST/iBtzR3/fF9Z8179VVIFbbQazDy5f
-         tRop5o0LD9ZbJy63DOWx0lmBElxQ6CPwG9d5OmUscLQkt7U9zLq0cZ1ThR0t0gF8Aern
-         mp/c/GBBEaf+jeYlpfntAgFiYmXisH0aADLYb/XJeKQyerz7oJ0v/0N+D9npZ3dmWoa3
-         ZuSlBoYOjJic01LkCpdp0c8d5FkBMKP/in1udOpU5MvRjIdsDDPZgLj4oJN1g07XTkDp
-         Rv/Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqD1jZO9TMAuQNSuTyKdilJFOhNiWRlC5NdxbUq+dVlmWYV8OkDikR8Be/EVBm4Ff14ze0vb8U=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxokhOOeyaPW3jxo182WL+oSsW7frJIMeDO5TBUFDtCb9CHCiHE
-	/zKFTo8vzfRmmmIcPBjOqk3UAqH7BeXIsXVmfA+V61f8/RwxfVXra0rvg0FRLoU5T9c=
-X-Gm-Gg: AfdE7cno8MCBS7W6lua8oFBCqr0THpuHcqI+a4IVX5oUvOVzaQm9E+VG4/1d79hUl2v
-	6JFlngEygSjVNNEjCeEKCkWt4uQ5jOj9yrvzPxavjjWREXzuG1YXkNUSxLazIxR8MqqG5yoswU5
-	1a61EuCDAxjIqhgy9McjOwhokAT+eNA9Frsiwi5fcQgnYapMBwhCPmoI1WN11ui3M1Vf1SAH9G6
-	rsiLkXtjSpo6LegwQkDtHiGm5C7SmKAg+hIMe/cE7ju7QjYXOH68hm2moALyEH0KnlGykUgNeFB
-	eLkogVZZh5g+zZKMea6qQTKwBKoo/mK2s83llbxDebrcXkwmaZ8AMTSjN5TEJE7DGLBeJCeHFqP
-	J3x0afYDmDYIhNualUADUaP7baOKBX9WqIhhaVfnVdFNw2VQgHNZyGR1vgvzRvqAoPNFBej75Xn
-	Uoa6vRExaXw0eEeSRHtvZuIVDUJIgdl75TIBW1N4Pc5bo1cNdNDTZKDcy75hWJpavmeqG+iwnmJ
-	dN9Py573+gi
-X-Received: by 2002:a05:620a:480c:b0:92e:6533:26eb with SMTP id af79cd13be357-92ef2bb48d0mr596324285a.6.1783871119197;
-        Sun, 12 Jul 2026 08:45:19 -0700 (PDT)
+        bh=qpaKnc1e95Tg7VSs2UGrLw6c/qizit0d3ArQLheYoTo=;
+        b=HKcAzFHaQwVVB0s1VnAQu0tZeDT5FxPFLobtJs5ryx7QEs2FUp3cnEOmFoGicSSZHg
+         wTJhEVufCmU0C0rMpprjMDQyE6/sYKsbqHqDfyTokcMdePm51qdaAqnbmHFQFC9LpkgX
+         m2KH6xnSSOap1EFMIrBI+PrLZHOBEkLxcwjQwqAAljOPNw63/nQ7uJM6ZOAmSKzagrta
+         UDsfQJlECOJcS+4f6wCE0PpahL8DPB+z38tlEVo7zTCcBFIcMcbyqik5q1/HigpmcXNa
+         9JnAcGmjpD/DYBi49bDHQWA+AjnWRdpdkXHh6JQHccvpS7YzV6t/hPNHe30qdj5RcBx0
+         PtkQ==
+X-Forwarded-Encrypted: i=1; AHgh+RozmwmjzB6mz04QbakgeWxQS43/zqDW1MLXi8y5CxYf/Jamp2Eap7FwbVUnHCDxoSGGk0WXZgQ=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzPCNhMot8svJJwIAwDdzO8YVyijAUGoBUpiztgDAieHrl+xEvK
+	8m90dRjBAPWqk8FPlXe4zQuv893OPBgxm0bTEEzeHR9YQSXI+xf8hkKQ4iEQHvv4HB4=
+X-Gm-Gg: AfdE7cmxQE/8HkeCxBBHjI40EYB0OR5XSgj7Nmv5DX5YhG5fU/3bAYbKir1NiWcAADe
+	9WtwCE+Ac0TVGqx0gPV7qN5/o1vV1AhkIUeuVD9LxuU6BRNJNHrd0ukJEMG7qHcxW3PI39n3foz
+	b/nfRIG1QQpFN4NZi0tLX5SZBkInFUBWKokidvLJVRgtYdtxj8SsCfd5IoMxXPyHJEvuiH+8GTb
+	vBQu3ivzlAgHAh+GugfdzoKNEWhb69eMRA3+SAUAMWtIr76cOLdyb/AD75lU/uRZjy6gYHuS69s
+	cH4Z5/dqe5ybJ+DGlZxP4/4LOwJUppTMy+V19JOVADlN+vkWCx1lAnMN1TaFMVosOPL1SzE7tj6
+	noiwS/Y3iTIgg96zTbWHvzFVH+aK72yOUYdnjhrbTVW5+IT7vqhQSqiWncU0Sa4/AAF8D8lu1jD
+	LmvtyfG3aqs83KFy7/hU7vvUIAdKYQNyG7DHwGQ3XAgSWymRJULnNWIANBmif2NSne1UWqmjI+0
+	A==
+X-Received: by 2002:a05:620a:2913:b0:915:e9c3:f1a0 with SMTP id af79cd13be357-92ef2b35bfemr677144185a.12.1783871120928;
+        Sun, 12 Jul 2026 08:45:20 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5d61facsm862186485a.42.2026.07.12.08.45.17
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5d61facsm862186485a.42.2026.07.12.08.45.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 08:45:18 -0700 (PDT)
+        Sun, 12 Jul 2026 08:45:20 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org,
@@ -102,10 +102,11 @@ Cc: linux-kernel@vger.kernel.org,
 	surenb@google.com,
 	mhocko@suse.com,
 	shuah@kernel.org,
-	gourry@gourry.net
-Subject: [PATCH v7 02/10] mm/memory_hotplug: add mhp_online_type_to_str() and export string helpers
-Date: Sun, 12 Jul 2026 11:44:56 -0400
-Message-ID: <20260712154505.3564379-3-gourry@gourry.net>
+	gourry@gourry.net,
+	Pankaj Gupta <pankaj.gupta@amd.com>
+Subject: [PATCH v7 03/10] mm/memory_hotplug: pass online_type to online_memory_block() via arg
+Date: Sun, 12 Jul 2026 11:44:57 -0400
+Message-ID: <20260712154505.3564379-4-gourry@gourry.net>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260712154505.3564379-1-gourry@gourry.net>
 References: <20260712154505.3564379-1-gourry@gourry.net>
@@ -118,85 +119,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-mm@kvack.org,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:nvdimm@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:david@kernel.org,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:alison.schofield@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:gourry@gourry.net,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-14901-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14904-lists,linux-nvdimm=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:linux-mm@kvack.org,m:linux-kernel@vger.kernel.org,m:linux-cxl@vger.kernel.org,m:driver-core@lists.linux.dev,m:nvdimm@lists.linux.dev,m:linux-kselftest@vger.kernel.org,m:kernel-team@meta.com,m:david@kernel.org,m:osalvador@suse.de,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:djbw@kernel.org,m:vishal.l.verma@intel.com,m:dave.jiang@intel.com,m:alison.schofield@intel.com,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:shuah@kernel.org,m:gourry@gourry.net,m:pankaj.gupta@amd.com,s:lists@lfdr.de];
 	DMARC_NA(0.00)[gourry.net];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[26];
 	FORGED_SENDER(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gourry.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,nvdimm@lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-nvdimm];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
+	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:from_mime,gourry.net:email,gourry.net:mid,gourry.net:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:email]
+	TAGGED_RCPT(0.00)[linux-nvdimm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:from_mime,gourry.net:email,gourry.net:mid,gourry.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:from_smtp,intel.com:email,amd.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: F04477453C2
+X-Rspamd-Queue-Id: 08CC274540C
 
-Add mhp_online_type_to_str() as the inverse of mhp_online_type_from_str(),
-and export both so a driver can render and parse the memory online type
-through its own sysfs interface.
+Modify online_memory_block() to accept the online type through its arg
+parameter rather than calling mhp_get_default_online_type() internally.
 
+This prepares for allowing callers to specify explicit online types.
+
+Update the caller in add_memory_resource() to pass the default online
+type via a local variable.
+
+No functional change.
+
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Reviewed-by: Pankaj Gupta <pankaj.gupta@amd.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 Reviewed-by: Dan Williams <djbw@kernel.org>
 Signed-off-by: Gregory Price <gourry@gourry.net>
 ---
- drivers/base/memory.c          | 9 +++++++++
- include/linux/memory_hotplug.h | 1 +
- 2 files changed, 10 insertions(+)
+ mm/memory_hotplug.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index bcfe2d9f4adbd..5eead3346f1e3 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -46,6 +46,15 @@ int mhp_online_type_from_str(const char *str)
- 	}
- 	return -EINVAL;
- }
-+EXPORT_SYMBOL_GPL(mhp_online_type_from_str);
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 8b137328dcf01..e625529baf996 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1338,7 +1338,9 @@ static int check_hotplug_memory_range(u64 start, u64 size)
+ 
+ static int online_memory_block(struct memory_block *mem, void *arg)
+ {
+-	mem->online_type = mhp_get_default_online_type();
++	enum mmop *online_type = arg;
 +
-+const char *mhp_online_type_to_str(int online_type)
-+{
-+	if (online_type < 0 || online_type >= (int)ARRAY_SIZE(online_type_to_str))
-+		return NULL;
-+	return online_type_to_str[online_type];
-+}
-+EXPORT_SYMBOL_GPL(mhp_online_type_to_str);
++	mem->online_type = *online_type;
+ 	return device_online(&mem->dev);
+ }
  
- #define to_memory_block(dev) container_of(dev, struct memory_block, dev)
+@@ -1495,6 +1497,7 @@ static int create_altmaps_and_memory_blocks(int nid, struct memory_group *group,
+ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+ {
+ 	struct mhp_params params = { .pgprot = pgprot_mhp(PAGE_KERNEL) };
++	enum mmop online_type = mhp_get_default_online_type();
+ 	enum memblock_flags memblock_flags = MEMBLOCK_NONE;
+ 	struct memory_group *group = NULL;
+ 	u64 start, size;
+@@ -1583,7 +1586,8 @@ int add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
  
-diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index f04b915678dbd..8f6da2656f4e2 100644
---- a/include/linux/memory_hotplug.h
-+++ b/include/linux/memory_hotplug.h
-@@ -127,6 +127,7 @@ extern int arch_add_memory(int nid, u64 start, u64 size,
- extern u64 max_mem_size;
+ 	/* online pages if requested */
+ 	if (mhp_get_default_online_type() != MMOP_OFFLINE)
+-		walk_memory_blocks(start, size, NULL, online_memory_block);
++		walk_memory_blocks(start, size, &online_type,
++				   online_memory_block);
  
- extern int mhp_online_type_from_str(const char *str);
-+const char *mhp_online_type_to_str(int online_type);
- 
- /* If movable_node boot option specified */
- extern bool movable_node_enabled;
+ 	return ret;
+ error:
 -- 
 2.53.0-Meta
 
