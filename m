@@ -1,64 +1,64 @@
-Return-Path: <nvdimm+bounces-14912-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14913-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id i8AqLZ+4U2rueAMAu9opvQ
-	(envelope-from <nvdimm+bounces-14912-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:54:07 +0200
+	id cd6QLqm4U2rxeAMAu9opvQ
+	(envelope-from <nvdimm+bounces-14913-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:54:17 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A109E74545A
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:54:06 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF0C074545F
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 17:54:16 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=aBW1fyIs;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=QHkOnok2;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14912-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="nvdimm+bounces-14912-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14913-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14913-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A484C3002B70
-	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 15:54:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D300B3002B54
+	for <lists+linux-nvdimm@lfdr.de>; Sun, 12 Jul 2026 15:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9413264E4;
-	Sun, 12 Jul 2026 15:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB15C3128D5;
+	Sun, 12 Jul 2026 15:54:12 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F3F2594B9;
-	Sun, 12 Jul 2026 15:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75492CA52;
+	Sun, 12 Jul 2026 15:54:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783871641; cv=none; b=lJ5h76sXOjELvRgSZw69WHcOtvnu8KXa0fX2UMcCFMtvEbfz17eAuGbY2ggvFMTOkhsHwQ3qMyWH8+pOMXU1kIVsDzZGDYK4T1q9MrmEYG+MpungrosPEIYas2vkyGd2kvN3aaEFSTd9vWleBF0PCtJgboRQkP6AUkO95VCKN94=
+	t=1783871652; cv=none; b=NT5hqKbuK6VXaxn/2B8v7LhDWJ8Be4qeKds6ibWU1s0ifrmAyKxpfBfPOJ9/DSQj2pC9uE8vwGb9ifIvrFaV4d0HgPtHMY5BIh5u8NWwoMd8fyx5xNxaIt15BeL7n5uicl3FFk0pOLEhevhr7qqfhtpO4LuPt6zYwr/XOHHFpWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783871641; c=relaxed/simple;
-	bh=VA5pM9YTYB1O1LYJ8eksuno7RXyL/y7y/YkS2ZMFbKU=;
+	s=arc-20240116; t=1783871652; c=relaxed/simple;
+	bh=BlTatt9egHAQadwzVtYu0PSFfI6hzoL07CO0YeS5/nU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BZ+z6725ZSAwRsspWlUs3BuXsUw+vqqedMF9YxgqRVRiS7p2RV/uvZmajamw7FFPeDSmpkdr0/OXq2ALYwRZEETPEoKPqFmTsWQ7POVkWWsnAmZwQeJzFS4Pzb9aPG5vGtHH4Rgp2M9Ge0OpLo2Y1dcnsAe/b2he0BQlx3a6l9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBW1fyIs; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1A91F000E9;
-	Sun, 12 Jul 2026 15:54:00 +0000 (UTC)
+	 Message-Id; b=XXhQmfxGR0LjfNEN7Ai55nPT4hl/MH/xyslP3RH+QcBN9L9GNN2qKcxlJgwM3w4/Llp6NHZXxyYtX49gsJoVfvKcRSYQnkct1SMSN1TdtkMQDLNG4J4P5oIhDRSOU2qb4ElWXt5GYWEhYylN6fHkrYE4GoslcOmPaa/OVLvx2Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHkOnok2; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D391F000E9;
+	Sun, 12 Jul 2026 15:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783871640;
-	bh=9IbvVlOB5gSoINw8GGnbUxxg52nhacJrzrIDBVy2TP0=;
+	s=k20260515; t=1783871651;
+	bh=9n0+ig0ScLFSWCBS+wNeJlwOegb+Bib0PT8HEmiicn0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aBW1fyIsusJ2TUSq00XTL0b2dmitP8PSk42uTVYDFThT4hn7QxtViwuq+tiChdQxW
-	 PJtSkMjL1q0gdMq9Tqomkz63817NdJ6HZv2qego1LcuITRhDh7HNook3MxuS80TAIC
-	 sSROwu6uOI5WpweygceZJnLhO9WnTmwGs2jTc6HSa8LLVKPrcB8xC7ysdX4LZiY2n1
-	 e0/+tj/isptuXk7SWNDaFabQ7eb7wuOm+TVVws07MvupkzwhUxkFp8khY3oc+BWSjb
-	 492IvBSGOxPcnW0LUNbOjl/pkdPvR8S/dhpUhGo50f56ivNUMzHlKFxRDRnWOfHLK2
-	 f3zjC1WBYHaGw==
+	b=QHkOnok2qjdb9ZOe6rP7ETJoVj/5K2SnpLGJSxWBA6LNFEWtJ26JWrOKwlPxWRbjs
+	 eisNll8YA+f2Aeg3sA4vhgCVhMvAfud9mxeS4FwrUyiqvGBKS8fNGiNHX5sicwS4j2
+	 GilNrMQMInw2Z30UbYSNZCSe8ieSoR0iXYOPqghDERs3O3Ts3gU3ioGzieCMn2XRlD
+	 DZHP2qWiiipjYCY5RZMcISqSIbljlus6YoSASec1hX6QUAiImW1Aw4SHYl85V3YZ0F
+	 b1Slty6OqTKJB/4KPjTOiCJnAlSP6h6Zg3asXDUX4SmzTj9dEvU1F88CYdjV7vvprE
+	 qOqEtr4NZ1gng==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 06/10] mm/memory_hotplug: add
- offline_and_remove_memory_ranges()
+Subject: Re: [PATCH v7 08/10] dax/kmem: extract hotplug/hotremove helper
+ functions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Gregory Price" <gourry@gourry.net>
 Cc: nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-In-Reply-To: <20260712154505.3564379-7-gourry@gourry.net>
+In-Reply-To: <20260712154505.3564379-9-gourry@gourry.net>
 References: <20260712154505.3564379-1-gourry@gourry.net>
- <20260712154505.3564379-7-gourry@gourry.net>
+ <20260712154505.3564379-9-gourry@gourry.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 12 Jul 2026 15:53:59 +0000
-Message-Id: <20260712155400.5D1A91F000E9@smtp.kernel.org>
+Date: Sun, 12 Jul 2026 15:54:10 +0000
+Message-Id: <20260712155411.00D391F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -70,7 +70,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -78,7 +78,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14912-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14913-lists,linux-nvdimm=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,nvdimm@lists.linux.dev];
 	TO_DN_SOME(0.00)[];
@@ -98,67 +98,158 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:email,smtp.kernel.org:mid,lists.linux.dev:from_smtp,lists.linux.dev:replyto,sashiko.dev:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gourry.net:email,smtp.kernel.org:mid,sashiko.dev:url,intel.com:email,lists.linux.dev:from_smtp,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A109E74545A
+X-Rspamd-Queue-Id: AF0C074545F
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] offline_and_remove_memory_ranges() silently discards errors from t=
-ry_remove_memory(), falsely returning success and breaking all-or-nothing r=
-ollback semantics.
+
+Pre-existing issues:
+- [High] If a DAX device has multiple ranges and at least one is too small =
+to be aligned, removing the device will unconditionally leak driver data an=
+d memory group registrations.
 --
 
---- Patch [6]: [PATCH v7 06/10] mm/memory_hotplug: add offline_and_remove_m=
-emory_ranges() ---
-commit 5dfae7d4a23ca17c8437f8cb92a4cc3f409e0c37
+--- Patch [8]: [PATCH v7 08/10] dax/kmem: extract hotplug/hotremove helper =
+functions ---
+commit 44ad562618b0448a09ed81ab105fa4c8551b6718
 Author: Gregory Price <gourry@gourry.net>
 
-mm/memory_hotplug: add offline_and_remove_memory_ranges()
+dax/kmem: extract hotplug/hotremove helper functions
 
-This commit introduces offline_and_remove_memory_ranges() to handle the
-offlining and removal of multiple memory ranges as a single atomic operation
-under the device hotplug lock. It offlines all blocks first, reverting on
-failure, before attempting to remove them.
+Refactor kmem _probe() _remove() by extracting init, cleanup, hotplug,
+and hot-remove logic into separate helper functions. This splits the
+hotplug and init phases to have resources available for hot-add, while
+enabling future granular hotplug operation control.
 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index a66346def504b..e33e0f4ae5da1 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Gregory Price <gourry@gourry.net>
+
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 38ed5c4e9c83d..6174f7d3d05bd 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+
 [ ... ]
-> +int offline_and_remove_memory_ranges(const struct range *ranges,
-> +		unsigned int nr_ranges)
+
+> +static int dax_kmem_do_hotremove(struct dev_dax *dev_dax,
+> +				 struct dax_kmem_data *data)
 > +{
+> +	struct device *dev =3D &dev_dax->dev;
+> +	int i, success =3D 0;
+> +
+> +	for (i =3D 0; i < dev_dax->nr_range; i++) {
+> +		struct range range;
+> +		int rc;
+> +
+> +		rc =3D dax_kmem_range(dev_dax, i, &range);
+> +		if (rc)
+> +			continue;
+> +
+> +		/* range was never added during probe, count as removed */
+> +		if (!data->res[i]) {
+> +			success++;
+> +			continue;
+> +		}
+> +
+> +		rc =3D remove_memory(range.start, range_len(&range));
+> +		if (rc =3D=3D 0) {
+> +			/* Release the resource for the successfully removed range */
+> +			remove_resource(data->res[i]);
+> +			kfree(data->res[i]);
+> +			data->res[i] =3D NULL;
+> +			success++;
+> +			continue;
+> +		}
+> +		any_hotremove_failed =3D true;
+> +		dev_err(dev, "mapping%d: %#llx-%#llx hotremove failed\n",
+> +			i, range.start, range.end);
+> +	}
+> +
+> +	return success;
+> +}
+
 [ ... ]
-> +	/* Phase 2: Remove. This should never fail holding the hotplug lock */
-> +	for (i =3D 0; i < nr_ranges; i++)
-> +		WARN_ON_ONCE(try_remove_memory(ranges[i].start,
-> +					       range_len(&ranges[i])));
+
+> @@ -208,7 +354,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  #ifdef CONFIG_MEMORY_HOTREMOVE
+>  static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+>  {
+> -	int i, success =3D 0;
+> +	int success;
+>  	int node =3D dev_dax->target_node;
+>  	struct device *dev =3D &dev_dax->dev;
+>  	struct dax_kmem_data *data =3D dev_get_drvdata(dev);
+> @@ -219,48 +365,25 @@ static void dev_dax_kmem_remove(struct dev_dax *dev=
+_dax)
+>  	 * there is no way to hotremove this memory until reboot because device
+>  	 * unbind will succeed even if we return failure.
+>  	 */
+> -	for (i =3D 0; i < dev_dax->nr_range; i++) {
+> -		struct range range;
+> -		int rc;
+> -
+> -		rc =3D dax_kmem_range(dev_dax, i, &range);
+> -		if (rc)
+> -			continue;
+> -
+> -		/* range was never added during probe */
+> -		if (!data->res[i]) {
+> -			success++;
+> -			continue;
+> -		}
+> -
+> -		rc =3D remove_memory(range.start, range_len(&range));
+> -		if (rc =3D=3D 0) {
+> -			remove_resource(data->res[i]);
+> -			kfree(data->res[i]);
+> -			data->res[i] =3D NULL;
+> -			success++;
+> -			continue;
+> -		}
+> -		any_hotremove_failed =3D true;
+> -		dev_err(dev,
+> -			"mapping%d: %#llx-%#llx cannot be hotremoved until the next reboot\n",
+> -				i, range.start, range.end);
+> +	success =3D dax_kmem_do_hotremove(dev_dax, data);
+> +	if (success < dev_dax->nr_range) {
+> +		dev_err(dev, "Hotplug regions stuck online until reboot\n");
+> +		return;
+>  	}
 
 [Severity: High]
-If try_remove_memory() does happen to fail during Phase 2, does wrapping
-it in WARN_ON_ONCE() silently discard the error code?
+This is a pre-existing issue, but does this logic handle unaligned ranges
+correctly during device unbind?
 
-Since rc is not updated here, offline_and_remove_memory_ranges() would
-return 0 (success) to the caller even if the removal failed.
+If a DAX device is created with a memory range smaller than the block
+alignment, dax_kmem_range() returns an error (like -ENOSPC) during probe,
+but the device can still probe successfully.
 
-Could this mislead the calling driver into freeing its device structures,
-leaving the kernel's memory subsystem with stale references to unremoved
-memory blocks?
+During removal, dax_kmem_do_hotremove() will also get an error from
+dax_kmem_range() for that small range and skip incrementing the success
+counter.
 
-> +
-> +out_unlock:
->  	unlock_device_hotplug();
+This causes success to evaluate as strictly less than dev_dax->nr_range,
+resulting in an early return here.
+
+Since device unbind can be triggered from userspace, does this early return
+unconditionally leak the memory group registrations, device name string,
+and driver data on every unbind for devices with unaligned ranges?
+
 > =20
->  	kfree(online_types);
->  	return rc;
->  }
-> +EXPORT_SYMBOL_GPL(offline_and_remove_memory_ranges);
+> -	if (success >=3D dev_dax->nr_range) {
+> -		memory_group_unregister(data->mgid);
+> -		kfree(data->res_name);
+> -		kfree(data);
+> -		dev_set_drvdata(dev, NULL);
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712154505.3564=
-379-1-gourry@gourry.net?part=3D6
+379-1-gourry@gourry.net?part=3D8
 
