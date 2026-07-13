@@ -1,53 +1,53 @@
-Return-Path: <nvdimm+bounces-14923-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
+Return-Path: <nvdimm+bounces-14924-lists+linux-nvdimm=lfdr.de@lists.linux.dev>
 Delivered-To: lists+linux-nvdimm@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id FYCjEjkpVWrFkgAAu9opvQ
-	(envelope-from <nvdimm+bounces-14923-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 20:06:49 +0200
+	id Una2JYUpVWrckgAAu9opvQ
+	(envelope-from <nvdimm+bounces-14924-lists+linux-nvdimm=lfdr.de@lists.linux.dev>)
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 20:08:05 +0200
 X-Original-To: lists+linux-nvdimm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D344F74E4DD
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 20:06:48 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2F674E52D
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 20:08:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=h0Yb9LAX;
-	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14923-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 172.232.135.74 as permitted sender) smtp.mailfrom="nvdimm+bounces-14923-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=TKnYTlap;
+	spf=pass (mail.lfdr.de: domain of "nvdimm+bounces-14924-lists+linux-nvdimm=lfdr.de@lists.linux.dev" designates 104.64.211.4 as permitted sender) smtp.mailfrom="nvdimm+bounces-14924-lists+linux-nvdimm=lfdr.de@lists.linux.dev";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0CE0130174F0
-	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 18:06:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 33EB8300BCA6
+	for <lists+linux-nvdimm@lfdr.de>; Mon, 13 Jul 2026 18:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3059F35201F;
-	Mon, 13 Jul 2026 18:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E3635203E;
+	Mon, 13 Jul 2026 18:07:50 +0000 (UTC)
 X-Original-To: nvdimm@lists.linux.dev
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8786310784;
-	Mon, 13 Jul 2026 18:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C075351C35;
+	Mon, 13 Jul 2026 18:07:49 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783966005; cv=none; b=GrTNT0RNiqOWi1P1A6Bda3ordRTg/yD1+I+/ykXfOE/QupsSjAJ391a6Fb6tGJSkdgeKurzvlHLJ1euc36pQCErlxlvkMW7RAxQS9ONLOOIlGTd9L4DR8KkFm3rBLekW6Lx/837NjisEoglE9hsHRU9ePyJgHF5WTMRHQDSiXfk=
+	t=1783966070; cv=none; b=JyTxPc5+mfBcX261cBmlPIA7ScP8x+6CBvy9vn/jpghlpd13noFXrnHGwpNuYGpVzLPwpwQjnZvzM9EWkL6qIVL/Hs8i0A8Wfydd7Mup28KHVXKDxHMH/mIotjnMsD+aIaAs5/7dwZJYH5O3SOkB6ETIOUPJV9srt+KIzTLvURs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783966005; c=relaxed/simple;
-	bh=GucAiGtHL9FCvc4aVDJHA/2hw1a6v512HKeJ2hlnx+E=;
+	s=arc-20240116; t=1783966070; c=relaxed/simple;
+	bh=wwFu0sW49zMt4Bc6JB4FrJNz5sJ3uJmbzifNgN+sNBw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O9Om36o06Slw2CdEDg0zH6XJ7dC7OvP/JvK2GGK4ACY/j8nC30idGwg/ZeUngZM+5Z3bnv8sU3vfXOUDr29Uyu71qgMDFL8CEVwvNuTwTo7puoyb0K09t4S1aZyOdbQhIhWXhxX5Wb33CY9yNzvCkDaDeBjVm74EtDfWUaeTq1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0Yb9LAX; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885671F000E9;
-	Mon, 13 Jul 2026 18:06:21 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=An8SA//1o2N2377u+wBe/B4vmtIDRiMVzBosU0fW7x/zbms8HbLvSGfexRqPyPUmPVbTFtyZ5jcIdIdc0QMOmhz6WOhUtQqI/3shRV15gMWdbaEEnkd+Q2HO8uuEiev9OJCP1KZ5VJYJA0zV0nTG6pMTVANgTcnO/ppSwi6MTiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKnYTlap; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3317E1F000E9;
+	Mon, 13 Jul 2026 18:07:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783966004;
-	bh=3RLaMYvaEZ6QnNNOQ5RKz5D3WUNa/mhzvYyboPZe8p0=;
+	s=k20260515; t=1783966068;
+	bh=SpufigZiou4genEc90Cxe+OObzBvXak/bm6Su5s66V8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=h0Yb9LAXeOujn96l8cLyS9mH/iSvd0ZFm49X++VDgksIF19qL9j3vPomORDGY3lRZ
-	 IBH8CX/gO5kDDLaz9qdQr91Lrb4crBu0R3rOnHG/JYHW7JqGKoNGLI0OCIQRUf5zq7
-	 R+VYdDsBatBzzs4WE0Gwl0qbGzjJLnpE79+seQscQbgnPslB1IqVhEuavZMzRyu1f4
-	 ZWb1CaCwSeWlxPvH2HsKrP2D1h4TIHsyUaF5mUxUHMMMChq03vgbmwukKr2m1ROH4R
-	 2nlqNXtoZtyqxON4ZV3HpHqtJq8VaRUdO916AYrbhFWXxvVRl7YtNTjIzQJJINRsc2
-	 QCHY2kTZaeveQ==
-Message-ID: <c9c51ce7-b560-44f3-a50a-75b4538c2642@kernel.org>
-Date: Mon, 13 Jul 2026 20:06:19 +0200
+	b=TKnYTlap9Jze+m1JhDyZAfUWuEQo4R01QRzf4HVTsI9jH+VXtcETN7kf3E2znyhoo
+	 +/D9mc4X44fTUeLCZlxDRZ4P/N81fvrv9kRNz0n835PLouKiL7sYt2BOs8Z9eO5tD8
+	 eLGnHQKBwW0COHfVGSwCP9E3e538+EaerwoldgtcFFhu240nyL2tvKTWWfmqZsBbzE
+	 fsvB+Bqa9m6ZqBbQMfYDSIs5sLQ0+KpwyOTLPjEIkMmC7MDBKQlCbW45xzmhGgsRgR
+	 v4j83nfST8o0aIiPwzAgAYh3tFC/9m/qFgZRtK5ZP6UjUurPBAHN/PCpjwoIpVJNha
+	 xHovJK3h0cu2A==
+Message-ID: <3436832b-839b-41cc-9361-95dc4e26513b@kernel.org>
+Date: Mon, 13 Jul 2026 20:07:25 +0200
 Precedence: bulk
 X-Mailing-List: nvdimm@lists.linux.dev
 List-Id: <nvdimm.lists.linux.dev>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:nvdimm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:nvdimm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 11/33] mm/rmap: rename anon_vma_interval_tree_*() to
- anon_rmap_tree_*()
+Subject: Re: [PATCH v2 12/33] MAINTAINERS: Move mm/interval_tree.c to rmap
+ section
 Content-Language: en-US
 To: Lorenzo Stoakes <ljs@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -133,7 +133,7 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org,
  kvm@vger.kernel.org, Russell King <linux+etnaviv@armlinux.org.uk>
 References: <20260710-b4-pre-scalable-cow-v2-0-2a5aa403d977@kernel.org>
- <20260710-b4-pre-scalable-cow-v2-11-2a5aa403d977@kernel.org>
+ <20260710-b4-pre-scalable-cow-v2-12-2a5aa403d977@kernel.org>
 From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
 Autocrypt: addr=vbabka@kernel.org; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -174,7 +174,7 @@ Autocrypt: addr=vbabka@kernel.org; keydata=
  NcaZ+c6J4H+nEJGi2SkHAUJz5oBzuThvPudLvPA/SK8sKoM01IRxSihev/S/5WLazXB1PGem
  OCbvzC1IjWJJraxiDJ5IygokapUa2RP7+WBR22skQ3SSl6G107QgWKSyTOGWEaRmV53vxQLV
  jXuCmzSSasTL60zq5yGrT4/DYQVSNEUiUbG4pYekxJujNeEDkUlky0Y=
-In-Reply-To: <20260710-b4-pre-scalable-cow-v2-11-2a5aa403d977@kernel.org>
+In-Reply-To: <20260710-b4-pre-scalable-cow-v2-12-2a5aa403d977@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
@@ -183,12 +183,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14923-lists,linux-nvdimm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14924-lists,linux-nvdimm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -199,7 +199,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FREEMAIL_TO(0.00)[kernel.org,linux-foundation.org,infradead.org,google.com,suse.com,surriel.com,linux.dev,suse.de,armlinux.org.uk,siemens-energy.com,HansenPartnership.com,gmx.de,zeniv.linux.org.uk,suse.cz,redhat.com,arm.com,linux.intel.com,intel.com,linaro.org,nvidia.com,linux.alibaba.com,huawei.com,gmail.com,zte.com.cn,sk.com,gourry.net,samsung.com,goodmis.org,efficios.com,alien8.de,zytor.com,mev.co.uk,visionengravers.com,pengutronix.de,ffwll.ch,oss.qualcomm.com,poorly.run,somainline.org,ideasonboard.com,amd.com,ziepe.ca,shazbot.org];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[121];
@@ -212,18 +212,44 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-nvdimm,etnaviv];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:from_smtp,kvack.org:email,suse.de:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D344F74E4DD
+X-Rspamd-Queue-Id: 9C2F674E52D
 
 On 7/10/26 22:16, Lorenzo Stoakes wrote:
-> To be consistent with the newly renamed mapping_rmap_tree_*(), rename the
-> anon_vma_interval_tree_*() helpers to anon_rmap_tree_*().
+> This file implements code for the interval trees used by the file and anon
+> rmap implementation, so belongs in the rmap section.
 > 
-> No functional change intended.
-> 
+> Acked-by: Pedro Falcato <pfalcato@suse.de>
 > Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 
-Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+
+
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c3e535ca4bef..ef168b583325 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17208,6 +17208,7 @@ R:	Lance Yang <lance.yang@linux.dev>
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+>  F:	include/linux/rmap.h
+> +F:	mm/interval_tree.c
+>  F:	mm/page_vma_mapped.c
+>  F:	mm/rmap.c
+>  F:	tools/testing/selftests/mm/rmap.c
+> @@ -17313,7 +17314,6 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	include/trace/events/mmap.h
+>  F:	fs/proc/task_mmu.c
+>  F:	fs/proc/task_nommu.c
+> -F:	mm/interval_tree.c
+>  F:	mm/mincore.c
+>  F:	mm/mlock.c
+>  F:	mm/mmap.c
+> 
 
 
